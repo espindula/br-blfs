@@ -165,7 +165,7 @@ $(RENDERTMP)/$(BLFSFULL): general.ent packages.ent $(ALLXML) $(ALLXSL) version
                 --output $(RENDERTMP)/$(BLFSHTML2)  \
                 --stringparam profile.revision $(REV) \
                 stylesheets/lfs-xsl/profile.xsl       \
-                index.xml
+                index-pt_br.xml
 
 	@echo "Validating the book..."
 	$(Q)xmllint --nonet                             \
