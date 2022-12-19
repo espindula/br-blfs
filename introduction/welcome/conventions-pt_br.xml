@@ -237,133 +237,236 @@ EOF</userinput></screen>
   </sect2>
 
   <sect2>
-  <title>Conventions Used for Kernel Configuration Options</title>
+  <title>Convenções Usadas para Opções de Configuração do Kernel</title>
 
-    <para>Some packages have specific needs regarding the kernel configuration.
-    The general layout is the following:</para>
+    <para>
 
-<screen><literal>Master section ---&gt;
-  Subsection ---&gt;
-    [*]     Required parameter                     [CONFIG_REQU_PAR]
-    &lt;*&gt;     Required parameter (not as module)     [CONFIG_REQU_PAR_NMOD]
-    &lt;*/M&gt;   Required parameter (could be a module) [CONFIG_REQU_PAR_MOD]
-    &lt;*/M/ &gt; Optional parameter                     [CONFIG_OPT_PAR]
-    [ ] Incompatible parameter                     [CONFIG_INCOMP_PAR]
-    &lt; &gt; Incompatible parameter (even as module)    [CONFIG_INCOMP_PAR_MOD]</literal></screen>
+      Alguns pacotes tem necessidades específicas relacionadas à 
+      configuração do kernel.  A disposição geral é a seguinte:
 
-    <para>[CONFIG_...] on the right gives the name of the option, so you can
-    easily check whether it is set in your <filename>config</filename> file.
-    The meaning of the various entries is:
-
-    <blockquote>
-    <informaltable frame='none'><tgroup cols="2">
-      <colspec align="left"/><colspec align="left"/><tbody>
-      <row>
-        <entry><emphasis role="bold">Master section</emphasis></entry>
-        <entry>top level menu item</entry>
-      </row>
-      <row>
-        <entry><emphasis role="bold">Subsection</emphasis></entry>
-        <entry>submenu item</entry>
-      </row>
-      <row>
-        <entry>
-          <emphasis role="bold">Required parameter</emphasis></entry>
-        <entry>
-          the option could be either built-in or not selected: it must be
-          selected
-        </entry>
-      </row>
-      <row>
-        <entry>
-          <emphasis role="bold">Required parameter (not as
-          module)</emphasis>
-        </entry>
-        <entry>
-          the option could be either built-in, module, or not selected:
-          it must be selected as built-in
-        </entry>
-      </row>
-      <row>
-        <entry>
-          <emphasis role="bold">Required parameter (could be
-          a module)</emphasis>
-        </entry>
-        <entry>
-          the option could be either built-in, module, or not selected:
-          it must be selected, either as built-in or module
-        </entry>
-      </row>
-      <row>
-        <entry>
-          <emphasis role="bold">Optional parameter</emphasis>
-        </entry>
-        <entry>
-          rarely used: the option could be either built-in, module, or not
-          selected: it may be selected at will
-        </entry>
-      </row>
-      <row>
-        <entry>
-          <emphasis role="bold">Incompatible parameter</emphasis>
-        </entry>
-        <entry>
-          the option could be either built-in or not selected: it must
-          <emphasis>not</emphasis> be selected
-        </entry>
-      </row>
-      <row>
-        <entry>
-          <emphasis role="bold">Incompatible parameter (even as module)</emphasis>
-        </entry>
-        <entry>
-          the option could be either built-in, module, or not selected:
-          it must <emphasis>not</emphasis> be selected
-        </entry>
-      </row>
-    </tbody></tgroup></informaltable>
-    </blockquote>
     </para>
 
-    <para>Note that, depending on other selections, the angle brackets
-    (&lt;&gt;) may appear as braces ({}), if the option cannot be unselected,
-    or even dashes (-*- or -M-), when the choice is imposed.
-    The help text about the option specifies the other selections on which this
-    option relies, and how those other selections are set.</para>
+<screen><literal>Seção mestre ---&gt;
+  Subseção ---&gt;
+    [*]     Parâmetro exigido                               [CONFIG_REQU_PAR]
+    &lt;*&gt;     Parâmetro exigido (não como módulo)       [CONFIG_REQU_PAR_NMOD]
+    &lt;*/M&gt;   Parâmetro exigido (poderia ser um módulo) [CONFIG_REQU_PAR_MOD]
+    &lt;*/M/ &gt; Parâmetro opcional                        [CONFIG_OPT_PAR]
+    [ ] Parâmetro incompatível                              [CONFIG_INCOMP_PAR]
+    &lt; &gt; Parâmetro incompatível (mesmo como módulo)    [CONFIG_INCOMP_PAR_MOD]</literal></screen>
+
+    <para>
+
+      [CONFIG_...] na direita fornece o nome da opção, de forma que você 
+      pode facilmente verificar se ela está configurada no seu arquivo 
+      <filename>config</filename>.  O significado das várias entradas é:
+
+    <blockquote>
+
+    <informaltable frame='none'>
+
+    <tgroup cols="2">
+      <colspec align="left"/><colspec align="left"/>
+
+    <tbody>
+
+      <row>
+
+        <entry><emphasis role="bold">Seção mestre</emphasis></entry>
+
+        <entry>item do topo do menu</entry>
+
+      </row>
+
+      <row>
+
+        <entry><emphasis role="bold">Subseção</emphasis></entry>
+
+        <entry>item do submenu</entry>
+
+      </row>
+
+      <row>
+
+        <entry>
+
+          <emphasis role="bold">Parâmetro exigido</emphasis></entry>
+
+        <entry>
+
+          a opção poderia ser ou construída internamente ou não 
+          selecionada: precisa ser selecionada
+
+        </entry>
+
+      </row>
+
+      <row>
+
+        <entry>
+
+          <emphasis role="bold">Parâmetro exigido (não como módulo)</emphasis>
+
+        </entry>
+
+        <entry>
+
+          a opção poderia ser ou construída internamente; ou módulo; ou 
+          não selecionada: precisa ser selecionada como construída 
+          internamente
+
+        </entry>
+
+      </row>
+
+      <row>
+
+        <entry>
+
+          <emphasis role="bold">Parâmetro exigido (poderia ser um módulo)</emphasis>
+
+        </entry>
+
+        <entry>
+
+          a opção poderia ser ou construída internamente; ou módulo; ou 
+          não selecionada: precisa ser selecionada, seja como construída 
+          internamente, seja como módulo
+
+        </entry>
+
+      </row>
+
+      <row>
+
+        <entry>
+
+          <emphasis role="bold">Parâmetro opcional</emphasis>
+
+        </entry>
+
+        <entry>
+
+          raramente usada: a opção poderia ser ou construída 
+          internamente; ou módulo; ou não selecionada: é possível que 
+          seja selecionada à vontade
+
+        </entry>
+
+      </row>
+
+      <row>
+
+        <entry>
+
+          <emphasis role="bold">Parâmetro incompatível</emphasis>
+
+        </entry>
+
+        <entry>
+
+          a opção poderia ser ou construída internamente ou não 
+          selecionada: precisa <emphasis>não</emphasis> ser selecionada
+
+        </entry>
+
+      </row>
+
+      <row>
+
+        <entry>
+
+          <emphasis role="bold">Parâmetro incompatível (mesmo como módulo)</emphasis>
+
+        </entry>
+
+        <entry>
+
+          a opção poderia ser ou construída internamente; ou módulo; ou 
+          não selecionada: precisa <emphasis>não</emphasis> ser 
+          selecionada
+
+        </entry>
+
+      </row>
+
+    </tbody>
+
+    </tgroup>
+
+    </informaltable>
+
+    </blockquote>
+
+    </para>
+
+    <para>
+
+      Observe que, dependendo de outras seleções, os colchetes angulares 
+      (&lt;&gt;) talvez apareçam como chaves ({}), se a opção não puder 
+      ser desmarcada; ou mesmo traços (-*- or -M-), quando a escolha for 
+      imposta.  O texto de ajuda acerca da opção especifica as outras 
+      seleções das quais essa opção depende e como aquelas outras 
+      seleções são configuradas.
+
+    </para>
 
   </sect2>
 
   <sect2>
-  <title>SBU values in BLFS</title>
+  <title>Valores da UPC no BLFS</title>
 
-    <para>As in LFS, each package in BLFS has a build time listed in Standard
-    Build Units (SBUs).   These times are relative to the time it took to build
-    binutils in LFS and are intended to provide some insight into how long it
-    will take to build a package. Most times listed are for a single processor
-    or core to build the package. In some cases, large, long running builds
-    tested on multi-core systems have SBU times listed with comments such
-    as '(parallelism=4)'.  These values indicate testing was done using
-    multiple cores.  Note that while this speeds up the build on systems with
-    the appropriate hardware, the speedup is not linear and to some extent
-    depends on the individual package and specific hardware used.  </para>
+    <para>
 
-    <para>For packages which use ninja (e.g. anything using meson) or rust, by
-    default all cores are used so similar comments will be seen on such packages
-    even when the build time is minimal.</para>
+      Como no LFS, cada pacote no BLFS tem um tempo de construção 
+      listado em Unidades Padrão de Construção (UPCs).  Esses tempos são 
+      relativos ao tempo gasto para construir o binutils no LFS e tem a 
+      intenção de fornecer alguma ideia acerca de quanto tempo levará 
+      para construir um pacote.  A maior parte dos tempos listados é 
+      para um processador ou núcleo único para construir o pacote.  Em 
+      alguns casos, construções grandes e de longa duração testadas em 
+      sistemas multi núcleos, tem tempos de UPC listados com comentários 
+      tais como '(paralelismo=4)'.  Esses valores indicam que o teste 
+      foi feito usando múltiplos núcleos.  Observe que, ao mesmo tempo 
+      que isso acelera a construção em sistemas com o hardware 
+      apropriado, a aceleração não é linear e, até certo ponto, depende 
+      do pacote individual e hardware específico usado.
 
-    <para>Where even a parallel build takes more than 15 SBU, on certain
-    machines the time may be considerably greater even when the build does not
-    use swap. In particular, different micro-architectures will build some
-    files at different relative speeds and this can introduce delays when
-    certain make targets wait for another file to be created. Where a large
-    build uses a lot of C++ files, processors with Simultaneous Multi Threading
-    will share the Floating Point Unit and can take 45% longer than when using
-    four 'prime' cores (measured on an intel i7 using taskset and keeping the
-    other cores idle).</para>
+    </para>
 
-    <para>Some packages do not support parallel builds and using -j1 for the
-    make command is required.  Packages that are known to have such limits are
-    marked as such in the text.</para>
+    <para>
+
+      Para pacotes que usam o ninja (por exemplo, qualquer coisa usando 
+      o meson) ou o rust, por padrão todos os núcleos são usados, de 
+      forma que comentários similares serão vistos em tais pacotes, 
+      mesmo quando o tempo de construção for mínimo.
+
+    </para>
+
+    <para>
+
+      Onde mesmo uma construção paralela tomar mais que quinze (15) 
+      UPCs, em certas máquinas o tempo talvez seja consideravelmente 
+      maior, mesmo quando a construção não usar a área de troca.  Em 
+      particular, diferentes micro arquiteturas construirão alguns 
+      arquivos a diferentes velocidades relativas e isso pode introduzir 
+      atrasos quando certos alvos do make esperarem por outro arquivo 
+      para serem criados.  Onde uma construção grande usar muitos dos 
+      arquivos do C++, processadores com Multi Encadeamento Simultâneo 
+      compartilharão a Unidade de Ponto Flutuante e podem tomar quarenta 
+      e cinco inteiros por cento (45%) mais tempo que quando se usar 
+      quatro núcleos 'principais' (medido em um Intel i7 usando o 
+      conjunto de tarefas e mantendo-se os outros núcleos ociosos).
+
+    </para>
+
+    <para>
+
+      Alguns pacotes não suportam construções paralelas e usar -j1 para 
+      o comando make é exigido.  Os pacotes que são conhecidos por ter 
+      tais limites estão sinalizados como tal no texto.
+
+    </para>
 
   </sect2>
 
