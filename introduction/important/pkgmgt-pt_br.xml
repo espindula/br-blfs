@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+]>
+
+<!--
+
+Direitos autorais (Copyright) da versão modificada traduzida para a 
+língua portuguesa escrita e falada no Brasil: (c) 2022 Jamenson Ferreira 
+Espindula de Almeida Melo (<jafesp@gmail.com>).
+
+  Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
+  classificado pela Free Software Foundation como sendo uma "versão 
+  modificada" do mencionado livro.  Em assim sendo, na qualidade de 
+  tradutor, produtor da "versão modificada" e titular dos direitos 
+  autorais sobre a versão traduzida para a língua portuguesa do livro 
+  "Beyond Linux From Scratch", concede-se a seguinte permissão:
+
+  É concedida permissão para copiar, distribuir e (ou) modificar este 
+  livro "Beyond Linux From Scratch", versão traduzida para a língua 
+  portuguesa, sob os termos da Licença de Documentação Livre GNU, versão 
+  1.3 ou qualquer versão posterior publicada pela Free Software 
+  Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
+  Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
+  intitulada "Licença de Documentação Livre GNU".
+  
+# Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
+  
+  Permission is granted to copy, distribute and (or) modify this book 
+  "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
+  under the terms of the GNU Free Documentation License, Version 1.3 or 
+  any later version published by the Free Software Foundation; with no 
+  Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A 
+  copy of the license is included in the section entitled "GNU Free 
+  Documentation License".
+
+# Warning: all the files herein published are released with no warranty, implicit and (or) explicit.
+
+-->
+
+<sect1 id="pkgmgt">
+  <?dbhtml filename="pkgmgt-pt_br.html"?>
+
+  <sect1info>
+    <date>$Date$</date>
+  </sect1info>
+
+  <title>Gerenciamento de Pacote</title>
+
+  <para>
+
+    O Gerenciamento de Pacote é uma adição solicitada com frequência 
+    para o Livro LFS.  Um Gerenciador de Pacote permite monitorar a 
+    instalação de arquivos tornando fácil remover e atualizar pacotes.  
+    E, antes que você comece a questionar, NÃO&mdash;esta seção não fala 
+    acerca de qualquer gerenciador de pacote em particular; nem 
+    recomenda um.  O que ela fornece é um resumo acerca das técnicas 
+    mais populares e como elas funcionam.  O gerenciador de pacote 
+    perfeito para você talvez esteja entre essas técnicas ou talvez seja 
+    uma combinação de duas ou mais dessas técnicas.  Esta seção menciona 
+    brevemente problemas que talvez surjam quando da atualização de 
+    pacotes.
+
+  </para>
+
+  <para>
+
+    Algumas razões porque nenhum gerenciador de pacote é mencionado no 
+    LFS ou no BLFS:
+
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+
+      <para>
+
+        Lidar com gerenciamento de pacote retira o foco das finalidades 
+        desses livros&mdash;ensinar como um sistema Linux é construído.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Existem múltiplas soluções para gerenciamento de pacote, cada 
+        uma tendo seus pontos fortes e fracos.  Incluir uma que 
+        satisfaça todas as audiências é difícil.
+
+      </para>
+
+    </listitem>
+
+  </itemizedlist>
+
+  <para>
+
+    Existem algumas dicas escritas no tópico acerca de gerenciamento de 
+    pacote.  Visite o
+    <ulink url="&hints-root;">sub projeto Dicas</ulink>
+    e veja se uma delas se adéqua às suas necessidades.
+
+  </para>
+
+  <sect2>
+    <title>Problemas de Atualização</title>
+
+    <para>
+
+      Um Gerenciador de Pacote torna fácil atualizar para versões mais 
+      novas quando elas são liberadas.  Geralmente as instruções nos 
+      livros LFS e BLFS podem ser usadas para atualizar para versões 
+      mais novas.  Aqui estão alguns pontos que você deveria estar 
+      ciente quando da atualização de pacotes, especialmente em um 
+      sistema em execução.
+
+    </para>
+
+    <itemizedlist>
+
+      <listitem>
+
+        <para>
+
+          Se um dos pacotes do conjunto de ferramentas 
+          (<application>Glibc</application>; 
+          <application>GCC</application>; ou 
+          <application>Binutils</application>) precisar ser atualizado 
+          para uma versão mais recente menor, [então] é mais seguro 
+          reconstruir o LFS.  Apesar de você <emphasis>talvez</emphasis> 
+          estar apto(a) a conseguir via reconstrução de todos os pacotes 
+          na ordem de dependências deles, nós não recomendamos isso.  
+          Por exemplo, se o glibc-2.2.x precisar ser atualizado para o 
+          glibc-2.3.x, [então] é mais seguro reconstruir.  Para 
+          atualizações de versão micro, uma reinstalação simples 
+          geralmente funciona, porém não é garantido.  Por exemplo, 
+          atualizar do glibc-2.3.4 para o glibc-2.3.5 geralmente não 
+          causará quaisquer problemas.
+
+        </para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>
+
+          Se um pacote contendo uma biblioteca compartilhada for 
+          atualizado e se o nome da biblioteca mudar, então todos os 
+          pacotes vinculados dinamicamente à biblioteca precisam ser 
+          recompilados para vincular contra a biblioteca mais recente.  
+          (Observe que não existe correlação entre a versão do pacote e 
+          o nome da biblioteca).  Por exemplo, considere um pacote 
+          foo-1.2.3 que instala uma biblioteca compartilhada com nome 
+          <filename class='libraryfile'>libfoo.so.1</filename>.  Digamos 
+          que você atualize o pacote para uma versão mais recente 
+          foo-1.2.4 que instala uma biblioteca compartilhada com nome 
+          <filename class='libraryfile'>libfoo.so.2</filename>.  Nesse 
+          caso, todos os pacotes que estiverem vinculados dinamicamente 
+          a <filename class='libraryfile'>libfoo.so.1</filename> 
+          precisam ser recompilados para vincular contra
+          <filename class='libraryfile'>libfoo.so.2</filename>.  Observe
+          que você não deveria remover as bibliotecas anteriores até que
+          os pacotes dependentes sejam recompilados.
+
+        </para>
+
+      </listitem>
+
+      <listitem>
+
+        <para>
+
+          Se você estiver atualizando um sistema em execução, esteja 
+          atento(a) a pacotes que usam o <command>cp</command> em vez do 
+          <command>install</command> para instalar arquivos.  O último 
+          comando geralmente é mais seguro se o executável ou biblioteca 
+          já estiver carregado(a) na memória.
+
+        </para>
+
+      </listitem>
+
+    </itemizedlist>
+
+  </sect2>
+
+  <sect2>
+    <title>Técnicas de Gerenciamento de Pacote</title>
+
+    <para>
+
+      As seguintes são algumas técnicas comuns de gerenciamento de 
+      pacote.  Antes de se decidir acerca de um gerenciador de pacote, 
+      pesquise sobre as várias técnicas, particularmente os pontos 
+      fracos do esquema em particular.
+
+    </para>
+
+    <sect3>
+      <title>Está Tudo na Minha Cabeça!</title>
+
+      <para>
+
+        Sim, isso é uma técnica de gerenciamento de pacote.  Algumas 
+        pessoas não encontram a necessidade para um gerenciador de 
+        pacote, pois elas conhecem os pacotes intimamente e sabem quais 
+        arquivos estão instalados por cada pacote.  Algumas(ns) 
+        usuárias(os) também não precisam de qualquer gerenciamento de 
+        pacote, pois elas(es) planejam reconstruir o sistema inteiro 
+        quando um pacote for mudado.
+
+      </para>
+
+    </sect3>
+
+    <sect3>
+      <title>Instalação em Diretórios Separados</title>
+
+      <para>
+
+        Esse é um gerenciamento de pacote simplista que não necessita de 
+        qualquer pacote extra para gerenciar as instalações.  Cada 
+        pacote é instalado em um diretório separado.  Por exemplo, o 
+        pacote foo-1.1 é instalado em
+        <filename class='directory'>/usr/pkg/foo-1.1</filename> e um link 
+        simbólico é feito de <filename>/usr/pkg/foo</filename> para 
+        <filename class='directory'>/usr/pkg/foo-1.1</filename>.  Quando 
+        da instalação de uma nova versão foo-1.2, ela é instalada em 
+        <filename class='directory'>/usr/pkg/foo-1.2</filename> e o link 
+        simbólico anterior é substituído por um link simbólico para a 
+        nova versão.
+
+      </para>
+
+      <para>
+
+        As Variáveis de ambiente, tais como aquelas mencionadas em 
+        <quote><xref linkend="beyond"/></quote>, precisam ser expandidas 
+        para incluir <filename>/usr/pkg/foo</filename>.  Para mais que 
+        uns poucos pacotes, esse esquema se torna ingerenciável.
+
+      </para>
+
+    </sect3>
+
+    <sect3>
+      <title>Gerenciamento de Pacote Estilo Link Simbólico</title>
+
+      <para>
+
+        Essa é uma variação da técnica de gerenciamento de pacote 
+        anterior.  Cada pacote é instalado similar ao esquema anterior.  
+        Mas, em vez de fazer o link simbólico, cada arquivo é 
+        simbolicamente vinculado à hierarquia <filename 
+        class='directory'>/usr</filename>.  Isso remove a necessidade de 
+        expandir as variáveis de ambiente.  Ainda que os links 
+        simbólicos possam ser criados pela(o) usuária(o) para 
+        automatizar a criação, muitos gerenciadores de pacote tem sido 
+        escritos usando essa abordagem.  Alguns dos populares inclui 
+        Stow, Epkg, Graft e Depot.
+
+      </para>
+
+      <para>
+
+        A instalação precisa ser falseada, de modo que o pacote pense 
+        que está instalado em <filename 
+        class="directory">/usr</filename>, ainda que, na realidade, ele 
+        esteja instalado na hierarquia <filename 
+        class="directory">/usr/pkg</filename>.  Instalar dessa maneira 
+        geralmente não é uma tarefa trivial.  Por exemplo, considere que 
+        você está instalando um pacote libfoo-1.1.  As seguintes 
+        instruções talvez não instalem adequadamente o pacote:
+
+      </para>
+
+<screen><userinput>./configure --prefix=/usr/pkg/libfoo/1.1
+make
+make install</userinput></screen>
+
+      <para>
+
+        A instalação funcionará, mas os pacotes dependentes talvez não 
+        se vinculem à libfoo conforme você esperaria.  Se você compilar 
+        um pacote que vincula à libfoo, [então] você talvez note que ele 
+        está vinculado a <filename 
+        class='libraryfile'>/usr/pkg/libfoo/1.1/lib/libfoo.so.1</filename> 
+        em vez de <filename 
+        class='libraryfile'>/usr/lib/libfoo.so.1</filename> como você 
+        esperaria.  A abordagem correta é a de usar a estratégia 
+        <envar>DESTDIR</envar> para falsear a instalação do pacote.  
+        Essa abordagem funciona como se segue:
+
+      </para>
+
+<screen><userinput>./configure --prefix=/usr
+make
+make DESTDIR=/usr/pkg/libfoo/1.1 install</userinput></screen>
+
+      <para>
+
+        A maioria dos pacotes suporta essa abordagem, mas existem alguns 
+        que não.  Para os pacotes não conformes, você talvez ou precise 
+        instalar manualmente o pacote, ou você talvez ache que é mais 
+        fácil instalar alguns pacotes problemáticos em <filename 
+        class='directory'>/opt</filename>.
+
+      </para>
+
+    </sect3>
+
+    <sect3>
+      <title>Baseado em Marca Temporal</title>
+
+      <para>
+
+        Nessa técnica, um arquivo é marcado temporalmente antes da 
+        instalação do pacote.  Após a instalação, um simples uso do 
+        comando <command>find</command> com as opções apropriadas pode 
+        gerar um registro de todos os arquivos instalados após o arquivo 
+        de marca temporal ser criado.  Um gerenciador de pacote escrito 
+        com essa abordagem é instalação-registro.
+
+      </para>
+
+      <para>
+
+        Ainda que esse esquema tenha a vantagem de ser simples, ele tem 
+        duas desvantagens.  Se, durante a instalação, os arquivos forem 
+        instalados com qualquer marca temporal outra que a hora atual, 
+        [então] aqueles arquivos não serão rastreados pelo gerenciador 
+        de pacote.  Além disso, esse esquema pode ser usado apenas 
+        quando um pacote for instalado de cada vez.  Os registros não 
+        são confiáveis se dois pacotes estão sendo instalados em dois 
+        consoles.
+
+      </para>
+
+    </sect3>
+
+    <sect3>
+      <title>Baseado em LD_PRELOAD</title>
+
+      <para>
+
+        Nessa abordagem, uma biblioteca é pré carregada antes da 
+        instalação.  Durante a instalação, essa biblioteca rastreia os 
+        pacotes que estão sendo instalados anexando-se a vários 
+        executáveis, tais como <command>cp</command>; 
+        <command>install</command>; <command>mv</command>, e rastreando 
+        as chamadas de sistema que modificam o sistema de arquivos.  
+        Para que essa abordagem funcione, todos os executáveis precisam 
+        ser dinamicamente vinculados sem o bit suid ou sgid.  
+        Pré-carregar a biblioteca talvez cause alguns efeitos colaterais 
+        indesejados durante a instalação.  Portanto, aconselha-se que se 
+        realize alguns testes para garantir que o gerenciador de pacote 
+        não quebre nada e registre todos os arquivos adequados.
+
+      </para>
+
+    </sect3>
+
+    <sect3>
+      <title>Criando Arquivamentos de Pacote</title>
+
+      <para>
+
+        Nesse esquema, a instalação do pacote é falseada em uma
+      árvore separada como descrito no gerenciamento de pacote estilo
+      Link Simbólico.  Após a instalação, um arquivamento de pacote é
+      criado usando os arquivos instalados.  Esse arquivamento é então
+      usado para instalar o pacote tanto na máquina local quanto pode
+      até ser usado para instalar o pacote em outras máquinas.
+
+      </para>
+
+      <para>
+
+        Essa abordagem é usada pela maioria dos gerenciadores de pacote 
+        encontrados nas distribuições comerciais.  Exemplos de 
+        gerenciadores de pacote que seguem essa abordagem são RPM; 
+        pkg-utils; apt do Debian; e sistema Portage do Gentoo.
+
+      </para>
+
+    </sect3>
+
+    <sect3>
+      <title>Gerenciamento Baseado em Usuário(a)</title>
+
+      <para>
+
+        Esse esquema, único para LFS, foi concebido por Matthias 
+        Benkmann, e está disponível a partir do
+        <ulink url="&hints-root;">Projeto das Dicas</ulink>.  Nesse esquema, 
+        cada pacote é instalado como um(a) usuário(a) separado(a) nos 
+        locais padrão.  Arquivos pertencentes a um pacote são facilmente 
+        identificados checando o ID de usuário(a).  As características e 
+        deficiências dessa abordagem são muito complexas para serem 
+        descritas nesta seção.  Para os detalhes, por favor veja a dica 
+        em
+        <ulink url="&hints-root;/downloads/files/more_control_and_pkg_man.txt"/>.
+
+      </para>
+
+    </sect3>
+
+  </sect2>
+
+</sect1>
