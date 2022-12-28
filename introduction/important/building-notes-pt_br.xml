@@ -300,138 +300,218 @@ bunzip2 -v nome_da_correcao.bz2</userinput></screen>
   </sect2>
 
   <sect2>
-    <title>Creating Log Files During Installation</title>
+    <title>Criando Arquivos de Registro Durante a Instalação</title>
 
-    <para>For larger packages, it is convenient to create log files instead of
-    staring at the screen hoping to catch a particular error or warning. Log
-    files are also useful for debugging and keeping records. The following
-    command allows you to create an installation log. Replace
-    <replaceable>&lt;command&gt;</replaceable> with the command you intend to execute.</para>
+    <para>
 
-<screen><userinput>( <replaceable>&lt;command&gt;</replaceable> 2&gt;&amp;1 | tee compile.log &amp;&amp; exit $PIPESTATUS )</userinput></screen>
+      Para pacotes mais largos, é conveniente se criar arquivos de 
+      registro em vez de olhar fixamente para a tela esperando pegar um 
+      erro ou aviso em particular.  Os arquivos de registro também são 
+      úteis para depuração e para manter registros.  O seguinte comando 
+      permite a você criar um registro da instalação.  Substitua 
+      <replaceable>&lt;comando&gt;</replaceable> pelo comando que você 
+      pretende executar.
 
-    <para><option>2&gt;&amp;1</option> redirects error messages to the same
-    location as standard output. The <command>tee</command> command allows
-    viewing of the output while logging the results to a file. The parentheses
-    around the command run the entire command in a subshell and finally the
-    <command>exit $PIPESTATUS</command> command ensures the result of the
-    <replaceable>&lt;command&gt;</replaceable> is returned as the result and not the
-    result of the <command>tee</command> command.</para>
+    </para>
+
+<screen><userinput>( <replaceable>&lt;comando&gt;</replaceable> 2&gt;&amp;1 | tee compilar.log &amp;&amp; exit $PIPESTATUS )</userinput></screen>
+
+    <para>
+
+      <option>2&gt;&amp;1</option> redireciona as mensagens de erro para 
+      o mesmo local que a saída gerada padrão.  O comando 
+      <command>tee</command> permite visualizar a saída gerada enquanto 
+      se registra os resultados em um arquivo.  Os parênteses em volta 
+      do comando executam o comando inteiro em um subshell; e, 
+      finalmente, o comando <command>exit $PIPESTATUS</command> garante 
+      que o resultado do <replaceable>&lt;comando&gt;</replaceable> seja 
+      retornado como o resultado e não o resultado do comando 
+      <command>tee</command>.
+
+    </para>
 
   </sect2>
 
-  <sect2 id="parallel-builds" xreflabel="Using Multiple Processors">
-    <title>Using Multiple Processors</title>
+  <sect2 id="parallel-builds" xreflabel="Usando Múltiplos Processadores">
+    <title>Usando Múltiplos Processadores</title>
 
-    <para>For many modern systems with multiple processors (or cores) the
-    compilation time for a package can be reduced by performing a "parallel
-    make" by either setting an environment variable or telling the make program
-    how many processors are available. For instance, a Core2Duo can support two
-    simultaneous processes with: </para>
+    <para>
+
+      Para muitos sistemas modernos com múltiplos processadores (ou 
+      núcleos) o tempo de compilação para um pacote pode ser reduzido 
+      realizando-se um "make paralelo", ou configurando-se uma variável 
+      de ambiente, ou dizendo-se ao aplicativo make quantos 
+      processadores estão disponíveis.  Por exemplo, um Core2Duo pode 
+      suportar dois processos simultâneos com:
+
+    </para>
 
     <screen><userinput>export MAKEFLAGS='-j2'</userinput></screen>
 
-    <para>or just building with:</para>
+    <para>
+
+      ou apenas construir com:
+
+    </para>
 
     <screen><userinput>make -j2</userinput></screen>
 
     <para>
-      If you have applied the optional <command>sed</command> when building
-      <application>ninja</application> in LFS, you can use:
+
+      Se você tiver aplicado o <command>sed</command> opcional quando da 
+      construção do <application>ninja</application> no LFS, [então] 
+      você pode usar:
+
     </para>
 
     <screen><userinput>export NINJAJOBS=2</userinput></screen>
 
     <para>
-      when a package uses <command>ninja</command>, or just:
+
+      quando um pacote usar o <command>ninja</command>; ou apenas:
+
     </para>
 
     <screen><userinput>ninja -j2</userinput></screen>
 
     <para>
-      but for ninja, the default number of jobs is &lt;N&gt;+2, where &lt;N&gt;
-      is the number of processors available, so that using the above commands
-      is rather for limiting the number of jobs (see below for why this could
-      be necessary).
+
+      porém, para o ninja, o número padrão de trabalhos é &lt;N&gt;+2, 
+      onde &lt;N&gt; é o número de processadores disponíveis, de forma 
+      que usar os comandos acima é preferencialmente para limitar o 
+      número de trabalhos (veja-se abaixo para o porque isso poderia ser 
+      necessário).
+
     </para>
 
-    <para>Generally the number of processes should not exceed the number of
-    cores supported by the CPU.  To list the processors on your
-    system, issue: <userinput>grep processor /proc/cpuinfo</userinput>.
+    <para>
+
+      Geralmente o número de processos não deveria exceder o número de 
+      núcleos suportados pela CPU.  Para listar os processadores em seu 
+      sistema, emita:
+      <userinput>grep processor /proc/cpuinfo</userinput>.
+
     </para>
 
-    <para>In some cases, using multiple processes may result in a 'race'
-    condition where the success of the build depends on the order of the
-    commands run by the <command>make</command> program.  For instance, if an
-    executable needs File A and File B, attempting to link the program before
-    one of the dependent components is available will result in a failure.
-    This condition usually arises because the upstream developer has not
-    properly designated all the prerequisites needed to accomplish a step in the
-    Makefile.</para>
+    <para>
 
-    <para>If this occurs, the best way to proceed is to drop back to a
-    single processor build.  Adding '-j1' to a make command will override
-    the similar setting in the <envar>MAKEFLAGS</envar> environment
-    variable.</para>
+      Em alguns casos, usar múltiplos processos talvez resulte em uma 
+      condição de 'corrida' onde o sucesso da construção depende da 
+      ordem dos comandos executados pelo aplicativo 
+      <command>make</command>.  Por exemplo, se um executável precisar 
+      do Arquivo A e do Arquivo B, [então] tentar-se vincular o 
+      aplicativo antes que um dos componentes dependentes esteja 
+      disponível resultará em uma falha.  Essa condição geralmente 
+      surge, pois o(a) desenvolvedor(a) do aplicativo não designou 
+      adequadamente todos os pré requisitos necessários para realizar um 
+      passo no Makefile.
 
-    <note><para>When running the package tests or the install portion of the
-    package build process, we do not recommend using an option greater than
-    '-j1' unless specified otherwise.  The installation procedures or checks
-    have not been validated using parallel procedures and may fail with issues
-    that are difficult to debug.</para></note>
+    </para>
+
+    <para>
+
+      Se isso ocorrer, [então] a melhor maneira de se proceder é a de se 
+      voltar para uma construção de processador único.  Adicionar '-j1' 
+      a um comando make substituirá a configuração semelhante na 
+      variável de ambiente <envar>MAKEFLAGS</envar>.
+
+    </para>
+
+    <note>
+
+      <para>
+
+        Quando se executar os testes de pacote ou a porção install do 
+        processo de construção do pacote, nós não recomendamos usar uma 
+        opção maior que '-j1', a menos que especificado de outra 
+        maneira.  Os procedimentos ou verificações da instalação não 
+        foram validados usando-se procedimentos paralelos e talvez 
+        falhem com problemas que são difíceis de se depurar.
+
+      </para>
+
+    </note>
 
     <important>
+
       <para>
-        Another problem may occur with modern CPU's, which have a lot of cores.
-        Each job started consumes memory, and if the sum of the needed
-        memory for each job exceeds the available memory, you may encounter
-        either an OOM (Out of Memory) kernel interrupt or intense swapping
-        that will slow the build beyond reasonable limits.
+
+        Outro problema talvez ocorra com CPUs modernas, as quais tem um 
+        monte de núcleos.  Cada trabalho iniciado consome memória e, se 
+        a soma da memória necessária para cada trabalho exceder da 
+        memória disponível, [então] você talvez encontre, ou uma 
+        interrupção de kernel Out of Memory (OOM), ou troca intensa, que 
+        retardará a construção além de limites razoáveis.
+
       </para>
 
       <para>
-        Some compilations with <command>g++</command> may consume up to 2.5 GB
-        of memory, so to be safe, you should restrict the number of jobs
-        to (Total Memory in GB)/2.5, at least for big packages such as LLVM,
-        WebKitGtk, QtWebEngine, or libreoffice.
+
+        Algumas compilações com o <command>g++</command> talvez consumam 
+        até 2,5 GB de memória, de forma que, para estar seguro(a), você 
+        deveria restringir o número de trabalhos a (Memória Total em 
+        GB)/2,5, ao menos para pacotes grandes, tais como o LLVM; o 
+        WebKitGtk; o QtWebEngine; ou o libreoffice.
+
       </para>
+
     </important>
+
   </sect2>
 
-  <sect2 id="automating-builds" xreflabel="Automated Building Procedures">
-    <title>Automated Building Procedures</title>
+  <sect2 id="automating-builds" xreflabel="Procedimentos Automatizados de Construção">
+    <title>Procedimentos Automatizados de Construção</title>
 
-    <para>There are times when automating the building of a package can come in
-    handy. Everyone has their own reasons for wanting to automate building,
-    and everyone goes about it in their own way. Creating
-    <filename>Makefile</filename>s, <application>Bash</application> scripts,
-    <application>Perl</application> scripts or simply a list of commands used
-    to cut and paste are just some of the methods you can use to automate
-    building BLFS packages. Detailing how and providing examples of the many
-    ways you can automate the building of packages is beyond the scope of this
-    section. This section will expose you to using file redirection and the
-    <command>yes</command> command to help provide ideas on how to automate
-    your builds.</para>
+    <para>
 
-    <bridgehead renderas="sect3">File Redirection to Automate Input</bridgehead>
+      Existem ocasiões onde automatizar a construção de um pacote pode 
+      vir a calhar.  Todo mundo tem razões próprias para querer 
+      automatizar a construção e todo mundo faz isso de maneira própria.  
+      Criar <filename>Makefile</filename>s; scripts do 
+      <application>Bash</application>; scripts do 
+      <application>Perl</application>; ou, simplesmente, uma lista de 
+      comandos usados para recortar e colar, são apenas alguns dos 
+      métodos que você pode usar para automatizar a construção de 
+      pacotes do BLFS.  Detalhar como e fornecer exemplos das muitas 
+      maneiras que você pode automatizar a construção de pacotes está 
+      além do escopo desta seção.  Esta seção exporá você ao uso do 
+      redirecionamento de arquivo e do comando <command>yes</command> 
+      para ajudar a fornecer ideias acerca do como automatizar suas 
+      construções.
 
-    <para>You will find times throughout your BLFS journey when you will come
-    across a package that has a command prompting you for information. This
-    information might be configuration details, a directory path, or a response
-    to a license agreement. This can present a challenge to automate the
-    building of that package. Occasionally, you will be prompted for different
-    information in a series of questions. One method to automate this type of
-    scenario requires putting the desired responses in a file and using
-    redirection so that the program uses the data in the file as the answers to
-    the questions.</para>
+    </para>
 
-    <para>Building the <application>CUPS</application> package is a good
-    example of how redirecting a file as input to prompts can help you automate
-    the build. If you run the test suite, you are asked to respond to a series
-    of questions regarding the type of test to run and if you have any
-    auxiliary programs the test can use. You can create a file with your
-    responses, one response per line, and use a command similar to the
-    one shown below to automate running the test suite:</para>
+    <bridgehead renderas="sect3">Redirecionamento de Arquivo para Automatizar a Entrada</bridgehead>
+
+    <para>
+
+      Você achará ocasiões ao longo da sua jornada BLFS quando você se 
+      deparará com um pacote que tenha um comando solicitando 
+      informação.  Essa informação poderia ser detalhes de configuração; 
+      um caminho de diretório; ou uma resposta a um acordo de licença.  
+      Isso pode apresentar um desafio para automatizar a construção 
+      desse pacote.  Ocasionalmente, você será consultado(a) para 
+      diferentes informações em uma série de perguntas.  Um método para 
+      automatizar esse tipo de cenário exige colocar as respostas 
+      desejadas em um arquivo e usar redirecionamento, de forma que o 
+      aplicativo use os dados no arquivo como as respostas para as 
+      perguntas.
+
+    </para>
+
+    <para>
+
+      Construir o pacote <application>CUPS</application> é um bom 
+      exemplo de como redirecionar um arquivo como entrada para 
+      solicitações pode te ajudar a automatizar a construção.  Se você 
+      executar a suíte de teste, [então] você é solicitado(a) a 
+      responder a uma série de perguntas relacionadas ao tipo do teste a 
+      executar e se você tem quaisquer aplicativos auxiliares que o 
+      teste possa usar.  Você pode criar um arquivo com as suas 
+      respostas, uma resposta por linha, e usar um comando similar ao 
+      mostrado abaixo para automatizar a execução da suíte de teste:
+
+    </para>
 
 <screen><userinput>make check &lt; ../cups-1.1.23-testsuite_parms</userinput></screen>
 
