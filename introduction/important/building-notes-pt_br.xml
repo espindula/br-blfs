@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+]>
+
+<!--
+
+Direitos autorais (Copyright) da versão modificada traduzida para a 
+língua portuguesa escrita e falada no Brasil: (c) 2022 Jamenson Ferreira 
+Espindula de Almeida Melo (<jafesp@gmail.com>).
+
+  Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
+  classificado pela Free Software Foundation como sendo uma "versão 
+  modificada" do mencionado livro.  Em assim sendo, na qualidade de 
+  tradutor, produtor da "versão modificada" e titular dos direitos 
+  autorais sobre a versão traduzida para a língua portuguesa do livro 
+  "Beyond Linux From Scratch", concede-se a seguinte permissão:
+
+  É concedida permissão para copiar, distribuir e (ou) modificar este 
+  livro "Beyond Linux From Scratch", versão traduzida para a língua 
+  portuguesa, sob os termos da Licença de Documentação Livre GNU, versão 
+  1.3 ou qualquer versão posterior publicada pela Free Software 
+  Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
+  Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
+  intitulada "Licença de Documentação Livre GNU".
+  
+# Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
+  
+  Permission is granted to copy, distribute and (or) modify this book 
+  "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
+  under the terms of the GNU Free Documentation License, Version 1.3 or 
+  any later version published by the Free Software Foundation; with no 
+  Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A 
+  copy of the license is included in the section entitled "GNU Free 
+  Documentation License".
+
+# Warning: all the files herein published are released with no warranty, implicit and (or) explicit.
+
+-->
+
+<sect1 id="unpacking">
+  <?dbhtml filename="notes-on-building-pt_br.html"?>
+
+  <sect1info>
+    <date>$Date$</date>
+  </sect1info>
+
+  <title>Observações Acerca de Construir Software</title>
+
+  <para>
+
+    Aquelas pessoas que tenham construído um sistema LFS talvez estejam 
+    cientes dos princípios gerais da transferência e do desempacotamento 
+    de software.  Alguma daquela informação está repetida aqui para 
+    aquelas novatas em construir o próprio software delas.
+
+  </para>
+
+  </para>
+
+    Cada conjunto de instruções de instalação contém um URL a partir do 
+    qual você pode transferir o pacote.  As correções, no entanto, estão 
+    armazenadas nos servidores do LFS e estão disponíveis via HTTP.  
+    Essas estão referenciadas conforme necessárias nas instruções de 
+    instalação.
+
+  </para>
+
+  <para>
+
+    Enquanto você pode manter os arquivos do fonte em qualquer lugar que 
+    queira, nós assumimos que você desempacotou o pacote e mudou para o 
+    diretório criado pelo processo de desempacotamento (o diretório de 
+    'construção').  Nós assumimos também que você descomprimiu quaisquer 
+    correções exigidas e que elas estão no diretório imediatamente acima 
+    do diretório de 'construção'.
+
+  </para>
+
+  <para>
+
+    Nós não podemos enfatizar fortemente o suficiente que você deveria 
+    iniciar a partir de uma <emphasis>árvore limpa do fonte</emphasis> a 
+    cada vez.  Isso significa que, se você tiver tido um erro durante a 
+    configuração ou a compilação, [então] geralmente é melhor deletar a 
+    árvore do fonte e desempacotá-la outra vez
+    <emphasis>antes de</emphasis> tentar novamente.  Isso, obviamente,
+    não se aplica se você for um(a) usuário(a) avançado(a) habituado(a)
+    a hackear <filename>Makefile</filename>s e código C; porém, se em
+    dúvida, [então] inicie a partir de uma árvore limpa.
+
+  </para>
+
+  <sect2>
+    <title>Construindo Software como um(a) Usuário(a) Não Privilegiado(a) (não root)</title>
+
+    <para>
+
+      A regra de ouro da Administração do Sistema Unix é a de usar os 
+      seus super poderes somente quando necessário.  Assim, o BLFS 
+      recomenda que você construa software como um(a) usuário(a) não 
+      privilegiado(a) e somente se torne o(a) usuário(a)
+      <systemitem class='username'>root</systemitem> quando instalar
+      o software.  Essa filosofia é seguida em todos os pacotes neste
+      livro.  A menos que especificado de outra maneira, todas as
+      instruções deveriam ser executadas como um(a) usuário(a) não
+      privilegiado(a).  O livro alertará você acerca de instruções
+      que precisarem de privilégios do(a)
+      <systemitem class='username'>root</systemitem>.
+
+    </para>
+
+  </sect2>
+
+  <sect2>
+    <title>Desempacotando o Software</title>
+
+    <para>
+
+      Se um arquivo estiver no formato
+      <filename class='extension'>.tar</filename> e comprimido, [então]
+      ele é desempacotado executando-se um dos seguintes comandos:
+
+    </para>
+
+<screen><userinput>tar -xvf nome_do_arquivo.tar.gz
+tar -xvf nome_do_arquivo.tgz
+tar -xvf nome_do_arquivo.tar.Z
+tar -xvf nome_do_arquivo.tar.bz2</userinput></screen>
+
+    <note>
+
+      <para>
+
+        Você talvez omita o uso do parâmetro <option>v</option> nos 
+        comandos mostrados acima e abaixo se você desejar suprimir a 
+        listagem verbosa de todos os arquivos no arquivamento conforme 
+        eles forem extraídos.  Isso pode ajudar a acelerar a extração, 
+        bem como torna quaisquer erros produzidos durante a extração 
+        mais óbvios para você.
+
+      </para>
+
+    </note>
+
+    <para>Você também pode usar um método ligeiramente diferente:</para>
+
+<screen><userinput>bzcat nome_do_arquivo.tar.bz2 | tar -xv</userinput></screen>
+
+    <para>
+
+      Finalmente, as vezes você precisa estar apto(a) a desempacotar 
+      correções que geralmente não estão no formato
+      <filename class='extension'>.tar</filename>.  A melhor maneira de
+      fazer isso é a de copiar o arquivo da correção para o pai do
+      diretório da 'construção' e, então, executar um dos seguintes
+      comandos, dependendo se o arquivo for um arquivo
+      <filename class='extension'>.gz</filename> ou um
+      <filename class='extension'>.bz2</filename>:
+
+    </para>
+
+<screen><userinput>gunzip -v nome_da_correcao.gz
+bunzip2 -v nome_da_correcao.bz2</userinput></screen>
+
+  </sect2>
+
+  <sect2>
+    <title>Averiguando a Integridade do Arquivo</title>
+
+    <para>
+
+      Geralmente, para se averiguar se o arquivo transferido está 
+      completo, muitos(as) mantenedores(as) de pacote também distribuem 
+      somas de md5 dos arquivos.  Para averiguar a soma de md5 dos 
+      arquivos transferidos, transfira ambos, o arquivo e o arquivo 
+      correspondente de soma de md5, para o mesmo diretório 
+      (preferencialmente a partir de locais diferentes online) e 
+      (assumindo que <filename>arquivo.md5sum</filename> seja o arquivo 
+      de soma de md5 transferido) execute o seguinte comando:
+
+    </para>
+
+<screen><userinput>md5sum -c arquivo.md5sum</userinput></screen>
+
+    <para>
+
+      Se existirem quaisquer erros, [então] eles serão relatados.  
+      Observe que o livro BLFS inclui somas de md5 para todos os 
+      arquivos de fonte também.  Para usar as somas de md5 fornecidas 
+      pelo BLFS, você pode criar um <filename>arquivo.md5sum</filename> 
+      (coloque os dados da soma de md5 e o nome exato do arquivo 
+      transferido na mesma linha de um arquivo, separados por espaço em 
+      branco) e executar o comando mostrado acima.  Alternativamente, 
+      simplesmente execute o comando mostrado abaixo e compare a saída 
+      gerada para os dados da soma de md5 mostrada no livro BLFS.
+
+    </para>
+
+<screen><userinput>md5sum <replaceable>&lt;nome_do_arquivo_transferido&gt;</replaceable></userinput></screen>
+
+    <para>
+
+      MD5 não é seguro criptograficamente, de forma que as somas de md5 
+      são fornecidas apenas para se detectar mudanças não maliciosas 
+      para o conteúdo do arquivo.  Por exemplo, um erro ou truncamento 
+      introduzido durante a transferência de rede; ou uma atualização 
+      <quote>furtiva</quote> para o pacote oriunda do(a) 
+      desenvolvedor(a) (atualizando o conteúdo de um tarball liberado em 
+      vez de fazer um lançamento novo adequadamente).
+
+    </para>
+
+    <para>
+
+      Não existe maneira <quote>100%</quote> segura de garantir a 
+      genuinidade dos arquivos do fonte.  Assumindo que o(a) 
+      desenvolvedor(a) esteja gerenciando corretamente o sítio da web 
+      dele(a) (a chave privada não vazou e o domínio não esteja 
+      sequestrado); e que as âncoras de confiança tenham sido 
+      configuradas corretamente usando <xref linkend="make-ca"/> no 
+      sistema BLFS; nós podemos razoavelmente confiar nos URLs de 
+      transferência para o sítio oficial da web do(a) desenvolvedor(a) 
+      <emphasis role="bold">com protocolo https</emphasis>.  Observe que 
+      o próprio livro BLFS está publicado em um sítio da web com https, 
+      de forma que você já deveria ter alguma confiança no protocolo 
+      https ou você não confiaria no conteúdo do livro.
+
+    </para>
+
+    <para>
+
+      Se o pacote for transferido a partir de um local não oficial (por 
+      exemplo, um espelho local), [então] as somas de verificação 
+      geradas por algoritmos de resumo criptograficamente seguros (por 
+      exemplo, SHA256) podem ser usadas para averiguar a genuinidade do 
+      pacote.  Transfira o arquivo da soma de verificação a partir do 
+      sítio da web <emphasis role="bold">oficial</emphasis> do(a) 
+      desenvolvedor(a) (ou algum lugar que
+      <emphasis role="bold">você possa confiar</emphasis>) e compare a
+      soma de verificação do pacote oriunda do local não oficial com
+      ele.  Por exemplo, a soma de verificação SHA256 pode ser
+      verificada com o comando:
+
+    </para>
+
+    <note>
+
+      <para>
+
+        Se a soma de verificação e o pacote forem transferidos a partir 
+        do mesmo local não confiável, [então] você não ganharia 
+        melhoramento de segurança averiguando o pacote com a soma de 
+        verificação.  O(A) atacante pode falsear a soma de verificação 
+        assim como comprometer o próprio pacote.
+
+      </para>
+
+    </note>
+
+<screen><userinput>sha256sum -c <replaceable>arquivo</replaceable>.sha256sum</userinput></screen>
+
+    <para>
+
+      Se o <xref linkend="gnupg2"/> estiver instalado, [então] você 
+      também pode averiguar a genuinidade do pacote com uma assinatura 
+      GPG.  Importe a chave pública GPG do(a) desenvolvedor(a) com:
+
+    </para>
+
+<screen><userinput>gpg --recv-key <replaceable>ID_da_chave</replaceable></userinput></screen>
+
+    <para>
+
+      <replaceable>ID_da_chave</replaceable> deveria ser substituído 
+      pelo ID da chave oriundo de algum lugar que
+      <emphasis role="bold">você possa confiar</emphasis> (por exemplo,
+      copie-o a partir do sítio da web oficial do(a) desenvolvedor(a)
+      usando https).  Agora, você pode averiguar a assinatura com:
+
+    </para>
+
+<screen><userinput>gpg --recv-key <replaceable>arquivo</replaceable>.sig <replaceable>arquivo</replaceable></userinput></screen>
+
+    <para>
+
+      A vantagem da assinatura <application>GnuPG</application> é, tão 
+      logo você importou uma chave pública que possa ser confiada, você 
+      pode transferir ambos, o pacote e a assinatura dele, a partir do 
+      mesmo local não oficial e averiguá-los com a chave pública.  
+      Assim, você não precisaria conectar com o sítio da web oficial 
+      do(a) desenvolvedor(a) para ir buscar uma soma de verificação para 
+      cada lançamento novo.  Você somente precisa atualizar a chave 
+      pública se ela estiver expirada ou revogada.
+
+    </para>
+
+  </sect2>
+
+  <sect2>
+    <title>Creating Log Files During Installation</title>
+
+    <para>For larger packages, it is convenient to create log files instead of
+    staring at the screen hoping to catch a particular error or warning. Log
+    files are also useful for debugging and keeping records. The following
+    command allows you to create an installation log. Replace
+    <replaceable>&lt;command&gt;</replaceable> with the command you intend to execute.</para>
+
+<screen><userinput>( <replaceable>&lt;command&gt;</replaceable> 2&gt;&amp;1 | tee compile.log &amp;&amp; exit $PIPESTATUS )</userinput></screen>
+
+    <para><option>2&gt;&amp;1</option> redirects error messages to the same
+    location as standard output. The <command>tee</command> command allows
+    viewing of the output while logging the results to a file. The parentheses
+    around the command run the entire command in a subshell and finally the
+    <command>exit $PIPESTATUS</command> command ensures the result of the
+    <replaceable>&lt;command&gt;</replaceable> is returned as the result and not the
+    result of the <command>tee</command> command.</para>
+
+  </sect2>
+
+  <sect2 id="parallel-builds" xreflabel="Using Multiple Processors">
+    <title>Using Multiple Processors</title>
+
+    <para>For many modern systems with multiple processors (or cores) the
+    compilation time for a package can be reduced by performing a "parallel
+    make" by either setting an environment variable or telling the make program
+    how many processors are available. For instance, a Core2Duo can support two
+    simultaneous processes with: </para>
+
+    <screen><userinput>export MAKEFLAGS='-j2'</userinput></screen>
+
+    <para>or just building with:</para>
+
+    <screen><userinput>make -j2</userinput></screen>
+
+    <para>
+      If you have applied the optional <command>sed</command> when building
+      <application>ninja</application> in LFS, you can use:
+    </para>
+
+    <screen><userinput>export NINJAJOBS=2</userinput></screen>
+
+    <para>
+      when a package uses <command>ninja</command>, or just:
+    </para>
+
+    <screen><userinput>ninja -j2</userinput></screen>
+
+    <para>
+      but for ninja, the default number of jobs is &lt;N&gt;+2, where &lt;N&gt;
+      is the number of processors available, so that using the above commands
+      is rather for limiting the number of jobs (see below for why this could
+      be necessary).
+    </para>
+
+    <para>Generally the number of processes should not exceed the number of
+    cores supported by the CPU.  To list the processors on your
+    system, issue: <userinput>grep processor /proc/cpuinfo</userinput>.
+    </para>
+
+    <para>In some cases, using multiple processes may result in a 'race'
+    condition where the success of the build depends on the order of the
+    commands run by the <command>make</command> program.  For instance, if an
+    executable needs File A and File B, attempting to link the program before
+    one of the dependent components is available will result in a failure.
+    This condition usually arises because the upstream developer has not
+    properly designated all the prerequisites needed to accomplish a step in the
+    Makefile.</para>
+
+    <para>If this occurs, the best way to proceed is to drop back to a
+    single processor build.  Adding '-j1' to a make command will override
+    the similar setting in the <envar>MAKEFLAGS</envar> environment
+    variable.</para>
+
+    <note><para>When running the package tests or the install portion of the
+    package build process, we do not recommend using an option greater than
+    '-j1' unless specified otherwise.  The installation procedures or checks
+    have not been validated using parallel procedures and may fail with issues
+    that are difficult to debug.</para></note>
+
+    <important>
+      <para>
+        Another problem may occur with modern CPU's, which have a lot of cores.
+        Each job started consumes memory, and if the sum of the needed
+        memory for each job exceeds the available memory, you may encounter
+        either an OOM (Out of Memory) kernel interrupt or intense swapping
+        that will slow the build beyond reasonable limits.
+      </para>
+
+      <para>
+        Some compilations with <command>g++</command> may consume up to 2.5 GB
+        of memory, so to be safe, you should restrict the number of jobs
+        to (Total Memory in GB)/2.5, at least for big packages such as LLVM,
+        WebKitGtk, QtWebEngine, or libreoffice.
+      </para>
+    </important>
+  </sect2>
+
+  <sect2 id="automating-builds" xreflabel="Automated Building Procedures">
+    <title>Automated Building Procedures</title>
+
+    <para>There are times when automating the building of a package can come in
+    handy. Everyone has their own reasons for wanting to automate building,
+    and everyone goes about it in their own way. Creating
+    <filename>Makefile</filename>s, <application>Bash</application> scripts,
+    <application>Perl</application> scripts or simply a list of commands used
+    to cut and paste are just some of the methods you can use to automate
+    building BLFS packages. Detailing how and providing examples of the many
+    ways you can automate the building of packages is beyond the scope of this
+    section. This section will expose you to using file redirection and the
+    <command>yes</command> command to help provide ideas on how to automate
+    your builds.</para>
+
+    <bridgehead renderas="sect3">File Redirection to Automate Input</bridgehead>
+
+    <para>You will find times throughout your BLFS journey when you will come
+    across a package that has a command prompting you for information. This
+    information might be configuration details, a directory path, or a response
+    to a license agreement. This can present a challenge to automate the
+    building of that package. Occasionally, you will be prompted for different
+    information in a series of questions. One method to automate this type of
+    scenario requires putting the desired responses in a file and using
+    redirection so that the program uses the data in the file as the answers to
+    the questions.</para>
+
+    <para>Building the <application>CUPS</application> package is a good
+    example of how redirecting a file as input to prompts can help you automate
+    the build. If you run the test suite, you are asked to respond to a series
+    of questions regarding the type of test to run and if you have any
+    auxiliary programs the test can use. You can create a file with your
+    responses, one response per line, and use a command similar to the
+    one shown below to automate running the test suite:</para>
+
+<screen><userinput>make check &lt; ../cups-1.1.23-testsuite_parms</userinput></screen>
+
+    <para>This effectively makes the test suite use the responses in the file
+    as the input to the questions. Occasionally you may end up doing a bit of
+    trial and error determining the exact format of your input file for some
+    things, but once figured out and documented you can use this to automate
+    building the package.</para>
+
+    <bridgehead renderas="sect3">Using <command>yes</command> to Automate
+    Input</bridgehead>
+
+    <para>Sometimes you will only need to provide one response, or provide the
+    same response to many prompts. For these instances, the
+    <command>yes</command> command works really well. The
+    <command>yes</command> command can be used to provide a response (the same
+    one) to one or more instances of questions. It can be used to simulate
+    pressing just the <keycap>Enter</keycap> key, entering the
+    <keycap>Y</keycap> key or entering a string of text. Perhaps the easiest
+    way to show its use is in an example.</para>
+
+    <para>First, create a short <application>Bash</application> script by
+    entering the following commands:</para>
+
+<screen><userinput>cat &gt; blfs-yes-test1 &lt;&lt; "EOF"
+<literal>#!/bin/bash
+
+echo -n -e "\n\nPlease type something (or nothing) and press Enter ---> "
+
+read A_STRING
+
+if test "$A_STRING" = ""; then A_STRING="Just the Enter key was pressed"
+else A_STRING="You entered '$A_STRING'"
+fi
+
+echo -e "\n\n$A_STRING\n\n"</literal>
+EOF
+chmod 755 blfs-yes-test1</userinput></screen>
+
+    <para>Now run the script by issuing <command>./blfs-yes-test1</command> from
+    the command line. It will wait for a response, which can be anything (or
+    nothing) followed by the <keycap>Enter</keycap> key. After entering
+    something, the result will be echoed to the screen. Now use the
+    <command>yes</command> command to automate the entering of a
+    response:</para>
+
+<screen><userinput>yes | ./blfs-yes-test1</userinput></screen>
+
+    <para>Notice that piping <command>yes</command> by itself to the script
+    results in <keycap>y</keycap> being passed to the script. Now try it with a
+    string of text:</para>
+
+<screen><userinput>yes 'This is some text' | ./blfs-yes-test1</userinput></screen>
+
+    <para>The exact string was used as the response to the script. Finally,
+    try it using an empty (null) string:</para>
+
+<screen><userinput>yes '' | ./blfs-yes-test1</userinput></screen>
+
+    <para>Notice this results in passing just the press of the
+    <keycap>Enter</keycap> key to the script. This is useful for times when the
+    default answer to the prompt is sufficient. This syntax is used in the
+    <xref linkend="net-tools-automate-example"/> instructions to accept all the
+    defaults to the many prompts during the configuration step. You may now
+    remove the test script, if desired.</para>
+
+    <bridgehead renderas="sect3">File Redirection to Automate Output</bridgehead>
+
+    <para>In order to automate the building of some packages, especially those
+    that require you to read a license agreement one page at a time, requires
+    using a method that avoids having to press a key to display each page.
+    Redirecting the output to a file can be used in these instances to assist
+    with the automation. The previous section on this page touched on creating
+    log files of the build output. The redirection method shown there used the
+    <command>tee</command> command to redirect output to a file while also
+    displaying the output to the screen. Here, the output will only be sent to
+    a file.</para>
+
+    <para>Again, the easiest way to demonstrate the technique is to show an
+    example. First, issue the command:</para>
+
+<screen><userinput>ls -l /usr/bin | more</userinput></screen>
+
+    <para>Of course, you'll be required to view the output one page at a time
+    because the <command>more</command> filter was used. Now try the same
+    command, but this time redirect the output to a file. The special file
+    <filename>/dev/null</filename> can be used instead of the filename shown,
+    but you will have no log file to examine:</para>
+
+<screen><userinput>ls -l /usr/bin | more &gt; redirect_test.log 2&gt;&amp;1</userinput></screen>
+
+    <para>Notice that this time the command immediately returned to the shell
+    prompt without having to page through the output. You may now remove the
+    log file.</para>
+
+    <para>The last example will use the <command>yes</command> command in
+    combination with output redirection to bypass having to page through the
+    output and then provide a <keycap>y</keycap> to a prompt. This technique
+    could be used in instances when otherwise you would have to page through
+    the output of a file (such as a license agreement) and then answer the
+    question of <quote>do you accept the above?</quote>. For this example,
+    another short <application>Bash</application> script is required:</para>
+
+<screen><userinput>cat &gt; blfs-yes-test2 &lt;&lt; "EOF"
+<literal>#!/bin/bash
+
+ls -l /usr/bin | more
+
+echo -n -e "\n\nDid you enjoy reading this? (y,n) "
+
+read A_STRING
+
+if test "$A_STRING" = "y"; then A_STRING="You entered the 'y' key"
+else A_STRING="You did NOT enter the 'y' key"
+fi
+
+echo -e "\n\n$A_STRING\n\n"</literal>
+EOF
+chmod 755 blfs-yes-test2</userinput></screen>
+
+    <para>This script can be used to simulate a program that requires you to
+    read a license agreement, then respond appropriately to accept the
+    agreement before the program will install anything. First, run the script
+    without any automation techniques by issuing
+    <command>./blfs-yes-test2</command>.</para>
+
+    <para>Now issue the following command which uses two automation techniques,
+    making it suitable for use in an automated build script:</para>
+
+<screen><userinput>yes | ./blfs-yes-test2 &gt; blfs-yes-test2.log 2&gt;&amp;1</userinput></screen>
+
+    <para>If desired, issue <command>tail blfs-yes-test2.log</command> to see
+    the end of the paged output, and confirmation that <keycap>y</keycap> was
+    passed through to the script. Once satisfied that it works as it should,
+    you may remove the script and log file.</para>
+
+    <para>Finally, keep in mind that there are many ways to automate and/or
+    script the build commands. There is not a single <quote>correct</quote> way
+    to do it. Your imagination is the only limit.</para>
+
+  </sect2>
+
+  <sect2>
+    <title>Dependencies</title>
+
+    <para>For each package described, BLFS lists the known dependencies.
+    These are listed under several headings, whose meaning is as follows:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Required</emphasis> means that the target package
+        cannot be correctly built without the dependency having first been
+        installed.</para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Recommended</emphasis> means that BLFS strongly
+        suggests this package is installed first for a clean and trouble-free
+        build, that won't have issues either during the build process, or at
+        run-time.  The instructions in the book assume these packages are
+        installed.  Some changes or workarounds may be required if these
+        packages are not installed.</para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Optional</emphasis> means that this package might be
+        installed for added functionality. Often BLFS will describe the
+        dependency to explain the added functionality that will result.</para>
+      </listitem>
+    </itemizedlist>
+
+  </sect2>
+
+  <sect2 id="package_updates">
+    <title>Using the Most Current Package Sources</title>
+
+    <para>On occasion you may run into a situation in the book when a package
+    will not build or work properly. Though the Editors attempt to ensure
+    that every package in the book builds and works properly, sometimes a
+    package has been overlooked or was not tested with this particular version
+    of BLFS.</para>
+
+    <para>If you discover that a package will not build or work properly, you
+    should see if there is a more current version of the package. Typically
+    this means you go to the maintainer's web site and download the most current
+    tarball and attempt to build the package. If you cannot determine the
+    maintainer's web site by looking at the download URLs, use Google and query
+    the package's name. For example, in the Google search bar type:
+    'package_name download' (omit the quotes) or something similar. Sometimes
+    typing: 'package_name home page' will result in you finding the
+    maintainer's web site.</para>
+
+  </sect2>
+
+  <sect2 id="stripping">
+    <title>Stripping One More Time</title>
+
+    <warning>
+      <para>If you did not strip programs and libraries in LFS,
+      the following will probably make your system unusable. To avoid that,
+      run the instructions at <ulink url="&lfs-root;/chapter08/strippingagain.html"/>
+      instead.  After the critical files are  stripped using those instructions,
+      the instructions below can be run any time new packages are installed.
+      </para>
+    </warning>
+
+    <para>
+      In LFS, stripping of debugging symbols was discussed a couple of
+      times.  When building BLFS packages, there are generally no special
+      instructions that discuss stripping again.  It is probably not a good
+      idea to strip an executable or a library while it is in use, so exiting
+      any windowing environment is a good idea.  Then you can do:
+    </para>
+
+<screen><userinput>find /usr/{bin,lib,sbin} \
+    -type f \( -name \*.so* -a ! -name \*dbg \) \
+    -exec strip --strip-unneeded {} \;</userinput></screen>
+
+    <para>
+      If you install programs in other directories such as <filename
+      class="directory">/opt</filename> or <filename
+      class="directory">/usr/local</filename>, you may want to strip the files
+      there too.
+    </para>
+
+    <para>
+      For more information on stripping, see <ulink
+      url="http://www.technovelty.org/linux/stripping-shared-libraries.html"/>.
+    </para>
+
+  </sect2>
+<!--
+  <sect2 id="libtool">
+    <title>Libtool files</title>
+
+    <para>
+      One of the side effects of packages that use Autotools, including
+      libtool, is that they create many files with an .la extension.  These
+      files are not needed in an LFS environment.  If there are conflicts with
+      pkgconfig entries, they can actually prevent successful builds.  You
+      may want to consider removing these files periodically:
+    </para>
+
+<screen><userinput>find /lib /usr/lib -not -path "*Image*" -a -name \*.la -delete</userinput></screen>
+
+    <para>
+      The above command removes all .la files with the exception of those that
+      have <quote>Image</quote> or <quote>openldap</quote> as a part of the
+      path.  These .la files are used by the ImageMagick and openldap programs,
+      respectively.  There may be other exceptions by packages not in BLFS.
+    </para>
+
+  </sect2>
+-->
+  <sect2 id="buildsystems">
+    <title>Working with different build systems</title>
+
+    <para>
+      There are now three different build systems in common use for
+      converting C or C++ source code into compiled programs or
+      libraries and their details (particularly, finding out about available
+      options and their default values) differ. It may be easiest to understand
+      the issues caused by some choices (typically slow execution or
+      unexpected use of, or omission of, optimizatons) by starting with
+      the CFLAGS and CXXFLAGS environment variables.  There are also some
+      programs which use rust.
+    </para>
+
+    <para>
+      Most LFS and BLFS builders are probably aware of the basics of CFLAGS
+      and CXXFLAGS for altering how a program is compiled. Typically, some
+      form of optimization is used by upstream developers (-O2 or -O3),
+      sometimes with the creation of debug symbols (-g), as defaults.
+    </para>
+
+    <para>
+      If there are contradictory flags (e.g. multiple different -O values),
+      the <emphasis>last</emphasis> value will be used. Sometimes this means
+      that flags specified in environment variables will be picked up before
+      values hardcoded in the Makefile, and therefore ignored.  For example,
+      where a user specifies '-O2' and that is followed by '-O3' the build will
+      use '-O3'.
+    </para>
+
+    <para>
+      There are various other things which can be passed in CFLAGS or
+      CXXFLAGS, such as forcing compilation for a specific microarchitecture
+      (e.g. -march=amdfam10, -march=native) or specifying a specific standard
+      for C or C++ (-std=c++17 for example). But one thing which has now come
+      to light is that programmers might include debug assertions in their
+      code, expecting them to be disabled in releases by using -DNDEBUG.
+      Specifically, if <xref linkend="mesa"/> is built with these assertions
+      enabled, some activities such as loading levels of games can take
+      extremely long times, even on high-class video cards.
+    </para>
+
+    <bridgehead renderas="sect3" id="autotools-info">Autotools with Make</bridgehead>
+
+      <para>
+       This combination is often described as 'CMMI' (configure, make, make
+       install) and is used here to also cover the few packages which have a
+       configure script that is not generated by autotools.
+      </para>
+
+      <para>
+        Sometimes running <command>./configure --help</command> will produce
+        useful options about switches which might be used.  At other times,
+        after looking at the output from configure you may need to look
+        at the details of the script to find out what it was actually searching
+        for.
+      </para>
+
+      <para>
+       Many configure scripts will pick up any CFLAGS or CXXFLAGS from the
+       environment, but CMMI packages vary about how these will be mixed with
+       any flags which would otherwise be used (<emphasis>variously</emphasis>:
+       ignored, used to replace the programmer's suggestion, used before the
+       programmer's suggestion, or used after the programmer's suggestion).
+      </para>
+
+      <para>
+       In most CMMI packages, running 'make' will list each command and run
+       it, interspersed with any warnings. But some packages try to be 'silent'
+       and only show which file they are compiling or linking instead of showing
+       the command line. If you need to inspect the command, either because of
+       an error, or just to see what options and flags are being used, adding
+       'V=1' to the make invocation may help.
+     </para>
+
+    <bridgehead renderas="sect3" id="cmake-info">CMake</bridgehead>
+
+      <para>
+        CMake works in a very different way, and it has two backends which can
+        be used on BLFS: 'make' and 'ninja'. The default backend is make, but
+        ninja can be faster on large packages with multiple processors. To
+        use ninja, specify '-G Ninja' in the cmake command. However, there are
+        some packages which create fatal errors in their ninja files but build
+        successfully using the default of Unix Makefiles.
+      </para>
+
+      <para>
+        The hardest part of using CMake is knowing what options you might wish
+        to specify. The only way to get a list of what the package knows about
+        is to run <command>cmake -LAH</command> and look at the output for that
+        default configuration.
+      </para>
+
+      <para>
+        Perhaps the most-important thing about CMake is that it has a variety
+        of CMAKE_BUILD_TYPE values, and these affect the flags. The default
+        is that this is not set and no flags are generated. Any CFLAGS or
+        CXXFLAGS in the environment will be used. If the programmer has coded
+        any debug assertions, those will be enabled unless -DNDEBUG is used.
+        The following CMAKE_BUILD_TYPE values will generate the flags shown,
+        and these will come <emphasis>after</emphasis> any flags in the
+        environment and therefore take precedence.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Debug : '-g'</para>
+        </listitem>
+        <listitem>
+          <para>Release : '-O3 -DNDEBUG'</para>
+        </listitem>
+        <listitem>
+           <para>RelWithDebInfo : '-O2 -g -DNDEBUG'</para>
+        </listitem>
+        <listitem>
+           <para>MinSizeRel : '-Os -DNDEBUG'</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        CMake tries to produce quiet builds. To see the details of the commands
+        which are being run, use 'make VERBOSE=1' or 'ninja -v'.
+      </para>
+
+    <bridgehead renderas="sect3" id="meson-info">Meson</bridgehead>
+
+      <para>
+        Meson has some similarities to CMake, but many differences. To get
+        details of the defines that you may wish to change you can look at
+        <filename>meson_options.txt</filename> which is usually in the
+         top-level directory.
+      </para>
+
+      <para>
+        If you have already configured the package by running
+        <command>meson</command> and now wish to change one or more settings,
+        you can either remove the build directory, recreate it, and use the
+        altered options, or within the build directory run <command>meson
+        configure</command>, e.g. to set an option:
+      </para>
+
+<screen><userinput>meson configure -D&lt;some_option&gt;=true</userinput></screen>
+
+      <para>
+        If you do that, the file <filename>meson-private/cmd_line.txt</filename>
+        will show the <emphasis>last</emphasis> commands which were used.
+      </para>
+
+      <para>
+        Meson provides the following buildtype values, and the flags they enable
+        come <emphasis>after</emphasis> any flags supplied in the environment and
+        therefore take precedence.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>plain : no added flags. This is for distributors to supply their
+          own CLFAGS, CXXFLAGS and LDFLAGS. There is no obvious reason to use
+          this in BLFS.</para>
+        </listitem>
+        <listitem>
+          <para>debug : '-g' - this is the default if nothing is specified
+          in either <filename>meson.build</filename> or the command line.
+          However it results large and slow binaries, so we should override
+          it in BLFS.</para>
+        </listitem>
+        <listitem>
+           <para>debugoptimized : '-O2 -g' : this is the default specified in
+           <filename>meson.build</filename> of some packages.</para>
+        </listitem>
+        <listitem>
+           <para>release : '-O3 -DNDEBUG' (but occasionally a package will force
+           -O2 here)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Although the 'release' buildtype is described as enabling -DNDEBUG, and all
+        CMake Release builds pass that, it has so far only been observed (in
+        verbose builds) for <xref linkend="mesa"/>. That suggests that it might
+        only be used when there are debug assertions present.
+      </para>
+
+      <para>
+        The -DNDEBUG flag can also be provided by passing
+        <command>-Db_ndebug=true</command>.
+      </para>
+
+      <para>
+        To see the details of the commands which are being run in a package using
+        meson, use 'ninja -v'.
+      </para>
+
+    <bridgehead renderas="sect3" id="rust-info">Rustc and Cargo</bridgehead>
+
+      <para>
+        Most released rustc programs are provided as crates (source tarballs)
+        which will query a server to check current versions of dependencies
+        and then download them as necessary.  These packages are built using
+        <command>cargo --release</command>. In theory, you can manipulate the
+        RUSTFLAGS to change the optimize-level (default is 3, like -O3, e.g.
+        <literal>-Copt-level=3</literal>) or to force it to build for the
+        machine it is being compiled on, using
+        <literal>-Ctarget-cpu=native</literal> but in practice this seems to
+        make no significant difference.
+      </para>
+
+      <para>
+        If you find an interesting rustc program which is only provided as
+        unpackaged source, you should at least specify
+        <literal>RUSTFLAGS=-Copt-level=2</literal> otherwise it will do an
+        unoptimized compile with debug info and run <emphasis>much</emphasis>
+        slower.
+      </para>
+
+      <para>
+        The rust developers seem to assume that everyone will compile on a
+        machine dedicated to producing builds, so by default all CPUs are used.
+        This can often be worked around, either by exporting
+        CARGO_BUILD_JOBS=&lt;N&gt; or passing --jobs &lt;N&gt; to cargo. For
+        compiling rustc itself, specifying --jobs &lt;N&gt; on invocations of
+        x.py (together with the <envar>CARGO_BUILD_JOBS</envar> environment
+        variable, which looks like a "belt and braces" approach but seems to be
+        necessary) mostly works. The exception is running the tests when building
+        rustc, some of them will nevertheless use all online CPUs, at least as of
+        rustc-1.42.0.
+      </para>
+
+  </sect2>
+
+  <sect2 id="optimizations">
+    <title>Optimizing the build</title>
+
+      <para>
+        Many people will prefer to optimize compiles as they see fit, by providing
+        CFLAGS or CXXFLAGS. For an introduction to the options available with gcc
+        and g++ see <ulink
+        url="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html"/> and <ulink
+        url="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html"/>
+        and <command>info gcc</command>.
+
+      </para>
+
+      <para>
+        Some packages default to '-O2 -g', others to '-O3 -g', and if CFLAGS or
+        CXXFLAGS are supplied they might be added to the package's defaults,
+        replace the package's defaults, or even be ignored.  There are details
+        on some desktop packages which were mostly current in April 2019 at
+        <ulink url="https://www.linuxfromscratch.org/~ken/tuning/"/> - in
+        particular, README.txt, tuning-1-packages-and-notes.txt, and
+        tuning-notes-2B.txt. The particular thing to remember is that if you
+        want to try some of the more interesting flags you may need to force
+        verbose builds to confirm what is being used.
+      </para>
+
+      <para>
+        Clearly, if you are optimizing your own program you can spend time to
+        profile it and perhaps recode some of it if it is too slow. But for
+        building a whole system that approach is impractical. In general,
+        -O3 usually produces faster programs than -O2.  Specifying
+        -march=native is also beneficial, but means that you cannot move the
+        binaries to an incompatible machine - this can also apply to newer
+        machines, not just to older machines. For example programs compiled for
+        'amdfam10' run on old Phenoms, Kaveris, and Ryzens : but programs
+        compiled for a Kaveri will not run on a Ryzen because certain op-codes
+        are not present.  Similarly, if you build for a Haswell not everything
+        will run on a SandyBridge.
+      </para>
+
+      <para>
+        There are also various other options which some people claim are
+        beneficial. At worst, you get to recompile and test, and then
+        discover that in your usage the options do not provide a benefit.
+      </para>
+
+      <para>
+        If building Perl or Python modules, or Qt packages which use qmake,
+        in general the CFLAGS and CXXFLAGS used are those which were used by
+        those 'parent' packages.
+      </para>
+
+  </sect2>
+
+  <sect2 id="hardening">
+    <title>Options for hardening the build</title>
+
+      <para>
+        Even on desktop systems, there are still a lot of exploitable
+        vulnerabilities. For many of these, the attack comes via javascript
+        in a browser. Often, a series of vulnerabilities are used to gain
+        access to data (or sometimes to pwn, i.e. own, the machine and
+        install rootkits).  Most commercial distros will apply various
+        hardening measures.
+      </para>
+
+      <para>
+        For hardening options which are reasonably cheap, there is some
+        discussion in the 'tuning' link above (occasionally, one or more
+        of these options might be inappropriate for a package). These
+        options are -D_FORTIFY_SOURCE=2, -fstack-protector=strong, and
+        (for C++) -D_GLIBCXX_ASSERTIONS. On modern machines these should
+        only have a little impact on how fast things run, and often they
+        will not be noticeable.
+      </para>
+
+      <para>
+        In the past, there was Hardened LFS where gcc (a much older version)
+        was forced to use hardening (with options to turn some of it off on a
+        per-package basis. What is being covered here is different - first you
+        have to make sure that the package is indeed using your added flags and
+        not over-riding them.
+      </para>
+
+      <para>
+        The main distros use much more, such as RELRO (Relocation Read Only)
+        and perhaps -fstack-clash-protection. You may also encounter the
+        so-called 'userspace retpoline' (-mindirect-branch=thunk etc.) which
+        is the equivalent of the spectre mitigations applied to the linux
+        kernel in late 2018). The kernel mitigations caused a lot of complaints
+        about lost performance, if you have a production server you might wish
+        to consider testing that, along with the other available options, to
+        see if performance is still sufficient.
+      </para>
+
+      <para>
+        Whilst gcc has many hardening options, clang/LLVM's strengths lie
+        elsewhere. Some options which gcc provides are said to be less effective
+        in clang/LLVM.
+      </para>
+
+  </sect2>
+
+</sect1>
