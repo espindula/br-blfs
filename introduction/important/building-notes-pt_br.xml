@@ -515,142 +515,221 @@ bunzip2 -v nome_da_correcao.bz2</userinput></screen>
 
 <screen><userinput>make check &lt; ../cups-1.1.23-testsuite_parms</userinput></screen>
 
-    <para>This effectively makes the test suite use the responses in the file
-    as the input to the questions. Occasionally you may end up doing a bit of
-    trial and error determining the exact format of your input file for some
-    things, but once figured out and documented you can use this to automate
-    building the package.</para>
+    <para>
 
-    <bridgehead renderas="sect3">Using <command>yes</command> to Automate
-    Input</bridgehead>
+      Isso, efetivamente, faz com que a suíte de teste use as respostas 
+      no arquivo como a entrada gerada para as perguntas.  
+      Ocasionalmente você talvez termine fazendo um bocado de tentativa 
+      e erro para determinar o formato exato do seu arquivo de entrada 
+      gerada para algumas coisas, porém, tão logo determinado e 
+      documentado, você pode usar isso para automatizar a construção do 
+      pacote.
 
-    <para>Sometimes you will only need to provide one response, or provide the
-    same response to many prompts. For these instances, the
-    <command>yes</command> command works really well. The
-    <command>yes</command> command can be used to provide a response (the same
-    one) to one or more instances of questions. It can be used to simulate
-    pressing just the <keycap>Enter</keycap> key, entering the
-    <keycap>Y</keycap> key or entering a string of text. Perhaps the easiest
-    way to show its use is in an example.</para>
+    </para>
 
-    <para>First, create a short <application>Bash</application> script by
-    entering the following commands:</para>
+    <bridgehead renderas="sect3">Usando o <command>yes</command> para Automatizar a Entrada Gerada</bridgehead>
+
+    <para>
+
+      As vezes você somente precisará fornecer uma resposta, ou fornecer 
+      a mesma resposta para muitas solicitações.  Para tais instâncias, 
+      o comando <command>yes</command> funciona realmente bem.  O 
+      comando <command>yes</command> pode ser usado para fornecer uma 
+      resposta (a mesma) para uma ou mais instâncias de perguntas.  Ele 
+      pode ser usado para simular o pressionamento apenas da tecla 
+      <keycap>Enter</keycap>; informar a tecla <keycap>Y</keycap>; ou 
+      informar uma sequência de caracteres de texto.  Talvez a maneira 
+      mais fácil de mostrar o uso dele é em um exemplo.
+
+    </para>
+
+    <para>
+
+      Primeiro, crie um script curto do <application>Bash</application> 
+      informando os seguintes comandos:
+
+    </para>
 
 <screen><userinput>cat &gt; blfs-yes-test1 &lt;&lt; "EOF"
 <literal>#!/bin/bash
 
-echo -n -e "\n\nPlease type something (or nothing) and press Enter ---> "
+echo -n -e "\n\nPor favor, digite algo (ou nada) e pressione Enter ---> "
 
 read A_STRING
 
-if test "$A_STRING" = ""; then A_STRING="Just the Enter key was pressed"
-else A_STRING="You entered '$A_STRING'"
+if test "$A_STRING" = ""; then A_STRING="Apenas a tecla Enter foi pressionada"
+else A_STRING="Você informou '$A_STRING'"
 fi
 
 echo -e "\n\n$A_STRING\n\n"</literal>
 EOF
 chmod 755 blfs-yes-test1</userinput></screen>
 
-    <para>Now run the script by issuing <command>./blfs-yes-test1</command> from
-    the command line. It will wait for a response, which can be anything (or
-    nothing) followed by the <keycap>Enter</keycap> key. After entering
-    something, the result will be echoed to the screen. Now use the
-    <command>yes</command> command to automate the entering of a
-    response:</para>
+    <para>
+
+      Agora execute o script emitindo 
+      <command>./blfs-yes-test1</command> a partir da linha de comando.  
+      Ele aguardará por uma resposta, que pode ser algo (ou nada) 
+      seguida pela tecla <keycap>Enter</keycap>.  Depois de informar 
+      alguma coisa, o resultado será ecoado para a tela.  Agora use o 
+      comando <command>yes</command> para automatizar a entrada de uma 
+      resposta:
+
+    </para>
 
 <screen><userinput>yes | ./blfs-yes-test1</userinput></screen>
 
-    <para>Notice that piping <command>yes</command> by itself to the script
-    results in <keycap>y</keycap> being passed to the script. Now try it with a
-    string of text:</para>
+    <para>
 
-<screen><userinput>yes 'This is some text' | ./blfs-yes-test1</userinput></screen>
+      Perceba que canalizar o próprio <command>yes</command> para o 
+      script resulta em <keycap>y</keycap> sendo passada para o script.  
+      Agora tente com uma sequência de caracteres de texto:
 
-    <para>The exact string was used as the response to the script. Finally,
-    try it using an empty (null) string:</para>
+    </para>
+
+<screen><userinput>yes 'Este é algum texto' | ./blfs-yes-test1</userinput></screen>
+
+    <para>
+
+      A sequência exata de caracteres foi usada como a resposta para o 
+      script.  Finalmente, tente usando uma sequência de caracteres 
+      vazia (nula):
+
+    </para>
 
 <screen><userinput>yes '' | ./blfs-yes-test1</userinput></screen>
 
-    <para>Notice this results in passing just the press of the
-    <keycap>Enter</keycap> key to the script. This is useful for times when the
-    default answer to the prompt is sufficient. This syntax is used in the
-    <xref linkend="net-tools-automate-example"/> instructions to accept all the
-    defaults to the many prompts during the configuration step. You may now
-    remove the test script, if desired.</para>
+    <para>
 
-    <bridgehead renderas="sect3">File Redirection to Automate Output</bridgehead>
+      Perceba que isso resulta na passagem apenas do pressionamento da 
+      tecla <keycap>Enter</keycap> para o script.  Isso é útil para 
+      ocasiões quando a resposta padrão para a solicitação é suficiente.  
+      Essa sintaxe é usada nas instruções do
+      <xref linkend="net-tools-automate-example"/> para aceitar todos os 
+      padrões para as muitas solicitações durante a etapa de 
+      configuração.  Você talvez agora remova o script de teste, se 
+      desejado.
 
-    <para>In order to automate the building of some packages, especially those
-    that require you to read a license agreement one page at a time, requires
-    using a method that avoids having to press a key to display each page.
-    Redirecting the output to a file can be used in these instances to assist
-    with the automation. The previous section on this page touched on creating
-    log files of the build output. The redirection method shown there used the
-    <command>tee</command> command to redirect output to a file while also
-    displaying the output to the screen. Here, the output will only be sent to
-    a file.</para>
+    </para>
 
-    <para>Again, the easiest way to demonstrate the technique is to show an
-    example. First, issue the command:</para>
+    <bridgehead renderas="sect3">Redirecionamento de Arquivo para Automatizar a Saída Gerada</bridgehead>
+
+    <para>
+
+      Para a finalidade de automatizar a construção de alguns pacotes, 
+      especialmente aqueles que exigem que você leia um acordo de 
+      licença em uma página por vez, exige-se usar um método que evite 
+      ter que pressionar uma tecla para exibir cada página.  
+      Redirecionar a saída gerada para um arquivo pode ser usado nessas 
+      instâncias para auxiliar com a automação.  A seção anterior nesta 
+      página tocou na criação de arquivos de registro da saída gerada da 
+      construção.  O método de redirecionamento mostrado lá usou o 
+      comando <command>tee</command> para redirecionar a saída gerada 
+      para um arquivo enquanto também exibia a saída gerada na tela.  
+      Aqui, a saída gerada somente será enviada para um arquivo.
+
+    </para>
+
+    <para>
+
+      Novamente, a maneira mais fácil para demonstrar a técnica é 
+      mostrar um exemplo.  Primeiro, emita o comando:
+
+    </para>
 
 <screen><userinput>ls -l /usr/bin | more</userinput></screen>
 
-    <para>Of course, you'll be required to view the output one page at a time
-    because the <command>more</command> filter was used. Now try the same
-    command, but this time redirect the output to a file. The special file
-    <filename>/dev/null</filename> can be used instead of the filename shown,
-    but you will have no log file to examine:</para>
+    <para>
+
+      Certamente, você será exigido(a) a visualizar a saída gerada uma 
+      página por vez, pois o filtro <command>more</command> foi usado.  
+      Agora tente o mesmo comando, porém, dessa vez, redirecione a saída 
+      gerada para um arquivo.  O arquivo especial 
+      <filename>/dev/null</filename> pode ser usado em vez do nome de 
+      arquivo mostrado, porém você não terá arquivo de registro para 
+      examinar:
+
+    </para>
 
 <screen><userinput>ls -l /usr/bin | more &gt; redirect_test.log 2&gt;&amp;1</userinput></screen>
 
-    <para>Notice that this time the command immediately returned to the shell
-    prompt without having to page through the output. You may now remove the
-    log file.</para>
+    <para>
 
-    <para>The last example will use the <command>yes</command> command in
-    combination with output redirection to bypass having to page through the
-    output and then provide a <keycap>y</keycap> to a prompt. This technique
-    could be used in instances when otherwise you would have to page through
-    the output of a file (such as a license agreement) and then answer the
-    question of <quote>do you accept the above?</quote>. For this example,
-    another short <application>Bash</application> script is required:</para>
+      Perceba que, dessa vez, o comando imediatamente retornou ao prompt 
+      do shell sem ter que paginar ao longo da saída gerada.  Você agora 
+      talvez remova o arquivo de registro.
+
+    </para>
+
+    <para>
+
+      O último exemplo usará o comando <command>yes</command> em 
+      combinação com o redirecionamento da saída gerada para desviar-se 
+      de ter que paginar ao longo da saída gerada e, então, fornecer um 
+      <keycap>y</keycap> para uma solicitação.  Essa técnica poderia ser 
+      usada em instâncias quando, de outra maneira, você teria que 
+      paginar ao longo da saída gerada de um arquivo (como um acordo de 
+      licença) e, então, responder à pergunta de
+      <quote>você aceita o acima?</quote>.  Para esse exemplo, outro
+      script curto do <application>Bash</application> é exigido:
+
+    </para>
 
 <screen><userinput>cat &gt; blfs-yes-test2 &lt;&lt; "EOF"
 <literal>#!/bin/bash
 
 ls -l /usr/bin | more
 
-echo -n -e "\n\nDid you enjoy reading this? (y,n) "
+echo -n -e "\n\nVocê curtiu ler isso? (y,n) "
 
 read A_STRING
 
-if test "$A_STRING" = "y"; then A_STRING="You entered the 'y' key"
-else A_STRING="You did NOT enter the 'y' key"
+if test "$A_STRING" = "y"; then A_STRING="Você digitou a tecla 'y'"
+else A_STRING="Você NÃO digitou a tecla 'y'"
 fi
 
 echo -e "\n\n$A_STRING\n\n"</literal>
 EOF
 chmod 755 blfs-yes-test2</userinput></screen>
 
-    <para>This script can be used to simulate a program that requires you to
-    read a license agreement, then respond appropriately to accept the
-    agreement before the program will install anything. First, run the script
-    without any automation techniques by issuing
-    <command>./blfs-yes-test2</command>.</para>
+    <para>
 
-    <para>Now issue the following command which uses two automation techniques,
-    making it suitable for use in an automated build script:</para>
+      Esse script pode ser usado para simular um aplicativo que exige 
+      que você leia um acordo de licença, então responda apropriadamente 
+      que aceita o acordo antes do aplicativo instalar qualquer coisa.  
+      Primeiro, execute o script sem quaisquer técnicas de automação 
+      emitindo <command>./blfs-yes-test2</command>.
+
+    </para>
+
+    <para>
+
+      Agora emita o seguinte comando que usa duas técnicas de automação, 
+      tornando-o adequado para uso em um script automatizado de 
+      construção:
+
+    </para>
 
 <screen><userinput>yes | ./blfs-yes-test2 &gt; blfs-yes-test2.log 2&gt;&amp;1</userinput></screen>
 
-    <para>If desired, issue <command>tail blfs-yes-test2.log</command> to see
-    the end of the paged output, and confirmation that <keycap>y</keycap> was
-    passed through to the script. Once satisfied that it works as it should,
-    you may remove the script and log file.</para>
+    <para>
 
-    <para>Finally, keep in mind that there are many ways to automate and/or
-    script the build commands. There is not a single <quote>correct</quote> way
-    to do it. Your imagination is the only limit.</para>
+      Se desejado, emita <command>tail blfs-yes-test2.log</command> para 
+      ver o final da saída gerada paginada e confirmação de que 
+      <keycap>y</keycap> foi passada ao longo para o script.  Tão logo 
+      satisfeito que ele funciona como deveria, você talvez remova o 
+      script e arquivo de registro.
+
+    </para>
+
+    <para>
+
+      Finalmente, tenha em mente que existem muitas maneiras de 
+      automatizar e (ou) roteirizar os comandos de construção.  Não 
+      existe uma maneira única <quote>correta</quote> para fazê-lo.  Sua 
+      imaginação é o único limite.
+
+    </para>
 
   </sect2>
 
