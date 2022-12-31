@@ -1197,89 +1197,118 @@ chmod 755 blfs-yes-test2</userinput></screen>
     <bridgehead renderas="sect3" id="rust-info">Rustc e Cargo</bridgehead>
 
       <para>
-        Most released rustc programs are provided as crates (source tarballs)
-        which will query a server to check current versions of dependencies
-        and then download them as necessary.  These packages are built using
-        <command>cargo --release</command>. In theory, you can manipulate the
-        RUSTFLAGS to change the optimize-level (default is 3, like -O3, e.g.
-        <literal>-Copt-level=3</literal>) or to force it to build for the
-        machine it is being compiled on, using
-        <literal>-Ctarget-cpu=native</literal> but in practice this seems to
-        make no significant difference.
+
+        A maioria dos aplicativos rustc lançados é fornecida como 
+        engradado (tarballs de fonte), que consultarão um servidor para 
+        verificar as versões atuais de dependências e, então, as 
+        transferirão conforme necessário.  Esses pacotes são construídos 
+        usando-se <command>cargo --release</command>.  Na teoria, você 
+        pode manipular o RUSTFLAGS para mudar o nível de otimização 
+        (padrão é 3, semelhante a -03; por exemplo, 
+        <literal>-Copt-level=3</literal>) ou para forçá-lo a construir 
+        para a máquina na qual está sendo compilado, usando 
+        <literal>-Ctarget-cpu=native</literal>; porém, na prática, isso 
+        parece não fazer uma diferença significante.
+
       </para>
 
       <para>
-        If you find an interesting rustc program which is only provided as
-        unpackaged source, you should at least specify
-        <literal>RUSTFLAGS=-Copt-level=2</literal> otherwise it will do an
-        unoptimized compile with debug info and run <emphasis>much</emphasis>
-        slower.
+
+        Se você encontrar um aplicativo rustc interessante que seja 
+        fornecido apenas como fonte desempacotado, [então] você deveria, 
+        pelo menos, especificar 
+        <literal>RUSTFLAGS=-Copt-level=2</literal>; do contrário, fará 
+        uma compilação não otimizada, com informação de depuração e 
+        executará <emphasis>muito</emphasis> mais lento.
+
       </para>
 
       <para>
-        The rust developers seem to assume that everyone will compile on a
-        machine dedicated to producing builds, so by default all CPUs are used.
-        This can often be worked around, either by exporting
-        CARGO_BUILD_JOBS=&lt;N&gt; or passing --jobs &lt;N&gt; to cargo. For
-        compiling rustc itself, specifying --jobs &lt;N&gt; on invocations of
-        x.py (together with the <envar>CARGO_BUILD_JOBS</envar> environment
-        variable, which looks like a "belt and braces" approach but seems to be
-        necessary) mostly works. The exception is running the tests when building
-        rustc, some of them will nevertheless use all online CPUs, at least as of
-        rustc-1.42.0.
+
+        Os(As) desenvolvedores(as) do rust parecem presumir que todos 
+        compilarão em uma máquina dedicada a produzir construções, de 
+        forma que, por padrão, todas as CPUs são usadas.  Isso, 
+        frequentemente, pode ser contornado, seja exportando-se 
+        CARGO_BUILD_JOBS=&lt;N&gt;, seja passando-se --jobs &lt;N&gt; 
+        para o cargo.  Para compilar o próprio rustc, especificar-se 
+        --jobs &lt;N&gt; em invocações de x.py (junto com a variável de 
+        ambiente <envar>CARGO_BUILD_JOBS</envar>, que se parece com uma 
+        abordagem "cinto e suspensórios", porém parece ser necessária) 
+        na maioria das vezes funciona.  A exceção é a de executar-se os 
+        testes quando construir-se o rustc; alguns deles, ainda assim, 
+        usarão todas as CPUs online, pelo menos desde o rustc-1.42.0.
+
       </para>
 
   </sect2>
 
   <sect2 id="optimizations">
-    <title>Optimizing the build</title>
+    <title>Otimizando a construção</title>
 
       <para>
-        Many people will prefer to optimize compiles as they see fit, by providing
-        CFLAGS or CXXFLAGS. For an introduction to the options available with gcc
-        and g++ see <ulink
-        url="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html"/> and <ulink
-        url="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html"/>
-        and <command>info gcc</command>.
+
+        Muitas pessoas preferirão otimizar compilações como acharem 
+        melhor, fornecendo CFLAGS ou CXXFLAGS.  Para uma introdução às 
+        opções disponíveis com o gcc e com o g++, veja-se
+        <ulink url="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html"/>; 
+        e
+        <ulink url="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html"/>; 
+        e <command>info gcc</command>.
 
       </para>
 
       <para>
-        Some packages default to '-O2 -g', others to '-O3 -g', and if CFLAGS or
-        CXXFLAGS are supplied they might be added to the package's defaults,
-        replace the package's defaults, or even be ignored.  There are details
-        on some desktop packages which were mostly current in April 2019 at
-        <ulink url="https://www.linuxfromscratch.org/~ken/tuning/"/> - in
-        particular, README.txt, tuning-1-packages-and-notes.txt, and
-        tuning-notes-2B.txt. The particular thing to remember is that if you
-        want to try some of the more interesting flags you may need to force
-        verbose builds to confirm what is being used.
+
+        Alguns pacotes padronizam para '-O2 -g'; outros para '-O3 -g'; 
+        e, se CFLAGS ou CXXFLAGS forem fornecidos, [então] eles poderiam 
+        ser adicionados ao padrão do pacote; substituir o padrão do 
+        pacote; ou até serem ignorados.  Existem detalhes acerca de 
+        alguns pacotes de área de trabalho que eram na maioria das vezes 
+        atuais em abril de 2019 em
+        <ulink url="https://www.linuxfromscratch.org/~ken/tuning/"/> - em 
+        particular, README.txt, tuning-1-packages-and-notes.txt e 
+        tuning-notes-2B.txt.  A coisa particular a se lembrar é a de 
+        que, se você quiser tentar algum dos mais interessantes 
+        sinalizadores, você talvez precise forçar construções verbosas 
+        para confirmar o que está sendo usado.
+
       </para>
 
       <para>
-        Clearly, if you are optimizing your own program you can spend time to
-        profile it and perhaps recode some of it if it is too slow. But for
-        building a whole system that approach is impractical. In general,
-        -O3 usually produces faster programs than -O2.  Specifying
-        -march=native is also beneficial, but means that you cannot move the
-        binaries to an incompatible machine - this can also apply to newer
-        machines, not just to older machines. For example programs compiled for
-        'amdfam10' run on old Phenoms, Kaveris, and Ryzens : but programs
-        compiled for a Kaveri will not run on a Ryzen because certain op-codes
-        are not present.  Similarly, if you build for a Haswell not everything
-        will run on a SandyBridge.
+
+        Claramente, se você estiver otimizando seu próprio aplicativo, 
+        [então] você pode gastar tempo para perfilá-lo e, talvez, 
+        recodificar algo dele, se ele estiver lento demais.  Porém, para 
+        construir um sistema inteiro, essa abordagem é impraticável.  No 
+        geral, -03 geralmente produz aplicativos mais rápidos que -02.  
+        Especificar-se -march=native também é benéfico, porém significa 
+        que você não pode mover os binários para uma máquina 
+        incompatível - isso também pode se aplicar a máquinas mais 
+        novas, não apenas às máquinas mais antigas.  Por exemplo, os 
+        aplicativos compilados para 'amdfam10' executam em Phenoms 
+        antigos; Kaveris; e Ryzens; porém, os aplicativos compilados 
+        para um Kaveri não executarão em um Ryzen, pois certos códigos 
+        de operação não estão presentes.  Similarmente, se você 
+        construir para um Haswell, [então] nem tudo executará em um 
+        SandyBridge.
+
       </para>
 
       <para>
-        There are also various other options which some people claim are
-        beneficial. At worst, you get to recompile and test, and then
-        discover that in your usage the options do not provide a benefit.
+
+        Existem também várias outras opções que algumas pessoas alegam 
+        que são benéficas.  Na pior das hipóteses, você consegue 
+        recompilar e testar e, então, descobrir que, em seu uso, as 
+        opções não fornecem um benefício.
+
       </para>
 
       <para>
-        If building Perl or Python modules, or Qt packages which use qmake,
-        in general the CFLAGS and CXXFLAGS used are those which were used by
-        those 'parent' packages.
+
+        Se construir módulos do Perl ou do Python; ou pacotes do Qt que 
+        usam o qmake, [então], no geral, os CFLAGS e CXXFLAGS usados são 
+        aqueles que foram usados por aqueles pacotes 'pai'.
+
       </para>
 
   </sect2>
