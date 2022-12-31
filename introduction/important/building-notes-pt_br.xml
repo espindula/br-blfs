@@ -1076,73 +1076,125 @@ chmod 755 blfs-yes-test2</userinput></screen>
     <bridgehead renderas="sect3" id="meson-info">Meson</bridgehead>
 
       <para>
-        Meson has some similarities to CMake, but many differences. To get
-        details of the defines that you may wish to change you can look at
-        <filename>meson_options.txt</filename> which is usually in the
-         top-level directory.
+
+        O Meson tem algumas semelhanças com o CMake, porém muitas 
+        diferenças.  Para obter os detalhes das definições que você 
+        talvez queira mudar, você pode olhar para o 
+        <filename>meson_options.txt</filename> que normalmente está no 
+        diretório de nível de topo.
+
       </para>
 
       <para>
-        If you have already configured the package by running
-        <command>meson</command> and now wish to change one or more settings,
-        you can either remove the build directory, recreate it, and use the
-        altered options, or within the build directory run <command>meson
-        configure</command>, e.g. to set an option:
+
+        Se você já configurou o pacote executando o 
+        <command>meson</command> e, agora, deseja mudar uma ou mais 
+        configurações, [então] você ou pode remover o diretório de 
+        construção, recriá-lo e usar as opções alteradas; ou, dentro do 
+        diretório de construção, executar
+        <command>meson configure</command>, por exemplo, para configurar
+        uma opção:
+
       </para>
 
-<screen><userinput>meson configure -D&lt;some_option&gt;=true</userinput></screen>
+<screen><userinput>meson configure -D&lt;alguma_opcao&gt;=true</userinput></screen>
 
       <para>
-        If you do that, the file <filename>meson-private/cmd_line.txt</filename>
-        will show the <emphasis>last</emphasis> commands which were used.
+
+        Se você fizer isso, [então] o arquivo 
+        <filename>meson-private/cmd_line.txt</filename> mostrará os 
+        <emphasis>últimos</emphasis> comandos que foram usados.
+
       </para>
 
       <para>
-        Meson provides the following buildtype values, and the flags they enable
-        come <emphasis>after</emphasis> any flags supplied in the environment and
-        therefore take precedence.
+
+        O Meson fornece os seguintes valores de tipo de construção e os 
+        sinalizadores que eles habilitam vem <emphasis>depois</emphasis> 
+        de quaisquer sinalizadores fornecidos no ambiente e, portanto, 
+        tem precedência.
+
       </para>
 
       <itemizedlist>
+
         <listitem>
-          <para>plain : no added flags. This is for distributors to supply their
-          own CLFAGS, CXXFLAGS and LDFLAGS. There is no obvious reason to use
-          this in BLFS.</para>
+
+          <para>
+
+            plano : nenhum sinalizador adicionado.  Isso é para os(as) 
+            distribuidores(as) fornecerem os próprios CLFAGS, CXXFLAGS e 
+            LDFLAGS deles(as).  Não existe razão óbvia para usar isso no 
+            BLFS.
+
+          </para>
+
         </listitem>
+
         <listitem>
-          <para>debug : '-g' - this is the default if nothing is specified
-          in either <filename>meson.build</filename> or the command line.
-          However it results large and slow binaries, so we should override
-          it in BLFS.</para>
+
+          <para>
+
+            depuração : '-g' - isso é o padrão, se nada for 
+            especificado, seja no <filename>meson.build</filename>, seja 
+            na linha de comando.  Entretanto, resulta em binários largos 
+            e lentos, de forma que nós deveríamos substitui-lo no BLFS.
+
+          </para>
+
         </listitem>
+
         <listitem>
-           <para>debugoptimized : '-O2 -g' : this is the default specified in
-           <filename>meson.build</filename> of some packages.</para>
+
+          <para>
+
+            depuração otimizada : '-O2 -g' : isso é o padrão, 
+            especificado no <filename>meson.build</filename>, de alguns 
+            pacotes.
+
+          </para>
+
         </listitem>
+
         <listitem>
-           <para>release : '-O3 -DNDEBUG' (but occasionally a package will force
-           -O2 here)</para>
+
+          <para>
+
+            lançamento : '-O3 -DNDEBUG' (porém, ocasionalmente, um 
+            pacote forçará -O2 aqui)
+
+          </para>
+
         </listitem>
+
       </itemizedlist>
 
       <para>
-        Although the 'release' buildtype is described as enabling -DNDEBUG, and all
-        CMake Release builds pass that, it has so far only been observed (in
-        verbose builds) for <xref linkend="mesa"/>. That suggests that it might
-        only be used when there are debug assertions present.
+
+        Apesar do tipo de construção 'lançamento' estar descrito como 
+        habilitante do -DNDEBUG e todas as construções CMake Release 
+        passarem isso, tem, até agora, somente sido observado (em 
+        construções verbosas) para o <xref linkend="mesa"/>.  Isso 
+        sugere que somente poderia ser usado quando existirem asserções 
+        de depuração presentes.
+
       </para>
 
       <para>
-        The -DNDEBUG flag can also be provided by passing
+
+        O sinalizador -DNDEBUG também pode ser fornecido passando-se 
         <command>-Db_ndebug=true</command>.
+
       </para>
 
       <para>
-        To see the details of the commands which are being run in a package using
-        meson, use 'ninja -v'.
+
+        Para ver os detalhes dos comandos que estão sendo executados em 
+        um pacote usando o meson, use 'ninja -v'.
+
       </para>
 
-    <bridgehead renderas="sect3" id="rust-info">Rustc and Cargo</bridgehead>
+    <bridgehead renderas="sect3" id="rust-info">Rustc e Cargo</bridgehead>
 
       <para>
         Most released rustc programs are provided as crates (source tarballs)
