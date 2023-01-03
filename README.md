@@ -10,8 +10,8 @@ git clone https://salsa.debian.org/jamenson/blfs-pt_br.git
 
 
 Direitos autorais (Copyright) da versão modificada traduzida para a 
-língua portuguesa escrita e falada no Brasil: (c) 2022 Jamenson Ferreira 
-Espindula de Almeida Melo (<jafesp@gmail.com>).
+língua portuguesa escrita e falada no Brasil: (c) 2022, 2023 Jamenson 
+Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
 
   Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
   classificado pela Free Software Foundation como sendo uma "versão 
@@ -27,9 +27,9 @@ Espindula de Almeida Melo (<jafesp@gmail.com>).
   Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
   Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
   intitulada "Licença de Documentação Livre GNU".
-  
+
 # Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
-  
+
   Permission is granted to copy, distribute and (or) modify this book 
   "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
   under the terms of the GNU Free Documentation License, Version 1.3 or 
@@ -42,4 +42,3 @@ Espindula de Almeida Melo (<jafesp@gmail.com>).
 
 ************************************************************************
 ************************************************************************
-								       
