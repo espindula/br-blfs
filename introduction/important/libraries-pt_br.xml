@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+]>
+
+<!--
+
+Direitos autorais (Copyright) da versão modificada traduzida para a 
+língua portuguesa escrita e falada no Brasil: (c) 2022, 2023 Jamenson 
+Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
+
+  Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
+  classificado pela Free Software Foundation como sendo uma "versão 
+  modificada" do mencionado livro.  Em assim sendo, na qualidade de 
+  tradutor, produtor da "versão modificada" e titular dos direitos 
+  autorais sobre a versão traduzida para a língua portuguesa do livro 
+  "Beyond Linux From Scratch", concede-se a seguinte permissão:
+
+  É concedida permissão para copiar, distribuir e (ou) modificar este 
+  livro "Beyond Linux From Scratch", versão traduzida para a língua 
+  portuguesa, sob os termos da Licença de Documentação Livre GNU, versão 
+  1.3 ou qualquer versão posterior publicada pela Free Software 
+  Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
+  Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
+  intitulada "Licença de Documentação Livre GNU".
+  
+# Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
+  
+  Permission is granted to copy, distribute and (or) modify this book 
+  "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
+  under the terms of the GNU Free Documentation License, Version 1.3 or 
+  any later version published by the Free Software Foundation; with no 
+  Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A 
+  copy of the license is included in the section entitled "GNU Free 
+  Documentation License".
+
+# Warning: all the files herein published are released with no warranty, implicit and (or) explicit.
+
+-->
+
+<sect1 id="libraries" xreflabel="bibliotecas">
+  <?dbhtml filename="libraries-pt_br.html"?>
+
+  <sect1info>
+    <date>$Date$</date>
+  </sect1info>
+
+  <title>Bibliotecas: Estáticas ou compartilhadas?</title>
+
+  <!-- seção g : 'Outros' em longindex.html -->
+  <indexterm zone="libraries">
+    <primary sortas="g-libraries">bibliotecas: Estáticas ou compartilhadas</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Bibliotecas: Estáticas ou compartilhadas?</title>
+
+    <para>
+
+      As bibliotecas originais eram simplesmente um arquivamento de 
+      rotinas a partir das quais as rotinas exigidas eram extraídas e 
+      vinculadas no aplicativo executável.  Essas são descritas como as 
+      bibliotecas estáticas (libfoo.a).  Em alguns sistemas operacionais 
+      antigos elas são o único tipo disponível.
+
+    </para>
+
+    <para>
+
+      Em quase todas as plataformas Linux também existem bibliotecas 
+      compartilhadas (libfoo.so) - uma cópia da biblioteca é carregada 
+      na memória virtual e compartilhada por todos os aplicativos, os 
+      quais chamam quaisquer das funções dela.  Isso é eficiente em 
+      espaço.
+
+    </para>
+
+    <para>
+
+      No passado, aplicativos essenciais, tais como um shell, 
+      frequentemente eram vinculados estaticamente, de forma que alguma 
+      forma de sistema mínimo de recuperação existia, mesmo se 
+      bibliotecas compartilhadas, tais como libc.so, se tornassem 
+      danificadas (por exemplo, movida para <filename 
+      class="directory">lost+found</filename> depois de um fsck seguindo 
+      uma parada não limpa).  Atualmente, a maioria das pessoas usa uma 
+      instalação alternativa de sistema ou um Live CD se elas tiverem 
+      que recuperar.  Os sistemas de arquivos com diário também reduzem 
+      a probabilidade desse tipo de problema.
+
+    </para>
+
+    <para>
+
+      Os(As) desenvolvedores(as), ao menos enquando estiverem 
+      desenvolvendo, frequentemente preferem usar versões estáticas das 
+      bibliotecas às quais o código deles(as) se vincula.
+
+    </para>
+
+    <para>
+
+      Dentro do livro, existem vários locais onde chaves de 
+      configuração, tais como <command>--disable-static</command>, são 
+      empregadas; e outros locais onde a possibilidade de usar versões 
+      de sistema das bibliotecas em vez das versões inclusas em outro 
+      pacote é discutida.  A razão principal para isso é para 
+      simplificar as atualizações de bibliotecas.
+
+    </para>
+
+    <para>
+
+      Se um pacote for vinculado a uma biblioteca dinâmica, [então] a 
+      atualização para uma versão mais recente da biblioteca é 
+      automática tão logo a biblioteca mais recente seja instalada e o 
+      aplicativo for (re)iniciado (condicionada a que a versão maior da 
+      biblioteca não seja modificada, por exemplo, indo de libfoo.so.2.0 
+      para libfoo.so.2.1.  Ir para libfoo.so.3 exigirá recompilação - o 
+      <command>ldd</command> pode ser usado para encontrar quais 
+      aplicativos usam a versão antiga).  Se um aplicativo for vinculado 
+      a uma biblioteca estática, [então] o aplicativo sempre tem de ser 
+      recompilado.  Se você souber quais aplicativos estão vinculados a 
+      uma biblioteca estática em particular, [então] isso é meramente um 
+      aborrecimento.  Entretanto, normalmente você 
+      <emphasis>não</emphasis> saberá quais aplicativos recompilar.
+
+    </para>
+
+    <para>
+
+      A maioria das bibliotecas é compartilhada; porém, se você fizer 
+      algo não usual, como mover uma biblioteca compartilhada para 
+      <filename class="directory">/lib</filename>, quebrando 
+      acidentalmente o link simbólico <literal>.so</literal> em 
+      <filename class="directory">/usr/lib</filename>, [então], enquanto 
+      mantiver a biblioteca estática em
+      <filename class="directory">/lib</filename>, a biblioteca estática
+      será silenciosamente vinculada nos aplicativos que precisarem dela.
+
+    </para>
+
+    <para>
+
+      Uma maneira de identificar quando uma biblioteca estática é usada 
+      é a de lidar com ela ao final da instalação de cada pacote.  
+      Escreva um script para encontrar todas as bibliotecas estáticas em 
+      <filename class="directory">/usr/lib</filename>, ou onde você 
+      estiver instalando; e, ou as mova para outro diretório, de forma 
+      que elas não mais sejam encontradas pelo vinculador; ou as 
+      renomeie, de forma que libfoo.a se torne, por exemplo, 
+      libfoo.a.oculta.  A biblioteca estática pode então ser restaurada 
+      temporariamente, se ela for mesmo necessária, e o pacote 
+      necessitando dela pode ser identificado.  Você talvez escolha 
+      excluir algumas das bibliotecas estáticas do glibc se você fizer 
+      isso (<filename>libc_nonshared.a; libg.a; libieee.a; libm.a; 
+      libpthread_nonshared.a; librpcsvc.a; libsupc++.a</filename>) para 
+      simplificar a compilação.
+
+    </para>
+
+<!-- versões rigidamente codificadas neste parágrafo; isto é um 
+comentário acerca daquelas versões -->
+
+    <para>
+
+      Se você usar essa abordagem, [então] você talvez descubra que mais 
+      pacotes que o que estava esperando usam uma biblioteca estática.  
+      Esse foi o caso com o <application>nettle-2.4</application> na 
+      configuração padrão somente estática dele: Ele era exigido pelo 
+      <application>GnuTLS-3.0.19</application>, porém vinculado também 
+      em pacote(s) que usa(m) o <application>GnuTLS</application>, tais 
+      como o <application>glib-networking-2.32.3</application>.
+
+    </para>
+
+    <para>
+
+      Muitos pacotes colocam algumas das funções comuns deles em uma 
+      biblioteca estática que somente é usada pelos aplicativos dentro 
+      do pacote e, crucialmente, a biblioteca <emphasis>não</emphasis> é 
+      instalada como uma biblioteca independente.  Essas bibliotecas 
+      internas não são um problema - se o pacote tiver de ser 
+      reconstruido para corrigir um defeito ou uma vulnerabilidade, 
+      [então] nada mais é vinculado a elas.
+
+    </para>
+
+    <para>
+
+      Quando o BLFS mencionar bibliotecas do sistema, significa as 
+      versões compartilhadas das bibliotecas.  Alguns pacotes, tais como 
+      o <xref linkend="firefox"/> e o <xref linkend="gs"/>, incluem 
+      muitas outras bibliotecas.  Quando eles se vinculam a elas, eles 
+      se vinculam estaticamente, de forma que isso também torna os 
+      aplicativos maiores.  A versão que eles enviam frequentemente é 
+      mais antiga que a versão usada no sistema, de forma que talvez 
+      contenham defeitos - ocasionalmente os(as) desenvolvedores(as) se 
+      defrontam com o problema da correção de defeitos nas bibliotecas 
+      inclusas deles; outras vezes não.
+
+    </para>
+
+    <para>
+
+      Ocasionalmente, decidir usar as bibliotecas do sistema é uma 
+      decisão fácil.  Outras vezes, talvez exija que você altere a 
+      versão do sistema (por exemplo, para a <xref linkend="libpng"/>, 
+      se usada pelo <xref linkend="firefox"/>).  De vez em quando, um 
+      pacote envia uma biblioteca antiga e não mais pode se vincular à 
+      versão atual, porém pode se vincular a uma versão mais antiga.  
+      Nesse caso, o BLFS normalmente usará apenas a versão enviada.  De 
+      quando em quando, a biblioteca inclusa não mais é desenvolvida 
+      separadamente; ou o(a) desenvolvedor(a) dela é o(a) mesmo(a) que o 
+      desenvolvedor(a) do pacote e você não tem outros pacotes que a 
+      usarão.  Nesses casos, você poderia decidir usar a biblioteca 
+      estática inclusa, mesmo se geralmente preferir usar as bibliotecas 
+      do sistema.
+
+    </para>
+
+    <para condition="html" role="usernotes">Observações do(a) Usuário(a): <ulink url="&blfs-wiki;/libraries"/></para>
+
+  </sect2>
+
+</sect1>
