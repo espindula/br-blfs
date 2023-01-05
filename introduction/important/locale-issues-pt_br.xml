@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+]>
+
+<!--
+
+Direitos autorais (Copyright) da versão modificada traduzida para a 
+língua portuguesa escrita e falada no Brasil: (c) 2022, 2023 Jamenson 
+Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
+
+  Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
+  classificado pela Free Software Foundation como sendo uma "versão 
+  modificada" do mencionado livro.  Em assim sendo, na qualidade de 
+  tradutor, produtor da "versão modificada" e titular dos direitos 
+  autorais sobre a versão traduzida para a língua portuguesa do livro 
+  "Beyond Linux From Scratch", concede-se a seguinte permissão:
+
+  É concedida permissão para copiar, distribuir e (ou) modificar este 
+  livro "Beyond Linux From Scratch", versão traduzida para a língua 
+  portuguesa, sob os termos da Licença de Documentação Livre GNU, versão 
+  1.3 ou qualquer versão posterior publicada pela Free Software 
+  Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
+  Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
+  intitulada "Licença de Documentação Livre GNU".
+  
+# Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
+  
+  Permission is granted to copy, distribute and (or) modify this book 
+  "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
+  under the terms of the GNU Free Documentation License, Version 1.3 or 
+  any later version published by the Free Software Foundation; with no 
+  Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A 
+  copy of the license is included in the section entitled "GNU Free 
+  Documentation License".
+
+# Warning: all the files herein published are released with no warranty, implicit and (or) explicit.
+
+-->
+
+<sect1 id="locale-issues" xreflabel="Problemas Relacionados ao Locale">
+  <?dbhtml filename="locale-issues-pt_br.html"?>
+
+  <sect1info>
+    <date>$Date$</date>
+  </sect1info>
+
+  <title>Problemas Relacionados ao Locale</title>
+
+  <para>
+
+    Esta página contém informação acerca de situações difíceis e 
+    problemas relacionados ao locale.  Nos parágrafos seguintes você 
+    encontrará uma visão geral genérica das coisas que podem surgir 
+    quando configurar o seu sistema para vários locales.  Muitas (mas, 
+    não todas) situações difíceis existentes relacionadas ao locale 
+    podem ser classificadas e caem sob um dos títulos abaixo.  As 
+    avaliações de gravidade abaixo usam o seguinte critério:
+
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+
+      <para>
+
+        Crítica: O aplicativo não realiza a função principal dele.  A 
+        correção seria muito invasiva; é melhor procurar por uma 
+        substituição.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Alta: Parte da funcionalidade que o aplicativo fornece não é 
+        utilizável.  Se essa funcionalidade for exigida, [então] é 
+        melhor procurar por uma substituição.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Baixa: O aplicativo funciona em todos os casos típicos de uso, 
+        porém carece de alguma funcionalidade normalmente fornecida 
+        pelos equivalentes dele.
+
+      </para>
+
+    </listitem>
+
+  </itemizedlist>
+
+  <para>
+
+    Se existir uma gambiarra conhecida para um pacote específico, 
+    [então] ela aparecerá naquela página do pacote.  Para a mais recente 
+    informação acerca dos problemas relacionados ao locale para pacotes 
+    individuais, verifique as
+    <ulink url="&blfs-wiki;/BlfsNotes">Observações de Usuário(a)</ulink>
+    na Wiki do BLFS.
+
+  </para>
+
+  <sect2 id="locale-not-valid-option"
+         xreflabel="Codificação Necessária Não É uma Opção Válida">
+
+    <title>A Codificação Necessária Não É uma Opção Válida no Aplicativo</title>
+
+    <para>Gravidade: Crítica</para>
+
+    <para>
+
+      Alguns aplicativos exigem que o(a) usuário(a) especifique a 
+      codificação de caracteres para os dados de entrada gerada ou de 
+      saída gerada deles e apresentam somente uma escolha limitada de 
+      codificações.  Esse é o caso para a opção <option>-X</option> no 
+      <!-- <xref linkend="a2ps"/> e no --><xref linkend="enscript"/>; 
+      para a opção <option>-input-charset</option> no
+      <xref linkend="cdrtools"/> não remendado; e para os conjuntos de 
+      caracteres oferecidos para exibição no menu do
+      <xref linkend="Links"/>.  Se a codificação exigida não estiver na
+      lista, [então] o aplicativo geralmente se torna completamente 
+      inutilizável.  Para os aplicativos não interativos, talvez seja 
+      possível contornar isso convertendo-se o documento para um 
+      conjunto suportado de caracteres de entrada antes de submetê-lo ao 
+      aplicativo.
+
+    </para>
+
+    <para>
+
+      Uma solução para esse tipo de situação difícil é a de implementar 
+      o suporte necessário para a codificação ausente como uma correção 
+      para o aplicativo original ou encontrar um substituto.
+
+    </para>
+
+  </sect2>
+
+  <sect2 id="locale-assumed-encoding"
+         xreflabel="O Aplicativo Assume a Codificação">
+
+    <title>
+
+      O Aplicativo Assume a Codificação Baseada no Locale dos Documentos 
+      Externos
+
+    </title>
+
+    <para>
+
+      Gravidade: Alta para documentos não textuais; baixa para 
+      documentos de texto
+
+    </para>
+
+    <para>
+
+      Alguns aplicativos, <xref linkend="nano"/> ou
+      <xref linkend="joe"/>, por exemplo, assumem que os documentos
+      sempre estejam na codificação implícita pelo locale
+      atual.  Enquanto essa presunção talvez seja válida para os
+      documentos criados pelo(a) usuário(a), ela não é segura para
+      os externos.  Quando essa presunção falha, os caracteres não
+      ASCII são exibidos incorretamente e o documento talvez se
+      torne ilegível.
+
+    </para>
+
+    <para>
+
+      Se o documento externo for inteiramente baseado em texto, [então] 
+      ele pode ser convertido para a codificação atual do locale 
+      usando-se o aplicativo <command>iconv</command>.
+
+    </para>
+
+    <para>
+
+      Para documentos que não sejam baseados em texto, isso não é 
+      possível.  De fato, a presunção feita no aplicativo talvez seja 
+      completamente inválida para documentos onde o sistema operacional 
+      Microsoft Windows tenha configurado padrões efetivos.  Um exemplo 
+      dessa situação difícil são as etiquetas ID3v1 nos arquivos MP3 
+      (veja-se a
+<ulink url="&blfs-wiki;/ID3v1Coding">página Codificação ID3v1 da Wiki da BLFS</ulink>
+      para mais detalhes).  Para esses casos, a única solução é a de
+      encontrar um aplicativo substituto que não tenha o problema (por
+      exemplo, um que te permitirá especificar a codificação presumida
+      do documento).
+
+    </para>
+
+    <para>
+
+      Entre os pacotes do BLFS, essa situação difícil se aplica ao
+      <xref linkend="nano"/>; ao <xref linkend="joe"/>; e a todos os 
+      reprodutores de mídia, exceto o <xref linkend="audacious"/>.
+
+    </para>
+
+
+
+
+    <para>Another problem in this category is when someone cannot read
+    the documents you've sent them because their operating system is
+    set up to handle character encodings differently. This can happen
+    often when the other person is using Microsoft Windows, which only
+    provides one character encoding for a given country. For example,
+    this causes problems with UTF-8 encoded TeX documents created in
+    Linux. On Windows, most applications will assume that these documents
+    have been created using the default Windows 8-bit encoding.
+    </para>
+
+    <para>In extreme cases, Windows encoding compatibility issues may be
+    solved only by running Windows programs under
+    <ulink url="http://www.winehq.com/">Wine</ulink>.</para>
+
+  </sect2>
+
+  <sect2 id="locale-wrong-filename-encoding"
+         xreflabel="Wrong Filename Encoding">
+
+    <title>The Program Uses or Creates Filenames in the Wrong Encoding</title>
+
+    <para>Severity: Critical</para>
+
+    <para>The POSIX standard mandates that the filename encoding is
+    the encoding implied by the current LC_CTYPE locale category. This
+    information is well-hidden on the page which specifies the behavior
+    of <application>Tar</application> and <application>Cpio</application>
+    programs. Some programs get it wrong by default (or simply don't
+    have enough information to get it right). The result is that they
+    create filenames which are not subsequently shown correctly by
+    <command>ls</command>, or they refuse to accept filenames that
+    <command>ls</command> shows properly. For the <xref linkend="glib2"/>
+    library, the problem can be corrected by setting the
+    <envar>G_FILENAME_ENCODING</envar> environment variable to the special
+    "@locale" value. <application>Glib2</application> based programs that
+    don't respect that environment variable are buggy.</para>
+
+    <para>The <xref linkend="zip"/> and <xref linkend="unzip"/> have this
+    problem because they hard-code the expected filename encoding.
+    <application>UnZip</application> contains a hard-coded conversion table
+    between the CP850 (DOS) and ISO-8859-1 (UNIX) encodings and uses this table
+    when extracting archives created under DOS or Microsoft Windows. However,
+    this assumption only works for those in the US and not for anyone using a
+    UTF-8 locale. Non-ASCII characters will be mangled in the extracted
+    filenames.</para>
+
+    <!--<para>On the other hand,
+    <application>Nautilus CD Burner</application> checks names of
+    files added to its window for UTF-8 validity. This is wrong for
+    users of non-UTF-8 locales. Also,
+    <application>Nautilus CD Burner</application> unconditionally
+    calls <command>mkisofs</command> with the
+    <parameter>-input-charset UTF-8</parameter> parameter, which is
+    only correct in UTF-8 locales.</para>-->
+
+    <para>The general rule for avoiding this class of problems is to
+    avoid installing broken programs. If this is impossible, the
+    <ulink url="http://j3e.de/linux/convmv/">convmv</ulink>
+    command-line tool can be used to fix filenames created by these
+    broken programs, or intentionally mangle the existing filenames
+    to meet the broken expectations of such programs.</para>
+
+    <para>In other cases, a similar problem is caused by importing
+    filenames from a system using a different locale with a tool that
+    is not locale-aware (e.g., <!--<xref linkend="nfs-utils"/> or-->
+    <xref linkend="openssh"/>). In order to avoid mangling non-ASCII
+    characters when transferring files to a system with a different
+    locale, any of the following methods can be used:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Transfer anyway, fix the damage with
+        <command>convmv</command>.</para>
+      </listitem>
+      <listitem>
+        <para>On the sending side, create a tar archive with the
+        <parameter>--format=posix</parameter> switch passed to
+        <command>tar</command> (this will be the default in a future
+        version of <command>tar</command>).</para>
+      </listitem>
+      <listitem>
+        <para>Mail the files as attachments. Mail clients specify the
+        encoding of attached filenames.</para>
+      </listitem>
+      <listitem>
+        <para>Write the files to a removable disk formatted with a FAT or
+        FAT32 filesystem.</para>
+      </listitem>
+      <listitem>
+        <para>Transfer the files using Samba.</para>
+      </listitem>
+      <listitem>
+        <para>Transfer the files via FTP using RFC2640-aware server
+        (this currently means only wu-ftpd, which has bad security history)
+        and client (e.g., lftp).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The last four methods work because the filenames are automatically
+    converted from the sender's locale to UNICODE and stored or sent in this
+    form. They are then transparently converted from UNICODE to the
+    recipient's locale encoding.</para>
+
+  </sect2>
+
+  <sect2 id="locale-wrong-multibyte-characters"
+         xreflabel="Breaks Multibyte Characters">
+
+    <title>The Program Breaks Multibyte Characters or Doesn't Count
+    Character Cells Correctly</title>
+
+    <para>Severity: High or critical</para>
+
+    <para>Many programs were written in an older era where multibyte
+    locales were not common. Such programs assume that C "char" data
+    type, which is one byte, can be used to store single characters.
+    Further, they assume that any sequence of characters is a valid
+    string and that every character occupies a single character cell.
+    Such assumptions completely break in UTF-8 locales. The visible
+    manifestation is that the program truncates strings prematurely
+    (i.e., at 80 bytes instead of 80 characters). Terminal-based
+    programs don't place the cursor correctly on the screen, don't react
+    to the "Backspace" key by erasing one character, and leave junk
+    characters around when updating the screen, usually turning the
+    screen into a complete mess.</para>
+
+    <para>Fixing this kind of problems is a tedious task from a
+    programmer's point of view, like all other cases of retrofitting new
+    concepts into the old flawed design. In this case, one has to redesign
+    all data structures in order to accommodate to the fact that a complete
+    character may span a variable number of "char"s (or switch to wchar_t
+    and convert as needed). Also, for every call to the "strlen" and
+    similar functions, find out whether a number of bytes, a number of
+    characters, or the width of the string was really meant. Sometimes it
+    is faster to write a program with the same functionality from scratch.
+    </para>
+
+    <para>Among BLFS packages, this problem applies to
+    <xref linkend="xine-ui"/> and all the shells.</para>
+
+  </sect2>
+
+  <sect2 id="locale-wrong-manpage-encoding"
+         xreflabel="Incorrect Manual Page Encoding">
+
+    <title>The Package Installs Manual Pages in Incorrect or
+    Non-Displayable Encoding</title>
+
+    <para>Severity: Low</para>
+
+    <para>LFS expects that manual pages are in the language-specific (usually
+    8-bit) encoding, as specified on the <ulink
+    url="&lfs-root;/chapter08/man-db.html">LFS Man DB page</ulink>. However,
+    some packages install translated manual pages in UTF-8 encoding (e.g.,
+    Shadow, already dealt with), or manual pages in languages not in the table.
+    Not all BLFS packages have been audited for conformance with the
+    requirements put in LFS (the large majority have been checked, and fixes
+    placed in the book for packages known to install non-conforming manual
+    pages). If you find a manual page installed by any of BLFS packages that is
+    obviously in the wrong encoding, please remove or convert it as needed, and
+    report this to BLFS team as a bug.</para>
+
+    <para>You can easily check your system for any non-conforming manual pages
+    by copying the following short shell script to some accessible location,
+
+<screen><literal>#!/bin/sh
+# Begin checkman.sh
+# Usage: find /usr/share/man -type f | xargs checkman.sh
+for a in "$@"
+do
+    # echo "Checking $a..."
+    # Pure-ASCII manual page (possibly except comments) is OK
+    grep -v '.\\"' "$a" | iconv -f US-ASCII -t US-ASCII >/dev/null 2>&amp;1 \
+        &amp;&amp; continue
+    # Non-UTF-8 manual page is OK
+    iconv -f UTF-8 -t UTF-8 "$a" >/dev/null 2>&amp;1 || continue
+    # Found a UTF-8 manual page, bad.
+    echo "UTF-8 manual page: $a" >&amp;2
+done
+# End checkman.sh
+</literal></screen>
+
+    and then issuing the following command (modify the command below if the
+    <command>checkman.sh</command> script is not in your <envar>PATH</envar>
+    environment variable):</para>
+
+<screen><userinput>find /usr/share/man -type f | xargs checkman.sh</userinput></screen>
+
+    <para>Note that if you have manual pages installed in any location other
+    than <filename class='directory'>/usr/share/man</filename> (e.g.,
+    <filename class='directory'>/usr/local/share/man</filename>), you must
+    modify the above command to include this additional location.</para>
+
+  </sect2>
+
+</sect1>
