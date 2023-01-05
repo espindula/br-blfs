@@ -210,111 +210,207 @@ Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
 
     </para>
 
+    <para>
 
+      Outra situação difícil nessa categoria é quando alguém não 
+      consegue ler os documentos que você enviou, pois o sistema 
+      operacional dessa pessoa está configurado para manusear 
+      diferentemente as codificações de caracteres.  Isso pode acontecer 
+      frequentemente quando a outra pessoa estiver usando o Microsoft 
+      Windows, o qual fornece apenas uma codificação de caracteres para 
+      um dado país.  Por exemplo, isso causa situações difíceis com 
+      documentos do TeX codificados em UTF-8 criados no Linux.  No 
+      Windows, a maioria dos aplicativos assumirá que esses documentos 
+      tenham sido criados usando a codificação padrão de oito (08) bits 
+      do Windows.
 
-
-    <para>Another problem in this category is when someone cannot read
-    the documents you've sent them because their operating system is
-    set up to handle character encodings differently. This can happen
-    often when the other person is using Microsoft Windows, which only
-    provides one character encoding for a given country. For example,
-    this causes problems with UTF-8 encoded TeX documents created in
-    Linux. On Windows, most applications will assume that these documents
-    have been created using the default Windows 8-bit encoding.
     </para>
 
-    <para>In extreme cases, Windows encoding compatibility issues may be
-    solved only by running Windows programs under
-    <ulink url="http://www.winehq.com/">Wine</ulink>.</para>
+    <para>
+
+      Em casos extremos, os problemas de compatibilidade de codificação 
+      do Windows talvez somente sejam resolvidos executando-se os 
+      aplicativos do Windows sob o
+      <ulink url="http://www.winehq.com/">Wine</ulink>.
+
+    </para>
 
   </sect2>
 
   <sect2 id="locale-wrong-filename-encoding"
-         xreflabel="Wrong Filename Encoding">
+         xreflabel="Codificação Errada do Nome do Arquivo">
 
-    <title>The Program Uses or Creates Filenames in the Wrong Encoding</title>
+    <title>
 
-    <para>Severity: Critical</para>
+      O Aplicativo Usa ou Cria os Nomes de Arquivo na Codificação Errada
 
-    <para>The POSIX standard mandates that the filename encoding is
-    the encoding implied by the current LC_CTYPE locale category. This
-    information is well-hidden on the page which specifies the behavior
-    of <application>Tar</application> and <application>Cpio</application>
-    programs. Some programs get it wrong by default (or simply don't
-    have enough information to get it right). The result is that they
-    create filenames which are not subsequently shown correctly by
-    <command>ls</command>, or they refuse to accept filenames that
-    <command>ls</command> shows properly. For the <xref linkend="glib2"/>
-    library, the problem can be corrected by setting the
-    <envar>G_FILENAME_ENCODING</envar> environment variable to the special
-    "@locale" value. <application>Glib2</application> based programs that
-    don't respect that environment variable are buggy.</para>
+    </title>
 
-    <para>The <xref linkend="zip"/> and <xref linkend="unzip"/> have this
-    problem because they hard-code the expected filename encoding.
-    <application>UnZip</application> contains a hard-coded conversion table
-    between the CP850 (DOS) and ISO-8859-1 (UNIX) encodings and uses this table
-    when extracting archives created under DOS or Microsoft Windows. However,
-    this assumption only works for those in the US and not for anyone using a
-    UTF-8 locale. Non-ASCII characters will be mangled in the extracted
-    filenames.</para>
+    <para>Gravidade: Crítica</para>
 
-    <!--<para>On the other hand,
-    <application>Nautilus CD Burner</application> checks names of
-    files added to its window for UTF-8 validity. This is wrong for
-    users of non-UTF-8 locales. Also,
-    <application>Nautilus CD Burner</application> unconditionally
-    calls <command>mkisofs</command> with the
-    <parameter>-input-charset UTF-8</parameter> parameter, which is
-    only correct in UTF-8 locales.</para>-->
+    <para>
 
-    <para>The general rule for avoiding this class of problems is to
-    avoid installing broken programs. If this is impossible, the
-    <ulink url="http://j3e.de/linux/convmv/">convmv</ulink>
-    command-line tool can be used to fix filenames created by these
-    broken programs, or intentionally mangle the existing filenames
-    to meet the broken expectations of such programs.</para>
+      O padrão POSIX manda que a codificação do nome de arquivo seja a 
+      codificação implícita pela categoria de locale LC_CTYPE atual.  
+      Essa informação está bem ocultada na página que especifica o 
+      comportamento dos aplicativos <application>Tar</application> e 
+      <application>Cpio</application>.  Alguns aplicativos obtém isso 
+      errado por padrão (ou, simplesmente, não tem informação suficiente 
+      para obter isso certo).  O resultado é o de que eles criam nomes 
+      de arquivo que não são subsequentemente mostrados corretamente 
+      pelo <command>ls</command>; ou eles se recusam a aceitar nomes de 
+      arquivo que o <command>ls</command> mostra adequadamente.  Para a 
+      biblioteca <xref linkend="glib2"/>, a situação difícil pode ser 
+      corrigida configurando-se a variável de ambiente 
+      <envar>G_FILENAME_ENCODING</envar> para o valor especial 
+      "@locale".  Os aplicativos baseados na 
+      <application>Glib2</application> que não respeitarem essa variável 
+      de ambiente são defeituosos.
 
-    <para>In other cases, a similar problem is caused by importing
-    filenames from a system using a different locale with a tool that
-    is not locale-aware (e.g., <!--<xref linkend="nfs-utils"/> or-->
-    <xref linkend="openssh"/>). In order to avoid mangling non-ASCII
-    characters when transferring files to a system with a different
-    locale, any of the following methods can be used:</para>
+    </para>
+
+    <para>
+
+      O <xref linkend="zip"/> e o <xref linkend="unzip"/> tem esse 
+      problema, pois eles rigidamente codificam a codificação esperada 
+      de nome de arquivo.  O <application>UnZip</application> contém uma 
+      tabela rigidamente codificada de conversão entre as codificações 
+      CP850 (DOS) e ISO-8859-1 (UNIX) e usa essa tabela quando extrai 
+      arquivamentos criados sob o DOS ou sob o Microsoft Windows.  
+      Entretanto, essa presunção funciona somente para aqueles(as) nos 
+      Estados Unidos da América do Norte e não para qualquer um(a) 
+      usando um locale UTF-8.  Os caracteres não ASCII serão 
+      desfigurados nos nomes de arquivos extraídos.
+
+    </para>
+
+    <!--
+
+    <para>
+
+      Por outro lado, o
+      <application>Gravador de CD do Nautilus</application> verifica
+      os nomes dos arquivos adicionados à janela dele para validade
+      UTF-8.  Isso é errado para usuários(as) de locales não
+      UTF-8.  Também o
+      <application>Gravador de CD do Nautilus</application> chama
+      incondicionalmente o <command>mkisofs</command> com o parâmetro 
+      <parameter>-input-charset UTF-8</parameter>, o que é correto 
+      somente em locales UTF-8.
+
+    </para>
+
+    -->
+
+    <para>
+
+      A regra geral para se evitar essa classe de problemas é a de se 
+      evitar instalar aplicativos quebrados.  Se isso for impossível, 
+      [então] a ferramenta de linha de comando
+      <ulink url="http://j3e.de/linux/convmv/">convmv</ulink> pode ser
+      usada para corrigir os nomes de arquivos criados por esses
+      aplicativos quebrados; ou, intencionalmente, desfigurar os nomes
+      de arquivos existentes para satisfazer as expectativas quebradas
+      de tais aplicativos.
+
+    </para>
+
+    <para>
+
+      Em outros casos, um problema similar é causado importando-se nomes 
+      de arquivos a partir de um sistema usando um locale diferente com 
+      uma ferramenta que não é ciente do locale (por exemplo, o 
+      <!--<xref linkend="nfs-utils"/>; ou o-->
+      <xref linkend="openssh"/>).  Para a finalidade de se evitar
+      desfigurar os caracteres não ASCII quando se transferir arquivos
+      para um sistema com um locale diferente, quaisquer dos seguintes
+      métodos podem ser usados:
+
+    </para>
 
     <itemizedlist>
+
       <listitem>
-        <para>Transfer anyway, fix the damage with
-        <command>convmv</command>.</para>
+
+        <para>
+
+          Transfira de qualquer modo; corrija o dano com o 
+          <command>convmv</command>.
+
+        </para>
+
       </listitem>
+
       <listitem>
-        <para>On the sending side, create a tar archive with the
-        <parameter>--format=posix</parameter> switch passed to
-        <command>tar</command> (this will be the default in a future
-        version of <command>tar</command>).</para>
+
+        <para>
+
+          No lado do(a) remetente, crie um arquivamento tar com a chave 
+          <parameter>--format=posix</parameter> passada para o 
+          <command>tar</command> (isso será o padrão em uma versão 
+          futura do <command>tar</command>).
+
+        </para>
+
       </listitem>
+
       <listitem>
-        <para>Mail the files as attachments. Mail clients specify the
-        encoding of attached filenames.</para>
+
+        <para>
+
+          Envie os arquivos como anexos de mensagem de correio 
+          eletrônico.  Os clientes de correio eletrônico especificam a 
+          codificação dos nomes de arquivos anexados.
+
+        </para>
+
       </listitem>
+
       <listitem>
-        <para>Write the files to a removable disk formatted with a FAT or
-        FAT32 filesystem.</para>
+
+        <para>
+
+          Escreva os arquivos para um disco removível formatado com um 
+          sistema de arquivos FAT ou FAT32.
+
+        </para>
+
       </listitem>
+
       <listitem>
-        <para>Transfer the files using Samba.</para>
+
+        <para>
+
+          Transfira os arquivos usando o Samba.
+
+        </para>
+
       </listitem>
+
       <listitem>
-        <para>Transfer the files via FTP using RFC2640-aware server
-        (this currently means only wu-ftpd, which has bad security history)
-        and client (e.g., lftp).</para>
+
+        <para>
+
+          Transfira os arquivos via FTP usando um servidor (atualmente, 
+          isso significa somente o wu-ftpd, que tem um mau histórico de 
+          segurança) e um cliente (por exemplo, o lftp) cientes da 
+          RFC2640.
+
+        </para>
+
       </listitem>
+
     </itemizedlist>
 
-    <para>The last four methods work because the filenames are automatically
-    converted from the sender's locale to UNICODE and stored or sent in this
-    form. They are then transparently converted from UNICODE to the
-    recipient's locale encoding.</para>
+    <para>
+
+      Os últimos quatro métodos funcionam, pois os nomes de arquivos são 
+      convertidos automaticamente do locale do(a) remetente para UNICODE 
+      e armazenados ou enviados nessa forma.  Eles são então convertidos 
+      transparentemente do UNICODE para a codificação do locale do(a) 
+      recipiente.
+
+    </para>
 
   </sect2>
 
