@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+]>
+
+<!--
+
+Direitos autorais (Copyright) da versão modificada traduzida para a 
+língua portuguesa escrita e falada no Brasil: (c) 2022, 2023 Jamenson 
+Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
+
+  Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
+  classificado pela Free Software Foundation como sendo uma "versão 
+  modificada" do mencionado livro.  Em assim sendo, na qualidade de 
+  tradutor, produtor da "versão modificada" e titular dos direitos 
+  autorais sobre a versão traduzida para a língua portuguesa do livro 
+  "Beyond Linux From Scratch", concede-se a seguinte permissão:
+
+  É concedida permissão para copiar, distribuir e (ou) modificar este 
+  livro "Beyond Linux From Scratch", versão traduzida para a língua 
+  portuguesa, sob os termos da Licença de Documentação Livre GNU, versão 
+  1.3 ou qualquer versão posterior publicada pela Free Software 
+  Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
+  Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
+  intitulada "Licença de Documentação Livre GNU".
+  
+# Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
+  
+  Permission is granted to copy, distribute and (or) modify this book 
+  "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
+  under the terms of the GNU Free Documentation License, Version 1.3 or 
+  any later version published by the Free Software Foundation; with no 
+  Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A 
+  copy of the license is included in the section entitled "GNU Free 
+  Documentation License".
+
+# Warning: all the files herein published are released with no warranty, implicit and (or) explicit.
+
+-->
+
+<sect1 id="beyond" xreflabel="Indo Além do BLFS">
+  <?dbhtml filename="beyond-pt_br.html"?>
+
+  <sect1info>
+    <date>$Date$</date>
+  </sect1info>
+
+  <title>Indo Além do BLFS</title>
+
+  <para>
+
+    Os pacotes que são instalados neste livro são apenas a ponta do 
+    iceberg.  Nós esperamos que a experiência que você ganhou com o 
+    livro LFS e com o livro BLFS te dará o conhecimento necessário para 
+    compilar, instalar e configurar pacotes que não estejam inclusos 
+    neste livro.
+
+  </para>
+
+  <para>
+
+    Quando você quiser instalar um pacote para um local outro que 
+    <filename class='directory'>/</filename> ou
+    <filename class='directory'>/usr</filename>, você estará instalando
+    fora das configurações padrão de ambiente na maioria das máquinas.  Os 
+    seguintes exemplo deveriam te auxiliar a determinar como corrigir 
+    essa situação.  Os exemplos cobrem o intervalo completo de 
+    configurações que talvez precisem de atualização, porém eles não são 
+    todo o necessário em cada situação.
+
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+
+      <para>
+
+        Expanda a <envar>PATH</envar> para incluir
+        <filename class='directory'>$PREFIX/bin</filename>.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Expanda a <envar>PATH</envar> para o(a)
+        <systemitem class="username">root</systemitem> para incluir
+        <filename class='directory'>$PREFIX/sbin</filename>.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Adicione <filename class='directory'>$PREFIX/lib</filename> ao 
+        <filename>/etc/ld.so.conf</filename>; ou expanda a 
+        <envar>LD_LIBRARY_PATH</envar> para inclui-lo.  Antes de usar a 
+        última opção, consulte
+        <ulink url="http://xahlee.org/UnixResource_dir/_/ldpath.html"/>.  Se 
+        você modificar o <filename>/etc/ld.so.conf</filename>, [então] 
+        lembre-se de atualizar o <filename>/etc/ld.so.cache</filename>, 
+        executando <command>ldconfig</command> como o(a) usuário(a) 
+        <systemitem class="username">root</systemitem>.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Adicione <filename class='directory'>$PREFIX/man</filename> ao 
+        <filename>/etc/man_db.conf</filename>; ou expanda 
+        <envar>MANPATH</envar>.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Adicione <filename class='directory'>$PREFIX/info</filename> a 
+        <envar>INFOPATH</envar>.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Adicione
+        <filename class='directory'>$PREFIX/lib/pkgconfig</filename> a 
+        <envar>PKG_CONFIG_PATH</envar>.  Alguns pacotes agora estão 
+        instalando arquivos <filename class='extension'>.pc</filename> 
+        em
+        <filename class='directory'>$PREFIX/share/pkgconfig</filename>,
+        de forma que você talvez tenha que incluir esse diretório também.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Adicione <filename class='directory'>$PREFIX/include</filename> 
+        a <envar>CPPFLAGS</envar> quando compilar pacotes que dependam 
+        do pacote que você instalou.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Adicione <filename class='directory'>$PREFIX/lib</filename> a 
+        <envar>LDFLAGS</envar> quando compilar pacotes que dependam de 
+        uma biblioteca instalada pelo pacote.
+
+      </para>
+
+    </listitem>
+
+  </itemizedlist>
+
+  <para>
+
+    Se você estiver em busca de um pacote que não estiver no livro, 
+    [então] as seguintes são maneiras diferentes que você pode procurar 
+    pelo pacote desejado.
+
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+
+      <para>
+
+        Se você souber o nome do pacote, então procure no Freecode por 
+        ele em <ulink url="http://freecode.com/"/>.  Também, procure no 
+        Google em <ulink url="http://google.com/"/>.  Ocasionalmente, 
+        uma busca pelo <filename class='extension'>rpm</filename> em 
+        <ulink url="http://rpmfind.net/"/>; ou pelo
+        <filename class='extension'>deb</filename> em
+        <ulink url="http://www.debian.org/distrib/packages#search_packages"/> 
+        também pode levar a um link para o pacote.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Se você souber o nome do executável, porém não o do pacote ao 
+        qual o executável pertence, [então], primeiro, tente uma busca 
+        Google com o nome do executável.  Se os resultados forem 
+        sobrecarregadores, [então] tente buscar pelo dado executável no 
+        repositório do Debian em
+        <ulink url="http://www.debian.org/distrib/packages#search_contents"/>.
+
+      </para>
+
+    </listitem>
+
+  </itemizedlist>
+
+  <para>
+
+    Algumas dicas gerais acerca de manusear pacotes novos:
+
+  </para>
+
+  <itemizedlist>
+
+    <listitem>
+
+      <para>
+
+        Muitos dos pacotes mais recentes seguem o processo 
+<command>./configure &amp;&amp; make &amp;&amp; make install</command>.  Ajuda
+        acerca das opções aceitas pelo 
+        configure pode ser obtida via o comando
+        <command>./configure --help</command>.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        A maioria dos pacotes contém documentação acerca de compilar e 
+        de instalar o pacote.  Alguns dos documentos são excelentes; 
+        alguns, não tão excelentes.  Consulte a página do pacote para 
+        quaisquer dicas adicionais e atualizadas para compilar e 
+        configurar o pacote.
+
+      </para>
+
+    </listitem>
+
+    <listitem>
+
+      <para>
+
+        Se você estiver tendo um problema compilando o pacote, [então] 
+        tente procurar nos arquivamentos do LFS em
+        <ulink url="https://www.&lfs-domainname;/search.html"/> pelo
+        erro; ou, 
+        se isso falhar, [então] tente procurar no Google.  
+        Frequentemente, uma distribuição já terá solucionado o problema 
+        (muitas delas usam versões de desenvolvimento dos pacotes, de 
+        forma que elas veem as mudanças mais breve que aqueles de nós 
+        que normalmente usamos versões estáveis lançadas).  Porém, seja 
+        cauteloso(a) - todos(as) os(as) construtores(as) tendem a 
+        carregar remendos que não mais são necessários; e terem correções 
+        que somente são exigidas por causa das escolhas particulares 
+        deles(as) em como constroem um pacote.  Você talvez tenha que 
+        procurar profundamente para encontrar uma correção para a versão 
+        do pacote que estiver tentando usar; ou até mesmo para encontrar 
+        o pacote (os nomes, ocasionalmente, não são o que você poderia 
+        esperar; por exemplo, o <application>ghostscript</application> 
+        frequentemente tem um prefixo ou um sufixo no nome dele); 
+        entretanto, as observações seguintes poderiam ajudar, 
+        particularmente aqueles(as) que, como os(as) editores(as), estão 
+        tentando construir as versões mais recentes e encontrar 
+        problemas:
+
+      </para>
+
+      <itemizedlist>
+
+        <listitem>
+
+          <para>
+
+            Arch <ulink url="http://www.archlinux.org/packages/"/> - 
+            informe o nome do pacote na caixa 'Keywords'; selecione o 
+            nome do pacote; selecione o campo 'Source Files'; e, então, 
+            selecione a entrada <filename>PKGBUILD</filename> para ver 
+            como eles constroem esse pacote.
+
+          </para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>
+
+            Debian
+          <!-- 2020-11-11 ; o ftp congela tentando conectar; 
+          presumívelmente removido.  Use o http, pois o firefox diz que 
+          o certificado neste sítio gb não é válido para 
+          ftp.uk.debian.org -->
+            <ulink url="http://ftp.uk.debian.org/debian/pool"/> (use a 
+            versão do seu país, se existir uma) - o fonte estará em 
+            tarballs .tar.gz (ou o fonte original
+            <filename class='extension'>.orig</filename> do(a) desenvolvedor(a); 
+            ou, do contrário, um <filename>dfsg</filename> contendo 
+            aquelas partes que cumprem as diretrizes de software livre 
+            do debian) acompanhado por adições versionadas .diff.gz ou 
+            .tar.gz.  Essas adições frequentemente mostram como o pacote 
+            é construído e talvez contenham remendos.  Nas versões 
+            .diff.gz, quaisquer remendos criam arquivos em
+            <filename class="directory">debian/patches</filename>.
+
+          </para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>
+
+            O fonte do pacote do Fedora é reorganizado de tempos em 
+            tempos.  No momento, o fonte do pacote para rpms está em 
+            <ulink url="https://src.fedoraproject.org/projects/rpms/%2A"/>
+            e, a 
+            partir de lá, você pode tentar colocando um nome de pacote 
+            na caixa de busca.  Se o pacote for encontrado, [então] você 
+            pode olhar nos arquivos (specfile para controlar a 
+            construção; vários remendos) ou nos commits.  Se isso 
+            falhar, [então] você pode baixar um srpm (source rpm) e usar 
+            o <application>rpm2cpio</application> (veja-se a Dica ao 
+            final da página).  Para rpms, vá para
+            <ulink url="https://dl.fedoraproject.org/pub/fedora/linux/"/> e, 
+            então, escolha qual repositório deseja olhar - 
+            development/rawhide é o desenvolvimento mais recente; ou, 
+            escolha releases, para o que foi embarcado em um lançamento; 
+            updates, para as atualizações para um lançamento; ou, 
+            updates/testing, para as atualizações mais recentes, que 
+            poderiam funcionar ou poderiam ter problemas.
+
+          </para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>
+
+            Gentoo - os espelhos para ebuilds e para remendos parecem 
+            estar bem ocultados; e eles mudam frequentemente.  Também, 
+            se você tiver achado um espelho, [então] você precisa saber 
+            para qual diretório a aplicação foi atribuída.  Os próprios 
+            ebuilds podem ser encontrados em
+            <ulink url="http://packages.gentoo.org/"/> - use o campo de busca.  
+            Se existirem quaisquer remendos, [então] um espelho os terá 
+            no diretório <filename class="directory">files/</filename>.  
+            Dependendo do seu navegador, ou do espelho, você poderia 
+            precisar baixar o ebuild para estar apto(a) a lê-lo.  Trate 
+            o ebuild como uma espécie de combinação de pseudo código / 
+            shell - olhe, em particular, para os comandos e remendos 
+            <command>sed</command>; ou, arrisque um palpite no 
+            significado das funções, tais como <command>dodoc</command>.
+
+          </para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>openSUSE provide a rolling release, some package versions are in
+          <ulink url="http://download.opensuse.org/source/tumbleweed/repo/oss/src/"/>
+          but others are in ../update/openSUSE-current/src - the
+          source only seems to be available in source rpms.</para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>Slackware - the official package browser is currently broken.  The
+          site at <ulink url="http://slackbuilds.org/"/> has current and previous
+          versions in their unofficial repository with links to homepages, downloads,
+          and some individual files, particularly the <filename>.SlackBuild</filename>
+          files.</para>
+
+        </listitem>
+
+        <listitem>
+
+          <para>Ubuntu <ulink url="ftp://ftp.ubuntu.com/ubuntu/pool/"/> - see the
+          debian notes above.</para>
+
+        </listitem>
+
+      </itemizedlist>
+
+      <para>If everything else fails, try the blfs-support mailing-list.</para>
+
+    </listitem>
+
+  </itemizedlist>
+
+  <tip>
+    <para>If you have found a package that is only available in
+    <filename class='extension'>.deb</filename> or
+    <filename class='extension'>.rpm</filename>
+    format, there are two small scripts, <command>rpm2targz</command> and
+    <command>deb2targz</command> that are available at
+    <ulink url="&sources-anduin-http;/extras/deb2targz.tar.bz2"/> and
+    <ulink url="&sources-anduin-http;/extras/rpm2targz.tar.bz2"/> to convert the archives
+    into a simple <filename>tar.gz</filename> format.</para>
+    <para>You may also find an rpm2cpio script useful.  The Perl version in the
+    linux kernel archives at <ulink
+    url="http://lkml.indiana.edu/hypermail/linux/kernel/0210.2/att-0093/01-rpm2cpio"/>
+    works for most source rpms.  The rpm2targz script will use an rpm2cpio script
+    or binary if one is on your path.  Note that rpm2cpio will unpack a source
+    rpm in the current directory, giving a tarball, a spec file, and perhaps patches
+    or other files.</para>
+  </tip>
+
+</sect1>
