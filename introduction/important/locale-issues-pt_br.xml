@@ -415,92 +415,134 @@ Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
   </sect2>
 
   <sect2 id="locale-wrong-multibyte-characters"
-         xreflabel="Breaks Multibyte Characters">
+         xreflabel="Quebra Caracteres Multibyte">
 
-    <title>The Program Breaks Multibyte Characters or Doesn't Count
-    Character Cells Correctly</title>
+    <title>
 
-    <para>Severity: High or critical</para>
+      O Aplicativo Quebra Caracteres Multibyte ou Não Conta Células de 
+      Caracteres Corretamente
 
-    <para>Many programs were written in an older era where multibyte
-    locales were not common. Such programs assume that C "char" data
-    type, which is one byte, can be used to store single characters.
-    Further, they assume that any sequence of characters is a valid
-    string and that every character occupies a single character cell.
-    Such assumptions completely break in UTF-8 locales. The visible
-    manifestation is that the program truncates strings prematurely
-    (i.e., at 80 bytes instead of 80 characters). Terminal-based
-    programs don't place the cursor correctly on the screen, don't react
-    to the "Backspace" key by erasing one character, and leave junk
-    characters around when updating the screen, usually turning the
-    screen into a complete mess.</para>
+    </title>
 
-    <para>Fixing this kind of problems is a tedious task from a
-    programmer's point of view, like all other cases of retrofitting new
-    concepts into the old flawed design. In this case, one has to redesign
-    all data structures in order to accommodate to the fact that a complete
-    character may span a variable number of "char"s (or switch to wchar_t
-    and convert as needed). Also, for every call to the "strlen" and
-    similar functions, find out whether a number of bytes, a number of
-    characters, or the width of the string was really meant. Sometimes it
-    is faster to write a program with the same functionality from scratch.
+    <para>Gravidade: Alta ou crítica</para>
+
+    <para>
+
+      Muitos aplicativos foram escritos em uma era mais antiga onde 
+      locales multibyte não eram comuns.  Tais aplicativos assumem que o 
+      tipo de dados "char" do C, que é um byte, pode ser usado para 
+      armazenar caracteres únicos.  Além disso, eles assumem que 
+      qualquer sequência de caracteres é uma sequência de caracteres 
+      válida e que cada caractere ocupa uma célula de caractere única.  
+      Tais presunções quebram completamente em locales UTF-8.  A 
+      manifestação visível é a de que o aplicativo trunca sequências de 
+      caracteres prematuramente (isto é, em oitenta (80) bytes, em vez 
+      de oitenta (80) caracteres).  Os aplicativos baseados em terminal 
+      não colocam o cursor corretamente na tela; não reagem à tecla 
+      "Backspace" apagando um caractere; e deixam caracteres inúteis ao 
+      atualizar a tela, geralmente transformando a tela em uma completa 
+      bagunça.
+
     </para>
 
-    <para>Among BLFS packages, this problem applies to
-    <xref linkend="xine-ui"/> and all the shells.</para>
+    <para>
+
+      Corrigir esses tipos de problemas é uma tarefa tediosa, a partir 
+      de um ponto de vista do(a) programador(a), semelhante a todos os 
+      outros casos de retro adequar conceitos novos no projeto falho 
+      antigo.  Nesse caso, deve-se reprojetar todas as estruturas de 
+      dados para a finalidade de acomodar ao fato de que um caractere 
+      completo talvez abranja um número variável de "char"s (ou alternar 
+      para wchar_t e converter conforme necessário).  Também, para cada 
+      chamada à "strlen" e funções similares, descobrir se um número de 
+      bytes; um número de caracteres; ou a largura da sequência de 
+      caracteres realmente foi declarada.  Ocasionalmente, é mais rápido 
+      escrever um aplicativo com a mesmo funcionalidade desde o zero.
+
+    </para>
+
+    <para>
+
+      Entre os pacotes do BLFS, esse problema se aplica ao
+      <xref linkend="xine-ui"/> e a todos os shells.
+
+    </para>
 
   </sect2>
 
   <sect2 id="locale-wrong-manpage-encoding"
-         xreflabel="Incorrect Manual Page Encoding">
+         xreflabel="Codificação Incorreta da Página de Manual">
 
-    <title>The Package Installs Manual Pages in Incorrect or
-    Non-Displayable Encoding</title>
+    <title>
 
-    <para>Severity: Low</para>
+      O Pacote Instala as Páginas de Manual em Codificação Incorreta ou 
+      Não Exibível
 
-    <para>LFS expects that manual pages are in the language-specific (usually
-    8-bit) encoding, as specified on the <ulink
-    url="&lfs-root;/chapter08/man-db.html">LFS Man DB page</ulink>. However,
-    some packages install translated manual pages in UTF-8 encoding (e.g.,
-    Shadow, already dealt with), or manual pages in languages not in the table.
-    Not all BLFS packages have been audited for conformance with the
-    requirements put in LFS (the large majority have been checked, and fixes
-    placed in the book for packages known to install non-conforming manual
-    pages). If you find a manual page installed by any of BLFS packages that is
-    obviously in the wrong encoding, please remove or convert it as needed, and
-    report this to BLFS team as a bug.</para>
+    </title>
 
-    <para>You can easily check your system for any non-conforming manual pages
-    by copying the following short shell script to some accessible location,
+    <para>Gravidade: Baixa</para>
+
+    <para>
+
+      O LFS espera que as páginas de manual estejam na codificação 
+      específica para o idioma (geralmente oito (08) bits), conforme 
+      especificado na
+<ulink url="&lfs-root;/chapter08/man-db.html">página Man DB do LFS</ulink>.  Entretanto,
+      alguns pacotes instalam as páginas de 
+      manual traduzidas na codificação UTF-8 (por exemplo, o Shadow já 
+      tratou); ou páginas de manual em idiomas que não estão na tabela.  
+      Nem todos os pacotes do BLFS foram auditados para conformidade com 
+      as exigências colocadas no LFS (a quase totalidade foi verificada 
+      e correções colocadas no livro para os pacotes conhecidos por 
+      instalar páginas de manual não conformes).  Se você encontrar uma 
+      página de manual instalada por quaisquer dos pacotes do BLFS que 
+      obviamente esteja na codificação errada, [então], por favor, 
+      remova-o ou converta-o conforme necessário e relate isso para a 
+      equipe do BLFS como um defeito.
+
+    </para>
+
+    <para>
+
+      Você pode verificar facilmente o seu sistema para quaisquer 
+      páginas de manual não conformes, copiando o seguinte script curto 
+      de shell para algum local acessível,
 
 <screen><literal>#!/bin/sh
 # Begin checkman.sh
-# Usage: find /usr/share/man -type f | xargs checkman.sh
+# Uso: find /usr/share/man -type f | xargs checkman.sh
 for a in "$@"
 do
-    # echo "Checking $a..."
-    # Pure-ASCII manual page (possibly except comments) is OK
+    # echo "Verificando $a..."
+    # Página de manual ASCII pura (possivelmente exceto comentários) está OK
     grep -v '.\\"' "$a" | iconv -f US-ASCII -t US-ASCII >/dev/null 2>&amp;1 \
         &amp;&amp; continue
-    # Non-UTF-8 manual page is OK
+    # Página de manual não em UTF-8 está OK
     iconv -f UTF-8 -t UTF-8 "$a" >/dev/null 2>&amp;1 || continue
-    # Found a UTF-8 manual page, bad.
-    echo "UTF-8 manual page: $a" >&amp;2
+    # Encontrada uma página de manual em UTF-8, ruim.
+    echo "Página de manual em UTF-8: $a" >&amp;2
 done
 # End checkman.sh
 </literal></screen>
 
-    and then issuing the following command (modify the command below if the
-    <command>checkman.sh</command> script is not in your <envar>PATH</envar>
-    environment variable):</para>
+      e, então, emitindo o seguinte comando (modifique o comando abaixo 
+      se o script <command>checkman.sh</command> não estiver na sua 
+      variável de ambiente <envar>PATH</envar>):
+
+    </para>
 
 <screen><userinput>find /usr/share/man -type f | xargs checkman.sh</userinput></screen>
 
-    <para>Note that if you have manual pages installed in any location other
-    than <filename class='directory'>/usr/share/man</filename> (e.g.,
-    <filename class='directory'>/usr/local/share/man</filename>), you must
-    modify the above command to include this additional location.</para>
+    <para>
+
+      Observe que, se você tiver páginas de manual instaladas em 
+      qualquer outro local que
+      <filename class='directory'>/usr/share/man</filename> (por exemplo, 
+      <filename class='directory'>/usr/local/share/man</filename>), 
+      [então] você precisa modificar o comando acima para incluir esse 
+      local adicional.
+
+    </para>
 
   </sect2>
 
