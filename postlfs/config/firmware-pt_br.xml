@@ -1,124 +1,208 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 ]>
 
-<sect1 id="postlfs-firmware" xreflabel="About Firmware">
-  <?dbhtml filename="firmware.html"?>
+<!--
+
+Direitos autorais (Copyright) da versão modificada traduzida para a 
+língua portuguesa escrita e falada no Brasil: (c) 2022, 2023 Jamenson 
+Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
+
+  Este trabalho de tradução do livro "Beyond Linux From Scratch" é 
+  classificado pela Free Software Foundation como sendo uma "versão 
+  modificada" do mencionado livro.  Em assim sendo, na qualidade de 
+  tradutor, produtor da "versão modificada" e titular dos direitos 
+  autorais sobre a versão traduzida para a língua portuguesa do livro 
+  "Beyond Linux From Scratch", concede-se a seguinte permissão:
+
+  É concedida permissão para copiar, distribuir e (ou) modificar este 
+  livro "Beyond Linux From Scratch", versão traduzida para a língua 
+  portuguesa, sob os termos da Licença de Documentação Livre GNU, versão 
+  1.3 ou qualquer versão posterior publicada pela Free Software 
+  Foundation; sem Seções Invariantes, sem Textos de Capa Frontal e sem 
+  Textos de Quarta Capa.  Uma cópia da licença está incluída na seção 
+  intitulada "Licença de Documentação Livre GNU".
+  
+# Atenção: todos os documentos aqui publicados são distribuídos sem qualquer garantia, implícita e (ou) explícita.
+  
+  Permission is granted to copy, distribute and (or) modify this book 
+  "Beyond Linux From Scratch", translated into Brazilian Portuguese, 
+  under the terms of the GNU Free Documentation License, Version 1.3 or 
+  any later version published by the Free Software Foundation; with no 
+  Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A 
+  copy of the license is included in the section entitled "GNU Free 
+  Documentation License".
+
+# Warning: all the files herein published are released with no warranty, implicit and (or) explicit.
+
+-->
+
+<sect1 id="postlfs-firmware" xreflabel="Acerca de Firmware">
+  <?dbhtml filename="firmware-pt_br.html"?>
 
   <sect1info>
     <date>$Date$</date>
   </sect1info>
 
-  <title>About Firmware</title>
+  <title>Acerca de Firmware</title>
 
   <indexterm zone="postlfs-firmware">
     <primary sortas="e-lib-firmware">/lib/firmware</primary>
   </indexterm>
 
   <para>
-    On some recent PCs it can be necessary, or desirable, to load firmware
-    to make them work at their best. There is a directory, <filename
-    class="directory">/lib/firmware</filename>, where the kernel or kernel
-    drivers look for firmware images.
+
+    Em alguns PCs recentes, pode ser necessário, ou desejável, carregar 
+    firmware para fazer com que trabalhem no melhor deles.  Existe um 
+    diretório, <filename class="directory">/lib/firmware</filename>, 
+    onde o kernel ou os controladores de kernel procurão por imagens de 
+    firmware.
+
   </para>
 
   <para>
-    Currently, most firmware can be found at a <userinput>git</userinput>
-    repository: <ulink url=
-      "http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/tree/"/>.
-    For convenience, the LFS Project has created a mirror, updated daily, where
-    these firmware files can be accessed via <userinput>wget</userinput> or a
-    web browser at <ulink url="&sources-anduin-http;/linux-firmware/"/>.
+
+    Atualmente, a maioria do firmware pode ser encontrada em um 
+    repositório <userinput>git</userinput>:
+<ulink url="http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/tree/"/>.  
+    Por conveniência, o Projeto LFS criou um espelho, atualizado 
+    diariamente, onde esses arquivos de firmware podem ser acessados via 
+    <userinput>wget</userinput> ou via um navegador da web em
+<ulink url="&sources-anduin-http;/linux-firmware/"/>.
+
   </para>
 
   <para>
-    To get the firmware, either point a browser to one of the above
-    repositories and then download the item(s) which you need, or install
-    <xref linkend="git"/> and clone that repository.
+
+    Para obter o firmware, ou aponte um navegador para um dos 
+    repositórios acima e, então, transfira o(s) item(s) que você 
+    precisar; ou instale o <xref linkend="git"/> e clone aquele 
+    repositório.
+
   </para>
 
   <para>
-    For some other firmware, particularly for Intel microcode and certain
-    wifi devices, the needed firmware is not available in the above repository.
-    Some of this will be addressed below, but a search of the Internet for
-    needed firmware is sometimes necessary.
+
+    Para algum outro firmware, particularmente para microcode da Intel e 
+    certos dispositivos wifi, o firmware necessário não está disponível 
+    no repositório acima.  Algo disso será endereçado abaixo, porém uma 
+    busca da Internet pelo firmware necessário de vez em quando é 
+    necessária.
+
   </para>
 
   <para>
-    Firmware files are conventionally referred to as blobs because you cannot
-    determine what they will do. Note that firmware is distributed under
-    various different licenses which do not permit disassembly or
-    reverse-engineering.
+
+    Os arquivos de firmware convencionalmente são referenciados como 
+    blobs, pois você não pode determinar o que eles farão.  Observe que 
+    o firmware é distribuído sob diferentes licenças que não permitem 
+    desmontagem ou engenharia reversa.
+
   </para>
 
   <para>
-    Firmware for PCs falls into four categories:
+
+    Firmware para PCs caem em quatro categorias:
+
   </para>
 
   <itemizedlist spacing="compact">
+
     <listitem>
+
       <para>
-        Updates to the CPU to work around errata, usually referred to as
-        microcode.
+
+        Atualizações para a CPU contornar erros, geralmente 
+        referenciadas como microcode.
+
       </para>
+
     </listitem>
+
     <listitem>
+
       <para>
-        Firmware for video controllers. On x86 machines this is required for
-        ATI devices (Radeon and AMDGPU chips) and may be useful for Intel (Skylake
-        and later) and Nvidia (Kepler and later) GPUs.
+
+        Firmware para controladores de vídeo.  Em máquinas x86, isso é 
+        exigido para dispositivos ATI (chips Radeon e AMDGPU); e talvez 
+        seja útil para GPUs Intel (Skylake e posteriores) e Nvidia 
+        (Kepler e posteriores).
+
       </para>
 
       <para>
-        ATI Radeon and AMGPU devices all require firmware to be able to use KMS
-        (kernel modesetting - the preferred option) as well as for Xorg. For
-        old radeon chips (before the R600), the firmware is still in the
-        kernel source.
+
+        Os dispositivos ATI Radeon e AMGPU todos exigem firmware para 
+        estarem aptos a usar o KMS (kernel modesetting - a opção 
+        preferida), bem como para Xorg.  Para os chips radeon antigos 
+        (antes do R600), o firmware ainda está no fonte do kernel.
+
       </para>
 
       <para>
-        Intel integrated GPUs from Skylake onwards can use firmware for GuC
-        (the Graphics microcontroller), and also for the HuC (HEVC/H265
-        microcontroller which offloads to the GPU) and the DMC (Display
-        Microcontroller) to provide additional low-power states. The GuC and
-        HuC have had a chequered history in the kernel and updated firmware
-        may be disabled by default, depending on your kernel version. Further
-        details may be found at <ulink
-        url="https://01.org/linuxgraphics/downloads/firmware/">01.org</ulink>
-        and <ulink
-        url="https://wiki.archlinux.org/index.php/intel_graphics">Arch
-        linux</ulink>.
+
+        GPUs integradas Intel a partir do Skylake em diante podem usar 
+        firmware para GuC (o microcontrolador Graphics) e, também, para 
+        o HuC (microcontrolador HEVC/H265, que descarrega para a GPU); e 
+        o DMC (Display Microcontroller) para fornecer estados adicionais 
+        de baixa energia.  O GuC e o HuC tiveram um histórico duvidoso 
+        no kernel e o firmware atualizado pode estar desabilitado por 
+        padrão, dependendo da sua versão de kernel.  Maiores detalhes 
+        podem ser encontrados em
+<ulink url="https://01.org/linuxgraphics/downloads/firmware/">01.org</ulink>; 
+        e
+<ulink url="https://wiki.archlinux.org/index.php/intel_graphics">Arch linux</ulink>.
+
       </para>
 
       <para>
-        Nvidia GPUs from Kepler onwards require signed firmware, otherwise the
-        nouveau driver is unable to provide hardware acceleration. Nvidia has
-        now released firmware up to Turing (most, maybe all, GTX16xx and RTX20xx
-        GPUs) to linux-firmware, and kernels from linux-5.6 should support it,
-        although Mesa support may require a development version until Mesa-20.2
-        is released. Note that faster clocks than the default are not enabled
-        by the released firmware.
+
+        GPUs Nvidia a partir do Kepler em diante exigem firmware 
+        assinado, do contrário o controlador nouveau é incapaz de 
+        fornecer aceleração de hardware.  Nvidia agora lançou firmware 
+        até o Turing (a maioria, talvez todos, GPUs GTX16xx e RTX20xx) 
+        para linux-firmware e os kernels a partir do linux-5.6 deveriam 
+        suportá-los, apesar do suporte a Mesa talvez exigir uma versão 
+        de desenvolvimento até que o Mesa-20.2 seja lançado.  Observe 
+        que os relógios mais rápidos que o padrão não são habilitados 
+        pelo firmware lançado.
+
       </para>
+
     </listitem>
+
     <listitem>
+
       <para>
-        Firmware updates for wired network ports. Mostly they work even
-        without the updates, but probably they will work better with
-        the updated firmware. For some modern laptops, firmware for both
-        wired ethernet (e.g. rtl_nic) and also for bluetooth devices (e.g. qca)
-        is <emphasis>required</emphasis> before the wired network can be used.
+
+        Atualizações de firmware para portas cabeadas de rede.  A 
+        maioria delas funciona mesmo sem as atualizações, porém 
+        provavelmente funcionarão melhor com o firmware atualizado.  
+        Para alguns laptops modernos, o firmware para ambos, ethernet 
+        cabeado (por exemplo, rtl_nic), e também para dispositivos 
+        bluetooth (por exemplo, qca), é <emphasis>exigido</emphasis> 
+        antes que a rede cabeada possa ser usada.
+
       </para>
+
     </listitem>
+
     <listitem>
+
       <para>
-        Firmware for other devices, such as wifi. These devices are not
-        required for the PC to boot, but need the firmware before these devices
-        can be used.
+
+        Firmware para outros dispositivos, tais como wifi.  Esses 
+        dispositivos não são exigidos para o PC inicializar, porém 
+        precisam do firmware antes que esses dispositivos possam ser 
+        usados.
+
       </para>
+
     </listitem>
+
   </itemizedlist>
 
   <note>
