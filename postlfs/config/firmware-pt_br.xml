@@ -310,74 +310,90 @@ Intel Desabilita as Instruções TSX: Errata Encontrada em Haswell, Haswell-E/EP
     </para>
 
     <sect3 id="intel-microcode">
-      <title>Intel Microcode for the CPU</title>
+      <title>Microcode Intel para a CPU</title>
 
       <para>
-        The first step is to get the most recent version of the Intel
-        microcode.  This must be done by navigating to <ulink url=
-        'https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/>
-        and downloading the latest file there.  As of this writing the most
-        <!-- at one time, some skylakes had problems with a certain revision
-        secure version of the microcode, for those machines which can boot it, -->
-        secure version of the microcode
-        is microcode-20220207.<!-- If you have a Skylake machine, please read the
-        Caution in the 'Early loading of microcode' section below.-->  Extract this
-        file in the normal way, the microcode is in the <filename>intel-ucode
-        </filename> directory, containing various blobs with names in the form
-        XX-YY-ZZ. There are also various other files, and a releasenote.
+
+        O primeiro passo é o de obter a versão mais recente do microcode 
+        Intel.  Isso precisa ser feito navegando-se até
+<ulink url='https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/> 
+        e baixando-se o arquivo mais recente lá.  Ao tempo da escrita 
+        deste texto, a versão mais segura do microcode era 
+        microcode-20220207.  Extraia esse arquivo da maneira normal; o 
+        microcode está no diretório <filename>intel-ucode</filename>, 
+        contendo vários blobs com nomes na forma XX-YY-ZZ.  Existem 
+        também vários outros arquivos e as observações de lançamento.
+
       </para>
 
       <para>
-        In the past, intel did not provide any details of which blobs had
-        changed versions, but now the release note details this.
+
+        No passado, a Intel não fornecia quaisquer detalhes de quais 
+        blobs tinham versões mudadas, porém, agora, a observação de 
+        lançamento detalha isso.
+
       </para>
 
       <para>
-        The recent firmware for older processors is provided to deal with
-        vulnerabilities which have now been made public, and for some of these
-        such as Microarchitectural Data Sampling (MDS) you might wish to
-        increase the protection by disabling hyperthreading, or alternatively
-        to disable the kernel's default mitigation because of its impact on
-        compile times. Please read the online documentation at <ulink url=
-        'https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/index.html'/>.
+
+        O firmware recente para processadores mais antigos é fornecido 
+        para lidar com vulnerabilidades que agora tenham sido tornadas 
+        públicas e, para algumas dessas, tais como Microarchitectural 
+        Data Sampling (MDS), você poderia desejar aumentar a proteção 
+        desabilitando hyperthreading; ou, alternativamente, desabilitar 
+        a mitigação padrão do kernel, por causa do impacto dela sobre os 
+        tempos de compilação.  Por favor, leia a documentação online em
+<ulink url='https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/index.html'/>.
+
       </para>
 
-      <!-- commented, I don't think there is a new listed item for 2011-11 vulns
-          (platypus etc : intel-sa-00381 and 0389)
-          and anyway the very latest stable releases have backports : ken
+      <!-- comentado, eu não penso que existe um item novo listado para 
+      as vulnerabilidades 2011-11 (platypus etc : intel-sa-00381 e 0389) 
+      e, de qualquer maneira, os lançamentos estáveis muito mais 
+      recentes tem portas dos fundos : ken
       <para>
-        The documentation on the latest SRBDS (Special Register Buffer Data
-        Sampling) vulnerabilities/fixes will be documented in kernels 5.4.46,
-        5.6.18, 5.7.2, 5.8.0 and later.
+        A documentação acerca das vulnerabilidades/correções SRBDS 
+        (Special Register Buffer Data Sampling) mais recentes estará 
+        documentada nos kernels 5.4.46, 5.6.18, 5.7.2, 5.8.0 e 
+        posteriores.
       </para>-->
 
       <para>
-        Now you need to determine your processor's identity to see if there
-        is any microcode for it. Determine the decimal values of the cpu family,
-        model and stepping by running the following command (it will also report
-        the current microcode version):
+
+        Agora você precisa determinar a identidade do seu processador 
+        para ver se existe algum microcode para ele.  Determine os 
+        valores decimais da família da CPU; do modelo; e da revisão 
+        executando o seguinte comando (também relatará a versão atual do 
+        microcode):
+
       </para>
 
 <screen><userinput>head -n7 /proc/cpuinfo</userinput></screen>
 
       <para>
-        Convert the cpu family, model and stepping to pairs of hexadecimal
-        digits. For a Skylake i3 6100 (described as Intel(R) Core(TM) i3-6100
-        CPU) the relevant values are cpu family 6, model 94, stepping 3 so in
-        this case the required identification is 06-5e-03. A look at the blobs
-        will show that there is one for this CPU (although for older issues it
-        might have already been applied by the BIOS). If there is a blob for
-        your system then test if it will be applied by copying it (replace
-        &lt;XX-YY-ZZ&gt; by the identifier for your CPU) to where the
-        kernel can find it:
+
+        Converta a família da CPU; o modelo; e a revisão para pares de 
+        dígitos hexadecimais.  Para um Skylake i3 6100 (descrito como 
+        Intel(R) Core(TM) i3-6100 CPU) os valores relevantes são família 
+        da CPU 6; modelo 94; revisão 3; de forma que, nesse caso, a 
+        identificação exigida é 06-5e-03.  Uma olhada nos blobs mostrará 
+        que existe um para essa CPU (apesar de para problemas mais 
+        antigos poderia já ter sido aplicado pelo BIOS).  Se existir um 
+        blob para o seu sistema, então teste se ele será aplicado 
+        copiando-o (substitua &lt;XX-YY-ZZ&gt; pelo identificador para a 
+        sua CPU) para onde o kernel possa encontrá-lo:
+
       </para>
 
 <screen><userinput>mkdir -pv /lib/firmware/intel-ucode
 cp -v intel-ucode/&lt;XX-YY-ZZ&gt; /lib/firmware/intel-ucode</userinput></screen>
 
       <para>
-        Now that the Intel microcode has been prepared, use the following
-        options when you configure the kernel to load Intel microcode:
+
+        Agora que o microcode Intel foi preparado, use as seguintes 
+        opções quando você configurar o kernel para carregar o microcode 
+        Intel:
+
       </para>
 
 <screen><literal>General Setup ---&gt;
@@ -387,16 +403,20 @@ Processor type and features  ---&gt;
   [*]      Intel microcode loading support [CONFIG_MICROCODE_INTEL]</literal></screen>
 
       <para>
-        After you have successfully booted the new system, force late loading
-        by using the command:
+
+        Depois que você tiver inicializado com sucesso o sistema novo, 
+        forçe o carregamento atrasado usando o comando:
+
       </para>
 
 <screen><userinput>echo 1 > /sys/devices/system/cpu/microcode/reload</userinput></screen>
 
       <para>
-        Then use the following command to see if anything was loaded:
-        (N.B. the dates when microcode was created may be months ahead of when
-        it was released.)
+
+        Então use o seguinte comando para ver se alguma coisa foi 
+        carregada: (observe bem: as datas quando o microcode foi criado 
+        possivelmente estejam meses antes de quando foi lançado)
+
       </para>
 
 <screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
