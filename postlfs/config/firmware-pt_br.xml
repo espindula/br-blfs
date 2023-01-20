@@ -58,7 +58,7 @@ Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
     Em alguns PCs recentes, pode ser necessário, ou desejável, carregar 
     firmware para fazer com que trabalhem no melhor deles.  Existe um 
     diretório, <filename class="directory">/lib/firmware</filename>, 
-    onde o kernel ou os controladores de kernel procurão por imagens de 
+    onde o kernel ou os controladores de kernel procuram por imagens de 
     firmware.
 
   </para>
@@ -206,80 +206,107 @@ Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
   </itemizedlist>
 
   <note>
+
     <para>
-      Although not needed to load a firmware blob, the following
-      tools may be useful for determining, obtaining, or preparing the needed
-      firmware in order to load it into the system:
-      <xref linkend="cpio"/>,
-      <xref linkend="git"/>,
-      <xref linkend="pciutils"/>, and
+
+      Apesar de não necessárias para carregar um blob de firmware, as 
+      seguintes ferramentas possivelmente sejam úteis para determinar, 
+      obter ou preparar o firmware necessário para a finalidade de 
+      carregá-lo no sistema: <xref linkend="cpio"/>;
+      <xref linkend="git"/>; <xref linkend="pciutils"/>; e
       <xref linkend="wget"/>
+
     </para>
+
   </note>
 
-  <para condition="html" role="usernotes">User Notes:
+  <para condition="html" role="usernotes">Observações de Usuário(a):
   <ulink url="&blfs-wiki;/aboutfirmware"/></para>
 
   <sect2 id="cpu-microcode">
-    <title>Microcode updates for CPUs</title>
+    <title>Atualizações de microcode para CPUs</title>
 
     <para>
-      In general, microcode can be loaded by the BIOS or UEFI, and it might be
-      updated by upgrading to a newer version of those. On linux, you can also
-      load the microcode from the kernel if you are using an AMD family 10h or
-      later processor (first introduced late 2007), or an Intel processor from
-      1998 and later (Pentium4, Core, etc), if updated microcode has been
-      released. These updates only last until the machine is powered off, so
-      they need to be applied on every boot.
+
+      Em geral, microcode pode ser carregado pelo BIOS ou pela UEFI e 
+      poderia ser atualizado atualizando-se para uma versão mais recente 
+      daqueles.  No Linux, você também pode carregar o microcode a 
+      partir do kernel se estiver usando um processador AMD família 10h 
+      ou posterior (introduzido primeiramente no final de 2007); ou um 
+      processador Intel a partir de 1998 e posterior (Pentium4, Core, 
+      etc), se microcode atualizado tiver sido lançado.  Essas 
+      atualizações duram somente até que a máquina seja desligada, de 
+      forma que elas precisam ser aplicadas a cada inicialização.
+
     </para>
 
     <para>
-      Intel provide updates of their microcode for Skylake and later
-      processors as new vulnerabilities come to light, and have in the past
-      provided updates for processors from SandyBridge onwards, although those
-      are no-longer supported for new fixes. New versions of AMD
-      firmware are rare and usually only apply to a few models, although
-      motherboard manufacturers get extra updates which maybe update microcode
-      along with the changes to support newer CPUs and faster memory.
+
+      A Intel fornece atualizações do microcode dela para os 
+      processadores Skylake e posteriores conforme vulnerabilidades 
+      novas surjam e forneceu no passado atualizações para processadores 
+      a partir do SandyBridge em diante, apesar daqueles não mais serem 
+      suportados para correções novas.  Versões novas do firmware AMD 
+      são raras e geralmente somente se aplicam a uns poucos modelos, 
+      apesar dos(as) fabricantes de placas mãe obterem atualizações 
+      extras que talvez atualizem o microcode juntamente com as mudanças 
+      para suportar CPUs mais recentes e memória mais rápida.
+
     </para>
 
     <para>
-      There are two ways of loading the microcode, described as 'early' and
-      'late'. Early loading happens before userspace has been started, late
-      loading happens after userspace has started. Not surprisingly, early
-      loading is preferred, (see e.g. an explanatory comment in a kernel
-      commit noted at <ulink url="https://lwn.net/Articles/530346/">
-        x86/microcode: Early load microcode</ulink> on LWN.)  Indeed, it
-      is needed to work around one particular erratum in early Intel Haswell
-      processors which had TSX enabled.  (See <ulink url=
-      "http://www.anandtech.com/show/8376/intel-disables-tsx-instructions-erratum-found-in-haswell-haswelleep-broadwellyi/">
-        Intel Disables TSX Instructions: Erratum Found in Haswell,
-        Haswell-E/EP, Broadwell-Y
-      </ulink>.) Without this update glibc can do the wrong thing in uncommon
-      situations.
+
+      Existem duas maneiras de se carregar o microcode, descritas como 
+      'antecipada' e 'atrasada'.  O carregamento antecipado acontece 
+      antes que o espaço de usuário(a) tenha sido iniciado; o 
+      carregamento atrasado acontece depois que o espaço de usuário(a) 
+      foi iniciado.  Não surpreendentemente, o carregamento antecipado é 
+      o preferido (veja-se, por exemplo, um comentário explicativo em um 
+      commit do kernel anotado em
+<ulink url="https://lwn.net/Articles/530346/">x86/microcode: Microcode de carregamento antecipado</ulink>
+      no LWN).  Além disso, é necessário se trabalhar em torno de uma
+      errata em particular nos processadores iniciais Intel Haswell que
+      tinham TSX habilitado.  (Veja-se
+<ulink url="http://www.anandtech.com/show/8376/intel-disables-tsx-instructions-erratum-found-in-haswell-haswelleep-broadwellyi/">
+Intel Desabilita as Instruções TSX: Errata Encontrada em Haswell, Haswell-E/EP, Broadwell-Y</ulink>).  Sem
+      essa atualização, a glibc pode fazer a coisa errada em situações
+      incomuns.
+
+    </para>
+
+
+    <para>
+
+      Ainda é possível forçar manualmente o carregamento atrasado do 
+      microcode, seja para testar, seja para evitar ter que 
+      reinicializar.  Você precisará reconfigurar seu kernel para ambos 
+      os métodos.  As instruções aqui criarão um 
+      <filename>.config</filename> do kernel para acomodar o 
+      carregamento antecipado, antes de forçar o carregamento atrasado 
+      para ver se existe algum microcode.  Se existir, as instruções 
+      então te mostram como criar um initrd para o carregamento 
+      antecipado.
+
     </para>
 
     <para>
-      It is still possible to manually force late loading of microcode, either
-      for testing or to prevent having to reboot. You will need to reconfigure
-      your kernel for either method. The instructions here will create a
-      kernel <filename>.config</filename> to suite early loading, before
-      forcing late loading to see if there is any microcode. If there is,
-      the instructions then show you how to create an initrd for early loading.
+
+      Para confirmar que processador(es) você tem (se mais que um, eles 
+      serão idênticos) olhe em /proc/cpuinfo.
+
     </para>
 
     <para>
-      To confirm what processor(s) you have (if more than one, they will be
-      identical) look in /proc/cpuinfo.
-    </para>
 
-    <para>
-      If you are creating an initrd to update firmware for different machines,
-      as a distro would do, go down to 'Early loading of microcode' and cat all
-      the Intel blobs to GenuineIntel.bin or cat all the AMD blobs to
-      AuthenticAMD.bin. This creates a larger initrd - for all Intel machines in
-      the 20200609 update the size is 3.0 MB compared to typically 24 KB for one
-      machine.
+      Se você estiver criando um initrd para atualizar firmware para 
+      máquinas diferentes, como uma distribuição faria, [então] vá para 
+      baixo até 'Carregamento antecipado do microcode' e concatene todos 
+      os blobs Intel para GenuineIntel.bin; ou concatene todos os blobs 
+      AMD para AuthenticAMD.bin.  Isso cria um initrd mais largo - para 
+      todas as máquinas Intel na atualização 20200609, o tamanho é de 
+      três (3,0) MB comparado a tipicamente vinte e quatro (24) KB para 
+      uma máquina.
+
     </para>
 
     <sect3 id="intel-microcode">
