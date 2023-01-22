@@ -422,10 +422,13 @@ Processor type and features  ---&gt;
 <screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
 
       <para>
-        This old example showing the very old BIOS firmware version
-        was created by temporarily booting without
-        microcode, to show the current Firmware Bug messages, then the late load
-        shows it being updated to revision 0xea which was current at that time.
+
+        Este exemplo antigo mostrando a versão muito antiga do firmware 
+        do BIOS foi criada para inicializar temporariamente sem 
+        microcode, para mostrar as mensagens atuais dos Defeitos do 
+        Firmware; então o carregamento atrasado mostra ele sendo 
+        atualizado para a revisão 0xea, que era atual naquela época.
+
       </para>
 
 <screen><literal>[    0.000000] Linux version 5.12.8 (lfs@leshp) (gcc (GCC) 11.1.0,
@@ -445,33 +448,41 @@ Processor type and features  ---&gt;
 [   70.089530] microcode: Reload completed, microcode revision: 0xea</literal></screen>
 
       <para>
-        If the microcode was not updated, there is no new microcode for this
-        system's processor. If it did get updated, you can now proceed to
+
+        Se o microcode não foi atualizado, [então] não existe microcode 
+        novo para esse processador do sistema.  Se ele foi atualizado, 
+        [então] você agora pode continuar para o
         <xref linkend='early-microcode'/>.
+
       </para>
 
     </sect3>
 
     <sect3 id="amd-microcode">
-      <title>AMD Microcode for the CPU</title>
+      <title>Microcode AMD para a CPU</title>
 
       <para>
-        Begin by downloading a container of firmware for your CPU family
-        from <ulink url=
-          '&sources-anduin-http;/linux-firmware/amd-ucode/'/>.
-        The family is always specified in hex. Families 10h to 14h (16 to 20)
-        are in microcode_amd.bin.  Families 15h, 16h and 17h have their own
-        containers.  Create the required directory and put the firmware you
-        downloaded into it as the <systemitem
-        class="username">root</systemitem> user:
+
+        Comece baixando um contêiner do firmware para a família da sua 
+        CPU a partir de
+        <ulink url='&sources-anduin-http;/linux-firmware/amd-ucode/'/>.  A 
+        família sempre é especificada em hexadecimal.  As famílias 10h 
+        até 14h (16 até 20) estão no microcode_amd.bin.  As famílias 
+        15h, 16h e 17h tem os contêineres próprios delas.  Crie o 
+        diretório exigido e coloque o firmware que você baixou nele, 
+        como o(a) usuário(a)
+        <systemitem class="username">root</systemitem>:
+
       </para>
 
 <screen><userinput>mkdir -pv /lib/firmware/amd-ucode
 cp -v microcode_amd* /lib/firmware/amd-ucode</userinput></screen>
 
       <para>
-        When you configure the kernel, use the following options
-        to load AMD microcode:
+
+        Quando você configurar o kernel, use as seguintes opções para 
+        carregar o microcode AMD:
+
       </para>
 
 <screen><literal>General Setup ---&gt;
@@ -481,22 +492,31 @@ Processor type and features  ---&gt;
   [*]      AMD microcode loading support [CONFIG_MICROCODE_AMD]</literal></screen>
 
       <para>
-        After you have successfully booted the new system, force late loading
-        by using the command:
+
+        Depois que você tiver inicializado com sucesso o novo sistema, 
+        force o carregamento atrasado usando o comando:
+
       </para>
 
 <screen><userinput>echo 1 > /sys/devices/system/cpu/microcode/reload</userinput></screen>
 
       <para>
-        Then use the following command to see if anything was loaded:
+
+        Então, use o seguinte comando para ver se alguma coisa foi 
+        carregada:
+
       </para>
 
 <screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
+
       <para>
-        This historic example from an old Athlon(tm) II X2 shows it has been
-        updated. At that time, all CPUs were still reported in the microcode
-        details on AMD machines (the current position for AMD machines where
-        newer microcode is available is unknown) :
+
+        Este exemplo histórico originário de um antigo Athlon(tm) II X2 
+        mostra que foi atualizado.  Naquela época, todas as CPUs ainda 
+        eram relatadas nos detalhes do microcode em máquinas AMD (a 
+        posição atual para máquinas AMD onde microcode mais recente está 
+        disponível é desconhecida):
+
       </para>
 
 <screen><literal>[    0.000000] Linux version 4.15.3 (ken@testserver) (gcc version 7.3.0 (GCC))
@@ -509,72 +529,103 @@ Processor type and features  ---&gt;
 [  187.928899] microcode: CPU1: new patch_level=0x010000c8</literal></screen>
 
       <para>
-        If the microcode was not updated, there is no new microcode for
-        this system's processor. If it did get updated, you can now proceed to
+
+        Se o microcode não foi atualizado, [então] não existe microcode 
+        novo para este processador do sistema.  Se ele foi atualizado, 
+        [então] você agora pode continuar para o
         <xref linkend='early-microcode'/>.
+
       </para>
 
     </sect3>
 
     <sect3 id="early-microcode">
-      <title>Early loading of microcode</title>
+      <title>Carregamento antecipado do microcode</title>
 
       <para>
-        If you have established that updated microcode is available for
-        your system, it is time to prepare it for early loading. This requires
-        an additional package, <xref linkend='cpio'/> and the creation of an
-        initrd which will need to be added to grub.cfg.
+
+        Se você tiver estabelecido que o microcode atualizado está 
+        disponível para o seu sistema, [então] é hora de prepará-lo para 
+        o carregamento antecipado.  Isso exige um pacote adicional, o 
+        <xref linkend='cpio'/> e a criação de um initrd que precisará 
+        ser adicionado ao grub.cfg.
+
       </para>
 
       <para>
-        It does not matter where you prepare the initrd, and once it is
-        working you can apply the same initrd to later LFS systems or newer
-        kernels on this same machine, at least until any newer microcode is
-        released. Use the following commands:
+
+        Não importa onde você prepara o initrd e, tão logo ele esteja 
+        funcionando, você pode aplicar o mesmo initrd a sistemas LFS 
+        posteriores ou a kernels mais recentes na mesma máquina, ao 
+        menos até que algum microcode mais recente seja liberado.  Use 
+        os seguintes comandos:
+
       </para>
 
 <screen><userinput>mkdir -p initrd/kernel/x86/microcode
 cd initrd</userinput></screen>
 
       <para>
-        For an AMD machine, use the following command (replace
-        &lt;MYCONTAINER&gt; with the name of the container for your CPU's
-        family):
+
+        Para uma máquina AMD, use o seguinte comando (substitua 
+        &lt;MEUCONTEINER&gt; pelo nome do contêiner para a família da 
+        sua CPU):
+
       </para>
 
-<screen><userinput>cp -v /lib/firmware/amd-ucode/&lt;MYCONTAINER&gt; kernel/x86/microcode/AuthenticAMD.bin</userinput></screen>
+<screen><userinput>cp -v /lib/firmware/amd-ucode/&lt;MEUCONTEINER&gt; kernel/x86/microcode/AuthenticAMD.bin</userinput></screen>
 
       <para>
-        Or for an Intel machine copy the appropriate blob using this command:
+
+        Ou, para uma máquina Intel, copie o blob apropriado usando este 
+        comando:
+
       </para>
 
 <screen><userinput>cp -v /lib/firmware/intel-ucode/&lt;XX-YY-ZZ&gt; kernel/x86/microcode/GenuineIntel.bin</userinput></screen>
 
-<!-- new version from 20201110 release onwards, assumed to work on all skylakes
-   But complaints about previous version took some days to appear, so keep as a comment for now.
+<!-- a versão nova a partir do lançamento 20201110 em diante, assumiu 
+funcionar em todos os Skylakes, porém as reclamações acerca da versão 
+anterior tomam alguns dias para aparecer; portanto, mantenha como um 
+comentário por agora.
+
       <caution>
+
         <para>
-          On some Skylake machines with hex Model Number '4e' (78 decimal) the
-          upgrade to microcode version '0xdc' is reported to cause the machine to
-          hang in early boot, and the fix is to revert to version 0xd6 which was
-          first shipped in the 20191115 microcode release.
+
+          Em algumas máquinas Skylake com Número de Modelo hexadecimal 
+          '4e' (78 em decimal) a atualização para a versão de microcode 
+          '0xdc' é relatada causar a máquina travar na inicialização 
+          antecipada e a correção é a de reverter para a versão 0xd6, 
+          que primeiro foi embarcada no lançamento de microcode 
+          20191115.
+
         </para>
 
         <para>
-          At least one model '5e' Skylake does boot successfully with version
-          0xdc, but Intel has now shipped a 20200616 release which is intended for
-          distros which need an initrd that will boot on everyone's machine: it
-          reverts both Skylake variants ('4e' and '5e') to the old 0xd6.
+
+          Ao menos um modelo '5e' Skylake inicializa com sucesso com a 
+          versão 0xdc, porém a Intel agora embarcou um lançamento 
+          20200616 que é concebido para distribuições que precisam de um 
+          initrd que inicializará na máquina de todos(as): ele reverte 
+          ambas as variantes Skylake ('4e' e '5e') para o antigo 0xd6.
+
         </para>
 
         <para>
-          For a Skylake which does not boot with 0xdc, reverting to 0xd6 will make
-          the machine usable, but without the SRBDS mitigations.
+
+          Para um Skylake que não inicializa com 0xdc, reverter para 
+          0xd6 tornará a máquina utilizável, porém sem as mitigações 
+          SRBDS.
+
         </para>
+
       </caution>-->
 
       <para>
-        Now prepare the initrd:
+
+        Agora, prepare o initrd:
+
       </para>
 
 <screen><userinput>find . | cpio -o -H newc &gt; /boot/microcode.img</userinput></screen>
