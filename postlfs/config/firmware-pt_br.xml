@@ -631,45 +631,64 @@ comentário por agora.
 <screen><userinput>find . | cpio -o -H newc &gt; /boot/microcode.img</userinput></screen>
 
       <para>
-        You now need to add a new entry to /boot/grub/grub.cfg and
-        here you should add a new line after the linux line within the stanza.
-        If /boot is a separate mountpoint:
-       </para>
+
+        Agora você precisa adicionar uma entrada nova a 
+        /boot/grub/grub.cfg e aqui você deveria adicionar uma linha nova 
+        depois da linha linux dentro da estância.  Se /boot for um ponto 
+        de montagem separado:
+
+      </para>
 
 <screen><userinput>initrd /microcode.img</userinput></screen>
 
       <para>
-        or this if it is not:
+
+        ou isto, se ele não for:
+
       </para>
 
 <screen><userinput>initrd /boot/microcode.img</userinput></screen>
 
       <para>
-        If you are already booting with an initrd (see <xref
-        linkend="initramfs"/>), you should run <command>mkinitramfs</command>
-        again after putting the appropriate blob or container into <filename
-        class="directory">/lib/firmware</filename> as explained above.
-        Alternatively, you can have both initrd on the same line, such as
-        <userinput>initrd /microcode.img /other-initrd.img</userinput> (adapt
-        that as above if /boot is not a separate mountpoint).
+
+        Se já estiver inicializando com um initrd (veja-se
+        <xref linkend="initramfs"/>), [então] você deveria executar 
+        <command>mkinitramfs</command> novamente depois de colocar o 
+        blob ou contêiner apropriado no
+        <filename class="directory">/lib/firmware</filename> conforme
+        explicado acima.  Alternativamente, você pode ter ambos os
+        initrd na mesma linha, assim
+<userinput>initrd /microcode.img /other-initrd.img</userinput>
+        (adapte isso conforme acima se /boot não for um ponto de
+        montagem separado).
+
       </para>
 
       <para>
-        You can now reboot with the added initrd, and then use the same
-        command to check that the early load worked:
+
+        Você agora pode reinicializar com o initrd adicionado e, então, 
+        usar o mesmo comando para verificar se o carregamento antecipado 
+        funcionou:
+
       </para>
 
 <screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
 
       <para>
-        If you updated to address vulnerabilities, you can look at <filename
-        class="directory">/sys/devices/system/cpu/vulnerabilities/</filename>
-        to see what is now reported.
+
+        Se atualizou para endereçar vulnerabilidades, [então] você pode 
+        olhar no
+<filename class="directory">/sys/devices/system/cpu/vulnerabilities/</filename> 
+        para ver o que agora está relatado.
+
       </para>
 
       <para>
-        The places and times where early loading happens are very different
-        in AMD and Intel machines. First, an old example of an Intel (Skylake) with early loading:
+
+        Os locais e horários onde o carregamento antecipado acontece são 
+        muito diferentes em máquinas AMD e Intel.  Primeiro, um exemplo 
+        antigo de uma Intel (Skylake) com carregamento antecipado:
+
       </para>
 
 <screen><literal>[    0.000000] microcode: microcode updated early to revision 0xea, date = 2021-01-25
@@ -680,9 +699,10 @@ comentário por agora.
 [    0.381420] microcode: sig=0x506e3, pf=0x2, revision=0xea
 [    0.381479] microcode: Microcode Update Driver: v2.2.</literal></screen>
 
-
       <para>
-        A historic AMD example:
+
+        Um exemplo histórico AMD:
+
       </para>
 
 <screen><literal>[    0.000000] Linux version 4.15.3 (ken@testserver) (gcc version 7.3.0 (GCC))
@@ -698,7 +718,7 @@ comentário por agora.
   </sect2>
 
   <sect2 id="video-firmware">
-    <title>Firmware for Video Cards</title>
+    <title>Firmware para Placas de Vídeo</title>
 
     <sect3 id="ati-video-firmware">
       <title>Firmware for ATI video chips (R600 and later)</title>
