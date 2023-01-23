@@ -721,52 +721,67 @@ comentário por agora.
     <title>Firmware para Placas de Vídeo</title>
 
     <sect3 id="ati-video-firmware">
-      <title>Firmware for ATI video chips (R600 and later)</title>
+      <title>Firmware para chips de vídeo ATI (R600 e posteriores)</title>
 
       <para>
-        These instructions do NOT apply to old radeons before the R600
-        family. For those, the firmware is in the kernel's <filename
-        class='directory'>/lib/firmware/</filename> directory. Nor do they
-        apply if you intend to avoid a graphical setup such as Xorg and are
-        content to use the default 80x25 display rather than a framebuffer.
+
+        Estas instruções não se aplicam aos antigos radeons antes da 
+        família R600.  Para aqueles, o firmware está no diretório do 
+        kernel <filename class='directory'>/lib/firmware/</filename>.  
+        Nem se aplicam se você pretender evitar uma configuração gráfica 
+        como o Xorg e estiver contente em usar a exibição padrão de 
+        80x25 em vez de um framebuffer.
+
       </para>
 
       <para>
-        Early radeon devices only needed a single 2K blob of firmware. Recent
-        devices need several different blobs, and some of them are much bigger.
-        The total size of the radeon firmware directory is over 500K &mdash;
-        on a large modern system you can probably spare the space, but it is
-        still redundant to install all the unused files each time you build
-        a system.
+
+        Os dispositivos iniciais radeon precisavam somente de um blob de 
+        firmware de 2K.  Os dispositivos recentes precisam de vários 
+        blobs e alguns deles são muito maiores.  O tamanho total do 
+        diretório do firmware radeon é de mais que 500K &mdash; em um 
+        sistema largo moderno você provavelmente pode poupar o espaço, 
+        porém ainda é redundante instalar todos os arquivos não usados a 
+        cada vez que construir um sistema.
+
       </para>
 
       <para>
-        A better approach is to install <xref linkend='pciutils'/> and then
-        use <userinput>lspci</userinput> to identify which VGA controller is
-        installed.
+
+        Uma abordagem melhor é a de instalar o
+        <xref linkend='pciutils'/> e, então, usar o 
+        <userinput>lspci</userinput> para identificar qual controlador 
+        VGA está instalado.
+
       </para>
 
       <para>
-        With that information, check the RadeonFeature page of the Xorg wiki
-        for <ulink url="http://wiki.x.org/wiki/RadeonFeature/#index5h2">Decoder
-        ring for engineering vs marketing names</ulink> to identify the family
-        (you may need to know this for the Xorg driver in BLFS &mdash;
-        Southern Islands and Sea Islands use the radeonsi driver) and the
-        specific model.
+
+        Com essa informação, verifique a página RadeonFeature da wiki do 
+        Xorg para
+<ulink url="http://wiki.x.org/wiki/RadeonFeature/#index5h2">Anel decodificador para nomes de engenharia x nomes de comercialização</ulink>
+        para identificar a família (você possivelmente precise saber
+        disso para o controlador Xorg no BLFS &mdash; Ilhas do Sul e
+        Ilhas do Mar usam o controlador radeonsi) e o modelo específico.
+
       </para>
 
       <para>
-        Now that you know which controller you are using, consult the
-        <ulink url="https://wiki.gentoo.org/wiki/Radeon#Firmware">
-           Radeon</ulink> page of the Gentoo wiki which has a table listing
-        the required firmware blobs for the various chipsets. Note that
-        Southern Islands and Sea Islands chips use different firmware for
-        kernel 3.17 and later compared to earlier kernels. Identify and
-        download the required blobs then install them:
+
+        Agora que você sabe qual controlador está usando, consulte a 
+        página
+<ulink url="https://wiki.gentoo.org/wiki/Radeon#Firmware">Radeon</ulink> 
+        da wiki do Gentoo a qual tem uma tabela listando os blobs de 
+        firmware exigidos para os vários chipsets.  Observe que os chips 
+        das Ilhas do Sul e os das Ilhas do Mar usam firmware diferente 
+        para o kernel 3.17 e posteriores comparados a kerneis 
+        anteriores.  Identifique e baixe os blobs exigidos; então 
+        instale-os:
+
       </para>
 
 <screen><userinput>mkdir -pv /lib/firmware/radeon
-cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
+cp -v &lt;SEUS_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
 
       <para>
         There are actually two ways of installing this firmware. BLFS, in the
