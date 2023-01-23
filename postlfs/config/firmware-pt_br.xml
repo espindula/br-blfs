@@ -784,13 +784,15 @@ comentário por agora.
 cp -v &lt;SEUS_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
 
       <para>
-        There are actually two ways of installing this firmware. BLFS, in the
-        'Kernel Configuration for additional firmware' section part of the
-        <xref linkend="xorg-ati-driver"/> section gives an example of
-        compiling the firmware into the kernel - that is slightly faster to
-        load, but uses more kernel memory. Here we will use the alternative
-        method of making the radeon driver a module. In your kernel config
-        set the following:
+
+        Atualmente existem duas maneiras de instalar esse firmware.  No 
+        BLFS, na seção 'Configuração do Kernel para firmware adicional', 
+        parte da seção <xref linkend="xorg-ati-driver"/> dá um exemplo 
+        de compilar o firmware no kernel - isso é ligeiramente mais 
+        rápido de carregar, porém usa mais memória do kernel.  Aqui nós 
+        usaremos o método alternativo de fazer do controlador radeon um 
+        módulo.  No seu config do kernel, configure o seguinte:
+
       </para>
 
 <screen><literal>Device Drivers ---&gt;
@@ -800,30 +802,38 @@ cp -v &lt;SEUS_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
       [M] ATI Radeon                                        [CONFIG_DRM_RADEON]</literal></screen>
 
       <para>
-        Loading several large blobs from /lib/firmware takes a noticeable
-        time, during which the screen will be blank. If you do not enable the
-        penguin framebuffer logo, or change the console size by using a bigger
-        font, that probably does not matter. If desired, you can slightly
-        reduce the time if you follow the alternate method of specifying 'y'
-        for CONFIG_DRM_RADEON covered in BLFS at the link above &mdash; you
-        must specify each needed radeon blob if you do that.
+
+        O carregamento de vários blobs largos a partir de /lib/firmware 
+        toma um tempo notável, durante o qual a tela estará sem escrito.  
+        Se você não habilitar o logotipo de framebuffer pinguim ou mudar 
+        o tamanho do console usando uma fonte maior, [então] 
+        provavelmente isso não importa.  Se desejado, você pode reduzir 
+        ligeiramente o tempo se seguir o método alternativo de 
+        especificar 'y' para CONFIG_DRM_RADEON coberto no BLFS no link 
+        acima &mdash; você precisa especificar cada blob radeon 
+        necessário se fizer isso.
+
       </para>
 
     </sect3>
 
     <sect3 id="nvidia-video-firmware">
-      <title>Firmware for Nvidia video chips</title>
+      <title>Firmware para chips de vídeo Nvidia</title>
 
       <para>
-        Some Nvidia graphics chips need firmware updates to take advantage
-        of all the card's capability.  These are generally the GeForce 8, 9,
-        9300, and 200-900 series chips.  For more exact information, see
-        <ulink url=
-          "https://nouveau.freedesktop.org/wiki/VideoAcceleration/#firmware"/>.
+
+        Alguns chips gráficos Nvidia precisam de atualizações de 
+        firmware para tirar proveito de toda a capacidade da placa.  
+        Geralmente esses são os chips das séries GeForce 8, 9, 9300 e 
+        200-900.  Para informação mais exata, veja-se
+<ulink url="https://nouveau.freedesktop.org/wiki/VideoAcceleration/#firmware"/>.
+
       </para>
 
       <para>
-        First, the kernel Nvidia driver must be activated:
+
+        Primeiro, o controlador de kernel Nvidia precisa ser ativado:
+
       </para>
 
 <screen><literal>Device Drivers ---&gt;
@@ -833,7 +843,9 @@ cp -v &lt;SEUS_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
       &lt;*/M&gt; Nouveau (NVIDIA) cards                          [CONFIG_DRM_NOUVEAU]</literal></screen>
 
       <para>
-        The steps to install the Nvidia firmware are:
+
+        Os passos para instalar o firmware Nvidia são:
+
       </para>
 
 <screen><userinput>wget https://raw.github.com/imirkin/re-vp2/master/extract_firmware.py
@@ -844,24 +856,31 @@ mkdir -p /lib/firmware/nouveau
 cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
 
     </sect3>
+
   </sect2>
 
   <sect2 id="nic-firmware">
-    <title>Firmware for Network Interfaces</title>
+    <title>Firmware para Interfaces de Rede</title>
 
     <para>
-      The kernel likes to load firmware for some network drivers, particularly
-      those from Realtek (the /lib/linux-firmware/rtl_nic/) directory, but
-      they generally appear to work without it. Therefore, you can boot the
-      kernel, check dmesg for messages about this missing firmware, and if
-      necessary download the firmware and put it in the specified directory in
-      <filename class="directory">/lib/firmware</filename> so that it will
-      be found on subsequent boots. Note that with current kernels this
-      works whether or not the driver is compiled in or built as a module,
-      there is no need to build this firmware into the kernel.
-      Here is an example where the R8169 driver has been compiled in but the
-      firmware was not made available. Once the firmware had been provided,
-      there was no mention of it on later boots.
+
+      O kernel gosta de carregar firmware para alguns controladores de 
+      rede, particularmente aqueles originários do diretório da Realtek 
+      (o /lib/linux-firmware/rtl_nic/), porém geralmente eles aparentam 
+      funcionar sem isso.  Sendo assim, você pode inicializar o kernel; 
+      verificar dmesg para mensagens acerca desse firmware ausente; e, 
+      se necessário, baixar o firmware e colocá-lo no diretório 
+      especificado no
+      <filename class="directory">/lib/firmware</filename>, de forma
+      que ele será encontrado nas inicializações subsequentes.  Observe
+      que, com os kerneis atuais, isso funciona se ou não o controlador
+      for compilado internamente ou construído como um módulo; não existe 
+      necessidade de construir esse firmware internamente ao kernel.  
+      Aqui está um exemplo onde o controlador R8169 foi compilado 
+      internamente, porém o firmware não foi tornado disponível.  Tão 
+      logo o firmware tenha sido fornecido, não existiu menção dele nas 
+      inicializações posteriores.
+
     </para>
 
 <screen><literal>dmesg | grep firmware | grep r8169
@@ -871,44 +890,57 @@ cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
   </sect2>
 
   <sect2 id="other-firmware">
-    <title>Firmware for Other Devices</title>
+    <title>Firmware para Outros Dispositivos</title>
 
     <para>
-      Identifying the correct firmware will typically require you to install
-      <xref linkend='pciutils'/>, and then use <userinput>lspci</userinput>
-      to identify the device. You should then search online to check which
-      module it uses, which firmware, and where to obtain the firmware &mdash;
-      not all of it is in linux-firmware.
+
+      Identificar o firmware correto tipicamente exigirá que você 
+      instale o <xref linkend='pciutils'/> e, então, use o 
+      <userinput>lspci</userinput> para identificar o dispositivo.  Você 
+      deveria então procurar online para verificar qual módulo ele usa; 
+      qual firmware; e onde obter o firmware &mdash; nem todos eles 
+      estão no linux-firmware.
+
     </para>
 
     <para>
-      If possible, you should begin by using a wired connection when you first
-      boot your LFS system. To use a wireless connection you will need to
-      use a network tools such as <xref linkend='wireless_tools'/> and <xref
-      linkend='wpa_supplicant'/>.
+
+      Se possível, você deveria iniciar usando uma conexão com fios 
+      quando inicializar pela primeira vez o seu sistema LFS.  Para usar 
+      uma conexão sem fios, você precisará usar ferramentas de rede, 
+      tais como <xref linkend='wireless_tools'/> e
+      <xref linkend='wpa_supplicant'/>.
+
     </para>
 
     <para>
-      Different countries have different regulations on the radio spectrum
-      usage of wireless devices.  You can install a firmware to make the
-      wireless devices obey local spectrum regulations, so you won't be
-      inquired by local authority or find your wireless NIC jamming the
-      frequencies of other devices (for example, remote controllers).
-      The regulatory database firmware can be downloaded from
-      <ulink url = 'https://kernel.org/pub/software/network/wireless-regdb/'/>.
-      To install it, simply extract <filename>regulatory.db</filename> and
-      <filename>regulatory.db.p7s</filename> from the tarball into
-      <filename class="directory">/lib/firmware</filename>.
-      The access point would send a country code to your wireless NIC,
-      and <xref linkend='wpa_supplicant'/> would tell the kernel to load
-      the regulation of this country from
-      <filename>regulatory.db</filename>, and enforce it.
+
+      Países diferentes tem regulações diferentes acerca do uso do 
+      espectro de rádio dos dispositivos sem fios.  Você pode instalar 
+      um firmware para fazer com que os dispositivos sem fios obedeçam 
+      às regulações locais de espectro, de forma que você não seria 
+      questionado(a) pela autoridade local ou não encontraria sua NIC 
+      sem fios atrapalhando as frequências de outros dispositivos (por 
+      exemplo, controles remotos).  O firmware da base de dados 
+      regulatória pode ser baixado a partir de
+<ulink url = 'https://kernel.org/pub/software/network/wireless-regdb/'/>.  Para 
+      instalá-lo, simplesmente extraia o 
+      <filename>regulatory.db</filename> e o 
+      <filename>regulatory.db.p7s</filename> a partir do tarball no 
+      <filename class="directory">/lib/firmware</filename>.  O ponto de 
+      acesso enviaria um código de país para a sua NIC sem fios e o 
+      <xref linkend='wpa_supplicant'/> diria ao kernel para carregar a 
+      regulação desse país a partir do 
+      <filename>regulatory.db</filename>; e impo-la.
+
     </para>
 
     <para>
-      Firmware may also be needed for other devices such as some SCSI
-      controllers, bluetooth adaptors, or TV recorders. The same principles
-      apply.
+
+      Firmware possivelmente também seja necessário para outros 
+      dispositivos, tais como alguns controladores SCSI; adaptadores 
+      bluetooth; ou gravadores de TV.  Os mesmos princípios se aplicam.
+
     </para>
 
   </sect2>
