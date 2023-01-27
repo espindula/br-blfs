@@ -1,52 +1,65 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 ]>
 
-<sect1 id="postlfs-devices" xreflabel="About Devices">
-  <?dbhtml filename="devices.html"?>
+<sect1 id="postlfs-devices" xreflabel="Acerca de Dispositivos">
+  <?dbhtml filename="devices-pt_br.html"?>
 
   <sect1info>
     <date>$Date$</date>
   </sect1info>
 
-  <title>About Devices</title>
+  <title>Acerca de Dispositivos</title>
 
   <indexterm zone="postlfs-devices">
     <primary sortas="e-etc-udev-rules">/etc/udev/rules.d</primary>
   </indexterm>
 
   <para>
-    Although most devices needed by packages in BLFS and beyond are set up
-    properly by <application>udev</application> using the default rules
-    installed by LFS in <filename
-    class="directory">/etc/udev/rules.d</filename>, there are cases where
-    the rules must be modified or augmented.
+
+    Apesar da maioria dos dispositivos necessitados pelos pacotes no 
+    BLFS e além serem configurados adequadamente pelo 
+    <application>udev</application> usando as regras padrão instaladas 
+    pelo LFS em
+<filename class="directory">/etc/udev/rules.d</filename>, existem casos onde 
+    as regras precisam ser modificadas ou estendidas.
+
   </para>
 
-  <para condition="html" role="usernotes">User Notes:
-  <ulink url="&blfs-wiki;/aboutdevices"/></para>
+  <para condition="html" role="usernotes">
+
+    Observações de Usuário(a): <ulink url="&blfs-wiki;/aboutdevices"/>
+
+  </para>
 
   <sect2>
-    <title>Multiple Sound Cards</title>
+    <title>Múltiplas Placas de Som</title>
 
     <para>
-      If there are multiple sound cards in a system, the "default"
-      sound card becomes random.  The method to establish sound card order
-      depends on whether the drivers are modules or not.  If the sound card
-      drivers are compiled into the kernel, control is via kernel command line
-      parameters in <filename>/boot/grub/grub.cfg</filename>.  For example,
-      if a system has both an FM801 card and a SoundBlaster PCI card, the
-      following can be appended to the command line:
+
+      Se existirem múltiplas placas de som em um sistema, [então] a 
+      placa de som "padrão" se torna aleatória.  O método para 
+      estabelecer a ordem da placa de som depende se os controladores 
+      são módulos ou não.  Se os controladores da placa de som forem 
+      compilados internamente ao kernel, [então] o controle é via 
+      parâmetros de linha de comando do kernel em 
+      <filename>/boot/grub/grub.cfg</filename>.  Por exemplo, se um 
+      sistema tiver ambas, uma placa FM801 e uma placa PCI SoundBlaster, 
+      [então] o seguinte pode ser acrescentado à linha de comando:
+
     </para>
 
 <screen><literal>snd-fm801.index=0 snd-ens1371.index=1</literal></screen>
 
     <para>
-      If the sound card drivers are built as modules, the order can be
-      established in the <filename>/etc/modprobe.conf</filename> file with:
+
+      Se os controladores da placa de som forem construídos como 
+      módulos, [então] a ordem pode ser estabelecida no arquivo 
+      <filename>/etc/modprobe.conf</filename> com:
+
     </para>
 
 <screen><literal>options snd-fm801 index=0
@@ -55,42 +68,63 @@ options snd-ens1371 index=1</literal></screen>
   </sect2>
 
   <sect2 id="usb-device-issues">
-    <title>USB Device Issues</title>
+    <title>Consequências do Dispositivo USB</title>
 
     <para>
-      USB devices usually have two kinds of device nodes associated with them.
+
+      Os dispositivos USB geralmente tem dois tipos de nós de 
+      dispositivo associados com eles.
+
     </para>
 
     <para>
-      The first kind is created by device-specific drivers (e.g.,
-      usb_storage/sd_mod or usblp) in the kernel. For example, a USB mass
-      storage device would be /dev/sdb, and a USB printer would be
-      /dev/usb/lp0. These device nodes exist only when the device-specific
-      driver is loaded.
+
+      O primeiro tipo é criado pelos controladores específicos do 
+      dispositivo (por exemplo, usb_storage/sd_mod ou usblp) no kernel.  
+      Por exemplo, um dispositivo USB de armazenamento em massa seria 
+      /dev/sdb; e uma impressora USB seria /dev/usb/lp0.  Esses nós de 
+      dispositivo somente existem quando o controlador específico do 
+      dispositivo estiver carregado.
+
     </para>
 
     <para>
-      The second kind of device nodes (/dev/bus/usb/BBB/DDD, where BBB is
-      the bus number and DDD is the device number) are created even if the
-      device doesn't have a kernel driver. By using these "raw" USB device
-      nodes, an application can exchange arbitrary USB packets with the
-      device, i.e., bypass the possibly-existing kernel driver.
+
+      O segundo tipo de nós de dispositivo (/dev/bus/usb/BBB/DDD, onde 
+      BBB é o número do barramento e DDD é o número do dispositivo) é 
+      criado mesmo se o dispositivo não tiver um controlador de kernel.  
+      Ao usar esses nós de dispositivo USB "crus", uma aplicação pode 
+      trocar pacotes USB arbitrários com o dispositivo, isto é, 
+      contornar o possivelmente existente controlador de kernel.
+
     </para>
 
     <para>
-      Access to raw USB device nodes is needed when a userspace program is
-      acting as a device driver. However, for the program to open the device
-      successfully, the permissions have to be set correctly. By default, due
-      to security concerns, all raw USB devices are owned by user root and
-      group usb, and have 0664 permissions (the read access is needed, e.g.,
-      for lsusb to work and for programs to access USB hubs). Packages (such
-      as SANE and libgphoto2) containing userspace USB device drivers also
-      ship udev rules that change the permissions of the controlled raw USB
-      devices. That is, rules installed by SANE change permissions for known
-      scanners, but not printers.  If a package maintainer forgot to write
-      a rule for your device, report a bug to both BLFS (if the package is
-      there) and upstream, and you will need to write your own rule.
+
+      O acesso a nós de dispositivo USB crus é necessário quando um 
+      aplicativo do espaço do(a) usuário(a) estiver atuando como um 
+      controlador de dispositivo.  Entretanto, para o aplicativo abrir o 
+      dispositivo com sucesso, as permissões devem ser configuradas 
+      corretamente.  Por padrão, devido a motivos de segurança, todos os 
+      dispositivos USB crus são de propriedade do(a) usuário(a) root e 
+      do grupo usb; e tem permissões 0664 (o acesso de leitura é 
+      necessário, por exemplo, para o lsusb funcionar e para os 
+      aplicativos acessarem hubs USB).  Os pacotes (tais como SANE e 
+      libgphoto2) contendo controladores de dispositivo USB do espaço 
+      do(a) usuário(a) também embarcam regras do udev que mudam as 
+      permissões dos dispositivos USB crus controlados.  Isto é, as 
+      regras instaladas pelo SANE mudam as permissões para escaneadores 
+      conhecidos, porém não para impressoras.  Se um(a) mantenedor(a) de 
+      pacote se esqueceu de escrever uma regra para o seu dispositivo, 
+      [então] relate um defeito para ambos, o BLFS (se o pacote estiver 
+      lá) e o(a) desenvolvedor(a), e você precisará escrever sua própria 
+      regra.
+
     </para>
+
+
+
+
 
     <para>
       There is one situation when such fine-grained access control with
