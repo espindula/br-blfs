@@ -175,70 +175,89 @@ options snd-ens1371 index=1</literal></screen>
   </sect2>
 
   <sect2>
-    <title>Udev Device Attributes</title>
+    <title>Atributos de Dispositivo do Udev</title>
 
     <para>
-      Fine-tuning of device attributes such as group name and permissions
-      is possible by creating extra <application>udev</application> rules,
-      matching on something like this. The vendor and product can be found by
-      searching the <filename class='directory'>/sys/devices</filename>
-      directory entries or using <command>udevadm info</command> after the
-      device has been attached. See the documentation in the current
-      <application>udev</application> directory of <filename
-      class='directory'>/usr/share/doc</filename> for details.
+
+      O ajuste fino dos atributos de dispositivo, tais como nome e 
+      permissões do grupo, é possível criando-se regras extras do 
+      <application>udev</application>, casando com algo como isto.  O 
+      fornecedor e produto pode ser encontrado procurando-se nas 
+      entradas do diretório
+<filename class='directory'>/sys/devices</filename> ou usando-se o 
+      <command>udevadm info</command> depois que o dispositivo tenha 
+      sido anexado.  Veja-se a documentação no diretório do 
+      <application>udev</application> atual do
+<filename class='directory'>/usr/share/doc</filename> para detalhes.
+
     </para>
 
 <screen><literal>SUBSYSTEM=="usb_device", SYSFS{idVendor}=="05d8", SYSFS{idProduct}=="4002", \
   GROUP:="scanner", MODE:="0660"</literal></screen>
 
     <note>
+
       <para>
-        The above line is used for descriptive purposes only. The
-        scanner <application>udev</application> rules are put into place when
-        installing <xref linkend='sane'/>.
+
+        A linha acima é usada somente para propósitos descritivos.  As 
+        regras do <application>udev</application> do escaneador são 
+        colocadas no lugar quando se instalar o <xref linkend='sane'/>.
+
       </para>
+
     </note>
 
   </sect2>
 
 <!--
   <sect2>
-    <title>Multiple Network Interfaces</title>
+    <title>Múltiplas Interfaces de Rede</title>
 
 
   </sect2>
 -->
 
-<!-- These instructions are invalid on systemd because we don't use bootscripts.
-     In addition, we should probably verify that these are valid on SysV too.-->
+<!-- Essas instruções são inválidas no systemd, pois nós não usamos 
+scripts de inicialização.  Adicionalmente, nós provavelmente deveriamos 
+verificar se essas são válidas no SysV também.-->
 
   <sect2 revision="sysv">
-    <title>Devices for Servers</title>
+    <title>Dispositivos para Servidores</title>
 
     <para>
-      In some cases, it makes sense to disable
-      <application>udev</application> completely and create static devices.
-      Servers are one example of this situation.  Does a server need the
-      capability of handling dynamic devices?  Only the system administrator
-      can answer that question, but in many cases the answer will be no.
+
+      Em alguns casos, faz sentido desabilitar o 
+      <application>udev</application> completamente e criar dispositivos 
+      estáticos.  Servidores são um exemplo dessa situação.  Um servidor 
+      precisa da capacidade de manusear dispositivos dinâmicos?  Somente 
+      o(a) administrador(a) do sistema pode responder a essa pergunta, 
+      porém, em muitos casos, a resposta será não.
+
     </para>
 
     <para>
-      If dynamic devices are not desired, then static devices must be
-      created on the system.  In the default configuration, the
-      <filename>/etc/rc.d/rcS.d/S10udev</filename> boot script mounts a
-      <systemitem class="filesystem">tmpfs</systemitem> partition over the
-      <filename class="directory">/dev</filename> directory. This problem can
-      be overcome by mounting the root partition temporarily:
+
+      Se dispositivos dinâmicos não são desejados, então dispositivos 
+      estáticos precisam ser criados no sistema.  Na configuração 
+      padrão, o script de inicialização 
+      <filename>/etc/rc.d/rcS.d/S10udev</filename> monta uma partição 
+      <systemitem class="filesystem">tmpfs</systemitem> sobre o 
+      diretório <filename class="directory">/dev</filename>.  Esse 
+      problema pode ser ultrapassado montando-se a partição raiz 
+      temporariamente:
+
     </para>
 
     <warning>
-      <para>
-        If the instructions below are not followed carefully, your
-        system could become unbootable.
-      </para>
-    </warning>
 
+      <para>
+
+        Se as instruções abaixo não forem seguidas cuidadosamente, 
+        [então] o seu sistema poderia se tornar não inicializável.
+
+      </para>
+
+    </warning>
 
 <screen><userinput>mount --bind / /mnt
 cp -a /dev/* /mnt/dev
@@ -246,30 +265,40 @@ rm /etc/rc.d/rcS.d/{S10udev,S50udev_retry}
 umount /mnt</userinput></screen>
 
     <para>
-      At this point, the system will use static devices upon the next
-      reboot.  Create any desired additional devices using
-      <command>mknod</command>.
+
+      Neste ponto, o sistema usará dispositivos estáticos até a próxima 
+      reinicialização.  Crie quaisquer dispositivos adicionais desejados 
+      usando o <command>mknod</command>.
+
     </para>
 
     <para>
-      If you want to restore the dynamic devices, recreate the
-      <filename>/etc/rc.d/rcS.d/{S10udev,S50udev_retry}</filename> symbolic
-      links and reboot again.  Static devices do not need to be removed
-      (console and null are always needed) because they are covered by the
-      <systemitem class="filesystem">tmpfs</systemitem> partition.  Disk
-      usage for devices is negligible (about 20&ndash;30 bytes per entry.)
+
+      Se você quiser restaurar os dispositivos dinâmicos, [então] recrie 
+      os vínculos simbólicos 
+      <filename>/etc/rc.d/rcS.d/{S10udev,S50udev_retry}</filename> e 
+      reinicialize novamente.  Dispositivos estáticos não precisam ser 
+      removidos (console e null sempre são necessários), pois eles são 
+      cobertos pela partição
+<systemitem class="filesystem">tmpfs</systemitem>.  O uso do disco para 
+      dispositivos é desprezível (cerca de 20&ndash;30 bytes por 
+      entrada).
+
     </para>
 
   </sect2>
 
   <sect2 id="dev-dvd">
-    <title>Devices for DVD Drives</title>
+    <title>Dispositivos para Unidades de DVD</title>
 
     <para>
-      If the initial boot process does not set up the
-      <systemitem>/dev/dvd</systemitem> device properly, it can
-      be installed using the following modification to the default udev rules.
-      As the <systemitem class="username">root</systemitem> user, run:
+
+      Se o processo inicial da inicialização não configurar o 
+      dispositivo <systemitem>/dev/dvd</systemitem> adequadamente, 
+      [então] ele pode ser instalado usando-se a seguinte modificação 
+      para as regras padrão do udev.  Como o(a) usuário(a)
+<systemitem class="username">root</systemitem>, execute:
+
     </para>
 
 <screen><userinput>sed '1d;/SYMLINK.*cdrom/ a\
