@@ -122,43 +122,54 @@ options snd-ens1371 index=1</literal></screen>
 
     </para>
 
-
-
-
-
     <para>
-      There is one situation when such fine-grained access control with
-      pre-generated udev rules doesn't work. Namely, PC emulators such as KVM,
-      QEMU and VirtualBox use raw USB device nodes to present arbitrary USB
-      devices to the guest operating system (note: patches are needed in order
-      to get this to work without the obsolete /proc/bus/usb mount point
-      described below). Obviously, maintainers of these packages cannot know
-      which USB devices are going to be connected to the guest operating
-      system. You can either write separate udev rules for all needed USB
-      devices yourself, or use the default catch-all "usb" group, members
-      of which can send arbitrary commands to all USB devices.
+
+      Existe uma situação quando tal controle de acesso refinado com 
+      regras do udev pré-geradas não funciona.  Nomeadamente, os 
+      emuladores de PC, tais como o KVM; o QEMU; e o VirtualBox, usam 
+      nós de dispositivo USB crus para apresentar dispositivos USB 
+      arbitrários para o sistema operacional convidado (observação: 
+      remendos são necessários para a finalidade de fazer com que isso 
+      funcione sem o obsoleto ponto de montagem /proc/bus/usb descrito 
+      abaixo).  Obviamente, os(as) mantenedores(as) desses pacotes não 
+      podem saber quais dispositivos USB serão conectados ao sistema 
+      operacional convidado.  Você pode, ou escrever você mesmo(a) 
+      regras do udev separadas para todos os dispositivos USB 
+      necessários; ou usar o grupo padrão abrangente "usb", membros do 
+      qual podem enviar comandos arbitrários para todos os dispositivos 
+      USB.
+
     </para>
 
     <para>
-      Before Linux-2.6.15, raw USB device access was performed not with
-      /dev/bus/usb/BBB/DDD device nodes, but with /proc/bus/usb/BBB/DDD
-      pseudofiles. Some applications (e.g., VMware Workstation) still use only
-      this deprecated technique and can't use the new device nodes. For them to
-      work, use the "usb" group, but remember that members will have
-      unrestricted access to all USB devices.  To create the fstab entry for
-      the obsolete usbfs filesystem:
+
+      Antes do Linux-2.6.15, o acesso de dispositivo USB cru era 
+      realizado não com nós de dispositivo /dev/bus/usb/BBB/DDD, porém 
+      com pseudo arquivos /proc/bus/usb/BBB/DDD.  Alguns aplicativos 
+      (por exemplo, o VMware Workstation) ainda usam somente essa 
+      técnica obsoleta e não conseguem usar os novos nós de dispositivo.  
+      Para eles funcionarem, use o grupo "usb", porém lembre-se de que 
+      os(as) membros(as) terão acesso irrestrito a todos os dispositivos 
+      USB.  Para criar a entrada fstab para o obsoleto sistema de 
+      arquivos usbfs:
+
     </para>
 
 <screen><literal>usbfs  /proc/bus/usb  usbfs  devgid=14,devmode=0660  0  0</literal></screen>
 
     <note>
+
       <para>
-        Adding users to the "usb" group is inherently insecure, as they can
-        bypass access restrictions imposed through the driver-specific USB
-        device nodes. For instance, they can read sensitive data from USB
-        hard drives without being in the "disk" group. Avoid adding users
-        to this group, if you can.
-    </para>
+
+        Adicionar usuários(as) ao grupo "usb" é inerentemente inseguro, 
+        já que eles(as) conseguem contornar as restrições de acesso 
+        impostas por intermédio dos nós de dispositivo USB específicos 
+        do controlador.  Por exemplo, eles(as) conseguem ler dados 
+        sensíveis a partir de unidades rígidas USB sem estarem no grupo 
+        "disk".  Evite adicionar usuários(as) a esse grupo, se puder.
+
+      </para>
+
     </note>
 
   </sect2>
