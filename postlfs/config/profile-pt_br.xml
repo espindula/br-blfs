@@ -16,7 +16,7 @@
 
   <para>
 
-    O aplicativo de shell <filename>/bin/bash</filename> (doravente 
+    O aplicativo de shell <filename>/bin/bash</filename> (doravante 
     referenciado apenas como "o shell") usa uma coleção de arquivos de 
     iniciação para auxiliar a criar um ambiente.  Cada arquivo tem um 
     uso específico e possivelmente afete os ambientes de login e os 
@@ -29,7 +29,7 @@
 
   <para>
 
-    Um shell de login interativo é iniciado depois de um login exitôso, 
+    Um shell de login interativo é iniciado depois de um login exitoso, 
     usando o <filename>/bin/login</filename>, pela leitura do arquivo 
     <filename>/etc/passwd</filename>.  Essa invocação do shell 
     normalmente lê <filename>/etc/profile</filename> e o equivalente 
@@ -91,17 +91,23 @@
   </para>
 
   <note>
+
     <para>
-      Most of the instructions below are used to create files located in the
-      <filename class='directory'>/etc</filename> directory structure which
-      requires you to execute the commands as the <systemitem
-      class='username'>root</systemitem> user. If you elect to create the
-      files in user's home directories instead, you should run the commands
-      as an unprivileged user.
+
+      A maioria das instruções abaixo é usada para criar arquivos 
+      localizados na estrutura de diretório
+<filename class='directory'>/etc</filename>, o que exige que você
+      execute os comandos como o(a) usuário(a)
+<systemitem class='username'>root</systemitem>.  Se você escolher criar os 
+      arquivos nos diretórios home dos(as) usuários(as) em vez disso, 
+      [então] você deveria executar os comandos como um(a) usuário(a) 
+      desprivilegiado(a).
+
     </para>
+
   </note>
 
-  <para condition="html" role="usernotes">User Notes:
+  <para condition="html" role="usernotes">Observações de Usuário(a):
   <ulink url="&blfs-wiki;/bash-shell-startup-files"/></para>
 
   <sect2 id="etc-profile-profile">
@@ -112,21 +118,27 @@
     </indexterm>
 
     <para>
-      Here is a base <filename>/etc/profile</filename>. This file starts by
-      setting up some helper functions and some basic parameters. It specifies
-      some <command>bash</command> history parameters and, for security
-      purposes, disables keeping a permanent history file for the <systemitem
-      class="username">root</systemitem> user.  It also sets a default user
-      prompt.  It then calls small, single purpose scripts in the <filename
-      class='directory'>/etc/profile.d</filename> directory to provide most
-      of the initialization.
+
+      Aqui está um <filename>/etc/profile</filename> de base.  Esse 
+      arquivo inicia configurando algumas funções auxiliares e alguns 
+      parâmetros básicos.  Ele especifica alguns parâmetros do histórico 
+      do <command>bash</command> e, para propósitos de segurança, 
+      desabilita a manutenção de um arquivo permanente do histórico para 
+      o(a) usuário(a) <systemitem class="username">root</systemitem>.  
+      Também configura um prompt padrão do(a) usuário(a).  Então chama 
+      scripts pequenos e de propósito único no diretório
+<filename class='directory'>/etc/profile.d</filename> para fornecer a maior 
+      parte da inicialização.
+
     </para>
 
     <para>
-      For more information on the escape sequences you can use for your prompt
-      (i.e., the <envar>PS1</envar> environment variable) see <command>info
-      bash</command> -- <emphasis role="strong">Node: Printing a
-      Prompt</emphasis>.
+
+      Para mais informação acerca das sequências de escape que você pode 
+      usar para o seu prompt (isto é, a variável de ambiente 
+      <envar>PS1</envar>), veja-se <command>info bash</command> -- 
+      <emphasis role="strong">Nó: Imprimindo um Prompt</emphasis>.
+
     </para>
 
 <screen role="root"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/profile &lt;&lt; "EOF"
@@ -218,15 +230,18 @@ unset script RED GREEN NORMAL
 EOF</userinput></screen>
 
     <sect3 id="etc-profile.d">
-      <title>The /etc/profile.d Directory</title>
+      <title>O Diretório /etc/profile.d</title>
 
       <indexterm zone="postlfs-config-profile etc-profile.d">
         <primary sortas="e-etc-profile.d">/etc/profile.d</primary>
       </indexterm>
 
       <para>
-        Now create the <filename class='directory'>/etc/profile.d</filename>
-        directory, where the individual initialization scripts are placed:
+
+        Agora crie o diretório
+<filename class='directory'>/etc/profile.d</filename>, onde os scripts 
+        individuais da inicialização são colocados:
+
       </para>
 
 <screen role="root"><userinput>install --directory --mode=0755 --owner=root --group=root /etc/profile.d</userinput></screen>
@@ -241,19 +256,27 @@ EOF</userinput></screen>
       </indexterm>
 
       <note>
+
         <para>
-          Using the bash completion script below is controversial. Not all
-          users like it.  It adds many (usually over 1000) lines to the bash
-          environment and makes it difficult to use the 'set' command to
-          examine simple environment variables.  Omitting this script does
-          not interfere with the ability of bash to use the tab key for file
-          name completion.
+
+          Usar o script de completação do bash abaixo é controverso.  
+          Nem todos(as) os(as) usuários(as) gostam dele.  Ele adiciona 
+          muitas (usualmente mais que mil (1.000)) linhas ao ambiente do 
+          bash e torna difícil usar o comando 'set' para examinar 
+          variáveis simples de ambiente.  Omitir-se este script não 
+          interfere na habilidade do bash de usar a tecla tab para a 
+          completação de nome de arquivo.
+
         </para>
+
       </note>
 
       <para>
-        This script imports bash completion scripts, installed by many
-        other BLFS packages, to allow TAB command line completion.
+
+        Este script importa scripts de completação do bash, instalados 
+        por muitos outros pacotes do BLFS, para permitir a completação 
+        de linha de comando TAB.
+
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/bash_completion.sh &lt;&lt; "EOF"
@@ -292,15 +315,20 @@ fi
 
 # End /etc/profile.d/bash_completion.sh</literal>
 EOF</userinput></screen>
+
       <para>
-        Make sure that the directory exists:
+
+        Tenha certeza de que o diretório existe:
+
       </para>
 
 <screen role="root"><userinput>install --directory --mode=0755 --owner=root --group=root /etc/bash_completion.d</userinput></screen>
 
       <para>
-        For a more complete installation, see
-        <ulink url="&blfs-wiki;/bash-shell-startup-files#bash-completions"/>.
+
+        Para uma instalação mais completa, veja-se
+<ulink url="&blfs-wiki;/bash-shell-startup-files#bash-completions"/>.
+
       </para>
 
     </sect3>
@@ -313,11 +341,14 @@ EOF</userinput></screen>
       </indexterm>
 
       <para>
-        This script uses the <filename>~/.dircolors</filename> and
-        <filename>/etc/dircolors</filename> files to control the colors of
-        file names in a directory listing. They control colorized output of
-        things like <command>ls --color</command>.  The explanation of how to
-        initialize these files is at the end of this section.
+
+        Este script usa os arquivos <filename>~/.dircolors</filename> e 
+        <filename>/etc/dircolors</filename> para controlar as cores dos 
+        nomes de arquivos em uma listagem de diretório.  Eles controlam 
+        a saída gerada colorida de coisas como
+<command>ls --color</command>.  A explicação do como inicializar esses 
+        arquivos está ao final desta seção.
+
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/dircolors.sh &lt;&lt; "EOF"
@@ -344,9 +375,13 @@ EOF</userinput></screen>
       </indexterm>
 
       <para>
-        This script adds some useful paths to the <envar>PATH</envar> and
-        can be used to customize other PATH related environment variables
-        (e.g. LD_LIBRARY_PATH, etc) that may be needed for all users.
+
+        Este script adiciona alguns caminhos úteis à <envar>PATH</envar> 
+        e pode ser usado para personalizar outras variáveis de ambiente 
+        relacionadas a PATH (por exemplo, LD_LIBRARY_PATH, etc) que 
+        possivelmente sejam necessárias para todos(as) os(as) 
+        usuários(as).
+
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/extrapaths.sh &lt;&lt; "EOF"
