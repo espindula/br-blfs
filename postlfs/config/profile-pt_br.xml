@@ -142,20 +142,20 @@
     </para>
 
 <screen role="root"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/profile &lt;&lt; "EOF"
-<literal># Begin /etc/profile
-# Written for Beyond Linux From Scratch
-# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
-# modifications by Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;
+<literal># Início do /etc/profile
+# Escrito para o Beyond Linux From Scratch
+# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
+# modificações por Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;
 
-# System wide environment variables and startup programs.
+# Aplicativos da inicialização e variáveis de ambiente abrangentes ao sistema.
 
-# System wide aliases and functions should go in /etc/bashrc.  Personal
-# environment variables and startup programs should go into
-# ~/.bash_profile.  Personal aliases and functions should go into
+# Alias e funções abrangentes ao sistema deveriam estar em /etc/bashrc.  Os aplicativos 
+# da inicialização e as variáveis de ambiente pessoais deveriam estar no 
+# ~/.bash_profile.  Os alias e a funções pessoais deveriam estar no 
 # ~/.bashrc.
 
-# Functions to help us manage paths.  Second argument is the name of the
-# path variable to be modified (default: PATH)
+# Funções para nos auxiliar a gerenciar paths.  O segundo argumento é o nome da 
+# variável path a ser modificada (default: PATH)
 pathremove () {
         local IFS=':'
         local NEWPATH
@@ -183,10 +183,10 @@ pathappend () {
 
 export -f pathremove pathprepend pathappend
 
-# Set the initial path
+# Configura o caminho inicial
 export PATH=/usr/bin
 
-# Attempt to provide backward compatibility with LFS earlier than 11
+# Tenta fornecer retrocompatibilidade com o LFS anterior a 11
 if [ ! -L /bin ]; then
         pathappend /bin
 fi
@@ -199,16 +199,16 @@ if [ $EUID -eq 0 ] ; then
         unset HISTFILE
 fi
 
-# Setup some environment variables.
+# Configura algumas variáveis de ambiente.
 export HISTSIZE=1000
 export HISTIGNORE="&amp;:[bf]g:exit"
 
-# Set some defaults for graphical systems
+# Configura alguns padrões para os sistemas gráficos
 export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share/}
 export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg/}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}
 
-# Setup a red prompt for root and a green one for users.
+# Configura um prompt vermelho para o(a) root e um verde para os(as) usuários(as).
 NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
 GREEN="\[\e[1;32m\]"
@@ -226,7 +226,7 @@ done
 
 unset script RED GREEN NORMAL
 
-# End /etc/profile</literal>
+# Fim do /etc/profile</literal>
 EOF</userinput></screen>
 
     <sect3 id="etc-profile.d">
@@ -280,22 +280,22 @@ EOF</userinput></screen>
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/bash_completion.sh &lt;&lt; "EOF"
-<literal># Begin /etc/profile.d/bash_completion.sh
-# Import bash completion scripts
+<literal># Início do /etc/profile.d/bash_completion.sh
+# Importa os scripts de completação do bash
 
-# If the bash-completion package is installed, use its configuration instead
+# Se o pacote bash-completion estiver instalado, [então] usa a configuração dele em vez disso
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 
-  # Check for interactive bash and that we haven't already been sourced.
+  # Verifica o bash interativo e que nós já não tenhamos sido obtidos.
   if [ -n "${BASH_VERSION-}" -a -n "${PS1-}" -a -z "${BASH_COMPLETION_VERSINFO-}" ]; then
 
-    # Check for recent enough version of bash.
+    # Verifica versão recente o suficiente do bash.
     if [ ${BASH_VERSINFO[0]} -gt 4 ] || \
        [ ${BASH_VERSINFO[0]} -eq 4 -a ${BASH_VERSINFO[1]} -ge 1 ]; then
        [ -r "${XDG_CONFIG_HOME:-$HOME/.config}/bash_completion" ] &amp;&amp; \
             . "${XDG_CONFIG_HOME:-$HOME/.config}/bash_completion"
        if shopt -q progcomp &amp;&amp; [ -r /usr/share/bash-completion/bash_completion ]; then
-          # Source completion code.
+          # Obtém o código da completação.
           . /usr/share/bash-completion/bash_completion
        fi
     fi
@@ -303,7 +303,7 @@ if [ -f /usr/share/bash-completion/bash_completion ]; then
 
 else
 
-  # bash-completions are not installed, use only bash completion directory
+  # bash-completions não estiverem instaladas, usa somente o diretório da completação do bash
   if shopt -q progcomp; then
     for script in /etc/bash_completion.d/* ; do
       if [ -r $script ] ; then
@@ -313,7 +313,7 @@ else
   fi
 fi
 
-# End /etc/profile.d/bash_completion.sh</literal>
+# Fim do /etc/profile.d/bash_completion.sh</literal>
 EOF</userinput></screen>
 
       <para>
@@ -352,7 +352,7 @@ EOF</userinput></screen>
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/dircolors.sh &lt;&lt; "EOF"
-<literal># Setup for /bin/ls and /bin/grep to support color, the alias is in /etc/bashrc.
+<literal># Configuração para o /bin/ls e o /bin/grep suportar cor, o alias está em /etc/bashrc.
 if [ -f "/etc/dircolors" ] ; then
         eval $(dircolors -b /etc/dircolors)
 fi
@@ -399,7 +399,7 @@ if [ -d /usr/local/share ]; then
         pathprepend /usr/local/share XDG_DATA_DIRS
 fi
 
-# Set some defaults before other applications add to these paths.
+# Configura alguns padrões antes que outros aplicativos adicionem a estes caminhos.
 pathappend /usr/share/man  MANPATH
 pathappend /usr/share/info INFOPATH</literal>
 EOF</userinput></screen>
@@ -422,7 +422,7 @@ EOF</userinput></screen>
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/readline.sh &lt;&lt; "EOF"
-<literal># Setup the INPUTRC environment variable.
+<literal># Configura a variável de ambiente INPUTRC.
 if [ -z "$INPUTRC" -a ! -f "$HOME/.inputrc" ] ; then
         INPUTRC=/etc/inputrc
 fi
@@ -448,7 +448,7 @@ EOF</userinput></screen>
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/umask.sh &lt;&lt; "EOF"
-<literal># By default, the umask should be set.
+<literal># Por padrão, o umask deveria ser configurado.
 if [ "$(id -gn)" = "$(id -un)" -a $EUID -gt 99 ] ; then
   umask 002
 else
@@ -505,12 +505,12 @@ EOF</userinput></screen>
       </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; "EOF"
-<literal># Set up i18n variables
+<literal># Configura as variáveis de internacionalização
 export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable></literal>
 EOF</userinput></screen>
 
 <screen role="root" revision="systemd"><userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; "EOF"
-<literal># Set up i18n variables
+<literal># Configura as variáveis de internacionalização
 . /etc/locale.conf
 export LANG</literal>
 EOF</userinput></screen>
@@ -518,12 +518,15 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3>
-      <title>Other Initialization Values</title>
+      <title>Outros Valores da Inicialização</title>
 
       <para>
-        Other initialization can easily be added to the
-        <filename>profile</filename> by adding additional scripts to the
-        <filename class='directory'>/etc/profile.d</filename> directory.
+
+        Outra inicialização pode facilmente ser adicionada ao 
+        <filename>profile</filename> adicionando-se scripts adicionais 
+        ao diretório
+<filename class='directory'>/etc/profile.d</filename>.
+
       </para>
 
     </sect3>
@@ -538,33 +541,35 @@ EOF</userinput></screen>
     </indexterm>
 
     <para>
-      Here is a base <filename>/etc/bashrc</filename>.  Comments in the
-      file should explain everything you need.
+
+      Aqui está um <filename>/etc/bashrc</filename> de base.  Os 
+      comentários no arquivo deveriam explicar tudo o que você precisa.
+
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/bashrc &lt;&lt; "EOF"
-<literal># Begin /etc/bashrc
-# Written for Beyond Linux From Scratch
-# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
-# updated by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
+<literal># Início do /etc/bashrc
+# Escrito para o Beyond Linux From Scratch
+# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
+# atualizado por Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
 
-# System wide aliases and functions.
+# Alias e funções abrangentes ao sistema.
 
-# System wide environment variables and startup programs should go into
-# /etc/profile.  Personal environment variables and startup programs
-# should go into ~/.bash_profile.  Personal aliases and functions should
-# go into ~/.bashrc
+# As variáveis de ambiente e os aplicativos da inicialização abrangentes 
+# ao sistema deveriam estar no /etc/profile.  As variáveis de ambiente e 
+# os aplicativos da inicialização pessoais deveriam estar no 
+# ~/.bash_profile.  Alias e funções pessoais deveriam estar no ~/.bashrc
 
-# Provides colored /bin/ls and /bin/grep commands.  Used in conjunction
-# with code in /etc/profile.
+# Fornece comandos /bin/ls e /bin/grep coloridos.  Usados em conjunção 
+# com o código em /etc/profile.
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
-# Provides prompt for non-login shells, specifically shells started
-# in the X environment. [Review the LFS archive thread titled
-# PS1 Environment Variable for a great case study behind this script
-# addendum.]
+# Fornece prompt para os shells de não login, especificamente os shells 
+# iniciados no ambiente do X.  [Reveja-se o tópico do arquivo do LFS 
+# intitulado Variável de Ambiente PS1 para um ótimo estudo de caso por 
+# trás deste adendo do script].
 
 NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
@@ -577,7 +582,7 @@ fi
 
 unset RED GREEN NORMAL
 
-# End /etc/bashrc</literal>
+# Fim do /etc/bashrc</literal>
 EOF</userinput></screen>
 
   </sect2>
@@ -590,26 +595,31 @@ EOF</userinput></screen>
     </indexterm>
 
     <para>
-      Here is a base <filename>~/.bash_profile</filename>.  If you want each
-        new user to have this file automatically, just change the output of
-      the command to <filename>/etc/skel/.bash_profile</filename> and check the
-      permissions after the command is run. You can then copy <filename>
-      /etc/skel/.bash_profile</filename> to the home directories of already
-      existing users, including <systemitem class="username">root</systemitem>,
-      and set the owner and group appropriately.
+
+      Aqui está um <filename>~/.bash_profile</filename> de base.  Se 
+      você quiser que cada usuário(a) novo(a) tenha esse arquivo 
+      automaticamente, [então] apenas mude a saída gerada do comando 
+      para o <filename>/etc/skel/.bash_profile</filename> e verifique as 
+      permissões depois que o comando for executado.  Você pode, então, 
+      copiar o <filename>/etc/skel/.bash_profile</filename> para os 
+      diretórios home dos(as) usuários(as) já existentes, incluindo o(a) 
+      <systemitem class="username">root</systemitem>, e configurar o(a) 
+      proprietário(a) e o grupo apropriadamente.
+
     </para>
 
 <screen><userinput>cat &gt; ~/.bash_profile &lt;&lt; "EOF"
-<literal># Begin ~/.bash_profile
-# Written for Beyond Linux From Scratch
-# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
-# updated by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
+<literal># Início do ~/.bash_profile
+# Escrito para o Beyond Linux From Scratch
+# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
+# atualizado por Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
 
-# Personal environment variables and startup programs.
+# Variáveis de ambiente e aplicativos da inicialização pessoais.
 
-# Personal aliases and functions should go in ~/.bashrc.  System wide
-# environment variables and startup programs are in /etc/profile.
-# System wide aliases and functions are in /etc/bashrc.
+# Alias e funções pessoais deveriam estar em ~/.bashrc.  As variáveis de 
+# ambiente e os aplicativos da inicialização abrangentes ao sistema 
+# estão em /etc/profile.
+# Alias e funções abrangentes ao sistema estão em /etc/bashrc.
 
 if [ -f "$HOME/.bashrc" ] ; then
   source $HOME/.bashrc
@@ -619,12 +629,12 @@ if [ -d "$HOME/bin" ] ; then
   pathprepend $HOME/bin
 fi
 
-# Having . in the PATH is dangerous
+# Ter-se o . no PATH é perigoso
 #if [ $EUID -gt 99 ]; then
 #  pathappend .
 #fi
 
-# End ~/.bash_profile</literal>
+# Fim do ~/.bash_profile</literal>
 EOF</userinput></screen>
 
   </sect2>
@@ -637,24 +647,27 @@ EOF</userinput></screen>
     </indexterm>
 
     <para>
-      Here is a base <filename>~/.profile</filename>. The comments and
-      instructions for using <filename class="directory">/etc/skel</filename>
-      for <filename>.bash_profile</filename> above also apply here. Only the
-      target file names are different.
+
+      Aqui está um <filename>~/.profile</filename> de base.  Os 
+      comentários e as instruções para se usar o
+<filename class="directory">/etc/skel</filename> para o 
+      <filename>.bash_profile</filename> acima também se aplicam aqui.  
+      Somente os nomes dos arquivos alvo são diferentes.
+
     </para>
 
 <screen><userinput>cat &gt; ~/.profile &lt;&lt; "EOF"
-<literal># Begin ~/.profile
-# Personal environment variables and startup programs.
+<literal># Início do ~/.profile
+# Variáveis de ambiente e aplicativos da inicialização pessoais.
 
 if [ -d "$HOME/bin" ] ; then
   pathprepend $HOME/bin
 fi
 
-# Set up user specific i18n variables
+# Configura variáveis de internacionalização específicas do(a) usuário(a)
 #export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable>
 
-# End ~/.profile</literal>
+# Fim do ~/.profile</literal>
 EOF</userinput></screen>
 
   </sect2>
@@ -667,33 +680,35 @@ EOF</userinput></screen>
     </indexterm>
 
     <para>
-      Here is a base <filename>~/.bashrc</filename>.
+
+      Aqui está um <filename>~/.bashrc</filename> de base.
+
     </para>
 
 <screen><userinput>cat &gt; ~/.bashrc &lt;&lt; "EOF"
-<literal># Begin ~/.bashrc
-# Written for Beyond Linux From Scratch
-# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
+<literal># Início do ~/.bashrc
+# Escrito para o Beyond Linux From Scratch
+# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
 
-# Personal aliases and functions.
+# Alias e funções pessoais.
 
-# Personal environment variables and startup programs should go in
-# ~/.bash_profile.  System wide environment variables and startup
-# programs are in /etc/profile.  System wide aliases and functions are
-# in /etc/bashrc.
+# As variáveis de ambiente e os aplicativos da inicialização pessoais 
+# deveriam estar em ~/.bash_profile.  As variáveis de ambiente e os 
+# aplicativos da inicialização abrangentes ao sistema estão em 
+# /etc/profile.  Alias e funções abrangentes ao sistema estão em 
+# /etc/bashrc.
 
 if [ -f "/etc/bashrc" ] ; then
   source /etc/bashrc
 fi
 
-# Set up user specific i18n variables
+# Configura variáveis da internacionalização específicas do(a) usuário(a)
 #export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable>
 
-# End ~/.bashrc</literal>
+# Fim do ~/.bashrc</literal>
 EOF</userinput></screen>
 
   </sect2>
-
 
   <sect2 id="bash_logout-profile">
     <title>~/.bash_logout</title>
@@ -703,25 +718,26 @@ EOF</userinput></screen>
     </indexterm>
 
     <para>
-      This is an empty <filename>~/.bash_logout</filename> that can be used as
-      a template.  You will notice that the base <filename>~/.bash_logout
-      </filename> does not include a <userinput>clear</userinput> command.
-      This is because the clear is handled in the
-      <filename>/etc/issue</filename> file.
+
+      Este é um <filename>~/.bash_logout</filename> vazio que pode ser 
+      usado como um modelo.  Você perceberá que o 
+      <filename>~/.bash_logout</filename> de base não inclui um comando 
+      <userinput>clear</userinput>.  Isso é porque o clear é manuseado 
+      no arquivo <filename>/etc/issue</filename>.
+
     </para>
 
 <screen><userinput>cat &gt; ~/.bash_logout &lt;&lt; "EOF"
-<literal># Begin ~/.bash_logout
-# Written for Beyond Linux From Scratch
-# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
+<literal># Início do ~/.bash_logout
+# Escrito para o Beyond Linux From Scratch
+# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
 
-# Personal items to perform on logout.
+# Itens pessoais a realizar no logout.
 
-# End ~/.bash_logout</literal>
+# Fim do ~/.bash_logout</literal>
 EOF</userinput></screen>
 
   </sect2>
-
 
   <sect2 id="etc-dircolors-profile">
     <title>/etc/dircolors</title>
@@ -735,28 +751,37 @@ EOF</userinput></screen>
     </indexterm>
 
     <para>
-       If you want to use the <filename>dircolors</filename> capability, then
-       run the following command. The <filename class="directory">/etc/skel
-       </filename> setup steps shown above also can be used here to provide
-       a <filename>~/.dircolors</filename> file when a new user is set up.
-       As before, just change the output file name on the following command
-       and assure the permissions, owner, and group are correct on the files
-       created and/or copied.
+
+      Se você quiser usar a capacidade <filename>dircolors</filename>, 
+      então execute o seguinte comando.  As etapas de configuração do 
+      <filename class="directory">/etc/skel</filename> mostradas acima 
+      também podem ser usadas aqui para fornecer um arquivo 
+      <filename>~/.dircolors</filename> quando um(a) usuário(a) novo(a) 
+      for configurado(a).  Como antes, apenas mude o nome de arquivo da 
+      saída gerada no seguinte comando e se assegure de que as 
+      permissões, proprietário(a) e grupo estejam corretas nos arquivos 
+      criados e (ou) copiados.
+
     </para>
 
 <screen role="root"><userinput>dircolors -p > /etc/dircolors</userinput></screen>
 
     <para>
-      If you wish to customize the colors used for different file types, you
-      can edit the <filename>/etc/dircolors</filename> file. The instructions
-      for setting the colors are embedded in the file.
+
+      Se desejar personalizar as cores usadas para os diferentes tipos 
+      de arquivo, [então] você pode editar o arquivo 
+      <filename>/etc/dircolors</filename>.  As instruções para 
+      configurar as cores estão embutidas no arquivo.
+
     </para>
 
-
     <para>
-      Finally, Ian Macdonald has written an excellent collection of tips and
-      tricks to enhance your shell environment.  You can read it online at
-      <ulink url="http://www.caliban.org/bash/index.shtml"/>.
+
+      Finalmente, Ian Macdonald escreveu uma excelente coleção de dicas 
+      e de truques para melhorar o seu ambiente de shell.  Você pode 
+      lê-la online em
+<ulink url="http://www.caliban.org/bash/index.shtml"/>.
+
     </para>
 
   </sect2>
