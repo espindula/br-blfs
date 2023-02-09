@@ -241,62 +241,75 @@ chmod 754 /etc/cron.weekly/update-pki.sh</userinput></screen>
   </sect2>
 
   <sect2 role="configuration" id="make-ca-config">
-    <title>Configuring make-ca</title>
+    <title>Configurando o make-ca</title>
 
     <para>
-      For most users, no additional configuration is necessary, however,
-      the default <filename>certdata.txt</filename> file provided by make-ca
-      is obtained from the mozilla-release branch, and is modified to provide a
-      Mercurial revision. This will be the correct version for most systems.
-      There are several other variants of the file available for use that might
-      be preferred for one reason or another, including the files shipped with
-      Mozilla products in this book. RedHat and OpenSUSE, for instance, use the
-      version included in <xref linkend="nss"/>. Additional upstream downloads
-      are available at the links included in
-      <filename>/etc/make-ca.conf.dist</filename>. Simply copy the file to
-      <filename>/etc/make-ca.conf</filename> and edit as appropriate.
+
+      Para a maioria dos(as) usuários(as), nenhuma configuração 
+      adicional é necessária; entretanto, o arquivo 
+      <filename>certdata.txt</filename> padrão fornecido pelo make-ca é 
+      obtido a partir da ramificação mozilla-release e é modificado para 
+      fornecer uma revisão Mercurial.  Essa será a versão correta para a 
+      maior parte dos sistemas.  Existem muitas outras variantes do 
+      arquivo disponíveis para uso que poderiam ser preferidas por uma 
+      razão ou por outra, incluindo os arquivos embarcados com os 
+      produtos da Mozilla neste livro.  RedHat e OpenSUSE, por exemplo, 
+      usam a versão inclusa no <xref linkend="nss"/>.  Transferências 
+      adicionais do(a) desenvolvedor(a) estão disponíveis nos links 
+      inclusos em <filename>/etc/make-ca.conf.dist</filename>.  
+      Simplesmente copie o arquivo para 
+      <filename>/etc/make-ca.conf</filename> e edite conforme 
+      apropriado.
+
     </para>
 
     <indexterm zone="make-ca make-ca-config">
       <primary sortas="e-etc-make-ca-conf">/etc/make-ca.conf</primary>
     </indexterm>
 
-    <bridgehead renderas="sect3">About Trust Arguments</bridgehead>
+    <bridgehead renderas="sect3">Acerca de Argumentos Confiáveis</bridgehead>
 
     <para>
-      There are three trust types that are recognized by the
-      <application>make-ca</application> script, SSL/TLS, S/Mime, and code
-      signing. For <application>OpenSSL</application>, these are
-      <parameter>serverAuth</parameter>,
-      <parameter>emailProtection</parameter>, and
-      <parameter>codeSigning</parameter> respectively. If one of the three
-      trust arguments is omitted, the certificate is neither trusted, nor
-      rejected for that role. Clients that use
-      <application>OpenSSL</application> or <application>NSS</application>
-      encountering this certificate will present a warning to the user.
-      Clients using
-      <application>GnuTLS</application> without
-      <application>p11-kit</application> support are not aware of trusted
-      certificates. To include this CA into the
-      <filename>ca-bundle.crt</filename>,
-      <filename>email-ca-bundle.crt</filename>, or
-      <filename>objsign-ca-bundle.crt</filename> files
-      (the <application>GnuTLS</application> legacy bundles), it must have the
-      appropriate trust arguments.
+
+      Existem três tipos confiáveis que são reconhecidos pelo script 
+      <application>make-ca</application>, SSL/TLS, S/Mime e assinatura 
+      de código.  Para o <application>OpenSSL</application>, esses são 
+      <parameter>serverAuth</parameter>; 
+      <parameter>emailProtection</parameter>; e 
+      <parameter>codeSigning</parameter>, respectivamente.  Se um dos 
+      três argumentos confiáveis for omitido, [então] o certificado nem 
+      é acreditado, nem é rejeitado para aquela função.  Os clientes que 
+      usarem o <application>OpenSSL</application> ou o 
+      <application>NSS</application> encontrando esse certificado 
+      apresentarão um aviso para o(a) usuário(a).  Os clientes usando o 
+      <application>GnuTLS</application> sem o suporte ao 
+      <application>p11-kit</application> não estão cientes dos 
+      certificados confiáveis.  Para incluir essa AC nos arquivos 
+      <filename>ca-bundle.crt</filename>, 
+      <filename>email-ca-bundle.crt</filename> ou 
+      <filename>objsign-ca-bundle.crt</filename> (os pacotes legados do 
+      <application>GnuTLS</application>), precisa ter os argumentos 
+      confiáveis adequados.
+
     </para>
 
-    <bridgehead renderas="sect3">Adding Additional CA Certificates</bridgehead>
+    <bridgehead renderas="sect3">Acrescentando Certificados de AC Adicionais</bridgehead>
 
     <para>
-      The <filename class="directory">/etc/ssl/local</filename> directory
-      is available to add additional CA certificates to the system trust store.
-      This directory is also used to store certificates that were added to or
-      modified  in the system trust store by <xref linkend="p11-kit"/> so that
-      trust values are maintained across upgrades. Files in this directory must
-      be in the <application>OpenSSL</application> trusted certificate format.
-      Certificates imported using the <command>trust</command> utility from
-      <xref linkend="p11-kit"/> will utilize the x509 Extended Key Usage values
-      to assign default trust values for the system anchors.
+
+      O diretório <filename class="directory">/etc/ssl/local</filename> 
+      está disponível para acrescentar certificados de AC adicionais à 
+      loja confiável do sistema.  Esse diretório também é usado para 
+      armazenar certificados que foram acrescentados a ou modificados na 
+      loja confiável do sistema pelo <xref linkend="p11-kit"/>, de forma 
+      que os valores confiáveis sejam mantidos ao longo de atualizações.  
+      Os arquivos nesse diretório precisam estar no formato de 
+      certificado confiável do <application>OpenSSL</application>.  Os 
+      certificados importados usando o utilitário 
+      <command>trust</command> originário do <xref linkend="p11-kit"/> 
+      utilizarão os valores Uso Estendido de Chave x509 para atribuir 
+      valores confiáveis padrão para as âncoras do sistema.
+
     </para>
 
     <para>If you need to override trust values, or otherwise need to create
