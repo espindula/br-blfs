@@ -343,8 +343,8 @@ echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_redirects
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirects
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Descarta Pacotes Falsificados entrantes em uma interface, onde as respostas
-# resultariam na resposta indo para uma interface diferente.
+# Descarta Pacotes Falsificados entrantes em uma interface, onde as 
+# respostas resultariam na resposta indo para uma interface diferente.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
@@ -352,7 +352,8 @@ echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/log_martians
 
-# Seja verboso a respeito de endereços de IP dinâmicos (não necessário no caso de IP estático)
+# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
+# no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
 # Desabilita a Notificação Explícita de Congestão
@@ -386,10 +387,10 @@ iptables -A OUTPUT -j ACCEPT
 # ftp)
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Log everything else.
+# Registra tudo o mais.
 iptables -A INPUT -j LOG --log-prefix "FIREWALL:INPUT "
 
-# End $rc_base/rc.iptables</literal>
+# Fim do $rc_base/rc.iptables</literal>
 EOF
 chmod 700 /etc/rc.d/rc.iptables</userinput></screen>
 
@@ -398,136 +399,149 @@ chmod 700 /etc/rc.d/rc.iptables</userinput></screen>
 cat &gt; /etc/systemd/scripts/iptables &lt;&lt; "EOF"
 <literal>#!/bin/sh
 
-# Begin /etc/systemd/scripts/iptables
+# Início do /etc/systemd/scripts/iptables
 
-# Insert connection-tracking modules
-# (not needed if built into the kernel)
+# Insere módulos de rastreamento de conexão (não necessário se 
+# construído internamente ao kernel)
 modprobe nf_conntrack
 modprobe xt_LOG
 
-# Enable broadcast echo Protection
+# Habilita difusão echo Protection
 echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
 
-# Disable Source Routed Packets
+# Desabilita Pacotes Fonte Roteados
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_source_route
 
-# Enable TCP SYN Cookie Protection
+# Habilita a Proteção SYN Cookie do TCP
 echo 1 &gt; /proc/sys/net/ipv4/tcp_syncookies
 
-# Disable ICMP Redirect Acceptance
+# Desabilita a Aceitação de Redireção de ICMP
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_redirects
 
-# Do not send Redirect Messages
+# Não envia Mensagens de Redireção
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirects
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Drop Spoofed Packets coming in on an interface, where responses
-# would result in the reply going out a different interface.
+# Descarta Pacotes Falsificados entrantes em uma interface, onde as 
+# respostas resultariam na resposta indo para uma interface diferente.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
-# Log packets with impossible addresses.
+# Registra pacotes com endereços impossíveis.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/log_martians
 
-# be verbose on dynamic ip-addresses  (not needed in case of static IP)
+# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
+# no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
-# disable Explicit Congestion Notification
-# too many routers are still ignorant
+# Desabilita a Notificação Explícita de Congestão
+# roteadores demais ainda são ignorantes
 echo 0 &gt; /proc/sys/net/ipv4/tcp_ecn
 
-# Set a known state
+# Configura um estado conhecido
 iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# These lines are here in case rules are already in place and the
-# script is ever rerun on the fly. We want to remove all rules and
-# pre-existing user defined chains before we implement new rules.
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
+# script for mesmo reexecutado em tempo real.  Nós queremos remover 
+# todas as regras e cadeias preexistentes definidas por usuário(a) 
+# antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z
 
 iptables -t nat -F
 
-# Allow local-only connections
+# Permite conexões locais somente
 iptables -A INPUT  -i lo -j ACCEPT
 
-# Free output on any interface to any ip for any service
-# (equal to -P ACCEPT)
+# Libera a saída gerada em qualquer interface para qualquer IP para 
+# qualquer serviço (igual a -P ACCEPT)
 iptables -A OUTPUT -j ACCEPT
 
-# Permit answers on already established connections
-# and permit new connections related to established ones
-# (e.g. port mode ftp)
+# Permite respostas em conexões já estabelecidas e permite novas 
+# conexões relacionadas às estabelecidas (por exemplo, modo de porta 
+# ftp)
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Log everything else.
+# Registra tudo o mais.
 iptables -A INPUT -j LOG --log-prefix "FIREWALL:INPUT "
 
-# End /etc/systemd/scripts/iptables</literal>
+# Fim do /etc/systemd/scripts/iptables</literal>
 EOF
 chmod 700 /etc/systemd/scripts/iptables</userinput></screen>
 
       <para>
-        This script is quite simple, it drops all traffic coming
-        into your computer that wasn't initiated from your computer, but
-        as long as you are simply surfing the Internet you are unlikely
-        to exceed its limits.
+
+        Esse script é bastante simples; ele descarta todo o tráfego 
+        entrante no seu computador que não foi iniciado a partir do seu 
+        computador; porém, considerando que você está simplesmente 
+        surfando na Internet, é improvável que exceda os limites dele.
+
       </para>
 
       <para>
-        If you frequently encounter certain delays at accessing
-        FTP servers, take a look at <xref linkend="fw-BB-4-ipt"/>.
+
+        Se você encontrar frequentemente certos atrasos ao acessar 
+        servidores FTP, [então] dê uma olhada em
+<xref linkend="fw-BB-4-ipt"/>.
+
       </para>
 
       <para>
-        Even if you have daemons or services running on your system,
-        these will be inaccessible everywhere but from your computer itself.
-        If you want to allow access to services on your machine, such as
-        <command>ssh</command> or <command>ping</command>, take a look at
-        <xref linkend="fw-busybox-ipt"/>.
+
+        Mesmo se você tiver daemons ou serviços executando em seu 
+        sistema, esses estarão inacessíveis em todos os lugares, exceto 
+        a partir do seu próprio computador.  Se quiser permitir o acesso 
+        a serviços na sua máquina, tais como o <command>ssh</command> ou 
+        o <command>ping</command>, [então] dê uma olhada em
+<xref linkend="fw-busybox-ipt"/>.
+
       </para>
 
     </sect3>
 
-    <sect3 id="fw-masqRouter-ipt"
-     xreflabel="Creating a Masquerading Router With iptables">
-      <title>Masquerading Router</title>
+    <sect3 id="fw-masqRouter-ipt" xreflabel="Criando um Roteador de Mascaramento Com o iptables">
+      <title>Roteador de Mascaramento</title>
 
       <para>
-        A Network Firewall has two interfaces, one connected to an
-        intranet, in this example <emphasis role="strong">LAN1</emphasis>,
-        and one connected to the Internet, here <emphasis
-        role="strong">WAN1</emphasis>. To provide the maximum security
-        for the firewall itself, make sure that there are no unnecessary
-        servers running on it such as <application>X11</application>.
-        As a general principle, the firewall itself should not access
-        any untrusted service (think of a remote server giving answers that
-        makes a daemon on your system crash, or even worse, that implements
-        a worm via a buffer-overflow).
+
+        Um Firewall de Rede de Comunicação tem duas interfaces, uma 
+        conectada com uma intranet, neste exemplo
+<emphasis role="strong">LAN1</emphasis> e uma conectada com a Internet, 
+        aqui <emphasis role="strong">WAN1</emphasis>.  Para fornecer a 
+        máxima segurança para o próprio firewall, tenha certeza de que 
+        não existem servidores desnecessários executando nele, tais como 
+        o <application>X11</application>.  Como um princípio geral, o 
+        próprio firewall não deveria acessar qualquer serviço não 
+        confiável (pense em um servidor remoto dando respostas que fazem 
+        com que um daemon no seu sistema quebre; ou ainda pior, que 
+        implementa um verme via um estouro do buffer).
+
       </para>
 
 <screen role="root" revision="sysv"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/rc.d/rc.iptables &lt;&lt; "EOF"
 <literal>#!/bin/sh
 
-# Begin rc.iptables
+# Início do rc.iptables
 
 echo
-echo "You're using the example configuration for a setup of a firewall"
-echo "from Beyond Linux From Scratch."
-echo "This example is far from being complete, it is only meant"
-echo "to be a reference."
-echo "Firewall security is a complex issue, that exceeds the scope"
-echo "of the configuration rules below."
-echo "You can find additional information"
-echo "about firewalls in Chapter 4 of the BLFS book."
+echo "Você está usando a configuração de exemplo para uma configuração de um firewall"
+echo "oriunda do Beyond Linux From Scratch."
+echo "Este exemplo está longe de ser completo; ele é entendido para ser"
+echo "somente uma referência."
+echo "A segurança do firewall é um problema complexo, que excede o escopo"
+echo "das regras de configuração abaixo."
+echo "Você pode encontrar informação adicional"
+echo "acerca de firewalls no Capítulo 4 do livro BLFS."
 echo "https://www.&lfs-domainname;/blfs"
 echo
 
-# Insert iptables modules (not needed if built into the kernel).
+# Insere módulos do iptables (não necessário se construído internamente 
+# ao kernel).
 
 modprobe nf_conntrack
 modprobe nf_conntrack_ftp
@@ -535,68 +549,70 @@ modprobe xt_conntrack
 modprobe xt_LOG
 modprobe xt_state
 
-# Enable broadcast echo Protection
+# Habilita difusão echo Protection
 echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
 
-# Disable Source Routed Packets
+# Desabilita Pacotes Fonte Roteados
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route
 
-# Enable TCP SYN Cookie Protection
+# Habilita a Proteção SYN Cookie do TCP
 echo 1 &gt; /proc/sys/net/ipv4/tcp_syncookies
 
-# Disable ICMP Redirect Acceptance
+# Desabilita a Aceitação de Redireção de ICMP
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_redirects
 
-# Don't send Redirect Messages
+# Não envia Mensagens de Redireção
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Drop Spoofed Packets coming in on an interface where responses
-# would result in the reply going out a different interface.
+# Descarta Pacotes Falsificados entrantes em uma interface, onde as 
+# respostas resultariam na resposta indo para uma interface diferente.
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
-# Log packets with impossible addresses.
+# Registra pacotes com endereços impossíveis.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 
-# Be verbose on dynamic ip-addresses  (not needed in case of static IP)
+# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
+# no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
-# Disable Explicit Congestion Notification
-# Too many routers are still ignorant
+# Desabilita a Notificação Explícita de Congestão
+# roteadores demais ainda são ignorantes
 echo 0 &gt; /proc/sys/net/ipv4/tcp_ecn
 
-# Set a known state
+# Configura um estado conhecido
 iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# These lines are here in case rules are already in place and the
-# script is ever rerun on the fly. We want to remove all rules and
-# pre-existing user defined chains before we implement new rules.
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
+# script for mesmo reexecutado em tempo real.  Nós queremos remover 
+# todas as regras e cadeias preexistentes definidas por usuário(a) 
+# antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z
 
 iptables -t nat -F
 
-# Allow local connections
+# Permite conexões locais
 iptables -A INPUT  -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
-# Allow forwarding if the initiated on the intranet
+# Permite o encaminhamento se a iniciada na intranet
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD ! -i WAN1 -m conntrack --ctstate NEW       -j ACCEPT
 
-# Do masquerading
-# (not needed if intranet is not using private ip-addresses)
+# Faz o mascaramento (não necessário se a intranet não estiver usando 
+# endereços IP privados)
 iptables -t nat -A POSTROUTING -o WAN1 -j MASQUERADE
 
-# Log everything for debugging
-# (last of all rules, but before policy rules)
+# Registra tudo para depuração (última de todas as regras, porém antes 
+# das regras de política)
 iptables -A INPUT   -j LOG --log-prefix "FIREWALL:INPUT "
 iptables -A FORWARD -j LOG --log-prefix "FIREWALL:FORWARD "
 iptables -A OUTPUT  -j LOG --log-prefix "FIREWALL:OUTPUT "
 
-# Enable IP Forwarding
+# Habilita o Encaminhamento de IP
 echo 1 &gt; /proc/sys/net/ipv4/ip_forward</literal>
 EOF
 chmod 700 /etc/rc.d/rc.iptables</userinput></screen>
@@ -606,22 +622,23 @@ chmod 700 /etc/rc.d/rc.iptables</userinput></screen>
 cat &gt; /etc/systemd/scripts/iptables &lt;&lt; "EOF"
 <literal>#!/bin/sh
 
-# Begin /etc/systemd/scripts/iptables
+# Início do /etc/systemd/scripts/iptables
 
 echo
-echo "You're using the example configuration for a setup of a firewall"
-echo "from Beyond Linux From Scratch."
-echo "This example is far from being complete, it is only meant"
-echo "to be a reference."
-echo "Firewall security is a complex issue, that exceeds the scope"
-echo "of the configuration rules below."
+echo "Você está usando a configuração de exemplo para uma configuração de um firewall"
+echo "oriunda do Beyond Linux From Scratch."
+echo "Este exemplo está longe de ser completo; ele é entendido para ser"
+echo "somente uma referência."
+echo "A segurança do firewall é um problema complexo, que excede o escopo"
+echo "das regras de configuração abaixo."
 
-echo "You can find additional information"
-echo "about firewalls in Chapter 4 of the BLFS book."
-echo "http://www.&lfs-domainname;/blfs"
+echo "Você pode encontrar informação adicional"
+echo "acerca de firewalls no Capítulo 4 do livro BLFS."
+echo "https://www.&lfs-domainname;/blfs"
 echo
 
-# Insert iptables modules (not needed if built into the kernel).
+# Insere módulos do iptables (não necessário se construído internamente 
+# ao kernel).
 
 modprobe nf_conntrack
 modprobe nf_conntrack_ftp
@@ -629,97 +646,106 @@ modprobe xt_conntrack
 modprobe xt_LOG
 modprobe xt_state
 
-# Enable broadcast echo Protection
+# Habilita difusão echo Protection
 echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
 
-# Disable Source Routed Packets
+# Desabilita Pacotes Fonte Roteados
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route
 
 # Enable TCP SYN Cookie Protection
 echo 1 &gt; /proc/sys/net/ipv4/tcp_syncookies
 
-# Disable ICMP Redirect Acceptance
+# Habilita a Proteção SYN Cookie do TCP
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_redirects
 
-# Don't send Redirect Messages
+# Não envia Mensagens de Redireção
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Drop Spoofed Packets coming in on an interface where responses
-# would result in the reply going out a different interface.
+# Descarta Pacotes Falsificados entrantes em uma interface, onde as 
+# respostas resultariam na resposta indo para uma interface diferente.
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
-# Log packets with impossible addresses.
+# Registra pacotes com endereços impossíveis.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 
-# Be verbose on dynamic ip-addresses  (not needed in case of static IP)
+# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
+# no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
-# Disable Explicit Congestion Notification
-# Too many routers are still ignorant
+# Desabilita a Notificação Explícita de Congestão
+# roteadores demais ainda são ignorantes
 echo 0 &gt; /proc/sys/net/ipv4/tcp_ecn
 
-# Set a known state
+# Configura um estado conhecido
 iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# These lines are here in case rules are already in place and the
-# script is ever rerun on the fly. We want to remove all rules and
-# pre-existing user defined chains before we implement new rules.
+
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
+# script for mesmo reexecutado em tempo real.  Nós queremos remover 
+# todas as regras e cadeias preexistentes definidas por usuário(a) 
+# antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z
 
 iptables -t nat -F
 
-# Allow local connections
+# Permite conexões locais
 iptables -A INPUT  -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
-# Allow forwarding if the initiated on the intranet
+# Permite o encaminhamento se a iniciada na intranet
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD ! -i WAN1 -m conntrack --ctstate NEW       -j ACCEPT
 
-# Do masquerading
-# (not needed if intranet is not using private ip-addresses)
+
+# Faz o mascaramento (não necessário se a intranet não estiver usando 
+# endereços IP privados)
 iptables -t nat -A POSTROUTING -o WAN1 -j MASQUERADE
 
-# Log everything for debugging
-# (last of all rules, but before policy rules)
+# Registra tudo para depuração (última de todas as regras, porém antes 
+# das regras de política)
 iptables -A INPUT   -j LOG --log-prefix "FIREWALL:INPUT "
 iptables -A FORWARD -j LOG --log-prefix "FIREWALL:FORWARD "
 iptables -A OUTPUT  -j LOG --log-prefix "FIREWALL:OUTPUT "
 
-# Enable IP Forwarding
+# Habilita o Encaminhamento de IP
 echo 1 &gt; /proc/sys/net/ipv4/ip_forward
 
-# The following sections allow inbound packets for specific examples
-# Uncomment the example lines and adjust as necessary
+# As seções seguintes permitem pacotes de entrada para exemplos 
+# específicos; descomente as linhas de exemplo e ajuste conforme 
+# necessário
 
-# Allow ping on the external interface
+# Permite ping na interface externa
 #iptables -A INPUT  -p icmp -m icmp --icmp-type echo-request -j ACCEPT
 #iptables -A OUTPUT -p icmp -m icmp --icmp-type echo-reply   -j ACCEPT
 
-# Reject ident packets with TCP reset to avoid delays with FTP or IRC
+# Rejeita pacotes idênticos com reconfiguração de TCP para evitar 
+# atrasos com o FTP ou o IRC
 #iptables -A INPUT  -p tcp --dport 113 -j REJECT --reject-with tcp-reset
 
-# Allow HTTP and HTTPS to 192.168.0.2
+# Permite HTTP e HTTPS para 192.168.0.2
 #iptables -A PREROUTING -t nat -i WAN1 -p tcp --dport 80 -j DNAT --to 192.168.0.2
 #iptables -A PREROUTING -t nat -i WAN1 -p tcp --dport 443 -j DNAT --to 192.168.0.2
 #iptables -A FORWARD -p tcp -d 192.168.0.2 --dport 80 -j ACCEPT
 #iptables -A FORWARD -p tcp -d 192.168.0.2 --dport 443 -j ACCEPT
 
-# End /etc/systemd/scripts/iptables</literal>
+# Fim do /etc/systemd/scripts/iptables</literal>
 EOF
 chmod 700 /etc/systemd/scripts/iptables</userinput></screen>
 
       <para>
-        With this script your intranet should be reasonably secure
-        against external attacks. No one should be able to setup a new
-        connection to any internal service and, if it's masqueraded,
-        makes your intranet invisible to the Internet. Furthermore, your
-        firewall should be relatively safe because there are no services
-        running that a cracker could attack.
+
+        Com esse script sua intranet deveria estar razoavelmente segura 
+        contra ataques externos.  Ninguém deveria estar apto(a) a 
+        configurar uma conexão nova para qualquer serviço interno e, se 
+        estiver mascarada, torna a sua intranet invisível para a 
+        Internet.  Além disso, o seu firewall deveria estar 
+        relativamente a salvo, pois não existem serviços executando que 
+        um cracker pudesse atacar.
+
       </para>
 
     </sect3>
