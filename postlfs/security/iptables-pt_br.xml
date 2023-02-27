@@ -198,8 +198,10 @@ Observações de Usuário(a): <ulink url="&blfs-wiki;/iptables"/>
     </note>
 
     <para>
-      Install <application>iptables</application> by running the following
-      commands:
+
+      Instale o <application>iptables</application> executando os 
+      seguintes comandos:
+
     </para>
 
 <screen><userinput>./configure --prefix=/usr      \
@@ -208,16 +210,22 @@ Observações de Usuário(a): <ulink url="&blfs-wiki;/iptables"/>
 make</userinput></screen>
 
     <para>
-      <!-- there is a iptables-test.py script which seems to run a
-      lot of tests. Unfortunately, success rate is 50% only. Needs
-      to be clarified how to use and which prerequisites are required
-      to run to 100%. Contacted Shekhar Sharma for that (Dec'19),
-      waiting for answer (thomas). -->
-      This package does not come with a test suite.
+
+      <!-- existe um script iptables-test.py que parece executar um 
+      monte de testes.  Infelizmente, a taxa de sucesso é de somente 
+      50%.  Precisa ser esclarecido como usar e quais pré-requisitos são 
+      exigidos para executar a 100%.  Contatado Shekhar Sharma para isso 
+      (dezembro de 2019); aguardando por uma resposta (thomas). -->
+
+      Esse pacote não vem com uma suíte de teste.
+
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+
+      Agora, como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
+
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -225,135 +233,157 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--disable-nftables</parameter>: This switch disables building
-      nftables compatibility. <!--Omit this switch if you have installed
-      <xref linkend="nftables"/>.-->
+
+      <parameter>--disable-nftables</parameter>: Essa chave desabilita a 
+      construção da compatibilidade do nftables.  <!--Omita essa chave 
+      se você tiver instalado o <xref linkend="nftables"/>.-->
+
     </para>
 
     <para>
-      <parameter>--enable-libipq</parameter>: This switch enables building
-      of <filename class="libraryfile">libipq.so</filename> which
-      can be used by some packages outside of BLFS.
+
+      <parameter>--enable-libipq</parameter>: Essa chave habilita a 
+      construção da <filename class="libraryfile">libipq.so</filename> a 
+      qual pode ser usada por alguns pacotes fora do BLFS.
+
     </para>
 
     <para>
-      <option>--enable-nfsynproxy</option>: This switch enables installation
-      of <application>nfsynproxy</application> SYNPROXY configuration tool.
+
+      <option>--enable-nfsynproxy</option>: Essa chave habilita a 
+      instalação da ferramenta de configuração do SYNPROXY 
+      <application>nfsynproxy</application>.
+
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring iptables</title>
+    <title>Configurando o iptables</title>
+
 <!--
     <note>
+
       <para>
-        If you intend to use <xref linkend="firewalld"/> to configure your
-        firewall rules, you should not use the example configurations provided
-        here, nor should you enable the
-        <phrase revision="sysv">bootscript.</phrase>
-        <phrase revision="systemd">systemd unit.</phrase>
+
+        Se você pretende usar o <xref linkend="firewalld"/> para 
+        configurar suas regras de firewall, [então] você não deveria 
+        usar as configurações de exemplo fornecidas aqui e nem deveria 
+        habilitar
+        <phrase revision="sysv">o script de inicialização.</phrase>
+        <phrase revision="systemd">a unidade do systemd.</phrase>
       </para>
+
     </note>
 -->
+
     <note>
+
       <para>
-        In the following example configurations, <emphasis
-        role="strong">LAN1</emphasis> is used for the internal LAN interface,
-        and <emphasis role="strong">WAN1</emphasis> is used for the external
-        interface connected to the Internet. You will need to replace these
-        values with appropriate interface names for your system.
+
+        Nas seguintes configurações de exemplo,
+<emphasis role="strong">LAN1</emphasis> é usada para a interface interna 
+        da LAN e <emphasis role="strong">WAN1</emphasis> é usada para a 
+        interface externa conectada com a Internet.  Você precisará 
+        substituir esses valores por nomes apropriados de interface para 
+        o seu sistema.
+
       </para>
+
     </note>
 
-    <sect3 id="fw-persFw-ipt"
-    xreflabel="Creating a Personal Firewall With iptables">
-      <title>Personal Firewall</title>
+    <sect3 id="fw-persFw-ipt" xreflabel="Criando um Firewall Pessoal Com o iptables">
+      <title>Firewall Pessoal</title>
 
       <para>
-        A Personal Firewall is designed to let you access all the
-        services offered on the Internet while keeping your computer secure and
-        your data private.
+
+        Um Firewall Pessoal é projetado para permitir que você acesse 
+        todos os serviços oferecidos na Internet enquanto mantém o seu 
+        computador seguro e os seus dados privados.
+
       </para>
 
       <para>
-        Below is a slightly modified version of Rusty Russell's
-        recommendation from the <ulink
-        url="http://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">
-        Linux 2.4 Packet Filtering HOWTO</ulink>. It is still applicable
-        to the Linux 5.x kernels.
+
+        Abaixo está uma versão ligeiramente modificada da recomendação 
+        do Rusty Russell oriunda do
+<ulink url="http://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">Linux 
+        2.4 Packet Filtering HOWTO</ulink>.  Ela ainda é aplicável aos 
+        kernels Linux 5.x.
+
       </para>
 
 <screen role="root" revision="sysv"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/rc.d/rc.iptables &lt;&lt; "EOF"
 <literal>#!/bin/sh
 
-# Begin rc.iptables
+# Início do rc.iptables
 
-# Insert connection-tracking modules
-# (not needed if built into the kernel)
+# Insere módulos de rastreamento de conexão
+# (não necessário se construído internamente ao kernel)
 modprobe nf_conntrack
 modprobe xt_LOG
 
-# Enable broadcast echo Protection
+# Habilita difusão echo Protection
 echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
 
-# Disable Source Routed Packets
+# Desabilita Pacotes Fonte Roteados
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_source_route
 
-# Enable TCP SYN Cookie Protection
+# Habilita a Proteção SYN Cookie do TCP
 echo 1 &gt; /proc/sys/net/ipv4/tcp_syncookies
 
-# Disable ICMP Redirect Acceptance
+# Desabilita a Aceitação de Redireção de ICMP
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_redirects
 
-# Do not send Redirect Messages
+# Não envia Mensagens de Redireção
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirects
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Drop Spoofed Packets coming in on an interface, where responses
-# would result in the reply going out a different interface.
+# Descarta Pacotes Falsificados entrantes em uma interface, onde as respostas
+# resultariam na resposta indo para uma interface diferente.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
-# Log packets with impossible addresses.
+# Registra pacotes com endereços impossíveis.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/log_martians
 
-# be verbose on dynamic ip-addresses  (not needed in case of static IP)
+# Seja verboso a respeito de endereços de IP dinâmicos (não necessário no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
-# disable Explicit Congestion Notification
-# too many routers are still ignorant
+# Desabilita a Notificação Explícita de Congestão
+# roteadores demais ainda são ignorantes
 echo 0 &gt; /proc/sys/net/ipv4/tcp_ecn
 
-# Set a known state
+# Configura um estado conhecido
 iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# These lines are here in case rules are already in place and the
-# script is ever rerun on the fly. We want to remove all rules and
-# pre-existing user defined chains before we implement new rules.
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
+# script for mesmo reexecutado em tempo real.  Nós queremos remover 
+# todas as regras e cadeias preexistentes definidas por usuário(a) 
+# antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z
 
 iptables -t nat -F
 
-# Allow local-only connections
+# Permite conexões locais somente
 iptables -A INPUT  -i lo -j ACCEPT
 
-# Free output on any interface to any ip for any service
-# (equal to -P ACCEPT)
+# Libera a saída gerada em qualquer interface para qualquer IP para 
+# qualquer serviço (igual a -P ACCEPT)
 iptables -A OUTPUT -j ACCEPT
 
-# Permit answers on already established connections
-# and permit new connections related to established ones
-# (e.g. port mode ftp)
+# Permite respostas em conexões já estabelecidas e permite novas 
+# conexões relacionadas às estabelecidas (por exemplo, modo de porta 
+# ftp)
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Log everything else.
