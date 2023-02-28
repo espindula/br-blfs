@@ -847,17 +847,24 @@ iptables -A INPUT  -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED \
 
         </listitem>
         <listitem>
+
           <para>
-            Your caching name server (e.g., named) does its lookups via UDP:
+
+            Seu servidor de nome de cache (por exemplo, named) faz as 
+            pesquisas dele via UDP:
+
           </para>
 
 <screen><literal>iptables -A OUTPUT -p udp --dport 53 -j ACCEPT</literal></screen>
 
         </listitem>
         <listitem>
+
           <para>
-            You want to be able to ping your computer to ensure it's still
-            alive:
+
+            Você quer executar ping em seu computador para garantir que 
+            ele ainda esteja ativo:
+
           </para>
 
 <screen><literal>iptables -A INPUT  -p icmp -m icmp --icmp-type echo-request -j ACCEPT
@@ -865,39 +872,54 @@ iptables -A OUTPUT -p icmp -m icmp --icmp-type echo-reply   -j ACCEPT</literal><
 
         </listitem>
         <listitem>
-          <para id='fw-BB-4-ipt' xreflabel="BusyBox with iptables example number 4">
-            If you are frequently accessing FTP servers or enjoy chatting, you
-            might notice delays because some implementations of these daemons
-            query an identd daemon on your system to obtain usernames. Although
-            there's really little harm in this, having an identd running is not
-            recommended because many security experts feel the service gives
-            out too much additional information.
+
+          <para id='fw-BB-4-ipt' xreflabel="Exemplo número quatro de BusyBox com o iptables">
+
+            Se você frequentemente está acessando servidores FTP ou 
+            curte chat, [então] você poderia notar atrasos, pois algumas 
+            implementações desses daemons consultam um daemon identd no 
+            seu sistema para obter nomes de usuário(a).  Embora exista 
+            realmente pouco dano nisso, ter-se um identd executando não 
+            é recomendado, pois muitos especialistas em segurança 
+            entendem que o serviço dá muito mais informação adicional.
+
           </para>
 
           <para>
-            To avoid these delays you could reject the requests with a
-            'tcp-reset' response:
+
+            Para evitar tais atrasos, você poderia rejeitar as 
+            solicitações com uma resposta 'tcp-reset':
+
           </para>
 
 <screen><literal>iptables -A INPUT  -p tcp --dport 113 -j REJECT --reject-with tcp-reset</literal></screen>
 
         </listitem>
         <listitem>
+
           <para>
-            To log and drop invalid packets (packets
-            that came in after netfilter's timeout or some types of
-            network scans) insert these rules at the top of the chain:
+
+            Para registrar e descartar pacotes inválidos (pacotes que 
+            vieram depois de um tempo esgotado do netfilter ou de alguns 
+            tipos de escaneamentos de rede de comunicação) insira estas 
+            regras no topo da cadeia:
+
           </para>
 
 <screen><literal>iptables -I INPUT 0 -p tcp -m conntrack --ctstate INVALID \
-  -j LOG --log-prefix "FIREWALL:INVALID "
+  -j LOG --log-prefix "FIREWALL:INVÁLIDO "
 iptables -I INPUT 1 -p tcp -m conntrack --ctstate INVALID -j DROP</literal></screen>
 
         </listitem>
+
         <listitem>
+
           <para>
-            Anything coming from the outside should not have a
-            private address, this is a common attack called IP-spoofing:
+
+            Qualquer coisa vinda a partir do lado de fora não deveria 
+            ter um endereço privado; isso é um ataque comum rotulado de 
+            falsificação de IP:
+
           </para>
 
 <screen><literal>iptables -A INPUT -i WAN1 -s 10.0.0.0/8     -j DROP
@@ -905,31 +927,48 @@ iptables -A INPUT -i WAN1 -s 172.16.0.0/12  -j DROP
 iptables -A INPUT -i WAN1 -s 192.168.0.0/16 -j DROP</literal></screen>
 
           <para>
-            There are other addresses that you may also want to drop:
-            0.0.0.0/8, 127.0.0.0/8, 224.0.0.0/3 (multicast and
-            experimental), 169.254.0.0/16 (Link Local Networks), and
-            192.0.2.0/24 (IANA defined test network).
+
+            Existem outros endereços que você possivelmente também 
+            queira descartar: 0.0.0.0/8, 127.0.0.0/8, 224.0.0.0/3 
+            (multicast e experimental), 169.254.0.0/16 (Redes de 
+            Comunicação Link Local) e 192.0.2.0/24 (rede de comunicação 
+            de teste definida pela IANA).
+
           </para>
+
         </listitem>
+
         <listitem>
+
           <para>
-            If your firewall is a DHCP client, you need to allow those packets:
+
+            Se o seu firewall for um cliente DHCP, [então] você precisa 
+            permitir aqueles pacotes:
+
           </para>
 
 <screen><literal>iptables -A INPUT  -i WAN1 -p udp -s 0.0.0.0 --sport 67 \
    -d 255.255.255.255 --dport 68 -j ACCEPT</literal></screen>
 
         </listitem>
+
         <listitem>
+
           <para>
-            To simplify debugging and be fair to anyone who'd like
-            to access a service you have disabled, purposely or by mistake,
-            you could REJECT those packets that are dropped.
+
+            Para simplificar a depuração e ser justo(a) com qualquer 
+            um(a) que gostaria de acessar um serviço que você tenha 
+            desabilitado, propositalmente ou por erro, você poderia 
+            REJEITAR aqueles pacotes que são descartados.
+
           </para>
 
           <para>
-            Obviously this must be done directly after logging as the very
-            last lines before the packets are dropped by policy:
+
+            Obviamente, isso precisa ser feito diretamente depois do 
+            registro, como as ultimíssimas linhas antes dos pacotes serem 
+            descartados pela política:
+
           </para>
 
 <screen><literal>iptables -A INPUT -j REJECT</literal></screen>
