@@ -464,64 +464,82 @@ EOF
      construído.
 
 -->
+
 <!--
+
       <para>
-        The remaining generic file depends on whether <xref
-        linkend="cracklib"/> is installed.  If it is installed, use:
+
+        O arquivo genérico restante depende se o
+<xref linkend="cracklib"/> estiver instalado.  Se estiver instalado,
+        [então] use:
+
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/system-password
+<literal># Início do /etc/pam.d/system-password
 
-# check new passwords for strength (man pam_cracklib)
+# verifique novas senhas quanto à força (man pam_cracklib)
 password  required    pam_cracklib.so    authtok_type=UNIX retry=1 difok=5 \
                                          minlen=9 dcredit=1 ucredit=1 \
                                          lcredit=1 ocredit=1 minclass=0 \
                                          maxrepeat=0 maxsequence=0 \
                                          maxclassrepeat=0 \
                                          dictpath=/lib/cracklib/pw_dict
-# use sha512 hash for encryption, use shadow, and use the
-# authentication token (chosen password) set by pam_cracklib
-# above (or any previous modules)
+# use o hash sha512 para encriptação; use sombra e use o token de 
+# autenticação (senha escolhida) configurado por pam_cracklib acima (ou 
+# quaisquer módulos anteriores)
 password  required    pam_unix.so        sha512 shadow use_authtok
 
-# End /etc/pam.d/system-password</literal>
+# Fim do /etc/pam.d/system-password</literal>
 EOF</userinput></screen>
 
       <note>
+
         <para>
-          In its default configuration, pam_cracklib will
-          allow multiple case passwords as short as 6 characters, even with
-          the <parameter>minlen</parameter> value set to 11. You should review
-          the pam_cracklib(8) man page and determine if these default values
-          are acceptable for the security of your system.
+
+          Na configuração padrão dele, pam_cracklib permitirá múltiplas 
+          senhas consideradas as letras maiúsculas e as minúsculas tão 
+          curtas quanto seis (06) caracteres, mesmo com o valor de 
+          <parameter>minlen</parameter> configurado para onze (11).  
+          Você deveria rever a página de manual pam_cracklib(8) e 
+          determinar se esses valores padrão são aceitáveis para a 
+          segurança do seu sistema.
+
         </para>
+
       </note>
 
       <para>
-        If <xref linkend="cracklib"/> is <emphasis>NOT</emphasis> installed,
-        use:
+
+        Se <xref linkend="cracklib"/> <emphasis>NÃO</emphasis> estiver 
+        instalado, [então] use:
+
       </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/system-password
-
-# use sha512 hash for encryption, use shadow, and try to use any previously
-# defined authentication token (chosen password) set by any prior module
+<literal># Início do /etc/pam.d/system-password
+# use o hash sha512 para encriptação; use sombra e tente usar algum 
+# token de autenticação previamente definido (senha escolhida) 
+# configurado por algum módulo anterior
 password  required    pam_unix.so       sha512 shadow try_first_pass
 
-# End /etc/pam.d/system-password</literal>
+# Fim do /etc/pam.d/system-password</literal>
 EOF</userinput></screen>
+
 -->
+
       <para>
-        Now add a restrictive <filename>/etc/pam.d/other</filename>
-        configuration file.  With this file, programs that are PAM aware will
-        not run unless a configuration file specifically for that application
-        is created.
+
+        Agora acrescente um arquivo de configuração 
+        <filename>/etc/pam.d/other</filename> restritivo.  Com esse 
+        arquivo, aplicativos que sejam cientes do PAM não executarão, a 
+        menos que um arquivo de configuração especificamente para esse 
+        aplicativo seja criado.
+
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/other &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/other
+<literal># Início do /etc/pam.d/other
 
 auth        required        pam_warn.so
 auth        required        pam_deny.so
@@ -532,25 +550,33 @@ password    required        pam_deny.so
 session     required        pam_warn.so
 session     required        pam_deny.so
 
-# End /etc/pam.d/other</literal>
+# Fim do /etc/pam.d/other</literal>
 EOF</userinput></screen>
 
       <para>
-        The <application>PAM</application> man page (<command>man
-        pam</command>) provides a good starting point for descriptions
-        of fields and allowable entries. The
-        <ulink url="http://www.linux-pam.org/Linux-PAM-html/Linux-PAM_SAG.html">
-          Linux-PAM System Administrators' Guide
-        </ulink> is recommended for additional information.
+
+        A página de manual do <application>PAM</application> 
+        (<command>man pam</command>) fornece um bom ponto de partida 
+        para as descrições dos campos e para as entradas permissíveis.  
+        O
+<ulink url="http://www.linux-pam.org/Linux-PAM-html/Linux-PAM_SAG.html">Guia
+Linux-PAM do(a) Administrador(a) do Sistema</ulink> é 
+        recomendado para informação adicional.
+
       </para>
 
       <important>
+
         <para>
-          You should now reinstall the <xref linkend="shadow"/>
-          <phrase revision="sysv">package</phrase>
-          <phrase revision="systemd"> and <xref linkend="systemd"/>
-          packages</phrase>.
+
+          Você agora deveria reinstalar
+<phrase revision="sysv">o pacote</phrase>
+<phrase revision="systemd">os pacotes</phrase>
+<xref linkend="shadow"/>
+<phrase revision="systemd"> e <xref linkend="systemd"/></phrase>.
+
         </para>
+
       </important>
 
     </sect3>
