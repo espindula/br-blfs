@@ -171,7 +171,7 @@ Ferreira Espindula de Almeida Melo (<jafesp@gmail.com>).
 
         Com o Linux-PAM-1.4.0 e superiores, o módulo pam_cracklib não é 
         instalado por padrão.  Para impor senhas fortes, é recomendado 
-        usar-se o <xref role="runtime" linkend="libpwquality"/>.
+        usar-se a <xref role="runtime" linkend="libpwquality"/>.
 
       </para>
 
@@ -287,23 +287,31 @@ session  required       pam_deny.so</literal>
 EOF</userinput></screen>
 
     <para>
-      Now run the tests by issuing <command>make check</command>.
-      Ensure there are no errors produced by the tests before continuing the
-      installation. Note that the checks are quite long.  It may be useful to
-      redirect the output to a log file in order to inspect it thoroughly.
+
+      Agora execute os testes emitindo <command>make check</command>.  
+      Assegure-se de que não existem erros produzidos pelos testes antes 
+      de continuar a instalação.  Observe que as verificações são 
+      bastante longas.  Possivelmente seja útil redirecionar a saída 
+      gerada para um arquivo de registro para a finalidade de 
+      inspecioná-lo cuidadosamente.
+
     </para>
 
     <para>
-      Only in case of a first installation, remove the configuration file
-      created earlier by issuing the following command as the
-      <systemitem class="username">root</systemitem> user:
+
+      Somente no caso de uma primeira instalação, remova o arquivo de 
+      configuração criado anteriormente emitindo o seguinte comando como 
+      o(a) usuário(a) <systemitem class="username">root</systemitem>:
+
     </para>
 
 <screen role="root"><userinput>rm -fv /etc/pam.d/other</userinput></screen>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem>
-      user:
+
+      Agora, como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
+
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -312,43 +320,53 @@ chmod -v 4755 /usr/sbin/unix_chkpwd</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
+
       <parameter>--enable-securedir=/usr/lib/security</parameter>:
-      This switch sets the installation location for the
-      <application>PAM</application> modules.
+      Essa chave configura o local da instalação para os módulos do 
+      <application>PAM</application>.
+
     </para>
 
     <para>
-      <option>--disable-regenerate-docu</option> : If the needed dependencies
-      (<xref linkend="DocBook"/>, <xref linkend="docbook-xsl"/>, <xref
-      linkend="libxslt"/>, and <xref linkend="lynx"/> or <ulink
-      url="&w3m-url;">W3m</ulink>) are installed, the manual pages, and the
-      html and text documentations are (re)generated and installed.
-      Furthermore, if <xref linkend="fop"/> is installed, the PDF
-      documentation is generated and installed. Use this switch if you do not
-      want to rebuild the documentation.
+
+      <option>--disable-regenerate-docu</option> : Se as dependências 
+      necessárias (<xref linkend="DocBook"/>;
+<xref linkend="docbook-xsl"/>; <xref linkend="libxslt"/>; e
+<xref linkend="lynx"/> ou o <ulink url="&w3m-url;">W3m</ulink>) 
+      estiverem instaladas, [então] as páginas de manual e as 
+      documentações html e de texto serão (re)geradas e instaladas.  
+      Além disso, se o <xref linkend="fop"/> estiver instalado, [então] 
+      a documentação PDF será gerada e instalada.  Use essa chave se 
+      você não quiser reconstruir a documentação.
+
     </para>
 
     <para>
+
       <command>chmod -v 4755 /usr/sbin/unix_chkpwd</command>:
-      The <command>unix_chkpwd</command> helper program must be setuid
-      so that non-<systemitem class="username">root</systemitem>
-      processes can access the shadow file.
+      O aplicativo auxiliar <command>unix_chkpwd</command> precisa ser 
+      setuid, de forma que processos não
+<systemitem class="username">root</systemitem> possam acessar o arquivo 
+      sombra.
+
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring Linux-PAM</title>
+    <title>Configurando o Linux-PAM</title>
 
     <sect3 id="pam-config">
-      <title>Config Files</title>
+      <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/security/*</filename> and
+
+        <filename>/etc/security/*</filename> e 
         <filename>/etc/pam.d/*</filename>
+
       </para>
 
       <indexterm zone="linux-pam pam-config">
@@ -362,76 +380,89 @@ chmod -v 4755 /usr/sbin/unix_chkpwd</userinput></screen>
     </sect3>
 
     <sect3>
-      <title>Configuration Information</title>
+      <title>Informação de Configuração</title>
 
       <para>
-        Configuration information is placed in
-        <filename class="directory">/etc/pam.d/</filename>.
-        Below is an example file:
+
+        A informação de configuração é colocada em
+<filename class="directory">/etc/pam.d/</filename>.  Abaixo está um 
+        exemplo:
+
       </para>
 
-<screen><literal># Begin /etc/pam.d/other
+<screen><literal># Início do /etc/pam.d/other
 
 auth            required        pam_unix.so     nullok
 account         required        pam_unix.so
 session         required        pam_unix.so
 password        required        pam_unix.so     nullok
 
-# End /etc/pam.d/other</literal></screen>
+# Fim do /etc/pam.d/other</literal></screen>
 
       <para>
-        Now set up some generic files.  As the
-        <systemitem class="username">root</systemitem> user:
+
+        Agora configure alguns arquivos genéricos.  Como o(a) usuário(a) 
+        <systemitem class="username">root</systemitem>:
+
       </para>
 
 <screen role="root"><userinput>install -vdm755 /etc/pam.d &amp;&amp;
 cat &gt; /etc/pam.d/system-account &lt;&lt; "EOF" &amp;&amp;
-<literal># Begin /etc/pam.d/system-account
+<literal># Início do /etc/pam.d/system-account
 
 account   required    pam_unix.so
 
-# End /etc/pam.d/system-account</literal>
+# Fim do /etc/pam.d/system-account</literal>
 EOF
 
 cat &gt; /etc/pam.d/system-auth &lt;&lt; "EOF" &amp;&amp;
-<literal># Begin /etc/pam.d/system-auth
+<literal># Início do /etc/pam.d/system-auth
 
 auth      required    pam_unix.so
 
-# End /etc/pam.d/system-auth</literal>
+# Fim do /etc/pam.d/system-auth</literal>
 EOF
 
 cat &gt; /etc/pam.d/system-session &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/system-session
+<literal># Início do /etc/pam.d/system-session
 
 session   required    pam_unix.so
 
-# End /etc/pam.d/system-session</literal>
+# Fim do /etc/pam.d/system-session</literal>
 EOF
 cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/system-password
+<literal># Início do /etc/pam.d/system-password
 
-# use sha512 hash for encryption, use shadow, and try to use any previously
-# defined authentication token (chosen password) set by any prior module
+
+# use o hash sha512 para encriptação; use sombra e tente usar algum 
+# token de autenticação previamente definido (senha escolhida) 
+# configurado por algum módulo anterior
 password  required    pam_unix.so       sha512 shadow try_first_pass
 
-# End /etc/pam.d/system-password</literal>
+# Fim do /etc/pam.d/system-password</literal>
 EOF
 </userinput></screen>
 
      <para>
-       If you wish to enable strong password support, install
-       <xref linkend="libpwquality"/>, and follow the
-       instructions in that page to configure the pam_pwquality
-       PAM module with strong password support.
+
+       Se você desejar habilitar o suporte a senha forte, [então] 
+       instale a <xref linkend="libpwquality"/> e siga as instruções 
+       naquela página para configurar o módulo do PAM pam_pwquality com 
+       o suporte a senha forte.
+
      </para>
 
-<!-- With the removal of the pam_cracklib module, we're supposed to be using
-     libpwquality. That already includes instructions in it's configuration
-     information page, so we'll use those instead.
+<!-- 
 
-     Linux-PAM must be installed prior to libpwquality so that PAM support
-     is built in, and the PAM module is built.
+     Com a remoção do módulo pam_cracklib, supõe-se que nós estaremos 
+     usando a libpwquality.  Essa já inclui instruções na página de 
+     informação de configuração dela, de forma que nós usaremos aquelas 
+     em vez.
+
+     O Linux-PAM precisa ser instalado antes da libpwquality, de forma 
+     que o suporte PAM seja construído internamente e o módulo PAM seja 
+     construído.
+
 -->
 <!--
       <para>
