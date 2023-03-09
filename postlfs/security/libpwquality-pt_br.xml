@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY libpwquality-download-http "https://github.com/libpwquality/libpwquality/releases/download/libpwquality-&libpwquality-version;/libpwquality-&libpwquality-version;.tar.bz2">
+  <!ENTITY libpwquality-download-ftp  " ">
+  <!ENTITY libpwquality-md5sum        "1fe43f6641dbf1e1766e2a02cf68a9c3">
+  <!ENTITY libpwquality-size          "420 KB">
+  <!ENTITY libpwquality-buildsize     "4.1 MB">
+  <!ENTITY libpwquality-time          "less than 0.1 SBU">
+]>
+
+<sect1 id="libpwquality" xreflabel="libpwquality-&libpwquality-version;">
+  <?dbhtml filename="libpwquality.html"?>
+
+  <sect1info>
+    <date>$Date$</date>
+  </sect1info>
+
+  <title>libpwquality-&libpwquality-version;</title>
+
+  <indexterm zone="libpwquality">
+    <primary sortas="a-libpwquality">libpwquality</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to libpwquality</title>
+
+    <para>
+      The <application>libpwquality</application> package provides common
+      functions for password quality checking and also scoring them based on
+      their apparent randomness. The library also provides a function for
+      generating random passwords with good pronounceability.
+    </para>
+
+    &lfs111_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&libpwquality-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&libpwquality-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &libpwquality-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &libpwquality-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &libpwquality-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &libpwquality-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">libpwquality Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref linkend="cracklib"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
+      <xref linkend="linux-pam"/>
+    </para>
+<!-- Do not advertise python 2 since python 3 can be used
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="python2"/>
+    </para>
+-->
+    <para condition="html" role="usernotes">User Notes:
+      <ulink url="&blfs-wiki;/libpwquality"/>
+    </para>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of libpwquality</title>
+
+    <para>
+      Install <application>libpwquality</application> by running the following
+      commands:
+    </para>
+
+<screen><userinput>./configure --prefix=/usr                      \
+            --disable-static                   \
+            --with-securedir=/usr/lib/security \
+            --with-python-binary=python3       &amp;&amp;
+make</userinput></screen>
+
+    <para>
+      This package does not come with a test suite.
+    </para>
+
+    <para>
+      Now, as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>make install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <para>
+      <parameter>--with-python-binary=python3</parameter>: This parameter gives
+      the location of the <application>Python</application> binary. The default
+      is <parameter>python</parameter>, and requires <xref linkend="python2"/>.
+    </para>
+
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configuring libpwquality</title>
+
+<!--
+    <para>
+      <application>libpwquality</application> is intended to be a
+      functional replacement for the <filename>pam_cracklib.so</filename>
+      module with additional options. To replace the
+      <filename>pam_cracklib.so</filename> module with the
+      <filename>pam_pwquality.so</filename> module, execute the following
+      commands as the <systemitem class="username">root</systemitem> user:
+    </para>
+-->
+
+    <para>
+      <application>libpwquality</application> is intended to be a
+      functional replacement for the now-obsolete
+      <filename>pam_cracklib.so</filename> PAM module. To configure the system
+      to use the <filename>pam_pwquality</filename> module, execute the
+      following commands as the
+      <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>mv /etc/pam.d/system-password{,.orig} &amp;&amp;
+cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
+<literal># Begin /etc/pam.d/system-password
+
+# check new passwords for strength (man pam_pwquality)
+password  required    pam_pwquality.so   authtok_type=UNIX retry=1 difok=1 \
+                                         minlen=8 dcredit=0 ucredit=0 \
+                                         lcredit=0 ocredit=0 minclass=1 \
+                                         maxrepeat=0 maxsequence=0 \
+                                         maxclassrepeat=0 geoscheck=0 \
+                                         dictcheck=1 usercheck=1 \
+                                         enforcing=1 badwords="" \
+                                         dictpath=/usr/lib/cracklib/pw_dict
+# use sha512 hash for encryption, use shadow, and use the
+# authentication token (chosen password) set by pam_pwquality
+# above (or any previous modules)
+password  required    pam_unix.so        sha512 shadow use_authtok
+
+# End /etc/pam.d/system-password</literal>
+EOF
+</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+          pwscore and pwmake
+        </seg>
+        <seg>
+          pam_pwquality.so and libpwquality.so
+        </seg>
+        <seg>
+          None
+          <!-- /etc/security was installed by Linux-PAM -->
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?>
+      <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="pwmake">
+        <term><command>pwmake</command></term>
+        <listitem>
+          <para>
+            is a simple configurable tool for generating random
+            and relatively easily pronounceable passwords
+          </para>
+          <indexterm zone="libpwquality pwmake">
+            <primary sortas="b-pwmake">pwmake</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="pwscore">
+        <term><command>pwscore</command></term>
+        <listitem>
+          <para>
+            is a simple tool for checking quality of a password
+          </para>
+          <indexterm zone="libpwquality pwscore">
+            <primary sortas="b-pwscore">pwscore</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libpwquality-lib">
+        <term><filename class="libraryfile">libpwquality.so</filename></term>
+        <listitem>
+          <para>
+            contains API functions for checking the password quality
+          </para>
+          <indexterm zone="libpwquality libpwquality-lib">
+            <primary sortas="c-libpwquality">libpwquality.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="pam_pwquality">
+        <term><filename class="libraryfile">pam_pwquality.so</filename></term>
+        <listitem>
+          <para>
+            is a <application>Linux PAM</application> module used to perform
+            password quality checking
+          </para>
+          <indexterm zone="libpwquality pam_pwquality">
+            <primary sortas="c-pam_pwquality">pam_pwquality.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>
