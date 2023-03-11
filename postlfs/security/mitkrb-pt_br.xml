@@ -401,13 +401,15 @@ cp -vfr ../doc/*  /usr/share/doc/krb5-&mitkrb-version;</userinput></screen>
         </tip>
 
         <para>
-          Create the Kerberos configuration file with the following
-          commands issued by the <systemitem class="username">root</systemitem>
-          user:
+
+          Crie o arquivo de configuração do Kerberos com os seguintes 
+          comandos emitidos pelo(a) usuário(a)
+<systemitem class="username">root</systemitem>:
+
         </para>
 
 <screen role="root"><userinput>cat &gt; /etc/krb5.conf &lt;&lt; "EOF"
-<literal># Begin /etc/krb5.conf
+<literal># Início do /etc/krb5.conf
 
 [libdefaults]
     default_realm = <replaceable>&lt;EXAMPLE.ORG&gt;</replaceable>
@@ -428,48 +430,66 @@ cp -vfr ../doc/*  /usr/share/doc/krb5-&mitkrb-version;</userinput></screen>
     admin_server = SYSLOG:INFO:AUTH
     default = SYSLOG:DEBUG:DAEMON
 
-# End /etc/krb5.conf</literal>
+# Fim do /etc/krb5.conf</literal>
 EOF</userinput></screen>
 
         <para>
-          You will need to substitute your domain and proper hostname for the
-          occurrences of the <replaceable>&lt;belgarath&gt;</replaceable> and
-          <replaceable>&lt;example.org&gt;</replaceable> names.
+
+          Você precisará substituir o seu domínio e nome apropriado do 
+          host para as ocorrências dos nomes 
+          <replaceable>&lt;belgarath&gt;</replaceable> e 
+          <replaceable>&lt;example.org&gt;</replaceable>.
+
         </para>
 
         <para>
-          <option>default_realm</option> should be the name of your
-          domain changed to ALL CAPS. This isn't required, but both
-          <application>Heimdal</application> and MIT recommend it.
+
+          <option>default_realm</option> deveria ser o nome do seu 
+          domínio mudado para TODO MAIÚSCULO.  Isso não é exigido, porém 
+          ambos <application>Heimdal</application> e MIT recomendam.
+
         </para>
 
         <para>
-          <option>encrypt = true</option> provides encryption of all traffic
-          between kerberized clients and servers. It's not necessary and can
-          be left off. If you leave it off, you can encrypt all traffic from
-          the client to the server using a switch on the client program
-          instead.
+
+          <option>encrypt = true</option> fornece encriptação de todo o 
+          tráfego entre os clientes "kerberizados" (sic) e os 
+          servidores.  Não é necessária e pode ser deixada desligada.  
+          Se deixá-la desligada, [então] você pode, em vez disso, 
+          encriptar todo o tráfego a partir do cliente para o servidor 
+          usando uma chave no aplicativo cliente.
+
         </para>
 
         <para>
-          The <option>[realms]</option> parameters tell the client programs
-          where to look for the KDC authentication services.
+
+          Os parâmetros <option>[realms]</option> dizem aos aplicativos 
+          clientes onde procurar pelos serviços de autenticação KDC.
+
         </para>
 
         <para>
-          The <option>[domain_realm]</option> section maps a domain to a realm.
+
+          A seção <option>[domain_realm]</option> mapeia um domínio a um 
+          realm.
+
         </para>
 
         <para>
-          Create the KDC database:
-       </para>
+
+          Crie a base de dados KDC:
+
+        </para>
 
 <screen role="root"><userinput>kdb5_util create -r <replaceable>&lt;EXAMPLE.ORG&gt;</replaceable> -s</userinput></screen>
 
         <para>
-          Now you should populate the database with principals
-          (users). For now, just use your regular login name or
-          <systemitem class="username">root</systemitem>.
+
+          Agora você deveria povoar a base de dados com "principals" 
+          (sic) (usuários(as)).  Por agora, apenas use o seu nome 
+          regular de login ou
+<systemitem class="username">root</systemitem>.
+
         </para>
 
 <screen role="root"><userinput>kadmin.local
@@ -477,46 +497,61 @@ EOF</userinput></screen>
 <prompt>kadmin.local:</prompt> addprinc -policy dict-only <replaceable>&lt;loginname&gt;</replaceable></userinput></screen>
 
         <para>
-          The KDC server and any machine running kerberized
-          server daemons must have a host key installed:
+
+          O servidor KDC e qualquer máquina executando daemons 
+          "kerberizados" (sic) de servidor precisa ter uma chave de host 
+          instalada:
+
         </para>
 
 <screen role="root"><userinput><prompt>kadmin.local:</prompt> addprinc -randkey host/<replaceable>&lt;belgarath.example.org&gt;</replaceable></userinput></screen>
 
         <para>
-          After choosing the defaults when prompted, you will have to
-          export the data to a keytab file:
+
+          Depois de escolher os padrões quando solicitado(a), você terá 
+          que exportar os dados para um arquivo "keytab" (sic):
+
         </para>
 
 <screen role="root"><userinput><prompt>kadmin.local:</prompt> ktadd host/<replaceable>&lt;belgarath.example.org&gt;</replaceable></userinput></screen>
 
         <para>
-          This should have created a file in
-          <filename class="directory">/etc</filename> named
-          <filename>krb5.keytab</filename> (Kerberos 5). This file should
-          have 600 (<systemitem class="username">root</systemitem> rw only)
-          permissions. Keeping the keytab files from public access is crucial
-          to the overall security of the Kerberos installation.
+
+          Isso deveria ter criado um arquivo em <filename 
+          class="directory">/etc</filename> chamado 
+          <filename>krb5.keytab</filename> (Kerberos 5).  Esse arquivo 
+          deveria ter permissões 600 (somente leitura e escrita por 
+          <systemitem class="username">root</systemitem>).  Manter os 
+          arquivos "keytab" (sic) a salvo de acesso público é crucial 
+          para a segurança geral da instalação Kerberos.
+
         </para>
 
         <para>
-          Exit the <command>kadmin</command> program (use
-          <command>quit</command> or <command>exit</command>) and return
-          back to the shell prompt. Start the KDC daemon manually, just to
-          test out the installation:
+
+          Saia do aplicativo <command>kadmin</command> (use 
+          <command>quit</command> ou <command>exit</command>) e retorne 
+          para o prompt do shell.  Inicie o daemon KDC manualmente, 
+          apenas para testar a instalação:
+
         </para>
 
 <screen role="root"><userinput>/usr/sbin/krb5kdc</userinput></screen>
 
         <para>
-          Attempt to get a ticket with the following command:
+
+          Tente obter um tíquete com o seguinte comando:
+
         </para>
 
 <screen><userinput>kinit <replaceable>&lt;loginname&gt;</replaceable></userinput></screen>
 
         <para>
-          You will be prompted for the password you created. After you
-          get your ticket, you can list it with the following command:
+
+          Você será solicitado(a) a inserir a senha que você criou.  
+          Depois que obtiver o seu tíquete, você pode listá-lo com o 
+          seguinte comando:
+
         </para>
 
 <screen><userinput>klist</userinput></screen>
