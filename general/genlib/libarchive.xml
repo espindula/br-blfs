@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY libarchive-download-http "https://github.com/libarchive/libarchive/releases/download/v&libarchive-version;/libarchive-&libarchive-version;.tar.xz">
-  <!ENTITY libarchive-download-ftp  " ">
-  <!ENTITY libarchive-md5sum        "93f96acdb9e7277278edb154e5d76e49">
-  <!ENTITY libarchive-size          "6.1 MB">
-  <!ENTITY libarchive-buildsize     "42 MB (add 30 MB for tests)">
-  <!ENTITY libarchive-time          "0.3 SBU (add 0.8 SBU for tests)">
+  <!ENTITY libarchive-download-ftp  "">
+  <!ENTITY libarchive-md5sum        "72cbb3c085624c825f627bfc8f52ce53">
+  <!ENTITY libarchive-size          "4,9 MB">
+  <!ENTITY libarchive-buildsize     "41 MB (add 29 MB for tests)">
+  <!ENTITY libarchive-time          "0,3 UPC (adicionar 0,7 UPC para os testes)">
 ]>
 
 <sect1 id="libarchive" xreflabel="libarchive-&libarchive-version;">
   <?dbhtml filename="libarchive.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libarchive-&libarchive-version;</title>
 
@@ -26,51 +23,53 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libarchive</title>
+    <title>Introdução a libarchive</title>
 
     <para>
-      The <application>libarchive</application> library provides a single
-      interface for reading/writing various compression formats.
+      A biblioteca <application>libarchive</application> fornece interface única
+para leitura/gravação de vários formatos de compressão.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libarchive-download-http;"/>
-         </para>
-      </listitem>
-      <listitem>
-        <para>
-          Download (FTP): <ulink url="&libarchive-download-ftp;"/>
+          Transferência (HTTP): <ulink url="&libarchive-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libarchive-md5sum;
+          Transferência (FTP): <ulink url="&libarchive-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libarchive-size;
+          Soma de verificação MD5 da transferência: &libarchive-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libarchive-buildsize;
+          Tamanho da transferência: &libarchive-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libarchive-time;
+          Espaço em disco estimado exigido: &libarchive-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &libarchive-time;
         </para>
       </listitem>
     </itemizedlist>
 
-<!--
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -80,84 +79,87 @@
       </listitem>
     </itemizedlist>
 -->
-    <bridgehead renderas="sect3">libarchive Dependencies</bridgehead>
+<bridgehead renderas="sect3">Dependências do libarchive</bridgehead>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="libxml2"/>,
-      <xref linkend="lzo"/>, and
-      <xref linkend="nettle"/>
-      <!-- <ulink url="https://facebook.github.io/zstd/">zstd</ulink> Now in LFS -->
+      <!-- <ulink url="https://facebook.github.io/zstd/">
+zstd</ulink> Now in LFS -->
+<xref linkend="libxml2"/>, <xref linkend="lzo"/> e <xref linkend="nettle"/>
+      
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/libarchive"/>
+    <para condition="html" role="usernotes">User Notes: <ulink url="&blfs-wiki;/libarchive"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libarchive</title>
+    <title>Instalação do libarchive</title>
 
-<!--
+
+
+    <!-- no longer required in 3.6.2.
     <para>
-      First, adapt the test suite to changes in glibc-2.32:
+
+      First, adapt the package to changes in glibc-2.36:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../libarchive-&libarchive-version;-testsuite_fix-1.patch</userinput></screen>
+<screen><userinput remap="pre">sed '/linux\/fs\.h/d' -i libarchive/archive_read_disk_posix.c</userinput></screen>
 -->
-
-    <para>
-      First, fix a bug caused by a behavior change in OpenSSL-3:
-    </para>
-
-<screen><userinput remap="pre">sed -i '436a if ((OSSL_PROVIDER_load(NULL, "legacy")) == NULL) \
-      return (ARCHIVE_FAILED);' libarchive/archive_digest.c</userinput></screen>
-
-    <para>
-      Install <application>libarchive</application> by running the following
-      commands:
+<para>
+      Instale o <application>libarchive</application> executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>LC_ALL=C make check</command>.
+      Para testar os resultados, emita: <command>LC_ALL=C make check</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
+    <para>
+      Remova uma entrada inválida em
+<filename>/usr/lib/pkgconfig/libarchive.pc</filename>:
+    </para>
+
+<screen role="root"><userinput>sed -i "s/iconv //" /usr/lib/pkgconfig/libarchive.pc</userinput></screen>
+
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <option>--without-xml2</option>: This switch sets expat for xar archive
-      format support instead of preferred libxml2 if both packages are installed.
+      <option>--without-xml2</option>: Essa chave configura "expat" para suporte
+ao formato de arquivamento "xar" em vez do preferido "libxml2" se ambos os
+pacotes estiverem instalados.
     </para>
 
     <para>
-      <option>--without-nettle</option>: This switch sets OpenSSL for crypto
-      support instead of preferred Nettle if both packages are installed.
+      <option>--without-nettle</option>: Essa chave configura o "OpenSSL" para
+suporte de criptografia em vez do preferido "Nettle" se ambos os pacotes
+estiverem instalados.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
@@ -167,21 +169,20 @@ make</userinput></screen>
           libarchive.so
         </seg>
         <seg>
-          None
+          Nenhum
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="bsdcat">
         <term><command>bsdcat</command></term>
         <listitem>
           <para>
-            expands files to standard output
+            expande arquivos para a saída gerada padrão
           </para>
           <indexterm zone="libarchive bsdcat">
             <primary sortas="b-bsdcat">bsdcat</primary>
@@ -193,7 +194,7 @@ make</userinput></screen>
         <term><command>bsdcpio</command></term>
         <listitem>
           <para>
-            is a tool similar to <command>cpio</command>
+            é uma ferramenta similar a <command>cpio</command>
           </para>
           <indexterm zone="libarchive bsdcpio">
             <primary sortas="b-bsdcpio">bsdcpio</primary>
@@ -205,7 +206,7 @@ make</userinput></screen>
         <term><command>bsdtar</command></term>
         <listitem>
           <para>
-            is a tool similar to GNU <command>tar</command>
+            é uma ferramenta similar à GNU <command>tar</command>
           </para>
           <indexterm zone="libarchive bsdtar">
             <primary sortas="b-bsdtar">bsdtar</primary>
@@ -217,8 +218,8 @@ make</userinput></screen>
         <term><filename class="libraryfile">libarchive.so</filename></term>
         <listitem>
           <para>
-            is a library that can create and read several streaming
-            archive formats
+            é uma biblioteca que consegue criar e ler vários formatos de arquivamento de
+fluxo
           </para>
           <indexterm zone="libarchive libarchive-lib">
             <primary sortas="c-libarchive">libarchive.so</primary>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -6,18 +6,15 @@
 
   <!ENTITY libxcvt-download-http "&xorg-download-http;/lib/libxcvt-&libxcvt-version;.tar.xz">
   <!ENTITY libxcvt-download-ftp  "&xorg-download-ftp;/lib/libxcvt-&libxcvt-version;.tar.xz">
-  <!ENTITY libxcvt-md5sum        "9f30247e8b5a09fa1df9538252a192b5">
-  <!ENTITY libxcvt-size          "9.4 KB">
-  <!ENTITY libxcvt-buildsize     "584 KB">
-  <!ENTITY libxcvt-time          "less than 0.1 SBU">
+  <!ENTITY libxcvt-md5sum        "b553fdb6024c5a137ff925bf4c337724">
+  <!ENTITY libxcvt-size          "12Ko">
+  <!ENTITY libxcvt-buildsize     "476Ko">
+  <!ENTITY libxcvt-time          "menos que 0,1UPC">
 ]>
 
 <sect1 id="libxcvt" xreflabel="libxcvt-&libxcvt-version;">
   <?dbhtml filename="libxcvt.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libxcvt-&libxcvt-version;</title>
 
@@ -26,88 +23,102 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libxcvt</title>
+    <title>Introdução a libxcvt</title>
 
     <para>
       <application>libxcvt</application> is a library providing a standalone
-      version of the X server implementation of the VESA CVT standard timing
-      modelines generator. It is meant to be a direct replacement to the
-      version formerly provided by the Xorg server.
+version of the X server implementation of the VESA CVT standard timing
+modelines generator. It is meant to be a direct replacement to the version
+formerly provided by the Xorg server.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libxcvt-download-http;"/>
+          Transferência (HTTP): <ulink url="&libxcvt-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libxcvt-download-ftp;"/>
+          Transferência (FTP): <ulink url="&libxcvt-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libxcvt-md5sum;
+          Soma de verificação MD5: &libxcvt-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libxcvt-size;
+          Tamanho da transferência: &libxcvt-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libxcvt-buildsize;
+          Espaço em disco estimado exigido: &libxcvt-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libxcvt-time;
+          Tempo de construção estimado: &libxcvt-time;
         </para>
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Dependências de libxcvt</bridgehead>
+
+    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <para role="required">
+      <xref linkend="xorg-env"/> (should be set for the following instructions to
+work)
+    </para>
+
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/libxcvt"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/libxcvt"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libxcvt</title>
+    <title>Instalação de libxcvt</title>
 
     <para>
-      Install <application>libxcvt</application> by running the following
-      commands:
+      Instale <application>libxcvt</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr .. &amp;&amp;
+meson --prefix=$XORG_PREFIX --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
   </sect2>
 
   <sect2 role="content">
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Program</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
@@ -117,22 +128,20 @@ ninja</userinput></screen>
           libxcvt.so
         </seg>
         <seg>
-          /usr/include/libxcvt
+          $XORG_PREFIX/include/libxcvt
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="cvt">
         <term><command>cvt</command></term>
         <listitem>
           <para>
-            calculates VESA Coordinated Video Timing (CVT) modelines for use
-            with X
+            calculates VESA Coordinated Video Timing (CVT) modelines for use with X
           </para>
           <indexterm zone="libxcvt cvt">
             <primary sortas="b-cvt">cvt</primary>

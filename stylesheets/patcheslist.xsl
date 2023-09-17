@@ -1,8 +1,13 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE xsl:stylesheet [
  <!ENTITY % general-entities SYSTEM "../general.ent">
   %general-entities;
 ]>
+
+<!--
+$LastChangedBy: randy $
+$Date: 2007-01-30 21:25:59 +0100 (mar, 30 jan 2007) $
+-->
 
 <!--
   This stylesheet creates a script to copy the patches referenced
@@ -18,7 +23,7 @@
 
     <!-- Allow select the dest dir at runtime -->
   <xsl:param name="dest.dir">
-    <xsl:value-of select="concat('/srv/www/', substring-after('&patch-root;', 'https://'))"/>
+    <xsl:value-of select="concat('/srv/www/', substring-after('&patch-root;', 'http://'))"/>
   </xsl:param>
 
   <xsl:template match="/">
@@ -40,7 +45,7 @@
       <!-- Ensure correct ownership -->
     <xsl:text>&#x0a;chgrp lfswww *.patch &amp;&amp;&#x0a;</xsl:text>
     <xsl:text>if [ `wc -l copyerrs|sed 's/ *//' |cut -f1 -d' '` -gt 0 ]; then
-  mail -s "Missing BLFS patches" blfs-book@lists.linuxfromscratch.org &lt; copyerrs
+  mail -s "Missing BLFS patches" blfs-book@linuxfromscratch.org &lt; copyerrs
 fi</xsl:text>
     <xsl:text>&#x0a;exit&#x0a;</xsl:text>
   </xsl:template>
@@ -74,17 +79,9 @@ fi</xsl:text>
         <xsl:when test="contains($patch.name, 'net-tools')">
           <xsl:text>/net-tools</xsl:text>
         </xsl:when>
-          <!-- junit -->
-        <xsl:when test="contains($patch.name, 'junit')">
-          <xsl:text>/junit</xsl:text>
-        </xsl:when>
           <!-- x265 -->
         <xsl:when test="contains($patch.name, 'x265')">
           <xsl:text>/x265</xsl:text>
-        </xsl:when>
-          <!-- node -->
-        <xsl:when test="contains($patch.name, 'node')">
-          <xsl:text>/node</xsl:text>
         </xsl:when>
           <!-- General rule -->
         <xsl:otherwise>

@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY serf-download-http "https://archive.apache.org/dist/serf/serf-&serf-version;.tar.bz2">
-  <!ENTITY serf-download-ftp  " ">
+  <!ENTITY serf-download-ftp  "">
   <!ENTITY serf-md5sum        "370a6340ff20366ab088012cd13f2b57">
-  <!ENTITY serf-size          "144 KB">
-  <!ENTITY serf-buildsize     "3.2 MB">
-  <!ENTITY serf-time          "less than 0.1 SBU">
+  <!ENTITY serf-size          "144Ko">
+  <!ENTITY serf-buildsize     "3,2Mo">
+  <!ENTITY serf-time          "menos que 0,1UPC">
 ]>
 
 <sect1 id="serf" xreflabel="Serf-&serf-version;">
   <?dbhtml filename="serf.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Serf-&serf-version;</title>
 
@@ -26,95 +23,110 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Serf</title>
+    <title>Introdução a Serf</title>
 
     <para>
       The <application>Serf</application> package contains a C-based HTTP client
-      library built upon the Apache Portable Runtime (APR) library. It
-      multiplexes connections, running the read/write communication asynchronously.
-      Memory copies and transformations are kept to a minimum to provide high
-      performance operation.
+library built upon the Apache Portable Runtime (APR) library. It multiplexes
+connections, running the read/write communication asynchronously.  Memory
+copies and transformations are kept to a minimum to provide high performance
+operation.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&serf-download-http;"/>
+          Transferência (HTTP): <ulink url="&serf-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&serf-download-ftp;"/>
+          Transferência (FTP): <ulink url="&serf-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &serf-md5sum;
+          Soma de verificação MD5: &serf-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &serf-size;
+          Tamanho da transferência: &serf-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &serf-buildsize;
+          Espaço em disco estimado exigido: &serf-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &serf-time;
+          Tempo de construção estimado: &serf-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/serf-&serf-version;-openssl3_fixes-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/serf-&serf-version;-openssl3_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Serf Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências de Serf</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="apr-util"/> and
-      <xref linkend="scons"/>
+      <xref linkend="apr-util"/> and <xref linkend="scons"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="mitkrb"/>, for the GSSAPI
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/serf"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/serf"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Serf</title>
+    <title>Instalação de Serf</title>
 
     <para>
-      First, fix an issue that causes compilation issues in other packages
-      when using OpenSSL-3:
+      First, fix an issue that causes compilation issues in other packages when
+using OpenSSL-3:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../serf-&serf-version;-openssl3_fixes-1.patch</userinput></screen>
 
     <para>
-      Install <application>Serf</application> by running the following
-      commands:
+      Instale <application>Serf</application> executando os seguintes comandos:
     </para>
 
+<!-- I did not find this to be needed as of 1.3.9 -renodr
+    <para>
+
+      If you wish to run the test suite, fix one file:
+    </para>
+
+<screen><userinput>sed -i test/test_buckets.c \
+    -e 's://\(    buf_size = orig_len + (orig_len / 1000) + 12;\):/\*\1\ */:'</userinput></screen>
+-->
+<!-- With Python 3, check.py is broken. It could be fixed, but since the
+     test suite hangs anyway...
+    <para>
+
+      To test the results, issue: <command>scons check</command>.
+      The tests currently will cause a hang.
+    </para>
+-->
 <screen><userinput>sed -i "/Append/s:RPATH=libdir,::"          SConstruct &amp;&amp;
 sed -i "/Default/s:lib_static,::"           SConstruct &amp;&amp;
 sed -i "/Alias/s:install_static,::"         SConstruct &amp;&amp;
@@ -123,29 +135,16 @@ sed -i "/get_contents()/s/,/.decode()&amp;/"    SConstruct &amp;&amp;
 
 scons PREFIX=/usr</userinput></screen>
 
-<!-- I did not find this to be needed as of 1.3.9 -renodr
-    <para>
-      If you wish to run the test suite, fix one file:
-    </para>
 
-<screen><userinput>sed -i test/test_buckets.c \
-    -e 's://\(    buf_size = orig_len + (orig_len / 1000) + 12;\):/\*\1\ */:'</userinput></screen>
--->
 
-<!-- With Python 3, check.py is broken. It could be fixed, but since the
-     testsuite hangs anyway...
-    <para>
-      To test the results, issue: <command>scons check</command>.
-      The tests currently will cause a hang.
-    </para>
--->
+
 
     <para>
-      This package does not come with a functional testsuite.
+      This package does not come with a functional test suite.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>scons PREFIX=/usr install</userinput></screen>
@@ -153,19 +152,19 @@ scons PREFIX=/usr</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i "..."</command>: The first command removes the runtime
-      path from a shared library and the next two commands disable building and
-      installing of the static library.  The fourth command corrects for
-      changes in scons-3.x. The last command allows to use <application>
-      Python 3</application>.
+      <command>sed -i "..."</command>: The first command removes the runtime path
+from a shared library and the next two commands disable building and
+installing of the static library.  The fourth command corrects for changes
+in scons-3.x. The last command allows to use <application> Python
+3</application>.
     </para>
 
     <para>
-      <option>GSSAPI=/usr</option>: Use this switch if you have installed a
-      GSSAPI library and you want <application>serf</application> to use it.
+      <option>GSSAPI=/usr</option>: Use this switch if you have installed a GSSAPI
+library and you want <application>serf</application> to use it.
     </para>
 
   </sect2>
@@ -174,9 +173,9 @@ scons PREFIX=/usr</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
@@ -192,9 +191,8 @@ scons PREFIX=/usr</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="libserf-1">
         <term><filename class="libraryfile">libserf-1.so</filename></term>

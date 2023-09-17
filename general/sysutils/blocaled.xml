@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
 <!ENTITY blocaled-download-http "https://github.com/lfs-book/blocaled/releases/download/v&blocaled-version;/blocaled-&blocaled-version;.tar.xz">
-  <!ENTITY blocaled-download-ftp  " ">
+  <!ENTITY blocaled-download-ftp  "">
   <!ENTITY blocaled-md5sum        "07796cf62fc1e2b743ee6f805183146d">
   <!ENTITY blocaled-size          "258 KB">
   <!ENTITY blocaled-buildsize     "4.1 MB (with tests)">
@@ -15,103 +15,100 @@
 <sect1 id="blocaled" revision="sysv" xreflabel="blocaled-&blocaled-version;">
   <?dbhtml filename="blocaled.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>blocaled-&blocaled-version;</title>
 
-  <indexterm zone="blocaled">
+  <!--Required section-->
+<indexterm zone="blocaled">
     <primary sortas="a-blocaled">blocaled</primary>
   </indexterm>
 
-  <!--Required section-->
+  
   <sect2 role="package">
-    <title>Introduction to blocaled</title>
+    <title>Introdução a "blocaled"</title>
 
     <para>
-      <application>blocaled</application> is an implementation of the
-      <emphasis>org.freedesktop.locale1</emphasis> D-Bus protocol,
-      which normally comes with <application>systemd</application>. It is
-      needed by the <application>GNOME</application> desktop.
+      <application>blocaled</application> é uma implementação do protocolo
+<emphasis>org.freedesktop.locale1</emphasis> do "D-Bus", que normalmente vem
+com o <application>systemd</application>. Ele é necessário para a área de
+trabalho <application>GNOME</application>.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&blocaled-download-http;"/>
+          Transferência (HTTP): <ulink url="&blocaled-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&blocaled-download-ftp;"/>
+          Transferência (FTP): <ulink url="&blocaled-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &blocaled-md5sum;
+          Soma de verificação MD5 da transferência: &blocaled-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &blocaled-size;
+          Tamanho da transferência: &blocaled-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &blocaled-buildsize;
+          Espaço em disco estimado exigido: &blocaled-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &blocaled-time;
+          Tempo de construção estimado: &blocaled-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">blocaled Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do "blocaled"</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="polkit"/> and
-      <xref linkend="libdaemon"/>
+      <xref linkend="polkit"/> e <xref linkend="libdaemon"/>
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/blocaled"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/blocaled"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of blocaled</title>
+    <title>Instalação do "blocaled"</title>
 
     <para>
-      Install <application>blocaled</application> by running the following
-      commands:
+      Instale <application>blocaled</application> executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --sysconfdir=/etc &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make check</command>.
+      Para testar os resultados, emita: <command>make check</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring blocaled</title>
+    <title>Configurando o "blocaled"</title>
 
     <sect3 id="blocaled-config">
-      <title>Config Files</title>
+      <title>Arquivos de Configuração</title>
       <para>
         <filename>/etc/blocaled.conf</filename>
       </para>
@@ -122,25 +119,25 @@ make</userinput></screen>
       </indexterm>
     </sect3>
 
-    <sect3><title>Configuration Information</title>
+    <sect3><title>Informação de Configuração</title>
 
       <para>
-        <filename>/etc/blocaled.conf</filename> contains the location of
-        the settings files used by <application>blocaled</application>. The
-        defaults are suitable for BLFS. Information about the entries is
-        available as comments in the file.
+        <filename>/etc/blocaled.conf</filename> contém o local dos arquivos de
+configurações usados por <application>blocaled</application>. Os padrões são
+adequados para BLFS. Informações relativas às entradas estão disponíveis
+como comentários no arquivo.
       </para>
 
       <para>
-        The <emphasis>org.freedesktop.locale1</emphasis> protocol is
-        unable to export locale variables. Locale settings are stored
-        by default in <filename>/etc/locale.conf</filename>. We need to
-        retrieve them in the bash profile. As the <systemitem class="username">
-        root</systemitem> user, issue:
+        O protocolo <emphasis>org.freedesktop.locale1</emphasis> é inapto para
+exportar variáveis de localidade. As configurações de localidade são
+armazenadas por padrão em <filename>/etc/locale.conf</filename>. Precisamos
+recuperá-las no perfil do "bash". Como o(a) usuário(a) <systemitem
+class="username"> root</systemitem>, emita:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; "EOF"
-<literal># Begin /etc/profile.d/i18n.sh
+<literal># Começo /etc/profile.d/i18n.sh
 
 if [ -r /etc/locale.conf ]; then source /etc/locale.conf; fi
 
@@ -158,43 +155,44 @@ if [ -n "$LC_TELEPHONE" ];      then export LC_TELEPHONE; fi
 if [ -n "$LC_MEASUREMENT" ];    then export LC_MEASUREMENT; fi
 if [ -n "$LC_IDENTIFICATION" ]; then export LC_IDENTIFICATION; fi
 
-# End /etc/profile.d/i18n.sh</literal>
+# Fim /etc/profile.d/i18n.sh</literal>
 EOF</userinput></screen>
 
       <para>
-        Then the <filename>/etc/locale</filename> file should be generated,
-        as the <systemitem class="username">root</systemitem> user:
+        Então o arquivo <filename>/etc/locale</filename> deveria ser gerado, como
+o(a) usuário(a) <systemitem class="username">root</systemitem>:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/locale.conf &lt;&lt; EOF
-<literal># Begin /etc/locale.conf
+<literal># Começo /etc/locale.conf
 
 LANG=$LANG
 
-# End /etc/locale.conf</literal>
+# Fim /etc/locale.conf</literal>
 EOF</userinput></screen>
 
       <para>
-        If you plan to run an X (or Wayland) Window system, you may want to
-        set up your X keyboard. The best way to do it is to retrieve the
-        settings from <filename>/etc/sysconfig/console</filename>, and feed
-        them to the <application>blocaled</application> daemon. As the
-        <systemitem class="username">root</systemitem> user:
+        Se você planeja executar um sistema de janelas "X" (ou "Wayland"), [então]
+você possivelmente queira configurar seu teclado do "X". A melhor maneira de
+fazer isso é a de recuperar as configurações a partir de
+<filename>/etc/sysconfig/console</filename> e alimentá-las para o processo
+de segundo plano <application>blocaled</application>. Como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
       </para>
 
 <screen role="root"><userinput>source /etc/sysconfig/console &amp;&amp;
 KEYMAP=${KEYMAP:-us}          &amp;&amp;
 
-gdbus call --system                                             \
+gdbus call --system                                            \
            --dest org.freedesktop.locale1                       \
            --object-path /org/freedesktop/locale1               \
            --method org.freedesktop.locale1.SetVConsoleKeyboard \
            "$KEYMAP" "$KEYMAP_CORRECTIONS" true true</userinput></screen>
 
       <para>
-        This should create or modify the Xorg configuration file (default is
-        <filename>/etc/X11/xorg.conf.d/30-keyboard.conf</filename>) to match
-        the keyboard settings set in <envar>KEYMAP</envar>.
+        Isso deveria criar ou modificar o arquivo de configuração do "Xorg" (o
+padrão é <filename>/etc/X11/xorg.conf.d/30-keyboard.conf</filename>) para
+corresponder às configurações do teclado definidas em <envar>KEYMAP</envar>.
       </para>
 
     </sect3>
@@ -202,19 +200,19 @@ gdbus call --system                                             \
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Program</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
-          blocaled (in <filename class="directory">/usr/libexec</filename>)
+          "blocaled" (em <filename class="directory">/usr/libexec</filename>)
         </seg>
         <seg>
-          None
+          Nenhuma
         </seg>
         <seg>
           /usr/share/blocaled
@@ -223,16 +221,15 @@ gdbus call --system                                             \
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="blocaled-prog">
         <term><command>blocaled</command></term>
         <listitem>
           <para>
-            is the daemon implementing the
-            <emphasis>org.freedesktop.locale1</emphasis> D-Bus protocol
+            é o processo de segundo plano implementando o protocolo
+<emphasis>org.freedesktop.locale1</emphasis> do "D-Bus"
           </para>
           <indexterm zone="blocaled blocaled-prog">
             <primary sortas="b-blocaled">blocaled</primary>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY libsoup3-download-http
+           "&gnome-download-http;/libsoup/&libsoup3-minor;/libsoup-&libsoup3-version;.tar.xz">
+  <!ENTITY libsoup3-download-ftp
+           "&gnome-download-ftp;/libsoup/&libsoup3-minor;/libsoup-&libsoup3-version;.tar.xz">
+  <!ENTITY libsoup3-md5sum        "33902089d52f862d6b39680dd4c4e3aa">
+  <!ENTITY libsoup3-size          "1,5Mo">
+  <!ENTITY libsoup3-buildsize     "24 MB (with tests)">
+  <!ENTITY libsoup3-time          "0.3 SBU (Using parallelism=4; with tests)">
+]>
+
+<sect1 id="libsoup3" xreflabel="libsoup-&libsoup3-version;">
+  <?dbhtml filename="libsoup3.html"?>
+
+
+  <title>libsoup-&libsoup3-version;</title>
+
+  <indexterm zone="libsoup3">
+    <primary sortas="a-libsoup3">libsoup3</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução a libsoup3</title>
+
+    <para>
+      The <application>libsoup3</application> is a HTTP client/server library for
+<application>GNOME</application>. It uses GObject and the GLib main loop to
+integrate with <application>GNOME</application> applications and it also has
+an asynchronous API for use in threaded applications.
+    </para>
+
+    &lfs113_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&libsoup3-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&libsoup3-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5: &libsoup3-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &libsoup3-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &libsoup3-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &libsoup3-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências de libsoup3</bridgehead>
+
+    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <para role="required">
+      <xref linkend="glib-networking"/>, <xref linkend="libpsl"/>, <xref
+linkend="libxml2"/>, <xref linkend="nghttp2"/>, and <xref linkend="sqlite"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <para role="recommended">
+      <xref linkend="gobject-introspection"/> and <xref linkend="vala"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <!-- It seems that XMLRPC is part of PHP 5.4.10 -->
+<xref linkend="apache"/> (required to run the test suite), <xref
+linkend="brotli"/>, <xref linkend="curl"/> (required to run the test suite),
+<xref linkend="gi-docgen"/>, <xref linkend="mitkrb"/> (required to run the
+test suite), <xref linkend="php"/> compiled with XMLRPC-EPI support (only
+used for the XMLRPC regression tests), <xref linkend="samba"/> (ntlm_auth is
+required to run the test suite), and <xref linkend="sysprof"/> (for
+profiling)
+    </para>
+
+    <para condition="html" role="usernotes">
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/libsoup3"/>
+    </para>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação de libsoup3</title>
+
+    <para>
+      Fix the installation path of API documentation:
+    </para>
+
+<screen><userinput>sed 's/apiversion/soup_version/' -i docs/reference/meson.build</userinput></screen>
+
+    <para>
+      Instale <application>libsoup3</application> executando os seguintes
+comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson --prefix=/usr          \
+      --buildtype=release    \
+      -Dvapi=enabled         \
+      -Dgssapi=disabled      \
+      -Dsysprof=disabled     \
+      --wrap-mode=nofallback \
+      ..                     &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-wrap-nofallback.xml"/>
+
+    <para>
+      <option>-Dvapi=disabled</option>: Use this if you have not installed
+<application>Vala</application>, e.g. because you are not building
+<application>GNOME</application>.
+    </para>
+
+    <para>
+      <option>-Ddocs=enabled</option>: If <xref linkend='gi-docgen'/> is
+installed, the API documentation will be built and installed no matter if
+this option is used or not.  This option causes the <command>meson</command>
+command to fail if <xref linkend='gi-docgen'/> is not installed.
+    </para>
+
+    <para>
+      <parameter>-Dgssapi=disabled</parameter>: libsoup3 defaults to building with
+GSSAPI support, which requires Kerberos (as does the test suite).
+    </para>
+
+    <para>
+      <parameter>-Dsysprof=disabled</parameter>: libsoup3 will automatically
+download a git version of <xref linkend="sysprof"/> if git is available or
+use the installed version if available.  If you need profiling, remove this
+option.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          None
+        </seg>
+        <seg>
+          libsoup-3.0.so
+        </seg>
+        <seg>
+          /usr/include/libsoup-3.0, /usr/share/gtk-doc/html/libsoup-3.0 (only
+installed if -Ddocs=enabled is passed)
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libsoup-3">
+        <term><filename class="libraryfile">libsoup-3.0.so</filename></term>
+        <listitem>
+          <para>
+            provides functions for asynchronous HTTP connections
+          </para>
+          <indexterm zone="libsoup libsoup-3">
+            <primary sortas="c-libsoup-3">libsoup-3.0.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY upower-download-http "https://gitlab.freedesktop.org/upower/upower/uploads/177df5b9f9b76f25a2ad9da41aa0c1fa/upower-&upower-version;.tar.xz">
-  <!ENTITY upower-download-ftp  " ">
-  <!ENTITY upower-md5sum        "0c945817c12a7967d2c5edf7138fcf80">
-  <!ENTITY upower-size          "438 KB">
-  <!ENTITY upower-buildsize     "15 MB (with tests)">
-  <!ENTITY upower-time          "0.1 SBU (using parallelism=4, add 0.8 SBU for tests)">
+  <!ENTITY upower-download-http "https://gitlab.freedesktop.org/upower/upower/-/archive/v&upower-version;/upower-v&upower-version;.tar.bz2">
+  <!ENTITY upower-download-ftp  "">
+  <!ENTITY upower-md5sum        "4fba71838a9ba0db6f140418eddbe2b7">
+  <!ENTITY upower-size          "128Ko">
+  <!ENTITY upower-buildsize     "4.9 MB (add 1.3 MB for tests)">
+  <!ENTITY upower-time          "less than 0.1 SBU (using parallelism=4, add 0.6 SBU for tests)">
 ]>
 
 <sect1 id="upower" xreflabel="UPower-&upower-version;">
   <?dbhtml filename="upower.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>UPower-&upower-version;</title>
 
@@ -26,88 +23,87 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to UPower</title>
+    <title>Introdução a UPower</title>
 
     <para>
       The <application>UPower</application> package provides an interface for
-      enumerating power devices, listening to device events and querying history
-      and statistics. Any application or service on the system can access the
-      org.freedesktop.UPower service via the system message bus.
+enumerating power devices, listening to device events and querying history
+and statistics. Any application or service on the system can access the
+org.freedesktop.UPower service via the system message bus.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&upower-download-http;"/>
+          Transferência (HTTP): <ulink url="&upower-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&upower-download-ftp;"/>
+          Transferência (FTP): <ulink url="&upower-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &upower-md5sum;
+          Soma de verificação MD5: &upower-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &upower-size;
+          Tamanho da transferência: &upower-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &upower-buildsize;
+          Espaço em disco estimado exigido: &upower-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &upower-time;
+          Tempo de construção estimado: &upower-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">UPower Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências de UPower</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="libgudev"/>,
-      <xref linkend="libusb"/>, and
-      <xref linkend="polkit"/>
+      <xref linkend="libgudev"/>, <xref linkend="libusb"/>, and <xref
+linkend="polkit"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional (Required if building GNOME)</bridgehead>
+    <bridgehead renderas="sect4">Opcionais (Exigidas se construir GNOME)</bridgehead>
     <para role="optional">
       <xref linkend="gobject-introspection"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/>,
-      <xref linkend="pygobject3"/>,
-      <xref linkend="python-dbusmock"/>,
-      <xref linkend="umockdev"/> (for part of the test suite), and
-      <ulink url="https://libimobiledevice.org/">libimobiledevice</ulink>
+      <xref linkend="gtk-doc"/>, <xref linkend="libxslt"/>, <xref
+linkend="docbook-xsl"/>, <xref linkend="pygobject3"/>, <xref
+linkend="python-dbusmock"/>, <xref linkend="umockdev"/> (for part of the
+test suite), and <ulink
+url="https://libimobiledevice.org/">libimobiledevice</ulink>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/upower"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/upower"/>
     </para>
   </sect2>
 
   <sect2 role="kernel" id="upower-kernel" revision="systemd">
+    
     <!-- With UPower-0.9.11's hardening of the systemd unit file,
-         User Namespace Support is now required. Without this, you get
-         "ERROR 213/USER" out of a 'systemctl start upower'. -->
-    <title>Kernel Configuration</title>
+         User Namespace Support (CONFIG_USER_NS) is now required. Without this,
+         you will get "ERROR 213/USER" out of a 'systemctl start upower'. -->
+<title>Configuração do Núcleo</title>
 
     <para>
-      Enable the following options in the kernel configuration and recompile the
-      kernel if necessary:
+      Habilite as seguintes opções na configuração do núcleo e recompile o núcleo,
+se necessário:
     </para>
 
  <screen><literal>General Setup ---&gt;
@@ -120,60 +116,95 @@
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of UPower</title>
+    <title>Instalação de UPower</title>
 
     <para>
-      Install <application>UPower</application> by running the following
-      commands:
+      First, remove an unneeded dependency from a test:
     </para>
 
-<screen><userinput>./configure --prefix=/usr         \
-             --sysconfdir=/etc    \
-             --localstatedir=/var \
-             --enable-deprecated  \
-             --disable-static     &amp;&amp;
-make</userinput></screen>
+<screen><userinput>sed '/parse_version/d' -i src/linux/integration-test.py</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make check</command>. Some
-      checks may not pass due to missing files. Test suite should be run from
-      a local GUI session started with dbus-launch.
+      Instale <application>UPower</application> executando os seguintes comandos:
+    </para>
+
+<!-- On my system with LANG=zh_CN.UTF-8, one test attempted to compare
+         Chinese error message with English references and failed.
+         LC_ALL=C fixes the problem.  -->
+<screen revision="sysv"><userinput>mkdir build                         &amp;&amp;
+cd    build                         &amp;&amp;
+meson --prefix=/usr                        \
+      --buildtype=release                  \
+      -Dgtk-doc=false                      \
+      -Dman=false                          \
+      -Dsystemdsystemunitdir=no            \
+      -Dudevrulesdir=/usr/lib/udev/rules.d \
+      ..                            &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision="systemd"><userinput>mkdir build                         &amp;&amp;
+cd    build                         &amp;&amp;
+meson --prefix=/usr       \
+      --buildtype=release \
+      -Dgtk-doc=false     \
+      -Dman=false         \
+      ..                            &amp;&amp;
+ninja</userinput></screen>
+
+    
+    <para>
+      To test the results, issue: <command>LC_ALL=C ninja test</command>. Some
+checks may not pass due to missing files. Test suite should be run from a
+local GUI session started with dbus-launch.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--enable-deprecated</parameter>: This switch enables
-      deprecated functionality which is still needed by some
-      applications.
+      <parameter>-Dgtk-doc=false</parameter>: Prevents building the
+documentation. Remove this if you have <application>GTK-Doc</application>
+installed and wish to build the documentation.
     </para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
+    <para>
+      <parameter>-Dman=false</parameter>: Prevents building the manual
+pages. Remove this if you have <xref linkend='libxslt'/> and <xref
+linkend='docbook-xsl'/> installed and wish to build the manual pages.
+    </para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/gtk-doc-rebuild.xml"/>
+    <para revision="sysv">
+      <parameter>-Dsystemdsystemunitdir=no</parameter>: Removes the dependency on
+<application>systemd</application>.
+    </para>
+
+    <para revision="sysv">
+      <parameter>-Dudevrulesdir=/usr/lib/udev/rules.d</parameter>: Tells the build
+system where to install <application>udev</application> rules because the
+information is missing in <filename>/usr/lib/pkgconfig/libudev.pc</filename>
+    </para>
 
   </sect2>
 
   <sect2 role="configuration" revision="systemd">
 
-    <title>Configuring UPower</title>
-<!-- timer statistics have been removed from kernel (since 4.11)
+    <title>Configurando UPower</title>
+
+    <!-- timer statistics have been removed from kernel (since 4.11)
      I do not know if there is a replacement. See
      https://patchwork.kernel.org/patch/9561519
      and https://bugs.freedesktop.org/show_bug.cgi?id=100626
 
     <para>
+
       To use the command <command>upower -w</command> for information about
       processor wakeups (this command is used by <phrase revision="sysv">
       <ulink url="&gnome-download-http;/gnome-power-manager/">gnome-power-manager</ulink></phrase><phrase revision="systemd"><xref linkend="gnome-power-manager"/></phrase>)
@@ -182,14 +213,13 @@ make</userinput></screen>
       menu and selecting &apos;Collect kernel timers statistics&apos;.
     </para>
 -->
-    <sect3  id="upower-init" revision="systemd">
-      <title>Systemd Unit</title>
+<sect3  id="upower-init">
+      <title>Unidade do systemd</title>
 
       <para>
-        To start the <command>UPower</command> service at boot,
-        enable the previously installed systemd unit by
-        running the following command as the
-        <systemitem class="username">root</systemitem> user:
+        To start the <command>UPower</command> service at boot, enable the
+previously installed systemd unit by running the following command as the
+<systemitem class="username">root</systemitem> user:
       </para>
 
       <indexterm zone="upower upower-init">
@@ -206,34 +236,35 @@ make</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Program<!--
-See below... <phrase revision="systemd">s</phrase>--></segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle><!--
+See below... <phrase revision="systemd">
+s</phrase>-->
+Aplicativo Instalado</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          upower
-<!-- <phrase revision="systemd"> and upowerd</phrase>
+          <!-- <phrase revision="systemd">
+ and upowerd</phrase>
 Upowerd should not be listed, as it is in /usr/libexec, and is not supposed
 to be run by a user. Furthermore, upowerd is also in sysv, and there is no
 reason so single out systemd here. -->
+upower
+
         </seg>
         <seg>
           libupower-glib.so
         </seg>
         <seg>
-          /etc/UPower,
-          /usr/include/libupower-glib, and
-          /var/lib/upower
+          /etc/UPower, /usr/include/libupower-glib, and /var/lib/upower
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="upower-prog">
         <term><command>upower</command></term>
@@ -246,8 +277,11 @@ reason so single out systemd here. -->
           </indexterm>
         </listitem>
       </varlistentry>
-<!-- See above
+
+
+      <!-- See above
       <varlistentry id="upowerd" revision="systemd">
+
         <term><command>upowerd</command></term>
         <listitem>
           <para>
@@ -259,8 +293,7 @@ reason so single out systemd here. -->
           </indexterm>
         </listitem>
       </varlistentry>-->
-
-      <varlistentry id="libupower-glib">
+<varlistentry id="libupower-glib">
         <term><filename class="libraryfile">libupower-glib.so</filename></term>
         <listitem>
           <para>

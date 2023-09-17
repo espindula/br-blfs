@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY polkit-download-http "https://www.freedesktop.org/software/polkit/releases/polkit-&polkit-version;.tar.gz">
-  <!ENTITY polkit-download-ftp  " ">
-  <!ENTITY polkit-md5sum        "a6efe21d021fafe4191ee30331ef801c">
-  <!ENTITY polkit-size          "1.6 MB">
-  <!ENTITY polkit-buildsize     "12 MB">
-  <!ENTITY polkit-time          "0.1 SBU (Using parallelism=4)">
+  <!ENTITY polkit-download-http "https://gitlab.freedesktop.org/polkit/polkit/-/archive/&polkit-version;/polkit-&polkit-version;.tar.gz">
+  <!ENTITY polkit-download-ftp  "">
+  <!ENTITY polkit-md5sum        "bbe3e745fc5bc1a41f1b5044f09a0f26">
+  <!ENTITY polkit-size          "728 KB">
+  <!ENTITY polkit-buildsize     "7.0 MB (with tests)">
+  <!ENTITY polkit-time          "0,3 UPC (com os testes, usando paralelismo=4)">
 ]>
 
 <sect1 id="polkit" xreflabel="Polkit-&polkit-version;">
   <?dbhtml filename="polkit.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Polkit-&polkit-version;</title>
 
@@ -26,90 +23,98 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Polkit</title>
+    <title>Introdução a Polkit</title>
 
     <para>
-      <application>Polkit</application> is a toolkit for defining and handling
-      authorizations. It is used for allowing unprivileged processes to
-      communicate with privileged processes.
+      <application>Polkit</application> é um kit de ferramentas para definir e
+para manusear autorizações. Ele é usado para permitir que processos não
+privilegiados se comuniquem com processos privilegiados.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&polkit-download-http;"/>
+          Transferência (HTTP): <ulink url="&polkit-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&polkit-download-ftp;"/>
+          Transferência (FTP): <ulink url="&polkit-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &polkit-md5sum;
+          Soma de verificação MD5 da transferência: &polkit-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &polkit-size;
+          Tamanho da transferência: &polkit-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &polkit-buildsize;
+          Espaço em disco estimado exigido: &polkit-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &polkit-time;
+          Tempo de construção estimado: &polkit-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
           Required patch:
-          <ulink url="&patch-root;/polkit-&polkit-version;-security_fix-1.patch"/>
+          <ulink url="&patch-root;/polkit-&polkit-version;-security_fixes-1.patch"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/polkit-&polkit-version;-js91-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do Polkit</bridgehead>
 
-    <bridgehead renderas="sect3">Polkit Dependencies</bridgehead>
-
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/> and
-      <xref linkend="js78"/>
+      <xref linkend="glib2"/> and <xref linkend="duktape"/>
     </para>
 
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>,
-      <xref linkend="libxslt"/>,
-      <xref linkend="linux-pam"/>
-      <phrase revision="sysv">
-        and <xref role="first" linkend="elogind"/>
-      </phrase>
+      <xref linkend="gobject-introspection"/>, <xref linkend="libxslt"/>, <xref
+linkend="linux-pam"/> <phrase revision="sysv"> and <xref role="first"
+linkend="elogind"/> </phrase>
     </para>
 
     <note>
       <para>
-        Since <phrase revision="sysv"><command>elogind</command></phrase>
-        <phrase revision="systemd"><command>systemd-logind</command></phrase>
-        uses PAM to register user sessions, it is a good idea to build
-        <application>Polkit</application> with PAM support so
-        <phrase revision="sysv"><command>elogind</command></phrase>
-        <phrase revision="systemd"><command>systemd-logind</command></phrase>
-        can track <application>Polkit</application> sessions.
+        Como <phrase revision="sysv"><command>elogind</command></phrase> <phrase
+revision="systemd"><command>systemd-logind</command></phrase> usa PAM para
+registrar sessões de usuário(a), é uma boa ideia construir
+<application>Polkit</application> com suporte a PAM, de forma que <phrase
+revision="sysv"><command>elogind</command></phrase> <phrase
+revision="systemd"><command> systemd-logind</command></phrase> possa
+rastrear sessões <application>Polkit</application>.
       </para>
     </note>
 
+
+    
 
     <!-- Due to the fact that meson will not autodetect g-i and
          has it set to required unless you pass an option, and the likelihood
@@ -121,118 +126,100 @@
       <xref linkend="gobject-introspection"/>
     </para>
     -->
-
-    <bridgehead renderas="sect4">Optional</bridgehead>
+<bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--<xref linkend="dbus-python"/> and
-      <xref linkend="python-dbusmock"/> (for tests), and - no more tests -->
-      <!--<xref linkend="DocBook"/>, (Part of libxslt's chain)
-      <xref linkend="docbook-xsl"/>,-->
-      <xref linkend="gtk-doc"/>
+      <xref linkend="gtk-doc"/>, <xref linkend="js102"/> (pode ser usado no lugar
+de duktape) e <xref linkend="python-dbusmock"/> (para os testes)
     </para>
 
-    <bridgehead renderas="sect4" revision="systemd">Required Runtime Dependencies</bridgehead>
+    <bridgehead renderas="sect4" revision="systemd">Dependências Exigidas em Tempo de Execução</bridgehead>
     <para role="required" revision="systemd">
       <xref role="runtime" linkend="systemd"/>
     </para>
 
-    <bridgehead renderas="sect4" id="polkit-agent" xreflabel="Polkit Authentication Agent">
-      Optional Runtime Dependencies
+    <bridgehead renderas="sect4" id="polkit-agent" xreflabel="Agente de Autenticação do Polkit">
+      Dependências Opcionais em Tempo de Execução
     </bridgehead>
     <para role="optional">
       One polkit authentication agent for using polkit in the graphical
-      environment:
-      <application>polkit-kde-agent</application> in
-      <xref role="runtime" linkend="plasma5-build"/> for KDE,
-      the agent built in
-      <xref role="runtime" linkend="gnome-shell"/> for GNOME3,
-      <xref role="runtime" linkend="polkit-gnome"/> for XFCE, and
-      <application>lxpolkit</application> in
-      <xref role="runtime" linkend="lxsession"/> for LXDE.
+environment: <application>polkit-kde-agent</application> in <xref
+role="runtime" linkend="plasma5-build"/> for KDE, the agent built in <xref
+role="runtime" linkend="gnome-shell"/> for GNOME3, <xref role="runtime"
+linkend="polkit-gnome"/> for XFCE, and <application>lxpolkit</application>
+in <xref role="runtime" linkend="lxsession"/> for LXDE
     </para>
 
     <note>
       <para>
-        If <xref linkend="libxslt"/> is installed,
-        then <xref linkend="DocBook"/> and <xref linkend="docbook-xsl"/> are
-        required. If you have installed <xref linkend="libxslt"/>, but you do
-        not want to install any of the DocBook packages mentioned, you will
-        need to use <option>-Dman=false</option> in the instructions
-        below.
+        Se <xref linkend="libxslt"/> estiver instalado, então <xref
+linkend="DocBook"/> e <xref linkend="docbook-xsl"/> serão exigidos. Se você
+tiver instalado <xref linkend="libxslt"/>, mas não deseja instalar nenhum
+dos pacotes DocBook mencionados, [então] você precisará usar
+<option>-Dman=false</option> nas instruções abaixo.
       </para>
     </note>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/polkit"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/polkit"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Polkit</title>
+    <title>Instalação do Polkit</title>
 
     <para>
-      There should be a dedicated user and group to take control
-      of the <command>polkitd</command> daemon after it is
-      started. Issue the following commands as the
-      <systemitem class="username">root</systemitem> user:
+      Deveria existir um(a) usuário(a) e um grupo dedicado(a) para assumir o
+controle do processo de segundo plano <command>polkitd</command> depois que
+ele for iniciado. Emita os seguintes comandos como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>groupadd -fg 27 polkitd &amp;&amp;
-useradd -c "PolicyKit Daemon Owner" -d /etc/polkit-1 -u 27 \
-        -g polkitd -s /bin/false polkitd</userinput></screen>
-
-<!-- All of this is irrelevant with meson
-    <note revision="systemd">
-      <para>
-        When building <application>Polkit</application> with
-        <application>systemd</application> logind support, the
-        <command>configure</command> script explicitly checks if
-        system is booted using <application>systemd</application>.
-        This can cause problems if building the package in chroot,
-        where the <command>configure</command> would fail to
-        detect <application>systemd</application>. To workaround
-        the problem, simply run the following command:
-      </para>
-
-<screen><userinput>sed -i "s:/sys/fs/cgroup/systemd/:/sys:g" configure</userinput></screen>
-    </note>
-
-    <para revision="sysv">
-      Fix an issue introduced in recent <application>Polkit</application>
-      releases with elogind:
-    </para>
-
-<screen revision="sysv"><userinput>patch -Np1 -i ../polkit-&polkit-version;-fix_elogind_detection-1.patch &amp;&amp;
-autoreconf -fv</userinput></screen>
--->
-
+<!--
     <para>
+
       First, fix problems with setting permissions during installation and with
       meson-0.60.0:
     </para>
 
 <screen><userinput remap="pre">sed '/0,/s/^/#/' -i meson_post_install.py &amp;&amp;
 sed '/policy,/d' -i actions/meson.build \
-                 -i src/examples/meson.build</userinput></screen>
+                 -i src/examples/meson.build</userinput>
+</screen>
 
     <para>
-      Apply a patch to fix a security issue:
+      Apply a patch to fix two security issues:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../polkit-&polkit-version;-security_fix-1.patch</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../polkit-&polkit-version;-security_fixes-1.patch</userinput></screen>
 
     <para>
-      Install <application>Polkit</application> by running the following
-      commands:
+      Port this package to use JS-91:
     </para>
 
+<screen><userinput remap="pre">patch -Np1 -i ../polkit-&polkit-version;-js91-1.patch</userinput></screen>
+-->
+<screen role="root"><userinput>groupadd -fg 27 polkitd &amp;&amp;
+useradd -c "Dono(a) do Processo de Segundo Plano do PolicyKit" -d /etc/polkit-1 -u 27 \
+        -g polkitd -s /bin/false polkitd</userinput></screen>
+
+
+
+    <para>
+      Instale <application>Polkit</application> executando os seguintes comandos:
+    </para>
+
+<!--
+      "-t3" for raising the timeout to 90s, i. e. 3x the default:
+      https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/107
+    -->
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 meson --prefix=/usr                       \
+      --buildtype=release                 \
       -Dman=true                          \
       -Dsession_tracking=libsystemd-login \
-      --buildtype=release                 \
+      -Dtests=true                        \
+      -Djs_engine=duktape                 \
       ..                                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -240,31 +227,25 @@ ninja</userinput></screen>
 cd    build &amp;&amp;
 
 meson --prefix=/usr                 \
+      --buildtype=release           \
       -Dman=true                    \
       -Dsession_tracking=libelogind \
       -Dsystemdsystemunitdir=/tmp   \
-      --buildtype=release           \
+      -Dtests=true                  \
+      -Djs_engine=duktape           \
       ..                            &amp;&amp;
 ninja</userinput></screen>
 
-<!--
+    
     <para>
       To test the results, first ensure that the system
-      <application>D-Bus</application> daemon is running.
-      Then run <command>make check</command>.
-    </para>
--->
-
-<!-- The subprojects directory which contains a wrapper for 'mocklibc'
-     is not shipped in the tarball like it should be. Whenever that is
-     fixed, -Dtests=true and ninja test is the ticket. -->
-
-    <para>
-      This package does not ship with a working test suite.
+<application>D-Bus</application> daemon is running, and both <xref
+linkend='dbus-python'/> and <xref linkend='python-dbusmock'/> are
+installed.  Then run <command>meson test -t3</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root" revision="systemd"><userinput>ninja install</userinput></screen>
@@ -275,90 +256,110 @@ rm -v /tmp/*.service</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
+    <para>
+      <parameter>-Dtests=true</parameter>: Essa chave permite executar a suíte de
+teste deste pacote. Como <application>Polkit</application> é usado para
+autorizações, a integridade dele pode afetar a segurança do
+sistema. Portanto, é recomendado executar a suíte de teste construindo este
+pacote.
+    </para>
+
+    <para>
+      <parameter>-Djs_engine=duktape</parameter>: This switch allows using the
+<xref linkend="duktape"/> JavaScript engine. Replace with
+<option>-Djs_engine=mozjs</option> for using the <xref linkend="js102"/>
+JavaScript engine.
+    </para>
+
+    
+
     <!--
     <para revision="sysv">
+
       <parameter>- -disable-libsystemd-login</parameter>: This switch forces
       polkit to build with elogind support (if available) rather than
       systemd-logind.
     </para>
 
-    
+
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
     -->
-    
-    <para>
-      <option>-Dauthfw=shadow</option>: This switch enables the
-      package to use the <application>Shadow</application> rather than the
-      <application>Linux PAM</application> Authentication framework. Use it
-      if you have not installed <application>Linux PAM</application>.
+<para>
+      <option>-Dauthfw=shadow</option>: Essa chave habilita o pacote a usar o
+<application>Shadow</application> em vez da estrutura de autenticação
+<application>Linux PAM</application>. Use-a se você não tiver instalado
+<application>Linux PAM</application>.
     </para>
+
+    
 
     <!--
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
     href="../../xincludes/gtk-doc-rebuild.xml"/>
+
     -->
-
-    <para>
-      <option>-Dintrospection=false</option>: Use this option if you are certain
-      that you do not need gobject-introspection files for polkit, or do not have
-      gobject-introspection installed.
+<para>
+      <option>-Dintrospection=false</option>: Use essa opção se tiver certeza de
+que não precisa dos arquivos gobject-introspection para o polkit ou não
+tiver o gobject-introspection instalado.
     </para>
 
     <para>
-      <option>-Dman=false</option>: Use this option to disable generating and
-      installing manual pages. This is useful if libxslt is not installed.
+      <option>-Dman=false</option>: Use essa opção para desabilitar a geração e a
+instalação das páginas de manual. Isso é útil se libxslt não estiver
+instalado.
     </para>
 
     <para>
-      <option>-Dexamples=true</option>: Use this option to build the example
-      programs.
+      <option>-Dexamples=true</option>: Use essa opção para construir os
+aplicativos de exemplo.
     </para>
 
     <para>
-      <option>-Dgtk_doc=true</option>: Use this option to enable building and
-      installing the API documentation.
+      <option>-Dgtk_doc=true</option>: Use essa opção para habilitar a construção
+e a instalação da documentação da API.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring Polkit</title>
+    <title>Configurando Polkit</title>
 
     <sect3>
-      <title>PAM Configuration</title>
+      <title>Configuração PAM</title>
 
       <note>
         <para>
-          If you did not build <application>Polkit</application> with
-          <application>Linux PAM</application> support, you can skip this
-          section.
+          Se não construiu o <application>Polkit</application> com suporte para
+<application>Linux PAM</application>, [então] você pode pular esta seção.
         </para>
       </note>
 
       <para>
-        If you have built <application>Polkit</application> with
-        <application>Linux PAM</application> support, you need to modify
-        the default PAM configuration file which was installed by default to get
-        <application>Polkit</application> to work correctly with BLFS. Issue the
-        following commands as the <systemitem class="username">root</systemitem>
-        user to create the configuration file for <application>Linux PAM</application>:
+        Se tiver construído o <application>Polkit</application> com suporte para
+<application>Linux PAM</application>, [então] você precisa modificar o
+arquivo padrão de configuração PAM que foi instalado por padrão para fazer o
+<application>Polkit</application> funcionar corretamente com o BLFS. Emita
+os seguintes comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem> para criar o arquivo de configuração para
+<application>Linux PAM</application>:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/polkit-1 &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/polkit-1
+<literal># Início /etc/pam.d/polkit-1
 
 auth     include        system-auth
 account  include        system-account
 password include        system-password
 session  include        system-session
 
-# End /etc/pam.d/polkit-1</literal>
+# Fim /etc/pam.d/polkit-1</literal>
 EOF</userinput></screen>
 
     </sect3>
@@ -366,42 +367,37 @@ EOF</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          pkaction, pkcheck, <!--pk-example-frobnicate,--> pkexec,
-          pkttyagent and polkitd
+          <!--pk-example-frobnicate,-->
+pkaction, pkcheck, pkexec, pkttyagent e polkitd
         </seg>
         <seg>
-          libpolkit-agent-1.so and
-          libpolkit-gobject-1.so
+          libpolkit-agent-1.so e libpolkit-gobject-1.so
         </seg>
         <seg>
-          /etc/polkit-1,
-          /usr/include/polkit-1,
-          /usr/lib/polkit-1,
-          /usr/share/gtk-doc/html/polkit-1 and
-          /usr/share/polkit-1
+          /etc/polkit-1, /usr/include/polkit-1, /usr/lib/polkit-1,
+/usr/share/gtk-doc/html/polkit-1 e /usr/share/polkit-1
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="pkaction">
         <term><command>pkaction</command></term>
         <listitem>
           <para>
-            is used to obtain information about registered PolicyKit actions
+            é usado para obter informação relativa às ações registradas do PolicyKit
           </para>
           <indexterm zone="polkit pkaction">
             <primary sortas="b-pkaction">pkaction</primary>
@@ -413,7 +409,7 @@ EOF</userinput></screen>
         <term><command>pkcheck</command></term>
         <listitem>
           <para>
-            is used to check whether a process is authorized for action
+            é usado para verificar se um processo está autorizado para ação
           </para>
           <indexterm zone="polkit pkcheck">
             <primary sortas="b-pkcheck">pkcheck</primary>
@@ -421,8 +417,11 @@ EOF</userinput></screen>
         </listitem>
       </varlistentry>
 
-<!--
+
+
+      <!--
       <varlistentry id="pk-example-frobnicate">
+
         <term><command>pk-example-frobnicate</command></term>
         <listitem>
           <para>
@@ -435,12 +434,12 @@ EOF</userinput></screen>
         </listitem>
       </varlistentry>
 -->
-      
-      <varlistentry id="pkexec">
+<varlistentry id="pkexec">
         <term><command>pkexec</command></term>
         <listitem>
           <para>
-            allows an authorized user to execute a command as another user
+            permite que um(a) usuário(a) autorizado(a) execute um comando como outro(a)
+usuário(a)
           </para>
           <indexterm zone="polkit pkexec">
             <primary sortas="b-pkexec">pkexec</primary>
@@ -452,7 +451,7 @@ EOF</userinput></screen>
         <term><command>pkttyagent</command></term>
         <listitem>
           <para>
-            is used to start a textual authentication agent for the subject
+            é usado para iniciar um agente textual de autenticação para o assunto
           </para>
           <indexterm zone="polkit pkttyagent">
             <primary sortas="b-pkttyagent">pkttyagent</primary>
@@ -464,8 +463,8 @@ EOF</userinput></screen>
         <term><command>polkitd</command></term>
         <listitem>
           <para>
-            provides the org.freedesktop.PolicyKit1 <application>D-Bus</application>
-            service on the system message bus
+            fornece o serviço <application>D-Bus</application> do
+org.freedesktop.PolicyKit1 no barramento de mensagem do sistema
           </para>
           <indexterm zone="polkit polkitd">
             <primary sortas="b-polkitd">polkitd</primary>
@@ -477,8 +476,8 @@ EOF</userinput></screen>
         <term><filename class="libraryfile">libpolkit-agent-1.so</filename></term>
         <listitem>
           <para>
-            contains the <application>Polkit</application> authentication
-            agent API functions
+            contém as funções de API do agente de autenticação
+<application>Polkit</application>
           </para>
           <indexterm zone="polkit libpolkit-agent-1">
             <primary sortas="c-libpolkit-agent-1">libpolkit-agent-1.so</primary>
@@ -490,7 +489,7 @@ EOF</userinput></screen>
         <term><filename class="libraryfile">libpolkit-gobject-1.so</filename></term>
         <listitem>
           <para>
-            contains the <application>Polkit</application> authorization API functions
+            contém as funções da API de autorização <application>Polkit</application>
           </para>
           <indexterm zone="polkit libpolkit-gobject-1">
             <primary sortas="c-libpolkit-gobject-1">libpolkit-gobject-1.so</primary>

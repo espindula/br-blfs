@@ -1,272 +1,256 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 ]>
 
-<sect1 id="postlfs-firmware" xreflabel="About Firmware">
+<sect1 id="postlfs-firmware" xreflabel="Acerca de Firmware">
   <?dbhtml filename="firmware.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
-  <title>About Firmware</title>
+  <title>Acerca de Firmware</title>
 
   <indexterm zone="postlfs-firmware">
     <primary sortas="e-lib-firmware">/lib/firmware</primary>
   </indexterm>
 
   <para>
-    On some recent PCs it can be necessary, or desirable, to load firmware
-    to make them work at their best. There is a directory, <filename
-    class="directory">/lib/firmware</filename>, where the kernel or kernel
-    drivers look for firmware images.
+    Em alguns PCs recentes, pode ser necessário, ou desejável, carregar firmware
+para fazer com que trabalhem no melhor deles. Existe um diretório, <filename
+class="directory">/lib/firmware</filename>, onde o núcleo ou os
+controladores de núcleo procuram por imagens de firmware.
   </para>
 
   <para>
     Currently, most firmware can be found at a <userinput>git</userinput>
-    repository: <ulink url=
-      "http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/tree/"/>.
-    For convenience, the LFS Project has created a mirror, updated daily, where
-    these firmware files can be accessed via <userinput>wget</userinput> or a
-    web browser at <ulink url="&sources-anduin-http;/linux-firmware/"/>.
+repository: <ulink url=
+"https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/tree/"/>.
+For convenience, the LFS Project has created a mirror, updated daily, where
+these firmware files can be accessed via <userinput>wget</userinput> or a
+web browser at <ulink url="&sources-anduin-http;/linux-firmware/"/>.
   </para>
 
   <para>
-    To get the firmware, either point a browser to one of the above
-    repositories and then download the item(s) which you need, or install
-    <xref linkend="git"/> and clone that repository.
+    Para obter o firmware, ou aponte um navegador para um dos repositórios acima
+e, então, transfira o(s) item(s) que você precisar; ou instale o <xref
+linkend="git"/> e clone aquele repositório.
   </para>
 
   <para>
-    For some other firmware, particularly for Intel microcode and certain
-    wifi devices, the needed firmware is not available in the above repository.
-    Some of this will be addressed below, but a search of the Internet for
-    needed firmware is sometimes necessary.
+    Para algum outro firmware, particularmente para microcódigo da Intel e
+certos dispositivos wifi, o firmware necessário não está disponível no
+repositório acima. Algo disso será endereçado abaixo, porém uma busca da
+Internet pelo firmware necessário de vez em quando é necessária.
   </para>
 
   <para>
-    Firmware files are conventionally referred to as blobs because you cannot
-    determine what they will do. Note that firmware is distributed under
-    various different licenses which do not permit disassembly or
-    reverse-engineering.
+    Os arquivos de firmware convencionalmente são referenciados como blobs, pois
+você não consegue determinar o que eles farão. Observe que o firmware é
+distribuído sob diferentes licenças que não permitem desmontagem ou
+engenharia reversa.
   </para>
 
   <para>
-    Firmware for PCs falls into four categories:
+    Firmware para PCs caem em quatro categorias:
   </para>
 
   <itemizedlist spacing="compact">
     <listitem>
       <para>
-        Updates to the CPU to work around errata, usually referred to as
-        microcode.
+        Atualizações para a CPU contornar erros, geralmente referenciadas como
+microcódigo.
       </para>
     </listitem>
     <listitem>
       <para>
-        Firmware for video controllers. On x86 machines this is required for
-        ATI devices (Radeon and AMDGPU chips) and may be useful for Intel (Skylake
-        and later) and Nvidia (Kepler and later) GPUs.
+        Firmware para controladores de vídeo. Em máquinas x86, isso é exigido para
+dispositivos ATI (chips Radeon e AMDGPU); e possivelmente seja útil para
+GPUs Intel (Skylake e posteriores) e Nvidia (Kepler e posteriores).
       </para>
 
       <para>
-        ATI Radeon and AMGPU devices all require firmware to be able to use KMS
-        (kernel modesetting - the preferred option) as well as for Xorg. For
-        old radeon chips (before the R600), the firmware is still in the
-        kernel source.
+        ATI Radeon and AMDGPU devices all require firmware to be able to use KMS
+(kernel modesetting - the preferred option) as well as for Xorg. For old
+radeon chips (before the R600), the firmware is still in the kernel source.
       </para>
 
       <para>
-        Intel integrated GPUs from Skylake onwards can use firmware for GuC
-        (the Graphics microcontroller), and also for the HuC (HEVC/H265
-        microcontroller which offloads to the GPU) and the DMC (Display
-        Microcontroller) to provide additional low-power states. The GuC and
-        HuC have had a chequered history in the kernel and updated firmware
-        may be disabled by default, depending on your kernel version. Further
-        details may be found at <ulink
-        url="https://01.org/linuxgraphics/downloads/firmware/">01.org</ulink>
-        and <ulink
-        url="https://wiki.archlinux.org/index.php/intel_graphics">Arch
-        linux</ulink>.
+        GPUs integradas Intel a partir do Skylake em diante conseguem usar firmware
+para GuC (o microcontrolador Graphics) e, também, para o HuC
+(microcontrolador HEVC/H265, que descarrega para a GPU); e o DMC (Display
+Microcontroller) para fornecer estados adicionais de baixa eletricidade. O
+GuC e o HuC tiveram um histórico duvidoso no núcleo e o firmware atualizado
+possivelmente esteja desabilitado por padrão, dependendo da sua versão de
+núcleo. Maiores detalhes podem ser encontrados em <ulink
+url="https://01.org/linuxgraphics/downloads/firmware/">01.org</ulink>; e
+<ulink url="https://wiki.archlinux.org/index.php/intel_graphics">Arch
+linux</ulink>.
       </para>
 
       <para>
         Nvidia GPUs from Kepler onwards require signed firmware, otherwise the
-        nouveau driver is unable to provide hardware acceleration. Nvidia has
-        now released firmware up to Turing (most, maybe all, GTX16xx and RTX20xx
-        GPUs) to linux-firmware, and kernels from linux-5.6 should support it,
-        although Mesa support may require a development version until Mesa-20.2
-        is released. Note that faster clocks than the default are not enabled
-        by the released firmware.
+nouveau driver is unable to provide hardware acceleration. Nvidia has now
+released firmware up to Ampere (GeForce30 series) to linux-firmware.  Note
+that faster clocks than the default are not enabled by the released
+firmware.
       </para>
     </listitem>
     <listitem>
       <para>
-        Firmware updates for wired network ports. Mostly they work even
-        without the updates, but probably they will work better with
-        the updated firmware. For some modern laptops, firmware for both
-        wired ethernet (e.g. rtl_nic) and also for bluetooth devices (e.g. qca)
-        is <emphasis>required</emphasis> before the wired network can be used.
+        Firmware updates for wired network ports. Mostly they work even without the
+updates, but probably they will work better with the updated firmware. For
+some modern laptops, firmware for both wired ethernet (e.g. rtl_nic) and
+also for bluetooth devices (e.g. qca)  is <emphasis>required</emphasis>
+before the wired network can be used.
       </para>
     </listitem>
     <listitem>
       <para>
-        Firmware for other devices, such as wifi. These devices are not
-        required for the PC to boot, but need the firmware before these devices
-        can be used.
+        Firmware for other devices, such as wifi. These devices are not required for
+the PC to boot, but need the firmware before these devices can be used.
       </para>
     </listitem>
   </itemizedlist>
 
   <note>
     <para>
-      Although not needed to load a firmware blob, the following
-      tools may be useful for determining, obtaining, or preparing the needed
-      firmware in order to load it into the system:
-      <xref linkend="cpio"/>,
-      <xref linkend="git"/>,
-      <xref linkend="pciutils"/>, and
-      <xref linkend="wget"/>
+      Apesar de não necessárias para carregar um blob de firmware, as seguintes
+ferramentas possivelmente sejam úteis para determinar, obter ou preparar o
+firmware necessário para a finalidade de carregá-lo no sistema: <xref
+linkend="cpio"/>; <xref linkend="git"/>; <xref linkend="pciutils"/>; e <xref
+linkend="wget"/>
     </para>
   </note>
 
-  <para condition="html" role="usernotes">User Notes:
-  <ulink url="&blfs-wiki;/aboutfirmware"/></para>
+  <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/aboutfirmware"/></para>
 
   <sect2 id="cpu-microcode">
-    <title>Microcode updates for CPUs</title>
+    <title>Atualizações de microcódigo para CPUs</title>
 
     <para>
-      In general, microcode can be loaded by the BIOS or UEFI, and it might be
-      updated by upgrading to a newer version of those. On linux, you can also
-      load the microcode from the kernel if you are using an AMD family 10h or
-      later processor (first introduced late 2007), or an Intel processor from
-      1998 and later (Pentium4, Core, etc), if updated microcode has been
-      released. These updates only last until the machine is powered off, so
-      they need to be applied on every boot.
+      Em geral, microcódigo pode ser carregado pelo BIOS ou pela UEFI e poderia
+ser atualizado atualizando-se para uma versão mais recente daqueles. No
+Linux, você também pode carregar o microcódigo a partir do núcleo se estiver
+usando um processador AMD família 10h ou posterior (introduzido
+primeiramente no final de 2007); ou um processador Intel a partir de 1998 e
+posterior (Pentium4, Core, etc), se microcódigo atualizado tiver sido
+lançado. Essas atualizações duram somente até que a máquina seja desligada,
+de forma que elas precisam ser aplicadas a cada inicialização.
     </para>
 
     <para>
-      Intel provide updates of their microcode for Skylake and later
-      processors as new vulnerabilities come to light, and have in the past
-      provided updates for processors from SandyBridge onwards, although those
-      are no-longer supported for new fixes. New versions of AMD
-      firmware are rare and usually only apply to a few models, although
-      motherboard manufacturers get extra updates which maybe update microcode
-      along with the changes to support newer CPUs and faster memory.
+      Intel provide updates of their microcode for Skylake and later processors as
+new vulnerabilities come to light, and have in the past provided updates for
+processors from SandyBridge onwards, although those are no-longer supported
+for new fixes. New versions of AMD firmware are rare and usually only apply
+to a few models, although motherboard manufacturers get AGESA (AMD Generic
+Encapsulated Software Architecture) updates to change BIOS values, e.g. to
+support more memory variants, new vulnerability fixes or newer CPUs.
     </para>
 
     <para>
-      There are two ways of loading the microcode, described as 'early' and
-      'late'. Early loading happens before userspace has been started, late
-      loading happens after userspace has started. Not surprisingly, early
-      loading is preferred, (see e.g. an explanatory comment in a kernel
-      commit noted at <ulink url="https://lwn.net/Articles/530346/">
-        x86/microcode: Early load microcode</ulink> on LWN.)  Indeed, it
-      is needed to work around one particular erratum in early Intel Haswell
-      processors which had TSX enabled.  (See <ulink url=
-      "http://www.anandtech.com/show/8376/intel-disables-tsx-instructions-erratum-found-in-haswell-haswelleep-broadwellyi/">
-        Intel Disables TSX Instructions: Erratum Found in Haswell,
-        Haswell-E/EP, Broadwell-Y
-      </ulink>.) Without this update glibc can do the wrong thing in uncommon
-      situations.
+      There were two ways of loading the microcode, described as 'early' and
+'late'. Early loading happens before userspace has been started, late
+loading happens after userspace has started. However, late loading is known
+to be problematic and not supported anymore (see the kernel commit <ulink
+url="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d23d33e">
+x86/microcode: Taint and warn on late loading</ulink>.)  Indeed, early
+loading is needed to work around one particular erratum in early Intel
+Haswell processors which had TSX enabled.  (See <ulink url=
+"https://www.anandtech.com/show/8376/intel-disables-tsx-instructions-erratum-found-in-haswell-haswelleep-broadwelly/">
+Intel Disables TSX Instructions: Erratum Found in Haswell, Haswell-E/EP,
+Broadwell-Y</ulink>.)  Without this update glibc can do the wrong thing in
+uncommon situations.
     </para>
 
     <para>
-      It is still possible to manually force late loading of microcode, either
-      for testing or to prevent having to reboot. You will need to reconfigure
-      your kernel for either method. The instructions here will create a
-      kernel <filename>.config</filename> to suite early loading, before
-      forcing late loading to see if there is any microcode. If there is,
-      the instructions then show you how to create an initrd for early loading.
+      In previous versions of this book, late loading of microcode to see if it
+gets applied was recommended, followed by using an initrd to force early
+loading. But now that the contents of the Intel microcode tarball is
+documented, and AMD microcode can be read by a Python script to determine
+which machines it covers, there is no real reason to use late loading.
+    </para>
+
+    <para>
+      It might be still possible to manually force late loading of microcode.  But
+it may cause kernel malfunction and you should take the risk yourself.  You
+will need to reconfigure your kernel for either method. The instructions
+here will show you how to create an initrd for early loading. It is also
+possible to build the same microcode bin file into the kernel, which allows
+early loading but requires the kernel to be recompiled to update the
+microcode.
     </para>
 
     <para>
       To confirm what processor(s) you have (if more than one, they will be
-      identical) look in /proc/cpuinfo.
+identical) look in /proc/cpuinfo. Determine the decimal values of the cpu
+family, model and stepping by running the following command (it will also
+report the current microcode version):
     </para>
-
-    <para>
-      If you are creating an initrd to update firmware for different machines,
-      as a distro would do, go down to 'Early loading of microcode' and cat all
-      the Intel blobs to GenuineIntel.bin or cat all the AMD blobs to
-      AuthenticAMD.bin. This creates a larger initrd - for all Intel machines in
-      the 20200609 update the size is 3.0 MB compared to typically 24 KB for one
-      machine.
-    </para>
-
-    <sect3 id="intel-microcode">
-      <title>Intel Microcode for the CPU</title>
-
-      <para>
-        The first step is to get the most recent version of the Intel
-        microcode.  This must be done by navigating to <ulink url=
-        'https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/>
-        and downloading the latest file there.  As of this writing the most
-        <!-- at one time, some skylakes had problems with a certain revision
-        secure version of the microcode, for those machines which can boot it, -->
-        secure version of the microcode
-        is microcode-20220207.<!-- If you have a Skylake machine, please read the
-        Caution in the 'Early loading of microcode' section below.-->  Extract this
-        file in the normal way, the microcode is in the <filename>intel-ucode
-        </filename> directory, containing various blobs with names in the form
-        XX-YY-ZZ. There are also various other files, and a releasenote.
-      </para>
-
-      <para>
-        In the past, intel did not provide any details of which blobs had
-        changed versions, but now the release note details this.
-      </para>
-
-      <para>
-        The recent firmware for older processors is provided to deal with
-        vulnerabilities which have now been made public, and for some of these
-        such as Microarchitectural Data Sampling (MDS) you might wish to
-        increase the protection by disabling hyperthreading, or alternatively
-        to disable the kernel's default mitigation because of its impact on
-        compile times. Please read the online documentation at <ulink url=
-        'https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/index.html'/>.
-      </para>
-
-      <!-- commented, I don't think there is a new listed item for 2011-11 vulns
-          (platypus etc : intel-sa-00381 and 0389)
-          and anyway the very latest stable releases have backports : ken
-      <para>
-        The documentation on the latest SRBDS (Special Register Buffer Data
-        Sampling) vulnerabilities/fixes will be documented in kernels 5.4.46,
-        5.6.18, 5.7.2, 5.8.0 and later.
-      </para>-->
-
-      <para>
-        Now you need to determine your processor's identity to see if there
-        is any microcode for it. Determine the decimal values of the cpu family,
-        model and stepping by running the following command (it will also report
-        the current microcode version):
-      </para>
 
 <screen><userinput>head -n7 /proc/cpuinfo</userinput></screen>
 
+    <para>
+      Convert the cpu family, model and stepping to pairs of hexadecimal digits,
+and remember the value of the <quote>microcode</quote> field.  You can now
+check if there is any microcode available.
+    </para>
+
+    <para>
+      If you are creating an initrd to update firmware for different machines, as
+a distro would do, go down to 'Early loading of microcode' and cat all the
+Intel blobs to GenuineIntel.bin or cat all the AMD blobs to
+AuthenticAMD.bin. This creates a larger initrd - for all Intel machines in
+the 20200609 update the size was 3.0 MB compared to typically 24 KB for one
+machine.
+    </para>
+
+    <sect3 id="intel-microcode">
+      <title>Microcódigo Intel para a CPU</title>
+
       <para>
-        Convert the cpu family, model and stepping to pairs of hexadecimal
-        digits. For a Skylake i3 6100 (described as Intel(R) Core(TM) i3-6100
-        CPU) the relevant values are cpu family 6, model 94, stepping 3 so in
-        this case the required identification is 06-5e-03. A look at the blobs
-        will show that there is one for this CPU (although for older issues it
-        might have already been applied by the BIOS). If there is a blob for
-        your system then test if it will be applied by copying it (replace
-        &lt;XX-YY-ZZ&gt; by the identifier for your CPU) to where the
-        kernel can find it:
+        <!-- at one time, some skylakes had problems with a certain revision
+        secure version of the microcode, for those machines which can boot it, -->
+<!-- If you have a Skylake machine, please read the
+        Caution in the 'Early loading of microcode' section below.-->
+The first step is to get the most recent version of the Intel microcode.
+This must be done by navigating to <ulink url=
+'https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/>
+and downloading the latest file there.  As of this writing the most secure
+version of the microcode is microcode-20230214.  Extract this file in the
+normal way, the microcode is in the <filename>intel-ucode </filename>
+directory, containing various blobs with names in the form XX-YY-ZZ. There
+are also various other files, and a releasenote.
       </para>
 
-<screen><userinput>mkdir -pv /lib/firmware/intel-ucode
-cp -v intel-ucode/&lt;XX-YY-ZZ&gt; /lib/firmware/intel-ucode</userinput></screen>
+      <para>
+        In the past, intel did not provide any details of which blobs had changed
+versions, but now the releasenote details this.  You can compare the
+microcode version in <filename>/proc/cpuinfo</filename> with the version for
+your CPU model in the releasenote to know if there is an update.
+      </para>
 
       <para>
-        Now that the Intel microcode has been prepared, use the following
-        options when you configure the kernel to load Intel microcode:
+        O firmware recente para processadores mais antigos é fornecido para lidar
+com vulnerabilidades que agora tenham sido tornadas públicas e, para algumas
+dessas, tais como Microarchitectural Data Sampling (MDS), você poderia
+desejar aumentar a proteção desabilitando hyperthreading; ou,
+alternativamente, desabilitar a mitigação padrão do núcleo, por causa do
+impacto dela sobre os tempos de compilação. Por favor, leia a documentação
+online em <ulink url=
+'https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/index.html'/>.
+      </para>
+
+      <para>
+        For an Icelake mobile (described as Intel(R) Core(TM) i7-1065G7 CPU) the
+relevant values are cpu family 6, model 126, stepping 5 so in this case the
+required identification is 06-7e-05. The releasenote says the latest
+microcode for it is versioned 0xb8.  If the value of the
+<quote>microcode</quote> field in <filename>/proc/cpuinfo</filename> is 0xb8
+or greater, it indicates the microcode update is already applied by the
+BIOS.  Otherwise, configure the kernel to support loading Intel microcode,
+and then proceed to <xref linkend='early-microcode'/>:
       </para>
 
 <screen><literal>General Setup ---&gt;
@@ -275,72 +259,41 @@ Processor type and features  ---&gt;
   [*] CPU microcode loading support  [CONFIG_MICROCODE]
   [*]      Intel microcode loading support [CONFIG_MICROCODE_INTEL]</literal></screen>
 
-      <para>
-        After you have successfully booted the new system, force late loading
-        by using the command:
-      </para>
-
-<screen><userinput>echo 1 > /sys/devices/system/cpu/microcode/reload</userinput></screen>
-
-      <para>
-        Then use the following command to see if anything was loaded:
-        (N.B. the dates when microcode was created may be months ahead of when
-        it was released.)
-      </para>
-
-<screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
-
-      <para>
-        This old example showing the very old BIOS firmware version
-        was created by temporarily booting without
-        microcode, to show the current Firmware Bug messages, then the late load
-        shows it being updated to revision 0xea which was current at that time.
-      </para>
-
-<screen><literal>[    0.000000] Linux version 5.12.8 (lfs@leshp) (gcc (GCC) 11.1.0,
-               GNU ld (GNU Binutils) 2.36.1)
-               #2 SMP PREEMPT Fri Jun 4 01:25:02 BST 2021
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.12.8-sda11 root=/dev/sda11 ro
-               resume=/dev/sda10
-[    0.028741] [Firmware Bug]: TSC_DEADLINE disabled due to Errata;
-               please update microcode to version: 0xb2 (or later)
-[    0.115716] SRBDS: Vulnerable: No microcode
-[    0.115826] MDS: Vulnerable: Clear CPU buffers attempted, no microcode
-[    0.389005] microcode: sig=0x506e3, pf=0x2, revision=0x74
-[    0.389030] microcode: Microcode Update Driver: v2.2.
-[   70.089502] microcode: updated to revision 0xea, date = 2021-01-25
-[   70.089528] x86/CPU: CPU features have changed after loading microcode,
-               but might not take effect.
-[   70.089530] microcode: Reload completed, microcode revision: 0xea</literal></screen>
-
-      <para>
-        If the microcode was not updated, there is no new microcode for this
-        system's processor. If it did get updated, you can now proceed to
-        <xref linkend='early-microcode'/>.
-      </para>
-
     </sect3>
 
     <sect3 id="amd-microcode">
-      <title>AMD Microcode for the CPU</title>
+      <title>Microcódigo AMD para a CPU</title>
 
       <para>
-        Begin by downloading a container of firmware for your CPU family
-        from <ulink url=
-          '&sources-anduin-http;/linux-firmware/amd-ucode/'/>.
-        The family is always specified in hex. Families 10h to 14h (16 to 20)
-        are in microcode_amd.bin.  Families 15h, 16h and 17h have their own
-        containers.  Create the required directory and put the firmware you
-        downloaded into it as the <systemitem
-        class="username">root</systemitem> user:
+        Begin by downloading a container of firmware for your CPU family from <ulink
+url= '&sources-anduin-http;/linux-firmware/amd-ucode/'/>.  The family is
+always specified in hex. Families 10h to 14h (16 to 20)  are in
+microcode_amd.bin.  Families 15h, 16h, 17h (Zen, Zen+, Zen2) and 19h (Zen3)
+have their own containers, but very few machines are likely to get updated
+microcode. Instead, AMD provide an updated AGESA to the motherboard makers,
+who may provide an updated BIOS using this.  There is a Python3 script at
+<ulink url=
+'https://github.com/AMDESE/amd_ucode_info/blob/master/amd_ucode_info.py'/>.
+Download that script and run it against the bin file to check which
+processors have updates.
       </para>
 
-<screen><userinput>mkdir -pv /lib/firmware/amd-ucode
-cp -v microcode_amd* /lib/firmware/amd-ucode</userinput></screen>
+      <para>
+        For the very old Athlon(tm) II X2 in these examples the values were cpu
+family 16, model 5, stepping 3 giving an identification of Family=0x10
+Model=0x05 Stepping=0x03.  One line of the
+<command>amd_ucode_info.py</command> script output describes the microcode
+version for it:
+      </para>
+
+<screen><computeroutput>Family=0x10 Model=0x05 Stepping=0x03: Patch=0x010000c8 Length=960 bytes</computeroutput></screen>
 
       <para>
-        When you configure the kernel, use the following options
-        to load AMD microcode:
+        If the value of the <quote>microcode</quote> field in
+<filename>/proc/cpuinfo</filename> is 0x10000c8 or greater, it indicates the
+BIOS has already applied the microcode update.  Otherwise, configure the
+kernel to support loading AMD microcode, and then proceed to <xref
+linkend='early-microcode'/>:
       </para>
 
 <screen><literal>General Setup ---&gt;
@@ -348,80 +301,43 @@ cp -v microcode_amd* /lib/firmware/amd-ucode</userinput></screen>
 Processor type and features  ---&gt;
   [*] CPU microcode loading support  [CONFIG_MICROCODE]
   [*]      AMD microcode loading support [CONFIG_MICROCODE_AMD]</literal></screen>
-
-      <para>
-        After you have successfully booted the new system, force late loading
-        by using the command:
-      </para>
-
-<screen><userinput>echo 1 > /sys/devices/system/cpu/microcode/reload</userinput></screen>
-
-      <para>
-        Then use the following command to see if anything was loaded:
-      </para>
-
-<screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
-      <para>
-        This historic example from an old Athlon(tm) II X2 shows it has been
-        updated. At that time, all CPUs were still reported in the microcode
-        details on AMD machines (the current position for AMD machines where
-        newer microcode is available is unknown) :
-      </para>
-
-<screen><literal>[    0.000000] Linux version 4.15.3 (ken@testserver) (gcc version 7.3.0 (GCC))
-               #1 SMP Sun Feb 18 02:08:12 GMT 2018
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-4.15.3-sda5 root=/dev/sda5 ro
-[    0.307619] microcode: CPU0: patch_level=0x010000b6
-[    0.307671] microcode: CPU1: patch_level=0x010000b6
-[    0.307743] microcode: Microcode Update Driver: v2.2.
-[  187.928891] microcode: CPU0: new patch_level=0x010000c8
-[  187.928899] microcode: CPU1: new patch_level=0x010000c8</literal></screen>
-
-      <para>
-        If the microcode was not updated, there is no new microcode for
-        this system's processor. If it did get updated, you can now proceed to
-        <xref linkend='early-microcode'/>.
-      </para>
-
     </sect3>
 
     <sect3 id="early-microcode">
-      <title>Early loading of microcode</title>
+      <title>Carregamento antecipado do microcódigo</title>
 
       <para>
-        If you have established that updated microcode is available for
-        your system, it is time to prepare it for early loading. This requires
-        an additional package, <xref linkend='cpio'/> and the creation of an
-        initrd which will need to be added to grub.cfg.
+        Se você tiver estabelecido que o microcódigo atualizado está disponível para
+o seu sistema, [então] é hora de prepará-lo para o carregamento
+antecipado. Isso exige um pacote adicional, o <xref linkend='cpio'/> e a
+criação de um initrd que precisará ser adicionado ao grub.cfg.
       </para>
 
       <para>
-        It does not matter where you prepare the initrd, and once it is
-        working you can apply the same initrd to later LFS systems or newer
-        kernels on this same machine, at least until any newer microcode is
-        released. Use the following commands:
+        Não importa onde você prepara o initrd e, tão logo ele esteja funcionando,
+você pode aplicar o mesmo initrd a sistemas LFS posteriores ou a núcleos
+mais recentes na mesma máquina, ao menos até que algum microcódigo mais
+recente seja liberado. Use os seguintes comandos:
       </para>
 
 <screen><userinput>mkdir -p initrd/kernel/x86/microcode
 cd initrd</userinput></screen>
 
       <para>
-        For an AMD machine, use the following command (replace
-        &lt;MYCONTAINER&gt; with the name of the container for your CPU's
-        family):
+        Para uma máquina AMD, use o seguinte comando (substitua &lt;MEUCONTEINER&gt;
+pelo nome do contêiner para a família da sua CPU):
       </para>
 
-<screen><userinput>cp -v /lib/firmware/amd-ucode/&lt;MYCONTAINER&gt; kernel/x86/microcode/AuthenticAMD.bin</userinput></screen>
+<screen><userinput>cp -v ../&lt;MYCONTAINER&gt; kernel/x86/microcode/AuthenticAMD.bin</userinput></screen>
 
       <para>
-        Or for an Intel machine copy the appropriate blob using this command:
+        Ou, para uma máquina Intel, copie o blob apropriado usando este comando:
       </para>
-
-<screen><userinput>cp -v /lib/firmware/intel-ucode/&lt;XX-YY-ZZ&gt; kernel/x86/microcode/GenuineIntel.bin</userinput></screen>
 
 <!-- new version from 20201110 release onwards, assumed to work on all skylakes
    But complaints about previous version took some days to appear, so keep as a comment for now.
       <caution>
+
         <para>
           On some Skylake machines with hex Model Number '4e' (78 decimal) the
           upgrade to microcode version '0xdc' is reported to cause the machine to
@@ -441,66 +357,71 @@ cd initrd</userinput></screen>
           the machine usable, but without the SRBDS mitigations.
         </para>
       </caution>-->
+<screen><userinput>cp -v ../intel-ucode/&lt;XX-YY-ZZ&gt; kernel/x86/microcode/GenuineIntel.bin</userinput></screen>
+
+
 
       <para>
-        Now prepare the initrd:
+        Agora, prepare o initrd:
       </para>
 
 <screen><userinput>find . | cpio -o -H newc &gt; /boot/microcode.img</userinput></screen>
 
       <para>
-        You now need to add a new entry to /boot/grub/grub.cfg and
-        here you should add a new line after the linux line within the stanza.
-        If /boot is a separate mountpoint:
+        Agora você precisa adicionar uma entrada nova a /boot/grub/grub.cfg e aqui
+você deveria adicionar uma linha nova depois da linha linux dentro da
+estância. Se /boot for um ponto de montagem separado:
        </para>
 
 <screen><userinput>initrd /microcode.img</userinput></screen>
 
       <para>
-        or this if it is not:
+        ou isto, se ele não for:
       </para>
 
 <screen><userinput>initrd /boot/microcode.img</userinput></screen>
 
       <para>
-        If you are already booting with an initrd (see <xref
-        linkend="initramfs"/>), you should run <command>mkinitramfs</command>
-        again after putting the appropriate blob or container into <filename
-        class="directory">/lib/firmware</filename> as explained above.
-        Alternatively, you can have both initrd on the same line, such as
-        <userinput>initrd /microcode.img /other-initrd.img</userinput> (adapt
-        that as above if /boot is not a separate mountpoint).
+        If you are already booting with an initrd (see <xref linkend="initramfs"/>),
+you should run <command>mkinitramfs</command> again after putting the
+appropriate blob or container into <filename
+class="directory">/lib/firmware</filename>. More precisely, put an intel
+blob in a <filename class="directory">/lib/firmware/intel-ucode</filename>
+directory or an AMD container in a <filename
+class="directory">/lib/firmware/amd-ucode</filename> directory before
+running <command>mkinitramfs</command>.  Alternatively, you can have both
+initrd on the same line, such as <userinput>initrd /microcode.img
+/other-initrd.img</userinput> (adapt that as above if /boot is not a
+separate mountpoint).
       </para>
 
       <para>
-        You can now reboot with the added initrd, and then use the same
-        command to check that the early load worked:
+        You can now reboot with the added initrd, and then use the following command
+to check that the early load worked:
       </para>
 
 <screen><userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command line'</userinput></screen>
 
       <para>
-        If you updated to address vulnerabilities, you can look at <filename
-        class="directory">/sys/devices/system/cpu/vulnerabilities/</filename>
-        to see what is now reported.
+        If you updated to address vulnerabilities, you can look at the output of the
+<command>lscpu</command> command to see what is now reported.
       </para>
 
       <para>
-        The places and times where early loading happens are very different
-        in AMD and Intel machines. First, an old example of an Intel (Skylake) with early loading:
+        The places and times where early loading happens are very different in AMD
+and Intel machines. First, an example of an Intel (Icelake mobile) with
+early loading:
       </para>
 
-<screen><literal>[    0.000000] microcode: microcode updated early to revision 0xea, date = 2021-01-25
-[    0.000000] Linux version 5.12.8 (lfs@leshp) (gcc (GCC) 11.1.0,
-               GNU ld (GNU Binutils) 2.36.1) #2 SMP PREEMPT Fri Jun 4 01:25:02 BST 2021
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.12.8-sda11 root=/dev/sda11 ro
-               resume=/dev/sda10
-[    0.381420] microcode: sig=0x506e3, pf=0x2, revision=0xea
-[    0.381479] microcode: Microcode Update Driver: v2.2.</literal></screen>
+<screen><literal>[    0.000000] microcode: microcode updated early to revision 0xb8, date = 2022-08-31
+[    0.000000] Linux version 6.1.11 (xry111@stargazer) (gcc (GCC) 12.2.0, GNU ld (GNU Binutils) 2.40) #2 SMP PREEMPT_DYNAMIC Tue Feb 14 23:23:31 CST 2023
+[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.1.11-lfs-11.3-rc1 root=PARTUUID=<replaceable>&lt;CLASSIFIED&gt;</replaceable> ro
+[    0.452924] microcode: sig=0x706e5, pf=0x80, revision=0xb8
+[    0.453197] microcode: Microcode Update Driver: v2.2.</literal></screen>
 
 
       <para>
-        A historic AMD example:
+        Um exemplo histórico AMD:
       </para>
 
 <screen><literal>[    0.000000] Linux version 4.15.3 (ken@testserver) (gcc version 7.3.0 (GCC))
@@ -516,64 +437,61 @@ cd initrd</userinput></screen>
   </sect2>
 
   <sect2 id="video-firmware">
-    <title>Firmware for Video Cards</title>
+    <title>Firmware para Placas de Vídeo</title>
 
     <sect3 id="ati-video-firmware">
-      <title>Firmware for ATI video chips (R600 and later)</title>
+      <title>Firmware para chips de vídeo ATI (R600 e posteriores)</title>
 
       <para>
-        These instructions do NOT apply to old radeons before the R600
-        family. For those, the firmware is in the kernel's <filename
-        class='directory'>/lib/firmware/</filename> directory. Nor do they
-        apply if you intend to avoid a graphical setup such as Xorg and are
-        content to use the default 80x25 display rather than a framebuffer.
+        Estas instruções NÃO se aplicam aos antigos Radeons antes da família
+R600. Para aqueles, o firmware está no diretório do núcleo <filename
+class='directory'>/lib/firmware/</filename>. Nem se aplicam se você
+pretender evitar uma configuração gráfica como o Xorg e estiver contente em
+usar a exibição padrão de 80x25 em vez de um framebuffer.
       </para>
 
       <para>
-        Early radeon devices only needed a single 2K blob of firmware. Recent
-        devices need several different blobs, and some of them are much bigger.
-        The total size of the radeon firmware directory is over 500K &mdash;
-        on a large modern system you can probably spare the space, but it is
-        still redundant to install all the unused files each time you build
-        a system.
+        Os dispositivos iniciais Radeon precisavam somente de um blob de firmware de
+2K. Os dispositivos recentes precisam de vários blobs e alguns deles são
+muito maiores. O tamanho total do diretório do firmware Radeon é de mais que
+500K &mdash; em um sistema largo moderno você provavelmente pode poupar o
+espaço, porém ainda é redundante instalar todos os arquivos não usados a
+cada vez que construir um sistema.
       </para>
 
       <para>
-        A better approach is to install <xref linkend='pciutils'/> and then
-        use <userinput>lspci</userinput> to identify which VGA controller is
-        installed.
+        Uma abordagem melhor é a de instalar o <xref linkend='pciutils'/> e, então,
+usar o <userinput>lspci</userinput> para identificar qual controlador VGA
+está instalado.
       </para>
 
       <para>
-        With that information, check the RadeonFeature page of the Xorg wiki
-        for <ulink url="http://wiki.x.org/wiki/RadeonFeature/#index5h2">Decoder
-        ring for engineering vs marketing names</ulink> to identify the family
-        (you may need to know this for the Xorg driver in BLFS &mdash;
-        Southern Islands and Sea Islands use the radeonsi driver) and the
-        specific model.
+        With that information, check the RadeonFeature page of the Xorg wiki for
+<ulink url="https://wiki.x.org/wiki/RadeonFeature/#index5h2">Decoder ring
+for engineering vs marketing names</ulink> to identify the family (you may
+need to know this for the Xorg driver in BLFS &mdash; Southern Islands and
+Sea Islands use the radeonsi driver) and the specific model.
       </para>
 
       <para>
-        Now that you know which controller you are using, consult the
-        <ulink url="https://wiki.gentoo.org/wiki/Radeon#Firmware">
-           Radeon</ulink> page of the Gentoo wiki which has a table listing
-        the required firmware blobs for the various chipsets. Note that
-        Southern Islands and Sea Islands chips use different firmware for
-        kernel 3.17 and later compared to earlier kernels. Identify and
-        download the required blobs then install them:
+        Agora que você sabe qual controlador está usando, consulte a página <ulink
+url="https://wiki.gentoo.org/wiki/Radeon#Firmware">Radeon</ulink> da wiki do
+Gentoo a qual tem uma tabela listando os blobs de firmware exigidos para os
+vários chipsets. Observe que os chips das Ilhas do Sul e os das Ilhas do Mar
+usam firmware diferente para o núcleo 3.17 e posteriores comparados a
+núcleos anteriores. Identifique e baixe os blobs exigidos; então instale-os:
       </para>
 
 <screen><userinput>mkdir -pv /lib/firmware/radeon
 cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
 
       <para>
-        There are actually two ways of installing this firmware. BLFS, in the
-        'Kernel Configuration for additional firmware' section part of the
-        <xref linkend="xorg-ati-driver"/> section gives an example of
-        compiling the firmware into the kernel - that is slightly faster to
-        load, but uses more kernel memory. Here we will use the alternative
-        method of making the radeon driver a module. In your kernel config
-        set the following:
+        Atualmente existem duas maneiras de instalar esse firmware. No BLFS, na
+seção 'Configuração do Núcleo para firmware adicional', parte da seção <xref
+linkend="xorg-ati-driver"/> dá um exemplo de compilar o firmware no núcleo -
+isso é ligeiramente mais rápido de carregar, porém usa mais memória do
+núcleo. Aqui nós usaremos o método alternativo de tornar o controlador
+Radeon um módulo. No seu config do núcleo, configure o seguinte:
       </para>
 
 <screen><literal>Device Drivers ---&gt;
@@ -583,30 +501,99 @@ cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
       [M] ATI Radeon                                        [CONFIG_DRM_RADEON]</literal></screen>
 
       <para>
-        Loading several large blobs from /lib/firmware takes a noticeable
-        time, during which the screen will be blank. If you do not enable the
-        penguin framebuffer logo, or change the console size by using a bigger
-        font, that probably does not matter. If desired, you can slightly
-        reduce the time if you follow the alternate method of specifying 'y'
-        for CONFIG_DRM_RADEON covered in BLFS at the link above &mdash; you
-        must specify each needed radeon blob if you do that.
+        O carregamento de vários blobs largos a partir de /lib/firmware toma um
+tempo notável, durante o qual a tela estará sem escrito. Se você não
+habilitar o logotipo pinguim do framebuffer ou mudar o tamanho do console
+usando uma fonte maior, [então] provavelmente isso não importa. Se desejado,
+você pode reduzir ligeiramente o tempo se seguir o método alternativo de
+especificar 'y' para CONFIG_DRM_RADEON coberto no BLFS no link acima &mdash;
+você precisa especificar cada blob Radeon necessário se fizer isso.
+      </para>
+
+    </sect3>
+
+    <sect3 id="amdgpu-video-firmware">
+      <title>Firmware for AMD/ATI amdgpu video chips</title>
+
+      <para>
+        All video controllers using the amdgpu kernel driver require firmware,
+whether you will be using the xorg amdgpu driver, the xserver's modesetting
+driver, or just kernel modesetting to get a console framebuffer larger than
+80x25.
+      </para>
+
+      <para>
+        Install <xref linkend="pciutils"/> and use that to check the model name
+(look for 'VGA compatible controller:'). If you have an APU (Accelerated
+Processing Unit, i.e. CPU and video on the same chip) that will probably
+tell you the name. If you have a separate amdgpu video card you will need to
+search to determine which name it uses (e.g. a card described as Advanced
+Micro Devices, Inc. [AMD/ATI] Baffin [Radeon RX 550 640SP / RX 560/560X]
+needs Polaris11 firmware.  There is a table of "Family, Chipset name,
+Product name and Firmware" at the end of the Kernel sections in <ulink
+url="https://wiki.gentoo.org/wiki/AMDGPU#Known_firmware_blobs">
+AMDGPU</ulink> page of the Gentoo wiki.
+    </para>
+
+    <para>
+      Once you have identified the firmware name, install all the relevant files
+for it. For example, the Baffin card mentioned above has 21 different
+polaris11* files, APUs such as renoir and picasso have at least 12 files and
+might gain more in future updates (e.g. the raven APU now has a 13th file,
+raven_ta.bin).
+    </para>
+
+<screen><userinput>mkdir -pv /lib/firmware/amdgpu
+cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/amdgpu</userinput></screen>
+
+    <para>
+      If disk space is not a problem, you could install all the current amdgpu
+firmware files and not worry about exactly which chipset is installed.
+    </para>
+
+    <para>
+      Building the kernel amdgpu driver as a module is recommended.  In your
+kernel .config set at least the following options and review the other
+AMDGPU options according to your target hardware, for example "ACP (Audio
+Co-Processor) Configuration":
+    </para>
+
+<screen><literal>Device Drivers ---&gt;
+  Graphics support ---&gt;
+      Direct Rendering Manager ---&gt;
+        [*] Direct Rendering Manager (XFree86 ... support)  [CONFIG_DRM]
+        [M] AMD GPU                                         [CONFIG_DRM_AMDGPU]
+        Display Engine Configuration ---&gt;
+          [*] AMD DC - Enable new display engine (NEW)      [CONFIG_DRM_AMD_DC]</literal></screen>
+
+      <para>
+        As written above at the end of the section on 'Firmware for ATI video
+chips', loading large blobs from /lib/firmware can take a noticeable time
+during which the screen will be blank. On a slow machine you might wish to
+refer to the 'Kernel Configuration for additional firmware' part of <xref
+linkend="xorg-amdgpu-driver"/> and compile all the required modules into the
+kernel to reduce this time, at the cost of using more kernel memory.
       </para>
 
     </sect3>
 
     <sect3 id="nvidia-video-firmware">
-      <title>Firmware for Nvidia video chips</title>
+      <title>Firmware para chips de vídeo Nvidia</title>
 
       <para>
-        Some Nvidia graphics chips need firmware updates to take advantage
-        of all the card's capability.  These are generally the GeForce 8, 9,
-        9300, and 200-900 series chips.  For more exact information, see
-        <ulink url=
-          "https://nouveau.freedesktop.org/wiki/VideoAcceleration/#firmware"/>.
+        Nvidia has released basic signed firmware for recent graphics chips, but
+significantly after the chips and its own binary drivers were first
+available. For other chips it has been necessary to extract the firmware
+from the binary driver.
+      </para>
+      <para>
+        For more exact information about which chips need extracted firmware, see
+<ulink url=
+"https://nouveau.freedesktop.org/wiki/VideoAcceleration/#firmware"/>.
       </para>
 
       <para>
-        First, the kernel Nvidia driver must be activated:
+        Primeiro, o controlador de núcleo Nvidia precisa ser ativado:
       </para>
 
 <screen><literal>Device Drivers ---&gt;
@@ -616,13 +603,22 @@ cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
       &lt;*/M&gt; Nouveau (NVIDIA) cards                          [CONFIG_DRM_NOUVEAU]</literal></screen>
 
       <para>
-        The steps to install the Nvidia firmware are:
+        If the necessary firmware is available in the <filename
+class="directory">nvidia/</filename> directory of linux-firmware, copy it to
+<filename class="directory">/lib/firmware/nouveau</filename>.
+      </para>
+      <para>
+        If the firmware has not been made available in linux-firmware, for the old
+chips mentioned in the nouveau wiki link above ensure you have installed
+<xref linkend="python2"/> and run the following commands:
       </para>
 
-<screen><userinput>wget https://raw.github.com/imirkin/re-vp2/master/extract_firmware.py
-wget http://us.download.nvidia.com/XFree86/Linux-x86/325.15/NVIDIA-Linux-x86-325.15.run
+      
+<screen><!-- Someone please port this to Python 3.  -->
+<userinput>wget https://raw.github.com/imirkin/re-vp2/master/extract_firmware.py
+wget https://us.download.nvidia.com/XFree86/Linux-x86/325.15/NVIDIA-Linux-x86-325.15.run
 sh NVIDIA-Linux-x86-325.15.run --extract-only
-python extract_firmware.py
+python2 extract_firmware.py
 mkdir -p /lib/firmware/nouveau
 cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
 
@@ -630,21 +626,23 @@ cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
   </sect2>
 
   <sect2 id="nic-firmware">
-    <title>Firmware for Network Interfaces</title>
+    <title>Firmware para Interfaces de Rede de Comunicação</title>
 
     <para>
-      The kernel likes to load firmware for some network drivers, particularly
-      those from Realtek (the /lib/linux-firmware/rtl_nic/) directory, but
-      they generally appear to work without it. Therefore, you can boot the
-      kernel, check dmesg for messages about this missing firmware, and if
-      necessary download the firmware and put it in the specified directory in
-      <filename class="directory">/lib/firmware</filename> so that it will
-      be found on subsequent boots. Note that with current kernels this
-      works whether or not the driver is compiled in or built as a module,
-      there is no need to build this firmware into the kernel.
-      Here is an example where the R8169 driver has been compiled in but the
-      firmware was not made available. Once the firmware had been provided,
-      there was no mention of it on later boots.
+      O núcleo gosta de carregar firmware para alguns controladores de rede de
+comunicação, particularmente aqueles originários do diretório da Realtek (o
+/lib/linux-firmware/rtl_nic/), porém geralmente eles aparentam funcionar sem
+isso. Sendo assim, você pode inicializar o núcleo; verificar dmesg para
+mensagens acerca desse firmware ausente; e, se necessário, baixar o firmware
+e colocá-lo no diretório especificado no <filename
+class="directory">/lib/firmware</filename>, de forma que ele será encontrado
+nas inicializações subsequentes. Observe que, com os núcleos atuais, isso
+funciona se ou não o controlador for compilado internamente ou construído
+como um módulo; não existe necessidade de construir esse firmware
+internamente ao núcleo. Aqui está um exemplo onde o controlador R8169 foi
+compilado internamente, porém o firmware não foi tornado disponível. Tão
+logo o firmware tenha sido fornecido, não existiu menção dele nas
+inicializações posteriores.
     </para>
 
 <screen><literal>dmesg | grep firmware | grep r8169
@@ -654,44 +652,43 @@ cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
   </sect2>
 
   <sect2 id="other-firmware">
-    <title>Firmware for Other Devices</title>
+    <title>Firmware para Outros Dispositivos</title>
 
     <para>
-      Identifying the correct firmware will typically require you to install
-      <xref linkend='pciutils'/>, and then use <userinput>lspci</userinput>
-      to identify the device. You should then search online to check which
-      module it uses, which firmware, and where to obtain the firmware &mdash;
-      not all of it is in linux-firmware.
+      Identificar o firmware correto tipicamente exigirá que você instale o <xref
+linkend='pciutils'/> e, então, use o <userinput>lspci</userinput> para
+identificar o dispositivo. Você deveria então procurar online para verificar
+qual módulo ele usa; qual firmware; e onde obter o firmware &mdash; nem
+todos eles estão no linux-firmware.
     </para>
 
     <para>
       If possible, you should begin by using a wired connection when you first
-      boot your LFS system. To use a wireless connection you will need to
-      use a network tools such as <xref linkend='wireless_tools'/> and <xref
-      linkend='wpa_supplicant'/>.
+boot your LFS system. To use a wireless connection you will need to use a
+network tools such as <xref linkend='wireless_tools'/> and <xref
+linkend='wpa_supplicant'/>.
     </para>
 
     <para>
-      Different countries have different regulations on the radio spectrum
-      usage of wireless devices.  You can install a firmware to make the
-      wireless devices obey local spectrum regulations, so you won't be
-      inquired by local authority or find your wireless NIC jamming the
-      frequencies of other devices (for example, remote controllers).
-      The regulatory database firmware can be downloaded from
-      <ulink url = 'https://kernel.org/pub/software/network/wireless-regdb/'/>.
-      To install it, simply extract <filename>regulatory.db</filename> and
-      <filename>regulatory.db.p7s</filename> from the tarball into
-      <filename class="directory">/lib/firmware</filename>.
-      The access point would send a country code to your wireless NIC,
-      and <xref linkend='wpa_supplicant'/> would tell the kernel to load
-      the regulation of this country from
-      <filename>regulatory.db</filename>, and enforce it.
+      Different countries have different regulations on the radio spectrum usage
+of wireless devices.  You can install a firmware to make the wireless
+devices obey local spectrum regulations, so you won't be inquired by local
+authority or find your wireless NIC jamming the frequencies of other devices
+(for example, remote controllers).  The regulatory database firmware can be
+downloaded from <ulink url =
+'https://kernel.org/pub/software/network/wireless-regdb/'/>.  To install it,
+simply extract <filename>regulatory.db</filename> and
+<filename>regulatory.db.p7s</filename> from the tarball into <filename
+class="directory">/lib/firmware</filename>.  The access point would send a
+country code to your wireless NIC, and <xref linkend='wpa_supplicant'/>
+would tell the kernel to load the regulation of this country from
+<filename>regulatory.db</filename>, and enforce it.
     </para>
 
     <para>
-      Firmware may also be needed for other devices such as some SCSI
-      controllers, bluetooth adaptors, or TV recorders. The same principles
-      apply.
+      Firmware possivelmente também seja necessário para outros dispositivos, tais
+como alguns controladores SCSI; adaptadores bluetooth; ou gravadores de
+TV. Os mesmos princípios se aplicam.
     </para>
 
   </sect2>

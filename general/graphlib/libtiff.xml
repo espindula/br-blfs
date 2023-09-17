@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -8,19 +8,16 @@
            "https://download.osgeo.org/libtiff/tiff-&libtiff-version;.tar.gz">
 <!--  <!ENTITY libtiff-download-ftp
            "ftp://ftp.remotesensing.org/libtiff/tiff-&libtiff-version;.tar.gz">-->
-  <!ENTITY libtiff-download-ftp  " ">
-  <!ENTITY libtiff-md5sum        "0a2e4744d1426a8fc8211c0cdbc3a1b3">
-  <!ENTITY libtiff-size          "2.7 MB">
-  <!ENTITY libtiff-buildsize     "16 MB (with tests)">
-  <!ENTITY libtiff-time          "less than 0.1 SBU (with tests)">
+  <!ENTITY libtiff-download-ftp  "">
+  <!ENTITY libtiff-md5sum        "db9e220a1971acc64487f1d51a20dcaa">
+  <!ENTITY libtiff-size          "3,7 MB">
+  <!ENTITY libtiff-buildsize     "59 MB (with tests)">
+  <!ENTITY libtiff-time          "0,2 UPC (com os testes)">
 ]>
 
 <sect1 id="libtiff" xreflabel="libtiff-&libtiff-version;">
   <?dbhtml filename="libtiff.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libtiff-&libtiff-version;</title>
 
@@ -29,102 +26,126 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libtiff</title>
+    <title>Introdução a libtiff</title>
 
     <para>
-      The <application>libtiff</application> package contains the TIFF
-      libraries and associated utilities. The libraries are used by many
-      programs for reading and writing TIFF files and the utilities are
-      used for general work with TIFF files.
+      O pacote <application>libtiff</application> contém as bibliotecas "TIFF" e
+utilitários associados. As bibliotecas são usadas por muitos aplicativos
+para ler e gravar arquivos "TIFF" e os utilitários são usados para trabalhos
+gerais com arquivos "TIFF".
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libtiff-download-http;"/>
+          Transferência (HTTP): <ulink url="&libtiff-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libtiff-download-ftp;"/>
+          Transferência (FTP): <ulink url="&libtiff-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libtiff-md5sum;
+          Soma de verificação MD5 da transferência: &libtiff-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libtiff-size;
+          Tamanho da transferência: &libtiff-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libtiff-buildsize;
+          Espaço em disco estimado exigido: &libtiff-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libtiff-time;
+          Tempo de construção estimado: &libtiff-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">libtiff Dependencies</bridgehead>
 
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/tiff-&libtiff-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do libtiff</bridgehead>
+
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
     <para role="recommended">
       <xref linkend="cmake"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="freeglut"/> (required for <command>tiffgt</command>),
-      <xref linkend="libjpeg"/>,
-      <xref linkend="libwebp"/>, and
-      <ulink url="http://www.cl.cam.ac.uk/~mgk25/jbigkit/">JBIG-KIT</ulink>
+      <xref linkend="freeglut"/> (exigido para <command>tiffgt</command>), <xref
+linkend="libjpeg"/>, <xref linkend="sphinx"/>, <xref linkend="libwebp"/>,
+<ulink url="https://www.cl.cam.ac.uk/~mgk25/jbigkit/">JBIG-KIT</ulink> e
+<ulink
+url="https://www.osgeo.org/projects/lerc-limited-error-raster-compression/">LERC</ulink>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/libtiff"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libtiff"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libtiff</title>
+    <title>Instalação do libtiff</title>
 
+
+
+    <!--
     <para>
-      Install <application>libtiff</application> by running the following
-      commands:
+
+      First fix several security issues identified upstream:
     </para>
 
-<!-- "build" exists in the source tree -->
-<screen><userinput>mkdir -p libtiff-build &amp;&amp;
-cd       libtiff-build &amp;&amp;
+<screen><userinput>patch -Np1 -i ../tiff-&libtiff-version;-upstream_fixes-1.patch</userinput></screen>
+-->
+<para>
+      Instale <application>libtiff</application> executando os seguintes comandos:
+    </para>
+
+
+<screen><!-- "build" exists in the source tree -->
+<userinput>mkdir -p libtiff-build &amp;&amp;
+cd      libtiff-build &amp;&amp;
 
 cmake -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/libtiff-&libtiff-version; \
       -DCMAKE_INSTALL_PREFIX=/usr -G Ninja .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      To test the results, issue: <command>ninja test</command>.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem>
-      user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>ninja install
-sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
-
+  
+  <!--
   <sect2 role="commands">
+
     <title>Command Explanations</title>
 
     <para>
@@ -134,24 +155,23 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
     </para>
 
   </sect2>
-
-  <sect2 role="content">
-    <title>Contents</title>
+  -->
+<sect2 role="content">
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
-          fax2ps, fax2tiff, pal2rgb, ppm2tiff,
-          raw2tiff, tiff2bw, tiff2pdf, tiff2ps,
-          tiff2rgba, tiffcmp, tiffcp, tiffcrop, tiffdither, tiffdump, tiffgt,
-          tiffinfo, tiffmedian, tiffset and tiffsplit
+          fax2ps, fax2tiff, pal2rgb, ppm2tiff, raw2tiff, tiff2bw, tiff2pdf, tiff2ps,
+tiff2rgba, tiffcmp, tiffcp, tiffcrop, tiffdither, tiffdump, tiffgt,
+tiffinfo, tiffmedian, tiffset e tiffsplit
         </seg>
         <seg>
-          libtiff.so and libtiffxx.so
+          libtiff.so e libtiffxx.so
         </seg>
         <seg>
           /usr/share/doc/tiff-&libtiff-version;
@@ -160,11 +180,9 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <!--      <varlistentry id="bmp2tiff">
 
-<!--      <varlistentry id="bmp2tiff">
         <term><command>bmp2tiff</command></term>
         <listitem>
           <para>
@@ -176,12 +194,15 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
           </indexterm>
         </listitem>
       </varlistentry> -->
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+
 
       <varlistentry id="fax2ps">
         <term><command>fax2ps</command></term>
         <listitem>
           <para>
-            converts a TIFF facsimile to compressed PostScript file
+            converte um fac-símile "TIFF" em arquivo comprimido "PostScript"
           </para>
           <indexterm zone="libtiff fax2ps">
             <primary sortas="b-fax2ps">fax2ps</primary>
@@ -193,7 +214,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>fax2tiff</command></term>
         <listitem>
           <para>
-            creates a TIFF Class F fax file from raw fax data
+            cria um arquivo de fax "TIFF" Classe F a partir de dados brutos de fax
           </para>
           <indexterm zone="libtiff fax2tiff">
             <primary sortas="b-fax2tiff">fax2tiff</primary>
@@ -201,7 +222,10 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         </listitem>
       </varlistentry>
 
-<!--      <varlistentry id="gif2tiff">
+
+
+      <!--      <varlistentry id="gif2tiff">
+
         <term><command>gif2tiff</command></term>
         <listitem>
           <para>
@@ -212,13 +236,12 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
           </indexterm>
         </listitem>
       </varlistentry> -->
-
-      <varlistentry id="pal2rgb">
+<varlistentry id="pal2rgb">
         <term><command>pal2rgb</command></term>
         <listitem>
           <para>
-            converts a palette color TIFF image to a full color
-            image
+            converte uma imagem "TIFF" colorida da paleta em uma imagem completa
+colorida
           </para>
           <indexterm zone="libtiff pal2rgb">
             <primary sortas="b-pal2rgb">pal2rgb</primary>
@@ -230,7 +253,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>ppm2tiff</command></term>
         <listitem>
           <para>
-            creates a TIFF file from a PPM image file
+            cria um arquivo "TIFF" a partir de um arquivo de imagem "PPM"
           </para>
           <indexterm zone="libtiff ppm2tiff">
             <primary sortas="b-ppm2tiff">ppm2tiff</primary>
@@ -238,7 +261,10 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         </listitem>
       </varlistentry>
 
-<!--      <varlistentry id="ras2tiff">
+
+
+      <!--      <varlistentry id="ras2tiff">
+
         <term><command>ras2tiff</command></term>
         <listitem>
           <para>
@@ -249,12 +275,11 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
           </indexterm>
         </listitem>
       </varlistentry> -->
-
-      <varlistentry id="raw2tiff">
+<varlistentry id="raw2tiff">
         <term><command>raw2tiff</command></term>
         <listitem>
           <para>
-            converts a raw byte sequence into TIFF
+            converte uma sequência bruta de bytes em "TIFF"
           </para>
           <indexterm zone="libtiff raw2tiff">
             <primary sortas="b-raw2tiff">raw2tiff</primary>
@@ -262,7 +287,10 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         </listitem>
       </varlistentry>
 
-<!--      <varlistentry id="rgb2ycbcr">
+
+
+      <!--      <varlistentry id="rgb2ycbcr">
+
         <term><command>rgb2ycbcr</command></term>
         <listitem>
           <para>
@@ -285,12 +313,11 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
           </indexterm>
         </listitem>
       </varlistentry> -->
-
-      <varlistentry id="tiff2bw">
+<varlistentry id="tiff2bw">
         <term><command>tiff2bw</command></term>
         <listitem>
           <para>
-            converts a color TIFF image to grayscale
+            converte uma imagem colorida "TIFF" em tons de cinza
           </para>
           <indexterm zone="libtiff tiff2bw">
             <primary sortas="b-tiff2bw">tiff2bw</primary>
@@ -302,7 +329,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiff2pdf</command></term>
         <listitem>
           <para>
-            converts a TIFF image to a PDF document
+            converte uma imagem "TIFF" em um documento "PDF"
           </para>
           <indexterm zone="libtiff tiff2pdf">
             <primary sortas="b-tiff2pdf">tiff2pdf</primary>
@@ -314,7 +341,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiff2ps</command></term>
         <listitem>
           <para>
-            converts a TIFF image to a PostScript file
+            converte uma imagem "TIFF" em um arquivo "PostScript"
           </para>
           <indexterm zone="libtiff tiff2ps">
             <primary sortas="b-tiff2ps">tiff2ps</primary>
@@ -326,8 +353,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiff2rgba</command></term>
         <listitem>
           <para>
-            converts a wide variety of TIFF images into an RGBA
-            TIFF image
+            converte uma ampla variedade de imagens "TIFF" em uma imagem "RGBA TIFF"
           </para>
           <indexterm zone="libtiff tiff2rgba">
             <primary sortas="b-tiff2rgba">tiff2rgba</primary>
@@ -339,7 +365,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffcmp</command></term>
         <listitem>
           <para>
-            compares two TIFF files
+            compara dois arquivos "TIFF"
           </para>
           <indexterm zone="libtiff tiffcmp">
             <primary sortas="b-tiffcmp">tiffcmp</primary>
@@ -351,7 +377,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffcp</command></term>
         <listitem>
           <para>
-            copies (and possibly converts) a TIFF file
+            copia (e possivelmente converte) um arquivo "TIFF"
           </para>
           <indexterm zone="libtiff tiffcp">
             <primary sortas="b-tiffcp">tiffcp</primary>
@@ -363,8 +389,8 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffcrop</command></term>
         <listitem>
           <para>
-            selects, copies, crops, converts, extracts and/or processes
-            one or more TIFF files
+            seleciona, copia, recorta, converte, extrai e(ou) processa um ou mais
+arquivos "TIFF"
           </para>
           <indexterm zone="libtiff tiffcrop">
             <primary sortas="b-tiffcrop">tiffcrop</primary>
@@ -376,7 +402,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffdither</command></term>
         <listitem>
           <para>
-            converts a grayscale image to bilevel using dithering
+            converte uma imagem em tons de cinza em dois níveis usando pontilhamento
           </para>
           <indexterm zone="libtiff tiffdither">
             <primary sortas="b-tiffdither">tiffdither</primary>
@@ -388,7 +414,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffdump</command></term>
         <listitem>
           <para>
-            prints verbatim information about TIFF files
+            imprime informações literais a respeito de arquivos "TIFF"
           </para>
           <indexterm zone="libtiff tiffdump">
             <primary sortas="b-tiffdump">tiffdump</primary>
@@ -400,7 +426,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffgt</command></term>
         <listitem>
           <para>
-            displays an image stored in a TIFF file
+            exibe uma imagem armazenada em um arquivo "TIFF"
           </para>
           <indexterm zone="libtiff tiffgt">
             <primary sortas="b-tiffgt">tiffgt</primary>
@@ -412,7 +438,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffinfo</command></term>
         <listitem>
           <para>
-            prints information about TIFF files
+            imprime informações relativas a arquivos "TIFF"
           </para>
           <indexterm zone="libtiff tiffinfo">
             <primary sortas="b-tiffinfo">tiffinfo</primary>
@@ -424,7 +450,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffmedian</command></term>
         <listitem>
           <para>
-            applies the median cut algorithm to data in a TIFF file
+            aplica o algoritmo de corte mediano aos dados em um arquivo "TIFF"
           </para>
           <indexterm zone="libtiff tiffmedian">
             <primary sortas="b-tiffmedian">tiffmedian</primary>
@@ -436,7 +462,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffset</command></term>
         <listitem>
           <para>
-            sets the value of a TIFF header to a specified value
+            configura o valor de um cabeçalho "TIFF" para um valor especificado
           </para>
           <indexterm zone="libtiff tiffset">
             <primary sortas="b-tiffset">tiffset</primary>
@@ -448,7 +474,7 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><command>tiffsplit</command></term>
         <listitem>
           <para>
-            splits a multi-image TIFF into single-image TIFF files
+            divide um "TIFF" de várias imagens em arquivos "TIFF" de imagem única
           </para>
           <indexterm zone="libtiff tiffsplit">
             <primary sortas="b-tiffsplit">tiffsplit</primary>
@@ -460,9 +486,9 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><filename class="libraryfile">libtiff.so</filename></term>
         <listitem>
           <para>
-            contains the API functions used by the
-            <application>libtiff</application> programs as well as other
-            programs to read and write TIFF files
+            contém as funções de API usadas pelos aplicativos
+<application>libtiff</application> assim como outros aplicativos para ler e
+gravar arquivos "TIFF"
           </para>
           <indexterm zone="libtiff libtiff-lib">
             <primary sortas="c-libtiff">libtiff.so</primary>
@@ -474,8 +500,8 @@ sed -i /Version/s/\$/$(cat ../VERSION)/ /usr/lib/pkgconfig/libtiff-4.pc</userinp
         <term><filename class="libraryfile">libtiffxx.so</filename></term>
         <listitem>
           <para>
-            contains the C++ API functions used
-            by programs to read and write TIFF files
+            contém as funções da API C++ usadas pelos aplicativos para ler e gravar
+arquivos "TIFF"
           </para>
           <indexterm zone="libtiff libtiffxx">
             <primary sortas="c-libtiffxx">libtiffxx.so</primary>

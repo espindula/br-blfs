@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY pciutils-download-http "&kernel-dl;/software/utils/pciutils/pciutils-&pciutils-version;.tar.xz">
-  <!ENTITY pciutils-download-ftp  " ">
-  <!ENTITY pciutils-md5sum        "e6e20482b4f25c5186e6a753c5edc361">
-  <!ENTITY pciutils-size          "364 KB">
-  <!ENTITY pciutils-buildsize     "3.8 MB">
-  <!ENTITY pciutils-time          "less than 0.1 SBU">
+  <!ENTITY pciutils-download-http "https://mj.ucw.cz/download/linux/pci/pciutils-&pciutils-version;.tar.gz">
+  <!ENTITY pciutils-download-ftp  "">
+  <!ENTITY pciutils-md5sum        "357496ae1652aac66cad0d2de2d831d0">
+  <!ENTITY pciutils-size          "888 KB">
+  <!ENTITY pciutils-buildsize     "5,5 MB">
+  <!ENTITY pciutils-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="pciutils" xreflabel="pciutils-&pciutils-version;">
   <?dbhtml filename="pciutils.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>pciutils-&pciutils-version;</title>
 
@@ -26,89 +23,87 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to PCI Utils</title>
+    <title>Introdução ao "PCI Utils"</title>
 
     <para>
-      The <application>PCI Utils</application> package contains
-      a set of programs for listing PCI devices, inspecting
-      their status and setting their configuration registers.
+      O pacote <application>PCI Utils</application> contém um conjunto de
+aplicativos para listar dispositivos "PCI", inspecionar a situação deles e
+configurar os registros de configuração deles.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&pciutils-download-http;"/>
+          Transferência (HTTP): <ulink url="&pciutils-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&pciutils-download-ftp;"/>
+          Transferência (FTP): <ulink url="&pciutils-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &pciutils-md5sum;
+          Soma de verificação MD5 da transferência: &pciutils-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &pciutils-size;
+          Tamanho da transferência: &pciutils-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &pciutils-buildsize;
+          Espaço em disco estimado exigido: &pciutils-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &pciutils-time;
+          Tempo de construção estimado: &pciutils-time;
         </para>
       </listitem>
     </itemizedlist>
-<!-- Needed to update the pci-ids. systemd has a unit and timer for this,
+
+
+    <!-- Needed to update the pci-ids. systemd has a unit and timer for this,
     but for anyone who updates this file on either platform, it's needed
     to download the pci.ids file. -->
+<bridgehead renderas="sect3">Dependências do "PCI Utils"</bridgehead>
 
-    <bridgehead renderas="sect3">pciutils Dependencies</bridgehead>
-
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-       <xref linkend="curl"/>,
-       <xref linkend="wget"/>, or
-       <xref linkend="lynx"/>
-       (for the update-pciids script to function correctly).
+       <xref linkend="curl"/>, <xref linkend="wget"/> ou <xref linkend="lynx"/>
+(para o script "update-pciids" funcionar corretamente).
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/pciutils"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/pciutils"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of PCI Utils</title>
+    <title>Instalação do "PCI Utils"</title>
 
     <para>
-      Install <application>PCI Utils</application> by
-      running the following commands:
+      Instale o <application>PCI Utils</application> executando os seguintes
+comandos:
     </para>
 
-<screen><userinput>make PREFIX=/usr                \
+<screen><userinput>make PREFIX=/usr               \
      SHAREDIR=/usr/share/hwdata \
      SHARED=yes</userinput></screen>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make PREFIX=/usr                \
+<screen role="root"><userinput>make PREFIX=/usr               \
      SHAREDIR=/usr/share/hwdata \
      SHARED=yes                 \
      install install-lib        &amp;&amp;
@@ -118,43 +113,45 @@ chmod -v 755 /usr/lib/libpci.so</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <parameter>SHARED=yes</parameter>: This parameter enables building of
-      the shared library instead of the static one.
+      <parameter>SHARED=yes</parameter>: Esse parâmetro habilita a construção da
+biblioteca compartilhada em vez da estática.
     </para>
 
     <para>
-      <option>ZLIB=no</option>: This option prevents compression of
-      the <filename>pci.ids</filename> file.
+      <option>ZLIB=no</option>: Essa opção evita a compressão do arquivo
+<filename>pci.ids</filename>.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring PCI Utils</title>
+    <title>Configurando o "PCI Utils"</title>
 
     <para>
-      The <filename>pci.ids</filename> data file is constantly being
-      updated. To get a current version of this file, run
-      <command>update-pciids</command> as the <systemitem
-      class="username">root</systemitem> user. This program requires the
-      <xref linkend="which"/> script or program to find <xref linkend="curl"/>,
-      <xref linkend="lynx"/> or <xref linkend="wget"/> which are used to
-      download the most current file, and then replace the existing file in
-      <filename class="directory">/usr/share/hwdata</filename>.
+      O arquivo de dados <filename>pci.ids</filename> está sendo constantemente
+atualizado. Para obter uma versão atual desse arquivo, execute
+<command>update-pciids</command> como o(a) usuário(a) <systemitem
+class="username">root</systemitem>. Esse aplicativo exige o script ou
+aplicativo <xref linkend="which"/> para encontrar o <xref linkend="curl"/>,
+<xref linkend="lynx"/> ou o <xref linkend="wget"/> que são usados para
+baixar o arquivo mais atual e, em seguida, substituir o arquivo existente em
+<filename class="directory">/usr/share/hwdata</filename>.
     </para>
 
     <para>
-      You should update the <filename>/usr/share/hwdata/pci.ids</filename> file
-      periodically. <phrase revision="sysv">If you've installed
-      <xref linkend="fcron"/> and completed the section on periodic jobs,
-      execute</phrase><phrase revision="systemd">Execute</phrase> the following
-      commands, as the  <systemitem class="username">root</systemitem> user,
-      to create a <phrase revision="sysv">weekly cron job:</phrase>
-      <phrase revision="systemd">systemd timer to update it weekly on Sundays
-      at 2:30 A.M. (local time):</phrase>
+      Você deveria atualizar o arquivo
+<filename>/usr/share/hwdata/pci.ids</filename> periodicamente. <phrase
+revision="sysv">Se você tiver instalado o <xref linkend="fcron"/> e
+completou a seção relativa a tarefas periódicas, [então]
+execute</phrase><phrase revision="systemd">Execute</phrase> os seguintes
+comandos, como o(a) usuário(a) <systemitem
+class="username">root</systemitem>, para criar <phrase revision="sysv">uma
+tarefa semanal do "cron":</phrase> <phrase revision="systemd">um cronômetro
+do "systemd" para atualizá-lo semanalmente aos domingos às 2h30 (hora
+local):</phrase>
     </para>
 
 <screen role="nodump" revision="sysv"><userinput>cat &gt; /etc/cron.weekly/update-pciids.sh &lt;&lt; "EOF" &amp;&amp;
@@ -165,7 +162,7 @@ chmod 754 /etc/cron.weekly/update-pciids.sh</userinput></screen>
 
 <screen role="root" revision="systemd"><userinput>cat &gt; /usr/lib/systemd/system/update-pciids.service &lt;&lt; "EOF" &amp;&amp;
 <literal>[Unit]
-Description=Update pci.ids file
+Description=Atualiza o arquivo "pci.ids"
 Documentation=man:update-pciids(8)
 DefaultDependencies=no
 After=local-fs.target network-online.target
@@ -178,7 +175,7 @@ ExecStart=/usr/sbin/update-pciids</literal>
 EOF
 cat &gt; /usr/lib/systemd/system/update-pciids.timer &lt;&lt; "EOF" &amp;&amp;
 <literal>[Unit]
-Description=Update pci.ids file weekly
+Description=Atualiza o arquivo "pci.ids" semanalmente
 
 [Timer]
 OnCalendar=Sun 02:30:00
@@ -193,37 +190,36 @@ systemctl enable update-pciids.timer</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
-          lspci, setpci, and update-pciids
+          lspci, setpci e update-pciids
         </seg>
         <seg>
           libpci.so
         </seg>
         <seg>
-          /usr/include/pci and /usr/share/hwdata
+          /usr/include/pci e /usr/share/hwdata
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="lspci">
         <term><command>lspci</command></term>
         <listitem>
           <para>
-            is a utility for displaying information about all PCI buses
-            in the system and all devices connected to them
+            é um utilitário para exibir informações relativas a todos os barramentos
+"PCI" no sistema e todos os dispositivos conectados a eles
           </para>
           <indexterm zone="pciutils lspci">
             <primary sortas="b-lspci">lspci</primary>
@@ -235,7 +231,7 @@ systemctl enable update-pciids.timer</userinput></screen>
         <term><command>setpci</command></term>
         <listitem>
           <para>
-            is a utility for querying and configuring PCI devices
+            é um utilitário para consultar e configurar dispositivos "PCI"
           </para>
           <indexterm zone="pciutils setpci">
             <primary sortas="b-setpci">setpci</primary>
@@ -247,10 +243,12 @@ systemctl enable update-pciids.timer</userinput></screen>
         <term><command>update-pciids</command></term>
         <listitem>
           <para>
-             fetches the current version of the PCI ID list. <!-- Requires
-            <xref linkend="curl"/>, <xref linkend="lynx"/> or
+             <!-- Requires
+            <xref linkend="curl"/>
+, <xref linkend="lynx"/> or
             <xref linkend="wget"/>.
             -->
+busca a versão atual da lista de "IDs" de "PCI". 
           </para>
           <indexterm zone="pciutils update-pciids">
             <primary sortas="b-update-pciids">update-pciids</primary>
@@ -262,8 +260,7 @@ systemctl enable update-pciids.timer</userinput></screen>
       <term><filename class="libraryfile">libpci.so</filename></term>
       <listitem>
         <para>
-          is library that allows applications to access the PCI
-          subsystem
+          is library that allows applications to access the PCI subsystem
         </para>
         <indexterm zone="pciutils libpci">
           <primary sortas="c-libpci">libpci.so</primary>

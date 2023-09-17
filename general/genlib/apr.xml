@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -8,18 +8,15 @@
     "https://archive.apache.org/dist/apr/apr-&apr-version;.tar.bz2">
   <!ENTITY apr-download-ftp
     "ftp://ftp.mirrorservice.org/sites/ftp.apache.org/apr/apr-&apr-version;.tar.bz2">
-  <!ENTITY apr-md5sum        "7a14a83d664e87599ea25ff4432e48a7">
-  <!ENTITY apr-size          "852 KB">
-  <!ENTITY apr-buildsize     "11 MB (additional 4 MB for the tests)">
+  <!ENTITY apr-md5sum        "9a00835e4da8c215348e263b550fc130">
+  <!ENTITY apr-size          "870 KB">
+  <!ENTITY apr-buildsize     "12 MB (additional 4 MB for the tests)">
   <!ENTITY apr-time          "0.2 SBU (add 1.7 SBU for tests)">
 ]>
 
 <sect1 id="apr" xreflabel="Apr-&apr-version;">
   <?dbhtml filename="apr.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Apr-&apr-version;</title>
 
@@ -28,76 +25,85 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Apr</title>
+    <title>Introdução à Apr</title>
 
     <para>
-      The Apache Portable Runtime (APR) is a supporting library for the
-      Apache web server. It provides a set of application programming interfaces
-      (APIs) that map to the underlying Operating System (OS). Where the OS
-      doesn't support a particular function, APR will provide an emulation. Thus
-      programmers can use the APR to make a program portable across different
-      platforms.
+      O Apache Portable Runtime (APR) é uma biblioteca de suporte para o servidor
+web Apache. Ela fornece um conjunto de interfaces de programação de
+aplicativos (APIs) que mapeiam para o sistema operacional (SO)
+subjacente. Onde o sistema operacional não suportar uma função específica, o
+APR fornecerá uma emulação. Assim, os(as) programadores(as) conseguem usar a
+APR para tornar um aplicativo portátil em diferentes plataformas.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&apr-download-http;"/>
+          Transferência (HTTP): <ulink url="&apr-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&apr-download-ftp;"/>
+          Transferência (FTP): <ulink url="&apr-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &apr-md5sum;
+          Soma de verificação MD5 da transferência: &apr-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &apr-size;
+          Tamanho da transferência: &apr-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &apr-buildsize;
+          Espaço em disco estimado exigido: &apr-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &apr-time;
+          Tempo de construção estimado: &apr-time;
         </para>
       </listitem>
     </itemizedlist>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/apr"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/apr"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Apr</title>
+    <title>Instalação da APR</title>
 
+
+    <!--
     <para>
+
       First, fix a security issue:
     </para>
-<!--
+<!- -
 <screen><userinput>sed '/{306/a \
 \
     if (xt-&gt;tm_mon &lt; 0 || xt-&gt;tm_mon &gt;= 12) \
         return APR_EBADDATE;' -i time/unix/time.c</userinput></screen>
--->
+- ->
 <screen><userinput>sed -e "/shift/i \
 \    if (xt-&gt;tm_mon &lt; 0 || xt-&gt;tm_mon &gt;= 12) return APR_EBADDATE;" \
     -i time/unix/time.c</userinput></screen>
+-->
+<para>
+      Corrija um problema ao verificar um local em um modelo de script:
+    </para>
+<screen><userinput>sed -e '/^case "$0"/s;$0;$(readlink -f $0);' \
+    -i apr-config.in</userinput></screen>
 
     <para>
-      Install <application>Apr</application> by running the following commands:
+      Instale <application>Apr</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr    \
@@ -106,19 +112,20 @@
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make test</command>. <!-- teststr is
+      <!-- teststr is
       known to hang on some systems. - WORKS AS OF 1.6.5 (renodr) -->
+Para testar os resultados, emita: <command>make test</command>. 
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
@@ -126,12 +133,12 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Program</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
@@ -141,24 +148,22 @@ make</userinput></screen>
           libapr-1.so
         </seg>
         <seg>
-          /usr/include/apr-1 and
-          /usr/share/apr-1
+          /usr/include/apr-1 e /usr/share/apr-1
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="apr-1-config">
         <term><command>apr-1-config</command></term>
         <listitem>
           <para>
-            is a shell script used to retrieve information about the apr
-            library in the system. It is typically used to compile and link
-            against the library
+            é um script de shell usado para recuperar informação a respeito da
+biblioteca APR no sistema. É normalmente usado para compilar e vincular à
+biblioteca
           </para>
           <indexterm zone="apr apr-1-config">
             <primary sortas="b-apr-1-config">apr-1-config</primary>
@@ -170,7 +175,7 @@ make</userinput></screen>
         <term><filename class="libraryfile">libapr-1.so</filename></term>
         <listitem>
           <para>
-            is the Apache Portable Runtime library
+            é a biblioteca Apache Portable Runtime
           </para>
           <indexterm zone="apr libapr-1">
             <primary sortas="c-libapr-1">libapr-1.so</primary>

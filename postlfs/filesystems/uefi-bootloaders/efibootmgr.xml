@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../../general.ent">
   %general-entities;
 
   <!ENTITY efibootmgr-download-http "https://github.com/rhboot/efibootmgr/archive/&efibootmgr-version;/efibootmgr-&efibootmgr-version;.tar.gz">
-  <!ENTITY efibootmgr-download-ftp  " ">
-  <!ENTITY efibootmgr-md5sum        "6ae315936d9bc8613b3a4cb8a4064128">
-  <!ENTITY efibootmgr-size          "44 KB">
-  <!ENTITY efibootmgr-buildsize     "592 KB">
-  <!ENTITY efibootmgr-time          "less than 0.1 SBU">
+  <!ENTITY efibootmgr-download-ftp  "">
+  <!ENTITY efibootmgr-md5sum        "e170147da25e1d5f72721ffc46fe4e06">
+  <!ENTITY efibootmgr-size          "48Ko">
+  <!ENTITY efibootmgr-buildsize     "1,1Mo">
+  <!ENTITY efibootmgr-time          "menos que 0,1UPC">
 ]>
 
 <sect1 id="efibootmgr" xreflabel="efibootmgr-&efibootmgr-version;">
   <?dbhtml filename="efibootmgr.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>efibootmgr-&efibootmgr-version;</title>
 
@@ -26,91 +23,75 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to efibootmgr</title>
+    <title>Introdução a efibootmgr</title>
 
     <para>
-      The <application>efibootmgr</application> package provides tools and
-      libraries to manipulate EFI variables.
+      O pacote <application>efibootmgr</application> fornece ferramentas e
+bibliotecas para manipular variáveis EFI.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&efibootmgr-download-http;"/>
+          Transferência (HTTP): <ulink url="&efibootmgr-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&efibootmgr-download-ftp;"/>
+          Transferência (FTP): <ulink url="&efibootmgr-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &efibootmgr-md5sum;
+          Soma de verificação MD5: &efibootmgr-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &efibootmgr-size;
+          Tamanho da transferência: &efibootmgr-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &efibootmgr-buildsize;
+          Espaço em disco estimado exigido: &efibootmgr-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &efibootmgr-time;
+          Tempo de construção estimado: &efibootmgr-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">efibootmgr Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências de efibootmgr</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="efivar"/> and
-      <xref linkend="popt"/>
+      <xref linkend="efivar"/> e <xref linkend="popt"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/efibootmgr"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/efibootmgr"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of efibootmgr</title>
+    <title>Instalação de efibootmgr</title>
 
     <para>
-      At first, fix an outdated hotfix declaration causing compilation
-      failure:
-    </para>
-
-<screen><userinput>sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c</userinput></screen>
-
-    <para>
-      Fix an issue building this package with efivar-38 or later:
-    </para>
-
-<screen><userinput>sed 's/-Werror//' -i Make.defaults</userinput></screen>
-
-    <para>
-      Build <application>efibootmgr</application> with the following
-      commands:
+      Construa o <application>efibootmgr</application> com os seguintes comandos:
     </para>
 
 <screen><userinput>make EFIDIR=LFS EFI_LOADER=grubx64.efi</userinput></screen>
 
     <para>
-      This package does not have a test suite.
+      Esse pacote não tem uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install EFIDIR=LFS</userinput></screen>
@@ -118,47 +99,46 @@
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <parameter>EFIDIR=LFS</parameter>:
-      This option specifies the distro's subdirectory name under
-      <filename class="directory">/boot/efi/EFI</filename>.
-      The building system of this package needs it to be set explicitly.
+      <parameter>EFIDIR=LFS</parameter>: Essa opção especifica o nome do
+subdiretório da distribuição sob <filename
+class="directory">/boot/efi/EFI</filename>. O sistema de construção desse
+pacote precisa que essa seja configurada explicitamente.
     </para>
 
     <para>
-      <parameter>EFI_LOADER=grubx64.efi</parameter>:
-      This option specifies the name of the default EFI boot loader.  It is
-      set to match the EFI boot loader provided by GRUB
-      <!--xref linkend="grub-efi"/-->.
+      <!--xref linkend="grub-efi"/-->
+<parameter>EFI_LOADER=grubx64.efi</parameter>: Essa opção especifica o nome
+do carregador padrão de inicialização EFI. Ele é configurado para
+corresponder ao carregador de inicialização EFI fornecido pelo GRUB.
     </para>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          efibootdump and efibootmgr
+          efibootdump e efibootmgr
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="efibootdump">
         <term><command>efibootdump</command></term>
         <listitem>
           <para>
-            is a tool to display individual UEFI boot options, from a file
-            or an UEFI variable
+            é uma ferramenta para exibir opções individuais de inicialização UEFI, a
+partir de um arquivo ou de uma variável UEFI
           </para>
           <indexterm zone="efibootdump">
             <primary sortas="b-efibootdump">efibootdump</primary>
@@ -170,7 +150,7 @@
         <term><command>efibootmgr</command></term>
         <listitem>
           <para>
-            is a tool to manipulate the UEFI Boot Manager
+            é uma ferramenta para manipular o Gerenciador de Inicialização UEFI
           </para>
           <indexterm zone="efibootmgr efibootmgr-prog">
             <primary sortas="b-efibootmgr">efibootmgr</primary>

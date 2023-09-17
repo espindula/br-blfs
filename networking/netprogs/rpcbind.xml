@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY rpcbind-download-http "&sourceforge-dl;/rpcbind/rpcbind-&rpcbind-version;.tar.bz2">
-  <!ENTITY rpcbind-download-ftp  " ">
+  <!ENTITY rpcbind-download-ftp  "">
   <!ENTITY rpcbind-md5sum        "2d84ebbb7d6fb1fc3566d2d4b37f214b">
-  <!ENTITY rpcbind-size          "124 KB">
-  <!ENTITY rpcbind-buildsize     "1.6 MB">
-  <!ENTITY rpcbind-time          "less than 0.1 SBU">
+  <!ENTITY rpcbind-size          "124Ko">
+  <!ENTITY rpcbind-buildsize     "1,6Mo">
+  <!ENTITY rpcbind-time          "menos que 0,1UPC">
 ]>
 
 <sect1 id="rpcbind" xreflabel="rpcbind-&rpcbind-version;">
   <?dbhtml filename="rpcbind.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>rpcbind-&rpcbind-version;</title>
 
@@ -26,105 +23,104 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to rpcbind</title>
+    <title>Introdução a rpcbind</title>
 
     <para>
       The <application>rpcbind</application> program is a replacement for
-      <application>portmap</application>.  It is required for import or export
-      of Network File System (NFS) shared directories.
+<application>portmap</application>.  It is required for import or export of
+Network File System (NFS) shared directories.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&rpcbind-download-http;"/>
+          Transferência (HTTP): <ulink url="&rpcbind-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&rpcbind-download-ftp;"/>
+          Transferência (FTP): <ulink url="&rpcbind-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &rpcbind-md5sum;
+          Soma de verificação MD5: &rpcbind-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &rpcbind-size;
+          Tamanho da transferência: &rpcbind-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &rpcbind-buildsize;
+          Espaço em disco estimado exigido: &rpcbind-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &rpcbind-time;
+          Tempo de construção estimado: &rpcbind-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">rpcbind Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências de rpcbind</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
       <xref linkend="libtirpc"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/rpcbind"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/rpcbind"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of rpcbind</title>
+    <title>Instalação de rpcbind</title>
 
     <para revision="systemd">
-      There should be a dedicated user and group to take control
-      of the <command>rpcbind</command> daemon after it is started.
-      Issue the following commands as the
-      <systemitem class="username">root</systemitem> user:
+      There should be a dedicated user and group to take control of the
+<command>rpcbind</command> daemon after it is started.  Issue the following
+commands as the <systemitem class="username">root</systemitem> user:
     </para>
 
+<!-- Packages should adapt to standards, not the other way around -->
 <screen role="root" revision="systemd"><userinput>groupadd -g 28 rpc &amp;&amp;
 useradd -c "RPC Bind Daemon Owner" -d /dev/null -g rpc \
         -s /bin/false -u 28 rpc</userinput></screen>
 
-    <!-- Packages should adapt to standards, not the other way around -->
+    
     <para>
-      In order to get <application>rpcbind</application> to work
-      properly, first fix the package to use correct service name:
+      In order to get <application>rpcbind</application> to work properly, first
+fix the package to use correct service name:
     </para>
 
 <screen><userinput>sed -i "/servname/s:rpcbind:sunrpc:" src/rpcbind.c</userinput></screen>
 
     <para>
-      Install <application>rpcbind</application> by running the following
-      commands:
+      Instale <application>rpcbind</application> executando os seguintes comandos:
     </para>
 
-<!-- Previously, there were switches for bindir= and sbindir= pointing to /sbin
+
+
+<screen revision="sysv"><!-- Previously, there were switches for bindir= and sbindir= pointing to /sbin
      However, with a DESTDIR= install after merged-/usr changes, I think we can
      just run bindir=/usr/sbin to get rpcinfo in /usr/sbin, and leave sbindir=
      alone. -renodr -->
-
-<screen revision="sysv"><userinput>patch -Np1 -i ../rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch &amp;&amp;
+<userinput>patch -Np1 -i ../rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch &amp;&amp;
 
 ./configure --prefix=/usr                                  \
             --bindir=/usr/sbin                             \
@@ -142,11 +138,11 @@ make</userinput></screen>
 make</userinput></screen>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -154,53 +150,50 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para revision="sysv">
-      <command>--with-rpcuser=root</command>: This works
-      around an error in the configure script.
+      <command>--with-rpcuser=root</command>: This works around an error in the
+configure script.
     </para>
 
     <para revision="sysv">
-      <command>--without-systemdsystemunitdir</command>:
-      This version of BLFS does not support systemd.
+      <command>--without-systemdsystemunitdir</command>: This version of BLFS does
+not support systemd.
     </para>
 
     <para revision="systemd">
-      <parameter>--with-rpcuser=rpc</parameter>:
-      This switch is used so the <command>rpcbind</command> daemon will
-      run as an unprivileged user instead of the
-      <systemitem class="username">root</systemitem> user.
+      <parameter>--with-rpcuser=rpc</parameter>: This switch is used so the
+<command>rpcbind</command> daemon will run as an unprivileged user instead
+of the <systemitem class="username">root</systemitem> user.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring rpcbind</title>
+    <title>Configurando rpcbind</title>
 
     <sect3 id="rpcbind-init">
-      <title><phrase revision="sysv">Boot Script</phrase>
-             <phrase revision="systemd">Systemd Unit</phrase></title>
+      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
+revision="systemd">Unidade do systemd</phrase></title>
 
-      <para>
-        Install the
-        <phrase revision="sysv"><filename>/etc/rc.d/init.d/rpcbind</filename>
-        init script</phrase>
-        <phrase revision="systemd"><filename>rpcbind.service</filename>
-        unit</phrase> included in the
-        <xref linkend="bootscripts" revision="sysv"/>
-        <xref linkend="systemd-units" revision="systemd"/> package.
+      <para revision="sysv">
+        Install the <phrase
+revision="sysv"><filename>/etc/rc.d/init.d/rpcbind</filename> init
+script</phrase> included in the <xref linkend="bootscripts"/> package.
+      </para>
+
+      <para revision="systemd">
+         Enable the systemd unit installed with the package:
       </para>
 
       <indexterm zone="rpcbind rpcbind-init" revision="sysv">
         <primary sortas="f-rpcbind">rpcbind</primary>
       </indexterm>
 
-      <indexterm zone="rpcbind rpcbind-init" revision="systemd">
-        <primary sortas="f-rpcbind">rpcbind.service</primary>
-      </indexterm>
+<screen role="root" revision="sysv"><userinput>make install-rpcbind</userinput></screen>
 
-<screen role="root"><userinput>make install-rpcbind</userinput></screen>
+<screen role="root" revision="systemd"><userinput>systemctl enable rpcbind</userinput></screen>
 
     </sect3>
 
@@ -210,9 +203,9 @@ make</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Program</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>rpcbind and rpcinfo</seg>
@@ -222,17 +215,16 @@ make</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="rpcbind-prog">
         <term><command>rpcbind</command></term>
         <listitem>
           <para>
-            is a server that converts RPC program numbers into universal
-            addresses.  It must be running on the host to be able to make RPC
-            calls on a server on that machine
+            is a server that converts RPC program numbers into universal addresses.  It
+must be running on the host to be able to make RPC calls on a server on that
+machine
           </para>
           <indexterm zone="rpcbind rpcbind-prog">
             <primary sortas="b-rpcbind">rpcbind</primary>
@@ -244,8 +236,8 @@ make</userinput></screen>
         <term><command>rpcinfo</command></term>
         <listitem>
           <para>
-            makes an RPC call to an RPC server and reports data according
-            to the requested options
+            makes an RPC call to an RPC server and reports data according to the
+requested options
           </para>
           <indexterm zone="rpcbind rpcinfo">
             <primary sortas="b-rpcinfo">rpcinfo</primary>

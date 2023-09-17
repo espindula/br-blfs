@@ -1,67 +1,66 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../../general.ent">
   %general-entities;
 ]>
 
-<sect1 id="grub-setup" xreflabel="Using GRUB to Set Up the Boot Process with UEFI">
+<sect1 id="grub-setup" xreflabel="Usando o GRUB para Configurar o Processo de Inicialização com UEFI">
   <?dbhtml filename="grub-setup.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
-  <title>Using GRUB to Set Up the Boot Process with UEFI</title>
+  <title>Usando o GRUB para Configurar o Processo de Inicialização com UEFI</title>
 
   <sect2>
-    <title>Turn Off Secure Boot</title>
+    <title>Desligar a Inicialização Segura</title>
 
     <para>
-      BLFS does not have the essential packages to support Secure Boot. To
-      set up the boot process with GRUB for UEFI installed in BLFS, Secure
-      Boot must be turned off from the configuration interface of the
-      firmware.  Read the documentation provided by the manufacturer of your
-      system to find out how.
+      O BLFS não tem os pacotes essenciais para suportar a Inicialização
+Segura. Para configurar o processo de inicialização com GRUB e UEFI no BLFS,
+a Inicialização Segura precisa ser desligada a partir interface de
+configuração do firmware. Leia a documentação fornecida pelo(a) fabricante
+do seu sistema para descobrir como.
     </para>
   </sect2>
 
   <sect2>
-    <title>Create an Emergency Boot Disk</title>
+    <title>Criar um Disco de Inicialização de Emergência</title>
 
     <para>
-      Ensure that an emergency boot disk is ready to <quote>rescue</quote>
-      the system in case the system becomes un-bootable.  To make an
-      emergency boot disk with GRUB for an EFI based system, find a spare
-      USB flash drive and create a
-      <systemitem class="filesystem">vfat</systemitem> file system on it.
-      Install <xref linkend="dosfstools"/> first, then
-      as the <systemitem class="username">root</systemitem> user:
+      Garanta que um disco de inicialização de emergência esteja pronto para
+<quote>resgatar</quote> o sistema no caso do sistema se tornar não
+inicializável. Para produzir um disco de inicialização de emergência com o
+GRUB para um sistema baseado em EFI, encontre uma unidade flash USB
+sobressalente e crie um sistema de arquivos <systemitem
+class="filesystem">vfat</systemitem> nela. Instale o <xref
+linkend="dosfstools"/> primeiro, então, como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
     <warning>
       <para>
-        The following command will erase all directories and files in the
-        partition.  Make sure your USB flash drive contains no data which
-        will be needed, and change <userinput>sdx1</userinput> to the
-        device node corresponding to the first partition of the USB flash
-        drive.  Be careful not to overwrite your hard drive with a typo!
+        O comando a seguir apagará todos os diretórios e arquivos na
+partição. Certifique-se de que sua unidade flash USB não contém dados que
+serão necessários e mude <userinput>sdx1</userinput> para o nó de
+dispositivo correspondente à primeira partição da unidade flash USB. Seja
+cuidado(a) para não sobrescrever sua unidade rígida com um erro de
+digitação!
       </para>
     </warning>
 
     <screen role="nodump"><userinput>mkfs.vfat /dev/sdx1</userinput></screen>
 
     <para>
-      Still as the <systemitem class="username">root</systemitem> user, use
-      the <command>fdisk</command> utility to set the first parition
-      of the USB flash drive to be an <quote>EFI system</quote> partition
-      (change <userinput>sdx</userinput> to the device node corresponding
-      to your USB flash drive):
+      Ainda como o(a) usuário(a) <systemitem class="username">root</systemitem>,
+use o utilitário <command>fdisk</command> para configurar a primeira
+partição da unidade flash USB para ser uma partição do <quote>sistema
+EFI</quote> (mude <userinput>sdx</userinput> para o nó de dispositivo
+correspondente à sua unidade flash USB):
     </para>
 
 <screen role="nodump"><userinput>fdisk /dev/sdx</userinput>
 <literal>
-Welcome to fdisk (util-linux 2.37.4).
+Welcome to fdisk (util-linux 2.38.1).
 Changes will remain in memory only, until you decide to write them.
 Be careful before using the write command.
 
@@ -77,94 +76,94 @@ Calling ioctl() to re-read partition table.
 Syncing disks.</literal></screen>
 
     <para>
-      Still as the <systemitem class="username">root</systemitem> user,
-      create a mount point for the EFI partition on the USB flash drive
-      and mount it:
+      Ainda como o(a) usuário(a) <systemitem class="username">root</systemitem>,
+crie um ponto de montagem para a partição EFI na unidade flash USB e
+monte-o:
     </para>
 
 <screen role="nodump"><userinput>mkdir -pv /mnt/rescue &amp;&amp;
 mount -v -t vfat /dev/sdx1 /mnt/rescue</userinput></screen>
 
     <para>
-      Install GRUB for EFI on the partition:
+      Instale o GRUB para EFI na partição:
     </para>
 
-<screen role="nodump"><userinput>grub-install --removable --efi-directory=/mnt/rescue --boot-directory=/mnt/rescue/grub</userinput></screen>
+<screen role="nodump"><userinput>grub-install --target=x86_64-efi --removable --efi-directory=/mnt/rescue --boot-directory=/mnt/rescue</userinput></screen>
 
     <para>
-      Unmount the partition:
+      Desmonte a partição:
     </para>
 
 <screen role="nodump"><userinput>umount /mnt/rescue</userinput></screen>
 
     <para>
-      Now the USB flash drive can be used as a emergency boot disk on x86-64
-      UEFI platform.  It will boot the system and show the GRUB shell.  Then you
-      can type commands to boot your operating systems on the hard drive.
-      To learn how to select the boot device, read the manual of your
-      motherboard or laptop.
+      Agora, a unidade flash USB pode ser usada como um disco de inicialização de
+emergência em qualquer plataforma UEFI x86-64. Ele inicializará o sistema e
+mostrará o shell do GRUB. Então você consegue digitar comandos para
+inicializar seu sistema operacional a partir da unidade rígida. Para saber
+como selecionar o dispositivo de inicialização, leia-se o manual da sua
+placa-mãe ou notebook.
     </para>
 
   </sect2>
 
   <sect2 role="kernel" id="uefi-kernel">
-    <title>Kernel Configuration for UEFI support</title>
+    <title>Configuração do Núcleo para Suporte a UEFI</title>
 
     <para>
-      Enable the following options in the kernel configuration and recompile
-      the kernel if necessary:
+      Habilite as seguintes opções na configuração do núcleo e recompile o núcleo,
+se necessário:
     </para>
 
 <screen><literal>Processor type and features ---&gt;
   [*] EFI runtime service support                              [CONFIG_EFI]
-  [*]   EFI stub support                                       [CONFIG_EFI_STUB]
-Firmware Drivers ---&gt;
-  EFI (Extensible Firmware Interface) Support ---&gt;
-    &lt; &gt; EFI Variable Support via sysfs                         [CONFIG_EFI_VARS]
-    [*] Export efi runtime maps to sysfs                       [CONFIG_EFI_RUNTIME_MAP]
+  [*]   EFI stub support                                        [CONFIG_EFI_STUB]
 Enable the block layer ---&gt;
   Partition Types ---&gt;
-    [*] Advanced partition selection                           [CONFIG_PARTITION_ADVANCED]
-    [*] EFI GUID Partition support                             [CONFIG_EFI_PARTITION]
+    [*] Advanced partition selection                            [CONFIG_PARTITION_ADVANCED]
+    [*] EFI GUID Partition support                              [CONFIG_EFI_PARTITION]
 Device Drivers ---&gt;
+  Firmware Drivers ---&gt;
+    [*] Mark VGA/VBE/EFI FB as generic system framebuffer       [CONFIG_SYSFB_SIMPLEFB]
   Graphics support ---&gt;
+    &lt;*&gt; Direct Rendering Manager                                [CONFIG_DRM]
+    [*] Enable legacy fbdev support for your modesetting driver [CONFIG_DRM_FBDEV_EMULATION]
+    &lt;*&gt; Simple framebuffer driver                               [CONFIG_DRM_SIMPLEDRM]
     Frame buffer Devices ---&gt;
-      Support for frame buffer devices ---&gt;                    [CONFIG_FB]
-        [*] EFI-based Framebuffer support                      [CONFIG_FB_EFI]
+      &lt;*&gt; Support for frame buffer devices ---&gt;                 [CONFIG_FB]
     Console display driver support ---&gt;
-      [*] Framebuffer Console support                          [CONFIG_FRAMEBUFFER_CONSOLE]
+      [*] Framebuffer Console support                           [CONFIG_FRAMEBUFFER_CONSOLE]
 File systems ---&gt;
+  &lt;DOS/FAT/EXFAT/NT Filesystems ---&gt;
+    &lt;*/M&gt; VFAT (Windows-95) fs support                          [CONFIG_VFAT_FS]
   Pseudo filesystems ---&gt;
-    &lt;*/M&gt; EFI Variable filesystem                              [CONFIG_EFIVAR_FS]</literal></screen>
+    &lt;*/M&gt; EFI Variable filesystem                               [CONFIG_EFIVAR_FS]</literal></screen>
 
     <variablelist>
-      <title>The meaning of the configure options:</title>
+      <title>O significado das opções de configuração:</title>
 
       <varlistentry>
         <term><parameter>CONFIG_EFI_STUB</parameter></term>
         <listitem>
-          <para>Although the EFI stub is designed to boot a kernel directly from
-          the UEFI firmware (without a bootloader like GRUB), GRUB needs the
-          kernel to be loaded to support the EFI handover protocol enabled by
-          this option.</para>
+          <para>Em sistemas EFI, o GRUB inicializa o núcleo Linux invocando o firmware EFI
+para carregá-lo como um aplicativo EFI. Portanto, a raiz EFI é necessária
+para amarrar o núcleo como um aplicativo EFI.</para>
         </listitem>
       </varlistentry>
 
       <varlistentry>
-        <term><parameter>CONFIG_EFI_VARS</parameter></term>
+        <term>
+          <parameter>CONFIG_SYSFB_SIMPLEFB</parameter>,
+<parameter>CONFIG_DRM</parameter>,
+<parameter>CONFIG_DRM_FBDEV_EMULATION</parameter>,
+<parameter>CONFIG_DRM_SIMPLEDRM</parameter>,
+<parameter>CONFIG_FB</parameter> e
+<parameter>CONFIG_FRAMEBUFFER_CONSOLE</parameter></term>
         <listitem>
-          <para>Don't use this deprecated option because of a 1024-byte
-          variable size limit.  Its function is replaced by
-          <parameter>CONFIG_EFIVAR_FS</parameter>.</para>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term><parameter>CONFIG_FB_EFI</parameter> and <parameter>CONFIG_FRAMEBUFFER_CONSOLE</parameter></term>
-        <listitem>
-          <para>The combination of these two options allows the kernel to
-          print debug messages (along with Tux logos) at the early stage of
-          the boot process with UEFI.</para>
+          <para>A combinação dessas opções fornece suporte ao console Linux no topo do
+framebuffer UEFI. Para permitir que o núcleo imprima mensagens de depuração
+em um estágio inicial da inicialização, elas não deveriam ser construídas
+como módulos do kernel, a menos que um initramfs seja usado.</para>
         </listitem>
       </varlistentry>
 
@@ -173,56 +172,53 @@ File systems ---&gt;
   </sect2>
 
   <sect2>
-    <title>Find or Create the EFI System Partition</title>
+    <title>Encontrar ou Criar a Partição do Sistema EFI</title>
 
     <para>
-      On EFI based system, the bootloaders are installed in a special FAT32
-      partition called an <emphasis>EFI System Partition</emphasis> (ESP).
-      If your system supports EFI, and a recent version of Linux
-      distribution or Windows is pre-installed, it's likely that the ESP
-      is already created.  As the
-      <systemitem class="username">root</systemitem> user, list all the
-      partitions on your hard drive (replace <userinput>sda</userinput>
-      with the device corresponding to the appropriate hard drive):
+      Em sistemas baseados em EFI, os carregadores de inicialização são instalados
+em uma partição especial FAT32 chamada <emphasis>EFI System
+Partition</emphasis> (ESP). Se o seu sistema suportar EFI e uma versão
+recente de alguma distribuição Linux ou Windows estiver pré-instalada,
+[então] é provável que o ESP já tenha sido criada. Como o(a) usuário(a)
+<systemitem class="username">root</systemitem>, liste todas as partições em
+sua unidade rígida (substitua <userinput>sda</userinput> pelo dispositivo
+correspondente à unidade rígida apropriada):
     </para>
 
     <screen role="nodump"><userinput>fdisk -l /dev/sda</userinput></screen>
 
     <para>
-      The <quote>Type</quote> column of the ESP should be
-      <literal>EFI System</literal>.
+      A coluna <quote>Type</quote> da ESP deveria ser <literal>EFI
+System</literal>.
     </para>
 
     <para>
-      If the system or the hard drive is new, or it's a first time
-      install an UEFI booted OS on the system, the ESP may not exist.
-      In that case, create a new partition, make a
-      <systemitem class="filesystem">vfat</systemitem> file system on it,
-      and set the partition type to <quote>EFI system</quote>.  See the
-      instructions for the emergency boot device above as a reference.
+      If the system or the hard drive is new, or it's the first installation of a
+UEFI-booted OS on the system, the ESP may not exist.  In that case, create a
+new partition, make a <systemitem class="filesystem">vfat</systemitem> file
+system on it, and set the partition type to <quote>EFI system</quote>.  See
+the instructions for the emergency boot device above as a reference.
     </para>
 
     <warning>
       <para>
-        Some (old) UEFI implementations may demand the ESP to be the first
-        partition on the disk.
+        Algumas (antigas) implementações UEFI possivelmente exijam que a ESP seja a
+primeira partição no disco.
       </para>
     </warning>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user,
-      create the mount point for the ESP, and mount it (replace
-      <userinput>sda1</userinput> with the device node corresponding to
-      the ESP):
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>,
+crie o ponto de montagem para a ESP e monte-a (substitua
+<userinput>sda1</userinput> pelo nó de dispositivo correspondente à ESP):
     </para>
 
 <screen role="nodump"><userinput>mkdir -pv /boot/efi &amp;&amp;
 mount -v -t vfat /dev/sda1 /boot/efi</userinput></screen>
 
     <para>
-      Add an entry for the ESP in
-      <filename>/etc/fstab</filename>, so it will be mounted automatically
-      during system boot:
+      Adicione uma entrada para a ESP em <filename>/etc/fstab</filename>, de forma
+que ela será montada automaticamente durante a inicialização do sistema:
     </para>
 
 <screen role="nodump"><userinput>cat &gt;&gt; /etc/fstab &lt;&lt; EOF</userinput>
@@ -232,31 +228,131 @@ mount -v -t vfat /dev/sda1 /boot/efi</userinput></screen>
   </sect2>
 
   <sect2>
-    <title>Mount the EFI Variable File System</title>
+    <title>Configuração Mínima de Inicialização com GRUB e EFI</title>
 
     <para>
-      The installation of GRUB on a UEFI platform requires that the EFI Variable
-      file system, <systemitem class="filesystem">efivarfs</systemitem>, to be
-      mounted.  As the <systemitem class="username">root</systemitem> user,
-      mount it if it's not already mounted:
+      Em sistemas baseados em UEFI, o GRUB funciona instalando um aplicativo EFI
+(um tipo especial de executável) na ESP. O firmware EFI pesquisará
+carregadores de inicialização em aplicativos EFI a partir de entradas de
+inicialização registradas em variáveis EFI e, adicionalmente, um caminho
+rigidamente codificado,
+<filename>EFI/BOOT/BOOTX64.EFI</filename>. Normalmente, um carregador de
+inicialização deveria ser instalado em um caminho personalizado e o caminho
+deveria ser registrado nas variáveis EFI. O uso do caminho codificado
+rigidamente deveria ser evitado, se possível. No entanto, em alguns casos,
+temos que usar o caminho codificado rigidamente:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          O sistema não foi inicializado com EFI ainda, tornando as variáveis EFI
+inacessíveis.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          O firmware EFI é de 64 bits, mas o sistema LFS é de 32 bits, tornando as
+variáveis EFI inacessíveis porque o núcleo não consegue invocar serviços de
+tempo de execução EFI com um comprimento diferente de endereço virtual.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          O LFS é construído para um Live USB, de forma que não podemos confiar nas
+variáveis EFI, as quais são armazenadas em NVRAM ou em EEPROM na máquina
+local.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Você não consegue ou não quer instalar o
+<application>efibootmgr</application> para manipular entradas de
+inicialização em variáveis EFI.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      Nesses casos, siga estas instruções para instalar o aplicativo EFI do GRUB
+no caminho codificado rigidamente e faça uma configuração mínima de
+inicialização. Caso contrário, é melhor pular à frente e definir a
+configuração de inicialização normalmente.
+    </para>
+
+    <para>
+      Para instalar o GRUB com o aplicativo EFI no caminho rigidamente codificado
+<filename>EFI/BOOT/BOOTX64.EFI</filename>, primeiro certifique-se de que a
+partição de inicialização esteja montada em <filename
+class="directory">/boot</filename> e de que a ESP esteja montada em
+<filename class="directory">/boot/efi</filename>. Então, como o(a)
+usuário(a) &root;, execute o comando:
+    </para>
+
+    <note>
+      <para>
+        Este comando sobrescreverá
+<filename>/boot/efi/EFI/BOOT/BOOTX64.EFI</filename>. Ele possivelmente
+quebre um carregador de inicialização já instalado lá. Produza uma cópia de
+segurança dele se não tiver certeza.
+      </para>
+    </note>
+
+    <screen role="nodump"><userinput>grub-install --target=x86_64-efi --removable</userinput></screen>
+
+    <para>
+      Esse comando instalará o aplicativo EFI do GRUB no caminho rigidamente
+codificado <filename>/boot/efi/EFI/BOOT/BOOTX64.EFI</filename>, de forma que
+o firmware EFI consiga achá-lo e carregá-lo. Os arquivos restantes do GRUB
+são instalados no diretório <filename
+class="directory">/boot/grub</filename> e serão carregados pelo
+<filename>BOOTX64.EFI</filename> durante a inicialização do sistema.
+    </para>
+
+    <note>
+      <para>
+        O firmware EFI geralmente prefere os aplicativos EFI com um caminho
+armazenado em variáveis EFI ao aplicativo EFI no caminho codificado
+rigidamente. Portanto, você possivelmente precise invocar o menu de seleção
+de inicialização ou a interface de configuração de firmware para selecionar
+manualmente o GRUB recém-instalado na próxima inicialização. Leia-se o
+manual da sua placa-mãe ou laptop para aprender como.
+      </para>
+    </note>
+
+    <para>
+      Se você tiver seguido as instruções nesta seção e configurou uma
+configuração mínima de inicialização, agora pule à frente para
+<quote>Criando o Arquivo de Configuração do GRUB</quote>.
+    </para>
+  </sect2>
+
+  <sect2>
+    <title>Montar o Sistema de Arquivos de Variáveis EFI</title>
+
+    <para>
+      A instalação do GRUB em uma plataforma UEFI exige que o sistema de arquivos
+de Variáveis EFI, <systemitem class="filesystem">efivarfs</systemitem>,
+esteja montado. Como o(a) usuário(a) <systemitem
+class="username">root</systemitem>, monte-o se já não estiver montado:
     </para>
 
 <screen role="nodump"><userinput>mountpoint /sys/firmware/efi/efivars || mount -v -t efivarfs efivarfs /sys/firmware/efi/efivars</userinput></screen>
 
     <note revision="systemd">
       <para>
-        If the system is booted with UEFI and systemd,
-        <systemitem class="filesystem">efivarfs</systemitem> will be mounted
-        automatically.  However in the LFS chroot environment it still needs to
-        be mounted manually.
+        Se o sistema for inicializado com UEFI e systemd, [então] o <systemitem
+class="filesystem">efivarfs</systemitem> será montado automaticamente. No
+entanto, no ambiente chroot do LFS ele ainda precisa ser montado
+manualmente.
       </para>
     </note>
 
     <para revision="sysv">
-      Now add an entry for the
-      <systemitem class="filesystem">efivarfs</systemitem> in
-      <filename>/etc/fstab</filename> so it will be mounted automatically
-      during system boot:
+      Agora adicione uma entrada para o <systemitem
+class="filesystem">efivarfs</systemitem> em <filename>/etc/fstab</filename>,
+de forma que seja montado automaticamente durante a inicialização do
+sistema:
     </para>
 
 <screen revision="sysv" role="nodump"><userinput>cat &gt;&gt; /etc/fstab &lt;&lt; EOF</userinput>
@@ -265,58 +361,60 @@ mount -v -t vfat /dev/sda1 /boot/efi</userinput></screen>
 
     <warning>
       <para>
-        If the system is not booted with UEFI, the directory
-        <filename class="directory">/sys/firmware/efi</filename> will be
-        missing. In this case you should boot the system in UEFI mode with
-        the emergency boot disk created as above.
+        Se o sistema não for inicializado com UEFI, [então] o diretório <filename
+class="directory">/sys/firmware/efi</filename> estará ausente. Nesse caso,
+você deveria inicializar o sistema no modo UEFI com o disco de inicialização
+de emergência ou usando uma configuração mínima de inicialização criada como
+acima, então montar o <systemitem class="filesystem">efivarfs</systemitem> e
+continuar.
       </para>
     </warning>
   </sect2>
 
   <sect2>
-    <title>Setting Up the Configuration</title>
+    <title>Finalizando a Configuração</title>
 
     <para>
-      On UEFI based systems, GRUB works by installing an EFI application
-      (a special kind of executable) into
-      <filename class="directory">/boot/efi/EFI/[id]/grubx64.efi</filename>,
-      where <filename class="directory">/boot/efi</filename> is the mount
-      point of the ESP, and <literal>[id]</literal> is replaced with an
-      identifier specified in the <command>grub-install</command> command
-      line.  GRUB will create an entry in the EFI variables containing
-      the path <literal>EFI/[id]/grubx64.efi</literal> so the EFI firmware
-      can find <filename>grubx64.efi</filename> and load it.
+      Em sistemas baseados em UEFI, o GRUB funciona instalando um aplicativo EFI
+(um tipo especial de executável) em <filename
+class="directory">/boot/efi/EFI/[id]/grubx64.efi</filename>, onde <filename
+class="directory">/boot/efi</filename> é o ponto de montagem da ESP e
+<literal>[id]</literal> é substituído por um identificador especificado na
+linha de comando do <command>grub-install</command>. O GRUB criará uma
+entrada nas variáveis EFI contendo o caminho
+<literal>EFI/[id]/grubx64.efi</literal>, de forma que o firmware EFI consiga
+encontrar o <filename>grubx64.efi</filename> e carregá-lo.
     </para>
 
     <para>
-      <filename>grubx64.efi</filename> is very lightweight (136 KB with
-      GRUB-2.06~rc1) so it will not use much space in the ESP.  A typical ESP
-      size is 100 MB (for Windows boot manager, which uses about 50 MB in
-      the ESP). Once <filename>grubx64.efi</filename> loaded by the
-      firmware, it will load GRUB modules in the boot partition.
-      The default location is
-      <filename class="directory">/boot/grub</filename>.
+      O <filename>grubx64.efi</filename> é muito leve (136 KB com o GRUB-2.06), de
+forma que não usará muito espaço na ESP. Um tamanho típico da ESP é de 100
+MB (para o gerenciador de inicialização do Windows, que usa cerca de 50 MB
+na ESP). Assim que o <filename>grubx64.efi</filename> tenha sido carregado
+pelo firmware, ele carregará os módulos do GRUB a partir da partição de
+inicialização. O local padrão é <filename
+class="directory">/boot/grub</filename>.
     </para>
 
     <para>
-      As the <systemitem class="username">root</systemitem> user, install
-      the GRUB files into <filename>/boot/efi/EFI/LFS/grubx64.efi</filename>
-      and <filename class="directory">/boot/grub</filename>. Then set up the
-      boot entry in the EFI variables:
+      Como o(a) usuário(a) <systemitem class="username">root</systemitem>, instale
+os arquivos do GRUB em <filename>/boot/efi/EFI/LFS/grubx64.efi</filename> e
+em <filename class="directory">/boot/grub</filename>. Em seguida, configure
+a entrada de inicialização nas variáveis EFI:
     </para>
 
 <screen role="nodump"><userinput>grub-install --bootloader-id=LFS --recheck</userinput></screen>
 
     <para>
-      If the installation is successful, the output should be:
+      Se a instalação for bem-sucedida, [então a saída gerada deveria ser:
     </para>
 
 <screen role="nodump"><literal>Installing for x86_64-efi platform.
 Installation finished. No error reported.</literal></screen>
 
     <para>
-      Issue <command>efibootmgr</command> to recheck the EFI boot
-      configuration.  An example of the output is:
+      Emita o comando <command>efibootmgr | cut -f 1</command> para verificar
+novamente a configuração de inicialização EFI. Um exemplo da saída gerada é:
     </para>
 
 <screen role="nodump"><literal>BootCurrent: 0000
@@ -330,24 +428,24 @@ Boot0004* UEFI:Network Device
 Boot0005* LFS</literal></screen>
 
     <para>
-      Note that <literal>0005</literal> is the first in the
-      <literal>BootOrder</literal>, and <literal>Boot0005</literal>
-      is <literal>LFS</literal>. This means that on the next boot, the
-      version of GRUB installed by LFS will be used to boot the system.
+      Observe que <literal>0005</literal> é o primeiro no
+<literal>BootOrder</literal> e <literal>Boot0005</literal> é
+<literal>LFS</literal>. Isso significa que, na próxima inicialização, a
+versão do GRUB instalada pelo LFS será usada para inicializar o sistema.
     </para>
 
   </sect2>
 
   <sect2>
-    <title>Creating the GRUB Configuration File</title>
+    <title>Criando o Arquivo de Configuração do GRUB</title>
 
     <indexterm zone="grub-setup grub-video">
       <primary sortas="e-boot-grub-grub-cfg">/boot/grub/grub.cfg</primary>
     </indexterm>
 
     <para>
-      Generate <filename>/boot/grub/grub.cfg</filename> to configure the
-      boot menu of GRUB:
+      Gere o <filename>/boot/grub/grub.cfg</filename> para configurar o menu de
+inicialização do GRUB:
     </para>
 
 <screen role="nodump"><userinput>cat &gt; /boot/grub/grub.cfg &lt;&lt; EOF</userinput>
@@ -365,8 +463,8 @@ if loadfont /boot/grub/fonts/unicode.pf2; then
   terminal_output gfxterm
 fi
 
-menuentry "GNU/Linux, Linux 5.10.17-lfs-10.1"  {
-  linux   /boot/vmlinuz-5.10.17-lfs-10.1 root=/dev/sda2 ro
+menuentry "GNU/Linux, Linux 6.1.11-lfs-11.3"  {
+  linux   /boot/vmlinuz-6.1.11-lfs-11.3 root=/dev/sda2 ro
 }
 
 menuentry "Firmware Setup" {
@@ -376,38 +474,38 @@ menuentry "Firmware Setup" {
 
     <para>
       <literal>(hd0,2)</literal>, <literal>sda2</literal>, and
-      <literal>5.10.17-lfs-10.1</literal> should be replaced to match your
-      configuration.
+<literal>6.1.11-lfs-11.3</literal> must match your configuration.
     </para>
 
     <note>
       <para>
-        From GRUB's perspective, the files are relative to the partition
-        are used. If you used a separate /boot partition, remove /boot from the
-        above paths (to kernel and to <filename>unicode.pf2</filename>). You
-        will also need to change the set root line to point to the boot
-        partition.
+        Da perspectiva do GRUB, os arquivos são relativos às partições usadas. Se
+você usou uma partição /boot separada, [então] remova /boot dos caminhos
+acima (para o núcleo e para <filename>unicode.pf2</filename>). Você também
+precisará mudar a linha "set root" para apontar para a partição de
+inicialização.
       </para>
     </note>
 
     <para>
-      The <literal>Firmware Setup</literal> entry can be used to enter the
-      configuration interface provided by the firmware (sometimes called
-      <quote>BIOS configuration</quote>).
+      A entrada <literal>Firmware Setup</literal> pode ser usada para entrar na
+interface de configuração fornecida pelo firmware (às vezes chamada de
+<quote>Configuração do BIOS</quote>).
     </para>
   </sect2>
 
   <sect2>
-    <title>Dual-booting with Windows</title>
+    <title>Inicialização Dupla com o Windows</title>
 
     <para>
-      Add a menu entry for Windows into <filename>grub.cfg</filename>:
+      Adicione uma entrada de menu para o Windows no
+<filename>grub.cfg</filename>:
     </para>
 
 <screen role="nodump"><userinput>cat &gt;&gt; /boot/grub/grub.cfg &lt;&lt; EOF</userinput>
-<literal># Begin Windows addition
+<literal># Início da adição do Windows
 
-menuentry "Windows 10" {
+menuentry "Windows 11" {
   insmod fat
   insmod chain
   set root=(hd0,1)
@@ -416,12 +514,12 @@ menuentry "Windows 10" {
 <userinput>EOF</userinput></screen>
 
     <para>
-      <literal>(hd0,1)</literal> should be replaced with the GRUB
-      designated name for the ESP.  The <literal>chainloader</literal>
-      directive can be used to tell GRUB to run another EFI executable,
-      in this case the Windows Boot Manager. You may put more usable tools
-      in EFI executable format (for example, an EFI shell) into the ESP and
-      create GRUB entries for them.
+      <literal>(hd0,1)</literal> deveria ser substituído pelo nome designado pelo
+GRUB para a ESP. A diretiva <literal>chainloader</literal> pode ser usada
+para dizer ao GRUB para executar outro executável EFI, nesse caso o Windows
+Boot Manager. Você pode colocar mais ferramentas utilizáveis no formato de
+executável EFI (por exemplo, um shell EFI) na ESP e, também, criar entradas
+do GRUB para elas.
     </para>
 
   </sect2>

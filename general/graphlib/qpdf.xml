@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY qpdf-download-http "https://github.com/qpdf/qpdf/releases/download/release-qpdf-&qpdf-version;/qpdf-&qpdf-version;.tar.gz">
-  <!ENTITY qpdf-download-ftp  " ">
-  <!ENTITY qpdf-md5sum        "243f5ec5c50c7db6dfc7d4ad4237d6f3">
+  <!ENTITY qpdf-download-http "https://github.com/qpdf/qpdf/releases/download/v&qpdf-version;/qpdf-&qpdf-version;.tar.gz">
+  <!ENTITY qpdf-download-ftp  "">
+  <!ENTITY qpdf-md5sum        "8fa1fc5d8b99e41c4f9d0760d6733756">
   <!ENTITY qpdf-size          "18 MB">
-  <!ENTITY qpdf-buildsize     "313 MB (add 46 MB for tests)">
-  <!ENTITY qpdf-time          "0.8 SBU (using parallelism=4; add 1.3 SBU for tests)">
+  <!ENTITY qpdf-buildsize     "249 MB (add 2 MB for tests)">
+  <!ENTITY qpdf-time          "0.5 SBU (using parallelism=4; add 0.5 SBU for tests)">
 ]>
 
 <sect1 id="qpdf" xreflabel="Qpdf-&qpdf-version;">
   <?dbhtml filename="qpdf.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Qpdf-&qpdf-version;</title>
 
@@ -26,137 +23,136 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Qpdf</title>
+    <title>Introdução a Qpdf</title>
 
     <para>
-      The <application>Qpdf</application> package contains command-line
-      programs and a library that does structural, content-preserving
-      transformations on PDF files.
+      O pacote <application>Qpdf</application> contém aplicativos de linha de
+comando e uma biblioteca que faz transformações estruturais, preservando
+conteúdo, sobre arquivos "PDF".
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&qpdf-download-http;"/>
+          Transferência (HTTP): <ulink url="&qpdf-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&qpdf-download-ftp;"/>
+          Transferência (FTP): <ulink url="&qpdf-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &qpdf-md5sum;
+          Soma de verificação MD5 da transferência: &qpdf-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &qpdf-size;
+          Tamanho da transferência: &qpdf-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &qpdf-buildsize;
+          Espaço em disco estimado exigido: &qpdf-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &qpdf-time;
+          Tempo de construção estimado: &qpdf-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Qpdf Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Qpdf</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
       <xref linkend="libjpeg"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="fop"/>,
-      <xref linkend="gnutls"/>, and
-      <xref linkend="libxslt"/>
+      <xref linkend="fop"/>, <xref linkend="gnutls"/> e <xref linkend="sphinx"/>
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/qpdf"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/qpdf"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Qpdf</title>
+    <title>Instalação do Qpdf</title>
 
     <para>
-      Install <application>Qpdf</application> by running the following
-      commands:
+      Instale <application>Qpdf</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr    \
-            --disable-static \
-            --docdir=/usr/share/doc/qpdf-&qpdf-version; &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd   build &amp;&amp;
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_BUILD_TYPE=Release  \
+      -DBUILD_STATIC_LIBS=OFF     \
+      -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/qpdf-&qpdf-version; \
+      .. &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make check</command>.
-      <!--Three tests are known to fail due to minor differences in
-      expected output.-->
+      Para testar os resultados, emita: <command>ctest</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
   </sect2>
 
+  <!--
   <sect2 role="commands">
+
     <title>Command Explanations</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
   </sect2>
-
-  <sect2 role="content">
-    <title>Contents</title>
+-->
+<sect2 role="content">
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          fix-qdf, qpdf, and zlib-flate
+          fix-qdf, qpdf e zlib-flate
         </seg>
         <seg>
           libqpdf.so
         </seg>
         <seg>
-          /usr/include/qpdf and
-          /usr/share/doc/qpdf-&qpdf-version;
+          /usr/lib/cmake/qpdf, /usr/include/qpdf e /usr/share/doc/qpdf-&qpdf-version;
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="fix-qdf">
         <term><command>fix-qdf</command></term>
         <listitem>
           <para>
-            is used to repair PDF files in QDF form after
-            editing
+            é usado para reparar arquivos "PDF" no formato "QDF" após a edição
           </para>
           <indexterm zone="qpdf fix-qdf">
             <primary sortas="b-fix-qdf">fix-qdf</primary>
@@ -168,8 +164,7 @@ make</userinput></screen>
         <term><command>qpdf</command></term>
         <listitem>
           <para>
-            is used to convert one PDF file to another equivalent
-            PDF file
+            é usado para converter um arquivo "PDF" para outro arquivo "PDF" equivalente
           </para>
           <indexterm zone="qpdf qpdf-prog">
             <primary sortas="b-qpdf">qpdf</primary>
@@ -181,7 +176,7 @@ make</userinput></screen>
         <term><command>zlib-flate</command></term>
         <listitem>
           <para>
-            is a raw zlib compression program
+            é um aplicativo de compressão bruta "zlib"
           </para>
           <indexterm zone="qpdf zlib-flate">
             <primary sortas="b-qpdf">zlib-flate</primary>
@@ -193,7 +188,7 @@ make</userinput></screen>
         <term><filename class="libraryfile">libqpdf.so</filename></term>
         <listitem>
           <para>
-            contains the <application>Qpdf</application> API functions
+            contém as funções da "API" <application>Qpdf</application>
           </para>
           <indexterm zone="qpdf libqpdf">
             <primary sortas="c-libqpdf">libqpdf.so</primary>

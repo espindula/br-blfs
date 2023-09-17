@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -8,9 +8,6 @@
 <sect1 id="advanced-network" revision="systemd">
   <?dbhtml filename="advanced-network.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Advanced Network Setup</title>
 
@@ -18,11 +15,11 @@
     <title>Network Bridge</title>
 
     <sect3 role="kernel" id="advanced-network-bridge-kernel">
-      <title>Kernel Configuration</title>
+      <title>Configuração do Núcleo</title>
 
       <para>
-        Enable the following options in the kernel configuration
-        and recompile the kernel if necessary:
+        Habilite as seguintes opções na configuração do núcleo e recompile o núcleo,
+se necessário:
       </para>
 
 <screen><literal>Networking support: Y
@@ -39,17 +36,17 @@
       <title>Setting up a Network Bridge</title>
 
       <para>
-        In this section we are are going to discuss how to set up a network
-        bridge using <command>systemd-networkd</command>. In the examples
-        below, <replaceable>eth0</replaceable> represents the external
-        interface that is being bridged, while <replaceable>br0</replaceable>
-        represents the bridge interface.
+        In this section we are are going to discuss how to set up a network bridge
+using <command>systemd-networkd</command>. In the examples below,
+<replaceable>eth0</replaceable> represents the external interface that is
+being bridged, while <replaceable>br0</replaceable> represents the bridge
+interface.
       </para>
 
       <para>
-        To create a bridge interface, create the following configuration file
-        by running the following command as the
-        <systemitem class="username">root</systemitem> user:
+        To create a bridge interface, create the following configuration file by
+running the following command as the <systemitem
+class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/50-br0.netdev &lt;&lt; EOF
@@ -60,8 +57,8 @@ EOF</userinput></screen>
 
       <para>
         To assign a network interface to a bridge, create the following
-        configuration file by running the following command as the
-        <systemitem class="username">root</systemitem> user:
+configuration file by running the following command as the <systemitem
+class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/51-eth0.network &lt;&lt; EOF
@@ -73,17 +70,19 @@ Bridge=<replaceable>br0</replaceable></literal>
 EOF</userinput></screen>
 
       <para>
-        Repeat the process for any other interfaces that need to be bridged.
-        Note that it is important that nothing assigns any addresses to the
-        bridged interfaces. If you are using <xref linkend="NetworkManager"/>,
-        <!--or <xref linkend="wicd"/>i,--> make sure you configure them to ignore
-        the bridged interfaces, as well as the bridge interface itself.
+        <!--or <xref linkend="wicd"/>
+i,-->
+Repeat the process for any other interfaces that need to be bridged.  Note
+that it is important that nothing assigns any addresses to the bridged
+interfaces. If you are using <xref linkend="NetworkManager"/>, make sure you
+configure them to ignore the bridged interfaces, as well as the bridge
+interface itself.
       </para>
 
       <para>
-        If you are on a network which uses DHCP for assigning ip addresses,
-        create the following configuration file by running the following
-        command as the <systemitem class="username">root</systemitem> user:
+        If you are on a network which uses DHCP for assigning ip addresses, create
+the following configuration file by running the following command as the
+<systemitem class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/60-br0.network &lt;&lt; EOF
@@ -96,8 +95,8 @@ EOF</userinput></screen>
 
       <para>
         Alternatively, if using a static ip setup, create the following
-        configuration file by running the following command as the
-        <systemitem class="username">root</systemitem> user:
+configuration file by running the following command as the <systemitem
+class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/60-br0.network &lt;&lt; EOF
@@ -112,8 +111,8 @@ EOF</userinput></screen>
 
       <para>
         To bring up the bridge interface, simply restart the
-        <command>systemd-networkd</command> daemon by running the following
-        command as the  <systemitem class="username">root</systemitem> user:
+<command>systemd-networkd</command> daemon by running the following command
+as the <systemitem class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>systemctl restart systemd-networkd</userinput></screen>
@@ -122,7 +121,10 @@ EOF</userinput></screen>
 
   </sect2>
 
-  <!-- <sect2 id="network-interface-bonding">
+  
+
+<!-- <sect2 id="network-interface-bonding">
+
     <title>Network Interface Bonding</title>
 
     <sect3 role="kernel" id="advanced-network-bonding-kernel">
@@ -149,5 +151,4 @@ EOF</userinput></screen>
     </sect3>
 
   </sect2> -->
-
 </sect1>

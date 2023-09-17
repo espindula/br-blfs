@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY libjpeg-download-http "&sourceforge-dl;/libjpeg-turbo/libjpeg-turbo-&libjpeg-turbo-version;.tar.gz">
-  <!ENTITY libjpeg-download-ftp  " ">
-  <!ENTITY libjpeg-md5sum        "e181bd78884dd5392a869209bfa41d4a">
-  <!ENTITY libjpeg-size          "2.2 MB">
-  <!ENTITY libjpeg-buildsize     "33 MB (with tests)">
-  <!ENTITY libjpeg-time          "0.3 SBU (using parallelism=4; with tests)">
+  <!ENTITY libjpeg-download-ftp  "">
+  <!ENTITY libjpeg-md5sum        "aed60d4d776dd5cf00b5a01c609d50f7">
+  <!ENTITY libjpeg-size          "2,2 MB">
+  <!ENTITY libjpeg-buildsize     "17 MB (adicionar 17 MB para os testes)">
+  <!ENTITY libjpeg-time          "0,1 UPC (usando paralelismo=4; adicionar 0,2 UPC para os testes)">
 ]>
 
 <sect1 id="libjpeg" xreflabel="libjpeg-turbo-&libjpeg-turbo-version;">
   <?dbhtml filename="libjpeg.html"?>
 
-  <sect1info>
-  <date>$Date$</date>
-  </sect1info>
 
   <title>libjpeg-turbo-&libjpeg-turbo-version;</title>
 
@@ -26,76 +23,79 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libjpeg-turbo</title>
+    <title>Introdução a libjpeg-turbo</title>
 
     <para>
-      <application>libjpeg-turbo</application> is a fork of the original
-      IJG <application>libjpeg</application> which uses SIMD to accelerate
-      baseline JPEG compression and decompression.
-      <application>libjpeg</application> is a library that implements JPEG
-      image encoding, decoding and transcoding.
+      <application>libjpeg-turbo</application> é uma bifurcação do
+<application>libjpeg</application> "IJG" original que usa "SIMD" para
+acelerar a compressão e descompressão "JPEG" da linha de
+base. <application>libjpeg</application> é uma biblioteca que implementa
+codificação, decodificação e transcodificação de imagens "JPEG".
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libjpeg-download-http;"/>
+          Transferência (HTTP): <ulink url="&libjpeg-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libjpeg-download-ftp;"/>
+          Transferência (FTP): <ulink url="&libjpeg-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libjpeg-md5sum;
+          Soma de verificação MD5 da transferência: &libjpeg-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libjpeg-size;
+          Tamanho da transferência: &libjpeg-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libjpeg-buildsize;
+          Espaço em disco estimado exigido: &libjpeg-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libjpeg-time;
+          Tempo de construção estimado: &libjpeg-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">libjpeg-turbo Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do libjpeg-turbo</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="cmake"/> and
-      <xref linkend="nasm"/> or
-      <xref linkend="yasm"/>
+      <xref linkend="cmake"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/libjpeg-turbo"/>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="nasm"/> ou <xref linkend="yasm"/> (para construir o pacote
+com rotina otimizada "assembly")
+    </para>
+
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libjpeg-turbo"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libjpeg-turbo</title>
+    <title>Instalação do libjpeg-turbo</title>
 
     <para>
-      Install <application>libjpeg-turbo</application> by running the
-      following commands:
+      Instale <application>libjpeg-turbo</application> executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd    build &amp;&amp;
+cd   build &amp;&amp;
 
 cmake -DCMAKE_INSTALL_PREFIX=/usr \
       -DCMAKE_BUILD_TYPE=RELEASE  \
@@ -106,10 +106,12 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr \
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make test</command>.
+      Para testar os resultados, emita: <command>make test</command>.
     </para>
 
-    <note><para>
+    <!--
+    <note>
+<para>
       If installing <application>libjpeg-turbo</application> over an older jpeg
       installation, not all library symbolic links are updated properly.  To fix
       this before installation, run the following as the <systemitem
@@ -118,9 +120,9 @@ make</userinput></screen>
 <screen role="root"><userinput>rm -f /usr/lib/libjpeg.so*</userinput></screen>
 
     </note>
-
-    <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+-->
+<para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -128,32 +130,28 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <option>-DWITH_JPEG8=ON</option>: This switch enables compatibility
-      with <application>libjpeg</application> version 8.
+      <option>-DWITH_JPEG8=ON</option>: Essa chave habilita a compatibilidade com
+<application>libjpeg</application> versão 8.
     </para>
-<!--
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
--->
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          cjpeg, djpeg, jpegtran, rdjpgcom, tjbench, and wrjpgcom
+          cjpeg, djpeg, jpegtran, rdjpgcom, tjbench e wrjpgcom
         </seg>
         <seg>
-          libjpeg.so and libturbojpeg.so
+          libjpeg.so e libturbojpeg.so
         </seg>
         <seg>
           /usr/share/doc/libjpeg-turbo-&libjpeg-turbo-version;
@@ -162,18 +160,17 @@ make</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="cjpeg">
         <term><command>cjpeg</command></term>
         <listitem>
           <para>
-            compresses image files to produce a JPEG/JFIF file on the
-            standard output. Currently supported input file formats are: PPM
-            (PBMPLUS color format), PGM (PBMPLUS gray-scale format),
-            BMP, and Targa
+            comprime arquivos de imagem para produzir um arquivo "JPEG/JFIF" na saída
+gerada padrão. Os formatos de arquivo de entrada atualmente suportados são:
+"PPM" (formato de cor "PBMPLUS"), "PGM" (formato de escala de cinza
+"PBMPLUS"), "BMP" e "Targa"
           </para>
           <indexterm zone="libjpeg cjpeg">
             <primary sortas="b-cjpeg">cjpeg</primary>
@@ -185,9 +182,9 @@ make</userinput></screen>
         <term><command>djpeg</command></term>
         <listitem>
           <para>
-            decompresses image files from JPEG/JFIF format to either
-            PPM (PBMPLUS color format), PGM (PBMPLUS gray-scale format),
-            BMP, or Targa format
+            descomprime arquivos de imagem do formato "JPEG/JFIF" para ou "PPM" (formato
+de cores "PBMPLUS"), "PGM" (formato de escala de cinza "PBMPLUS"), "BMP" ou
+formato "Targa"
           </para>
           <indexterm zone="libjpeg djpeg">
             <primary sortas="b-djpeg">djpeg</primary>
@@ -199,7 +196,7 @@ make</userinput></screen>
         <term><command>jpegtran</command></term>
         <listitem>
           <para>
-            is used for lossless transformation of JPEG files
+            é usado para transformação sem perdas de arquivos "JPEG"
           </para>
           <indexterm zone="libjpeg jpegtran">
             <primary sortas="b-jpegtran">jpegtran</primary>
@@ -211,7 +208,7 @@ make</userinput></screen>
         <term><command>rdjpgcom</command></term>
         <listitem>
           <para>
-            displays text comments from within a JPEG file
+            exibe comentários de texto a partir de um arquivo "JPEG"
           </para>
           <indexterm zone="libjpeg rdjpgcom">
             <primary sortas="b-rdjpgcom">rdjpgcom</primary>
@@ -223,7 +220,7 @@ make</userinput></screen>
         <term><command>tjbench</command></term>
         <listitem>
           <para>
-            is used to benchmark the performance of libjpeg-turbo
+            é usado para avaliar comparativamente o desempenho da "libjpeg-turbo"
           </para>
           <indexterm zone="libjpeg tjbench">
             <primary sortas="b-tjbench">tjbench</primary>
@@ -235,7 +232,7 @@ make</userinput></screen>
         <term><command>wrjpgcom</command></term>
         <listitem>
           <para>
-            inserts text comments into a JPEG file
+            insere comentários de texto em um arquivo "JPEG"
           </para>
           <indexterm zone="libjpeg wrjpgcom">
             <primary sortas="b-wrjpgcom">wrjpgcom</primary>
@@ -247,7 +244,7 @@ make</userinput></screen>
         <term><filename class="libraryfile">libjpeg.so</filename></term>
         <listitem>
           <para>
-            contains functions used for reading and writing JPEG images
+            contém funções usadas para ler e gravar imagens "JPEG"
         </para>
           <indexterm zone="libjpeg libjpeg-lib">
             <primary sortas="c-libjpeg">libjpeg.so</primary>

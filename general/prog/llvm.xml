@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -7,27 +7,31 @@
   <!ENTITY llvm-url "https://github.com/llvm/llvm-project/releases/download/llvmorg-&llvm-version;">
 
   <!ENTITY llvm-download-http "&llvm-url;/llvm-&llvm-version;.src.tar.xz">
-  <!ENTITY llvm-download-ftp  " ">
-  <!ENTITY llvm-md5sum        "4ca3266b539ccec41cb5094c510221a1">
-  <!ENTITY llvm-size          "43 MB">
-  <!ENTITY llvm-buildsize     "2.6 GB (1 GB installed, with documentation, add 16 GB for tests)">
-  <!ENTITY llvm-time          "30 SBU (on 4 CPU cores, with documentation, add 18 SBU for tests)">
+  <!ENTITY llvm-download-ftp  "">
+  <!ENTITY llvm-md5sum        "c77db4c71e1eb267358204dffe2c6e10">
+  <!ENTITY llvm-size          "50 MB">
+  <!ENTITY llvm-buildsize     "2.7 GB (848 MB installed; add 18.3 GB for tests and 308 MB for
+documentation)">
+  <!ENTITY llvm-time          "24 SBU (Using parallelism=4; add 22 SBU for tests)">
 
   <!ENTITY clang-download-http "&llvm-url;/clang-&llvm-version;.src.tar.xz">
-  <!ENTITY clang-md5sum        "89017bafd256ac5ad766920d15d8deba">
-  <!ENTITY clang-size          "18 MB">
+  <!ENTITY clang-md5sum        "a6d0141e50b48f5e60c682277dac83b4">
+  <!ENTITY clang-size          "18Mo">
 
   <!ENTITY compiler-rt-download-http "&llvm-url;/compiler-rt-&llvm-version;.src.tar.xz">
-  <!ENTITY compiler-rt-md5sum        "f534ab8fb371ec1a8a22a6fa5809be46">
-  <!ENTITY compiler-rt-size          "2.2 MB">
+  <!ENTITY compiler-rt-md5sum        "12e6777354f0121cbe73ef13342a9302">
+  <!ENTITY compiler-rt-size          "2,3Mo">
+
+  <!ENTITY cmake-llvm-download-http "&sources-anduin-http;/llvm/llvm-cmake-&llvm-version;.src.tar.xz">
+<!--  <!ENTITY cmake-llvm-download-http "&llvm-url;/cmake-&llvm-version;.src.tar.xz">
+      Renamed cmake-15.0.1.src.tar.xz and placed on anduin.-->
+  <!ENTITY cmake-llvm-md5sum         "c3647d253f67ce255e1aba014e528f5b">
+  <!ENTITY cmake-llvm-size           "6,8Ko">
 ]>
 
 <sect1 id="llvm" xreflabel="LLVM-&llvm-version;">
   <?dbhtml filename="llvm.html" ?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>LLVM-&llvm-version;</title>
 
@@ -36,163 +40,195 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to LLVM</title>
+    <title>Introdução a LLVM</title>
 
     <para>
-      The <application>LLVM</application> package contains a collection of
-      modular and reusable compiler and toolchain technologies. The Low Level
-      Virtual Machine (LLVM) Core libraries provide a modern source and
-      target-independent optimizer, along with code generation support for many
-      popular CPUs (as well as some less common ones!). These libraries are
-      built around a well specified code representation known as the LLVM
-      intermediate representation ("LLVM IR").
+      The <application>LLVM</application> package contains a collection of modular
+and reusable compiler and toolchain technologies. The Low Level Virtual
+Machine (LLVM) Core libraries provide a modern source and target-independent
+optimizer, along with code generation support for many popular CPUs (as well
+as some less common ones!). These libraries are built around a well
+specified code representation known as the LLVM intermediate representation
+("LLVM IR").
     </para>
 
     <para>
-      <application>Clang</application> provides new C, C++, Objective C
-      and Objective C++ front-ends for <application>LLVM</application> and is
-      required by some desktop packages such as <application>firefox</application>
-      and for <application>rust</application> if that is built using the system
-      <application>LLVM</application>.
+      <application>Clang</application> provides new C, C++, Objective C and
+Objective C++ front-ends for <application>LLVM</application> and is required
+by some desktop packages such as <application>firefox</application> and for
+<application>rust</application> if that is built using the system
+<application>LLVM</application>.
     </para>
 
     <para>
-      The <application>Compiler RT</application> package provides
-      runtime sanitizer and profiling libraries for developers who use
-      <application>Clang</application> and <application>LLVM</application>.
+      The <application>Compiler RT</application> package provides runtime
+sanitizer and profiling libraries for developers who use
+<application>Clang</application> and <application>LLVM</application>.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&llvm-download-http;"/>
+          Transferência (HTTP): <ulink url="&llvm-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&llvm-download-ftp;"/>
+          Transferência (FTP): <ulink url="&llvm-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &llvm-md5sum;
+          Soma de verificação MD5: &llvm-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &llvm-size;
+          Tamanho da transferência: &llvm-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &llvm-buildsize;
+          Espaço em disco estimado exigido: &llvm-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &llvm-time;
+          Tempo de construção estimado: &llvm-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <para>
+      <emphasis role="strong">Cmake modules for LLVM</emphasis>
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download: <ulink url="&cmake-llvm-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5: &cmake-llvm-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &cmake-llvm-size;
         </para>
       </listitem>
     </itemizedlist>
 
     <bridgehead renderas="sect3">Recommended Download</bridgehead>
-      <bridgehead role="recommended" renderas="sect4">Clang</bridgehead>
-      <itemizedlist spacing="compact">
-        <listitem>
-          <para>
-            Download: <ulink url="&clang-download-http;"/>
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Download MD5 sum: &clang-md5sum;
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Download size: &clang-size;
-          </para>
-        </listitem>
-      </itemizedlist>
+    <para>
+      <emphasis role="strong">Clang</emphasis>
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download: <ulink url="&clang-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5: &clang-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &clang-size;
+        </para>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Patch enabling <xref linkend="gSSP"/> by default in clang: <ulink
+url="&patch-root;/clang-&llvm-version;-enable_default_ssp-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
 
     <bridgehead renderas="sect3">Optional Download</bridgehead>
-      <bridgehead role="optional" renderas="sect4">Compiler RT</bridgehead>
-      <itemizedlist spacing="compact">
-        <listitem>
-          <para>
-            Download: <ulink url="&compiler-rt-download-http;"/>
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Download MD5 sum: &compiler-rt-md5sum;
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Download size: &compiler-rt-size;
-          </para>
-        </listitem>
-      </itemizedlist>
-<!--
-      <itemizedlist spacing="compact">
-        <listitem>
-          <para>
-            Optional patch:
-            <ulink url="&patch-root;/llvm-&llvm-version;-compiler_rt_buildfix-1.patch"/>
-            (required if using compiler-rt)
-          </para>
-        </listitem>
-      </itemizedlist>
--->
-    <bridgehead renderas="sect3">LLVM Dependencies</bridgehead>
+    <para>
+      <emphasis role="strong">Compiler RT</emphasis>
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download: <ulink url="&compiler-rt-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5: &compiler-rt-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &compiler-rt-size;
+        </para>
+      </listitem>
+    </itemizedlist>
+    <bridgehead renderas="sect3">Dependências de LLVM</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
       <xref linkend="cmake"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="doxygen"/>,
-      <xref linkend="git"/>,
-      <xref linkend="graphviz"/>,
-      <xref linkend="libxml2"/>,
-      <xref linkend="pygments"/>,
-      <xref linkend="rsync"/> (for tests),
-      <xref linkend="texlive"/> (or <xref linkend="tl-installer"/>),
-      <xref linkend="valgrind"/>,
-      <xref linkend="PyYAML"/>, <!-- for yaml2obj -->
-      <xref linkend="zip"/>,
-      <ulink url="https://ocaml.org/">OCaml</ulink>,
-      <ulink url="https://pypi.org/project/psutil/">psutil</ulink>,
-      <ulink url="https://pypi.python.org/pypi/recommonmark">recommonmark</ulink>,
-      <ulink url="https://pypi.python.org/pypi/Sphinx">Sphinx</ulink>, and
-      <ulink url="https://github.com/Z3Prover/z3">Z3</ulink>
+      <!-- for yaml2obj -->
+<xref linkend="doxygen"/>, <xref linkend="git"/>, <xref
+linkend="graphviz"/>, <xref linkend="libxml2"/>, <xref linkend="pygments"/>,
+<xref linkend="rsync"/> (for tests), <xref linkend="recommonmark"/> (for
+building documentation), <xref linkend="texlive"/> (or <xref
+linkend="tl-installer"/>), <xref linkend="valgrind"/>, <xref
+linkend="PyYAML"/>, <xref linkend="zip"/>, <ulink
+url="https://ocaml.org/">OCaml</ulink>, <ulink
+url="https://pypi.org/project/psutil/">psutil</ulink> (for tests), and
+<ulink url="https://github.com/Z3Prover/z3">Z3</ulink>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/llvm"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/llvm"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of LLVM</title>
+    <title>Instalação de LLVM</title>
 
     <para>
-      Install <application>clang</application> into
-      the source tree by running the following commands:
+      Starting with version 15.0.0, an additional tarball
+<filename>llvm-cmake-&llvm-version;.src.tar.xz</filename> is needed.  The
+upstream expects it extracted at the same level as the
+<filename>llvm-&llvm-version;.src.tar.xz</filename> tarball, and the
+extracted directory renamed to <filename
+class="directory">cmake</filename>.  Extract it and modify the build system
+to avoid creating a directory outside the
+<filename>llvm-&llvm-version;.src</filename> hierarchy:
+    </para>
+
+<screen><userinput>tar -xf ../llvm-cmake-&llvm-version;.src.tar.xz &amp;&amp;
+sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@cmake-&llvm-version;.src@' \
+    -i CMakeLists.txt</userinput></screen>
+
+    <para>
+      Install <application>clang</application> into the source tree by running the
+following commands:
     </para>
 
 <screen><userinput>tar -xf ../clang-&llvm-version;.src.tar.xz -C tools &amp;&amp;
 mv tools/clang-&llvm-version;.src tools/clang</userinput></screen>
 
     <para>
-      If you have downloaded <application>compiler-rt</application>,
-      install it into the source tree by running the following commands:
+      If you have downloaded <application>compiler-rt</application>, install it
+into the source tree by running the following commands:
     </para>
 
 <screen><userinput>tar -xf ../compiler-rt-&llvm-version;.src.tar.xz -C projects &amp;&amp;
@@ -200,23 +236,25 @@ mv projects/compiler-rt-&llvm-version;.src projects/compiler-rt</userinput></scr
 
     <para>
      There are many Python scripts in this package which use
-     <command>/usr/bin/env python</command> to access the system Python
-     which on LFS is <xref linkend="python3"/>. Use the following comand
-     to fix these scripts:
+<command>/usr/bin/env python</command> to access the system Python which on
+LFS is <xref linkend="python3"/>. Use the following command to fix these
+scripts:
     </para>
 
 <screen><userinput>grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'</userinput></screen>
-<!--
+
     <para>
-      If you have downloaded <application>compiler-rt</application>,
-      fix building it with Linux-5.13.0 by using the following command:
+      If you have downloaded <application>clang</application>, apply the following
+patch to enable <xref linkend="gSSP"/> by default in compiled programs.
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../llvm-&llvm-version;-compiler_rt_buildfix-1.patch</userinput></screen>
--->
+<screen><!-- need <../<patch>
+ instead of -i because -d changes directory
+     before applying -i -->
+<userinput remap="pre">patch -Np2 -d tools/clang &lt;../clang-&llvm-version;-enable_default_ssp-1.patch</userinput></screen>
+
     <para>
-      Install <application>LLVM</application> by running the following
-      commands:
+      Instale <application>LLVM</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir -v build &amp;&amp;
@@ -231,14 +269,15 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr               \
       -DLLVM_ENABLE_RTTI=ON                     \
       -DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF" \
       -DLLVM_BINUTILS_INCDIR=/usr/include       \
+      -DLLVM_INCLUDE_BENCHMARKS=OFF             \
+      -DCLANG_DEFAULT_PIE_ON_LINUX=ON           \
       -Wno-dev -G Ninja ..                      &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      If you have installed <application>Sphinx</application> and
-      <application>recommonmark</application> and wish
-      to generate the html documentation and manual pages, issue the following
-      commands:
+      If you have installed <xref linkend="recommonmark"/> and its dependencies,
+you can generate the html documentation and manual pages with the following
+commands:
     </para>
 
 <screen remap="doc"><userinput>cmake -DLLVM_BUILD_DOCS=ON            \
@@ -254,123 +293,147 @@ ninja docs-llvm-html  docs-llvm-man</userinput></screen>
 <screen remap="doc"><userinput>ninja docs-clang-html docs-clang-man</userinput></screen>
 
     <para>
+      
       <!-- EDITORS - if you have more than 4 cores, take some offline to measure
       the elapsed time for the tests.  Also, libstdc++.a and perhaps libstdc++fs.a
       are used by a couple of the link-static tests. -->
-      To test the results, issue: <command>ninja check-all</command>. Tests are
-      built with all <emphasis>available</emphasis> cores, but run using the number
-      of <emphasis>online</emphasis> processors. (The difference is that available
-      cores can be limited using <command>taskset</command>, but taking them offline
-      requires echoing 0 to <filename
-      class="directory">/sys/devices/system/cpu/cpu&lt;N&gt;/online</filename>
-      by the <systemitem class="username">root</systemitem> user and makes them
-      temporarily unusable by all jobs on the machine.)
-      Note that a few of the compiler-rt Sanitizer based tests (13 of more than 59000
-      tests run) are known to fail. Some of the LLVM-Unit IR tests are known to
-      fail as well.
+<!--Note that 2 of more than 62090 tests (llvm-libtool-darwin/L-and-l.test
+      and ThreadSanitizer-x86_64) are known to fail.-->
+<!--Note that three tests, <filename>
+extendhfsf2_test.c</filename>,
+      <filename>truncdfhf2_test.c</filename>, and
+      <filename>truncsfhf2_test.c</filename> are known to fail.-->
+<!-- 15.0.1: -->
+To test the results, issue: <command>ninja check-all</command>. Tests are
+built with all <emphasis>available</emphasis> cores, but run using the
+number of <emphasis>online</emphasis> processors. (The difference is that
+available cores can be limited using <command>taskset</command>, but taking
+them offline requires echoing 0 to <filename
+class="directory">/sys/devices/system/cpu/cpu&lt;N&gt;/online</filename> by
+the <systemitem class="username">root</systemitem> user and makes them
+temporarily unusable by all jobs on the machine.)  Note that four tests out
+of more than 64,700 are known to fail: <filename>DataFlowSanitizer-x86_64 ::
+custom.cpp</filename>, <filename>DataFlowSanitizer-x86_64 ::
+origin_unaligned_memtrans.c</filename>, <filename>DataFlowSanitizer-x86_64
+:: release_shadow_space.c</filename>, <filename>LLVM ::
+tools/llvm-libtool-darwin/L-and-l.test</filename>,
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>ninja install</userinput></screen>
 <!-- as of version 13.0.0, the install process seems to install the html
      documentation and the manual pages. The llvm html documentation
-     is installed into /usr/share/doc/llvm, while the clang html documentation
-     is installed into /usr/doc/clang. So we have just to move it. -->
+     is installed into /usr/share/doc/LLVM/llvm, while the clang html
+     documentation is installed into /usr/share/doc/LLVM/clang. So we have
+     just to move it. -->
+<screen role="root"><userinput>ninja install &amp;&amp;
+cp bin/FileCheck /usr/bin</userinput></screen>
+
     <para>
-      If you have built the llvm documentation, it has been installed
-      by the above command, but it needs to be moved. As the
-      <systemitem class="username">root</systemitem> user:
+      If you have built the llvm documentation, it has been installed by the above
+command, but it needs to be moved. As the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"
-        remap="doc"><userinput>install -v -d -m755 /usr/share/doc/llvm-&llvm-version;                        &amp;&amp;
-mv -v /usr/share/doc/llvm/html /usr/share/doc/llvm-&llvm-version;/llvm-html   &amp;&amp;
-rmdir -v /usr/share/doc/llvm</userinput></screen>
+        remap="doc"><userinput>install -v -d -m755 /usr/share/doc/llvm-&llvm-version;            &amp;&amp;
+mv -v /usr/share/doc/LLVM/llvm /usr/share/doc/llvm-&llvm-version; &amp;&amp;
+rmdir -v --ignore-fail-on-non-empty /usr/share/doc/LLVM</userinput></screen>
 
     <para>
-      If you have built the clang documentation, it has been installed, but
-      needs to be moved too.  Again as the
-      <systemitem class="username">root</systemitem> user:
+      If you have built the clang documentation, it has been installed, but needs
+to be moved too.  Again as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"
-        remap="doc"><userinput>install -v -d -m755 /usr/share/doc/llvm-&llvm-version;                        &amp;&amp;
-mv -v /usr/share/doc/clang/html /usr/share/doc/llvm-&llvm-version;/clang-html &amp;&amp;
-rmdir -v /usr/share/doc/clang</userinput></screen>
+        remap="doc"><userinput>install -v -d -m755 /usr/share/doc/llvm-&llvm-version;             &amp;&amp;
+mv -v /usr/share/doc/LLVM/clang /usr/share/doc/llvm-&llvm-version; &amp;&amp;
+rmdir -v --ignore-fail-on-non-empty /usr/share/doc/LLVM</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
       <parameter>-DLLVM_ENABLE_FFI=ON</parameter>: This switch allows
-      <application>LLVM</application> to use
-      <application>libffi</application>.
+<application>LLVM</application> to use <application>libffi</application>.
     </para>
 
     <para>
-      <parameter>-DLLVM_BUILD_LLVM_DYLIB=ON</parameter>: This switch builds
-      the libraries as static and links all of them into an unique shared one.
-      This is the recommended way of building a shared library.
+      <parameter>-DLLVM_BUILD_LLVM_DYLIB=ON</parameter>: This switch builds the
+libraries as static and links all of them into an unique shared one.  This
+is the recommended way of building a shared library.
     </para>
 
     <para>
       <parameter>-DCMAKE_BUILD_TYPE=Release</parameter>: This switch enables
-      compiler optimizations in order to speed up the code and reduce its size.
-      It also disables some compile checks which are not necessary on a
-      production system.
+compiler optimizations in order to speed up the code and reduce its size.
+It also disables some compile checks which are not necessary on a production
+system.
     </para>
 
     <para>
       <parameter>-DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF"</parameter>: This
-      switch enables building for the same target as the host, and also for
-      the r600 AMD GPU used by the Mesa r600 and radeonsi drivers. The BPF
-      target is required to build <xref linkend="v4l-utils"/>. The Default is
-      all of the targets. You can use a semicolon separated list. Valid targets
-      are: host, X86, Sparc, PowerPC, ARM, AArch64, Mips, Hexagon, Xcore,
-      M68K, MSP430, NVPTX, SystemZ, AMDGPU, BPF, CppBackend, or all.
+switch enables building for the same target as the host, and also for the
+r600 AMD GPU used by the Mesa r600 and radeonsi drivers. The BPF target is
+required to build <xref linkend="v4l-utils"/>. The Default is all of the
+targets. You can use a semicolon separated list. Valid targets are: host,
+X86, Sparc, PowerPC, ARM, AArch64, Mips, Hexagon, Xcore, M68K, MSP430,
+NVPTX, SystemZ, AMDGPU, BPF, CppBackend, or all.
     </para>
 
     <para>
       <parameter>-DLLVM_LINK_LLVM_DYLIB=ON</parameter>: Used in conjunction with
-      <parameter>-DLLVM_BUILD_LLVM_DYLIB=ON</parameter>, this switch enables
-      linking the tools against the shared library instead of the static ones.
-      It also slightly reduces their size and also ensures that llvm-config
-      will correctly use libLLVM-&llvm-majmin-version;.so.
+<parameter>-DLLVM_BUILD_LLVM_DYLIB=ON</parameter>, this switch enables
+linking the tools against the shared library instead of the static ones.  It
+slightly reduces their size and also ensures that llvm-config will correctly
+use libLLVM-&llvm-maj-version;.so.
     </para>
 
     <para>
-      <parameter>-DLLVM_ENABLE_RTTI=ON</parameter>: This switch is used to
-      build LLVM with run-time type information. This is required for building
-      <xref linkend="mesa"/>.
+      <parameter>-DLLVM_ENABLE_RTTI=ON</parameter>: This switch is used to build
+LLVM with run-time type information. This is required for building <xref
+linkend="mesa"/>.
     </para>
 
     <para>
-      <parameter>-DLLVM_BINUTILS_INCDIR=/usr/include</parameter>: This switch
-      is used to tell the build system the location of binutils headers,
-      which were installed in LFS.  This allows the building of
-      <filename class="libraryfile">LLVMgold.so</filename>, which is needed
-      for building programs with <command>clang</command> and Link Time
-      Optimization (LTO).
+      <parameter>-DLLVM_BINUTILS_INCDIR=/usr/include</parameter>: This switch is
+used to tell the build system the location of binutils headers, which were
+installed in LFS.  This allows the building of <filename
+class="libraryfile">LLVMgold.so</filename>, which is needed for building
+programs with <command>clang</command> and Link Time Optimization (LTO).
+    </para>
+
+    <para>
+      <parameter>-DLLVM_INCLUDE_BENCHMARKS=OFF</parameter>: is used to disable
+generation build targets for the LLVM benchmarks. This option requires
+additional code that is not currently available.
+    </para>
+
+    <para>
+      <parameter>-DCLANG_DEFAULT_PIE_ON_LINUX=ON</parameter>: makes
+<option>-fpie</option> option the default when compiling programs.  Together
+with the <xref linkend="gASLR"/> feature enabled in the kernel, this defeats
+some kind of attacks based on known memory layouts.
     </para>
 
     <para>
       <option>-DBUILD_SHARED_LIBS=ON</option>: if used instead of
-      <parameter>-DLLVM_BUILD_LLVM_DYLIB=ON</parameter> and
-      <parameter>-DLLVM_LINK_LLVM_DYLIB=ON</parameter>, builds all the
-      <application>LLVM</application> libraries (about 60) as shared
-      libraries instead of static.
+<parameter>-DLLVM_BUILD_LLVM_DYLIB=ON</parameter> and
+<parameter>-DLLVM_LINK_LLVM_DYLIB=ON</parameter>, builds all the
+<application>LLVM</application> libraries (about 60) as shared libraries
+instead of static.
     </para>
 
     <para>
-      <option>-DLLVM_ENABLE_DOXYGEN</option>: Enables the generation of
-      browsable HTML documentation if you have installed <xref
-      linkend="doxygen"/>. You should run <command>make doxygen-html</command>
-      afterwards, and install the generated documentation manually.
+      <option>-DLLVM_ENABLE_DOXYGEN</option>: Enables the generation of browsable
+HTML documentation if you have installed <xref linkend="doxygen"/>. You
+should run <command>make doxygen-html</command> afterwards, and install the
+generated documentation manually.
     </para>
 
   </sect2>
@@ -379,62 +442,66 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          bugpoint, c-index-test, clang, clang++ (symlinks to
-          clang-&lt;version&gt;), clang-&lt;version&gt;, clang-check, clang-cl,
-          clang-cpp (last two symlinks to clang), clang-extdef-mapping, clang-format,
-          clang-offload-bundler, clang-offload-wrapper,
-          clang-refactor, clang-rename, clang-repl, clang-scan-deps,
-          diagtool, dsymutil, git-clang-format, hmaptool, llc, lli,
-          llvm-addr2line (symlink to llvm-symbolizer),
-          llvm-ar, llvm-as, llvm-bcanalyzer,
-          llvm-bitcode-strip (symlink to llvm-objcopy), llvm-cat,
-          llvm-cfi-verify, llvm-config, llvm-cov, llvm-c-test, llvm-cvtres,
-          llvm-cxxdump, llvm-cxxfilt, llvm-cxxmap,
-          llvm-diff, llvm-dis, llvm-dlltool (symlink to llvm-ar), llvm-dwarfdump,
-          llvm-dwp, llvm-exegenesis, llvm-extract, llvm-gsymutil, llvm-ifs,
-          llvm-install-name-tool (symlink to llvm-objcopy), llvm-jitlink,
-          llvm-lib (symlink to llvm-ar), llvm-libtool-darwin, llvm-link,
-          llvm-lipo, llvm-lto, llvm-lto2, llvm-mc, llvm-mca, llvm-ml,
-          llvm-modextract, llvm-mt, llvm-nm, llvm-objcopy, llvm-objdump,
-          llvm-opt-report, llvm-otool (symlink to llv-objdump),
-          llvm-pdbutil, llvm-profdata, llvm-profgen,
-          llvm-ranlib (symlink to llvm-ar), llvm-rc,
-          llvm-readelf (symlink to llvm-readobj), llvm-readobj, llvm-reduce,
-          llvm-rtdyld, llvm-sim, llvm-size, llvm-split, llvm-stress,
-          llvm-strings, llvm-strip (symlink to llvm-objcopy), llvm-symbolizer,
-          llvm-tapi-diff, llvm-tblgen, llvm-undname, llvm-windres (symlink to
-          llvm-rc, llvm-xray, opt, sancov, sanstats, scan-build,
-          scan-view, split-file, and verify-uselistorder
+          analyze-build, bugpoint, c-index-test, clang, clang++ (symlinks to
+clang-&llvm-maj-version;), clang-&llvm-maj-version;, clang-check, clang-cl,
+clang-cpp (last two symlinks to clang), clang-extdef-mapping, clang-format,
+clang-linker-wrapper, clang-nvlink-wrapper, clang-offload-bundler,
+clang-offload-packager, clang-offload-wrapper, clang-refactor, clang-rename,
+clang-repl, clang-scan-deps, diagtool, dsymutil, FileCheck,
+git-clang-format, hmaptool, intercept-build, llc, lli, llvm-addr2line
+(symlink to llvm-symbolizer), llvm-ar, llvm-as, llvm-bcanalyzer,
+llvm-bitcode-strip (symlink to llvm-objcopy), llvm-cat, llvm-cfi-verify,
+llvm-config, llvm-cov, llvm-c-test, llvm-cvtres, llvm-cxxdump, llvm-cxxfilt,
+llvm-cxxmap, llvm-debuginfod, llvm-debuginfod-find, llvm-diff, llvm-dis,
+llvm-dlltool (symlink to llvm-ar), llvm-dwarfdump, llvm-dwarfutil, llvm-dwp,
+llvm-exegesis, llvm-extract, llvm-gsymutil, llvm-ifs, llvm-install-name-tool
+(symlink to llvm-objcopy), llvm-jitlink, llvm-lib (symlink to llvm-ar),
+llvm-libtool-darwin, llvm-link, llvm-lipo, llvm-lto, llvm-lto2, llvm-mc,
+llvm-mca, llvm-ml, llvm-modextract, llvm-mt, llvm-nm, llvm-objcopy,
+llvm-objdump, llvm-opt-report, llvm-otool (symlink to llv-objdump),
+llvm-pdbutil, llvm-profdata, llvm-profgen, llvm-ranlib (symlink to llvm-ar),
+llvm-rc, llvm-readelf (symlink to llvm-readobj), llvm-readobj, llvm-reduce,
+llvm-remark-size-diff, llvm-rtdyld, llvm-sim, llvm-size, llvm-split,
+llvm-stress, llvm-strings, llvm-strip (symlink to llvm-objcopy),
+llvm-symbolizer, llvm-tapi-diff, llvm-tblgen, llvm-tli-checker,
+llvm-undname, llvm-windres (symlink to llvm-rc), llvm-xray, opt, sancov,
+sanstats, scan-build, scan-build-py, scan-view, split-file, and
+verify-uselistorder
         </seg>
         <seg>
-          libLLVM.so,
-          libLLVM*.a (89 libraries),
-          libLTO.so,
-          libRemarks.so,
-          libclang.so,
-          libclang-cpp.so,
-          libclang*.a (38 libraries),
-          and LLVMgold.so
+          libLLVM.so, libLLVM*.a (95 libraries), libLTO.so, libRemarks.so,
+libclang.so, libclang-cpp.so, libclang*.a (41 libraries), and LLVMgold.so
         </seg>
         <seg>
           /usr/include/{clang,clang-c,llvm,llvm-c},
-          /usr/lib/{clang,cmake/{clang,llvm},libear,libscanbuild},
-          /usr/share/{clang,opt-viewer,scan-build,scan-view}, and
-          /usr/share/doc/llvm-&llvm-version;
+/usr/lib/{clang,cmake/{clang,llvm},libear,libscanbuild},
+/usr/share/{clang,opt-viewer,scan-build,scan-view}, and
+/usr/share/doc/llvm-&llvm-version;
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="analyze-build">
+        <term><command>analyze-build</command></term>
+        <listitem>
+          <para>
+            is a static analysis tool
+          </para>
+          <indexterm zone="llvm analyze-build">
+            <primary sortas="b-analyze-build">analyze-build</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
 
       <varlistentry id="bugpoint">
         <term><command>bugpoint</command></term>
@@ -464,8 +531,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>clang</command></term>
         <listitem>
           <para>
-            is the <application>Clang</application> C, C++,
-            and Objective-C compiler
+            is the <application>Clang</application> C, C++, and Objective-C compiler
           </para>
           <indexterm zone="llvm clang">
             <primary sortas="b-clang">clang</primary>
@@ -477,8 +543,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>clang-check</command></term>
         <listitem>
           <para>
-            is a tool to perform static code analysis and display Abstract
-            Syntax Trees (AST)
+            is a tool to perform static code analysis and display Abstract Syntax Trees
+(AST)
           </para>
           <indexterm zone="llvm clang-check">
             <primary sortas="b-clang-check">clang-check</primary>
@@ -490,8 +556,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>clang-extdef-mapping</command></term>
         <listitem>
           <para>
-            is a tool to collect the USR name and location of external
-            definitions in a source file
+            is a tool to collect the USR name and location of external definitions in a
+source file
           </para>
           <indexterm zone="llvm clang-extdef-mapping">
             <primary sortas="b-clang-extdef-mapping">clang-extdef-mapping</primary>
@@ -503,8 +569,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>clang-format</command></term>
         <listitem>
           <para>
-            is a tool to format C/C++/Java/JavaScript/Objective-C/Protobuf
-            code
+            is a tool to format C/C++/Java/JavaScript/Objective-C/Protobuf code
           </para>
           <indexterm zone="llvm clang-format">
             <primary sortas="b-clang-format">clang-format</primary>
@@ -512,29 +577,52 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         </listitem>
       </varlistentry>
 
- <!--
-      <varlistentry id="clang-func-mapping">
-        <term><command>clang-func-mapping</command></term>
+      <varlistentry id="clang-linker-wrapper">
+        <term><command>clang-linker-wrapper</command></term>
         <listitem>
           <para>
-            collects the name and location of all function definitions in the
-            source files.
+            is a wrapper utility over the host linker
           </para>
-          <indexterm zone="llvm clang-func-mapping">
-            <primary sortas="b-clang-func-mapping">clang-func-mapping</primary>
+          <indexterm zone="llvm clang-linker-wrapper">
+            <primary sortas="b-clang-linker-wrapper">clang-linker-wrapper</primary>
           </indexterm>
         </listitem>
       </varlistentry>
--->
+
+      <varlistentry id="clang-nvlink-wrapper">
+        <term><command>clang-nvlink-wrapper</command></term>
+        <listitem>
+          <para>
+            is a wrapper tool over the nvlink program
+          </para>
+          <indexterm zone="llvm clang-nvlink-wrapper">
+            <primary sortas="b-clang-nvlink-wrapper">clang-nvlink-wrapper</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="clang-offload-bundler">
         <term><command>clang-offload-bundler</command></term>
         <listitem>
           <para>
-            is a tool to bundle/unbundle OpenMP offloaded files associated with
-            a common source file
+            is a tool to bundle/unbundle OpenMP offloaded files associated with a common
+source file
           </para>
           <indexterm zone="llvm clang-offload-bundler">
             <primary sortas="b-clang-offload-bundler">clang-offload-bundler</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="clang-offload-packager">
+        <term><command>clang-offload-packager</command></term>
+        <listitem>
+          <para>
+            is a tool to bundle several object files into a single binary, which can
+then be used to create a fatbinary containing offloading code
+          </para>
+          <indexterm zone="llvm clang-offload-packager">
+            <primary sortas="b-clang-offload-packager">clang-offload-packager</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -599,12 +687,25 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         </listitem>
       </varlistentry>
 
+      <varlistentry id="FileCheck">
+        <term><command>FileCheck</command></term>
+        <listitem>
+          <para>
+            is a tool that reads two files (one from standard input, and one specified
+on the command line) and uses one to verify the other.
+          </para>
+          <indexterm zone="llvm FileCheck">
+            <primary sortas="b-FileCheck">FileCheck</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="dsymutil">
         <term><command>dsymutil</command></term>
         <listitem>
           <para>
-            is a tool used to manipulate archived DWARF debug symbol files,
-            compatible with the Darwin command <command>dsymutil</command>
+            is a tool used to manipulate archived DWARF debug symbol files, compatible
+with the Darwin command <command>dsymutil</command>
           </para>
           <indexterm zone="llvm dsymutil">
             <primary sortas="b-dsymutil">dsymutil</primary>
@@ -616,8 +717,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>git-clang-format</command></term>
         <listitem>
           <para>
-            runs clang-format on git generated patches (requires
-            <xref linkend="git"/>)
+            runs clang-format on git generated patches (requires <xref linkend="git"/>)
           </para>
           <indexterm zone="llvm git-clang-format">
             <primary sortas="b-git-clang-format">git-clang-format</primary>
@@ -653,8 +753,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>lli</command></term>
         <listitem>
           <para>
-            is used to directly execute programs from
-            <application>LLVM</application> bitcode
+            is used to directly execute programs from <application>LLVM</application>
+bitcode
           </para>
           <indexterm zone="llvm lli">
             <primary sortas="b-lli">lli</primary>
@@ -666,8 +766,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-addr2line</command></term>
         <listitem>
           <para>
-            is a tool used to convert addresses into file names and line
-            numbers
+            is a tool used to convert addresses into file names and line numbers
           </para>
           <indexterm zone="llvm llvm-addr2line">
             <primary sortas="b-llvm-addr2line">llvm-addr2line</primary>
@@ -739,9 +838,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-cfi-verify</command></term>
         <listitem>
           <para>
-            identifies whether Control Flow Integrity protects all indirect
-            control flow instructions in the provided object file, DSO, or
-            binary
+            identifies whether Control Flow Integrity protects all indirect control flow
+instructions in the provided object file, DSO, or binary
           </para>
           <indexterm zone="llvm llvm-cfi-verify">
             <primary sortas="b-llvm-cfi-verify">llvm-cfi-verify</primary>
@@ -833,12 +931,37 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         </listitem>
       </varlistentry>
 
+      <varlistentry id="llvm-debuginfod">
+        <term><command>llvm-debuginfod</command></term>
+        <listitem>
+          <para>
+            is a service providing debug information over an HTTP API for analyzing
+stripped binaries
+          </para>
+          <indexterm zone="llvm llvm-debuginfod">
+            <primary sortas="b-llvm-debuginfod">llvm-debuginfod</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="llvm-debuginfod-find">
+        <term><command>llvm-debuginfod-find</command></term>
+        <listitem>
+          <para>
+            is an interface to the <command>llvm-debuginfod</command> daemon for finding
+debuginfod artifacts
+          </para>
+          <indexterm zone="llvm llvm-debuginfod-find">
+            <primary sortas="b-llvm-debuginfod-find">llvm-debuginfod-find</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="llvm-diff">
         <term><command>llvm-diff</command></term>
         <listitem>
           <para>
-            is the <application>LLVM</application> structural
-            '<command>diff</command>'
+            is the <application>LLVM</application> structural '<command>diff</command>'
           </para>
           <indexterm zone="llvm llvm-diff">
             <primary sortas="b-llvm-diff">llvm-diff</primary>
@@ -866,6 +989,18 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
           </para>
           <indexterm zone="llvm llvm-dwarfdump">
             <primary sortas="b-llvm-dwarfdump">llvm-dwarfdump</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="llvm-dwarfutil">
+        <term><command>llvm-dwarfutil</command></term>
+        <listitem>
+          <para>
+            is a tool to copy and manipulate debug info
+          </para>
+          <indexterm zone="llvm llvm-dwarfutil">
+            <primary sortas="b-llvm-dwarfutil">llvm-dwarfutil</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -898,9 +1033,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-exegesis</command></term>
         <listitem>
           <para>
-            is a benchmarking tool that uses information available in LLVM to
-            measure host machine instruction characteristics like latency or
-            port decomposition
+            is a benchmarking tool that uses information available in LLVM to measure
+host machine instruction characteristics like latency or port decomposition
           </para>
           <indexterm zone="llvm llvm-exegesis">
             <primary sortas="b-llvm-exegesis">llvm-exegesis</primary>
@@ -912,8 +1046,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-extract</command></term>
         <listitem>
           <para>
-            is used to extract a function from an
-            <application>LLVM</application> module
+            is used to extract a function from an <application>LLVM</application> module
           </para>
           <indexterm zone="llvm llvm-extract">
             <primary sortas="b-llvm-extract">llvm-extract</primary>
@@ -925,9 +1058,9 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-gsymutil</command></term>
         <listitem>
           <para>
-            is used to process GSYM Symbolication Format files which
-            convert memory addresses to function name and source file
-            line. These files are smaller than DWARF or Breakpad files
+            is used to process GSYM Symbolication Format files which convert memory
+addresses to function name and source file line. These files are smaller
+than DWARF or Breakpad files
           </para>
           <indexterm zone="llvm llvm-gsymutil">
             <primary sortas="b-llvm-gsymutil">llvm-gsymutil</primary>
@@ -963,8 +1096,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-jitlink</command></term>
         <listitem>
           <para>
-            is used to parse relocatable object files to make their contents
-            executable in a target process
+            is used to parse relocatable object files to make their contents executable
+in a target process
           </para>
           <indexterm zone="llvm llvm-jitlink">
             <primary sortas="b-llvm-jitlink">llvm-jitlink</primary>
@@ -976,9 +1109,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-libtool-darwin</command></term>
         <listitem>
           <para>
-            provides basic libtool functionality on Darwin-based systems.
-            This is mostly useful if you are generating binaries for macOS
-            systems
+            provides basic libtool functionality on Darwin-based systems.  This is
+mostly useful if you are generating binaries for macOS systems
           </para>
           <indexterm zone="llvm llvm-libtool-darwin">
             <primary sortas="b-llvm-libtool-darwin">llvm-libtool-darwin</primary>
@@ -1014,8 +1146,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-lto</command></term>
         <listitem>
           <para>
-            is the <application>LLVM</application> LTO (link time optimization)
-            linker
+            is the <application>LLVM</application> LTO (link time optimization)  linker
           </para>
           <indexterm zone="llvm llvm-lto">
             <primary sortas="b-llvm-lto">llvm-lto</primary>
@@ -1051,8 +1182,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-mca</command></term>
         <listitem>
           <para>
-            is a performance analysis tool to statically measure the
-            performance of machine code
+            is a performance analysis tool to statically measure the performance of
+machine code
           </para>
           <indexterm zone="llvm llvm-mca">
             <primary sortas="b-llvm-mca">llvm-mca</primary>
@@ -1060,7 +1191,10 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         </listitem>
       </varlistentry>
 
-<!--  <varlistentry id="llvm-mcmarkup">
+
+
+      <!--  <varlistentry id="llvm-mcmarkup">
+
         <term><command>llvm-mcmarkup</command></term>
         <listitem>
           <para>
@@ -1071,8 +1205,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
           </indexterm>
         </listitem>
       </varlistentry>-->
-
-      <varlistentry id="llvm-ml">
+<varlistentry id="llvm-ml">
         <term><command>llvm-ml</command></term>
         <listitem>
           <para>
@@ -1100,8 +1233,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-mt</command></term>
         <listitem>
           <para>
-            is a tool to generate signed files and catalogs from a
-            side-by-side assembly manifest (used for Microsoft SDK)
+            is a tool to generate signed files and catalogs from a side-by-side assembly
+manifest (used for Microsoft SDK)
           </para>
           <indexterm zone="llvm llvm-mt">
             <primary sortas="b-llvm-mt">llvm-mt</primary>
@@ -1113,8 +1246,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-nm</command></term>
         <listitem>
           <para>
-            is used to list <application>LLVM</application> bitcode
-            and object file's symbol table
+            is used to list <application>LLVM</application> bitcode and object file's
+symbol table
           </para>
           <indexterm zone="llvm llvm-nm">
             <primary sortas="b-llvm-nm">llvm-nm</primary>
@@ -1150,8 +1283,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-opt-report</command></term>
         <listitem>
           <para>
-            is a tool to generate an optimization report from YAML optimization
-            record files
+            is a tool to generate an optimization report from YAML optimization record
+files
           </para>
           <indexterm zone="llvm llvm-opt-report">
             <primary sortas="b-llvm-opt-report">llvm-opt-report</primary>
@@ -1199,8 +1332,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-ranlib</command></term>
         <listitem>
           <para>
-            is used to generate an index for a <application>LLVM</application>
-            archive
+            is used to generate an index for a <application>LLVM</application> archive
           </para>
           <indexterm zone="llvm llvm-ranlib">
             <primary sortas="b-llvm-ranlib">llvm-ranlib</primary>
@@ -1212,8 +1344,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-rc</command></term>
         <listitem>
           <para>
-            is a platform-independent tool to compile resource scripts
-            into binary resource files
+            is a platform-independent tool to compile resource scripts into binary
+resource files
           </para>
           <indexterm zone="llvm llvm-rc">
             <primary sortas="b-llvm-rc">llvm-rc</primary>
@@ -1237,11 +1369,23 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-reduce</command></term>
         <listitem>
           <para>
-            is used to automatically reduce testcases
-            when running a test suite
+            is used to automatically reduce testcases when running a test suite
           </para>
           <indexterm zone="llvm llvm-reduce">
             <primary sortas="b-llvm-reduce">llvm-reduce</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="llvm-remark-size-diff">
+        <term><command>llvm-remark-size-diff</command></term>
+        <listitem>
+          <para>
+            reports the difference in instruction count and stack size remarks between
+two remark files
+          </para>
+          <indexterm zone="llvm llvm-remark-size-diff">
+            <primary sortas="b-llvm-remark-size-diff">llvm-remark-size-diff</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -1286,8 +1430,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-stress</command></term>
         <listitem>
           <para>
-            is used to generate random
-            <filename class="extension">.ll</filename> files
+            is used to generate random <filename class="extension">.ll</filename> files
           </para>
           <indexterm zone="llvm llvm-stress">
             <primary sortas="b-llvm-stress">llvm-stress</primary>
@@ -1299,8 +1442,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-strings</command></term>
         <listitem>
           <para>
-            print strings found in a binary (object file, executable, or
-            archive library)
+            print strings found in a binary (object file, executable, or archive
+library)
           </para>
           <indexterm zone="llvm llvm-strings">
             <primary sortas="b-llvm-strings">llvm-strings</primary>
@@ -1312,7 +1455,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-symbolizer</command></term>
         <listitem>
           <para>
-            converts adresses into source code locations
+            converts addresses into source code locations
           </para>
           <indexterm zone="llvm llvm-symbolizer">
             <primary sortas="b-llvm-symbolizer">llvm-symbolizer</primary>
@@ -1324,11 +1467,23 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>llvm-tblgen</command></term>
         <listitem>
           <para>
-            is the <application>LLVM</application> Target Description
-            To C++ Code Generator
+            is the <application>LLVM</application> Target Description To C++ Code
+Generator
           </para>
           <indexterm zone="llvm llvm-tblgen">
             <primary sortas="b-llvm-tblgen">llvm-tblgen</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="llvm-tli-checker">
+        <term><command>llvm-tli-checker</command></term>
+        <listitem>
+          <para>
+            is the <application>LLVM</application> TargetLibraryInfo versus SDK checker
+          </para>
+          <indexterm zone="llvm llvm-tli-checker">
+            <primary sortas="b-llvm-tli-checker">llvm-tli-checker</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -1357,20 +1512,18 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         </listitem>
       </varlistentry>
 
-<!--
-      <varlistentry id="obj2yaml">
-        <term><command>obj2yaml</command></term>
+      <varlistentry id="intercept-build">
+        <term><command>intercept-build</command></term>
         <listitem>
           <para>
-            takes an object file, and produces a YAML representation of the
-            file
+            generates a database of build commands for a project
           </para>
-          <indexterm zone="llvm obj2yaml">
-            <primary sortas="b-obj2yaml">obj2yaml</primary>
+          <indexterm zone="llvm intercept-build">
+            <primary sortas="b-intercept-build">intercept-build</primary>
           </indexterm>
         </listitem>
       </varlistentry>
--->
+
 
       <varlistentry id="opt">
         <term><command>opt</command></term>
@@ -1413,10 +1566,23 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <listitem>
           <para>
             is a <application>Perl</application> script that invokes the
-            <application>Clang</application> static analyzer
+<application>Clang</application> static analyzer
           </para>
           <indexterm zone="llvm scan-build">
             <primary sortas="b-scan-build">scan-build</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="scan-build-py">
+        <term><command>scan-build-py</command></term>
+        <listitem>
+          <para>
+            is a <application>Python</application> script that invokes the
+<application>Clang</application> static analyzer
+          </para>
+          <indexterm zone="llvm scan-build-py">
+            <primary sortas="b-scan-build-py">scan-build-py</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -1425,8 +1591,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>scan-view</command></term>
         <listitem>
           <para>
-            is a viewer for <application>Clang</application> static analyzer
-            results
+            is a viewer for <application>Clang</application> static analyzer results
           </para>
           <indexterm zone="llvm scan-view">
             <primary sortas="b-scan-view">scan-view</primary>
@@ -1450,8 +1615,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
         <term><command>verify-uselistorder</command></term>
         <listitem>
           <para>
-            is the <application>LLVM</application> tool to verify use-list
-            order
+            is the <application>LLVM</application> tool to verify use-list order
           </para>
           <indexterm zone="llvm verify-uselistorder">
             <primary sortas="b-verify-uselistorder">verify-uselistorder</primary>
@@ -1461,6 +1625,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
 
 <!-- Removed in 12.0.0
       <varlistentry id="yaml2obj">
+
         <term><command>yaml2obj</command></term>
         <listitem>
           <para>
@@ -1475,6 +1640,7 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
 -->
 <!--
       <varlistentry id="libllvm">
+
         <term><filename class="libraryfile">libLLVM-&llvm-version;.so</filename></term>
         <listitem>
           <para>
@@ -1498,6 +1664,8 @@ rmdir -v /usr/share/doc/clang</userinput></screen>
           </indexterm>
         </listitem>
       </varlistentry>-->
+
+
 
     </variablelist>
 

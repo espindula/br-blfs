@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-07 12:25:55 +0200 (sam, 07 jui 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -8,10 +13,10 @@
         Sets global params and include customized elements templates. -->
 
     <!-- Upstream XHTML presentation templates -->
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
+  <xsl:import href="/usr/share/xml/docbook/stylesheet/docbook-xsl/xhtml/docbook.xsl"/>
 
     <!-- Use ISO-8859-1 for output instead of default UTF-8 -->
-  <xsl:param name="chunker.output.encoding" select="'ISO-8859-1'"/>
+  <xsl:param name="chunker.output.encoding" select="'UTF-8'"/>
 
     <!-- Including our customized elements templates -->
   <xsl:include href="common.xsl"/>
@@ -22,13 +27,13 @@
   <xsl:include href="xhtml/lfs-toc.xsl"/>
   <xsl:include href="xhtml/lfs-xref.xsl"/>
 
-  <!-- The CSS Stylesheets. The path is relative to the top level html
-       directory. The templates compute automatically the position of
-       the CSS relative to the current file. So no need to fix the paths
-       in the Makefile. -->
+    <!-- The CSS Stylesheets. We set here relative path from sub-dirs HTML files.
+    The path from top-level HTML files (index.html, partX.html, etc) MUST be
+    fixed via a sed in the Makefile-->
+    <!-- Master CSS Stylesheet -->
   <xsl:param name="html.stylesheet" select="'stylesheets/lfs.css'"/>
-    <!-- Print CSS Stylesheet
-    The original template is in {docbook-xsl}/xhtml/docbook.xsl -->
+    <!-- Print CSS Stylesheet -->
+    <!-- The original template is in {docbook-xsl}/xhtml/docbook.xsl -->
   <xsl:template name='user.head.content'>
      <link rel="stylesheet" href="../stylesheets/lfs-print.css" type="text/css" media="print"/>
   </xsl:template>
@@ -38,7 +43,7 @@
   <xsl:param name="css.decoration" select="0"/>
 
     <!-- No XML declaration -->
-<!--  <xsl:param name="chunker.output.omit-xml-declaration" select="'yes'"/>-->
+  <xsl:param name="chunker.output.omit-xml-declaration" select="'yes'"/>
 
     <!-- Control generation of ToCs and LoTs -->
   <xsl:param name="generate.toc">

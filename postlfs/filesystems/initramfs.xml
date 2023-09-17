@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -8,67 +8,67 @@
 <sect1 id="initramfs">
   <?dbhtml filename="initramfs.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
-  <title>About initramfs</title>
+  <title>A respeito do initramfs</title>
 
   <para>
-    The only purpose of an initramfs is to mount the root filesystem.  The
-    initramfs is a complete set of directories that you would find on a normal
-    root filesystem.  It is bundled into a single cpio archive and compressed
-    with one of several compression algorithms.
+    O único propósito de um initramfs é o do montar o sistema de arquivos
+raiz. O initramfs é um conjunto completo de diretórios que você encontraria
+em um sistema de arquivos raiz normal. Ele é agrupado em um arquivamento
+cpio e comprimido com um dos vários algoritmos de compressão.
   </para>
 
   <para>
-    At boot time, the boot loader loads the kernel and the initramfs image
-    into memory and starts the kernel.  The kernel checks for the presence
-    of the initramfs and, if found, mounts it as / and runs /init. The init
-    program is typically a shell script.  Note that the boot process takes
-    longer, possibly significantly longer, if an initramfs is used.
+    Ao tempo da inicialização, o carregador de inicialização carrega o núcleo e
+a imagem initramfs na memória e inicia o núcleo. O núcleo verifica a
+presença do initramfs e, se encontrado, o monta como / e executa /init. O
+aplicativo init é tipicamente um script de shell. Observe que o processo de
+inicialização leva mais tempo, possivelmente significativamente mais, se um
+initramfs for usado.
   </para>
 
   <para>
-    For most distributions, kernel modules are the biggest reason to have
-    an initramfs.  In a general distribution, there are many unknowns such
-    as file system types and disk layouts.  In a way, this is the opposite
-    of LFS where the system capabilities and layout are known and a custom
-    kernel is normally built.  In this situation, an initramfs is rarely
-    needed.
+    Para a maioria das distribuições, os módulos do núcleo são a maior razão
+para ter um initramfs. Em uma distribuição geral, existem muitas incógnitas,
+como tipos de sistema de arquivos e esquemas de disco. De certa forma, isso
+é o oposto do LFS, onde os recursos e o esquema do sistema são conhecidos e
+um núcleo personalizado normalmente é construído. Nessa situação, um
+initramfs raramente é necessário.
   </para>
 
   <para>
-    There are only four primary reasons to have an initramfs in the LFS
-    environment: loading the rootfs from a network, loading it from an LVM
-    logical volume, having an encrypted rootfs where a password is required, or
-    for the convenience of specifying the rootfs as a LABEL or UUID.  Anything
-    else usually means that the kernel was not configured properly.
+    Existem somente quatro razões principais para se ter um initramfs no
+ambiente LFS: carregar o rootfs a partir de uma rede; carregá-lo a partir de
+um volume lógico LVM; ter um rootfs encriptado onde uma senha seja exigida;
+ou para a conveniência de se especificar o rootfs como um RÓTULO ou como um
+UUID. Qualquer outra coisa geralmente significa que o núcleo não foi
+configurado adequadamente.
   </para>
 
   <sect2 id="initramfs-build">
-    <title>Building an initramfs</title>
+    <title>Construindo um initramfs</title>
 
     <para>
-      If you do decide to build an initramfs, the following scripts will
-      provide a basis to do it.  The scripts will allow specifying a rootfs
-      via partition UUID or partition LABEL or a rootfs on an LVM logical
-      volume.  They do not support an encrypted root file system or mounting
-      the rootfs over a network card.  For a more complete capability see
-      <ulink url="https://www.linuxfromscratch.org/hints/read.html"> the LFS
-      Hints</ulink> or <ulink
-      url="http://fedoraproject.org/wiki/Dracut">dracut</ulink>.
+      Se você decidir construir um initramfs, [então] os scripts a seguir
+fornecerão uma base para isso. Os scripts permitirão especificar um rootfs
+via partição UUID ou partição RÓTULO ou um rootfs em um volume lógico
+LVM. Eles não suportam um sistema de arquivos raiz encriptado ou montar o
+rootfs passando por uma placa de rede de comunicação. Para uma capacidade
+mais completa, vejam-se <ulink
+url="https://www.linuxfromscratch.org/hints/read.html">as Dicas do
+LFS</ulink> ou <ulink
+url="https://fedoraproject.org/wiki/Dracut">dracut</ulink>.
     </para>
 
     <para>
-      To install these scripts, run the following commands as the
-      <systemitem class="username">root</systemitem> user:
+      Para instalar estes scripts, execute os seguintes comandos como o(a)
+usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
     <screen role="root"><userinput>cat &gt; /usr/sbin/mkinitramfs &lt;&lt; "EOF"
 <literal>#!/bin/bash
-# This file based in part on the mkinitramfs script for the LFS LiveCD
-# written by Alexander E. Patrakov and Jeremy Huntwork.
+# Este arquivo é baseado em parte no script mkinitramfs para o LiveCD do LFS
+# escrito por Alexander E. Patrakov e Jeremy Huntwork.
 
 copy()
 {
@@ -83,7 +83,7 @@ copy()
   if [ -n "$file" ] ; then
     cp $file $WDIR/usr/$2
   else
-    echo "Missing required file: $1 for directory $2"
+    echo "Ausente arquivo exigido: $1 para o diretório $2"
     rm -rf $WDIR
     exit 1
   fi
@@ -97,28 +97,28 @@ else
 fi
 
 if [ -n "$KERNEL_VERSION" ] &amp;&amp; [ ! -d "/usr/lib/modules/$1" ] ; then
-  echo "No modules directory named $1"
+  echo "Sem diretório dos módulos chamado $1"
   exit 1
 fi
 
-printf "Creating $INITRAMFS_FILE... "
+printf "Criando $INITRAMFS_FILE... "
 
 binfiles="sh cat cp dd killall ls mkdir mknod mount "
 binfiles="$binfiles umount sed sleep ln rm uname"
 binfiles="$binfiles readlink basename"
 
-# Systemd installs udevadm in /bin. Other udev implementations have it in /sbin
+# O systemd instala udevadm em /bin. Outras implementações do udev o tem em /sbin
 if [ -x /usr/bin/udevadm ] ; then binfiles="$binfiles udevadm"; fi
 
 sbinfiles="modprobe blkid switch_root"
 
-# Optional files and locations
+# Arquivos e locais opcionais
 for f in mdadm mdmon udevd udevadm; do
   if [ -x /usr/sbin/$f ] ; then sbinfiles="$sbinfiles $f"; fi
 done
 
-# Add lvm if present (cannot be done with the others because it
-# also needs dmsetup
+# Adiciona lvm se presente (não pode ser feito com os outros, pois
+# também precisa do dmsetup
 if [ -x /usr/sbin/lvm ] ; then sbinfiles="$sbinfiles lvm dmsetup"; fi
 
 unsorted=$(mktemp /tmp/unsorted.XXXXXXXXXX)
@@ -126,10 +126,10 @@ unsorted=$(mktemp /tmp/unsorted.XXXXXXXXXX)
 DATADIR=/usr/share/mkinitramfs
 INITIN=init.in
 
-# Create a temporary working directory
+# Cria um diretório temporário de trabalho
 WDIR=$(mktemp -d /tmp/initrd-work.XXXXXXXXXX)
 
-# Create base directory structure
+# Cria a estrutura básica de diretório
 mkdir -p $WDIR/{dev,run,sys,proc,usr/{bin,lib/{firmware,modules},sbin}}
 mkdir -p $WDIR/etc/{modprobe.d,udev/rules.d}
 touch $WDIR/etc/modprobe.d/modprobe.conf
@@ -138,11 +138,11 @@ ln -s usr/lib  $WDIR/lib
 ln -s usr/sbin $WDIR/sbin
 ln -s lib      $WDIR/lib64
 
-# Create necessary device nodes
+# Cria os nós necessários de dispositivo
 mknod -m 640 $WDIR/dev/console c 5 1
 mknod -m 664 $WDIR/dev/null    c 1 3
 
-# Install the udev configuration files
+# Instala os arquivos de configuração do udev
 if [ -f /etc/udev/udev.conf ]; then
   cp /etc/udev/udev.conf $WDIR/etc/udev/udev.conf
 fi
@@ -151,15 +151,15 @@ for file in $(find /etc/udev/rules.d/ -type f) ; do
   cp $file $WDIR/etc/udev/rules.d
 done
 
-# Install any firmware present
+# Instala quaisquer firmware presentes
 cp -a /usr/lib/firmware $WDIR/usr/lib
 
-# Copy the RAID configuration file if present
+# Copia o arquivo de configuração RAID se presente
 if [ -f /etc/mdadm.conf ] ; then
   cp /etc/mdadm.conf $WDIR/etc
 fi
 
-# Install the init file
+# Instala o arquivo init
 install -m0755 $DATADIR/$INITIN $WDIR/init
 
 if [  -n "$KERNEL_VERSION" ] ; then
@@ -171,7 +171,7 @@ if [  -n "$KERNEL_VERSION" ] ; then
   fi
 fi
 
-# Install basic binaries
+# Instala binários básicos
 for f in $binfiles ; do
   ldd /usr/bin/$f | sed "s/\t//" | cut -d " " -f1 &gt;&gt; $unsorted
   copy /usr/bin/$f bin
@@ -182,21 +182,21 @@ for f in $sbinfiles ; do
   copy $f sbin
 done
 
-# Add udevd libraries if not in /usr/sbin
+# Adiciona bibliotecas do udevd se não em /usr/sbin
 if [ -x /usr/lib/udev/udevd ] ; then
   ldd /usr/lib/udev/udevd | sed "s/\t//" | cut -d " " -f1 &gt;&gt; $unsorted
 elif [ -x /usr/lib/systemd/systemd-udevd ] ; then
   ldd /usr/lib/systemd/systemd-udevd | sed "s/\t//" | cut -d " " -f1 &gt;&gt; $unsorted
 fi
 
-# Add module symlinks if appropriate
+# Adiciona links simbólicos de módulo se apropriado
 if [ -n "$KERNEL_VERSION" ] &amp;&amp; [ -x /usr/bin/kmod ] ; then
   ln -s kmod $WDIR/usr/bin/lsmod
   ln -s kmod $WDIR/usr/bin/insmod
 fi
 
-# Add lvm symlinks if appropriate
-# Also copy the lvm.conf file
+# Adiciona links simbólicos do lvm se apropriado
+# Também copia o arquivo lvm.conf
 if  [ -x /usr/sbin/lvm ] ; then
   ln -s lvm $WDIR/usr/sbin/lvchange
   ln -s lvm $WDIR/usr/sbin/lvrename
@@ -216,15 +216,15 @@ if  [ -x /usr/sbin/lvm ] ; then
   ln -s lvm $WDIR/usr/sbin/vgscan
   ln -s lvm $WDIR/usr/sbin/vgrename
   ln -s lvm $WDIR/usr/sbin/vgck
-  # Conf file(s)
+  # Arquivo(s) de configuração
   cp -a /etc/lvm $WDIR/etc
 fi
 
-# Install libraries
+# Instala bibliotecas
 sort $unsorted | uniq | while read library ; do
-# linux-vdso and linux-gate are pseudo libraries and do not correspond to a file
-# libsystemd-shared is in /lib/systemd, so it is not found by copy, and
-# it is copied below anyway
+# linux-vdso e linux-gate são pseudo bibliotecas e não correspondem a um arquivo
+# libsystemd-shared está em /lib/systemd, de forma que não é encontrada pela cópia, e
+# é copiada abaixo de qualquer forma
   if [[ "$library" == linux-vdso.so.1 ]] ||
      [[ "$library" == linux-gate.so.1 ]] ||
      [[ "$library" == libsystemd-shared* ]]; then
@@ -244,28 +244,32 @@ if [ -d /usr/lib/elogind ]; then
   cp -a /usr/lib/elogind $WDIR/usr/lib
 fi
 
-# Install the kernel modules if requested
+# Instala os módulos do núcleo se solicitado
 if [ -n "$KERNEL_VERSION" ]; then
-  find                                                                        \
+  find \
      /usr/lib/modules/$KERNEL_VERSION/kernel/{crypto,fs,lib}                      \
-     /usr/lib/modules/$KERNEL_VERSION/kernel/drivers/{block,ata,md,firewire}      \
+     /usr/lib/modules/$KERNEL_VERSION/kernel/drivers/{block,ata,nvme,md,firewire} \
      /usr/lib/modules/$KERNEL_VERSION/kernel/drivers/{scsi,message,pcmcia,virtio} \
      /usr/lib/modules/$KERNEL_VERSION/kernel/drivers/usb/{host,storage}           \
      -type f 2&gt; /dev/null | cpio --make-directories -p --quiet $WDIR
 
-  cp /usr/lib/modules/$KERNEL_VERSION/modules.{builtin,order}                     \
+  cp /usr/lib/modules/$KERNEL_VERSION/modules.{builtin,order} \
             $WDIR/usr/lib/modules/$KERNEL_VERSION
+  if [ -f /usr/lib/modules/$KERNEL_VERSION/modules.builtin.modinfo ]; then
+    cp /usr/lib/modules/$KERNEL_VERSION/modules.builtin.modinfo \
+            $WDIR/usr/lib/modules/$KERNEL_VERSION
+  fi
 
   depmod -b $WDIR $KERNEL_VERSION
 fi
 
 ( cd $WDIR ; find . | cpio -o -H newc --quiet | gzip -9 ) &gt; $INITRAMFS_FILE
 
-# Prepare early loading of microcode if available
+# Prepare o carregamento antecipado do micro código se disponível
 if ls /usr/lib/firmware/intel-ucode/* &gt;/dev/null 2&gt;&amp;1 ||
    ls /usr/lib/firmware/amd-ucode/*   &gt;/dev/null 2&gt;&amp;1; then
 
-# first empty WDIR to reuse it
+# Primeiro, esvazia WDIR para reusá-lo
   rm -r $WDIR/*
 
   DSTDIR=$WDIR/kernel/x86/microcode
@@ -285,7 +289,7 @@ if ls /usr/lib/firmware/intel-ucode/* &gt;/dev/null 2&gt;&amp;1 ||
   rm microcode.img
 fi
 
-# Remove the temporary directories and files
+# Remove os arquivos e diretórios temporários
 rm -rf $WDIR $unsorted
 printf "done.\n"
 </literal>
@@ -302,25 +306,25 @@ export PATH
 
 problem()
 {
-   printf "Encountered a problem!\n\nDropping you to a shell.\n\n"
+   printf "Encontrado um problema!\n\nDeixando você em um shell.\n\n"
    sh
 }
 
 no_device()
 {
-   printf "The device %s, which is supposed to contain the\n" $1
-   printf "root file system, does not exist.\n"
-   printf "Please fix this problem and exit this shell.\n\n"
+   printf "O dispositivo %s, que se presume conter o\n" $1
+   printf "sistema de arquivos raiz, não existe.\n"
+   printf "Por favor, corrija esse problema e saia deste shell.\n\n"
 }
 
 no_mount()
 {
-   printf "Could not mount device %s\n" $1
-   printf "Sleeping forever. Please reboot and fix the kernel command line.\n\n"
-   printf "Maybe the device is formatted with an unsupported file system?\n\n"
-   printf "Or maybe filesystem type autodetection went wrong, in which case\n"
-   printf "you should add the rootfstype=... parameter to the kernel command line.\n\n"
-   printf "Available partitions:\n"
+   printf "Não poderia montar o dispositivo %s\n" $1
+   printf "Dormindo para sempre. Por favor, reinicialize e corrija a linha de comando do núcleo.\n\n"
+   printf "Talvez o dispositivo esteja formatado com um sistema de arquivos não suportado?\n\n"
+   printf "Ou talvez a auto detecção do tipo do sistema de arquivos foi errada, caso no qual\n"
+   printf "você deveria adicionar o parâmetro rootfstype=... à linha de comando do núcleo.\n\n"
+   printf "Partições disponíveis:\n"
 }
 
 do_mount_root()
@@ -334,7 +338,7 @@ do_mount_root()
       UUID=*    ) eval $root; device="/dev/disk/by-uuid/$UUID" ;;
       PARTUUID=*) eval $root; device="/dev/disk/by-partuuid/$PARTUUID" ;;
       LABEL=*   ) eval $root; device="/dev/disk/by-label/$LABEL" ;;
-      ""        ) echo "No root device specified." ; problem ;;
+      ""        ) echo "Nenhum dispositivo raiz especificado." ; problem ;;
    esac
 
    while [ ! -b "$device" ] ; do
@@ -347,7 +351,7 @@ do_mount_root()
        cat /proc/partitions
        while true ; do sleep 10000 ; done
    else
-       echo "Successfully mounted device $root"
+       echo "Dispositivo montado com sucesso $root"
    fi
 }
 
@@ -395,7 +399,7 @@ for param in $cmdline ; do
   esac
 done
 
-# udevd location depends on version
+# Local do udevd depende da versão
 if [ -x /sbin/udevd ]; then
   UDEVD=/sbin/udevd
 elif [ -x /lib/udev/udevd ]; then
@@ -403,7 +407,7 @@ elif [ -x /lib/udev/udevd ]; then
 elif [ -x /lib/systemd/systemd-udevd ]; then
   UDEVD=/lib/systemd/systemd-udevd
 else
-  echo "Cannot find udevd nor systemd-udevd"
+  echo "Não consigo encontrar o udevd nem o systemd-udevd"
   problem
 fi
 
@@ -415,7 +419,7 @@ if [ -f /etc/mdadm.conf ] ; then mdadm -As                       ; fi
 if [ -x /sbin/vgchange  ] ; then /sbin/vgchange -a y &gt; /dev/null ; fi
 if [ -n "$rootdelay"    ] ; then sleep "$rootdelay"              ; fi
 
-do_try_resume # This function will not return if resuming from disk
+do_try_resume # Esta função não retornará se retomar a partir do disco
 do_mount_root
 
 killall -w ${UDEVD##*/}
@@ -427,78 +431,78 @@ EOF</userinput></screen>
   </sect2>
 
   <sect2 id="initramfs-install">
-    <title>Using an initramfs</title>
+    <title>Usando um initramfs</title>
 
-    <bridgehead renderas="sect3">Required Runtime Dependency</bridgehead>
+    <bridgehead renderas="sect3">Dependência Exigida em Tempo de Execução</bridgehead>
 
     <para role="required">
       <xref role="runtime" linkend="cpio"/>
     </para>
 
-    <bridgehead renderas="sect3">Other Runtime Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Outras Dependências em Tempo de Execução</bridgehead>
 
     <para role="optional">
-      <xref role="runtime" linkend="lvm2"/> and/or
-      <xref role="runtime" linkend="mdadm"/> must be installed before
-      generating the initramfs, if the system partition uses them.
+      <xref role="runtime" linkend="lvm2"/> e(ou) <xref role="runtime"
+linkend="mdadm"/> precisam ser instalados antes de gerar o initramfs, se a
+partição do sistema os usar.
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/initramfs"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/initramfs"/>
     </para>
 
 
     <para>
-      To build an initramfs, run the following as the  <systemitem
-      class="username">root</systemitem> user:
+      Para construir um initramfs, execute o seguinte como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
     </para>
 
-    <screen role="nodump"><userinput>mkinitramfs [KERNEL VERSION]</userinput></screen>
+    <screen role="nodump"><userinput>mkinitramfs [VERSÃO DO NÚCLEO]</userinput></screen>
 
     <para>
-      The optional argument is the directory where the appropriate kernel
-      modules are located. This must be a subdirectory of <filename
-      class='directory'> /lib/modules</filename>.  If no modules are specified,
-      then the initramfs is named <emphasis>initrd.img-no-kmods</emphasis>.
-      If a kernel version is specified, the initrd is named
-      <emphasis>initrd.img-$KERNEL_VERSION</emphasis> and is only appropriate
-      for the specific kernel specified. The output file will be placed in the
-      current directory.
-    </para>
-
-    <para>
-      If early loading of microcode is needed (see <xref
-      linkend="cpu-microcode"/>), you can install the appropriate blob or
-      container in <filename class="directory">/lib/firmware</filename>.
-      It will be automatically added to the initrd when running
-      <command>mkinitramfs</command>.
+      O argumento opcional é o diretório onde os módulos apropriados do núcleo
+estão localizados. Esse precisa ser um subdiretório de <filename
+class='directory'>/lib/modules</filename>. Se nenhum módulo for
+especificado, então o initramfs é nomeado
+<emphasis>initrd.img-no-kmods</emphasis>. Se uma versão do núcleo for
+especificada, [então] o initrd é nomeado de
+<emphasis>initrd.img-$VERSÃO_DO_NÚCLEO</emphasis> e é apropriado somente
+para o núcleo específico especificado. O arquivo de saída gerada será
+colocado no diretório atual.
     </para>
 
     <para>
-      After generating the initrd, copy it to the <filename
-      class='directory'>/boot</filename> directory.
+      Se for necessário o carregamento antecipado do microcódigo (veja-se <xref
+linkend="cpu-microcode"/>), [então] você pode instalar o blob ou contêiner
+apropriado em <filename class="directory">/lib/firmware</filename>. Ele será
+adicionado automaticamente ao initrd ao executar
+<command>mkinitramfs</command>.
     </para>
 
     <para>
-      Now edit <filename>/boot/grub/grub.cfg</filename> and add a new
-      menuentry.  Below are several examples.
+      Depois de gerar o initrd, copie-o para o diretório <filename
+class='directory'>/boot</filename>.
     </para>
 
-     <screen role="nodump"><userinput># Generic initramfs and root fs identified by UUID
+    <para>
+      Agora edite <filename>/boot/grub/grub.cfg</filename> e adicione uma nova
+entrada de menu. Abaixo estão vários exemplos.
+    </para>
+
+     <screen role="nodump"><userinput># initramfs genérico e sistema de arquivos raiz identificado por UUID
 menuentry "LFS Dev (LFS-7.0-Feb14) initrd, Linux 3.0.4"
 {
   linux  /vmlinuz-3.0.4-lfs-20120214 root=UUID=54b934a9-302d-415e-ac11-4988408eb0a8 ro
   initrd /initrd.img-no-kmods
 }</userinput></screen>
 
-     <screen role="nodump"><userinput># Generic initramfs and root fs on LVM partition
+     <screen role="nodump"><userinput># initramfs genérico e sistema de arquivos raiz na partição LVM
 menuentry "LFS Dev (LFS-7.0-Feb18) initrd lvm, Linux 3.0.4"
 {
   linux  /vmlinuz-3.0.4-lfs-20120218 root=/dev/mapper/myroot ro
   initrd /initrd.img-no-kmods
 }</userinput></screen>
 
-     <screen role="nodump"><userinput># Specific initramfs and root fs identified by LABEL
+     <screen role="nodump"><userinput># initramfs específico e sistema de arquivos raiz identificado por RÓTULO
 menuentry "LFS Dev (LFS-7.1-Feb20) initrd label, Linux 3.2.6"
 {
   linux  /vmlinuz-3.2.6-lfs71-120220 root=LABEL=lfs71 ro
@@ -506,7 +510,7 @@ menuentry "LFS Dev (LFS-7.1-Feb20) initrd label, Linux 3.2.6"
 }</userinput></screen>
 
     <para>
-      Finally, reboot the system and select the desired system.
+      Finalmente, reinicialize o sistema e selecione o sistema desejado.
     </para>
 
   </sect2>

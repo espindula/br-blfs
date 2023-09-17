@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libgusb-download-http "https://people.freedesktop.org/~hughsient/releases/libgusb-&libgusb-version;.tar.xz">
-  <!ENTITY libgusb-download-ftp  " ">
-  <!ENTITY libgusb-md5sum        "5effbae7609134a51f3ec295733302c3">
-  <!ENTITY libgusb-size          "44 KB">
-  <!ENTITY libgusb-buildsize     "1.6 MB (with tests)">
-  <!ENTITY libgusb-time          "less than 0.1 SBU (with tests)">
+  <!ENTITY libgusb-download-http "https://github.com/hughsie/libgusb/releases/download/&libgusb-version;/libgusb-&libgusb-version;.tar.xz">
+  <!ENTITY libgusb-download-ftp  "">
+  <!ENTITY libgusb-md5sum        "6b8dfb57b2828562ed007fc84ab6af67">
+  <!ENTITY libgusb-size          "52 KB">
+  <!ENTITY libgusb-buildsize     "2.6 MB (with tests)">
+  <!ENTITY libgusb-time          "menos que 0,1 UPC (com os testes)">
 ]>
 
 <sect1 id="libgusb" xreflabel="libgusb-&libgusb-version;">
   <?dbhtml filename="libgusb.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libgusb-&libgusb-version;</title>
 
@@ -26,78 +23,80 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libgusb</title>
+    <title>Introdução a libgusb</title>
 
     <para>
-      The <application>libgusb</application> package contains the GObject
-      wrappers for <application>libusb-1.0</application> that makes it
-      easy to do asynchronous control, bulk and interrupt transfers with
-      proper cancellation and integration into a mainloop.
+      O pacote <application>libgusb</application> contém os amarradores GObject
+para a <application>libusb-1.0</application> que tornam fácil fazer controle
+assíncrono, transferências em massa e de interrupções com cancelamento
+adequado e integração em um loop principal.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libgusb-download-http;"/>
+          Transferência (HTTP): <ulink url="&libgusb-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libgusb-download-ftp;"/>
+          Transferência (FTP): <ulink url="&libgusb-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libgusb-md5sum;
+          Soma de verificação MD5 da transferência: &libgusb-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libgusb-size;
+          Tamanho da transferência: &libgusb-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libgusb-buildsize;
+          Espaço em disco estimado exigido: &libgusb-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libgusb-time;
+          Tempo de construção estimado: &libgusb-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">libgusb Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do libgusb</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libusb"/>
+      <xref linkend="json-glib"/> e <xref linkend="libusb"/>
     </para>
 
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gtk-doc"/>,
-      <xref linkend="gobject-introspection"/>,
-      <xref linkend="usbutils"/> (for <filename>usb.ids</filename> data file,
-      which is also required for the tests), and
-      <xref linkend="vala"/>
+      <xref linkend="gobject-introspection"/>, <xref linkend="umockdev"/>, <xref
+linkend="usbutils"/> (para o arquivo de dados <filename>usb.ids</filename>,
+o qual também é exigido para os testes) e <xref linkend="vala"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="gi-docgen"/>
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/libgusb"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/libgusb"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libgusb</title>
+    <title>Instalação do libgusb</title>
 
     <para>
-      Install <application>libgusb</application> by running the following
-      commands:
+      Instale <application>libgusb</application> executando os seguintes comandos:
     </para>
 
     <screen><userinput>mkdir build &amp;&amp;
@@ -107,37 +106,44 @@ meson --prefix=/usr --buildtype=release -Ddocs=false .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      To test the results, issue: <command>ninja test</command>.
+      Se você tiver o <xref linkend='gi-docgen'/> instalado e desejar construir a
+documentação da API para esse pacote, [então] emita:
+    </para>
+
+<screen role='nodump'><userinput>sed "/output: 'libgusb'/s/'\$/-0.4.5'/" -i ../docs/meson.build &amp;&amp;
+meson configure -Ddocs=true                                    &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>-Ddocs=true</option>: Use this option if
-      <application>GTK-Doc</application> is installed and you wish to install
-      the documentation.
+      <parameter>-Ddocs=false</parameter>: &gi-doc-disable;
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
@@ -147,22 +153,21 @@ ninja</userinput></screen>
           libgusb.so
         </seg>
         <seg>
-          /usr/include/gusb-1 and
-          /usr/share/gtk-doc/html/gusb (if gtk-doc is used)
+          /usr/include/gusb-1 e /usr/share/doc/libgusb-&libgusb-version; (se
+"gi-docgen" for usado)
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="gusbcmd">
         <term><command>gusbcmd</command></term>
         <listitem>
           <para>
-            is a debugging tool for the libgusb library
+            é uma ferramenta de depuração para a biblioteca "libgusb"
           </para>
           <indexterm zone="libgusb gusbcmd">
             <primary sortas="b-gusbcmd">gusbcmd</primary>
@@ -174,7 +179,7 @@ ninja</userinput></screen>
         <term><filename class="libraryfile">libgusb.so</filename></term>
         <listitem>
           <para>
-            contains the <application>libgusb</application> API functions
+            contém as funções da API da <application>libgusb</application>
           </para>
           <indexterm zone="libgusb libgusb-lib">
             <primary sortas="c-libgusb">libgusb.so</primary>

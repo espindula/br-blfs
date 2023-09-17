@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect2 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../../general.ent">
+  %general-entities;
+
+  <!ENTITY packaging-download-http "https://files.pythonhosted.org/packages/source/p/packaging/packaging-&packaging-version;.tar.gz">
+  <!ENTITY packaging-download-ftp  "">
+  <!ENTITY packaging-md5sum        "&packaging-md5sum;">
+  <!ENTITY packaging-size          "123Ko">
+  <!ENTITY packaging-buildsize     "2.9 MB (add 28 MB for tests)">
+  <!ENTITY packaging-time          "less than 0.1 SBU (0.2 SBU for tests)">
+]>
+
+  <sect2 id="packaging" xreflabel="packaging-&packaging-version;">
+
+    <title>Packaging-&packaging-version;</title>
+
+    <indexterm zone="packaging">
+      <primary sortas="a-packaging">packaging</primary>
+    </indexterm>
+
+    <sect3 role="package">
+      <title>Introduo a Packaging Module</title>
+
+      <para>
+        The <application>Packaging</application> library provides utilities that
+implement the interoperability specifications which have clearly one correct
+behaviour or benefit greatly from having a single shared implementation.
+      </para>
+
+      &lfs113_checked;
+
+      <bridgehead renderas="sect4">Informao do Pacote</bridgehead>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Transferncia (HTTP): <ulink url="&packaging-download-http;"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Transferncia (FTP): <ulink url="&packaging-download-ftp;"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Soma de verificao MD5: &packaging-md5sum;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Tamanho da transferncia: &packaging-size;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Espao em disco estimado exigido: &packaging-buildsize;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Tempo de construo estimado: &packaging-time;
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <bridgehead renderas="sect4">Dependncias de Packaging</bridgehead>
+
+      <bridgehead renderas="sect5">Exigida</bridgehead>
+      <para role="required">
+        <xref linkend="flit_core"/>
+      </para>
+
+      <bridgehead renderas="sect5">Optional (for testing)</bridgehead>
+      <para role="optional">
+        <xref linkend="pytest"/> and <ulink
+url="https://pypi.org/project/pretend/">pretend</ulink>
+      </para>
+
+
+    </sect3>
+
+    <sect3 role="installation">
+      <title>Instalao de Packaging</title>
+
+    <para> Build the module: </para>
+
+<screen><userinput>pip3 wheel -w dist --no-build-isolation --no-deps $PWD</userinput></screen>
+
+    <para>
+      Agora, como o(a) usurio(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>pip3 install --no-index --find-links dist --no-cache-dir --no-user packaging</userinput></screen>
+
+    <para>
+      Assuming <xref linkend="pytest"/> is installed, but the other optional
+dependency is not, the installation can be tested with the following
+commands:
+    </para>
+
+<screen remap="test"><!-- no && because of a possible error -->
+<userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
+source testenv/bin/activate                    &amp;&amp;
+pip3 install pretend                           &amp;&amp;
+python3 /usr/bin/pytest
+deactivate</userinput></screen>
+
+    </sect3>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../../xincludes/pip3-cmd-explain.xml"/>
+
+    <sect3 role="content">
+      <title>Contents</title>
+
+      <segmentedlist>
+        <segtitle>Aplicativos Instalados</segtitle>
+        <segtitle>Bibliotecas Instaladas</segtitle>
+        <segtitle>Diretrios Instalados</segtitle>
+
+        <seglistitem>
+          <seg>None</seg>
+          <seg>None</seg>
+          <seg>
+            /usr/lib/python&python3-majorver;/site-packages/packaging and
+/usr/lib/python&python3-majorver;/site-packages/packaging-&packaging-version;.dist-info
+          </seg>
+        </seglistitem>
+      </segmentedlist>
+
+    </sect3>
+
+  </sect2>

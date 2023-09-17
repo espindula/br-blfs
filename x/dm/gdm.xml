@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-43;/gdm-&gdm-version;.tar.xz">
+  <!ENTITY gdm-download-ftp  "&gnome-download-ftp;/gdm/&gnome-43;/gdm-&gdm-version;.tar.xz">
+  <!ENTITY gdm-md5sum        "d9ca2abdf2359d0420dc71a1bd1d7530">
+  <!ENTITY gdm-size          "812Ko">
+  <!ENTITY gdm-buildsize     "33Mo">
+  <!ENTITY gdm-time          "0.3 SBU">
+]>
+
+<sect1 id="gdm" xreflabel="GDM-&gdm-version;">
+  <?dbhtml filename="gdm.html"?>
+
+
+  <title>GDM-&gdm-version;</title>
+
+  <indexterm zone="gdm">
+    <primary sortas="a-GDM">GDM</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução a GDM</title>
+
+    <para>
+      <application>GDM</application> is a system service that is responsible for
+providing graphical logins and managing local and remote displays.
+    </para>
+
+    &lfs113_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&gdm-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&gdm-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5: &gdm-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &gdm-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &gdm-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &gdm-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+    
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/gdm-&gdm-version;-security_fix-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+    -->
+<bridgehead renderas="sect3">Dependências de GDM</bridgehead>
+
+    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <para role="required">
+      <xref linkend="accountsservice"/>, <xref linkend="gtk3"/>, <xref
+linkend="iso-codes"/>, <xref linkend="itstool"/>, <xref
+linkend="libcanberra"/>, <xref linkend="libdaemon"/>, and <xref
+linkend="linux-pam"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="keyutils"/>
+    </para>
+
+    <bridgehead renderas="sect4">Dependências de Runtime</bridgehead>
+    <para role="required">
+      <xref role="runtime" linkend="gnome-session"/>, <xref role="runtime"
+linkend="gnome-shell"/>, and <phrase revision="sysv"><xref role="runtime"
+linkend="elogind"/></phrase> <phrase revision="systemd"><xref role="runtime"
+linkend="systemd"/></phrase>
+    </para>
+
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gdm"/>
+    </para>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação de GDM</title>
+
+    <para>
+      It is recommended to have a dedicated user and group to take control of the
+<command>gdm</command> daemon after it is started. Issue the following
+commands as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>groupadd -g 21 gdm &amp;&amp;
+useradd -c "GDM Daemon Owner" -d /var/lib/gdm -u 21 \
+        -g gdm -s /bin/false gdm &amp;&amp;
+passwd -ql gdm</userinput></screen>
+
+    <para revision="sysv">
+      First, adapt GDM to build without systemd present:
+    </para>
+
+<screen revision="sysv"><userinput remap="pre">sed -i -r '/(^| )systemd_dep/d' meson.build</userinput></screen>
+
+    <para>
+      Instale <application>GDM</application> executando os seguintes comandos:
+    </para>
+
+<screen revision="sysv"><userinput>sed -e 's@systemd@elogind@'                                \
+    -e '/elogind/isession  required       pam_loginuid.so' \
+    -i data/pam-lfs/gdm-launch-environment.pam &amp;&amp;
+
+mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson --prefix=/usr               \
+      --buildtype=release         \
+      -Dgdm-xsession=true         \
+      -Drun-dir=/run/gdm          \
+      -Dsystemd-journal=false     \
+      -Dsystemdsystemunitdir=/tmp \
+      -Dsystemduserunitdir=/tmp   .. &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision="systemd"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson --prefix=/usr               \
+      --buildtype=release         \
+      -Dgdm-xsession=true         \
+      -Drun-dir=/run/gdm ..
+ninja</userinput></screen>
+
+    <para>
+      This package does not come with a usable test suite.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root" revision="sysv"><userinput>ninja install &amp;&amp;
+rm -rv /tmp/*.{service,target.d}</userinput></screen>
+
+<screen role="root" revision="systemd"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para>
+      <option>-Dinitial-vt=7</option>: Use this switch to make
+<application>GDM</application> start on VT7 instead of the first free VT.
+    </para>
+
+    <para>
+      <option>-Ddefault-pam-config=lfs</option>: Use this switch if you did not
+create the <filename>/etc/lfs-release</filename> file or distribution auto
+detection will fail and you will be unable to use
+<application>GDM</application>.
+    </para>
+
+    <para>
+      <parameter>-Dgdm-xsession=true</parameter>: This enables the installation of
+the <application>GDM</application> Xsession file.
+    </para>
+
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configurando GDM</title>
+
+    <sect3 id="gdm-config">
+      <title>Arquivos de Configuração</title>
+
+      <para>
+        <filename>/etc/gdm/custom.conf</filename>
+      </para>
+
+      <indexterm zone="gdm gdm-config">
+        <primary sortas="e-etc-gdm-custom.conf">/etc/gdm/custom.conf</primary>
+      </indexterm>
+
+    </sect3>
+
+    <sect3>
+      <title>Informação de Configuração</title>
+
+      <para>
+        The GDM daemon is configured using the
+<filename>/etc/gdm/custom.conf</filename> file. Default values are stored in
+GSettings in the <filename>gdm.schemas</filename> file. It is recommended
+that end-users modify the <filename>/etc/gdm/custom.conf</filename> file
+because the schemas file may be overwritten when the user updates their
+system to have a newer version of <application>GDM</application>.
+      </para>
+
+    </sect3>
+
+    <sect3 id="gdm-init">
+      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
+revision="systemd">Unidade do systemd</phrase></title>
+
+      <indexterm zone="gdm gdm-init">
+        <primary sortas="f-gdm">gdm</primary>
+      </indexterm>
+
+      <para revision="sysv">
+        To start <command>gdm</command> automatically when the system is switched to
+runlevel 5, install the <filename>/etc/rc.d/init.d/xdm</filename> script and
+the <filename>/etc/sysconfig/xdm</filename> configuration file included in
+the <xref linkend="bootscripts"/> package and adjust
+<filename>/etc/inittab</filename> by running as the <systemitem
+class="username">root</systemitem> user:
+      </para>
+
+<screen role="root" revision="sysv"><userinput>make install-gdm</userinput></screen>
+
+      <para revision="sysv">
+        In order to permanently set the default runlevel to 5, starting the
+<command>gdm</command> greeter screen automatically, you can modify
+<filename>/etc/inittab</filename>. As the <systemitem
+class="username">root</systemitem> user:
+      </para>
+
+<screen role="root" revision="sysv"><userinput>sed /initdefault/s/3/5/ -i /etc/inittab</userinput></screen>
+
+      <para revision="systemd">
+        Para iniciar o processo de segundo plano <command>gdm</command> na
+inicialização, habilite a unidade do systemd instalada anteriormente
+executando o seguinte comando como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
+      </para>
+
+<!-- [pierre October 2020] I don't understand why this is here: power
+     management works perfectly well
+      <para revision="sysv">
+          You should also disable default elogind power management:
+      </para>
+
+<screen role="root" revision="sysv"><userinput>cat &gt;&gt; /etc/elogind/logind.conf &lt;&lt; "EOF"
+<literal>AllowSuspend=no
+AllowHibernation=no</literal>
+EOF</userinput></screen>
+-->
+<screen role="root" revision="systemd"><userinput>systemctl enable gdm</userinput></screen>
+
+
+
+    </sect3>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          gdm, gdmflexiserver, and gdm-screenshot
+        </seg>
+        <seg>
+          libgdm.so and pam_gdm.so (PAM Module)
+        </seg>
+        <seg>
+          <!-- seems those diretories are not created at install, but at
+     runtime
+          /var/cache/gdm,
+          /var/lib/gdm,
+          /var/log/gdm, and
+          /var/run/gdm-->
+/etc/gdm, /usr/include/gdm, /usr/share/gdm, and /usr/share/help/*/gdm
+
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="gdm-prog">
+        <term><command>gdm</command></term>
+        <listitem>
+          <para>
+            is a login prompt for <application>GNOME</application>
+          </para>
+          <indexterm zone="gdm gdm-prog">
+            <primary sortas="b-gdm">gdm</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="gdm-screenshot">
+        <term><command>gdm-screenshot</command></term>
+        <listitem>
+          <para>
+            is a screenshot tool for <application>GDM</application>
+          </para>
+          <indexterm zone="gdm gdm-screenshot">
+            <primary sortas="b-gdm-screenshot">gdm-screenshot</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

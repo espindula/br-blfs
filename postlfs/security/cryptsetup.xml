@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY cryptsetup-download-http "&kernel-dl;/linux/utils/cryptsetup/v&cryptsetup-minor;/cryptsetup-&cryptsetup-version;.tar.xz">
-  <!ENTITY cryptsetup-download-ftp  " ">
+  <!ENTITY cryptsetup-download-ftp  "">
   <!ENTITY cryptsetup-md5sum        "2303d57e78d4977344188a46e125095c">
   <!ENTITY cryptsetup-size          "11 MB">
-  <!ENTITY cryptsetup-buildsize     "29 MB (add 5 MB for tests)">
-  <!ENTITY cryptsetup-time          "0.2 SBU (add 19 SBU for tests)">
+  <!ENTITY cryptsetup-buildsize     "29 MB (adicionar 5 MB para os testes)">
+  <!ENTITY cryptsetup-time          "0,2 UPC (adicionar 19 UPC para os testes)">
 ]>
 
 <sect1 id="cryptsetup" xreflabel="cryptsetup-&cryptsetup-version;">
   <?dbhtml filename="cryptsetup.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>cryptsetup-&cryptsetup-version;</title>
 
@@ -26,51 +23,54 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to cryptsetup</title>
+    <title>Introdução a cryptsetup</title>
 
     <para>
-      cryptsetup is used to set up transparent encryption of block devices
-      using the kernel crypto API.
+      cryptsetup é usado para configurar a encriptação transparente de
+dispositivos de bloco usando a API criptográfica do núcleo.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&cryptsetup-download-http;"/>
+          Transferência (HTTP): <ulink url="&cryptsetup-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&cryptsetup-download-ftp;"/>
+          Transferência (FTP): <ulink url="&cryptsetup-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &cryptsetup-md5sum;
+          Soma de verificação MD5 da transferência: &cryptsetup-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &cryptsetup-size;
+          Tamanho da transferência: &cryptsetup-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &cryptsetup-buildsize;
+          Espaço em disco estimado exigido: &cryptsetup-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &cryptsetup-time;
+          Tempo de construção estimado: &cryptsetup-time;
         </para>
       </listitem>
     </itemizedlist>
 
-<!-- No longer needed with 2.3.2.
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+
+
+    <!-- No longer needed with 2.3.2.
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -80,41 +80,38 @@
       </listitem>
     </itemizedlist>
 -->
+<bridgehead renderas="sect3">Dependências do cryptsetup</bridgehead>
 
-    <bridgehead renderas="sect3">cryptsetup Dependencies</bridgehead>
-
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="json-c"/>,
-      <xref linkend="lvm2"/>, and
-      <xref linkend="popt"/>
+      <xref linkend="json-c"/>, <xref linkend="lvm2"/> e <xref linkend="popt"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="libpwquality"/>,
-      <ulink url="https://github.com/P-H-C/phc-winner-argon2">argon2</ulink>, 
-      <ulink url="http://www.libssh.org/">libssh</ulink>, and
-      <ulink url="http://www.openwall.com/passwdqc/">passwdqc</ulink>
+      <xref linkend="libpwquality"/>, <ulink
+url="https://github.com/P-H-C/phc-winner-argon2">argon2</ulink>, <ulink
+url="https://www.libssh.org/">libssh</ulink> e <ulink
+url="https://www.openwall.com/passwdqc/">passwdqc</ulink>
     </para>
 
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/cryptsetup"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/cryptsetup"/>
     </para>
   </sect2>
 
   <sect2 role="kernel" id="cryptsetup-kernel">
-    <title>Kernel Configuration</title>
+    <title>Configuração do Núcleo</title>
 
     <para>
-      Encrypted block devices require kernel support.  To use it, the
-      appropriate kernel configuration parameters need to be set:
+      Dispositivos de bloco encriptados exigem suporte de núcleo. Para usá-lo, os
+parâmetros apropriados de configuração do núcleo precisam estar
+configurados:
     </para>
 
 <screen><literal>Device Drivers  ---&gt;
   [*] Multiple devices driver support (RAID and LVM) ---&gt; [CONFIG_MD]
-       &lt;*/M&gt; Device mapper support                        [CONFIG_BLK_DEV_DM]
+       &lt;*/M&gt; Device mapper support                       [CONFIG_BLK_DEV_DM]
        &lt;*/M&gt; Crypt target support                         [CONFIG_DM_CRYPT]
 
 Cryptographic API  ---&gt;
@@ -133,57 +130,49 @@ Cryptographic API  ---&gt;
   </sect2>
 
     <sect2 role="installation">
-      <title>Installation of cryptsetup</title>
+      <title>Instalação do cryptsetup</title>
 
-<!-- No longer needed with 2.3.2
+
+
+    <!-- No longer needed with 2.3.2
     <para>
+
       First, apply a patch to fix a build problem caused by API changes in
       <xref role="nodep" linkend="json-c"/>:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../cryptsetup-&cryptsetup-version;-upstream_fixes-1.patch</userinput></screen>
 -->
-
-    <para>
-      Install <application>cryptsetup</application> by running the following
-      commands:
+<para>
+      Instale <application>cryptsetup</application> executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --disable-ssh-token &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the result, issue as the <systemitem
-      class="username">root</systemitem> user: <command>make check</command>.
-      Some tests will fail if appropriate kernel configuration options are not
-      set. Some additional options that may be needed for tests are:
-      CONFIG_SCSI_LOWLEVEL,
-      CONFIG_SCSI_DEBUG,
-      CONFIG_BLK_DEV_DM_BUILTIN,
-      CONFIG_CRYPTO_USER,
-      CONFIG_CRYPTO_CRYPTD,
-      CONFIG_CRYPTO_LRW,
-      CONFIG_CRYPTO_XTS,
-      CONFIG_CRYPTO_ESSIV,
-      CONFIG_CRYPTO_CRCT10DIF,
-      CONFIG_CRYPTO_AES_TI,
-      CONFIG_CRYPTO_AES_NI_INTEL,
-      CONFIG_CRYPTO_BLOWFISH,
-      CONFIG_CRYPTO_CAST5,
-      CONFIG_CRYPTO_SERPENT,
-      CONFIG_CRYPTO_SERPENT_SSE2_X86_64,
-      CONFIG_CRYPTO_SERPENT_AVX_X86_64,
-      CONFIG_CRYPTO_SERPENT_AVX2_X86_64, and
-      CONFIG_CRYPTO_TWOFISH_X86_64.
       <!--I had 1 of 21 tests fail with the above crypto options in the
-      kernel.  Eight tests were not run.  Version 2.4.3. 
+      kernel.  Eight tests were not run.  Version 2.4.3.
       Failed test  was tcrypt-compat-test
       tcrypt-images/tc_1-ripemd160-cbc-aes [FAILED]
       bdubbs -->
+Para testar o resultado, emita como o(a) usuário(a) <systemitem
+class="username">root</systemitem>: <command>make check</command>. Alguns
+testes falharão se as opções apropriadas de configuração do núcleo não forem
+configuradas. Algumas opções adicionais que possivelmente sejam necessárias
+para os testes são: CONFIG_SCSI_LOWLEVEL, CONFIG_SCSI_DEBUG,
+CONFIG_BLK_DEV_DM_BUILTIN, CONFIG_CRYPTO_USER, CONFIG_CRYPTO_CRYPTD,
+CONFIG_CRYPTO_LRW, CONFIG_CRYPTO_XTS, CONFIG_CRYPTO_ESSIV,
+CONFIG_CRYPTO_CRCT 10DIF, CONFIG_CRYPTO_AES_TI, CONFIG_CRYPTO_AES_NI_INTEL,
+CONFIG_CRYPTO_BLOWFISH, CONFIG_CRYPTO_CAST5, CONFIG_CRYPTO_SERPENT,
+CONFIG_CRYPTO_SERPENT_SSE2_X86_64, CONFIG_CRYPTO_SERPENT_AVX_X86_64,
+CONFIG_CRYPTO_SERPENT_AVX2_X86_64 e CONFIG_CRYPTO_TWOFISH_X86_64.
+      
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -191,60 +180,57 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
     <para>
-      <option>--disable-ssh-token</option>:  This option is required if
-      the optional libssh dependency is not installed.
+      <option>--disable-ssh-token</option>: Essa opção é exigida se a dependência
+opcional libssh não estiver instalada.
     </para>
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring cryptsetup</title>
+    <title>Configurando cryptsetup</title>
 
     <para>
-      Because of the number of possible configurations, setup of encrypted
-      volumes is beyond the scope of the BLFS book. Please see the
-      configuration guide in the cryptsetup <ulink
-      url="https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#2-setup">
-      FAQ</ulink>.
+      Devido ao número de configurações possíveis, a configuração de volumes
+encriptados está além do escopo do livro BLFS. Por favor, veja-se o guia de
+configuração nas <ulink
+url="https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#2-setup">
+Perguntas Frequentes</ulink> do cryptsetup.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          cryptsetup,
-          cryptsetup-reencrypt,
-          integritysetup, and
-          veritysetup
+          cryptsetup, cryptsetup-reencrypt, integritysetup e veritysetup
         </seg>
         <seg>
           libcryptsetup.so
         </seg>
         <seg>
-          None
+          Nenhum
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="cryptsetup-prog">
         <term><command>cryptsetup</command></term>
         <listitem>
           <para>
-             is used to setup dm-crypt managed device-mapper mappings
+             é usado para configurar mapeamentos de mapeadores de dispositivos
+gerenciados pelo dm-crypt
           </para>
           <indexterm zone="cryptsetup cryptsetup-prog">
             <primary sortas="b-cryptsetup">cryptsetup</primary>
@@ -256,7 +242,7 @@ make</userinput></screen>
         <term><command>cryptsetup-reencrypt</command></term>
         <listitem>
           <para>
-             is a tool for offline LUKS device re-encryption
+             é uma ferramenta para re-encriptação offline de dispositivo LUKS
           </para>
           <indexterm zone="cryptsetup cryptsetup-reencrypt">
             <primary sortas="b-cryptsetup-reencrypt">cryptsetup-reencrypt</primary>
@@ -268,7 +254,8 @@ make</userinput></screen>
         <term><command>integritysetup</command></term>
         <listitem>
           <para>
-             is a tool to manage dm-integrity (block level integrity) volumes
+             é uma ferramenta para gerenciar volumes dm-integrity (integridade em nível
+de bloco)
           </para>
           <indexterm zone="cryptsetup integritysetup">
             <primary sortas="b-integritysetup">integritysetup</primary>
@@ -280,9 +267,10 @@ make</userinput></screen>
         <term><command>veritysetup</command></term>
         <listitem>
           <para>
-             is used to configure dm-verity managed device-mapper mappings.
-             Device-mapper verity target provides read-only transparent integrity
-             checking of block devices using kernel crypto API
+             é usado para configurar mapeamentos de mapeadores de dispositivos
+gerenciados dm-verity. O destino de veracidade do mapeador de dispositivos
+fornece verificação de integridade transparente somente leitura de
+dispositivos de bloco usando a API criptográfica do núcleo
           </para>
           <indexterm zone="cryptsetup veritysetup">
             <primary sortas="b-veritysetup">veritysetup</primary>

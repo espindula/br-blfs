@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY usbutils-download-http "&kernel-dl;/linux/utils/usb/usbutils/usbutils-&usbutils-version;.tar.xz">
-  <!ENTITY usbutils-download-ftp  " ">
-  <!ENTITY usbutils-md5sum        "f21aa68ee7870b161921a590be7765e6">
-  <!ENTITY usbutils-size          "162 KB">
-  <!ENTITY usbutils-buildsize     "3.0 MB">
-  <!ENTITY usbutils-time          "0.1 SBU">
+  <!ENTITY usbutils-download-http "https://github.com/gregkh/usbutils/archive/v&usbutils-version;/usbutils-&usbutils-version;.tar.gz">
+  <!ENTITY usbutils-download-ftp  "">
+  <!ENTITY usbutils-md5sum        "112eafa991e55229b9f48b90c290a0e2">
+  <!ENTITY usbutils-size          "120Ko">
+  <!ENTITY usbutils-buildsize     "4,3Mo">
+  <!ENTITY usbutils-time          "0,1 UPC">
 ]>
 
 <sect1 id="usbutils" xreflabel="usbutils-&usbutils-version;">
   <?dbhtml filename="usbutils.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>usbutils-&usbutils-version;</title>
 
@@ -26,51 +23,53 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to USB Utils</title>
+    <title>Introdução a USB Utils</title>
 
     <para>
-      The <application>USB Utils</application> package contains utilities
-      used to display information about USB buses in the system and the
-      devices connected to them.
+      The <application>USB Utils</application> package contains utilities used to
+display information about USB buses in the system and the devices connected
+to them.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&usbutils-download-http;"/>
+          Transferência (HTTP): <ulink url="&usbutils-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&usbutils-download-ftp;"/>
+          Transferência (FTP): <ulink url="&usbutils-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &usbutils-md5sum;
+          Soma de verificação MD5: &usbutils-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &usbutils-size;
+          Tamanho da transferência: &usbutils-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &usbutils-buildsize;
+          Espaço em disco estimado exigido: &usbutils-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &usbutils-time;
+          Tempo de construção estimado: &usbutils-time;
         </para>
       </listitem>
     </itemizedlist>
-<!--
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -80,70 +79,74 @@
       </listitem>
     </itemizedlist>
 -->
-    <bridgehead renderas="sect3">USB Utils Dependencies</bridgehead>
+<bridgehead renderas="sect3">Dependências de USB Utils</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="libusb"/> and
-      <xref linkend="wget"/>
-      <!-- In the systemd book, a unit/timer is installed to update the
-      usb.ids file automatically.
-
-      wget is used in the instructions below.
-      -->
+      <xref linkend="libusb"/>
     </para>
 
-<!-- lsusb.py has been ported to Python 3, and it is the only Python user
-    <bridgehead renderas="sect4">Required Runtime</bridgehead>
-    <para role="required">
-      <xref role="runtime" linkend="python2"/>
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <para role="recommended">
+
+      <!-- git is required by autogen.sh. If using the tarball on kernel.org,
+     autogen.sh does not need to be run. If using the github source,
+     autogen.sh needs to be run, and git is used to pull the usbhid-dump
+     submodule. -->
+<!-- In the systemd book, a unit/timer is installed to update the
+     usb.ids file automatically. wget is used in the instructions below. -->
+<xref linkend="git"/> and <xref linkend="wget"/>
+
     </para>
--->
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/usbutils"/>
+
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/usbutils"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of USB Utils</title>
+    <title>Instalação de USB Utils</title>
 
     <para>
-      Install <application>USB Utils</application> by
-      running the following commands:
+      Install <application>USB Utils</application> by running the following
+commands:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --datadir=/usr/share/hwdata &amp;&amp;
+<screen><userinput>autoreconf -fiv &amp;&amp;
+
+./configure --prefix=/usr --datadir=/usr/share/hwdata &amp;&amp;
 make</userinput></screen>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      To install the <filename>usb.ids</filename> data file, using
-      <xref linkend="wget"/>, run, as the
-      <systemitem class="username">root</systemitem> user:
+      To install the <filename>usb.ids</filename> data file, using <xref
+linkend="wget"/>, run, as the <systemitem class="username">root</systemitem>
+user:
     </para>
 
 <screen role="root"><userinput>install -dm755 /usr/share/hwdata/ &amp;&amp;
 wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</userinput></screen>
 
     <para>
-      The script <command>lsusb.py</command> displays information in a more
-      easily readable form than <command>lsusb</command>. To find the options,
-      use <command>lsusb.py -h</command>. One form of use recommended by the
-      developer is <command>lsusb.py -ciu</command>.
+      The script <command>lsusb.py</command> displays information in a more easily
+readable form than <command>lsusb</command>. To find the options, use
+<command>lsusb.py -h</command>. One form of use recommended by the developer
+is <command>lsusb.py -ciu</command>.
     </para>
 
   </sect2>
-<!-- No longer needed
+
+  <!-- No longer needed
   <sect2 role="commands">
+
     <title>Command Explanations</title>
 
     <para>
@@ -153,26 +156,27 @@ wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</userinput></
 
   </sect2>
 -->
-  <sect2 role="configuration">
+<sect2 role="configuration">
     <title>Configuring USB Utils</title>
 
     <para revision="sysv">
-      The <filename>usb.ids</filename> data file is constantly being updated.
-      To get a current version of this file, using <xref linkend="wget"/>,
-      periodically run again, as the
-      <systemitem class="username">root</systemitem> user:
+      The <filename>usb.ids</filename> data file is constantly being updated.  To
+get a current version of this file, using <xref linkend="wget"/>,
+periodically run again, as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root" revision="sysv"><userinput>wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</userinput></screen>
 
     <para>
       You should update the <filename>/usr/share/hwdata/usb.ids</filename> file
-      periodically. <phrase revision="sysv">If you've installed
-      <xref linkend="fcron"/> and completed the section on periodic jobs,
-      execute</phrase><phrase revision="systemd">Execute</phrase> the following       commands, as the  <systemitem class="username">root</systemitem> user,
-      to create a <phrase revision="sysv">weekly cron job:</phrase>
-      <phrase revision="systemd">systemd timer to update it weekly on Sundays
-      at 2:30 A.M. (local time):</phrase>
+periodically. <phrase revision="sysv">If you've installed <xref
+linkend="fcron"/> and completed the section on periodic jobs,
+execute</phrase><phrase revision="systemd">Execute</phrase> the following
+commands, as the <systemitem class="username">root</systemitem> user, to
+create a <phrase revision="sysv">weekly cron job:</phrase> <phrase
+revision="systemd">systemd timer to update it weekly on Sundays at 2:30
+A.M. (local time):</phrase>
     </para>
 
 <screen role="nodump" revision="sysv"><userinput>cat &gt; /etc/cron.weekly/update-usbids.sh &lt;&lt; "EOF" &amp;&amp;
@@ -213,9 +217,9 @@ systemctl enable update-usbids.timer</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
@@ -231,17 +235,15 @@ systemctl enable update-usbids.timer</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="lsusb">
         <term><command>lsusb</command></term>
         <listitem>
           <para>
-            is a utility for displaying information about all USB buses
-            in the system and all devices connected to them, but not in human
-            friendly form
+            is a utility for displaying information about all USB buses in the system
+and all devices connected to them, but not in human friendly form
           </para>
           <indexterm zone="usbutils lsusb">
             <primary sortas="b-lsusb">lsusb</primary>
@@ -253,8 +255,8 @@ systemctl enable update-usbids.timer</userinput></screen>
         <term><command>lsusb.py</command></term>
         <listitem>
           <para>
-            displays information about all USB buses in the system and all
-            devices connected to them in reasonable human friendly form
+            displays information about all USB buses in the system and all devices
+connected to them in reasonable human friendly form
           </para>
           <indexterm zone="usbutils lsusb.py">
             <primary sortas="b-lsusb.py">lsusb.py</primary>
@@ -266,9 +268,9 @@ systemctl enable update-usbids.timer</userinput></screen>
         <term><command>usb-devices</command></term>
         <listitem>
           <para>
-            is a shell script that displays details of USB buses and devices
-            connected to them. It is designed to be used if /proc/bus/usb/devices
-            is not available on your system
+            is a shell script that displays details of USB buses and devices connected
+to them. It is designed to be used if /proc/bus/usb/devices is not available
+on your system
           </para>
           <indexterm zone="usbutils usb-devices">
             <primary sortas="b-usb-devices">usb-devices</primary>
@@ -280,8 +282,8 @@ systemctl enable update-usbids.timer</userinput></screen>
         <term><command>usbhid-dump</command></term>
         <listitem>
           <para>
-            is used to dump report descriptors and streams from HID
-            (human interface device) interfaces of USB devices
+            is used to dump report descriptors and streams from HID (human interface
+device) interfaces of USB devices
           </para>
           <indexterm zone="usbutils usbhid-dump">
             <primary sortas="b-usbhid-dump">usbhid-dump</primary>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY gcr4-download-http "&gnome-download-http;/gcr/&gcr4-minor;/gcr-&gcr4-version;.tar.xz">
+  <!ENTITY gcr4-download-ftp  "&gnome-download-ftp;/gcr/&gcr4-minor;/gcr-&gcr4-version;.tar.xz">
+  <!ENTITY gcr4-md5sum        "836cd6d1cf57b2e0e9df40f6980fdb99">
+  <!ENTITY gcr4-size          "700Ko">
+  <!ENTITY gcr4-buildsize     "25 MB (with tests)">
+  <!ENTITY gcr4-time          "0.2 SBU (with tests; both using parallelism=4)">
+]>
+
+<sect1 id="gcr4" xreflabel="Gcr-&gcr4-version;">
+  <?dbhtml filename="gcr4.html"?>
+
+
+  <title>Gcr-&gcr4-version;</title>
+
+  <indexterm zone="gcr4">
+    <primary sortas="a-Gcr">Gcr</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução a Gcr</title>
+
+    <para>
+      The <application>Gcr</application> package contains libraries used for
+displaying certificates and accessing key stores. It also provides the
+viewer for crypto files on the <application>GNOME</application> Desktop.
+    </para>
+
+    &lfs113_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&gcr4-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&gcr4-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5: &gcr4-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &gcr4-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &gcr4-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &gcr4-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências de Gcr</bridgehead>
+
+    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <para role="required">
+      <xref linkend="glib2"/>, <xref linkend="libgcrypt"/>, and <xref
+linkend="p11-kit"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <para role="recommended">
+      <xref linkend="gnupg2"/>, <xref linkend="gobject-introspection"/>, <xref
+linkend="gtk4"/>, <xref linkend="libsecret"/>, <xref linkend="libxslt"/>,
+and <xref linkend="vala"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="gi-docgen"/> and <xref linkend="valgrind"/>
+    </para>
+
+    <para condition="html" role="usernotes">
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/gcr"/>
+    </para>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação de Gcr</title>
+
+    <note>
+      <para>Both gcr-3 and gcr-4 are coinstallable. This version of the package is used
+to support GTK-4 applications, such as <xref linkend="gnome-shell"
+role="nodep"/>.</para>
+    </note>
+
+    <para>
+      Instale <application>Gcr</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson --prefix=/usr --buildtype=release -Dgtk_doc=false .. &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      If you have <xref linkend='gi-docgen'/> installed and wish to build the API
+documentation for this package, issue:
+    </para>
+
+<screen role='nodump'><userinput>sed -e "/install_dir/s@,\$@ / 'gcr-&gcr4-version;'&amp;@" \
+    -e "/fatal-warnings/d"                   \
+    -i ../docs/*/meson.build                 &amp;&amp;
+meson configure -Dgtk_doc=true               &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      To test the results, issue: <command>ninja test</command>.  The tests must
+be run from an X Terminal or similar.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para>
+      <option>-Dgtk=false</option>: Use this switch if you haven't installed <xref
+linkend="gtk4"/>. Note that <application>gcr-viewer</application> will not
+be installed if this is passed to meson.
+    </para>
+
+    <para>
+      <option>-Dgtk_doc=true</option>: &gi-doc-disable;
+    </para>
+
+    
+
+  <!--<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../../xincludes/gtk-doc-rebuild.xml"/>
+-->
+</sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          gcr-viewer-gtk4
+        </seg>
+        <seg>
+          libgck-2.so, libgcr-4.so
+        </seg>
+        <seg>
+          /usr/include/gck-2, /usr/include/gcr-4, and
+/usr/share/gtk-doc/html/{gcr,gck}
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="gcr-viewer-gtk4">
+        <term><command>gcr-viewer-gtk4</command></term>
+        <listitem>
+          <para>
+            is used to view certificates and key files
+          </para>
+          <indexterm zone="gcr4 gcr-viewer-gtk4">
+            <primary sortas="b-gcr-viewer-gtk4">gcr-viewer-gtk4</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libgck-2">
+        <term><filename class="libraryfile">libgck-2.so</filename></term>
+        <listitem>
+          <para>
+            contains GObject bindings for PKCS#11
+          </para>
+          <indexterm zone="gcr4 libgck-2">
+            <primary sortas="c-libgck-2">libgck-2.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libgcr-4">
+        <term><filename class="libraryfile">libgcr-4.so</filename></term>
+        <listitem>
+          <para>
+            contains functions for accessing key stores and displaying certificates
+          </para>
+          <indexterm zone="gcr4 libgcr-4">
+            <primary sortas="c-libgcr-4">libgcr-4.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+  </sect2>
+
+</sect1>

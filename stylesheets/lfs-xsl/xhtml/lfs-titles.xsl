@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-07 12:25:55 +0200 (sam, 07 jui 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -127,9 +132,7 @@
   </xsl:template>
 
     <!-- sect3.titlepage:
-           Uses h3 and removed a lot of unneeded code.
-           Use generic titlepage.mode template in case there are child
-            elements (xref)-->
+           Uses h3 and removed a lot of unneeded code. -->
     <!-- The original template is in {docbook-xsl}/xhtml/titlepage.templates.xsl -->
   <xsl:template name="sect3.titlepage">
     <h3 class="{name(.)}">
@@ -140,7 +143,7 @@
         <xsl:apply-templates select="." mode="label.markup"/>
         <xsl:text>. </xsl:text>
       </xsl:if>
-      <xsl:apply-templates select="./title" mode="titlepage.mode"/>
+      <xsl:value-of select="title"/>
     </h3>
   </xsl:template>
 

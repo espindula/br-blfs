@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -6,20 +6,16 @@
 
   <!ENTITY gcc-download-http  "&gnu-http;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
   <!ENTITY gcc-download-ftp   "&gnu-ftp;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
-  <!ENTITY gcc-md5sum         "31c86f2ced76acac66992eeedce2fce2">
-  <!ENTITY gcc-size           "77 MB">
-  <!ENTITY gcc-buildsize      "8.0 GB (2.4 GB installed with all listed languages; add 1.0 GB for tests)">
-  <!-- For me the SBU values are a bit faster on haswell, but much slower on ryzen 3400G,
-       so keeping these existing values as an approximation - ken -->
-  <!ENTITY gcc-time           "26 SBU (add 56 SBU for tests; both with parallelism=4)">
+  <!-- Update this also on the grub-uefi page -->
+  <!ENTITY gcc-md5sum         "73bafd0af874439dcdb9fc063b6fb069">
+  <!ENTITY gcc-size           "81Mo">
+  <!ENTITY gcc-buildsize      "10.5 GB (2.4 GB installed with all listed languages; add 1.3 GB for tests)">
+  <!ENTITY gcc-time           "32 SBU (add 66 SBU for tests; both with parallelism=4)">
 ]>
 
 <sect1 id="gcc" xreflabel="GCC-&gcc-version;">
   <?dbhtml filename="gcc.html" ?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>GCC-&gcc-version;</title>
 
@@ -28,102 +24,113 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to GCC</title>
+    <title>Introdução a GCC</title>
 
     <para>
       The <application>GCC</application> package contains the GNU Compiler
-      Collection. This page describes the installation of compilers for the
-      following languages: C, C++, D, Fortran, Objective C, Objective C++, and Go.
-      <!--One additional language, Ada, is available in the collection. It has
-      a binary bootstrap requirement for the first installation, so it is
-      described on a separate page (<xref linkend="gcc-ada"/>) but can be added
-      here if you are performing a rebuild or upgrade. Since C and C++ are
-      installed in LFS, this page is  either for upgrading C and C++, or for
-      installing additional compilers.-->
+Collection. This page describes the installation of compilers for the
+following languages: C, C++, Fortran, Objective C, Objective C++, and Go.
+Since C and C++ are installed in LFS, this page is either for upgrading C
+and C++, or for installing additional compilers.
     </para>
 
-    &lfs111_checked;
+    <note>
+      <para>
+        Additional languages, among which D and ADA, are available in the
+collection. D and ADA have a binary bootstrap requirement for the first
+installation, so their installation is not described here. To install them,
+you can proceed along the same lines as below after installing the
+corresponding compiler from a binary package, adding <option>ada</option> or
+<option>d</option> to the <parameter>--enable-languages</parameter> line.
+      </para>
+    </note>
+
+    &lfs113_checked;
 
     <caution>
       <para>
-        If you are upgrading <application>GCC</application> from any other
-        version prior to &gcc-version;, then you must be careful compiling 3rd
-        party kernel modules. You should ensure that the kernel and all its
-        native modules are also compiled using the same version of
-        <application>GCC</application> that you use to build the 3rd party module.
-        This issue does not affect native kernel (and kernel modules) updates,
-        as the instructions below are a complete reinstallation of
-        <application>GCC</application>. If you have existing 3rd party modules
-        installed, ensure they are recompiled using the updated version of
-        <application>GCC</application>. As always, never update the kernel
-        headers from the ones used when <application>Glibc</application> was
-        compiled during LFS.
+        If you are upgrading <application>GCC</application> from any other version
+prior to &gcc-version;, then you must be careful compiling 3rd party kernel
+modules. You should ensure that the kernel and all its native modules are
+also compiled using the same version of <application>GCC</application> that
+you use to build the 3rd party module.  This issue does not affect native
+kernel (and kernel modules) updates, as the instructions below are a
+complete reinstallation of <application>GCC</application>. If you have
+existing 3rd party modules installed, ensure they are recompiled using the
+updated version of <application>GCC</application>. As always, never update
+the kernel headers from the ones used when <application>Glibc</application>
+was compiled during LFS.
       </para>
 
       <para>
         Some system headers need to be fixed to be used with GCC. This is done
-        during the installation of GCC, and the <quote>fixed</quote> headers
-        are installed in <filename class="directory">
-        /usr/lib/gcc/&lt;machine triplet&gt;/&lt;GCC version&gt;/include-fixed
-        </filename>. This is harmless if GCC is built during the LFS stage. But
-        if you reinstall GCC in BLFS, some of the BLFS packages may be
-        <quote>fixed</quote>. If one of those packages is reinstalled
-        afterwards, the <quote>fixed</quote> headers are not updated, which may
-        lead to version mismatches. In case that happens, the
-        <quote>fixed</quote> headers must be updated by running (as
-        <systemitem class="username">root</systemitem>):
-        <command>
-         /usr/libexec/gcc/x86_64-pc-linux-gnu/&gcc-version;/install-tools/mkheaders
-        </command>. The machine triplet may be different on a 32bit system.
+during the installation of GCC, and the <quote>fixed</quote> headers are
+installed in <filename class="directory"> /usr/lib/gcc/&lt;machine
+triplet&gt;/&lt;GCC version&gt;/include-fixed </filename>. This is harmless
+if GCC is built during the LFS stage. But if you reinstall GCC in BLFS, some
+of the BLFS packages may be <quote>fixed</quote>. If one of those packages
+is reinstalled afterwards, the <quote>fixed</quote> headers are not updated,
+which may lead to version mismatches. In case that happens, the
+<quote>fixed</quote> headers must be updated by running (as <systemitem
+class="username">root</systemitem>): <command>
+/usr/libexec/gcc/x86_64-pc-linux-gnu/&gcc-version;/install-tools/mkheaders
+</command>. The machine triplet may be different on a 32-bit system.
       </para>
     </caution>
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&gcc-download-http;"/>
+          Transferência (HTTP): <ulink url="&gcc-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&gcc-download-ftp;"/>
+          Transferência (FTP): <ulink url="&gcc-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &gcc-md5sum;
+          Soma de verificação MD5: &gcc-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &gcc-size;
+          Tamanho da transferência: &gcc-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &gcc-buildsize;
+          Espaço em disco estimado exigido: &gcc-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &gcc-time;
+          Tempo de construção estimado: &gcc-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">GCC Dependencies</bridgehead>
-<!--
-    <bridgehead renderas="sect4">Recommended</bridgehead>
-    <para role="recommended">
-      <xref linkend="dejagnu"/>, for tests
-    </para>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch for building against glibc-2.36:
+          <ulink url="&patch-root;/gcc-&gcc-version;-glibc_2.36-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
 -->
-    <bridgehead renderas="sect4">Optional</bridgehead>
+<bridgehead renderas="sect3">Dependências de GCC</bridgehead>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gdb"/>,
-      <xref linkend="valgrind"/> (for tests), and
-      <ulink url="https://repo.or.cz/isl.git">ISL</ulink> (to enable graphite optimization)
+      <xref linkend="gdb"/>, <xref linkend="valgrind"/> (for tests), and <ulink
+url="https://repo.or.cz/isl.git">ISL</ulink> (to enable graphite
+optimization)
     </para>
 
     <para condition="html" role="usernotes">
@@ -133,50 +140,44 @@
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of GCC</title>
+    <title>Instalação de GCC</title>
 
     <important>
       <para>
         Even if you specify only languages other than C and C++ to the
-        <command>./configure</command> command below, the
-        installation process will overwrite your existing
-        <application>GCC</application> C and C++ compilers and libraries.
-        <!--Having the <application>Tcl</application>,
-        <application>Expect</application> and <application>DejaGnu</application>
-        packages installed before beginning the build is highly recommended so
-        you can run the full suite of tests.-->
-        Running the full suite of tests is recommended.
+<command>./configure</command> command below, the installation process will
+overwrite your existing <application>GCC</application> C and C++ compilers
+and libraries.  Running the full suite of tests is recommended.
       </para>
 
       <para>
-        Do not continue with the <command>make install</command> command
-        until you are confident the build was successful. You can compare your
-        test results with those found at <ulink
-        url="https://gcc.gnu.org/ml/gcc-testresults/"/>. You may also want to
-        refer to the information found in the <application>GCC</application>
-        section of Chapter 8 in the LFS book (<ulink
-        url="&lfs-root;/chapter08/gcc.html"/>).
+        Do not continue with the <command>make install</command> command until you
+are confident the build was successful. You can compare your test results
+with those found at <ulink
+url="https://gcc.gnu.org/ml/gcc-testresults/"/>. You may also want to refer
+to the information found in the <application>GCC</application> section of
+Chapter 8 in the LFS book (<ulink url="&lfs-root;/chapter08/gcc.html"/>).
       </para>
     </important>
 
     <para>
       The instructions below are intentionally performing a
-      <quote>bootstrap</quote> process. Bootstrapping is needed for robustness
-      and is highly recommended when upgrading the compilers version. To disable
-      bootstrap anyways, add <parameter>--disable-bootstrap</parameter> to the
-      <command>./configure</command> options below.
+<quote>bootstrap</quote> process. Bootstrapping is needed for robustness and
+is highly recommended when upgrading the compilers version. To disable
+bootstrap anyway, add <parameter>--disable-bootstrap</parameter> to the
+<command>./configure</command> options below.
     </para>
 
+    <!--
     <para>
-      As in LFS fix an issue breaking libasan.a identified upstream:
+
+      First fix a problem with glibc-2.36:
     </para>
 
-<screen><userinput>sed -e '/static.*SIGSTKSZ/d' \
-    -e 's/return kAltStackSize/return SIGSTKSZ * 4/' \
-    -i libsanitizer/sanitizer_common/sanitizer_posix_libcdep.cpp</userinput></screen>
-
-    <para>
-      Install <application>GCC</application> by running the following commands:
+<screen><userinput>patch -Np1 -i ../gcc-&gcc-version;-glibc_2.36-1.patch</userinput></screen>
+-->
+<para>
+      Instale <application>GCC</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>case $(uname -m) in
@@ -192,39 +193,39 @@ cd    build                                            &amp;&amp;
     --prefix=/usr                                      \
     --disable-multilib                                 \
     --with-system-zlib                                 \
-    --enable-languages=c,c++,d,fortran,go,objc,obj-c++ &amp;&amp;
+    --enable-default-pie                               \
+    --enable-default-ssp                               \
+    --enable-languages=c,c++,fortran,go,objc,obj-c++ &amp;&amp;
 make</userinput></screen>
 
     <para>
       If you have installed additional packages such as
-      <application>Valgrind</application> and <application>GDB</application>,
-      the <application>GCC</application> part of the testsuite will run more
-      tests than in LFS. Some of those will report FAIL and others XPASS
-      (pass when expected to FAIL). As of gcc-11.1.0, about 90 FAIL occur
-      in the <quote>guality</quote> suite, as well as miscellaneous failures
-      throughout the rest of the test suite. If all the compilers above are
-      built, there will be  around 102 unexpected failures out of over
-      481,000 tests. To run the tests, issue:
+<application>Valgrind</application> and <application>GDB</application>, the
+<application>GCC</application> part of the test suite will run more tests
+than in LFS. Some of those will report FAIL and others XPASS (pass when
+expected to FAIL). As of gcc-12.2.0, about 60 FAIL occur in the
+<quote>guality</quote> suite, as well as miscellaneous failures throughout
+the rest of the test suite, fifteen of which are already present in the GCC
+tests of LFS. If all the compilers above are built, there will be around 80
+unexpected failures out of over 482,000 tests. To run the tests, issue:
     </para>
 
-<screen><userinput>ulimit -s 32768 &amp;&amp;
-make -k check</userinput></screen>
 <!-- The command above may error out, so using && may prevent the summary
 to be run. -->
+<screen><userinput>ulimit -s 32768 &amp;&amp;
+make -k check</userinput></screen>
+
 
     <para>
-      The tests are very long, and the results may be hard to find in the
-      logs, specially if you use parallel jobs with make. You can get a summary
-      of the tests with:
+      The tests are very long, and the results may be hard to find in the logs,
+specially if you use parallel jobs with make. You can get a summary of the
+tests with:
     </para>
 
 <screen><userinput>../contrib/test_summary</userinput></screen>
 
-    <para>A few tests, less than 20 out of about 450,000, will fail, but unless
-    the failures are excessive, they can be ignored.</para>
-
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -233,17 +234,15 @@ mkdir -pv /usr/share/gdb/auto-load/usr/lib              &amp;&amp;
 mv -v /usr/lib/*gdb.py /usr/share/gdb/auto-load/usr/lib &amp;&amp;
 
 chown -v -R root:root \
-    /usr/lib/gcc/*linux-gnu/&gcc-version;/include{,-fixed}
-
-rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/&gcc-version;/include-fixed/bits/</userinput></screen>
+    /usr/lib/gcc/*linux-gnu/&gcc-version;/include{,-fixed}</userinput></screen>
 
     <para>
-      Some packages expect to find the C preprocessor in
-      <filename class="directory">/lib</filename> or may refer to the C compiler
-      under the name <command>cc</command>. The following symbolic links are not
-      needed if you have followed the LFS instructions, since they
-      have been already created. If you do not have them on your system, issue
-      as the <systemitem class="username">root</systemitem> user:
+      Some packages expect to find the C preprocessor in <filename
+class="directory">/lib</filename> or may refer to the C compiler under the
+name <command>cc</command>. The following symbolic links are not needed if
+you have followed the LFS instructions, since they have been already
+created. If you do not have them on your system, issue as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>ln -v -sf ../usr/bin/cpp /lib          &amp;&amp;
@@ -254,86 +253,85 @@ ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /us
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <command>mkdir build; cd build</command>: The
-      <application>GCC</application> documentation recommends
-      building the package in a dedicated build directory.
+      <command>mkdir build; cd build</command>: The <application>GCC</application>
+documentation recommends building the package in a dedicated build
+directory.
     </para>
 
     <para>
-      <parameter>--disable-multilib</parameter>: This parameter ensures
-      that files are created for the specific architecture of your computer.
+      <parameter>--disable-multilib</parameter>: This parameter ensures that files
+are created for the specific architecture of your computer.
     </para>
 
     <para>
       <parameter>--with-system-zlib</parameter>: Uses the system
-      <application>zlib</application> instead of the bundled one.
-      <application>zlib</application> is used for compressing
-      and uncompressing <application>GCC</application>'s intermediate
-      language in LTO (Link Time Optimization) object files.
+<application>zlib</application> instead of the bundled one.
+<application>zlib</application> is used for compressing and decompressing
+<application>GCC</application>'s intermediate language in LTO (Link Time
+Optimization) object files.
     </para>
 
     <para>
-      <parameter>--enable-languages=c,c++,d,fortran,go,objc,obj-c++</parameter>:
-      This command identifies which languages to build. You may modify
-      this command to remove undesired languages. Three other languages can be
-      added, including ADA, BRIG (add
-      <parameter>brig</parameter> to the list of enabled languages), a binary
-      format for HSAIL (Heterogeneous System Architecture Intermediate
-      Language), and JIT (add <parameter>jit</parameter> to the list of enabled
-      languages), a library which can be linked into interpreters that want to
-      generate machine code <quote>on the fly</quote> at run-time. They have not
-      been tested by the BLFS developers.
-    </para>
-    <!-- It's been three major versions now, and many years.
-    Commenting out unless needed somewhere. -renodr
-    <para>
-      <option>- -with-default-libstdcxx-abi=gcc4-compatible</option>: Use this
-      switch if you are upgrading from a <application>GCC</application>
-      version prior to 5.1.0, and you do not want to recompile all the
-      libraries written in C++.
-    </para>
-   -->
-
-    <para>
-      <command>ulimit -s 32768</command>: This command prevents several
-      tests from running out of stack space.
+      <parameter>--enable-default-pie</parameter>: Makes the
+<option>-fpie</option> option the default when compiling programs.  Together
+with the <xref linkend="gASLR"/> feature enabled in the kernel, this defeats
+some kind of attacks based on known memory layouts.
     </para>
 
     <para>
-      <command>make -k check</command>: This command runs the test suite
-      without stopping if any errors are encountered.
+      <parameter>--enable-default-ssp</parameter>: Makes the
+<option>-fstack-protector-strong</option> option the default when compiling
+programs. <xref linkend="gSSP"/> is a technique preventing alteration of the
+program flow by corrupting the parameter stack.
     </para>
 
     <para>
-      <command>../contrib/test_summary</command>: This command will produce
-      a summary of the test suite results. You can append <command>| grep
-      -A7 Summ</command> to the command to produce an even more condensed
-      version of the summary. You may also wish to redirect the output
-      to a file for review and comparison later on.
+      <parameter>--enable-languages=c,c++,fortran,go,objc,obj-c++</parameter>:
+This command identifies which languages to build. You may modify this
+command to remove undesired languages. Other languages can be added,
+including ADA, D, BRIG (add <parameter>brig</parameter> to the list of
+enabled languages), a binary format for HSAIL (Heterogeneous System
+Architecture Intermediate Language), and JIT (add <parameter>jit</parameter>
+to the list of enabled languages), a library which can be linked into
+interpreters that want to generate machine code <quote>on the fly</quote> at
+run-time. They have not been tested by the BLFS developers.
     </para>
 
     <para>
-      <command>mv -v /usr/lib/*gdb.py ...</command>: The installation
-      stage puts some files used by <application>gdb</application> under the
-      <filename class="directory">/usr/lib</filename> directory. This generates
-      spurious error messages when performing <command>ldconfig</command>. This
-      command moves the files to another location.
+      <command>ulimit -s 32768</command>: This command prevents several tests from
+running out of stack space.
     </para>
 
     <para>
-      <command>chown -v -R root:root /usr/lib/gcc/*linux-gnu/...</command>:
-      If the package is built by a user other than root, the ownership of the
-      installed <filename class="directory">include</filename> directory (and
-      its content) will be incorrect. This command changes the ownership to the
-      <systemitem class="username">root</systemitem> user and group.
+      <command>make -k check</command>: This command runs the test suite without
+stopping if any errors are encountered.
     </para>
 
     <para>
-      <command>rm -rf .../include-fixed/bits/</command>:  Remove an erroneous
-      file in gcc added by the fixincludes process.
+      <command>../contrib/test_summary</command>: This command will produce a
+summary of the test suite results. You can append <command>| grep -A7
+Summ</command> to the command to produce an even more condensed version of
+the summary. You may also wish to redirect the output to a file for review
+and comparison later on.
+    </para>
+
+    <para>
+      <command>mv -v /usr/lib/*gdb.py ...</command>: The installation stage puts
+some files used by <application>gdb</application> under the <filename
+class="directory">/usr/lib</filename> directory. This generates spurious
+error messages when performing <command>ldconfig</command>. This command
+moves the files to another location.
+    </para>
+
+    <para>
+      <command>chown -v -R root:root /usr/lib/gcc/*linux-gnu/...</command>: If the
+package is built by a user other than root, the ownership of the installed
+<filename class="directory">include</filename> directory (and its content)
+will be incorrect. This command changes the ownership to the <systemitem
+class="username">root</systemitem> user and group.
     </para>
 
   </sect2>
@@ -342,28 +340,24 @@ ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /us
     <title>Contents</title>
 
     <para>
-      Some program and library names and descriptions are not listed here,
-      but can be found at
-      <ulink url="&lfs-root;/chapter08/gcc.html#contents-gcc">LFS section
-      for GCC</ulink> as they were
-      initially installed during the building of LFS.
+      Some program and library names and descriptions are not listed here, but can
+be found at <ulink url="&lfs-root;/chapter08/gcc.html#contents-gcc">LFS
+section for GCC</ulink> as they were initially installed during the building
+of LFS.
     </para>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          gccgo, gdc, gfortran, go, and gofmt, hard-linked to architecture
-          specific names
+          gccgo, gfortran, go, and gofmt, hard-linked to architecture specific names
         </seg>
         <seg>
-          libgfortran.{so,a},
-          libgdruntime.{so,a}, libgphobos.{so,a}
-          libgo.{so,a}, libgobegin.a, libgolibbegin.a,
-          libobjc.{so,a}, and numerous other run-time libraries and executables
+          libgfortran.{so,a}, libgo.{so,a}, libgobegin.a, libgolibbegin.a,
+libobjc.{so,a}, and numerous other run-time libraries and executables
         </seg>
         <seg>
           /usr/lib/go
@@ -372,16 +366,14 @@ ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /us
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="gccgo">
         <term><command>gccgo</command></term>
         <listitem>
           <para>
-            is a GCC-based compiler for the <application>Go</application>
-            language
+            is a GCC-based compiler for the <application>Go</application> language
           </para>
           <indexterm zone="gcc gccgo">
             <primary sortas="b-gccgo">gccgo</primary>
@@ -412,8 +404,10 @@ ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /us
           </indexterm>
         </listitem>
       </varlistentry>
-
+      
+      <!--
       <varlistentry id="gdc">
+
         <term><command>gdc</command></term>
         <listitem>
           <para>
@@ -425,13 +419,12 @@ ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /us
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="gfortran">
+      -->
+<varlistentry id="gfortran">
         <term><command>gfortran</command></term>
         <listitem>
           <para>
-            is a GCC-based compiler for the <application>Fortran</application>
-            language
+            is a GCC-based compiler for the <application>Fortran</application> language
           </para>
           <indexterm zone="gcc gfortran">
             <primary sortas="b-gfortran">gfortran</primary>

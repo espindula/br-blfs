@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY tripwire-download-http "https://github.com/Tripwire/tripwire-open-source/releases/download/&tripwire-version;/tripwire-open-source-&tripwire-version;.tar.gz">
-  <!ENTITY tripwire-download-ftp  " ">
+  <!ENTITY tripwire-download-ftp  "">
   <!ENTITY tripwire-md5sum        "a5cf1bc2f235f5d8ca458f00548db6ee">
   <!ENTITY tripwire-size          "980 KB">
   <!ENTITY tripwire-buildsize     "29 MB">
-  <!ENTITY tripwire-time          "1.6 SBU (scripting install)">
+  <!ENTITY tripwire-time          "1,6 UPC (instalação via scripts)">
 ]>
 
 <sect1 id="tripwire" xreflabel="Tripwire-&tripwire-version;">
   <?dbhtml filename="tripwire.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Tripwire-&tripwire-version;</title>
 
@@ -26,76 +23,77 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Tripwire</title>
+    <title>Introdução a Tripwire</title>
 
     <para>
-      The <application>Tripwire</application> package contains programs
-      used to verify the integrity of the files on a given system.
+      O pacote <application>Tripwire</application> contém aplicativos usados para
+verificar a integridade dos arquivos em um determinado sistema.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&tripwire-download-http;"/>
+          Transferência (HTTP): <ulink url="&tripwire-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&tripwire-download-ftp;"/>
+          Transferência (FTP): <ulink url="&tripwire-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &tripwire-md5sum;
+          Soma de verificação MD5 da transferência: &tripwire-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &tripwire-size;
+          Tamanho da transferência: &tripwire-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &tripwire-buildsize;
+          Espaço em disco estimado exigido: &tripwire-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &tripwire-time;
+          Tempo de construção estimado: &tripwire-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Tripwire Dependencies</bridgehead>
-<!--
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Tripwire</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect4">
+Recommended</bridgehead>
     <para role="recommended">
       <xref linkend="openssl"/>
     </para>
 -->
-
-    <bridgehead renderas="sect4">Optional</bridgehead>
+<bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      An <xref linkend="server-mail"/>
+      Um <xref linkend="server-mail"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/tripwire"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/tripwire"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Tripwire</title>
+    <title>Instalação do Tripwire</title>
 
     <para>
-      Compile <application>Tripwire</application> by running the following
-      commands:
+      Compile <application>Tripwire</application> executando os seguintes
+comandos:
     </para>
 
-<screen><userinput>sed -e '/^CLOBBER/s/false/true/'         \
+<screen><userinput>sed -e '/^CLOBBER/s/false/true/'        \
     -e 's|TWDB="${prefix}|TWDB="/var|'   \
     -e '/TWMAN/ s|${prefix}|/usr/share|' \
     -e '/TWDOCS/s|${prefix}/doc/tripwire|/usr/share/doc/tripwire-&tripwire-version;|' \
@@ -112,19 +110,19 @@ make CPPFLAGS=-std=c++11</userinput></screen>
 
     <note>
       <para>
-        The default configuration is to use a local MTA. If
-        you don't have an MTA installed and have no wish to install
-        one, modify <filename>install/install.cfg</filename> to use an SMTP
-        server instead.  Otherwise the install will fail.
+        A configuração padrão é a de usar um MTA local. Se você não teiver um MTA
+instalado e não desejar instalar um, [então] modifique
+<filename>install/install.cfg</filename> para usar um servidor SMTP. Caso
+contrário, a instalação falhará.
       </para>
     </note>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -132,23 +130,23 @@ cp -v policy/*.txt /usr/share/doc/tripwire-&tripwire-version;</userinput></scree
 
     <note>
       <para>
-        During <command>make install</command>, several questions
-        are asked, including passwords. If you want to make a script, you have
-        to apply a <application>sed</application> before running
-        <command>make install</command>:
+        Durante o <command>make install</command>, várias perguntas são feitas,
+incluindo senhas. Se você deseja criar um script, [então] tem de aplicar um
+<application>sed</application> antes de executar <command>make
+install</command>:
       </para>
 
-<screen><userinput>sed -i -e 's@installer/install.sh@&amp; -n -s <replaceable>&lt;site-password&gt;</replaceable> -l <replaceable>&lt;local-password&gt;</replaceable>@' Makefile</userinput></screen>
+<screen><userinput>sed -i -e 's@installer/install.sh@&amp; -n -s <replaceable>&lt;senha_do_sítio&gt;</replaceable> -l <replaceable>&lt;senha_local&gt;</replaceable>@' Makefile</userinput></screen>
 
       <para>
-        Of course, you should do this with dummy passwords and change them
-	later.
+        Claro, você deveria fazer isso com senhas fictícias e mudá-las
+posteriormente.
       </para>
 
       <para>
-        Another issue when scripting is that the installer exits when the
-        standard input is not a terminal. You may disable this behavior
-        with the following sed:
+        Outro problema ao criar scripts é o de que o instalador sai quando a entrada
+padrão não é um terminal. Você consegue desativar esse comportamento com o
+seguinte sed:
       </para>
 
 <screen><userinput>sed '/-t 0/,+3d' -i installer/install.sh</userinput></screen>
@@ -158,48 +156,48 @@ cp -v policy/*.txt /usr/share/doc/tripwire-&tripwire-version;</userinput></scree
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <command>sed ... installer/install.cfg</command>: This command tells
-      the package to install the program database and reports in
-      <filename class="directory">/var/lib/tripwire</filename> and sets the
-      proper location for man pages and documentation.
+      <command>sed ... installer/install.cfg</command>: Esse comando informa ao
+pacote para instalar a base de dados do aplicativo e informa em <filename
+class="directory">/var/lib/tripwire</filename> e configura o local adequado
+para páginas de manual e documentação.
     </para>
 
     <para>
-      <command>find ...</command>, <command>sed ...</command>, and
-      <command>autoreconf -fi</command>: The build system is unusable as is, and
-      has to be modified for the build to succeed.
+      <command>find ...</command>, <command>sed ...</command> e
+<command>autoreconf -fi</command>: O sistema de construção é inutilizável
+como está e tem de ser modificado para que a construção tenha sucesso.
     </para>
 
     <para>
-      <option>CPPFLAGS=-std=c++11</option>: Setting the C++ preprocessor
-      flags to version 11 is necessary to prevent a confict with the
-      default version which is c++17 in recent version of gcc.
+      <option>CPPFLAGS=-std=c++11</option>: Configurar os sinalizadores do
+pré-processador C++ para a versão 11 é necessário para evitar um conflito
+com a versão padrão que é c++17 na versão recente do GCC.
     </para>
 
     <para>
-      <command>make install</command>: This command creates the
-      <application>Tripwire</application> security keys as well as installing
-      the binaries. There are two keys: a site key and a local key which are
-      stored in <filename class="directory">/etc/tripwire/</filename>.
+      <command>make install</command>: Esse comando cria as chaves de segurança do
+<application>Tripwire</application> assim como instala os binários. Existem
+duas chaves: uma chave do sítio e uma chave local que são armazenadas em
+<filename class="directory">/etc/tripwire/</filename>.
     </para>
 
     <para>
       <command>cp -v policy/*.txt /usr/doc/tripwire-&tripwire-version;</command>:
-      This command installs the <application>tripwire</application> sample
-      policy files with the other <application>tripwire</application>
-      documentation.i
+Esse comando instala os arquivos de exemplo da política do
+<application>tripwire</application> com a outra documentação do
+<application>tripwire</application>.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring Tripwire</title>
+    <title>Configurando Tripwire</title>
 
     <sect3 id="tripwire-config">
-      <title>Config Files</title>
+      <title>Arquivos de Configuração</title>
 
       <para>
         <filename>/etc/tripwire/*</filename>
@@ -212,121 +210,124 @@ cp -v policy/*.txt /usr/share/doc/tripwire-&tripwire-version;</userinput></scree
     </sect3>
 
     <sect3>
-      <title>Configuration Information</title>
+      <title>Informação de Configuração</title>
 
       <para>
-        <application>Tripwire</application> uses a policy file to
-        determine which files are integrity checked. The default policy
-        file (<filename>/etc/tripwire/twpol.txt</filename>) is for a
-        default installation and will need to be updated for your
-        system.
+        O <application>Tripwire</application> usa um arquivo de política para
+determinar quais arquivos são verificados quanto à integridade. O arquivo
+padrão da política (<filename>/etc/tripwire/twpol.txt</filename>) é para uma
+instalação padrão e precisará ser atualizado para seu sistema.
       </para>
 
       <para>
-        Policy files should be tailored to each individual distribution and/or
-        installation. Some example policy files can be found in <filename
-        class="directory">/usr/share/doc/tripwire/</filename>.
+        Os arquivos da política deveriam ser adaptados para cada distribuição e(ou)
+instalação individual. Alguns arquivos de exemplo da política podem ser
+encontrados em <filename
+class="directory">/usr/share/doc/tripwire/</filename>.
       </para>
 
       <para>
-        If desired, copy the policy file you'd like to try into <filename
-        class="directory">/etc/tripwire/</filename> instead of using the
-        default policy file, <filename>twpol.txt</filename>.  It is, however,
-        recommended that you edit your policy file. Get ideas from the
-        examples above and read
-        <filename>/usr/share/doc/tripwire/policyguide.txt</filename> for
-        additional information. <filename>twpol.txt</filename> is a good
-        policy file for learning about <application>Tripwire</application>
-        as it will note any changes to the file system and can even be used
-        as an annoying way of keeping track of changes for uninstallation of
-        software.
+        Se desejado, [então] copie o arquivo da política que gostaria de tentar para
+<filename class="directory">/etc/tripwire/</filename> em vez de usar o
+arquivo padrão da política, <filename>twpol.txt</filename>. É, no entanto,
+recomendado que você edite seu arquivo da política. Obtenha ideias a partir
+dos exemplos acima e leia
+<filename>/usr/share/doc/tripwire/policyguide.txt</filename> para informação
+adicional. <filename>twpol.txt</filename> é um bom arquivo da política para
+aprender a respeito do <application>Tripwire</application>, pois ele
+observará quaisquer mudanças no sistema de arquivos e até mesmo pode ser
+usado como uma maneira irritante de manter rastreio das mudanças para
+desinstalação de software.
       </para>
 
       <para>
-        After your policy file has been edited to your satisfaction you may
-        begin the configuration steps (perform as the <systemitem
-        class='username'>root</systemitem>) user:
+        Depois que seu arquivo da política tiver sido editado para sua satisfação,
+você poderá iniciar as etapas de configuração (realizar como o(a) usuário(a)
+<systemitem class='username'>root</systemitem>):
       </para>
 
 <screen role="root"><userinput>twadmin --create-polfile --site-keyfile /etc/tripwire/site.key \
-    /etc/tripwire/twpol.txt &amp;&amp;
+   /etc/tripwire/twpol.txt &amp;&amp;
 tripwire --init</userinput></screen>
 
       <para>
-        Depending on your system and the contents of the policy file, the
-        initialization phase above can take a relatively long time.
+        Dependendo do seu sistema e do conteúdo do arquivo da política, a fase de
+inicialização acima pode levar um tempo relativamente longo.
       </para>
 
     </sect3>
 
     <sect3>
-      <title>Usage Information</title>
+      <title>Informação de Uso</title>
 
       <para>
-        <application>Tripwire</application> will identify file changes in
-        the critical system files specified in the policy file.  Using
-        <application>Tripwire</application> while making frequent changes to
-        these directories will flag all these changes.  It is most useful
-        after a system has reached a configuration that the user considers
-        stable.
+        O <application>Tripwire</application> identificará as mudanças de arquivo
+nos arquivos críticos do sistema especificados no arquivo da política. Usar
+o <application>Tripwire</application> enquanto se faz mudanças frequentes
+nesses diretórios sinalizará todas essas mudanças. É mais útil depois que um
+sistema tenha atingido uma configuração que o(a) usuário(a) considere
+estável.
       </para>
 
       <para>
-        To use <application>Tripwire</application> after creating a policy
-        file to run a report, use the following command:
+        Para usar o <application>Tripwire</application> depois de criar um arquivo
+da política para executar um informe, use o seguinte comando:
       </para>
 
 <screen role="root"><userinput>tripwire --check &gt; /etc/tripwire/report.txt</userinput></screen>
 
       <para>
-        View the output to check the integrity of your files. An automatic
-        integrity report can be produced by using a cron facility to schedule
-        the runs.
+        Veja a saída gerada para verificar a integridade dos seus arquivos. Um
+informe automático de integridade pode ser produzido usando-se um recurso
+cron para agendar as execuções.
       </para>
 
       <para>
-        Reports are stored in binary and, if desired, encrypted.  View reports,
-        as the <systemitem class="username">root</systemitem> user, with:
+        Os informes são armazenados em binário e, se desejado,
+encriptados. Visualize os informes, como o(a) usuário(a) <systemitem
+class="username">root</systemitem>, com:
       </para>
 
-<screen role="nodump"><userinput>twprint --print-report -r /var/lib/tripwire/report/<replaceable>&lt;report-name.twr&gt;</replaceable></userinput></screen>
+<screen role="nodump"><userinput>twprint --print-report -r /var/lib/tripwire/report/<replaceable>&lt;nome-informe.twr&gt;</replaceable></userinput></screen>
 
       <para>
-        After you run an integrity check, you should examine the report (or
-        email) and then modify the <application>Tripwire</application> database
-        to reflect the changed files on your system. This is so that
-        <application>Tripwire</application> will not continually notify you
-        hat files you intentionally changed are a security violation. To do
-        this you must first <command>ls -l /var/lib/tripwire/report/</command>
-        and note the name of the newest file which starts with your system
-        name as presented by the command <userinput>uname -n</userinput> and
-        ends in <filename>.twr</filename>. These files were created during
-        report creation and the most current one is needed to update the
-        <application>Tripwire</application> database of your system. As the
-        <systemitem class='username'>root</systemitem> user, type in the
-        following command making the appropriate report name:
+        Depois de executar uma verificação de integridade, você deveria examinar o
+informe (ou o correio eletrônico) e, então, modificar a base de dados do
+<application>Tripwire</application> para refletir os arquivos mudados em seu
+sistema. Isso é assim de forma que o <application>Tripwire</application> não
+te notificará continuamente que os arquivos que você mudou intencionalmente
+sejam uma violação de segurança. Para fazer isso, você precisa primeiro
+<command>ls -l /var/lib/tripwire/report/</command> e anotar o nome do
+arquivo mais recente que começa com o nome do seu sistema conforme
+apresentado pelo comando <userinput>uname -n</userinput> e termina em
+<filename>.twr</filename>. Esses arquivos foram criados durante a criação do
+informe e o mais atual é necessário para atualizar a base de dados do
+<application>Tripwire</application> do seu sistema. Como o(a) usuário(a)
+<systemitem class='username'>root</systemitem>, digite o seguinte comando
+criando o nome apropriado do informe:
       </para>
 
-<screen role="nodump"><userinput>tripwire --update --twrfile /var/lib/tripwire/report/<replaceable>&lt;report-name.twr&gt;</replaceable></userinput></screen>
+<screen role="nodump"><userinput>tripwire --update --twrfile /var/lib/tripwire/report/<replaceable>&lt;nome-informe.twr&gt;</replaceable></userinput></screen>
 
       <para>
-        You will be placed into <application>Vim</application> with a copy
-        of the report in front of you. If all the changes were good, then just
-        type <command>:wq</command> and after entering your local key, the
-        database will be updated. If there are files which you still want to
-        be warned about, remove the 'x' before the filename in the report and
-        type <command>:wq</command>.
+        Você será colocado(a) no <application>Vim</application> com uma cópia do
+informe à sua frente. Se todas as mudanças estiverem boas, então apenas
+digite <command>:wq</command> e depois de inserir sua chave local, a base de
+dados será atualizada. Se existirem arquivos a respeito dos quais você ainda
+desejar ser avisado(a), [então] remova o 'x' de antes do nome do arquivo no
+informe e digite <command>:wq</command>.
       </para>
 
     </sect3>
 
     <sect3>
-      <title>Changing the Policy File</title>
+      <title>Mudando o Arquivo da Política</title>
 
       <para>
-        If you are unhappy with your policy file and would like to modify it
-        or use a new one, modify the policy file and then execute the following
-        commands as the <systemitem class='username'>root</systemitem> user:
+        Se você estiver insatisfeito(a) com seu arquivo da política e gostaria de
+modificá-lo ou de usar um novo, [então] modifique o arquivo da política e
+então execute os seguintes comandos como o(a) usuário(a) <systemitem
+class='username'>root</systemitem>:
       </para>
 
 <screen role="nodump"><userinput>twadmin --create-polfile /etc/tripwire/twpol.txt &amp;&amp;
@@ -337,32 +338,31 @@ tripwire --init</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>siggen, tripwire, twadmin, and twprint</seg>
-        <seg>None</seg>
-	<seg>/etc/tripwire, /var/lib/tripwire,
-        and /usr/share/doc/tripwire-&tripwire-version;</seg>
+        <seg>siggen, tripwire, twadmin e twprint</seg>
+        <seg>Nenhuma</seg>
+        <seg>/etc/tripwire, /var/lib/tripwire e
+/usr/share/doc/tripwire-&tripwire-version;</seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="siggen">
         <term><command>siggen</command></term>
         <listitem>
           <para>
-            is a signature gathering utility that displays
-            the hash function values for the specified files
+            é um utilitário de coleta de assinatura que exibe os valores da função hash
+para os arquivos especificados
           </para>
           <indexterm zone="tripwire siggen">
             <primary sortas="b-siggen">siggen</primary>
@@ -374,7 +374,7 @@ tripwire --init</userinput></screen>
         <term><command>tripwire</command></term>
         <listitem>
           <para>
-            is the main file integrity checking program
+            é o principal aplicativo de verificação de integridade de arquivo
           </para>
           <indexterm zone="tripwire tripwire">
             <primary sortas="b-tripwire">tripwire</primary>
@@ -386,10 +386,9 @@ tripwire --init</userinput></screen>
         <term><command>twadmin</command></term>
         <listitem>
           <para>
-            administrative and utility tool used to perform
-            certain administrative functions related to
-            <application>Tripwire</application> files and configuration
-            options
+            ferramenta administrativa e utilitária usada para realizar certas funções
+administrativas relacionadas a arquivos e opções de configuração do
+<application>Tripwire</application>
           </para>
           <indexterm zone="tripwire twadmin">
             <primary sortas="b-twadmin">twadmin</primary>
@@ -401,8 +400,8 @@ tripwire --init</userinput></screen>
         <term><command>twprint</command></term>
         <listitem>
           <para>
-            prints <application>Tripwire</application>
-            database and report files in clear text format
+            imprime a base de dados e arquivos de informe do
+<application>Tripwire</application> em formato de texto simples
           </para>
           <indexterm zone="tripwire twprint">
             <primary sortas="b-twprint">twprint</primary>

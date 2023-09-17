@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-07 12:25:55 +0200 (sam, 07 jui 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -13,10 +18,10 @@
   <xsl:import href="chunk-slave.xsl"/>
 
     <!-- Upstream chunk code named templates -->
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk-common.xsl"/>
+  <xsl:import href="/usr/share/xml/docbook/stylesheet/docbook-xsl/xhtml/chunk-common.xsl"/>
 
     <!-- Upstream chunk code match templates -->
-  <xsl:include href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk-code.xsl"/>
+  <xsl:include href="/usr/share/xml/docbook/stylesheet/docbook-xsl/xhtml/chunk-code.xsl"/>
 
     <!-- Including our customized chunks templates -->
   <xsl:include href="xhtml/lfs-index.xsl"/>

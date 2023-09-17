@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY keyutils-download-http "https://people.redhat.com/~dhowells/keyutils/keyutils-&keyutils-version;.tar.bz2">
-  <!ENTITY keyutils-download-ftp  " ">
+  <!ENTITY keyutils-download-ftp  "">
   <!ENTITY keyutils-md5sum        "919af7f33576816b423d537f8a8692e8">
   <!ENTITY keyutils-size          "96 KB">
-  <!ENTITY keyutils-buildsize     "1.9 MB (with tests)">
-  <!ENTITY keyutils-time          "less than 0.1 SBU (add 0.6 SBU for tests)">
+  <!ENTITY keyutils-buildsize     "1,9 MB (com os testes)">
+  <!ENTITY keyutils-time          "menos que 0,1 UPC (adicionar 0,6 UPC para os testes)">
 ]>
 
 <sect1 id="keyutils" xreflabel="keyutils-&keyutils-version;">
   <?dbhtml filename="keyutils.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>keyutils-&keyutils-version;</title>
 
@@ -26,91 +23,92 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to keyutils</title>
+    <title>Introdução a keyutils</title>
 
     <para>
-      <application>Keyutils</application> is a set of utilities for managing
-      the key retention facility in the kernel, which can be used by
-      filesystems, block devices and more to gain and retain the authorization
-      and encryption keys required to perform secure operations.
+      <application>Keyutils</application> é um conjunto de utilitários para
+gerenciar o recurso de retenção de chave no núcleo, que pode ser usado por
+sistemas de arquivos, dispositivos de bloco e muito mais para obter e reter
+as chaves de autorização e de encriptação exigidas para realizar operações
+seguras.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&keyutils-download-http;"/>
+          Transferência (HTTP): <ulink url="&keyutils-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&keyutils-download-ftp;"/>
+          Transferência (FTP): <ulink url="&keyutils-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &keyutils-md5sum;
+          Soma de verificação MD5 da transferência: &keyutils-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &keyutils-size;
+          Tamanho da transferência: &keyutils-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &keyutils-buildsize;
+          Espaço em disco estimado exigido: &keyutils-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &keyutils-time;
+          Tempo de construção estimado: &keyutils-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">keyutils Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do keyutils</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="mitkrb"/>
       <!-- Without krb5 installed, a FTBFS occurs while trying to compile dns.afsdb.c.
       It looks for profile.h, which is installed by krb5. -->
+<xref linkend="mitkrb"/>
+      
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/keyutils"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/keyutils"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of keyutils</title>
+    <title>Instalação do keyutils</title>
 
     <para>
-      Install <application>keyutils</application> by running the following
-      commands:
+      Instale <application>keyutils</application> executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>sed -i 's:$(LIBDIR)/$(PKGCONFIG_DIR):/usr/lib/pkgconfig:' Makefile &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue, as the
-      <systemitem class="username">root</systemitem> user:
+      Para testar os resultados, emita, como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root" remap="test"><userinput>make -k test</userinput></screen>
 
     <para>
-      Note that several tests will fail if certain uncommon kernel options
-      were not used when the kernel was built.  These include CONFIG_BIG_KEYS,
-      CONFIG_KEY_DH_OPERATIONS, and CONFIG_CRYPTO_DH.
+      Observe que vários testes falharão se certas opções incomuns do núcleo não
+forem usadas quando o núcleo foi construído. Isso inclui CONFIG_BIG_KEYS,
+CONFIG_KEY_DH_OPERATIONS e CONFIG_CRYPTO_DH.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make NO_ARLIB=1 LIBDIR=/usr/lib BINDIR=/usr/bin SBINDIR=/usr/sbin install</userinput></screen>
@@ -118,29 +116,29 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <command>sed ... Makefile</command>: This command ensures the pkgconfig
-      file is placed in the correct directory.
+      <command>sed ... Makefile</command>: Esse comando garante que o arquivo
+"pkgconfig" seja colocado no diretório correto.
     </para>
 
     <para>
-      <parameter>NO_ARLIB=1</parameter>: This make flag disables installing the
-      static library.
+      <parameter>NO_ARLIB=1</parameter>: Esse sinalizador do "make" desabilita a
+instalação da biblioteca estática.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring keyutils</title>
+    <title>Configurando keyutils</title>
 
     <sect3 id="keyutils-config">
-      <title>Config Files</title>
+      <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/request-key.conf</filename> and
-        <filename>/etc/request-key.d/*</filename>
+        <filename>/etc/request-key.conf</filename> e
+<filename>/etc/request-key.d/*</filename>
       </para>
 
       <indexterm zone="keyutils keyutils-config">
@@ -156,30 +154,30 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
-        <seg>keyctl, key.dns_resolver, and request-key</seg>
+        <seg>keyctl, key.dns_resolver e request-key</seg>
         <seg>libkeyutils.so</seg>
-        <seg>/etc/request-key.d and /usr/share/keyutils</seg>
+        <seg>/etc/request-key.d e /usr/share/keyutils</seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="keyctl">
         <term><command>keyctl</command></term>
         <listitem>
           <para>
-            controls the key management facility with a variety of subcommands
+            controla o recurso de gerenciamento de chave com uma variedade de
+subcomandos
           </para>
           <indexterm zone="keyutils keyctl">
             <primary sortas="b-keyctl">keyctl</primary>
@@ -191,10 +189,10 @@ make</userinput></screen>
         <term><command>key.dns_resolver</command></term>
         <listitem>
           <para>
-            is invoked by <command>request-key</command> on behalf of the
-            kernel when kernel services (such as NFS, CIFS and AFS) need to
-            perform a hostname lookup and the kernel does not have the key
-            cached.  It is not ordinarily intended to be called directly
+            é invocado por <command>request-key</command> em nome do núcleo quando os
+serviços do núcleo (como NFS, CIFS e AFS) precisam realizar uma pesquisa de
+nome de dispositivo e o núcleo não tem a chave armazenada em cache. Não é
+destinado, ordinariamente, a ser chamado diretamente
           </para>
           <indexterm zone="keyutils key.dns_resolver">
             <primary sortas="b-key.dns_resolver">key.dns_resolver</primary>
@@ -206,10 +204,10 @@ make</userinput></screen>
         <term><command>request-key</command></term>
         <listitem>
           <para>
-            is invoked by the kernel when the kernel is asked for a key that it
-            doesn't have immediately available. The kernel creates a temporary
-            key and then calls out to this program to instantiate it.  It is
-            not intended to be called directly
+            é invocado pelo núcleo quando o núcleo é solicitado por uma chave que não
+tem imediatamente disponível. O núcleo cria uma chave temporária e, em
+seguida, chama esse aplicativo para instanciá-lo. Não é destinado a ser
+chamado diretamente
           </para>
           <indexterm zone="keyutils request-key">
             <primary sortas="b-request-keyt-key">request-key</primary>
@@ -221,7 +219,7 @@ make</userinput></screen>
         <term><filename class="libraryfile">libkeyutils.so</filename></term>
         <listitem>
           <para>
-            contains the keyutils library API instantiation
+            contém a instanciação da API da biblioteca "keyutils"
           </para>
           <indexterm zone="keyutils libkeyutils">
             <primary sortas="c-libkeyutils">libkeyutils.so</primary>

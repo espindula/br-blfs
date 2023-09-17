@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-07 12:25:55 +0200 (sam, 07 jui 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -212,7 +217,7 @@
 
     <!-- Body attributes:
            Add to the body XHTML output tag a class attribute with the book type
-           and a id attribute with the book type and version. -->
+           and a id atribute with the book type and version. -->
     <!-- The original template is in {docbook-xsl}/xhtml/docbook.xsl -->
   <xsl:template name="body.attributes">
     <xsl:attribute name="class">

@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY lcms2-download-http "https://github.com/mm2/Little-CMS/releases/download/lcms&lcms2-version;/lcms2-&lcms2-version;.tar.gz">
-  <!ENTITY lcms2-download-ftp  " ">
-  <!ENTITY lcms2-md5sum        "47a99e781b89c958a773e2012e81ae8c">
-  <!ENTITY lcms2-size          "6.9 MB">
-  <!ENTITY lcms2-buildsize     "19 MB (with the tests)">
-  <!ENTITY lcms2-time          "0.2 SBU (with the tests)">
+  <!ENTITY lcms2-download-ftp  "">
+  <!ENTITY lcms2-md5sum        "7f7baa3e605c961b9301135105ee9a34">
+  <!ENTITY lcms2-size          "7,1 MB">
+  <!ENTITY lcms2-buildsize     "20 MB (com os testes)">
+  <!ENTITY lcms2-time          "0,2 UPC (com os testes)">
 ]>
 
 <sect1 id="lcms2" xreflabel="Little CMS-&lcms2-version;">
   <?dbhtml filename="lcms2.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Little CMS-&lcms2-version;</title>
 
@@ -26,98 +23,96 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Little CMS2</title>
+    <title>Introdução a Little CMS2</title>
 
     <para>
-      The Little Color Management System is a small-footprint color management
-      engine, with special focus on accuracy and performance. It uses
-      the International Color Consortium standard (ICC), which is the modern
-      standard for color management.
+      O "Little Color Management System" é um mecanismo de gerenciamento de cores
+compacto, com foco especial em precisão e desempenho. Ele usa o padrão
+"International Color Consortium" (ICC), que é o padrão moderno para
+gerenciamento de cores.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&lcms2-download-http;"/>
+          Transferência (HTTP): <ulink url="&lcms2-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&lcms2-download-ftp;"/>
+          Transferência (FTP): <ulink url="&lcms2-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &lcms2-md5sum;
+          Soma de verificação MD5 da transferência: &lcms2-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &lcms2-size;
+          Tamanho da transferência: &lcms2-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &lcms2-buildsize;
+          Espaço em disco estimado exigido: &lcms2-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &lcms2-time;
+          Tempo de construção estimado: &lcms2-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Little CMS2 Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Little CMS2</bridgehead>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="libjpeg"/> and
-      <xref linkend="libtiff"/>
+      <xref linkend="libjpeg"/> e <xref linkend="libtiff"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/lcms2"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/lcms2"/></para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Little CMS2</title>
+    <title>Instalação do Little CMS2</title>
 
-<!-- Seems to be fixed in 2.10
-    <para>
-      If you want to run tests, then the build procedure must
-      be modified to make some library internal references visible to
-      the test code:
+    
+    <!-- Will be fixed in the next release (2.15 or 2.14.1?)
+         https://github.com/mm2/Little-CMS/commit/93629504f8175e0002 -->
+<para>
+      Aplique a correção do(a) desenvolvedor(a) para um problema quebrando
+"colord":
     </para>
 
-<screen><userinput>sed -i '/AX_APPEND/s/^/#/' configure.ac &amp;&amp;
-autoreconf</userinput></screen>
--->
+<screen><userinput>sed '/BufferSize &lt; TagSize/,+1 s/goto Error/TagSize = BufferSize/' \
+   -i src/cmsio0.c</userinput></screen>
 
     <para>
-      Install <application>Little CMS2</application> by running the following
-      commands:
+      Instale <application>Little CMS2</application> executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make check</command>.
+      Para testar os resultados, emita: <command>make check</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
@@ -125,30 +120,29 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>jpgicc, linkicc, psicc, tificc, and transicc</seg>
+        <seg>jpgicc, linkicc, psicc, tificc e transicc</seg>
         <seg>liblcms2.so</seg>
-        <seg>None</seg>
+        <seg>Nenhum</seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="jpgicc">
         <term><command>jpgicc</command></term>
         <listitem>
           <para>
-            is the Little CMS ICC profile applier for JPEG
+            é o aplicador de perfil "ICC" do "Little CMS" para "JPEG"
           </para>
           <indexterm zone="lcms2 jpgicc">
             <primary sortas="b-jpgicc">jpgicc</primary>
@@ -160,7 +154,7 @@ make</userinput></screen>
         <term><command>linkicc</command></term>
         <listitem>
           <para>
-            is the Little CMS ICC device link generator
+            é o gerador de ligação de dispositivo "ICC" do "Little CMS"
           </para>
           <indexterm zone="lcms2 linkicc">
             <primary sortas="b-linkicc">linkicc</primary>
@@ -172,7 +166,7 @@ make</userinput></screen>
         <term><command>psicc</command></term>
         <listitem>
           <para>
-            is the Little CMS ICC PostScript generator
+            é o gerador de "ICC PostScript" do "Little CMS"
           </para>
           <indexterm zone="lcms2 psicc">
             <primary sortas="b-psicc">psicc</primary>
@@ -184,7 +178,7 @@ make</userinput></screen>
         <term><command>tificc</command></term>
         <listitem>
           <para>
-            is the Little CMS ICC tiff generator
+            é o gerador de "ICC tiff" do "Little CMS"
           </para>
           <indexterm zone="lcms2 tificc">
             <primary sortas="b-tificc">tificc</primary>
@@ -196,7 +190,7 @@ make</userinput></screen>
         <term><command>transicc</command></term>
         <listitem>
           <para>
-            is the Little CMS ColorSpace conversion calculator
+            é a calculadora de conversão "ColorSpace" do "Little CMS"
           </para>
           <indexterm zone="lcms2 transicc">
             <primary sortas="b-transicc">transicc</primary>
@@ -208,7 +202,7 @@ make</userinput></screen>
         <term><filename class="libraryfile">liblcms2.so</filename></term>
         <listitem>
           <para>
-            contains functions that implement the lcms2 API
+            contém funções que implementam a API do "lcms2"
           </para>
           <indexterm zone="lcms2 liblcms2">
             <primary sortas="c-liblcms2">liblcms2.so</primary>

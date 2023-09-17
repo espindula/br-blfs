@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY at-download-http "http://software.calhariz.com/at/at_&at-version;.orig.tar.gz">
-  <!ENTITY at-download-ftp  " ">
-  <!ENTITY at-md5sum        "7b02676dd0501a1774b7119e02902697">
-  <!ENTITY at-size          "132 KB">
-  <!ENTITY at-buildsize     "1.5 MB (including tests)">
-  <!ENTITY at-time          "less than 0.1 SBU">
+  <!ENTITY at-download-http "&sources-anduin-http;/at/at_&at-version;.orig.tar.gz">
+  <!ENTITY at-download-ftp  "">
+  <!ENTITY at-md5sum        "ca3657a1c90d7c3d252e0bc17feddc6e">
+  <!ENTITY at-size          "130 KB">
+  <!ENTITY at-buildsize     "1,9 MB (incluindo os testes)">
+  <!ENTITY at-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="at" xreflabel="At-&at-version;">
   <?dbhtml filename="at.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>at-&at-version;</title>
 
@@ -26,93 +23,91 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to at</title>
+    <title>Introdução a "at"</title>
 
     <para>
-      The <application>at</application> package provide delayed job execution
-      and batch processing. It is required for Linux Standards Base (LSB)
-      conformance.
+      O pacote <application>at</application> fornece execução de tarefa atrasada e
+processamento em lote. Ele é exigido para conformidade com o "Linux
+Standards Base" (LSB).
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&at-download-http;"/>
+          Transferência (HTTP): <ulink url="&at-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&at-download-ftp;"/>
+          Transferência (FTP): <ulink url="&at-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &at-md5sum;
+          Soma de verificação MD5 da transferência: &at-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &at-size;
+          Tamanho da transferência: &at-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &at-buildsize;
+          Espaço em disco estimado exigido: &at-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &at-time;
+          Tempo de construção estimado: &at-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">at Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do "at"</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      An <xref linkend="server-mail"/>
+      Um <xref linkend="server-mail"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="linux-pam"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/at"/></para>
+    <para condition="html" role="usernotes">User Notes: <ulink url="&blfs-wiki;/at"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of at</title>
+    <title>Instalação do "at"</title>
 
     <para>
-      Before building <application>at</application>, as the
-      <systemitem class="username">root</systemitem> user you should create
-      the group and user <systemitem class="username">atd</systemitem> which
-      will run the <command>atd</command> daemon:
+      Antes de construir o <application>at</application>, como o(a) usuário(a)
+<systemitem class="username">root</systemitem>, você deveria criar o grupo e
+o(a) usuário(a) <systemitem class="username">atd</systemitem> que executarão
+o processo de segundo plano <command>atd</command>:
     </para>
 
-<screen role="root"><userinput>groupadd -g 17 atd                                                  &amp;&amp;
+<screen role="root"><userinput>groupadd -g 17 atd                                                 &amp;&amp;
 useradd -d /dev/null -c "atd daemon" -g atd -s /bin/false -u 17 atd</userinput></screen>
 
     <para>
-      Install <application>at</application> with the following
-      commands:
+      Instale <application>at</application> com os seguintes comandos:
     </para>
 
-    <screen revision="sysv"><userinput>./configure --with-daemon_username=atd        \
+    <screen revision="sysv"><userinput>./configure --with-daemon_username=atd       \
             --with-daemon_groupname=atd       \
             --with-jobdir=/var/spool/atjobs   \
             --with-atspool=/var/spool/atspool \
             SENDMAIL=/usr/sbin/sendmail       &amp;&amp;
 make -j1</userinput></screen>
 
-    <screen revision="systemd"><userinput>./configure --with-daemon_username=atd        \
+    <screen revision="systemd"><userinput>./configure --with-daemon_username=atd       \
             --with-daemon_groupname=atd       \
             SENDMAIL=/usr/sbin/sendmail       \
             --with-jobdir=/var/spool/atjobs   \
@@ -121,29 +116,28 @@ make -j1</userinput></screen>
 make -j1</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make test</command>.
+      Para testar os resultados, emita: <command>make test</command>.
     </para>
 
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install docdir=/usr/share/doc/at-&at-version; \
-             atdocdir=/usr/share/doc/at-&at-version;</userinput></screen>
+            atdocdir=/usr/share/doc/at-&at-version;</userinput></screen>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring at</title>
+    <title>Configurando "at"</title>
 
     <sect3 id="at-config">
-      <title>Config Files</title>
+      <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/at.allow</filename> and
-        <filename>/etc/at.deny</filename> determines who can submit jobs via at
-        or batch.
+        <filename>/etc/at.allow</filename> e <filename>/etc/at.deny</filename>
+determinam quem consegue submeter tarefas via "at" ou "batch".
       </para>
 
       <indexterm zone="at at-config">
@@ -157,19 +151,19 @@ make -j1</userinput></screen>
     </sect3>
 
     <sect3>
-      <title>Linux PAM Configuration</title>
+      <title>Configuração do "Linux PAM"</title>
 
       <para>
-        If <application>At</application> has been built with
-        <application>Linux PAM</application> support, you need to create a
-        <application>PAM</application> configuration file, to get it working
-        correctly with BLFS.
+        Se <application>At</application> tiver sido construído com suporte
+<application>Linux PAM</application>, [então] você precisa criar um arquivo
+de configuração <application>PAM</application>, para fazê-lo funcionar
+corretamente com BLFS.
       </para>
 
       <para>
-        Issue the following commands as the <systemitem
-        class="username">root</systemitem> user to create the configuration
-        file for <application>Linux PAM</application>:
+        Emita os seguintes comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem> para criar o arquivo de configuração para
+<application>Linux PAM</application>:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/atd &lt;&lt; "EOF"
@@ -186,19 +180,19 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3  id="at-init">
-      <title><phrase revision="sysv">Boot Script</phrase>
-             <phrase revision="systemd">Systemd Unit</phrase></title>
+      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
+revision="systemd">Unidade do systemd</phrase></title>
 
       <para revision="sysv">
-        Install the <filename>/etc/init.d/atd</filename>
-        init script from the <xref linkend="bootscripts"/> package.
+        Instale o script de inicialização <filename>/etc/init.d/atd</filename> a
+partir do pacote <xref linkend="bootscripts"/>.
       </para>
 
       <para revision="systemd">
-        To start the <command>atd</command> daemon at boot,
-        enable the previously installed systemd unit by
-        running the following command as the
-        <systemitem class="username">root</systemitem> user:
+        Para iniciar o processo de segundo plano <command>atd</command> na
+inicialização, habilite a unidade do systemd instalada anteriormente
+executando o seguinte comando como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
       </para>
 
       <indexterm zone="at at-init">
@@ -214,19 +208,19 @@ EOF</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          at, atd, atq (symlink), atrm (symlink), atrun, and batch
+          at, atd, atq (link simbólico), atrm (link simbólico), atrun e batch
         </seg>
         <seg>
-          None
+          Nenhuma
         </seg>
         <seg>
           /usr/share/doc/at-&at-version;
@@ -235,15 +229,14 @@ EOF</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="at-prog">
         <term><command>at</command></term>
         <listitem>
           <para>
-            queues, examines or deletes jobs for later execution
+            enfileira, examina ou deleta tarefas para execução posterior
           </para>
           <indexterm zone="at at-prog">
             <primary sortas="b-at">at</primary>
@@ -255,7 +248,8 @@ EOF</userinput></screen>
         <term><command>atd</command></term>
         <listitem>
           <para>
-            is the daemon that runs jobs queued for later execution
+            é o processo de segundo plano que executa tarefas enfileiradas para execução
+posterior
           </para>
           <indexterm zone="at atd">
             <primary sortas="b-atd">atd</primary>
@@ -267,7 +261,8 @@ EOF</userinput></screen>
         <term><command>atq</command></term>
         <listitem>
           <para>
-            lists the user's pending jobs, or all jobs, if superuser
+            lista as tarefas pendentes do(a) usuário(a), ou todas as tarefas, se
+superusuário(a)
           </para>
           <indexterm zone="at atq">
             <primary sortas="b-atq">atq</primary>
@@ -279,7 +274,7 @@ EOF</userinput></screen>
         <term><command>atrm</command></term>
         <listitem>
           <para>
-            deletes jobs, identified by their job number
+            deleta tarefas, identificadas pelo número da tarefa delas
           </para>
           <indexterm zone="at atrm">
             <primary sortas="b-atrm">atrm</primary>
@@ -291,7 +286,7 @@ EOF</userinput></screen>
         <term><command>atrun</command></term>
         <listitem>
           <para>
-            runs jobs queued for later execution
+            executa tarefas enfileiradas para execução posterior
           </para>
           <indexterm zone="at atrun">
             <primary sortas="b-atrun">atrun</primary>
@@ -303,7 +298,8 @@ EOF</userinput></screen>
         <term><command>batch</command></term>
         <listitem>
           <para>
-            is a script that executes commands when system load levels permit
+            é um script que executa comandos quando os níveis de carga do sistema
+permitem
           </para>
           <indexterm zone="at batch">
             <primary sortas="b-batch">batch</primary>

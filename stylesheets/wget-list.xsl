@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-01-25 20:55:05 +0100 (jeu, 25 jan 2007) $
+-->
 
 <!-- Create a list of upstream URLs for packages and patches to be used
      with wget. -->

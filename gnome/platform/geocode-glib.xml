@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -8,18 +8,15 @@
            "&gnome-download-http;/geocode-glib/&gnome-minor-26;/geocode-glib-&geocode-glib-version;.tar.xz">
   <!ENTITY geocode-glib-download-ftp
            "&gnome-download-ftp;/geocode-glib/&gnome-minor-26;/geocode-glib-&geocode-glib-version;.tar.xz">
-  <!ENTITY geocode-glib-md5sum        "e1ef140a11a543643d170dc701009e39">
-  <!ENTITY geocode-glib-size          "72 KB">
-  <!ENTITY geocode-glib-buildsize     "5.1 MB (with tests)">
-  <!ENTITY geocode-glib-time          "0.1 SBU (with tests)">
+  <!ENTITY geocode-glib-md5sum        "4c0dcdb7ee1222435b20acd3d7b68cd1">
+  <!ENTITY geocode-glib-size          "76Ko">
+  <!ENTITY geocode-glib-buildsize     "4,6Mo (com os testes)">
+  <!ENTITY geocode-glib-time          "0,1UPC (com os testes)">
 ]>
 
 <sect1 id="geocode-glib" xreflabel="geocode-glib-&geocode-glib-version;">
   <?dbhtml filename="geocode-glib.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>geocode-glib-&geocode-glib-version;</title>
 
@@ -28,95 +25,99 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Geocode GLib</title>
+    <title>Introdução a Geocode GLib</title>
 
     <para>
-      The <application>Geocode GLib</application> is a convenience library
-      for the Yahoo! Place Finder APIs. The Place Finder web service allows
-      to do geocoding (finding longitude and latitude from an address), and
-      reverse geocoding (finding an address from coordinates).
+      The <application>Geocode GLib</application> is a convenience library for the
+Yahoo! Place Finder APIs. The Place Finder web service allows to do
+geocoding (finding longitude and latitude from an address), and reverse
+geocoding (finding an address from coordinates).
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&geocode-glib-download-http;"/>
+          Transferência (HTTP): <ulink url="&geocode-glib-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&geocode-glib-download-ftp;"/>
+          Transferência (FTP): <ulink url="&geocode-glib-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &geocode-glib-md5sum;
+          Soma de verificação MD5: &geocode-glib-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &geocode-glib-size;
+          Tamanho da transferência: &geocode-glib-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &geocode-glib-buildsize;
+          Espaço em disco estimado exigido: &geocode-glib-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &geocode-glib-time;
+          Tempo de construção estimado: &geocode-glib-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Geocode GLib Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências de Geocode GLib</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="json-glib"/> and
-      <xref linkend="libsoup"/>
+      <xref linkend="json-glib"/> and <xref linkend="libsoup3"/>
     </para>
 
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
     <para role="recommended">
       <xref linkend="gobject-introspection"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="gtk-doc"/>
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/geocode-glib"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/geocode-glib"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Geocode GLib</title>
+    <title>Instalação de Geocode GLib</title>
 
     <para>
       Install <application>Geocode GLib</application> by running the following
-      commands:
+commands:
     </para>
 
-    <screen><userinput>mkdir build                                   &amp;&amp;
-cd    build                                   &amp;&amp;
-meson --prefix /usr --buildtype=release -Denable-gtk-doc=false .. &amp;&amp;
+<screen><userinput>mkdir build                   &amp;&amp;
+cd    build                   &amp;&amp;
+
+meson --prefix /usr           \
+      --buildtype=release     \
+      -Denable-gtk-doc=false  \
+      -Dsoup2=false           .. &amp;&amp;
 ninja</userinput></screen>
 
 
     <para>
-      To test the results, issue: <command>LANG=C ninja test</command>. <!-- Note that
-      at least one test is known to fail for unknown reasons. -->
+      To test the results, issue: <command>LANG=C ninja test</command>.  One test
+fails because it needs the <literal>sv_SE.utf8</literal> locale, which is
+not installed by default in LFS.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
@@ -124,15 +125,22 @@ ninja</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
       <parameter>-Denable-gtk-doc=false</parameter>: Allow this package to be
-      built without GTK-Doc.  Remove this parameter if GTK-Doc is installed
-      and you wish to rebuild and install the API documentation.
+built without <xref linkend="gtk-doc" role="nodep"/>. Remove this parameter
+if <xref linkend="gtk-doc" role="nodep"/> is installed and you wish to
+rebuild and install the API documentation.
+    </para>
+
+    <para>
+      <parameter>-Dsoup2=false</parameter>: This switch forces this package to use
+libsoup-3 for HTTP requests instead of libsoup-2. The packages in BLFS that
+use geocode-glib now expect libsoup-3 to be used.
     </para>
 
   </sect2>
@@ -141,39 +149,37 @@ ninja</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
           None
         </seg>
         <seg>
-          libgeocode-glib.so
+          libgeocode-glib-2.so
         </seg>
         <seg>
-          /usr/include/geocode-glib-1.0,
-          /usr/libexec/installed-tests/geocode-glib,
-          /usr/share/icons/gnome/scalable/places, and
-          /usr/share/gtk-doc/html/geocode-glib
+          /usr/include/geocode-glib-2.0, /usr/libexec/installed-tests/geocode-glib,
+/usr/share/icons/gnome/scalable/places, and
+/usr/share/gtk-doc/html/geocode-glib
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
-      <varlistentry id="libgeocode-glib">
-        <term><filename class="libraryfile">libgeocode-glib.so</filename></term>
+      <varlistentry id="libgeocode-glib-2">
+        <term><filename class="libraryfile">libgeocode-glib-2.so</filename></term>
         <listitem>
           <para>
             contains the <application>Geocode GLib</application> API functions
           </para>
-          <indexterm zone="geocode-glib libgeocode-glib">
-            <primary sortas="c-libgeocode-glib">libgeocode-glib.so</primary>
+          <indexterm zone="geocode-glib libgeocode-glib-2">
+            <primary sortas="c-libgeocode-glib-2">libgeocode-glib-2.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

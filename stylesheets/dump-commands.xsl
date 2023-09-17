@@ -4,6 +4,11 @@
     extension-element-prefixes="exsl"
     version="1.0">
 
+<!--
+$LastChangedBy: randy $
+$Date: 2007-01-18 20:38:19 +0100 (jeu, 18 jan 2007) $
+-->
+
 <!-- XSLT stylesheet to extract commands from [B,H]LFS books. -->
 
   <xsl:template match="/">

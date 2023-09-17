@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY libcddb-download-http "&sourceforge-dl;/libcddb/libcddb-&libcddb-version;.tar.bz2">
-  <!ENTITY libcddb-download-ftp  " ">
+  <!ENTITY libcddb-download-ftp  "">
   <!ENTITY libcddb-md5sum        "8bb4a6f542197e8e9648ae597cd6bc8a">
-  <!ENTITY libcddb-size          "384 KB">
-  <!ENTITY libcddb-buildsize     "3.9 MB (with tests)">
-  <!ENTITY libcddb-time          "0.2 SBU (with tests)">
+  <!ENTITY libcddb-size          "384Ko">
+  <!ENTITY libcddb-buildsize     "3,9Mo (com os testes)">
+  <!ENTITY libcddb-time          "0,2UPC (com os testes)">
 ]>
 
 <sect1 id="libcddb" xreflabel="libcddb-&libcddb-version;">
   <?dbhtml filename="libcddb.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libcddb-&libcddb-version;</title>
 
@@ -26,72 +23,84 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libcddb</title>
+    <title>Introduo a libcddb</title>
 
     <para>
-      The <application>libcddb</application> is a library that implements
-      the different protocols (CDDBP, HTTP, SMTP) to access data on a CDDB
-      server.
+      The <application>libcddb</application> is a library that implements the
+different protocols (CDDBP, HTTP, SMTP) to access data on a CDDB server.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informao do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libcddb-download-http;"/>
+          Transferncia (HTTP): <ulink url="&libcddb-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libcddb-download-ftp;"/>
+          Transferncia (FTP): <ulink url="&libcddb-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libcddb-md5sum;
+          Soma de verificao MD5: &libcddb-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libcddb-size;
+          Tamanho da transferncia: &libcddb-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libcddb-buildsize;
+          Espao em disco estimado exigido: &libcddb-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libcddb-time;
+          Tempo de construo estimado: &libcddb-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <para condition="html" role="usernotes">User Notes:
-    <ulink url="&blfs-wiki;/libcddb"/></para>
+    <para condition="html" role="usernotes">Observaes de Usurio(a): <ulink url="&blfs-wiki;/libcddb"/></para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libcddb</title>
+    <title>Instalao de libcddb</title>
 
     <para>
-      Install <application>libcddb</application> by running the
-      following commands:
+      By default this package accesses <systemitem
+class='domainname'>freedb.org</systemitem>, which is already closed.  Modify
+the default to use <systemitem
+class='domainname'>gnudb.gnudb.org</systemitem> instead, and fix two stale
+test data files:
+    </para>
+
+<screen><userinput>sed -e '/DEFAULT_SERVER/s/freedb.org/gnudb.gnudb.org/' \
+    -e '/DEFAULT_PORT/s/888/&amp;0/'                       \
+    -i include/cddb/cddb_ni.h                          &amp;&amp;
+sed '/^Genre:/s/Trip-Hop/Electronic/' -i tests/testdata/920ef00b.txt &amp;&amp;
+sed '/DISCID/i# Revision: 42'         -i tests/testcache/misc/12340000</userinput></screen>
+
+    <para>
+      Instale <application>libcddb</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make check</command>. Two
-      tests fail due to missing test servers.
+      To test the results, issue: <command>make check -k</command>.  The test
+suite needs the Internet connection.  One test fails due to missing test
+server.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usurio(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -102,9 +111,9 @@ make</userinput></screen>
     <title>Contents</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretrios Instalados</segtitle>
 
       <seglistitem>
         <seg>
@@ -120,9 +129,8 @@ make</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descries Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="cddb_query">
         <term><command>cddb_query</command></term>

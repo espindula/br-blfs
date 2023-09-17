@@ -1,186 +1,169 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!--  <!ENTITY systemd-download-http "http://anduin.linuxfromscratch.org/LFS/systemd-&systemd-version;-&systemd-stable;.tar.xz"> For whenever we move to a stable snapshot for backports -->
+  <!--  <!ENTITY systemd-download-http "https://anduin.linuxfromscratch.org/LFS/systemd-&systemd-version;-&systemd-stable;.tar.xz"> For whenever we move to a stable snapshot for backports -->
   <!ENTITY systemd-download-http "https://github.com/systemd/systemd/archive/v&systemd-version;/systemd-&systemd-version;.tar.gz">
-  <!ENTITY systemd-download-ftp  " ">
-  <!ENTITY systemd-md5sum        "8929beb037c587ada4ed201f19756fe2">
-  <!ENTITY systemd-size          "11 MB">
+  <!ENTITY systemd-download-ftp  "">
+  <!ENTITY systemd-md5sum        "b9456750a212dd54d81caeb3c38134b6">
+  <!ENTITY systemd-size          "11Mo">
   <!ENTITY systemd-buildsize     "307 MB (with tests)">
-  <!ENTITY systemd-time          "2.5 SBU (with tests)">
+  <!ENTITY systemd-time          "2.8 SBU (with tests)">
 
 ]>
 
 <sect1 id="systemd" xreflabel="Systemd-&systemd-version;" revision="systemd">
   <?dbhtml filename="systemd.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Systemd-&systemd-version;</title>
-  <!-- Whenever we switch back to stable backports, make sure to add the systemd-stable reference back. -->
+  
 
   <indexterm zone="systemd">
-    <primary sortas="a-systemd">systemd</primary>
+    <!-- Whenever we switch back to stable backports, make sure to add the systemd-stable reference back. -->
+<primary sortas="a-systemd">systemd</primary>
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to systemd</title>
+    <title>Introdução a systemd</title>
 
     <para>
-      While <application>systemd</application> was installed when
-      building LFS, there are many features provided by the package that
-      were not included in the initial installation because
-      <application>Linux-PAM</application> was not yet installed.
-      The <application>systemd</application> package needs to be
-      rebuilt to provide a working <command>systemd-logind</command> service,
-      which provides many additional features for dependent packages.
+      While <application>systemd</application> was installed when building LFS,
+there are many features provided by the package that were not included in
+the initial installation because <application>Linux-PAM</application> was
+not yet installed.  The <application>systemd</application> package needs to
+be rebuilt to provide a working <command>systemd-logind</command> service,
+which provides many additional features for dependent packages.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&systemd-download-http;"/>
+          Transferência (HTTP): <ulink url="&systemd-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&systemd-download-ftp;"/>
+          Transferência (FTP): <ulink url="&systemd-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &systemd-md5sum;
+          Soma de verificação MD5: &systemd-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &systemd-size;
+          Tamanho da transferência: &systemd-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &systemd-buildsize;
+          Espaço em disco estimado exigido: &systemd-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &systemd-time;
+          Tempo de construção estimado: &systemd-time;
         </para>
       </listitem>
     </itemizedlist>
 
 
-    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+
+    <!--  Keep here in case a patch will be needed.-->
+<bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-         Required patch:
-         <ulink url="&patch-root;/systemd-&systemd-version;-upstream_fixes-1.patch"/>
+         Remendo exigido: <ulink
+url="&patch-root;/systemd-&systemd-version;-security_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Dependências de systemd</bridgehead>
 
-    <bridgehead renderas="sect3">systemd Dependencies</bridgehead>
-
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="Jinja2"/> and
       <xref linkend="linux-pam"/>
     </para>
 
-    <bridgehead renderas="sect4">Recommended Runtime Dependencies</bridgehead>
+    <bridgehead renderas="sect4">Recommended Runtime Dependency</bridgehead>
     <para role="recommended">
       <xref role="runtime" linkend="polkit"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="btrfs-progs"/>, <!-- homed may support it, see the C.E.-->
-      <xref linkend="curl"/>,
-      <xref linkend="cryptsetup"/>,
-      <xref linkend="git"/>,
-      <xref linkend="gnutls"/>,
-      <xref linkend="iptables"/>,
-      <xref linkend="libgcrypt"/>,
-      <xref linkend="libidn2"/>,
-      <xref linkend="libpwquality"/>,
-      <xref linkend="libseccomp"/>,
-      <xref linkend="libxkbcommon"/>,
-      <xref linkend="make-ca"/>,
-      <xref linkend="p11-kit"/>,
-      <xref linkend="pcre2"/>,
-      <xref linkend="qemu"/>,
-      <xref linkend="qrencode"/>,
-      <xref linkend="rsync"/>,
-      <xref linkend="valgrind"/>,
-      <xref linkend="zsh"/> (for the zsh completions),
-      <ulink url="https://sourceforge.net/projects/gnu-efi/">gnu-efi</ulink>,
-      <ulink url="https://www.kernel.org/pub/linux/utils/kernel/kexec/">kexec-tools</ulink>,
-      <ulink url="https://github.com/libbpf/libbpf">libbpf</ulink>,
-      <ulink url="https://sourceware.org/elfutils/">libdw</ulink>,
-      <ulink url="https://developers.yubico.com/libfido2/">libfido2</ulink>,
-      <ulink url="https://www.gnu.org/software/libmicrohttpd/">libmicrohttpd</ulink>,
-      <ulink url="http://lz4.github.io/lz4/">lz4</ulink>,
-      <!--<ulink url="http://fukuchi.org/works/qrencode/">qrencode</ulink>,-->
-      <ulink url="https://sourceforge.net/projects/linuxquota/">quota-tools</ulink>,
-      <ulink url="https://pypi.python.org/pypi/Sphinx">Sphinx</ulink>, and
-      <ulink url="https://tpm2-tss.readthedocs.io/en/latest/">tpm2-tss</ulink>
+      <!-- homed may support it, see the C.E.-->
+<!--<ulink url="http://fukuchi.org/works/qrencode/">
+qrencode</ulink>,-->
+<xref linkend="btrfs-progs"/>, <xref linkend="curl"/>, <xref
+linkend="cryptsetup"/>, <xref linkend="git"/>, <xref linkend="gnutls"/>,
+<xref linkend="iptables"/>, <xref linkend="libgcrypt"/>, <xref
+linkend="libidn2"/>, <xref linkend="libpwquality"/>, <xref
+linkend="libseccomp"/>, <xref linkend="libxkbcommon"/>, <xref
+linkend="make-ca"/>, <xref linkend="p11-kit"/>, <xref linkend="pcre2"/>,
+<xref linkend="qemu"/>, <xref linkend="qrencode"/>, <xref linkend="rsync"/>,
+<xref linkend="sphinx"/>, <xref linkend="valgrind"/>, <xref linkend="zsh"/>
+(for the zsh completions), <ulink
+url="https://sourceforge.net/projects/gnu-efi/">gnu-efi</ulink>, <ulink
+url="https://www.kernel.org/pub/linux/utils/kernel/kexec/">kexec-tools</ulink>,
+<ulink url="https://github.com/libbpf/libbpf">libbpf</ulink>, <ulink
+url="https://sourceware.org/elfutils/">libdw</ulink>, <ulink
+url="https://developers.yubico.com/libfido2/">libfido2</ulink>, <ulink
+url="https://www.gnu.org/software/libmicrohttpd/">libmicrohttpd</ulink>,
+<ulink url="https://lz4.github.io/lz4/">lz4</ulink>, <ulink
+url="https://sourceforge.net/projects/linuxquota/">quota-tools</ulink>, and
+<ulink url="https://tpm2-tss.readthedocs.io/en/latest/">tpm2-tss</ulink>
     </para>
 
     <bridgehead renderas="sect4">Optional (to rebuild the manual pages)</bridgehead>
     <para role="optional">
-      <xref linkend="DocBook"/>,
-      <xref linkend="docbook-xsl"/>,
-      <xref linkend="libxslt"/>, and
-      <xref linkend="lxml"/> (to build the index of systemd manual pages)
+      <xref linkend="DocBook"/>, <xref linkend="docbook-xsl"/>, <xref
+linkend="libxslt"/>, and <xref linkend="lxml"/> (to build the index of
+systemd manual pages)
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/systemd"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/systemd"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of systemd</title>
-
+    <title>Instalação de systemd</title>
 
     <para>
-      Apply a patch to fix a security vulnerability and fix issues with the
-      default hostname on some systems:
+      First, fix a security issue in systemd-coredump:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../systemd-&systemd-version;-upstream_fixes-1.patch</userinput></screen>
+<screen><userinput>patch -Np1 -i ../systemd-&systemd-version;-security_fix-1.patch</userinput></screen>
 
     <para>
-      Remove two unneeded groups,
-      <systemitem class="groupname">render</systemitem> and
-      <systemitem class="groupname">sgx</systemitem>, from the default udev
-      rules:
+      Remove two unneeded groups, <systemitem
+class="groupname">render</systemitem> and <systemitem
+class="groupname">sgx</systemitem>, from the default udev rules:
     </para>
 
 <screen><userinput remap="pre">sed -i -e 's/GROUP="render"/GROUP="video"/' \
        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in</userinput></screen>
 
     <para>
-      Rebuild <application>systemd</application> by running the
-      following commands:
+      Rebuild <application>systemd</application> by running the following
+commands:
     </para>
 
+<!-- Regarding homed and userdb, see the note below in Command Explanations-->
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 meson --prefix=/usr                 \
       --buildtype=release           \
-      -Dblkid=true                  \
       -Ddefault-dnssec=no           \
       -Dfirstboot=false             \
       -Dinstall-tests=false         \
@@ -188,108 +171,69 @@ meson --prefix=/usr                 \
       -Dman=auto                    \
       -Dsysusers=false              \
       -Drpmmacrosdir=no             \
-      -Db_lto=false                 \
       -Dhomed=false                 \
       -Duserdb=false                \
       -Dmode=release                \
+      -Dpam=true                    \
       -Dpamconfdir=/etc/pam.d       \
       -Ddocdir=/usr/share/doc/systemd-&systemd-version; \
       ..                            &amp;&amp;
 
 ninja</userinput></screen>
-<!-- Regarding homed and userdb, see the note below in Command Explanations-->
+
 
     <note>
       <para>
-        For the best test results, make sure you run the testsuite from
-        a system that is booted by the same
-        <application>systemd</application> version you are rebuilding.
+        For the best test results, make sure you run the test suite from a system
+that is booted by the same <application>systemd</application> version you
+are rebuilding.
       </para>
     </note>
 
     <para>
-      To test the results, issue:
-      <command>PATH+=:/usr/sbin ninja test</command>.
       <!-- One test named test-repart needs sfdisk, which is in /usr/sbin. -->
+Para testar os resultados, emita: <command>PATH+=:/usr/sbin ninja
+test</command>.
+      
     </para>
 
-<!--
-    <warning>
-      <para>
-        Installing the package will overwrite all files installed by
-        <application>systemd</application> in LFS. It is critical that
-        nothing uses either <application>systemd</application> or
-        <application>Udev</application> libraries during the installation.
-        The best way to ensure that these libraries are not being used is to
-        run the installation in rescue mode. To switch to rescue mode,
-        run the following command as the
-        <systemitem class="username">root</systemitem> user (from a TTY):
-      </para>
-
-<screen role="root"><userinput>systemctl isolate rescue.target</userinput></screen>
-    </warning>
-    Nobody has reported problems with this in years. Let's comment it. -->
-
    <para>
-     Now, as the <systemitem class="username">root</systemitem> user:
+     Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
    </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
 
-<!-- Included in the patch
-    <para>
-      Fix a problem in a systemd unit that can cause extra delays when
-      changing TTYs:
-    </para>
-
-<screen role="root"><userinput>sed -i 's/idle/simple/' /usr/lib/systemd/system/getty@.service</userinput></screen>
--->
-  <!-- No longer needed as of systemd-244.
-    <para>
-      Remove a configuration file that causes some problems with PID files:
-    </para>
-
-<screen role="root"><userinput>rm -fv /etc/sysctl.d/50-pid-max.conf</userinput></screen>
-  -->
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
-
-<!-- Not needed with the patch
-    <para>
-      <parameter>-Dc_args=-Wno-format-overflow</parameter>: Prevents an error
-      when building with <application>GCC 10</application>. The default is
-      <option>-Werror=format-overflow</option>,
-      which generates false positives. This switch may be used with previous
-      versions of GCC too.
-    </para>
--->
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dpamconfdir=/etc/pam.d</parameter>: Forces the PAM files to
-      be installed in /etc/pam.d rather than /usr/lib/pam.d.
+      <parameter>-Dpamconfdir=/etc/pam.d</parameter>: Forces the PAM files to be
+installed in /etc/pam.d rather than /usr/lib/pam.d.
     </para>
 
     <para>
-      <parameter>-Duserdb=false</parameter>: Removes a daemon that does not
-      offer any use under a BLFS configuration. If you wish to enable the
-      <application>userdbd</application> daemon, replace "false" with "true"
-      in the above meson command.
+      <parameter>-Duserdb=false</parameter>: Removes a daemon that does not offer
+any use under a BLFS configuration. If you wish to enable the
+<application>userdbd</application> daemon, replace "false" with "true" in
+the above meson command.
     </para>
 
     <para>
       <parameter>-Dhomed=false</parameter>: Removes a daemon that does not offer
-      any use under a traditional BLFS configuration, especially using accounts
-      created with useradd. To enable systemd-homed, first ensure that you have
-      <xref linkend="cryptsetup"/> and <xref linkend="libpwquality"/> installed,
-      and then change "false" to "true" in the above meson command.
+any use under a traditional BLFS configuration, especially using accounts
+created with useradd. To enable systemd-homed, first ensure that you have
+<xref linkend="cryptsetup"/> and <xref linkend="libpwquality"/> installed,
+and then change "false" to "true" in the above meson command.
     </para>
 
-    <!-- EDITORS NOTE: Explanation on removing userdbd and homed:
+    
+
+  <!-- EDITORS NOTE: Explanation on removing userdbd and homed:
     In BLFS, we do not fully support disk encryption. We offer instructions for
     building 'cryptsetup' as a dependency, but we do not offer instructions for
     actually configuring it. In addition, we generally do not include
@@ -321,17 +265,16 @@ ninja</userinput></screen>
 
     I would be open to discussing this after the next systemd version when
     systemd-homed has matured a bit more. -renodr -->
-
-  </sect2>
+</sect2>
 
   <sect2 role="configuration">
-    <title>Configuring systemd</title>
+    <title>Configurando systemd</title>
 
     <para>
-      The <filename>/etc/pam.d/system-session</filename> file needs to
-      be modified and a new file needs to be created in order for
-      <command>systemd-logind</command> to work correctly. Run the following
-      commands as the <systemitem class="username">root</systemitem> user:
+      The <filename>/etc/pam.d/system-session</filename> file needs to be modified
+and a new file needs to be created in order for
+<command>systemd-logind</command> to work correctly. Run the following
+commands as the <systemitem class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>grep 'pam_systemd' /etc/pam.d/system-session ||
@@ -363,24 +306,10 @@ password required    pam_deny.so
 # End /etc/pam.d/systemd-user</literal>
 EOF</userinput></screen>
 
-<!--
-    <para>
-      At this point, you should reload the systemd daemon, and reenter
-      multi-user mode with the following commands (as the
-      <systemitem class="username">root</systemitem> user).  If a desktop
-      manager is installed and you wish to reenter the graphical mode,
-      replace <userinput>multi-user.target</userinput> with
-      <userinput>graphical.target</userinput>:
-    </para>
-
-<screen role="root"><userinput>systemctl daemon-reexec
-systemctl start multi-user.target</userinput></screen>-->
-
     <warning>
       <para>
-        If upgrading from a previous version of systemd and an
-        initrd is used for system boot, you should generate a new initrd before
-        rebooting the system.
+        If upgrading from a previous version of systemd and an initrd is used for
+system boot, you should generate a new initrd before rebooting the system.
       </para>
     </warning>
 
@@ -390,42 +319,38 @@ systemctl start multi-user.target</userinput></screen>-->
     <title>Contents</title>
 
       <para>
-        A list of the installed files, along with their short
-        descriptions can be found at
-        <ulink url="&lfs-root;/chapter08/systemd.html#contents-systemd"/>.
+        A list of the installed files, along with their short descriptions can be
+found at <ulink url="&lfs-root;/chapter08/systemd.html#contents-systemd"/>.
       </para>
 
       <para>
-        Listed below are the newly installed programs
-        along with short descriptions.
+        Listed below are the newly installed programs along with short descriptions.
       </para>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
 
       <seglistitem>
         <seg>
+          
           <!-- maybe userdbd/userdbctl can go in LFS, try at next time -->
-          homectl (if <xref linkend="cryptsetup"/> is installed),
-          systemd-cryptenroll (if <xref linkend="cryptsetup"/> is installed),
-          and userdbctl (optionally)
+homectl (if <xref linkend="cryptsetup"/> is installed), systemd-cryptenroll
+(if <xref linkend="cryptsetup"/> is installed), and userdbctl (optionally)
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="homectl">
         <term><command>homectl</command></term>
         <listitem>
           <para>
-            is a tool to create, remove, change, or inspect a home directory
-            managed by <command>systemd-homed</command>;  note that it's
-            useless for the classic UNIX users and home directories which
-            we are using in LFS/BLFS book
+            is a tool to create, remove, change, or inspect a home directory managed by
+<command>systemd-homed</command>; note that it's useless for the classic
+UNIX users and home directories which we are using in LFS/BLFS book
           </para>
           <indexterm zone="systemd homectl">
             <primary sortas="b-homectl">homectl</primary>
@@ -437,8 +362,8 @@ systemctl start multi-user.target</userinput></screen>-->
         <term><command>systemd-cryptenroll</command></term>
         <listitem>
           <para>
-            Is used to enroll or remove a system from full disk encryption,
-            as well as set and query private keys and recovery keys
+            Is used to enroll or remove a system from full disk encryption, as well as
+set and query private keys and recovery keys
           </para>
           <indexterm zone="systemd systemd-cryptenroll">
             <primary sortas="b-systemd-cryptenroll">systemd-cryptenroll</primary>
@@ -463,8 +388,8 @@ systemctl start multi-user.target</userinput></screen>-->
         <listitem>
           <para>
             is a PAM module used to register user sessions with the
-            <application>systemd</application> login manager,
-            <command>systemd-logind</command>
+<application>systemd</application> login manager,
+<command>systemd-logind</command>
           </para>
           <indexterm zone="systemd pam_systemd">
             <primary sortas="c-pam_systemd">pam_systemd.so</primary>

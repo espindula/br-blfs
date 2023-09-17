@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY libuv-download-http "https://dist.libuv.org/dist/v&libuv-version;/libuv-v&libuv-version;.tar.gz">
-  <!ENTITY libuv-download-ftp  " ">
-  <!ENTITY libuv-md5sum        "2e2fd46f60ff73b17a04add5a934b2e9">
-  <!ENTITY libuv-size          "1.2 MB">
+  <!ENTITY libuv-download-ftp  "">
+  <!ENTITY libuv-md5sum        "0addbddcb1098e2c1c99f03f0108e1e7">
+  <!ENTITY libuv-size          "1,2 MB">
   <!ENTITY libuv-buildsize     "14 MB (add 13 MB for tests)">
-  <!ENTITY libuv-time          "less than 0.1 SBU (Using parallelism=4; add 0.5 SBU for tests)">
+  <!ENTITY libuv-time          "0.1 SBU (add 0.5 SBU for tests)">
 ]>
 
 <sect1 id="libuv" xreflabel="libuv-&libuv-version;">
   <?dbhtml filename="libuv.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libuv-&libuv-version;</title>
 
@@ -26,50 +23,52 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libuv</title>
+    <title>Introdução a libuv</title>
 
     <para>
-      The <application>libuv</application> package is a
-      multi-platform support library with a focus on asynchronous I/O.
+      O pacote <application>libuv</application> é uma biblioteca de suporte
+multiplataforma com foco em Entrada/Saída assíncrona.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libuv-download-http;"/>
+          Transferência (HTTP): <ulink url="&libuv-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libuv-download-ftp;"/>
+          Transferência (FTP): <ulink url="&libuv-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libuv-md5sum;
+          Soma de verificação MD5 da transferência: &libuv-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libuv-size;
+          Tamanho da transferência: &libuv-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libuv-buildsize;
+          Espaço em disco estimado exigido: &libuv-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libuv-time;
+          Tempo de construção estimado: &libuv-time;
         </para>
       </listitem>
     </itemizedlist>
-<!--
-    <bridgehead renderas="sect3">libuv Dependencies</bridgehead>
+
+    <!--
+    <bridgehead renderas="sect3">
+libuv Dependencies</bridgehead>
 
     <bridgehead renderas="sect4">Required</bridgehead>
     <para role="required">
@@ -81,29 +80,38 @@
       <xref linkend="???"/>
     </para>
 -->
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/libuv"/>
+<para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libuv"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libuv</title>
+    <title>Instalação do libuv</title>
 
     <para>
-      Install <application>libuv</application> by running the following
-      commands:
+      Instale <application>libuv</application> executando os seguintes comandos:
     </para>
 
     <caution>
       <para>
-        The <command>sh autogen.sh</command> command below fails if the ACLOCAL
-        environment variable is set as specified in <xref linkend="xorg7"/>.
-        If it is used, ACLOCAL needs to be unset for this package and then
-        reset for other packages.
+        O comando <command>sh autogen.sh</command> abaixo falha se a variável de
+ambiente "ACLOCAL" estiver configurada conforme especificado em <xref
+linkend="xorg7"/>. Se for usado, [então] "ACLOCAL" precisa ser
+desconfigurada para esse pacote e, em seguida, reconfigurada para outros
+pacotes.
       </para>
     </caution>
 
+
+
 <!--
+    <para>
+
+      If you want to run the tests, add -DBUILD_TESTING=true to
+      the cmake line above and after building run:
+      <command>make test</command>.
+    </para>
+-->
+<screen><!--
 Don't use cmake here to avoid circular dependency
 
 <screen><userinput>sed -i "/TARGETS uv_a ARCHIVE/d" CMakeLists.txt &amp;&amp;
@@ -114,31 +122,27 @@ cd    build &amp;&amp;
 cmake -DCMAKE_INSTALL_PREFIX=/usr .. &amp;&amp;
 make </userinput></screen>
 -->
-
-<screen><userinput>sh autogen.sh                              &amp;&amp;
+<userinput>sh autogen.sh                             &amp;&amp;
 ./configure --prefix=/usr --disable-static &amp;&amp;
 make </userinput></screen>
-<!--
+
     <para>
-      If you want to run the tests, add -DBUILD_TESTING=true to
-      the cmake line above and after building run:
-      <command>make test</command>.
-    </para>
--->
-    <para>
-      If you want to run the tests, run: <command>make check</command> as
-      a non-root user. <!-- the test suite refuses to run as root -->
+      <!-- the test suite refuses to run as root -->
+Se você deseja executar os testes, [então] execute: <command>make
+check</command> como um(a) usuário(a) não root. 
     </para>
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
   </sect2>
 
-<!--
+
+  <!--
   <sect2 role="commands">
+
     <title>Command Explanations</title>
 
     <para>
@@ -148,17 +152,17 @@ make </userinput></screen>
 
   </sect2>
 -->
-  <sect2 role="content">
-    <title>Contents</title>
+<sect2 role="content">
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
-          None
+          Nenhum
         </seg>
         <seg>
           libuv.so
@@ -170,15 +174,14 @@ make </userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="libuv.so">
         <term><filename class="libraryfile">libuv.so</filename></term>
         <listitem>
           <para>
-            contains API functions for asynchronous I/O operations
+            contém funções de API para operações assíncronas de Entrada/Saída
           </para>
           <indexterm zone="libuv libuv.so">
             <primary sortas="c-libuv.so">libuv.so</primary>

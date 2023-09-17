@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -8,120 +8,115 @@
 <sect1 id="raid">
   <?dbhtml filename="raid.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
-  <title>About RAID</title>
+  <title>A respeito de RAID</title>
 
   <para>
-    The storage technology known as RAID (Redundant Array of
-    Independent Disks) combines multiple physical disks into a logical
-    unit.  The drives can generally be combined to provide data
-    redundancy or to extend the size of logical units beyond the
-    capability of the physical disks or both.  The technology
-    also allows for providing hardware maintenance without powering
-    down the system.
+    A tecnologia de armazenamento conhecida como RAID (Redundant Array of
+Independent Disks) combina vários discos físicos em uma unidade lógica. As
+unidades geralmente podem ser combinadas para fornecer redundância de dados
+ou para estender o tamanho das unidades lógicas além da capacidade dos
+discos físicos ou de ambos. A tecnologia também permite fornecer manutenção
+de hardware sem desligar o sistema.
   </para>
 
   <para>
-    The types of RAID organization are described in the <ulink
-    url="https://raid.wiki.kernel.org/index.php/Overview#The_RAID_levels">
-    RAID Wiki</ulink>.
+    Os tipos de organização de RAID são descritos no <ulink
+url="https://raid.wiki.kernel.org/index.php/Overview#The_RAID_levels">RAID
+Wiki</ulink>.
   </para>
 
   <para>
-    Note that while RAID provides protection against disk
-    failures, it is not a substitute for backups.  A file deleted
-    is still deleted on all the disks of a RAID array.  Modern backups
-    are generally done via <xref linkend='rsync'/>.
+    Observe que, embora o RAID forneça proteção contra falhas de disco, ele não
+é um substituto para as cópias de segurança. Um arquivo deletado ainda é
+deletado em todos os discos de uma matriz RAID. As cópias de segurança
+modernas geralmente são feitas via <xref linkend='rsync'/>.
   </para>
 
   <para>
-    There are three major types of RAID implementation:
-    Hardware RAID, BIOS-based RAID, and Software RAID.
+    Existem três tipos principais de implementação de RAID: RAID de hardware,
+RAID baseado em BIOS e RAID de software.
   </para>
 
   <sect2 id="hwraid">
-    <title>Hardware RAID</title>
+    <title>RAID de Hardware</title>
     <para>
-      Hardware based RAID provides capability through proprietary
-      hardware and data layouts.  The control and configuration is generally
-      done via firmware in conjunction with executable programs made
-      available by the device manufacturer.  The capabilities are
-      generally supplied via a PCI card, although there are some
-      instances of RAID components integrated in to the motherboard.
-      Hardware RAID may also be available in a stand-alone enclosure.
+      O RAID baseado em hardware fornece capacidade por meio de esquemas de dados
+e hardware proprietários. O controle e a configuração geralmente são feitos
+via firmware em conjunto com aplicativos executáveis disponibilizados pelo
+fabricante do dispositivo. Os recursos geralmente são fornecidos por meio de
+uma placa PCI, embora existam algumas instâncias de componentes RAID
+integrados à placa-mãe. O RAID de hardware também possivelmente esteja
+disponível em um gabinete independente.
     </para>
 
     <para>
-      One advantage of hardware-based RAID is that the drives
-      are offered to the operating system as a logical drive and no
-      operating system dependent configuration is needed.
+      Uma vantagem do RAID baseado em hardware é que as unidades são oferecidas ao
+sistema operacional como uma unidade lógica e nenhuma configuração
+dependente do sistema operacional é necessária.
     </para>
 
     <para>
-      Disadvantages include difficulties in transferring drives
-      from one system to another, updating firmware, or replacing
-      failed RAID hardware.
+      As desvantagens incluem dificuldades em transferir unidades de um sistema
+para outro, atualização de firmware ou substituição de hardware RAID com
+falha.
     </para>
 
   </sect2>
 
   <sect2 id="biosraid">
-    <title>BIOS-based RAID</title>
+    <title>RAID baseado em BIOS</title>
 
     <para>
-      Some computers offter a hardware-like RAID implementation in the
-      system BIOS.  Sometime this is referred to as 'fake' RAID as the
-      capabilities are generally incorporated into firmware without any hardware
-      acceleration.
+      Alguns computadores oferecem uma implementação RAID semelhante a hardware no
+BIOS do sistema. Às vezes, isso é chamado de RAID 'falso', pois os recursos
+geralmente estão incorporados no firmware sem qualquer aceleração de
+hardware.
     </para>
 
     <para>
-      The advantages and disadvantages of BIOS-based RAID are generally
-      the same as hardware RAID with the additional disadvantage that there
-      is no hardware acceleration.
+      As vantagens e desvantagens do RAID baseado em BIOS são geralmente as mesmas
+do RAID de hardware, com a desvantagem adicional de não existir aceleração
+de hardware.
     </para>
 
     <para>
-      In some cases, BIOS-based RAID firmware is enabled by default (e.g.
-      some DELL systems).  If software RAID is desired, this option must be
-      explicitly disabled in the BIOS.
+      Em alguns casos, o firmware RAID baseado em BIOS é habilitado por padrão
+(por exemplo, alguns sistemas DELL). Se o RAID por software for desejado,
+[então] essa opção precisa ser explicitamente desabilitada no BIOS.
     </para>
 
   </sect2>
 
   <sect2 id="swraid">
-  <title>Software RAID</title>
+  <title>RAID por Software</title>
     <para>
-      Software based RAID is the most flexible form of RAID.  It is
-      easy to install and update and provides full capability on all or
-      part of any drives available to the system.  In BLFS, the RAID software
-      is found in <xref linkend='mdadm'/>.
+      O RAID baseado em software é a forma mais flexível de RAID. É fácil instalar
+e atualizar e fornece capacidade total em todas ou em parte de quaisquer
+unidades disponíveis para o sistema. No BLFS, o software RAID é encontrado
+em <xref linkend='mdadm'/>.
     </para>
 
     <para>
-      Configuring a RAID device is straightforward using
-      <application>mdadm</application>.  Generally devices are created in the
-      <filename class='directory'>/dev</filename> directory as
-      <filename>/dev/mdx</filename> where <emphasis>x</emphasis> is an integer.
+      A configuração de um dispositivo RAID é direta usando
+<application>mdadm</application>. Geralmente os dispositivos são criados no
+diretório <filename class='directory'>/dev</filename> como
+<filename>/dev/mdx</filename> onde <emphasis>x</emphasis> é um número
+inteiro.
     </para>
 
     <para>
-      The first step in creating a RAID array is to use partitioning software
-      such as <userinput>fdisk</userinput> or <xref linkend='parted'/> to
-      define the partitions needed for the array.  Usually, there will be
-      one partition on each drive participating in the RAID array, but that
-      is not strictly necessary.  For this example, there will be four disk
-      drives:
-      <filename>/dev/sda</filename>,
-      <filename>/dev/sdb</filename>,
-      <filename>/dev/sdc</filename>, and
-      <filename>/dev/sdd</filename>.  They will be partitioned as follows:
+      A primeira etapa na criação de uma matriz RAID é a de usar um software de
+particionamento, como o <userinput>fdisk</userinput> ou o <xref
+linkend='parted'/>, para definir as partições necessárias para a
+matriz. Normalmente, existirá uma partição em cada unidade participante da
+matriz RAID, mas isso não é estritamente necessário. Para este exemplo,
+existirão quatro unidades de disco: <filename>/dev/sda</filename>,
+<filename>/dev/sdb</filename>, <filename>/dev/sdc</filename> e
+<filename>/dev/sdd</filename>. Eles serão particionados como segue:
     </para>
 
-<screen><literal>Partition Size     Type                Use
+<screen><literal>Tamanho da partição     Tipo                Uso
 sda1:     100 MB   fd Linux raid auto  /boot    (RAID 1) /dev/md0
 sda2:      10 GB   fd Linux raid auto  /        (RAID 1) /dev/md1
 sda3:       2 GB   83 Linux swap       swap
@@ -139,36 +134,37 @@ sdd1:      12 GB   fd Linux raid auto  /usr/src (RAID 0) /dev/md3
 sdd2:     300 GB   fd Linux raid auto  /home    (RAID 5) /dev/md2 </literal></screen>
 
     <para>
-      In this arrangement, a separate boot partition is created as the
-      first small RAID array and a root filesystem as the secong RAID array,
-      both mirrored.  The third partition is a large (about 1TB) array for the
-      <filename class='directory'>/home</filename> directory.  This provides
-      an ability to stripe data across multiple devices, improving speed for
-      both reading and writing large files.  Finally, a fourth array is created
-      that concatenates two partitions into a larger device.
+      Nesse arranjo, uma partição separada de inicialização é criada como a
+primeira matriz RAID pequena e um sistema de arquivos raiz como a segunda
+matriz RAID, ambas espelhadas. A terceira partição é uma matriz grande
+(cerca de 1 TB) para o diretório <filename
+class='directory'>/home</filename>. Isso fornece uma capacidade de
+distribuir dados entre vários dispositivos, melhorando a velocidade de
+leitura e de gravação de arquivos grandes. Por fim, uma quarta matriz é
+criada que concatena duas partições em um dispositivo maior.
     </para>
 
     <note>
       <para>
-        All <application>mdadm</application> commands must be run
-        as the <systemitem class="username">root</systemitem> user.
+        Todos os comandos <application>mdadm</application> precisam ser executados
+como o(a) usuário(a) <systemitem class="username">root</systemitem>.
       </para>
     </note>
 
     <para>
-      To create these RAID arrays the commands are:
+      Para criar essas matrizes RAID, os comandos são:
     </para>
 
 <screen><userinput>/sbin/mdadm -Cv /dev/md0 --level=1 --raid-devices=2 /dev/sda1 /dev/sdb1
 /sbin/mdadm -Cv /dev/md1 --level=1 --raid-devices=2 /dev/sda2 /dev/sdb2
 /sbin/mdadm -Cv /dev/md3 --level=0 --raid-devices=2 /dev/sdc1 /dev/sdd1
 /sbin/mdadm -Cv /dev/md2 --level=5 --raid-devices=4 \
-        /dev/sda4 /dev/sdb4 /dev/sdc2 /dev/sdd2 </userinput></screen>
+       /dev/sda4 /dev/sdb4 /dev/sdc2 /dev/sdd2 </userinput></screen>
 
     <para>
-      The devices created can be examined by device.  For example,
-      to see the details of <filename>/dev/md1</filename>, use
-      <userinput>/sbin/mdadm --detail /dev/md1</userinput>:
+      Os dispositivos criados podem ser examinados por dispositivo. Por exemplo,
+para ver os detalhes de <filename>/dev/md1</filename>, use
+<userinput>/sbin/mdadm --detail /dev/md1</userinput>:
     </para>
 
 <screen><literal>        Version : 1.2
@@ -192,38 +188,38 @@ Working Devices : 2
          Events : 17
 
     Number   Major   Minor   RaidDevice State
-       0       8        1        0      active sync   /dev/sda1
+       0       8        1         0      active sync   /dev/sda1
        1       8       17        1      active sync   /dev/sdb1</literal></screen>
 
     <para>
-      From this point, the partitions can be formated with the filesystem of
-      choice (e.g. ext3, ext4, <xref linkend='xfsprogs'/>, <xref
-      linkend='reiserfs'/>, etc).  The formatted partitions can then be
-      mounted.  The <filename>/etc/fstab</filename> file can use the devices
-      created for mounting at boot time and the linux command line in
-      <filename>/boot/grub/grub.cfg</filename> can specify
-      <option>root=/dev/md1</option>.
+      From this point, the partitions can be formatted with the filesystem of
+choice (e.g. ext3, ext4, <xref linkend='xfsprogs'/>, <xref
+linkend='reiserfs'/>, etc).  The formatted partitions can then be mounted.
+The <filename>/etc/fstab</filename> file can use the devices created for
+mounting at boot time and the linux command line in
+<filename>/boot/grub/grub.cfg</filename> can specify
+<option>root=/dev/md1</option>.
     </para>
 
     <note>
       <para>
-        The swap devices should be specified in the
-        <filename>/etc/fstab</filename> file as normal.  The kernel normally
-        stripes swap data across multiple swap files and should not be made
-        part of a RAID array.
+        Os dispositivos de troca deveriam ser especificados no arquivo
+<filename>/etc/fstab</filename> normalmente. O núcleo normalmente distribui
+os dados de troca entre vários arquivos de troca e não deveria fazer parte
+de uma matriz RAID.
       </para>
     </note>
 
     <para>
-      For further options and management details of RAID devices, refer to
-      <userinput>man mdadm</userinput>.
+      Para mais opções e detalhes de gerenciamento de dispositivos RAID, consulte
+<userinput>man mdadm</userinput>.
     </para>
 
     <para>
-      Additional details for monitoring RAID arrays and dealing with
-      problems can be found at the <ulink
-      url="https://raid.wiki.kernel.org/index.php/Linux_Raid">Linux RAID
-      Wiki</ulink>.
+      Detalhes adicionais para monitorar matrizes RAID e para lidar com problemas
+podem ser encontrados no <ulink
+url="https://raid.wiki.kernel.org/index.php/Linux_Raid">Linux RAID
+Wiki</ulink>.
     </para>
 
   </sect2>

@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-10 21:04:19 +0200 (mar, 10 jui 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -8,10 +13,10 @@
         Replaces {docbook-xsl}/xhtml/profile-docbook.xsl -->
 
     <!-- Upstream XHTML templates -->
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
+  <xsl:import href="/usr/share/xml/docbook/stylesheet/docbook-xsl/xhtml/docbook.xsl"/>
 
     <!-- Fix encoding issues with default UTF-8 output of the xhtml stylesheet -->
-  <xsl:output method="html" encoding="ISO-8859-1" indent="no" />
+  <xsl:output method="html" encoding="UTF-8" indent="no" />
 
    <!-- Including our others customized templates -->
   <xsl:include href="common.xsl"/>
@@ -65,7 +70,7 @@
     <!-- sect2.titlepage:
            Removed a lot of unneeded code.
            Skip empty titles.
-           No label in preface (actually, skip the hardcoded dot). -->
+           No label in preface (actualy, skip the hardcoded dot). -->
     <!-- The original template is in {docbook-xsl}/xhtml/titlepage.templates.xsl -->
   <xsl:template name="sect2.titlepage">
     <xsl:choose>

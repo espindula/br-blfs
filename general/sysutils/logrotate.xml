@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY logrotate-download-http "https://github.com/logrotate/logrotate/releases/download/&logrotate-version;/logrotate-&logrotate-version;.tar.xz">
-  <!ENTITY logrotate-download-ftp  " ">
-  <!ENTITY logrotate-md5sum        "1cee3e80df6856435aeb751b98065f9c">
-  <!ENTITY logrotate-size          "164 KB">
-  <!ENTITY logrotate-buildsize     "40 MB (with tests)">
-  <!ENTITY logrotate-time          "0.1 SBU (with tests)">
+  <!ENTITY logrotate-download-ftp  "">
+  <!ENTITY logrotate-md5sum        "6c15f45efc3475a576c4f7e6cc481b2c">
+  <!ENTITY logrotate-size          "164,5 KB">
+  <!ENTITY logrotate-buildsize     "2,9 MB (adicionar 38 MB para os testes)">
+  <!ENTITY logrotate-time          "menos que 0,1 UPC (adicionar 0,2 UPC para os testes)">
 ]>
 
 <sect1 id="logrotate" xreflabel="logrotate-&logrotate-version;">
   <?dbhtml filename="logrotate.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Logrotate-&logrotate-version;</title>
 
@@ -26,90 +23,88 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to Logrotate</title>
+    <title>Introdução ao "Logrotate"</title>
 
     <para>
-      The <application>logrotate</application> package allows automatic
-      rotation, compression, removal, and mailing of log files.
+      O pacote <application>logrotate</application> permite rotação, compressão,
+remoção e envio automático de arquivos de registro.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&logrotate-download-http;"/>
+          Transferência (HTTP): <ulink url="&logrotate-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&logrotate-download-ftp;"/>
+          Transferência (FTP): <ulink url="&logrotate-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &logrotate-md5sum;
+          Soma de verificação MD5 da transferência: &logrotate-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &logrotate-size;
+          Tamanho da transferência: &logrotate-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &logrotate-buildsize;
+          Espaço em disco estimado exigido: &logrotate-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &logrotate-time;
+          Tempo de construção estimado: &logrotate-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Logrotate Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do "Logrotate"</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="popt"/>
     </para>
 
-    <bridgehead renderas="sect4" revision="sysv">Recommended</bridgehead>
+    <bridgehead renderas="sect4" revision="sysv">Recomendadas</bridgehead>
     <para role="recommended" revision="sysv">
-      <xref role="runtime" linkend="fcron"/> (runtime)
+      <xref role="runtime" linkend="fcron"/> (tempo de execução)
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      An <xref role="runtime" linkend="server-mail"/> (runtime)
+      Um <xref role="runtime" linkend="server-mail"/> (tempo de execução)
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/logrotate"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/logrotate"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Logrotate</title>
+    <title>Instalação do "Logrotate"</title>
 
     <para>
-      Install <application>logrotate</application> by running the following
-      command:
+      Instale <application>logrotate</application> executando o seguinte comando:
     </para>
 
 <screen><userinput>./configure --prefix=/usr &amp;&amp;
 make</userinput></screen>
 
     <para>
-      To test the results, issue: <command>make test</command>.  One test
-      fails because the very old <command>compress</command> is not
-      present and two tests fail if an MTA is not installed.
+      Para testar os resultados, emita: <command>make test</command>. Um teste
+falha porque o muito antigo <command>compress</command> não está presente e
+dois testes falham se um "MTA" não estiver instalado.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -117,39 +112,40 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring Logrotate</title>
+    <title>Configurando o "Logrotate"</title>
 
     <para>
-      <application>Logrotate</application> needs a configuration file,
-      which must be passed as an argument to the command when executed.  Create
-      the file as the <systemitem class="username">root</systemitem> user:
+      <application>Logrotate</application> precisa de um arquivo de configuração,
+o qual precisa ser passado como um argumento para o comando quando
+executado. Crie o arquivo como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/logrotate.conf &lt;&lt; EOF
-<literal># Begin /etc/logrotate.conf
+<literal># Começo /etc/logrotate.conf
 
-# Rotate log files weekly
+# Rotacione os arquivos de registro semanalmente
 weekly
 
-# Don't mail logs to anybody
+# Não envie registros para ninguém
 nomail
 
-# If the log file is empty, it will not be rotated
+# Se o arquivo de registro estiver vazio, [então] ele não será rotacionado
 notifempty
 
-# Number of backups that will be kept
-# This will keep the 2 newest backups only
+# Número de cópias de segurança que serão mantidas
+# Isto manterá somente as duas cópias de segurança mais recentes
 rotate 2
 
-# Create new empty files after rotating old ones
-# This will create empty log files, with owner
-# set to root, group set to sys, and permissions 664
+# Crie novos arquivos vazios depois de rotacionar os antigos
+# Isto criará arquivos de registro vazios, com o(a) proprietário(a)
+# configurado como "root", grupo configurado como "sys" e permissões 664
 create 0664 root sys
 
-# Compress the backups with gzip
+# Comprime as cópias de segurança com o "gzip"
 compress
 
-# No packages own lastlog or wtmp -- rotate them here
+# Nenhum pacote possui "lastlog" ou "wtmp" - rotacione-os aqui
 /var/log/wtmp {
     monthly
     create 0664 root utmp
@@ -161,31 +157,32 @@ compress
     rotate 1
 }
 
-# Some packages drop log rotation info in this directory
-# so we include any file in it.
+# Alguns pacotes colocam informações de rotação de registro neste diretório
+# de forma que incluímos qualquer arquivo nele.
 include /etc/logrotate.d
 
-# End /etc/logrotate.conf</literal>
+# Fim /etc/logrotate.conf</literal>
 EOF
 
 chmod -v 0644 /etc/logrotate.conf</userinput></screen>
 
     <para>
-      Now create the <filename class='directory'>/etc/logrotate.d</filename>
-      directory as the  <systemitem class="username">root</systemitem> user:
+      Agora crie o diretório <filename
+class='directory'>/etc/logrotate.d</filename> como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>mkdir -p /etc/logrotate.d</userinput></screen>
 
     <para>
-      At this point additional log rotation commands can be entered, typically
-      in the <filename class='directory'>/etc/logrotate.d</filename> directory.
-      For example:
+      Neste ponto, comandos adicionais de rotação de registro conseguem ser
+inseridos, normalmente no diretório <filename
+class='directory'>/etc/logrotate.d</filename>. Por exemplo:
     </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/logrotate.d/sys.log &lt;&lt; EOF
 <literal>/var/log/sys.log {
-   # If the log file is larger than 100kb, rotate it
+   # Se o arquivo de registro for maior que 100 KB, [então] rotacione-o
    size   100k
    rotate 5
    weekly
@@ -198,7 +195,7 @@ EOF
 chmod -v 0644 /etc/logrotate.d/sys.log</userinput></screen>
 
     <para>
-      You can designate multiple files in one entry:
+      Você consegue designar vários arquivos em uma entrada:
     </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/logrotate.d/example.log &lt;&lt; EOF
@@ -206,7 +203,7 @@ chmod -v 0644 /etc/logrotate.d/sys.log</userinput></screen>
 file2
 file3 {
    ...
-   postrotate
+  postrotate
     ...
    endscript
 }</literal>
@@ -215,34 +212,35 @@ EOF
 chmod -v 0644 /etc/logrotate.d/example.log</userinput></screen>
 
     <para>
-      You can use in the same line the list of files: file1 file2 file3.
-      See the logrotate man page or <ulink
-      url='http://www.techrepublic.com/article/manage-linux-log-files-with-logrotate/'/>
-      for more examples.
+      Você consegue usar na mesma linha a lista de arquivos: arquivo1 arquivo2
+arquivo3. Veja-se a página de manual do "logrotate" ou <ulink
+url='https://www.techrepublic.com/article/manage-linux-log-files-with-logrotate/'/>
+para mais exemplos.
     </para>
 
     <para>
-      The command <command>logrotate /etc/logrotate.conf</command> can be
-      run manually, however, the command should be run daily.
-      Other useful commands are <command>logrotate -d
-      /etc/logrotate.conf</command> for debugging purposes and
-      <command>logrotate -f /etc/logrotate.conf</command> forcing the
-      logrotate commands to be run immediately. Combining the previous options
-      <option>-df</option>, you can debug the effect of the force command.
-      When debugging, the commands are only simulated and are not actually run.
-      As a result, errors about files not existing will eventually appear because
-      the files are not actually created.
+      O comando <command>logrotate /etc/logrotate.conf</command> pode ser
+executado manualmente, porém o comando deveria ser executado
+diariamente. Outros comandos úteis são <command>logrotate -d
+/etc/logrotate.conf</command> para fins de depuração e <command>logrotate -f
+/etc/logrotate.conf</command> forçando os comandos do "logrotate" a serem
+executados imediatamente. Combinando as opções anteriores
+<option>-df</option>, você consegue depurar o efeito do comando
+"force". Durante a depuração, os comandos são somente simulados e não são
+realmente executados. Como resultado, erros a respeito de arquivos
+inexistentes aparecerão eventualmente porque os arquivos não foram realmente
+criados.
     </para>
 
     <para>
-      To run the <command>logrotate</command> command daily,
-      <phrase revision="sysv">if you've installed
-      <xref linkend="fcron"/> and completed the section on periodic jobs,
-      execute</phrase><phrase revision="systemd">execute</phrase> the following
-      commands, as the  <systemitem class="username">root</systemitem> user,
-      to create a <phrase revision="sysv">daily cron job:</phrase>
-      <phrase revision="systemd">systemd timer to run daily at 3:00 A.M.
-     (local time):</phrase>
+      Para executar o comando <command>logrotate</command> diariamente, <phrase
+revision="sysv">se você instalou <xref linkend="fcron"/> e completou a seção
+a respeito de tarefas periódicas, execute</phrase><phrase
+revision="systemd">execute</phrase> os seguintes comandos, como o(a)
+usuário(a) <systemitem class="username">root</systemitem>, para criar
+<phrase revision="sysv">uma tarefa diária do "cron":</phrase><phrase
+revision="systemd">um cronômetro do "systemd" para executar diariamente às
+3h (hora local):</phrase>
     </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /etc/cron.daily/logrotate.sh &lt;&lt; "EOF" &amp;&amp;
@@ -253,7 +251,7 @@ chmod 754 /etc/cron.daily/logrotate.sh</userinput></screen>
 
 <screen role="root" revision="systemd"><userinput>cat &gt; /usr/lib/systemd/system/logrotate.service &lt;&lt; "EOF" &amp;&amp;
 <literal>[Unit]
-Description=Runs the logrotate command
+Description=Executa o comando "logrotate"
 Documentation=man:logrotate(8)
 DefaultDependencies=no
 After=local-fs.target
@@ -266,7 +264,7 @@ ExecStart=/usr/sbin/logrotate /etc/logrotate.conf</literal>
 EOF
 cat &gt; /usr/lib/systemd/system/logrotate.timer &lt;&lt; "EOF" &amp;&amp;
 <literal>[Unit]
-Description=Runs the logrotate command daily at 3:00 AM
+Description=Executa o comando "logrotate" diariamente as 3:00 AM
 
 [Timer]
 OnCalendar=*-*-* 3:00:00
@@ -280,31 +278,30 @@ systemctl enable logrotate.timer</userinput></screen>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg> logrotate </seg>
-        <seg> None </seg>
-        <seg> None </seg>
+        <seg> Nenhum(a) </seg>
+        <seg> Nenhum(a) </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="logrotate-prog">
         <term><command>logrotate</command></term>
         <listitem>
           <para>
-            performs the log maintenance functions defined in the
-            configuration files
+            realiza as funções de manutenção do registro definidas nos arquivos de
+configuração
           </para>
           <indexterm zone="logrotate logrotate-prog">
             <primary sortas="b-logrotate-prog">logrotate</primary>

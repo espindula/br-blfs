@@ -1,80 +1,88 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 ]>
 
-<sect1 id="la-files" xreflabel="Libtool archive (.la) files">
+<sect1 id="la-files" xreflabel="Arquivos de arquivamento do Libtool (.la)">
   <?dbhtml filename="la-files.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
-  <title>About Libtool Archive (.la) files</title>
+  <title>Acerca dos arquivos de Arquivamento do Libtool (.la)</title>
 
-  <!-- section g : 'Others' in longindex.html -->
+  
   <indexterm zone="la-files">
-    <primary sortas="g-la-files">Library archive (.la) files</primary>
+    <!-- section g : 'Others' in longindex.html -->
+<primary sortas="g-la-files">Arquivos de arquivamento de biblioteca (.la)</primary>
   </indexterm>
 
   <sect2 role="package">
-    <title>Files with a .la extension</title>
+    <title>Arquivos com uma extensão .la</title>
 
     <para>
 
-      In LFS we installed a package, libtool, that is used by many packages to
-      build on a variety of Unix platforms.  This includes platforms such as
-      AIX, Solaris, IRIX, HP-UX, and Cygwin as well as Linux.  The origins of
-      this tool are quite dated.  It was intended to manage libraries on
-      systems with less advanced capabilities than a modern Linux system.
+      In LFS and BLFS, many packages use a internally shipped libtool copy to
+build on a variety of Unix platforms.  This includes platforms such as AIX,
+Solaris, IRIX, HP-UX, and Cygwin as well as Linux.  The origins of this tool
+are quite dated.  It was intended to manage libraries on systems with less
+advanced capabilities than a modern Linux system.
 
     </para>
 
     <para>
 
-      On a Linux system, libtool specific files are generally unneeded.
-      Normally libraries are specified in the build process during the link
-      phase.  Since a linux system uses the <ulink
-      url="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">
-      Executable and Linkable Format (ELF)</ulink> for executables and
-      libraries, information needed to complete the task is embedded in the
-      files.  At run time the program loader can query the appropriate files
-      and properly load and execute the program.
+      On a Linux system, libtool specific files are generally unneeded.  Normally
+libraries are specified in the build process during the link phase.  Since a
+linux system uses the <ulink
+url="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">
+Executable and Linkable Format (ELF)</ulink> for executables and dynamic
+libraries, information needed to complete the task is embedded in the
+files.  Both the linker and the program loader can query the appropriate
+files and properly link or execute the program.
+
+    </para>
+
+    <para>
+      Static libraries are rarely used in LFS and BLFS.  And, nowadays most
+packages store the information needed for linking against a static library
+into a .pc file, instead of relying on libtool.  A <command>pkg-config
+--static --libs</command> command will output the sufficient flags for the
+linker to link against a static library without any libtool magic.
+    </para>
+
+    <para>
+      The problem is that libtool usually creates one or more text files for
+package libraries called libtool archives.  These small files have a ".la"
+extension and contain information that is similar to that embedded in the
+libraries or pkg-config files.  When building a package that uses libtool,
+the process automatically looks for these files.  Sometimes a .la file can
+contains the name or path of a static library used during build but not
+installed, then the build process will break because the .la file refers to
+something nonexistent on the system.  Similarly, if a package is updated and
+no longer uses the .la file, then the build process can break with the old
+.la files.
+    </para>
+
+    <para>
+
+       A solução é a de remover os arquivos .la. No entanto, existe uma
+pegadinha. Alguns pacotes, tais como o <xref linkend='imagemagick'/>, usam
+uma função do libtool, lt_dlopen, para carregar bibliotecas conforme
+necessárias durante a execução e resolver as dependências deles em tempo de
+execução. Nesse caso, os arquivos .la deveriam permanecer.
 
     </para>
 
     <para>
 
-       The problem is that libtool usually creates one or more text files for
-       package libraries called libtool archives.  These small files have a
-       ".la" extension and contain information that is similar to that embedded
-       in the libraries.  When building a package that uses libtool, the
-       process automatically looks for these files.  If a package is updated
-       and no longer uses the .la file, then the build process can break.
-
-    </para>
-
-    <para>
-
-       The solution is to remove the .la files.  However there is a catch.
-       Some packages, such as <xref linkend='imagemagick'/>, use a libtool
-       function, lt_dlopen, to load libraries as needed during execution and
-       resolve their dependencies at run time.  In this case, the .la files
-       should remain.
-
-    </para>
-
-    <para>
-
-        The script below, removes all unneeded .la files and saves them in a
-        directory, /var/local/la-files by default, not in the normal library
-        path.  It also searches all pkg-config files (.pc) for embedded
-        references to .la files and fixes them to be conventional library
-        references needed when an application or library is built.  It
-        can be run as needed to clean up the directories that may be causing
-        problems.
+        O script abaixo remove todos os arquivos .la desnecessários e os salva em um
+diretório, /var/local/la-files, por padrão, não no caminho normal de
+biblioteca. Ele também procura em todos os arquivos pkg-config (.pc) por
+referências embutidas a arquivos .la e os corrige para serem referências
+convencionais de biblioteca necessárias quando uma aplicação ou biblioteca
+for construída. Ele pode ser executado conforme necessário para limpar os
+diretórios que possivelmente estejam causando problemas.
 
     </para>
 
@@ -134,14 +142,14 @@ for d in $(echo $PKG_CONFIG_PATH | tr : ' ') $STD_PC_PATH; do
       fi
     done
   done
-done
+done</literal>
 
 EOF
 
-chmod +x /usr/sbin/remove-la-files.sh</literal></userinput></screen>
+chmod +x /usr/sbin/remove-la-files.sh</userinput></screen>
 
     <para condition="html" role="usernotes">
-       User Notes: <ulink url="&blfs-wiki;/la-files"/>
+       Observações de Usuário(a): <ulink url="&blfs-wiki;/la-files"/>
     </para>
 
   </sect2>

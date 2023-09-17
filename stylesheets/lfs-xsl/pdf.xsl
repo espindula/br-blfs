@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-07 12:25:55 +0200 (sam, 07 jui 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -9,7 +14,7 @@
 
     <!-- Upstream FO templates. Profiled version is not supported by
          xsltproc, thus pofiling must be done in two steps (see Makefile) -->
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
+  <xsl:import href="/usr/share/xml/docbook/stylesheet/docbook-xsl/fo/docbook.xsl"/>
 
     <!-- Uncomment the next for debugging the raw FO code.
          Note that FOP will complaints about a lot of paragraph overflows
@@ -34,7 +39,7 @@
   <xsl:param name="draft.mode" select="'no'"/>
 
    <!-- Paper size -->
-  <xsl:param name="paper.type" select="'USletter'"/>
+  <xsl:param name="paper.type" select="'A4'"/>
 
     <!-- Paper size required by the publisher
   <xsl:param name="paper.type" select="'Customized'"/>

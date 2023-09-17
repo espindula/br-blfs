@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY libusb-download-http "https://github.com/libusb/libusb/releases/download/v&libusb-version;/libusb-&libusb-version;.tar.bz2">
-  <!ENTITY libusb-download-ftp  " ">
-  <!ENTITY libusb-md5sum        "4d8d9aa4656ec1e97eda5ef8d2071aaf">
-  <!ENTITY libusb-size          "596 KB">
-  <!ENTITY libusb-buildsize     "7.4 MB">
-  <!ENTITY libusb-time          "less than 0.1 SBU">
+  <!ENTITY libusb-download-ftp  "">
+  <!ENTITY libusb-md5sum        "9c75660dfe1d659387c37b28c91e3160">
+  <!ENTITY libusb-size          "608 KB">
+  <!ENTITY libusb-buildsize     "5,8 MB">
+  <!ENTITY libusb-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="libusb" xreflabel="libusb-&libusb-version;">
   <?dbhtml filename="libusb.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>libusb-&libusb-version;</title>
 
@@ -26,109 +23,106 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to libusb</title>
+    <title>Introdução a libusb</title>
 
     <para>
-      The <application>libusb</application> package contains a library
-      used by some applications for USB device access.
+      O pacote <application>libusb</application> contém uma biblioteca usada por
+alguns aplicativos para acesso a dispositivos USB.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&libusb-download-http;"/>
+          Transferência (HTTP): <ulink url="&libusb-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&libusb-download-ftp;"/>
+          Transferência (FTP): <ulink url="&libusb-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &libusb-md5sum;
+          Soma de verificação MD5 da transferência: &libusb-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &libusb-size;
+          Tamanho da transferência: &libusb-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &libusb-buildsize;
+          Espaço em disco estimado exigido: &libusb-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &libusb-time;
+          Tempo de construção estimado: &libusb-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">libusb Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do libusb</bridgehead>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="doxygen"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/libusb"/>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libusb"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of libusb</title>
-
-    <note>
-      <para>
-        This package does not support parallel build.
-      </para>
-    </note>
+    <title>Instalação do libusb</title>
 
     <para>
-      Install <application>libusb</application> by running the following
-      commands:
+      Instale <application>libusb</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
-      If <application>Doxygen</application> is installed and you wish to
-      build the API documentation, issue the following command:
+      Se o <application>Doxygen</application> estiver instalado e você desejar
+construir a documentação da API, [então] emita os seguintes comandos:
     </para>
 
-<screen remap="doc"><userinput>sed -i "s/^TCL_SUBST/#&amp;/; s/wide//" doc/doxygen.cfg &amp;&amp;
-make -C doc docs</userinput></screen>
+<screen remap="doc"><userinput>pushd doc               &amp;&amp;
+  doxygen -u doxygen.cfg &amp;&amp;
+  make docs              &amp;&amp;
+popd</userinput></screen>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      If you built the API documentation, install it using the following
-      commands as the <systemitem class="username">root</systemitem> user:
+      Se você construiu a documentação da API, [então] instale-a usando os
+seguintes comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root"
         remap="doc"><userinput>install -v -d -m755 /usr/share/doc/libusb-&libusb-version;/apidocs &amp;&amp;
-install -v -m644    doc/api-1.0/* \
+install -v -m644   doc/api-1.0/* \
                     /usr/share/doc/libusb-&libusb-version;/apidocs</userinput></screen>
 
   </sect2>
 
+  <!--
   <sect2 role="commands">
+
     <title>Command Explanations</title>
 
     <para>
@@ -136,64 +130,62 @@ install -v -m644    doc/api-1.0/* \
       building the documentation.
     </para>
   </sect2>
-
-  <sect2 role="configuration">
-    <title>Configuring Libusb</title>
+-->
+<sect2 role="configuration">
+    <title>Configurando Libusb</title>
 
     <para id="libusb-kernel">
-      To access raw USB devices (those not treated as a disk by the mass-storage
-      driver), appropriate support must be available in the kernel.  Check your
-      kernel configuration:
+      Para acessar dispositivos brutos USB (aqueles não tratados como um disco
+pelo controlador de armazenamento em massa), o suporte apropriado precisa
+estar disponível no núcleo. Verifique a configuração do seu núcleo:
     </para>
 
 <screen><literal>Device Drivers ---&gt;
-  [*] USB support ---&gt;                   [CONFIG_USB_SUPPORT]
+  [*] USB support ---&gt;                  [CONFIG_USB_SUPPORT]
     &lt;*/M&gt; Support for Host-side USB      [CONFIG_USB]
     (Select any USB hardware device drivers you may need on the same page)</literal></screen>
 
     <indexterm zone="libusb libusb-kernel">
-      <primary sortas="d-USB-device-filesystem">Support for Host-side USB</primary>
+      <primary sortas="d-USB-device-filesystem">Suporte para USB do Lado do Anfitrião</primary>
     </indexterm>
 
     <para>
-      For more details on setting up USB devices, see <xref
-      linkend="usb-device-issues"/>.
+      Para mais detalhes a respeito do como configurar dispositivos USB, veja-se
+<xref linkend="usb-device-issues"/>.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          None
+          Nenhum
         </seg>
         <seg>
           libusb-1.0.so
         </seg>
         <seg>
-          /usr/include/libusb-1.0 and
-          /usr/share/doc/libusb-&libusb-version;
+          /usr/include/libusb-1.0 e /usr/share/doc/libusb-&libusb-version;
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="libusb-lib">
         <term><filename class="libraryfile">libusb-1.0.so</filename></term>
         <listitem>
           <para>
-            contains API functions used for accessing USB hardware
+            contém funções de API usadas para acessar hardware USB
           </para>
           <indexterm zone="libusb libusb-lib">
             <primary sortas="c-libusb">libusb-1.0.so</primary>

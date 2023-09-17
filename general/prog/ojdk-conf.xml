@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 ]>
 
-<sect1 id="ojdk-conf" xreflabel="Configuring the JAVA environment">
+<sect1 id="ojdk-conf" xreflabel="Configurando o ambiente JAVA">
   <?dbhtml filename="ojdk-conf.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>Configuring the JAVA environment</title>
 
@@ -19,10 +16,10 @@
 
     <para>
       After the package installation is complete, the next step is to make sure
-      that the system can properly find the files.  If you set up your login
-      scripts as recommended in <xref linkend='postlfs-config-profile'/>, update
-      the environment by creating the <filename>openjdk.sh</filename> script,
-      as the <systemitem class="username">root</systemitem> user:
+that the system can properly find the files.  If you set up your login
+scripts as recommended in <xref linkend='postlfs-config-profile'/>, update
+the environment by creating the <filename>openjdk.sh</filename> script, as
+the <systemitem class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/openjdk.sh &lt;&lt; "EOF"
@@ -38,8 +35,7 @@ pathappend $JAVA_HOME/bin
 pathappend $JAVA_HOME/man MANPATH
 
 # Auto Java CLASSPATH: Copy jar files to, or create symlinks in, the
-# /usr/share/java directory. Note that having gcj jars with OpenJDK 8
-# may lead to errors.
+# /usr/share/java directory.
 
 AUTO_CLASSPATH_DIR=/usr/share/java
 
@@ -60,9 +56,9 @@ unset AUTO_CLASSPATH_DIR dir jar
 EOF</userinput></screen>
 
     <para>
-      If <xref linkend="sudo"/> is installed, the super user should have
-      access to the above variables. Execute the following commands as the
-       <systemitem class="username">root</systemitem> user:
+      If <xref linkend="sudo"/> is installed, the super user should have access to
+the above variables. Execute the following commands as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/sudoers.d/java &lt;&lt; "EOF"
@@ -71,9 +67,9 @@ Defaults env_keep += CLASSPATH</literal>
 EOF</userinput></screen>
 
     <para>
-      To use <command>mandb</command> to include the OpenJDK man pages
-      in its database, issue, as the <systemitem class="username">root
-      </systemitem> user:
+      To use <command>mandb</command> to include the OpenJDK man pages in its
+database, issue, as the <systemitem class="username">root </systemitem>
+user:
     </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/man_db.conf &lt;&lt; "EOF" &amp;&amp;
@@ -94,37 +90,36 @@ mandb -c /opt/jdk/man</userinput></screen>
     <title>Setting up the Certificate Authority Certificates for Java</title>
 
     <para>
-      <application>OpenJDK</application> uses its own format for the
-      CA certificates. The Java security modules use
-      <envar>$JAVA_HOME</envar><filename>/lib/security/cacerts</filename> by
-      default. In order to keep all the certificates in one place, we use
-      <filename>/etc/ssl/java/cacerts</filename>. The instructions
-      on the <xref linkend="make-ca"/> page previously created the file
-      located in <filename class="directory">/etc/ssl/java</filename>.
-      Setup a symlink in the default location as the
-      <systemitem class="username">root</systemitem> user:
+      <application>OpenJDK</application> uses its own format for the CA
+certificates. The Java security modules use
+<envar>$JAVA_HOME</envar><filename>/lib/security/cacerts</filename> by
+default. In order to keep all the certificates in one place, we use
+<filename>/etc/ssl/java/cacerts</filename>. The instructions on the <xref
+linkend="make-ca"/> page previously created the file located in <filename
+class="directory">/etc/ssl/java</filename>.  Set up a symlink in the default
+location as the <systemitem class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>ln -sfv /etc/pki/tls/java/cacerts /opt/jdk/lib/security/cacerts</userinput></screen>
 
     <para>
-      Use the following command to check if the <filename>cacerts</filename>
-      file has been successfully installed:
+      Use the following command to check if the <filename>cacerts</filename> file
+has been successfully installed:
     </para>
 
 <screen role="root"><userinput>/opt/jdk/bin/keytool -list -cacerts</userinput></screen>
 
     <para>
       At the prompt <computeroutput>Enter keystore password:</computeroutput>,
-      enter <userinput>changeit</userinput> (the default) or just press the
-      <quote>Enter</quote> key. If the <filename>cacerts</filename> file was
-      installed correctly, you will see a list of the certificates with
-      related information for each one. If not, you need to reinstall them.
+enter <userinput>changeit</userinput> (the default) or just press the
+<quote>Enter</quote> key. If the <filename>cacerts</filename> file was
+installed correctly, you will see a list of the certificates with related
+information for each one. If not, you need to reinstall them.
     </para>
 
     <para>
-      If you later install a new JVM, you just have to create the symlink in
-      the default location to be able to use the cacerts.
+      If you later install a new JVM, you just have to create the symlink in the
+default location to be able to use the cacerts.
     </para>
 
   </sect2>

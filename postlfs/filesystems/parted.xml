@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
@@ -6,18 +6,16 @@
 
   <!ENTITY parted-download-http "&gnu-http;/parted/parted-&parted-version;.tar.xz">
   <!ENTITY parted-download-ftp  "&gnu-ftp;/parted/parted-&parted-version;.tar.xz">
-  <!ENTITY parted-md5sum        "357d19387c6e7bc4a8a90fe2d015fe80">
-  <!ENTITY parted-size          "1.7 MB">
-  <!ENTITY parted-buildsize     "34 MB (additional 3 MB for the tests and additional 2 MB for optional PDF and Postscript documentation)">
-  <!ENTITY parted-time          "0.3 SBU (additional 2.5 SBU for the tests)">
+  <!ENTITY parted-md5sum        "336fde60786d5855b3876ee49ef1e6b2">
+  <!ENTITY parted-size          "1,8 MB">
+  <!ENTITY parted-buildsize     "33 MB (additional 3 MB for the tests and additional 2 MB for optional PDF
+and Postscript documentation)">
+  <!ENTITY parted-time          "0,3 UPC (3,6 UPC adicionais para os testes)">
 ]>
 
 <sect1 id="parted" xreflabel="parted-&parted-version;">
   <?dbhtml filename="parted.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>parted-&parted-version;</title>
 
@@ -26,50 +24,52 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to parted</title>
+    <title>Introdução a parted</title>
 
     <para>
-      The <application>Parted</application> package is a disk partitioning and
-      partition resizing tool.
+      O pacote <application>Parted</application> é uma ferramenta de
+particionamento de disco e de redimensionamento de partição.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&parted-download-http;"/>
+          Transferência (HTTP): <ulink url="&parted-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&parted-download-ftp;"/>
+          Transferência (FTP): <ulink url="&parted-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &parted-md5sum;
+          Soma de verificação MD5 da transferência: &parted-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &parted-size;
+          Tamanho da transferência: &parted-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &parted-buildsize;
+          Espaço em disco estimado exigido: &parted-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &parted-time;
+          Tempo de construção estimado: &parted-time;
         </para>
       </listitem>
     </itemizedlist>
+    
     <!--
-      <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+      <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
       <itemizedlist spacing="compact">
         <listitem>
           <para>
@@ -79,150 +79,158 @@
         </listitem>
       </itemizedlist>
     This seems to be unneeded now. The fix was merged. -->
-    <bridgehead renderas="sect3">Parted Dependencies</bridgehead>
+<bridgehead renderas="sect3">Dependências do Parted</bridgehead>
 
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
     <para role="recommended">
-      <xref linkend="lvm2"/> (device-mapper, required if building
-      <application>udisks</application>)
+      <xref linkend="lvm2"/> (device-mapper, exigido se construir
+<application>udisks</application>)
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="dosfstools"/>,
-      <xref linkend="pth"/>,
-      <xref linkend="texlive"/> (or <xref linkend="tl-installer"/>), and
-      <ulink url="https://metacpan.org/pod/Digest::CRC">Digest::CRC</ulink> (for tests)
+      <xref linkend="dosfstools"/>, <xref linkend="pth"/>, <xref
+linkend="texlive"/> (ou <xref linkend="tl-installer"/>) e <ulink
+url="https://metacpan.org/pod/Digest::CRC">Digest::CRC</ulink> (para testes)
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/parted"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/parted"/>
     </para>
   </sect2>
 
+  <sect2 role="kernel" id="parted-kernel">
+    <title>Configuração Opcional do Núcleo para Testes</title>
+
+    <para>
+      Cerca de 20% mais testes são executados se o seguinte módulo do núcleo for
+construído:
+    </para>
+
+<screen><literal>Device Drivers ---&gt;
+  SCSI device support ---&gt;
+    [*] SCSI low-level drivers ---&gt;                 [CONFIG_SCSI_LOW_LEVEL]
+      &lt;M&gt; SCSI debugging host and device simulator   [CONFIG_SCSI_DEBUG]</literal></screen>
+
+    <indexterm zone="parted parted-kernel">
+      <primary sortas="d-parted">parted</primary>
+    </indexterm>
+  </sect2>
+
   <sect2 role="installation">
-    <title>Installation of parted</title>
+    <title>Instalação do parted</title>
+    
     <!--
     <para>
+
       If you want to build without device mapper support, a fix is necessary:
     </para>
 
 <screen><userinput>patch -Np1 -i ../parted-&parted-version;-devmapper-1.patch</userinput></screen>
     -->
-    <para>
-      Install <application>Parted</application> by running the following
-      commands:
+<para>
+      Instale <application>Parted</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make &amp;&amp;
 
-make -C doc html                                       &amp;&amp;
+make -C doc html                                      &amp;&amp;
 makeinfo --html      -o doc/html       doc/parted.texi &amp;&amp;
 makeinfo --plaintext -o doc/parted.txt doc/parted.texi</userinput></screen>
 
     <para>
-      If you have <xref linkend="texlive"/> installed and wish to create
-      PDF and Postcript documentation issue the following commands:
+      Se você tiver <xref linkend="texlive"/> instalado e desejar criar
+documentação em PDF e Postscript, [então] emita os seguintes comandos:
     </para>
 
 <screen remap="doc"><userinput>texi2pdf             -o doc/parted.pdf doc/parted.texi &amp;&amp;
 texi2dvi             -o doc/parted.dvi doc/parted.texi &amp;&amp;
 dvips                -o doc/parted.ps  doc/parted.dvi</userinput></screen>
 
-<!-- Not needed with 3.4!
     <para>
-      If you wish to run the test suite, first remove a couple of tests
-      that are known to fail in a BLFS environment.  And, adjust two Python
-      scripts to use Python 3, in case Python 2 is not installed:
-    </para>
- <!- - One of these is due to a C locale, and another is a problem in LVM. - ->
-<screen remap="test"><userinput>sed -i '/t0251-gpt-unicode.sh/d' tests/Makefile &amp;&amp;
-sed -i '/t6002-dm-busy.sh/d' tests/Makefile &amp;&amp;
-sed -i '1s/python/&amp;3/' tests/{gpt-header-move,msdos-overlap}</userinput></screen>
--->
-    <para>
-      To test the results, issue, as the <systemitem
-      class="username">root</systemitem> user:
+      Para testar os resultados, emita, como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
+<!-- For devs: several tests are skipped with the message
+     "FS test with sector size != 512". This is expected since the same tests
+     are run with simulated sector of 1024, 2048, and 4096 bytes; only the
+     last group of tests is done with simulated sector size of 512, so that
+     less tests are skipped.-->
 <screen role="root"
         remap="test"><userinput>make check</userinput></screen>
 
+
     <note>
       <para>
-        Many tests are skipped if not run as the <systemitem
-        class="username">root</systemitem> user.
+        Muitos testes são pulados se não executados como o(a) usuário(a) <systemitem
+class="username">root</systemitem>.
       </para>
     </note>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
 install -v -m755 -d /usr/share/doc/parted-&parted-version;/html &amp;&amp;
 install -v -m644    doc/html/* \
-                    /usr/share/doc/parted-&parted-version;/html &amp;&amp;
+                   /usr/share/doc/parted-&parted-version;/html &amp;&amp;
 install -v -m644    doc/{FAT,API,parted.{txt,html}} \
                     /usr/share/doc/parted-&parted-version;</userinput></screen>
 
     <para>
-      Install the optional PDF and Postscript documentation by issuing the
-      following command as the <systemitem class="username">root</systemitem>
-      user:
+      Instale a documentação opcional PDF e Postscript emitindo o seguinte comando
+como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"
         remap="doc"><userinput>install -v -m644 doc/FAT doc/API doc/parted.{pdf,ps,dvi} \
-                    /usr/share/doc/parted-&parted-version;</userinput></screen>
+                   /usr/share/doc/parted-&parted-version;</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <option>--disable-device-mapper</option>: This option disables device
-      mapper support. Add this parameter if you have not installed
-      <application>LVM2</application>.
+      <option>--disable-device-mapper</option>: Essa opção desabilita o suporte a
+mapeador de dispositivos. Adicione esse parâmetro se você não tiver
+instalado o <application>LVM2</application>.
     </para>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Libraries</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          parted and
-          partprobe
+          parted e partprobe
         </seg>
         <seg>
-          libparted.so and
-          libparted-fs-resize.so</seg>
+          libparted.so e libparted-fs-resize.so</seg>
         <seg>
-          /usr/include/parted and
-          /usr/share/doc/parted-&parted-version;</seg>
+          /usr/include/parted e /usr/share/doc/parted-&parted-version;</seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="parted-prog">
         <term><command>parted</command></term>
         <listitem>
           <para>
-            is a partition manipulation program
+            é um aplicativo de manipulação de partição
           </para>
           <indexterm zone="parted parted-prog">
             <primary sortas="b-parted">parted</primary>
@@ -234,7 +242,7 @@ install -v -m644    doc/{FAT,API,parted.{txt,html}} \
         <term><command>partprobe</command></term>
         <listitem>
           <para>
-            informs the OS of partition table changes
+            informa o Sistema Operacional a respeito de mudanças da tabela de partição
           </para>
           <indexterm zone="parted partprobe">
             <primary sortas="b-partprobe">partprobe</primary>
@@ -246,7 +254,7 @@ install -v -m644    doc/{FAT,API,parted.{txt,html}} \
         <term><filename class="libraryfile">libparted.so</filename></term>
         <listitem>
           <para>
-            contains the <application>Parted</application> API functions
+            contém as funções da API do <application>Parted</application>
           </para>
           <indexterm zone="parted libparted">
             <primary sortas="c-libparted">libparted.so</primary>

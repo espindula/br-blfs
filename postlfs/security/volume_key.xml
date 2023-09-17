@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY volume_key-download-http "https://github.com/felixonmars/volume_key/archive/volume_key-&volume_key-version;.tar.gz">
-  <!ENTITY volume_key-download-ftp  " ">
+  <!ENTITY volume_key-download-ftp  "">
   <!ENTITY volume_key-md5sum        "d1c76f24e08ddd8c1787687d0af5a814">
   <!ENTITY volume_key-size          "196 KB">
   <!ENTITY volume_key-buildsize     "11 MB">
-  <!ENTITY volume_key-time          "0.2 SBU">
+  <!ENTITY volume_key-time          "0,2 UPC">
 ]>
 
 <sect1 id="volume_key" xreflabel="volume_key-&volume_key-version;">
   <?dbhtml filename="volume_key.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
   <title>volume_key-&volume_key-version;</title>
 
@@ -26,101 +23,113 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to volume_key</title>
+    <title>Introdução a volume_key</title>
 
     <para>
-      The <application>volume_key</application> package provides
-      a library for manipulating storage volume encryption keys and storing
-      them separately from volumes to handle forgotten passphrases.
+      O pacote <application>volume_key</application> fornece uma biblioteca para
+manipular as chaves de encriptação do volume de armazenamento e para
+armazená-las separadamente dos volumes para lidar com frases senha
+esquecidas.
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&volume_key-download-http;"/>
+          Transferência (HTTP): <ulink url="&volume_key-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&volume_key-download-ftp;"/>
+          Transferência (FTP): <ulink url="&volume_key-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &volume_key-md5sum;
+          Soma de verificação MD5 da transferência: &volume_key-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &volume_key-size;
+          Tamanho da transferência: &volume_key-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &volume_key-buildsize;
+          Espaço em disco estimado exigido: &volume_key-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &volume_key-time;
+          Tempo de construção estimado: &volume_key-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">volume_key Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do volume_key</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cryptsetup"/>,
-      <xref linkend="glib2"/>,
-      <xref linkend="gpgme"/>, and
-      <xref linkend="nss"/>
+      <!-- To editors: if GnuPG is not installed, a wrong path to gpg will
+           be hard-coded into the library.  Even if GnuPG is installed, we
+           still need the 's/gpg2/gpg/' sed below.  I can't find an elegant
+           way to specify the path manually (so I can't make it a runtime
+           dependency).  -->
+<xref linkend="cryptsetup"/>, <xref linkend="glib2"/>, <xref
+linkend="gnupg2"/>, <xref linkend="gpgme"/> e <xref linkend="nss"/>
     </para>
 
-    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <bridgehead renderas="sect4">Recomendada</bridgehead>
     <para role="recommended">
       <xref linkend="swig"/>
     </para>
-<!-- We prevent using Python2, so do not advertise it
-    <bridgehead renderas="sect4">Optional</bridgehead>
+
+    <!-- We prevent using Python2, so do not advertise it
+    <bridgehead renderas="sect4">
+Optional</bridgehead>
     <para role="optional">
       <xref linkend="python2"/>
     </para>
 -->
-    <para condition="html" role="usernotes">User Notes:
-      <ulink url="&blfs-wiki;/volume_key"/>
+<para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/volume_key"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of volume_key</title>
-
-    <para>
-      Install <application>volume_key</application> by running the following
-      commands:
-    </para>
+    <title>Instalação do volume_key</title>
 
     <note>
       <para>
-        This package expands to the directory
-        volume_key-volume_key-&volume_key-version;.
+        Esse pacote se expande para o diretório
+volume_key-volume_key-&volume_key-version;.
       </para>
     </note>
 
-<screen><userinput>autoreconf -fiv              &amp;&amp;
+    <para>
+      Diga ao sistema de construção como localizar o GPGME e o GnuPG corretamente:
+    </para>
+
+<screen><userinput remap='pre'>sed -e '/AM_PATH_GPGME/iAM_PATH_GPG_ERROR' \
+    -e 's/gpg2/gpg/' -i configure.ac</userinput></screen>
+
+    <para>
+      Instale <application>volume_key</application> executando os seguintes
+comandos:
+    </para>
+
+<screen><userinput>autoreconf -fiv             &amp;&amp;
 ./configure --prefix=/usr    \
             --without-python &amp;&amp;
 make</userinput></screen>
 
     <para>
-      This package does not come with a functioning test suite.
+      Para testar os resultados, emita: <command>make check</command>.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -128,28 +137,28 @@ make</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--without-python</parameter>: This parameter prevents building
-      the <application>Python 2</application> bindings, if <xref
-      linkend="python2"/> is installed.
+      <parameter>--without-python</parameter>: Esse parâmetro impede a construção
+das ligações <application>Python 2</application>, se <xref
+linkend="python2"/> estiver instalado.
     </para>
 
     <para>
-      <option>--without-python3</option>: Use this option if you do not want
-      to build the <application>Python 3</application> bindings. In this case,
-      <xref linkend="swig"/> is not needed.
+      <option>--without-python3</option>: Use essa opção se você não quiser
+construir as ligações <application>Python 3</application>. Nesse caso, <xref
+linkend="swig"/> não é necessário.
     </para>
 
   </sect2>
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Program</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
@@ -165,15 +174,14 @@ make</userinput></screen>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="volume_key-prog">
         <term><command>volume_key</command></term>
         <listitem>
           <para>
-            manages encrypted volume keys and passphrases
+            gerencia chaves e frases senhas do volume encriptado
           </para>
           <indexterm zone="volume_key volume_key-prog">
             <primary sortas="b-volume_key">volume_key</primary>
@@ -185,7 +193,7 @@ make</userinput></screen>
         <term><filename class="libraryfile">volume_key.so</filename></term>
         <listitem>
           <para>
-            contains API functions for managing encrypted volume keys
+            contém funções de API para gerenciar chaves do volume encriptado
           </para>
           <indexterm zone="volume_key volume_key-lib">
             <primary sortas="c-volume_key">volume_key.so</primary>

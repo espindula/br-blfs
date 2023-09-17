@@ -1,4 +1,9 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+$LastChangedBy: manuel $
+$Date: 2007-07-07 12:25:55 +0200 (sam. 07 juil. 2007) $
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -30,7 +35,7 @@
   </xsl:attribute-set>
 
     <!-- Format variablelists lists as blocks? 1 = yes, 0 = no
-           Default variablelist format. We override it when necessary
+           Default variablelist format. We override it when necesary
            using the list-presentation processing instruction. -->
   <xsl:param name="variablelist.as.blocks" select="1"/>
 

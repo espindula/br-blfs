@@ -1,77 +1,77 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
   <!ENTITY lm_sensors-download-http "https://github.com/lm-sensors/lm-sensors/archive/V&lm-sensors-version;/lm-sensors-&lm-sensors-version;.tar.gz">
-  <!ENTITY lm_sensors-download-ftp  " ">
+  <!ENTITY lm_sensors-download-ftp  "">
   <!ENTITY lm_sensors-md5sum        "f60e47b5eb50bbeed48a9f43bb08dd5e">
   <!ENTITY lm_sensors-size          "268 KB">
-  <!ENTITY lm_sensors-buildsize     "2.6 MB">
-  <!ENTITY lm_sensors-time          "less than 0.1 SBU">
+  <!ENTITY lm_sensors-buildsize     "2,6 MB">
+  <!ENTITY lm_sensors-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="lm_sensors" xreflabel="lm-sensors-&lm-sensors-version;">
   <?dbhtml filename="lm_sensors.html"?>
 
-  <sect1info>
-    <date>$Date$</date>
-  </sect1info>
 
-  <title>lm-sensors-&lm-sensors-version;</title>
+  <title>Lm-sensors-&lm-sensors-version;</title>
 
   <indexterm zone="lm_sensors">
     <primary sortas="a-lm_sensors">lm_sensors</primary>
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to lm_sensors</title>
+    <title>Introdução ao "Lm_sensors"</title>
 
     <para>
-      The <application>lm_sensors</application> package provides user-space
-      support for the hardware monitoring drivers in the Linux kernel.
-      This is useful for monitoring the temperature of the CPU and adjusting the
-      performance of some hardware (such as cooling fans).
+      O pacote <application>lm_sensors</application> fornece suporte de espaço de
+usuário(a) para os controladores de monitoramento de hardware no núcleo
+Linux. Isso é útil para monitorar a temperatura da "CPU" e ajustar o
+desempenho de alguns hardwares (como ventiladores de resfriamento).
     </para>
 
-    &lfs111_checked;
+    &lfs113_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&lm_sensors-download-http;"/>
+          Transferência (HTTP): <ulink url="&lm_sensors-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&lm_sensors-download-ftp;"/>
+          Transferência (FTP): <ulink url="&lm_sensors-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &lm_sensors-md5sum;
+          Soma de verificação MD5 da transferência: &lm_sensors-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &lm_sensors-size;
+          Tamanho da transferência: &lm_sensors-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &lm_sensors-buildsize;
+          Espaço em disco estimado exigido: &lm_sensors-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &lm_sensors-time;
+          Tempo de construção estimado: &lm_sensors-time;
         </para>
       </listitem>
     </itemizedlist>
 
-<!--    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+
+
+    <!--    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -80,55 +80,56 @@
         </para>
       </listitem>
     </itemizedlist> -->
+<bridgehead renderas="sect3">Dependências do "lm_sensors"</bridgehead>
 
-    <bridgehead renderas="sect3">lm_sensors Dependencies</bridgehead>
-
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="which"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <ulink url="http://oss.oetiker.ch/rrdtool/">RRDtool</ulink> (required to
-      build the <command>sensord</command> program)
+      <ulink url="https://oss.oetiker.ch/rrdtool/">RRDtool</ulink> (exigido para
+construir o aplicativo <command>sensord</command>) e <ulink role="runtime"
+url="https://www.nongnu.org/dmidecode/">dmidecode</ulink> (tempo de
+execução)
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/lm_sensors"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/lm_sensors"/>
     </para>
   </sect2>
 
   <sect2 role="kernel" id="lm_sensors-kernel">
-    <title>Kernel Configuration</title>
+    <title>Configuração do Núcleo</title>
 
     <para>
-      Getting your kernel config right is an iterative process that may require
-      that you recompile your kernel a couple of times. The simplest way to go
-      about it is to start by enabling modules and then compile everything that
-      may be needed by Lm Sensors as a module:
+      Acertar a configuração do seu núcleo é um processo iterativo que
+possivelmente exija que você recompile o seu núcleo algumas vezes. A maneira
+mais simples de fazer isso é a de começar habilitando os módulos e depois
+compilar tudo o que possivelmente seja necessário para o "Lm Sensors" como
+um módulo:
     </para>
 
-<screen><literal>Bus options (PCI etc.)  ---&gt;
-  [*] PCI support                         [CONFIG_PCI]
-
-[*] Enable loadable module support  ---&gt;  [CONFIG_MODULES]
-
-Device Drivers  ---&gt;
-  I2C support ---&gt;
-    &lt;*/M&gt; I2C device interface            [CONFIG_I2C_CHARDEV]<!--
+<screen><!--
 Seems to be automatically selected and invisible on linux 3.17:
     I2C Algorithms  -&45;-&gt;
       &lt;M&gt; (configure all of them as modules)-->
+<literal>[*] Enable loadable module support  ---&gt;  [CONFIG_MODULES]
+
+Device Drivers  ---&gt;
+  [*] PCI support ---&gt;                   [CONFIG_PCI]
+  I2C support ---&gt;
+    &lt;*/M&gt; I2C device interface            [CONFIG_I2C_CHARDEV]
     I2C Hardware Bus support  ---&gt;
       &lt;M&gt; (configure all of them as modules)
   &lt;*/M&gt; Hardware Monitoring support  ---&gt; [CONFIG_HWMON]
     &lt;M&gt; (configure all of them as modules)</literal></screen>
 
     <para>
-      Recompile your kernel and reboot into the new kernel. Don't forget to
-      <command>make modules_install</command> We will come back to the kernel in
-      the Configuring section below.
+      Recompile seu núcleo e reinicialize no novo núcleo. Não se esqueça de
+<command>make modules_install</command>. Voltaremos ao núcleo na seção
+"Configurando" abaixo.
     </para>
 
     <indexterm zone="lm_sensors lm_sensors-kernel">
@@ -137,27 +138,29 @@ Seems to be automatically selected and invisible on linux 3.17:
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of lm_sensors</title>
+    <title>Instalação do "Lm_sensors"</title>
 
     <para>
-      Install <application>lm_sensors</application> by running the following
-      commands:
+      Instale <application>Lm_sensors</application> executando os seguintes
+comandos:
     </para>
 
-<!-- <screen><userinput>patch -Np1 -i ../lm_sensors-&lm_sensors-version;-upstream_fixes-1.patch &amp;&amp; -->
-<screen><userinput>make PREFIX=/usr        \
+
+<screen><!-- <screen>
+<userinput>patch -Np1 -i ../lm_sensors-&lm_sensors-version;-upstream_fixes-1.patch &amp;&amp; -->
+<userinput>make PREFIX=/usr       \
      BUILD_STATIC_LIB=0 \
      MANDIR=/usr/share/man</userinput></screen>
 
     <para>
-      This package does not come with a test suite.
+      Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make PREFIX=/usr        \
+<screen role="root"><userinput>make PREFIX=/usr       \
      BUILD_STATIC_LIB=0 \
      MANDIR=/usr/share/man install &amp;&amp;
 
@@ -167,30 +170,32 @@ cp -rv              README INSTALL doc/* \
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <para>
-      <parameter>BUILD_STATIC_LIB=0</parameter>: This parameter disables
-      compiling and installing the static version of
-      <filename class="libraryfile">libsensors</filename>.
+      <parameter>BUILD_STATIC_LIB=0</parameter>: Esse parâmetro desabilita a
+compilação e instalação da versão estática da <filename
+class="libraryfile">libsensors</filename>.
     </para>
 
     <para>
-      <parameter>PROG_EXTRA=sensord</parameter>: This parameter enables
-      compiling <command>sensord</command>, a daemon that can monitor your
-      system at regular intervals. Compiling <command>sensord</command> requires
-      <ulink url="http://oss.oetiker.ch/rrdtool/">RRDtool</ulink>. Compiling
-      RRDtool 1.4.6 requires a sed: <command>sed -i '/ sv_undef/d'
-      bindings/perl-shared/RRDs.xs</command>.
+      <option>PROG_EXTRA=sensord</option>: Esse parâmetro habilita compilar o
+<command>sensord</command>, um processo de segundo plano que consegue
+monitorar seu sistema em intervalos regulares. Compilar o
+<command>sensord</command> exige <ulink
+url="https://oss.oetiker.ch/rrdtool/">RRDtool</ulink>. Certifique-se de
+instalar o "RRDtool" em <filename class="directory">/usr</filename>
+executando <command>make prefix=/usr</command> ao construí-lo. Caso
+contrário, "Lm_sensors" não o encontrará facilmente.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring lm_sensors</title>
+    <title>Configurando o "Lm_sensors"</title>
 
     <sect3 id="lm_sensors-config">
-      <title>Config File</title>
+      <title>Arquivo de Configuração</title>
 
       <para>
         <filename>/etc/sensors3.conf</filename>
@@ -203,20 +208,20 @@ cp -rv              README INSTALL doc/* \
 
     </sect3>
 
-    <sect3><title>Configuration Information</title>
+    <sect3><title>Informação de Configuração</title>
 
       <para>
-        To find out what hardware sensors your system has, issue the following
-        command as the <systemitem class="username">root</systemitem> user:
+        Para descobrir quais sensores de hardware seu sistema tem, emita o seguinte
+comando como o(a) usuário(a) <systemitem class="username">root</systemitem>:
       </para>
 
 <screen role="root"><userinput>sensors-detect</userinput></screen>
 
       <para>
-        The appropriate modules should have been loaded and a summary is
-        displayed at the end. Now you know what is needed and you can recompile
-        your kernel to enable just the options you need (i.e., don't enable the
-        modules you cannot use).
+        Os módulos apropriados deveriam ter sido carregados e um resumo ser exibido
+no final. Agora você sabe o que é necessário e pode recompilar seu núcleo
+para habilitar apenas as opções que necessitar (ou seja, não habilite os
+módulos que não consegue usar).
       </para>
 
     </sect3>
@@ -224,42 +229,41 @@ cp -rv              README INSTALL doc/* \
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directories</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
           fancontrol, isadump, isaset, pwmconfig, sensors, sensors-conf-convert,
-          sensors-detect, and optionally, sensord
+sensors-detect e, opcionalmente, sensord
         </seg>
         <seg>
           libsensors.so
         </seg>
         <seg>
-          /etc/sensors.d,
-          /usr/include/sensors and
-          /usr/share/doc/lm_sensors-&lm-sensors-version;
+          /etc/sensors.d, /usr/include/sensors e
+/usr/share/doc/lm_sensors-&lm-sensors-version;
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
-      <?dbfo list-presentation="list"?>
-      <?dbhtml list-presentation="table"?>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="fancontrol">
         <term><command>fancontrol</command></term>
         <listitem>
           <para>
-            is a shell script for use with <application>lm_sensors</application>.
-            It reads its configuration from a file<!--what file?-->, then
-            calculates fan speeds from temperatures and sets the corresponding
-            PWM outputs to the computed values
+            <!--what file?-->
+é um script de shell para uso com <application>lm_sensors</application>. Ele
+lê a configuração dele a partir de um arquivo, então calcula velocidades do
+ventilador a partir das temperaturas e configura as correspondentes saídas
+geradas de "PWM" para os valores computados
           </para>
           <indexterm zone="lm_sensors fancontrol">
             <primary sortas="b-fancontrol">fancontrol</primary>
@@ -271,10 +275,11 @@ cp -rv              README INSTALL doc/* \
         <term><command>isadump</command></term>
         <listitem>
           <para>
-            is a small helper program to examine registers visible through the
-            ISA bus. It is intended to probe any chip that lives on the ISA bus
-            working with an address register and a data register (I2C-like
-            access) or a flat range (of up to 256 bytes)
+            é um pequeno aplicativo auxiliar para examinar registros visíveis por meio
+do barramento "ISA". Destina-se a testar qualquer chip que resida no
+barramento "ISA" trabalhando com um registrador de endereços e um
+registrador de dados (acesso tipo "I2C") ou um intervalo plano (de até 256
+bytes)
           </para>
           <indexterm zone="lm_sensors isadump">
             <primary sortas="b-isadump">isadump</primary>
@@ -286,8 +291,8 @@ cp -rv              README INSTALL doc/* \
         <term><command>isaset</command></term>
         <listitem>
           <para>
-            is a small helper program to set registers visible through the ISA
-            bus
+            é um pequeno aplicativo auxiliar para configurar registros visíveis por meio
+do barramento "ISA"
           </para>
           <indexterm zone="lm_sensors isaset">
             <primary sortas="b-isaset">isaset</primary>
@@ -299,8 +304,8 @@ cp -rv              README INSTALL doc/* \
         <term><command>pwmconfig</command></term>
         <listitem>
           <para>
-            tests the pulse width modulation (PWM) outputs of sensors and
-            configures fancontrol
+            testa as saídas geradas de modulação por largura de pulso ("PWM") dos
+sensores e configura o controle do ventilador
           </para>
           <indexterm zone="lm_sensors pwmconfig">
             <primary sortas="b-pwmconfig">pwmconfig</primary>
@@ -312,7 +317,7 @@ cp -rv              README INSTALL doc/* \
         <term><command>sensors</command></term>
         <listitem>
           <para>
-            prints the current readings of all sensor chips
+            imprime as leituras atuais de todos os "chips" sensores
           </para>
           <indexterm zone="lm_sensors sensors">
             <primary sortas="b-sensors">sensors</primary>
@@ -324,9 +329,9 @@ cp -rv              README INSTALL doc/* \
         <term><command>sensors-conf-convert</command></term>
         <listitem>
           <para>
-            is a <application>Perl</application> script to convert
-            <application>lm-sensors</application> version 2 configuration files
-            to work with version 3
+            é um script <application>Perl</application> para converter arquivos de
+configuração de versão 2 do <application>lm-sensors</application> para
+funcionar com a versão 3
           </para>
           <indexterm zone="lm_sensors sensors-conf-convert">
             <primary sortas="b-sensors-conf-convert">sensors-conf-convert</primary>
@@ -338,11 +343,11 @@ cp -rv              README INSTALL doc/* \
         <term><command>sensors-detect</command></term>
         <listitem>
           <para>
-            is a <application>Perl</application> script that will walk you
-            through the process of scanning your system for various hardware
-            monitoring chips (sensors) supported by
-            <filename class="libraryfile">libsensors</filename>, or more
-            generally by the <application>lm_sensors</application> tool suite
+            é um script <application>Perl</application> que te guiará ao longo do
+processo de varredura de seu sistema em busca de vários "chips" de
+monitoramento de hardware (sensores) suportados pela <filename
+class="libraryfile">libsensors</filename>, ou mais geralmente pelo conjunto
+de ferramentas <application>lm_sensors</application>
           </para>
           <indexterm zone="lm_sensors sensors-detect">
             <primary sortas="b-sensors-detect">sensors-detect</primary>
@@ -354,8 +359,8 @@ cp -rv              README INSTALL doc/* \
         <term><command>sensord</command></term>
         <listitem>
           <para>
-            (optional) is a daemon that can be used to periodically log sensor
-            readings
+            (opcional) é um processo de segundo plano que consegue ser usado para
+registrar periodicamente as leituras do sensor
           </para>
           <indexterm zone="lm_sensors sensord">
             <primary sortas="b-sensord">sensord</primary>
@@ -367,7 +372,7 @@ cp -rv              README INSTALL doc/* \
         <term><filename class="libraryfile">libsensors.so</filename></term>
         <listitem>
           <para>
-            contains the <application>lm_sensors</application> API functions
+            contém as funções da "API" do <application>lm_sensors</application>
           </para>
           <indexterm zone="lm_sensors libsensors">
             <primary sortas="c-libsensors">libsensors.so</primary>
