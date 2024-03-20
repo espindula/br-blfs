@@ -7,9 +7,9 @@
   <!ENTITY openldap-download-http "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-&openldap-version;.tgz">
   <!ENTITY openldap-download-ftp  "ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-&openldap-version;.tgz">
   <!ENTITY openldap-md5sum        "fee2b0dca212b41c87976d0414f30f12">
-  <!ENTITY openldap-size          "6,2Mo">
-  <!ENTITY openldap-buildsize     "58 MB (client and server)">
-  <!ENTITY openldap-time          "0.4 SBU (client), 1.1 SBU (server)">
+  <!ENTITY openldap-size          "6,2 MB">
+  <!ENTITY openldap-buildsize     "58 MB (cliente e servidor)">
+  <!ENTITY openldap-time          "0,4 UPC (cliente), 1,1 UPC (servidor)">
 ]>
 
 <sect1 id="openldap" xreflabel="OpenLDAP-&openldap-version;">
@@ -23,11 +23,12 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a OpenLDAP</title>
+    <title>Introdução ao <quote>OpenLDAP</quote></title>
 
     <para>
-      The <application>OpenLDAP</application> package provides an open source
-implementation of the Lightweight Directory Access Protocol.
+      O pacote &quot;<application>OpenLDAP</application>&quot; fornece uma
+implementação de fonte aberto do &quot;Lightweight Directory Access
+Protocol&quot;.
     </para>
 
     &lfs113_checked;
@@ -46,7 +47,7 @@ implementation of the Lightweight Directory Access Protocol.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &openldap-md5sum;
+          Soma de verificação MD5 da transferência: &openldap-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -76,9 +77,9 @@ url="&patch-root;/openldap-&openldap-version;-consolidated-1.patch"/>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de OpenLDAP</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;OpenLDAP&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="cyrus-sasl"/>
     </para>
@@ -86,11 +87,11 @@ url="&patch-root;/openldap-&openldap-version;-consolidated-1.patch"/>
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="gnutls"/>, <xref linkend="pth"/>, <xref linkend="unixodbc"/>,
-<xref linkend="mariadb"/> or <xref linkend="postgresql"/> or <ulink
+<xref linkend="mariadb"/> ou <xref linkend="postgresql"/> ou <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <ulink
 url="http://www.openslp.org/">OpenSLP</ulink>, <ulink
-url="https://docs.mongodb.com/manual/core/wiredtiger/">WiredTiger</ulink>,
-and <xref linkend="db"/> (for slapd, but deprecated)
+url="https://docs.mongodb.com/manual/core/wiredtiger/">WiredTiger</ulink> e
+<xref linkend="db"/> (para &quot;slapd&quot;, porém descontinuado)
     </para>
 
     <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/openldap"/>
@@ -98,20 +99,21 @@ and <xref linkend="db"/> (for slapd, but deprecated)
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de OpenLDAP</title>
+    <title>Instalação do <quote>OpenLDAP</quote></title>
 
     <note>
       <para>
-        If you only need to install the client side <command>ldap*</command>
-binaries, corresponding man pages, libraries and header files (referred to
-as a <quote>client-only</quote> install), issue these commands instead of
-the following ones (no test suite available):
+        Se você precisar instalar somente os binários
+&quot;<command>ldap*</command>&quot; do lado cliente, páginas de manual,
+bibliotecas e arquivos de cabeçalho correspondentes (referidos como
+instalação <quote>client-only</quote>), [então] emita estes comandos, em vez
+dos seguintes (nenhuma suíte de teste disponível):
       </para>
 
 <screen role="nodump"><userinput>patch -Np1 -i ../openldap-&openldap-version;-consolidated-1.patch &amp;&amp;
 autoconf &amp;&amp;
 
-./configure --prefix=/usr     \
+./configure --prefix=/usr    \
             --sysconfdir=/etc \
             --disable-static  \
             --enable-dynamic  \
@@ -123,7 +125,8 @@ make depend &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Then, as the <systemitem class="username">root</systemitem> user:
+      Em seguida, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="nodump"><userinput>make install</userinput></screen>
@@ -131,25 +134,26 @@ make</userinput></screen>
     </note>
 
     <para>
-      There should be a dedicated user and group to take control of the
-<command>slapd</command> daemon after it is started. Issue the following
-commands as the <systemitem class="username">root</systemitem> user:
+      Deveria existir um(a) usuário(a) e um grupo dedicado(a) para assumir o
+controle do processo de segundo plano &quot;<command>slapd</command>&quot;
+depois de ele ser iniciado. Emita os seguintes comandos como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -g 83 ldap &amp;&amp;
-useradd  -c "OpenLDAP Daemon Owner" \
+useradd  -c "Proprietário(a) do Processo de Segundo Plano OpenLDAP" \
          -d /var/lib/openldap -u 83 \
          -g ldap -s /bin/false ldap</userinput></screen>
 
     <para>
-      Instale <application>OpenLDAP</application> executando os seguintes
-comandos:
+      Instale o &quot;<application>OpenLDAP</application>&quot; executando os
+seguintes comandos:
     </para>
 
 <screen><userinput>patch -Np1 -i ../openldap-&openldap-version;-consolidated-1.patch &amp;&amp;
 autoconf &amp;&amp;
 
-./configure --prefix=/usr         \
+./configure --prefix=/usr        \
             --sysconfdir=/etc     \
             --localstatedir=/var  \
             --libexecdir=/usr/lib \
@@ -174,21 +178,23 @@ make depend &amp;&amp;
 make</userinput></screen>
 
     <para>
-      The tests appear to be fragile.  Errors may cause the tests to abort prior
-to finishing, apparently due to timing issues.  The tests take about 65
-minutes and are processor independent.  To test the results, issue:
-<command>make test</command>.
+      Os testes parecem ser frágeis. Erros possivelmente causem os testes abortar
+antes de finalizar, aparentemente devido a problemas de temporização. Os
+testes duram cerca de sessenta e cinco (65) minutos e são independentes do
+processador. Para testar os resultados, emita: &quot;<command>make
+test</command>&quot;.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
 
 sed -e "s/\.la/.so/" -i /etc/openldap/slapd.{conf,ldif}{,.default} &amp;&amp;
 
-install -v -dm700 -o ldap -g ldap /var/lib/openldap     &amp;&amp;
+install -v -dm700 -o ldap -g ldap /var/lib/openldap    &amp;&amp;
 
 install -v -dm700 -o ldap -g ldap /etc/openldap/slapd.d &amp;&amp;
 chmod   -v    640     /etc/openldap/slapd.{conf,ldif}   &amp;&amp;
@@ -207,51 +213,51 @@ cp      -vfr      doc/{drafts,rfc,guide} \
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>--disable-debug</parameter>: This switch disables the debugging
-code in <application>OpenLDAP</application>.
+      <parameter>--disable-debug</parameter>: Essa chave desabilita o código de
+depuração no &quot;<application>OpenLDAP</application>&quot;.
     </para>
 
     <para>
-      <parameter>--enable-dynamic</parameter>: This switch forces the
-<application>OpenLDAP</application> libraries to be dynamically linked to
-the executable programs.
+      <parameter>--enable-dynamic</parameter>: Essa chave força as bibliotecas do
+&quot;<application>OpenLDAP</application>&quot; a serem vinculadas
+dinamicamente aos aplicativos executáveis.
     </para>
 
     <para>
-      <parameter>--enable-versioning</parameter>: This switch enables symbol
-versioning in the <application>OpenLDAP</application> libraries.  Without
-this, some applications might generate a warning about missing symbol
-versions.
+      <parameter>--enable-versioning</parameter>: Essa chave habilita o
+versionamento de símbolos nas bibliotecas do
+&quot;<application>OpenLDAP</application>&quot;. Sem isso, alguns
+aplicativos podem gerar um aviso relativo a versões ausentes de símbolos.
     </para>
 
     <para>
-      <parameter>--enable-crypt</parameter>: This switch enables using
-<command>crypt(3)</command> passwords.
+      <parameter>--enable-crypt</parameter>: Essa chave habilita o uso de senhas
+do &quot;<command>crypt(3)</command>&quot;.
     </para>
 
     <para>
-      <parameter>--enable-spasswd</parameter>: This switch enables
-<application>SASL</application> password verification.
+      <parameter>--enable-spasswd</parameter>: Essa chave habilita a verificação
+de senha do &quot;<application>SASL</application>&quot;.
     </para>
 
     <para>
-      <parameter>--enable-modules</parameter>: This switch enables dynamic module
-support.
+      <parameter>--enable-modules</parameter>: Essa chave habilita o suporte a
+módulo dinâmico.
     </para>
 
     <para>
-      <parameter>--enable-rlookups</parameter>: This switch enables reverse
-lookups of client hostnames.
+      <parameter>--enable-rlookups</parameter>: Essa chave habilita pesquisas
+reversas de nomes de dispositivos clientes.
     </para>
 
     <para>
-      <parameter>--enable-backends</parameter>: This switch enables all available
-backends.
+      <parameter>--enable-backends</parameter>: Essa chave habilita todas as
+estruturas de retaguarda disponíveis.
     </para>
 
     <para>
-      <parameter>--enable-overlays</parameter>: This switch enables all available
-overlays.
+      <parameter>--enable-overlays</parameter>: Essa chave habilita todas as
+sobreposições disponíveis.
     </para>
 
 
@@ -266,52 +272,61 @@ overlays.
     </para>
 -->
 <para>
-      <parameter>--disable-sql</parameter>: This switch explicitly disables the
-SQL backend.  Omit this switch if a SQL server is installed and you are
-going to use a SQL backend.
+      <parameter>--disable-sql</parameter>: Essa chave desabilita explicitamente a
+estrutura &quot;SQL&quot; de retaguarda. Omita essa chave se um servidor
+&quot;SQL&quot; estiver instalado e você for usar uma estrutura
+&quot;SQL&quot; de retaguarda.
     </para>
 
     <para>
-      <parameter>--disable-wt</parameter>: This switch explicitly disables the
-WiredTiger backend.  Omit this switch if WiredTiger is installed and you are
-going to use a WiredTiger backend.
+      <parameter>--disable-wt</parameter>: Essa chave desabilita explicitamente a
+estrutura &quot;WiredTiger&quot; de retaguarda. Omita essa chave se o
+&quot;WiredTiger&quot; estiver instalado e você for usar uma estrutura
+&quot;WiredTiger&quot; de retaguarda.
     </para>
 
     <para>
-     <parameter>--libexecdir=/usr/lib</parameter>: This switch controls where the
-<filename class="directory">/usr/lib/openldap</filename> directory is
-installed.  Everything in that directory is a library, so it belongs under
-<filename class="directory">/usr/lib</filename> instead of <filename
-class="directory">/usr/libexec</filename>.
+     <parameter>--libexecdir=/usr/lib</parameter>: Essa chave controla onde o
+diretório &quot;<filename
+class="directory">/usr/lib/openldap</filename>&quot; está instalado. Tudo
+nesse diretório é uma biblioteca, de forma que ele pertence a
+&quot;<filename class="directory">/usr/lib</filename>&quot; em vez de
+&quot;<filename class="directory">/usr/libexec</filename>&quot;.
     </para>
 
     <para>
-      <option>--enable-slp</option>: This switch enables SLPv2 support. Use it if
-you have installed <ulink url="http://www.openslp.org/">OpenSLP</ulink>.
+      <option>--enable-slp</option>: Essa chave habilita o suporte a
+&quot;SLPv2&quot;. Use-a se você tiver instalado o &quot;<ulink
+url="http://www.openslp.org/">OpenSLP</ulink>&quot;.
     </para>
 
     <note>
       <para>
-        You can run <command>./configure --help</command> to see if there are other
-switch you can pass to the <command>configure</command> command to enable
-other options or dependency packages.
+        Você pode executar &quot;<command>./configure --help</command>&quot; para
+ver se existe outra chave que você possa passar para o comando
+&quot;<command>configure</command>&quot; para habilitar outras opções ou
+pacotes de dependência.
       </para>
     </note>
 
     <para>
-      <command>install ...</command>, <command>chown ...</command>, and
-<command>chmod ...</command>: Having slapd configuration files and ldap
-databases in /var/lib/openldap readable by anyone is a SECURITY ISSUE,
-especially since a file stores the admin password in PLAIN TEXT. That's why
-mode 640 and root:ldap ownership were used. The owner is root, so only root
-can modify the file, and group is ldap, so that the group which owns slapd
-daemon could read but not modify the file in case of a security breach.
+      &quot;<command>install ...</command>&quot;, &quot;<command>chown
+...</command>&quot; e &quot;<command>chmod ...</command>&quot;: Ter arquivos
+de configuração do &quot;slapd&quot; e bases de dados &quot;ldap&quot; em
+&quot;/var/lib/openldap&quot; legíveis por qualquer pessoa é um PROBLEMA DE
+SEGURANÇA, especialmente porque um arquivo armazena a senha do(a)
+administrador(a) em TEXTO SIMPLES. É por isso que o modo 640 e a
+titularidade de propriedade &quot;root:ldap&quot; foi usado. O proprietário
+é o(a) &quot;root&quot;, de forma que somente o(a) &quot;root&quot; consegue
+modificar o arquivo, e o grupo é o &quot;ldap&quot;, de forma que o grupo
+que titulariza o processo de segundo plano &quot;slapd&quot; consiga ler,
+mas não modificar o arquivo em caso de uma brecha de segurança.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando OpenLDAP</title>
+    <title>Configurando o <quote>OpenLDAP</quote></title>
 
     <sect3 id="openldap-config">
       <title>Arquivos de Configuração</title>
@@ -319,16 +334,19 @@ daemon could read but not modify the file in case of a security breach.
       <itemizedlist spacing="compact">
         <listitem>
           <para>
-            For LDAP client: <filename>/etc/openldap/ldap.conf</filename> and
-<filename>~/.ldaprc</filename>
+            Para o cliente do &quot;LDAP&quot;:
+&quot;<filename>/etc/openldap/ldap.conf</filename>&quot; e
+&quot;<filename>~/.ldaprc</filename>&quot;
           </para>
         </listitem>
         <listitem>
           <para>
-            For LDAP server, two configuration mechanisms are used: a legacy
-<filename>/etc/openldap/slapd.conf</filename> configuration file and the
-recommended <emphasis>slapd-config</emphasis> system, using an LDIF database
-stored in <filename class="directory">/etc/openldap/slapd.d</filename>.
+            Para o servidor do &quot;LDAP&quot;, dois mecanismos de configuração são
+usados: um arquivo legado de configuração
+&quot;<filename>/etc/openldap/slapd.conf</filename>&quot; e o sistema
+recomendado &quot;<emphasis>slapd-config</emphasis>&quot;, usando uma base
+de dados &quot;LDIF&quot; armazenada em &quot;<filename
+class="directory">/etc/openldap/slapd.d</filename>&quot;.
           </para>
         </listitem>
       </itemizedlist>
@@ -358,15 +376,18 @@ stored in <filename class="directory">/etc/openldap/slapd.d</filename>.
       <title>Informação de Configuração</title>
 
       <para>
-        Configuring the <command>slapd</command> servers can be complex.  Securing
-the LDAP directory, especially if you are storing non-public data such as
-password databases, can also be a challenging task. In order to set up
-<application>OpenLDAP</application>, you'll need to modify either the
-<filename>/etc/openldap/slapd.conf</filename> file (old method), or the
-<filename>/etc/openldap/slapd.ldif</filename> file and then use
-<command>ldapadd</command> to create the LDAP configuration database in
-<filename class="directory">/etc/openldap/slapd.d</filename> (recommended by
-the OpenLDAP documentation).
+        Configurar os servidores &quot;<command>slapd</command>&quot; pode ser
+complexo. Proteger o diretório do &quot;LDAP&quot;, especialmente se você
+estiver armazenando dados não públicos, como bases de dados de senhas,
+também pode ser uma tarefa desafiadora. Para a finalidade de configurar o
+&quot;<application>OpenLDAP</application>&quot;, você precisará modificar ou
+o arquivo &quot;<filename>/etc/openldap/slapd.conf</filename>&quot; (método
+antigo) ou o arquivo
+&quot;<filename>/etc/openldap/slapd.ldif</filename>&quot; e, em seguida,
+usar o &quot;<command>ldapadd</command>&quot; para criar a base de dados de
+configuração do &quot;LDAP&quot; em &quot;<filename
+class="directory">/etc/openldap/slapd.d</filename>&quot; (recomendado pela
+documentação do &quot;OpenLDAP&quot;).
       </para>
 
       <!--
@@ -383,43 +404,45 @@ the OpenLDAP documentation).
 -->
 <warning>
         <para>
-          The instructions above install an empty LDAP structure and a default
-<filename>/etc/openldap/slapd.conf</filename> file, which are suitable for
-testing the build and other packages using LDAP. Do not use them on a
-production server.
+          As instruções acima instalam uma estrutura vazia do &quot;LDAP&quot; e um
+arquivo &quot;<filename>/etc/openldap/slapd.conf</filename>&quot; padrão,
+que são adequados para testar a construção e outros pacotes que usem o
+&quot;LDAP&quot;. Não os use em um servidor de produção.
         </para>
       </warning>
 
       <para>
-        Resources to assist you with topics such as choosing a directory
-configuration, backend and database definitions, access control settings,
-running as a user other than <systemitem class="username">root</systemitem>
-and setting a <command>chroot</command> environment include:
+        Recursos para te ajudar com tópicos como escolha de configuração de
+diretório, definições de estrutura de retaguarda e base de dados,
+configurações de controle de acesso, execução como um(a) usuário(a)
+diferente de &quot;<systemitem class="username">root</systemitem>&quot; e
+configuração de um ambiente &quot;<command>chroot</command>&quot; incluem:
       </para>
 
       <itemizedlist spacing="compact">
         <listitem>
           <para>
-            The <emphasis role="strong">slapd(8)</emphasis> man page.
+            A página de manual &quot;<emphasis role="strong">slapd(8)</emphasis>&quot;.
           </para>
         </listitem>
         <listitem>
           <para>
-            The <emphasis role="strong">slapd.conf(5)</emphasis> and <emphasis
-role="strong">slapd-config(5)</emphasis> man pages.
+            As páginas de manual &quot;<emphasis
+role="strong">slapd.conf(5)</emphasis>&quot; e &quot;<emphasis
+role="strong">slapd-config(5)</emphasis>&quot;.
           </para>
         </listitem>
         <listitem>
           <para>
-            The <ulink url="https://www.openldap.org/doc/admin26/"> OpenLDAP 2.6
-Administrator's Guide</ulink> (also installed locally in <filename
-class="directory">
-/usr/share/doc/openldap-&openldap-version;/guide/admin</filename>).
+            O &quot;<ulink url="https://www.openldap.org/doc/admin26/">Guia do(a)
+Administrador(a) do OpenLDAP 2.6</ulink>&quot; (também instalado localmente
+em &quot;<filename
+class="directory">/usr/share/doc/openldap-&openldap-version;/guide/admin</filename>&quot;).
           </para>
         </listitem>
         <listitem>
           <para>
-            Documents located at <ulink url="https://www.openldap.org/pub/"/>.
+            Documentes localizados em <ulink url="https://www.openldap.org/pub/"/>.
           </para>
         </listitem>
       </itemizedlist>
@@ -444,17 +467,20 @@ class="directory">
     </sect3>
  -->
 <sect3 id="openldap-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        To automate the startup of the LDAP server at system bootup, install the
-<phrase revision="sysv"><filename>/etc/rc.d/init.d/slapd</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>slapd.service</filename> unit</phrase> included
-in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package using the following
-command:
+        Para automatizar a inicialização do servidor do &quot;LDAP&quot; na
+inicialização do sistema, instale <phrase revision="sysv">o conjunto de
+comandos sequenciais de iniciação
+&quot;<filename>/etc/rc.d/init.d/slapd</filename>&quot; incluso</phrase>
+<phrase revision="systemd">a unidade
+&quot;<filename>slapd.service</filename>&quot; inclusa</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot; usando o seguinte
+comando:
       </para>
 
       <indexterm zone="openldap openldap-init">
@@ -465,22 +491,25 @@ command:
 
       <note>
         <para>
-          You'll need to modify <phrase
-revision="sysv"><filename>/etc/sysconfig/slapd</filename></phrase> <phrase
-revision="systemd"><filename>/etc/default/slapd</filename></phrase> to
-include the parameters needed for your specific configuration. See the
-<command>slapd</command> man page for parameter information.
+          Você precisará modificar o <phrase
+revision="sysv">&quot;<filename>/etc/sysconfig/slapd</filename>&quot;</phrase>
+<phrase
+revision="systemd">&quot;<filename>/etc/default/slapd</filename>&quot;</phrase>
+para incluir os parâmetros necessários para a tua configuração
+específica. Veja-se a página de manual do
+&quot;<command>slapd</command>&quot; para informações de parâmetros.
         </para>
       </note>
 
     </sect3>
 
     <sect3>
-      <title>Testing the Configuration</title>
+      <title>Testando a Configuração</title>
 
       <para>
-        Start the LDAP server using <phrase revision="sysv">the init
-script:</phrase> <phrase revision="systemd">systemctl:</phrase>
+        Inicie o servidor do &quot;LDAP&quot; usando <phrase revision="sysv">o
+conjunto de comandos sequenciais de iniciação:</phrase> <phrase
+revision="systemd">o &quot;systemctl&quot;:</phrase>
       </para>
 
 <screen role="root" revision="sysv"><userinput>/etc/rc.d/init.d/slapd start</userinput></screen>
@@ -488,13 +517,13 @@ script:</phrase> <phrase revision="systemd">systemctl:</phrase>
 <screen role="root" revision="systemd"><userinput>systemctl start slapd</userinput></screen>
 
       <para>
-        Verify access to the LDAP server with the following command:
+        Verifique o acesso ao servidor do &quot;LDAP&quot; com o seguinte comando:
       </para>
 
 <screen><userinput>ldapsearch -x -b '' -s base '(objectclass=*)' namingContexts</userinput></screen>
 
       <para>
-        The expected result is:
+        O resultado esperado é:
       </para>
 
 <screen><computeroutput># extended LDIF
@@ -521,7 +550,7 @@ result: 0 Success
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -533,13 +562,13 @@ result: 0 Success
           ldapadd, ldapcompare, ldapdelete, ldapexop, ldapmodify, ldapmodrdn,
 ldappasswd, ldapsearch, ldapurl, ldapvc, ldapwhoami, slapacl, slapadd,
 slapauth, slapcat, slapd, slapdn, slapindex, slapmodify, slappasswd,
-slapschema, and slaptest
+slapschema e slaptest
         </seg>
         <seg>
-          liblber.so, libldap.so, and several under /usr/lib/openldap
+          liblber.so, libldap.so e diversas sob &quot;/usr/lib/openldap&quot;
         </seg>
         <seg>
-          /etc/openldap, /{usr,var}/lib/openldap, and
+          /etc/openldap, /{usr,var}/lib/openldap e
 /usr/share/doc/openldap-&openldap-version;
         </seg>
       </seglistitem>
@@ -553,7 +582,8 @@ slapschema, and slaptest
         <term><command>ldapadd</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and adds entries
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e adiciona
+entradas
           </para>
           <indexterm zone="openldap ldapadd">
             <primary sortas="b-ldapadd">ldapadd</primary>
@@ -565,8 +595,8 @@ slapschema, and slaptest
         <term><command>ldapcompare</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and performs a compare using
-specified parameters
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e realiza uma
+comparação usando parâmetros especificados
           </para>
           <indexterm zone="openldap ldapcompare">
             <primary sortas="b-ldapcompare">ldapcompare</primary>
@@ -578,7 +608,8 @@ specified parameters
         <term><command>ldapdelete</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and deletes one or more entries
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e deleta uma
+ou mais entradas
           </para>
           <indexterm zone="openldap ldapdelete">
             <primary sortas="b-ldapdelete">ldapdelete</primary>
@@ -590,8 +621,9 @@ specified parameters
         <term><command>ldapexop</command></term>
         <listitem>
           <para>
-            issues the LDAP extended operation specified by oid or one of the special
-keywords whoami, cancel, or refresh
+            emite a operação estendida do &quot;LDAP&quot; especificada por
+&quot;oid&quot; ou uma das palavras-chave especiais&quot; whoami&quot;,
+&quot;cancel&quot; ou &quot;refresh&quot;
           </para>
           <indexterm zone="openldap ldapexop">
             <primary sortas="b-ldapexop">ldapexop</primary>
@@ -603,7 +635,8 @@ keywords whoami, cancel, or refresh
         <term><command>ldapmodify</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and modifies entries
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e modifica
+entradas
           </para>
           <indexterm zone="openldap ldapmodify">
             <primary sortas="b-ldapmodify">ldapmodify</primary>
@@ -615,7 +648,8 @@ keywords whoami, cancel, or refresh
         <term><command>ldapmodrdn</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and modifies the RDN of entries
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e modifica o
+&quot;RDN&quot; das entradas
           </para>
           <indexterm zone="openldap ldapmodrdn">
             <primary sortas="b-ldapmodrdn">ldapmodrdn</primary>
@@ -627,7 +661,8 @@ keywords whoami, cancel, or refresh
         <term><command>ldappasswd</command></term>
         <listitem>
           <para>
-            is a tool used to set the password of an LDAP user
+            é uma ferramenta usada para configurar a senha de um(a) usuário(a) do
+&quot;LDAP&quot;
           </para>
           <indexterm zone="openldap ldappasswd">
             <primary sortas="b-ldappasswd">ldappasswd</primary>
@@ -639,8 +674,8 @@ keywords whoami, cancel, or refresh
         <term><command>ldapsearch</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and performs a search using
-specified parameters
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e realiza uma
+pesquisa usando parâmetros especificados
           </para>
           <indexterm zone="openldap ldapsearch">
             <primary sortas="b-ldapsearch">ldapsearch</primary>
@@ -652,7 +687,8 @@ specified parameters
         <term><command>ldapurl</command></term>
         <listitem>
           <para>
-            is a command that allows to either compose or decompose LDAP URIs
+            é um comando que permite ou compor ou decompor &quot;URIs&quot; do
+&quot;LDAP&quot;
           </para>
           <indexterm zone="openldap ldapurl">
             <primary sortas="b-ldapurl">ldapurl</primary>
@@ -664,7 +700,7 @@ specified parameters
         <term><command>ldapvc</command></term>
         <listitem>
           <para>
-            verifies LDAP credentials
+            verifica credenciais de &quot;LDAP&quot;
           </para>
           <indexterm zone="openldap ldapvc">
             <primary sortas="b-ldapvc">ldapvc</primary>
@@ -676,7 +712,8 @@ specified parameters
         <term><command>ldapwhoami</command></term>
         <listitem>
           <para>
-            opens a connection to an LDAP server, binds and displays whoami information
+            abre uma conexão com um servidor do &quot;LDAP&quot;, vincula e exibe
+informações &quot;whoami&quot;
           </para>
           <indexterm zone="openldap ldapwhoami">
             <primary sortas="b-ldapwhoami">ldapwhoami</primary>
@@ -688,8 +725,9 @@ specified parameters
         <term><command>slapacl</command></term>
         <listitem>
           <para>
-            is used to check the behavior of slapd by verifying access to directory data
-according to the access control list directives defined in its configuration
+            é usado para verificar o comportamento do &quot;slapd&quot; verificando o
+acesso aos dados do diretório de acordo com as diretivas da lista de
+controle de acesso definidas na configuração dele
           </para>
           <indexterm zone="openldap slapacl">
             <primary sortas="b-slapacl">slapacl</primary>
@@ -701,8 +739,9 @@ according to the access control list directives defined in its configuration
         <term><command>slapadd</command></term>
         <listitem>
           <para>
-            is used to add entries specified in LDAP Directory Interchange Format (LDIF)
-to an LDAP database
+            é usado para adicionar entradas especificadas no &quot;LDAP Directory
+Interchange Format&quot; (&quot;LDIF&quot;) a uma base de dados do
+&quot;LDAP&quot;
           </para>
           <indexterm zone="openldap slapadd">
             <primary sortas="b-slapadd">slapadd</primary>
@@ -714,8 +753,9 @@ to an LDAP database
         <term><command>slapauth</command></term>
         <listitem>
           <para>
-            is used to check the behavior of the slapd in mapping identities for
-authentication and authorization purposes, as specified in slapd.conf
+            é usado para verificar o comportamento do &quot;slapd&quot; no mapeamento de
+identidades para fins de autenticação e autorização, conforme especificado
+no &quot;slapd.conf&quot;
           </para>
           <indexterm zone="openldap slapauth">
             <primary sortas="b-slapauth">slapauth</primary>
@@ -727,8 +767,8 @@ authentication and authorization purposes, as specified in slapd.conf
         <term><command>slapcat</command></term>
         <listitem>
           <para>
-            is used to generate an LDAP LDIF output based upon the contents of a slapd
-database
+            é usado para gerar uma saída &quot;LDIF&quot; do &quot;LDAP&quot; baseada no
+conteúdo de uma base de dados do &quot;slapd&quot;
           </para>
           <indexterm zone="openldap slapcat">
             <primary sortas="b-slapcat">slapcat</primary>
@@ -740,7 +780,7 @@ database
         <term><command>slapd</command></term>
         <listitem>
           <para>
-            is the standalone LDAP server
+            é o servidor autônomo do &quot;LDAP&quot;
           </para>
           <indexterm zone="openldap slapd">
             <primary sortas="b-slapd">slapd</primary>
@@ -752,7 +792,8 @@ database
         <term><command>slapdn</command></term>
         <listitem>
           <para>
-            checks a list of string-represented DNs based on schema syntax
+            verifica uma lista de &quot;DNs&quot; representados por sequências de
+caracteres baseadas na sintaxe do esquema
           </para>
           <indexterm zone="openldap slapdn">
             <primary sortas="b-slapdn">slapdn</primary>
@@ -764,8 +805,8 @@ database
         <term><command>slapindex</command></term>
         <listitem>
           <para>
-            is used to regenerate slapd indexes based upon the current contents of a
-database
+            é usado para regenerar índices do &quot;slapd&quot; baseados no conteúdo
+atual de uma base de dados
           </para>
           <indexterm zone="openldap slapindex">
             <primary sortas="b-slapindex">slapindex</primary>
@@ -777,7 +818,7 @@ database
         <term><command>slapmodify</command></term>
         <listitem>
           <para>
-            modifies entries in a slapd database
+            modifica entradas em uma base de dados do &quot;slapd&quot;
           </para>
           <indexterm zone="openldap slapmodify">
             <primary sortas="b-slapmodify">slapmodify</primary>
@@ -789,7 +830,7 @@ database
         <term><command>slappasswd</command></term>
         <listitem>
           <para>
-            is an <application>OpenLDAP</application> password utility
+            é um utilitário de senha &quot;<application>OpenLDAP</application>&quot;
           </para>
           <indexterm zone="openldap slappasswd">
             <primary sortas="b-slappasswd">slappasswd</primary>
@@ -801,7 +842,8 @@ database
         <term><command>slapschema</command></term>
         <listitem>
           <para>
-            is used to check schema compliance of the contents of a slapd database
+            é usado para verificar a conformidade do esquema do conteúdo de uma base de
+dados do &quot;slapd&quot;
           </para>
           <indexterm zone="openldap slapschema">
             <primary sortas="b-slapschema">slapschema</primary>
@@ -813,7 +855,7 @@ database
         <term><command>slaptest</command></term>
         <listitem>
           <para>
-            checks the sanity of the <filename>slapd.conf</filename> file
+            verifica a sanidade do arquivo &quot;<filename>slapd.conf</filename>&quot;
           </para>
           <indexterm zone="openldap slaptest">
             <primary sortas="b-slaptest">slaptest</primary>
@@ -825,11 +867,13 @@ database
         <term><filename class="libraryfile">liblber.so</filename></term>
         <listitem>
           <para>
-            is a set of Lightweight Basic Encoding Rules routines. These routines are
-used by the LDAP library routines to encode and decode LDAP protocol
-elements using the (slightly simplified) Basic Encoding Rules defined by
-LDAP. They are not normally used directly by an LDAP application program
-except in the handling of controls and extended operations
+            é um conjunto de rotinas de Regras Leves de Codificação Básicas. Essas
+rotinas são usadas pelas rotinas da biblioteca do &quot;LDAP&quot; para
+codificar e decodificar elementos do protocolo &quot;LDAP&quot; usando as
+Regras Básicas de Codificação (ligeiramente simplificadas) definidas pelo
+&quot;LDAP&quot;. Elas normalmente não são usadas diretamente por um
+programa aplicativo do &quot;LDAP&quot;, exceto no manuseio de controles e
+operações estendidas
           </para>
           <indexterm zone="openldap liblber">
             <primary sortas="c-liblber">liblber.so</primary>
@@ -841,8 +885,8 @@ except in the handling of controls and extended operations
         <term><filename class="libraryfile">libldap.so</filename></term>
         <listitem>
           <para>
-            supports the LDAP programs and provide functionality for other programs
-interacting with LDAP
+            suporta os aplicativos do &quot;LDAP&quot; e fornece funcionalidade para
+outros aplicativos que interajam com o &quot;LDAP&quot;
           </para>
           <indexterm zone="openldap libldap">
             <primary sortas="c-libldap">libldap.so</primary>

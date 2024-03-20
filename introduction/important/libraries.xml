@@ -21,30 +21,33 @@
     <title>Bibliotecas: Estáticas ou compartilhadas?</title>
 
     <para>
-      The original libraries were simply an archive of routines from which the
-required routines were extracted and linked into the executable
-program. These are described as static libraries, with names of the form
-<filename>libfoo.a</filename> on UNIX-like operating systems.  On some old
-operating systems they are the only type available.
+      As bibliotecas originais eram simplesmente um arquivamento de rotinas a
+partir do qual as rotinas necessárias eram extraídas e vinculadas ao
+aplicativo executável. Elas são descritas como bibliotecas estáticas, com
+nomes no formato <filename>libfoo.a</filename> em sistemas operacionais do
+tipo UNIX. Em alguns sistemas operacionais antigos elas são o único tipo
+disponível.
     </para>
 
     <para>
-      On almost all Linux platforms there are also <quote>shared</quote> (or
-equivalently <quote>dynamic</quote>)  libraries (with names of the form
-<filename>libfoo.so</filename>) &ndash; one copy of the library is loaded
-into virtual memory, and shared by all the programs which call any of its
-functions. This is space efficient.
+      Em quase todas as plataformas Linux também existem bibliotecas
+<quote>compartilhadas</quote> (ou equivalentemente <quote>dinâmicas</quote>)
+(com nomes no formato <filename>libfoo.so</filename>) &ndash; uma cópia da
+biblioteca é carregada na memória virtual e compartilhada por todos os
+aplicativos que chamam alguma das funções dela. Isso é eficiente em termos
+de espaço.
     </para>
 
     <para>
-      In the past, essential programs such as a shell were often linked statically
-so that some form of minimal recovery system would exist even if shared
-libraries, such as <filename>libc.so</filename>, became damaged (e.g. moved
-to <filename class="directory">lost+found</filename> after
-<command>fsck</command> following an unclean shutdown). Nowadays, most
-people use an alternative system install or a USB stick if they have to
-recover. Journaling filesystems also reduce the likelihood of this sort of
-problem.
+      No passado, aplicativos essenciais, como um "shell", frequentemente eram
+vinculados estaticamente, de forma que existisse alguma forma de sistema
+mínimo de recuperação, mesmo se bibliotecas compartilhadas, como
+<filename>libc.so</filename>, se tornassem danificadas (por exemplo, movidas
+para <filename class="directory">lost+found</filename> depois de
+<command>fsck</command> após um desligamento incorreto). Hoje em dia, a
+maioria das pessoas usa uma instalação alternativa de sistema ou um pendrive
+se precisar se recuperar. Os sistemas de arquivos com registro em diário
+também reduzem a probabilidade desse tipo de problema.
     </para>
 
 
@@ -56,25 +59,27 @@ problem.
     </para>
 -->
 <para>
-      Within the book, there are various places where configure switches such as
-<parameter>--disable-static</parameter> are employed, and other places where
-the possibility of using system versions of libraries instead of the
-versions included within another package is discussed. The main reason for
-this is to simplify updates of libraries.
+      Dentro do livro, existem vários locais onde chaves de configuração, tais
+como <parameter>--disable-static</parameter>, são empregadas; e outros
+locais onde a possibilidade de usar versões de sistema das bibliotecas em
+vez das versões inclusas em outro pacote é discutida. A razão principal para
+isso é a de simplificar as atualizações de bibliotecas.
     </para>
 
     <para>
-      If a package is linked to a dynamic library, updating to a newer library
-version is automatic once the newer library is installed and the program is
-(re)started (provided the library major version is unchanged, e.g. going
-from <filename>libfoo.so.2.0</filename> to
-<filename>libfoo.so.2.1</filename>. Going to
-<filename>libfoo.so.3</filename> will require recompilation &ndash;
-<command>ldd</command> can be used to find which programs use the old
-version). If a program is linked to a static library, the program always has
-to be recompiled. If you know which programs are linked to a particular
-static library, this is merely an annoyance. But usually you will
-<emphasis>not</emphasis> know which programs to recompile.
+      Se um pacote for vinculado a uma biblioteca dinâmica, [então] a atualização
+para uma versão mais recente da biblioteca é automática tão logo a
+biblioteca mais recente seja instalada e o aplicativo for (re)iniciado
+(condicionada a que a versão maior da biblioteca não seja modificada, por
+exemplo, indo de <filename>libfoo.so.2.0</filename> para
+<filename>libfoo.so.2.1</filename>. Ir para <filename>libfoo.so.3</filename>
+exigirá recompilação &ndash; o <command>ldd</command> pode ser usado para
+encontrar quais aplicativos usam a versão antiga). Se um aplicativo for
+vinculado a uma biblioteca estática, [então] o aplicativo sempre tem de ser
+recompilado. Se você souber quais aplicativos estão vinculados a uma
+biblioteca estática em particular, [então] isso é meramente um
+aborrecimento. Entretanto, normalmente você <emphasis>não</emphasis> saberá
+quais aplicativos recompilar.
     </para>
 
     <!-- obsolete with /usr merge
@@ -87,20 +92,22 @@ Most libraries are shared, but if you do something unusual, such as
     will be silently linked into the programs which need it.</para>
 -->
 <para>
-      One way to identify when a static library is used, is to deal with it at the
-end of the installation of every package.  Write a script to find all the
-static libraries in <filename class="directory">/usr/lib</filename> or
-wherever you are installing to, and either move them to another directory so
-that they are no longer found by the linker, or rename them so that
-<filename>libfoo.a</filename> becomes
-e.g. <filename>libfoo.a.hidden</filename>. The static library can then be
-temporarily restored if it is ever needed, and the package needing it can be
-identified. This shouldn't be done blindly since many libraries only exist
-in a static version. For example, some libraries from the
-<application>glibc</application> and <application>gcc</application> packages
-should always be present on the system (<filename>libc_nonshared.a, libg.a,
-libpthread_nonshared.a, libssp_nonshared.a, libsupc++.a</filename> as of
-glibc-2.36 and gcc-12.2).
+      Uma forma de identificar quando uma biblioteca estática é usada é a de
+tratar disso ao final da instalação de cada pacote. Escreva um script para
+achar todas as bibliotecas estáticas em <filename
+class="directory">/usr/lib</filename> ou onde quer que você esteja
+instalando, e, ou mova-as para outro diretório, de forma que não mais sejam
+encontradas pelo vinculador; ou renomeie-as, de forma que
+<filename>libfoo.a</filename> se torne, por
+exemplo. <filename>libfoo.a.oculta</filename>. A biblioteca estática pode
+então ser restaurada temporariamente se for efetivamente necessária, e o
+pacote que precisa dela pode ser identificado. Isso não deveria ser feito às
+cegas, pois muitas bibliotecas existem somente em uma versão estática. Por
+exemplo, algumas bibliotecas originárias dos pacotes
+<application>glibc</application> e <application>gcc</application> deveriam
+sempre estar presentes no sistema (<filename>libc_nonshared.a, libg.a,
+libpthread_nonshared.a, libssp_nonshared. a, libsupc++.a</filename> desde
+"glibc-2.36" e "gcc-12.2").
     </para>
 
 
@@ -113,29 +120,32 @@ somente estática dele: Ele era exigido pelo
 pacote(s) que usa(m) o <application>GnuTLS</application>, tais como o
 <application>glib-networking-2.32.3</application>.</para>
 
-    <para>Many packages put some of their common functions into a static library which
-is only used by the programs within the package and, crucially, the library
-is <emphasis>not</emphasis> installed as a standalone library. These
-internal libraries are not a problem &ndash; if the package has to be
-rebuilt to fix a bug or vulnerability, nothing else is linked to them.</para>
+    <para>Muitos pacotes colocam algumas das funções comuns deles em uma biblioteca
+estática que somente é usada pelos aplicativos dentro do pacote e,
+crucialmente, a biblioteca <emphasis>não</emphasis> é instalada como uma
+biblioteca independente. Essas bibliotecas internas não são um problema
+&ndash; se o pacote tiver de ser reconstruído para corrigir um defeito ou
+uma vulnerabilidade, [então] nada mais é vinculado a elas.</para>
 
-    <para>When BLFS mentions system libraries, it means shared versions of
-libraries. Some packages such as <xref linkend="firefox"/> and <xref
-linkend="gs"/> bundle many other libraries in their build tree.  The version
-they ship is often older than the version used in the system, so it may
-contain bugs &ndash; sometimes developers go to the trouble of fixing bugs
-in their included libraries, other times they do not.</para>
+    <para>Quando o BLFS menciona bibliotecas de sistema, significa versões
+compartilhadas de bibliotecas. Alguns pacotes como <xref linkend="firefox"/>
+e <xref linkend="gs"/> agrupam muitas outras bibliotecas na árvore de
+construção deles. A versão que eles enviam geralmente é mais antiga que a
+versão usada no sistema, portanto possivelmente contenham defeitos &ndash;
+às vezes os(as) desenvolvedores(as) se dão ao trabalho de consertar defeitos
+nas bibliotecas incluídas deles(as), outras vezes não.</para>
 
-    <para>Sometimes, deciding to use system libraries is an easy decision.  Other
-times it may require you to alter the system version (e.g. for <xref
-linkend="libpng"/> if used for <xref linkend="firefox"/>).  Occasionally, a
-package ships an old library and can no longer link to the current version,
-but can link to an older version. In this case, BLFS will usually just use
-the shipped version. Sometimes the included library is no longer developed
-separately, or its upstream is now the same as the package&apos;s upstream
-and you have no other packages which will use it.  In those cases, you'll be
-lead to use the included library even if you usually prefer to use system
-libraries.</para>
+    <para>Ocasionalmente, decidir usar as bibliotecas do sistema é uma decisão
+fácil. Outras vezes, possivelmente exija que você altere a versão do sistema
+(por exemplo, para a <xref linkend="libpng"/>, se usada pelo <xref
+linkend="firefox"/>). De vez em quando, um pacote envia uma biblioteca
+antiga e não mais pode se vincular à versão atual, porém pode se vincular a
+uma versão mais antiga. Nesse caso, o BLFS normalmente usará apenas a versão
+enviada. De quando em quando, a biblioteca inclusa não mais é desenvolvida
+separadamente; ou o(a) desenvolvedor(a) dela é o(a) mesmo(a) que o
+desenvolvedor(a) do pacote e você não tem outros pacotes que a
+usarão. Nesses casos, você será levado(a) a usar a biblioteca inclusa, mesmo
+se geralmente preferir usar as bibliotecas do sistema.</para>
 
     <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libraries"/></para>
 

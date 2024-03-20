@@ -7,9 +7,9 @@
   <!ENTITY avahi-download-http "https://github.com/lathiat/avahi/releases/download/v&avahi-version;/avahi-&avahi-version;.tar.gz">
   <!ENTITY avahi-download-ftp  "">
   <!ENTITY avahi-md5sum        "229c6aa30674fc43c202b22c5f8c2be7">
-  <!ENTITY avahi-size          "1,5Mo">
-  <!ENTITY avahi-buildsize     "32Mo">
-  <!ENTITY avahi-time          "0,3UPC">
+  <!ENTITY avahi-size          "1,5 MB">
+  <!ENTITY avahi-buildsize     "32 MB">
+  <!ENTITY avahi-time          "0,3 UPC">
 ]>
 
 <sect1 id="avahi" xreflabel="Avahi-&avahi-version;">
@@ -23,11 +23,11 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Avahi</title>
+    <title>Introdução ao <quote>Avahi</quote></title>
 
     <para>
-      The <application>Avahi</application> package is a system which facilitates
-service discovery on a local network.
+      O pacote <application>Avahi</application> é um sistema que facilita a
+descoberta de serviços em uma rede de intercomunicação local.
     </para>
 
     &lfs113_checked;
@@ -46,7 +46,7 @@ service discovery on a local network.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &avahi-md5sum;
+          Soma de verificação MD5 da transferência: &avahi-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -76,26 +76,26 @@ url="&patch-root;/avahi-&avahi-version;-ipv6_race_condition_fix-1.patch"/>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Avahi</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;Avahi&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="glib2"/>
     </para>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="gobject-introspection"/>, <xref linkend="gtk2"/>, <xref
-linkend="gtk3"/>, <xref linkend="libdaemon"/>, <xref linkend="libglade"/>,
-and <xref linkend="qt5"/>
+linkend="gtk3"/>, <xref linkend="libdaemon"/>, <xref linkend="libglade"/> e
+<xref linkend="qt5"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="dbus-python"/>, <xref linkend="libevent"/>, <xref
-linkend="pygtk"/>, <xref linkend="doxygen"/> and <ulink
-url="https://sourceforge.net/projects/xmltoman/">xmltoman</ulink> (for
-generating documentation)
+linkend="pygtk"/>, <xref linkend="doxygen"/> e <ulink
+url="https://sourceforge.net/projects/xmltoman/">xmltoman</ulink> (para
+gerar documentação)
     </para>
 
     <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/avahi"/>
@@ -103,36 +103,40 @@ generating documentation)
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Avahi</title>
+    <title>Instalação do <quote>Avahi</quote></title>
 
     <para>
-      There should be a dedicated user and group to take control of the
-<command>avahi-daemon</command> daemon after it is started. Issue the
-following commands as the <systemitem class="username">root</systemitem>
-user:
+      Deveria existir um(a) usuário(a) e um grupo dedicado(a) para assumir o
+controle do processo de segundo plano
+&quot;<command>avahi-daemon</command>&quot; depois que ele for
+iniciado. Emita os seguintes comandos como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -fg 84 avahi &amp;&amp;
-useradd -c "Avahi Daemon Owner" -d /run/avahi-daemon -u 84 \
+useradd -c "Proprietário(a) do Processo de Segundo Plano Avahi" -d /run/avahi-daemon -u 84 \
         -g avahi -s /bin/false avahi</userinput></screen>
 
     <para>
-      There should also be a dedicated privileged access group for
-<application>Avahi</application> clients. Issue the following command as the
-<systemitem class="username">root</systemitem> user:
+      Também deveria existir um grupo de acesso privilegiado dedicado para
+clientes do &quot;<application>Avahi</application>&quot;. Emita o seguinte
+comando como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -fg 86 netdev</userinput></screen>
 
     <para>
-      Fix a regression that results in a race condition when IPv6 is in use and
-multiple network adapters are present on the system:
+      Corrija uma regressão que resulta em uma condição de corrida quando o
+&quot;IPv6&quot; está em uso e vários adaptadores de rede de
+intercomunicação estiverem presentes no sistema:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../avahi-&avahi-version;-ipv6_race_condition_fix-1.patch</userinput></screen>
 
     <para>
-      Fix a security vulnerability in <command>avahi-daemon</command>:
+      Corrija uma vulnerabilidade de segurança no
+&quot;<command>avahi-daemon</command>&quot;:
     </para>
 
 <screen><userinput remap="pre">sed -i '426a if (events &amp; AVAHI_WATCH_HUP) { \
@@ -141,11 +145,12 @@ return; \
 }' avahi-daemon/simple-protocol.c</userinput></screen>
 
     <para>
-      Instale <application>Avahi</application> executando os seguintes comandos:
+      Instale o &quot;<application>Avahi</application>&quot; executando os
+seguintes comandos:
     </para>
 
 <screen revision="sysv"><userinput>./configure \
-    --prefix=/usr                  \
+    --prefix=/usr                 \
     --sysconfdir=/etc              \
     --localstatedir=/var           \
     --disable-static               \
@@ -162,7 +167,7 @@ return; \
 make</userinput></screen>
 
 <screen revision="systemd"><userinput>./configure \
-    --prefix=/usr        \
+    --prefix=/usr       \
     --sysconfdir=/etc    \
     --localstatedir=/var \
     --disable-static     \
@@ -182,7 +187,8 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -196,112 +202,117 @@ make</userinput></screen>
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>--disable-libevent</parameter>: This parameter disables the use
-of <xref linkend="libevent"/>. Remove if you have it installed.
+      <parameter>--disable-libevent</parameter>: Esse parâmetro desabilita o uso
+da &quot;<xref linkend="libevent"/>&quot;. Remova se você a tiver instalado.
     </para>
 
     <para>
-      <parameter>--disable-mono</parameter>: This parameter disables the
-<application>Mono</application> bindings.
+      <parameter>--disable-mono</parameter>: Esse parâmetro desabilita as ligações
+&quot;<application>Mono</application>&quot;.
     </para>
 
     <para>
-      <parameter>--disable-monodoc</parameter>: This parameter disables
-documentation for the <application>Mono</application> bindings.
+      <parameter>--disable-monodoc</parameter>: Esse parâmetro desabilita a
+documentação para as ligações &quot;<application>Mono</application>&quot;.
     </para>
 
     <para>
-      <parameter>--disable-python</parameter>: This parameter disables the scripts
-that depend on <application>Python</application>. It also allows a regular
-install to complete successfully.
+      <parameter>--disable-python</parameter>: Esse parâmetro desabilita os
+conjuntos de comandos sequenciais que dependem do
+<application>Python</application>. Ele também permite que uma instalação
+regular complete exitosamente.
     </para>
 
     <para>
-      <parameter>--disable-qt3</parameter>: This parameter disables the attempt to
-build the obsolete <application>Qt3</application> portions of the package.
+      <parameter>--disable-qt3</parameter>: Esse parâmetro desabilita a tentativa
+de construir as partes obsoletas do
+&quot;<application>Qt3</application>&quot; do pacote.
     </para>
 
     <para>
-      <parameter>--disable-qt4</parameter>: This parameter disables the attempt to
-build the obsolete <application>Qt4Core</application> portions of the
-package.
+      <parameter>--disable-qt4</parameter>: Esse parâmetro desabilita a tentativa
+de construir as partes obsoletas
+&quot;<application>Qt4Core</application>&quot; do pacote.
     </para>
 
     <para>
-      <parameter>--enable-core-docs</parameter>: This parameter enables the
-building of documentation.
+      <parameter>--enable-core-docs</parameter>: Esse parâmetro habilita a
+construção da documentação.
     </para>
 
     <para>
-      <parameter>--with-distro=none</parameter>: There is an obsolete boot script
-in the distribution for LFS. This option disables it.
+      <parameter>--with-distro=none</parameter>: Existe um conjunto de comandos
+sequenciais obsoletos de inicialização na distribuição para o LFS. Essa
+opção o desabilita.
     </para>
 
     <para revision="sysv">
-      <parameter>--with-systemdsystemunitdir=no</parameter>: Without it, the
-daemon fails to start in BLFS, which does not support
-<application>systemd</application>.
+      <parameter>--with-systemdsystemunitdir=no</parameter>: Sem ele, o processo
+de segundo plano falha ao iniciar no BLFS, que não suporta
+&quot;<application>systemd</application>&quot;.
     </para>
 
     <para>
-      <parameter>--with-dbus-system-address=...</parameter>: This option prevents
-the package from referring to the deprecated <filename
-class='directory'>/var/run</filename> directory.
+      <parameter>--with-dbus-system-address=...</parameter>: Essa opção evita que
+o pacote referencie o diretório obsoleto &quot;<filename
+class='directory'>/var/run</filename>&quot;.
     </para>
 
     <para>
-      <option>--disable-dbus</option>: This parameter disables the use of
-<application>D-Bus</application>.
+      <option>--disable-dbus</option>: Esse parâmetro desabilita o uso do
+&quot;<application>D-Bus</application>&quot;.
     </para>
 
     <para>
-      <option>--disable-gtk</option>: This parameter disables the use of
-<application>GTK+2</application>.
+      <option>--disable-gtk</option>: Esse parâmetro desabilita o uso do
+&quot;<application>GTK+2</application>&quot;.
     </para>
 
     <para>
-      <option>--disable-gtk3</option>: This parameter disables the use of
-<application>GTK+3</application>.
+      <option>--disable-gtk3</option>: Esse parâmetro desabilita o uso do
+&quot;<application>GTK+3</application>&quot;.
     </para>
 
     <para>
-      <option>--disable-qt5</option>: This parameter disables the use of
-<application>Qt5</application>, and allows building without it.
+      <option>--disable-qt5</option>: Esse parâmetro desabilita o uso do
+&quot;<application>Qt5</application>&quot; e permite construir sem ele.
     </para>
 
     <para>
-      <option>--disable-libdaemon</option>: This parameter disables the use of
-<application>libdaemon</application>. If you use this option,
-<command>avahi-daemon</command> won't be built.
+      <option>--disable-libdaemon</option>: Esse parâmetro desabilita o uso do
+&quot;<application>libdaemon</application>&quot;. Se você usar essa opção,
+[então] o &quot;<command>avahi-daemon</command>&quot; não será construído.
     </para>
 
     <para>
-      <option>--enable-tests</option>: This option enables the building of tests
-and examples.
+      <option>--enable-tests</option>: Essa opção habilita a construção de testes
+e exemplos.
     </para>
 
     <para>
-      <option>--enable-compat-howl</option>: This option enables the compatibility
-layer for <application>HOWL</application>.
+      <option>--enable-compat-howl</option>: Essa opção habilita a camada de
+compatibilidade para o &quot;<application>HOWL</application>&quot;.
     </para>
 
     <para>
-      <option>--enable-compat-libdns_sd</option>: This option enables the
-compatibility layer for <application>libdns_sd</application>.
+      <option>--enable-compat-libdns_sd</option>: Essa opção habilita a camada de
+compatibilidade para o &quot;<application>libdns_sd</application>&quot;.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando avahi</title>
+    <title>Configurando o <quote>avahi</quote></title>
 
     <sect3  id="avahi-init">
-      <title>Script de Inicialização</title>
+      <title>Conjunto de Comandos Sequenciais de Inicialização</title>
 
       <para revision="sysv">
-        To automatically start the <command>avahi-daemon</command> when the system
-is rebooted, install the <filename>/etc/rc.d/init.d/avahi</filename>
-bootscript from the <xref linkend="bootscripts"/> package.
+        Para iniciar automaticamente o &quot;<command>avahi-daemon</command>&quot;
+quando o sistema for reinicializado, instale o conjunto de comandos
+sequenciais de inicialização
+&quot;<filename>/etc/rc.d/init.d/avahi</filename>&quot; a partir do pacote
+&quot;<xref linkend="bootscripts"/>&quot;.
       </para>
 
       <para revision="systemd">
@@ -333,7 +344,7 @@ class="username">root</systemitem>:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -345,10 +356,10 @@ class="username">root</systemitem>:
 avahi-discover-standalone, avahi-dnsconfd, avahi-publish,
 avahi-publish-address, avahi-publish-service, avahi-resolve,
 avahi-resolve-address, avahi-resolve-host-name, avahi-set-host-name, bshell,
-bssh, and bvnc</seg>
+bssh e bvnc</seg>
         <seg>libavahi-client.so, libavahi-common.so, libavahi-core.so, libavahi-glib.so,
 libavahi-gobject.so, libavahi-libevent.so libavahi-ui-gtk3.so, libavahi-qt5,
-libavahi-ui.so, libdns_sd.so, and libhowl.so,</seg>
+libavahi-ui.so, libdns_sd.so e libhowl.so,</seg>
         <seg>/etc/avahi/services, /usr/include/{avahi-client,avahi-common,
 avahi-compat-howl, avahi-compat-libdns_sd, avahi-core, avahi-glib,
 avahi-gobject, avahi-libevent, avahi-qt5, avahi-ui}, /usr/lib/avahi,
@@ -364,7 +375,8 @@ avahi-gobject, avahi-libevent, avahi-qt5, avahi-ui}, /usr/lib/avahi,
         <term><command>avahi-autoipd</command></term>
         <listitem>
           <para>
-            is a IPv4LL network address configuration daemon
+            é um processo de segundo plano de configuração de endereço de rede de
+intercomunicação &quot;IPv4LL&quot;
           </para>
           <indexterm zone="avahi avahi-autoipd">
             <primary sortas="b-avahi-autoipd">avahi-autoipd</primary>
@@ -391,8 +403,8 @@ avahi-gobject, avahi-libevent, avahi-qt5, avahi-ui}, /usr/lib/avahi,
         <term><command>avahi-browse</command></term>
         <listitem>
           <para>
-            browses for mDNS/DNS-SD services using the <application>Avahi</application>
-daemon
+            procura serviços &quot;mDNS&quot;/&quot;DNS-SD&quot; usando o processo de
+segundo plano &quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-browse">
             <primary sortas="b-avahi-browse">avahi-browse</primary>
@@ -404,8 +416,8 @@ daemon
         <term><command>avahi-browse-domains</command></term>
         <listitem>
           <para>
-            browses for mDNS/DNS-SD services using the <application>Avahi</application>
-daemon
+            procura serviços &quot;mDNS&quot;/&quot;DNS-SD&quot; usando o processo de
+segundo plano &quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-browse-domains">
             <primary sortas="b-avahi-browse-domains">avahi-browse-domains</primary>
@@ -417,7 +429,8 @@ daemon
         <term><command>avahi-daemon</command></term>
         <listitem>
           <para>
-            is the <application>Avahi</application> mDNS/DNS-SD daemon
+            é o processo de segundo plano &quot;mDNS&quot;/&quot;DNS-SD&quot;
+&quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-daemon">
             <primary sortas="b-avahi-daemon">avahi-daemon</primary>
@@ -444,8 +457,8 @@ daemon
         <term><command>avahi-discover-standalone</command></term>
         <listitem>
           <para>
-            browses for mDNS/DNS-SD services using the <application>Avahi</application>
-daemon
+            procura serviços &quot;mDNS&quot;/&quot;DNS-SD&quot; usando o processo de
+segundo plano &quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-discover-standalone">
             <primary sortas="b-avahi-discover-standalone">avahi-discover-standalone</primary>
@@ -457,7 +470,8 @@ daemon
         <term><command>avahi-dnsconfd</command></term>
         <listitem>
           <para>
-            is a Unicast DNS server from mDNS/DNS-SD configuration daemon
+            é um servidor &quot;DNS&quot; &quot;Unicast&quot; originário do processo de
+segundo plano de configuração &quot;mDNS&quot;/&quot;DNS-SD&quot;
           </para>
           <indexterm zone="avahi avahi-dnsconfd">
             <primary sortas="b-avahi-dnsconfd">avahi-dnsconfd</primary>
@@ -469,8 +483,9 @@ daemon
         <term><command>avahi-publish</command></term>
         <listitem>
           <para>
-            registers a mDNS/DNS-SD service or host name or address mapping using the
-<application>Avahi</application> daemon
+            registra um serviço &quot;mDNS&quot;/&quot;DNS-SD&quot; ou mapeamento de
+nome de dispositivo ou de endereço usando o processo de segundo plano
+&quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-publish">
             <primary sortas="b-avahi-publish">avahi-publish</primary>
@@ -482,8 +497,9 @@ daemon
         <term><command>avahi-publish-address</command></term>
         <listitem>
           <para>
-            registers a mDNS/DNS-SD service or host name or address mapping using the
-<application>Avahi</application> daemon
+            registra um serviço &quot;mDNS&quot;/&quot;DNS-SD&quot; ou mapeamento de
+nome de dispositivo ou de endereço usando o processo de segundo plano
+&quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-publish-address">
             <primary sortas="b-avahi-publish-address">avahi-publish-address</primary>
@@ -495,8 +511,9 @@ daemon
         <term><command>avahi-publish-service</command></term>
         <listitem>
           <para>
-            registers a mDNS/DNS-SD service or host name or address mapping using the
-<application>Avahi</application> daemon
+            registra um serviço &quot;mDNS&quot;/&quot;DNS-SD&quot; ou mapeamento de
+nome de dispositivo ou de endereço usando o processo de segundo plano
+&quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-publish-service">
             <primary sortas="b-avahi-publish-service">avahi-publish-service</primary>
@@ -508,8 +525,9 @@ daemon
         <term><command>avahi-resolve</command></term>
         <listitem>
           <para>
-            resolves one or more mDNS/DNS host name(s) to IP address(es)  (and vice
-versa) using the <application>Avahi</application> daemon
+            resolve um ou mais nomes de dispositivo &quot;mDNS&quot;/&quot;DNS&quot;
+para endereços &quot;IP&quot; (e vice-versa) usando o processo de segundo
+plano &quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-resolve">
             <primary sortas="b-avahi-resolve">avahi-resolve</primary>
@@ -521,8 +539,9 @@ versa) using the <application>Avahi</application> daemon
         <term><command>avahi-resolve-address</command></term>
         <listitem>
           <para>
-            resolves one or more mDNS/DNS host name(s) to IP address(es)  (and vice
-versa) using the <application>Avahi</application> daemon
+            resolve um ou mais nomes de dispositivo &quot;mDNS&quot;/&quot;DNS&quot;
+para endereços &quot;IP&quot; (e vice-versa) usando o processo de segundo
+plano &quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-resolve-address">
             <primary sortas="b-avahi-resolve-address">avahi-resolve-address</primary>
@@ -534,8 +553,9 @@ versa) using the <application>Avahi</application> daemon
         <term><command>avahi-resolve-host-name</command></term>
         <listitem>
           <para>
-            resolves one or more mDNS/DNS host name(s) to IP address(es)  (and vice
-versa) using the <application>Avahi</application> daemon
+            resolve um ou mais nomes de dispositivo &quot;mDNS&quot;/&quot;DNS&quot;
+para endereços &quot;IP&quot; (e vice-versa) usando o processo de segundo
+plano &quot;<application>Avahi</application>&quot;
           </para>
           <indexterm zone="avahi avahi-resolve-host-name">
             <primary sortas="b-avahi-resolve-host-name">avahi-resolve-host-name</primary>
@@ -547,7 +567,7 @@ versa) using the <application>Avahi</application> daemon
         <term><command>avahi-set-host-name</command></term>
         <listitem>
           <para>
-            changes the mDNS host name
+            muda o nome &quot;mDNS&quot; do dispositivo
           </para>
           <indexterm zone="avahi avahi-set-host-name">
             <primary sortas="b-avahi-set-host-name">avahi-set-host-name</primary>
@@ -573,7 +593,7 @@ versa) using the <application>Avahi</application> daemon
         <term><command>bssh</command></term>
         <listitem>
           <para>
-            browses for SSH servers on the local network
+            procura servidores &quot;SSH&quot; na rede de intercomunicação local
           </para>
           <indexterm zone="avahi bssh">
             <primary sortas="b-bssh">bssh</primary>
@@ -585,7 +605,7 @@ versa) using the <application>Avahi</application> daemon
         <term><command>bvnc</command></term>
         <listitem>
           <para>
-            browses for VNC servers on the local network
+            procura servidores &quot;VNC&quot; na rede de intercomunicação local
           </para>
           <indexterm zone="avahi bvnc">
             <primary sortas="b-bvnc">bvnc</primary>

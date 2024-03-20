@@ -21,11 +21,11 @@ você pode transferir o pacote. Os remendos, no entanto, estão armazenados
 nos servidores do LFS e estão disponíveis via HTTP. Esses estão
 referenciados conforme necessários nas instruções de instalação.</para>
 
-  <para>While you can keep the source files anywhere you like, we assume that you
-have unpacked the package and changed into the directory created by the
-unpacking process (the 'build' directory).  We also assume you have
-uncompressed any required patches and they are in the directory immediately
-above the 'build' directory.</para>
+  <para>Enquanto você pode manter os arquivos do fonte em qualquer lugar que queira,
+nós assumimos que você desempacotou o pacote e mudou para o diretório criado
+pelo processo de desempacotamento (o diretório de 'construção'). Nós
+assumimos também que você descomprimiu quaisquer remendos exigidos e que
+eles estão no diretório imediatamente acima do diretório de 'construção'.</para>
 
   <para>Nós não podemos enfatizar fortemente o suficiente que você deveria iniciar a
 partir de uma <emphasis>árvore limpa do fonte</emphasis> a cada vez. Isso
@@ -83,8 +83,8 @@ então, executar um dos seguintes comandos, dependendo se o arquivo for um
 arquivo <filename class='extension'>.gz</filename> ou um <filename
 class='extension'>.bz2</filename>:</para>
 
-<screen><userinput>gunzip -v patchname.gz
-bunzip2 -v patchname.bz2</userinput></screen>
+<screen><userinput>gunzip -v nome_remendo.gz
+bunzip2 -v nome_remendo.bz2</userinput></screen>
 
   </sect2>
 
@@ -236,22 +236,24 @@ comandos acima é preferencialmente para limitar o número de trabalhos
 (veja-se abaixo para o porque isso poderia ser necessário).
     </para>
 
-    <para>Generally the number of processes should not exceed the number of cores
-supported by the CPU.  To list the processors on your system, issue:
+    <para>Geralmente o número de processos não deveria exceder o número de núcleos
+suportados pela CPU. Para listar os processadores em seu sistema, emita:
 <userinput>grep processor /proc/cpuinfo</userinput>.
     </para>
 
-    <para>In some cases, using multiple processes may result in a 'race' condition
-where the success of the build depends on the order of the commands run by
-the <command>make</command> program.  For instance, if an executable needs
-File A and File B, attempting to link the program before one of the
-dependent components is available will result in a failure.  This condition
-usually arises because the upstream developer has not properly designated
-all the prerequisites needed to accomplish a step in the Makefile.</para>
+    <para>Em alguns casos, usar múltiplos processos possivelmente resulte em uma
+condição de 'corrida' onde o sucesso da construção depende da ordem dos
+comandos executados pelo aplicativo <command>make</command>. Por exemplo, se
+um executável precisar do Arquivo A e do Arquivo B, [então] tentar-se
+vincular o aplicativo antes que um dos componentes dependentes esteja
+disponível resultará em uma falha. Essa condição geralmente surge, pois o(a)
+desenvolvedor(a) do aplicativo não designou adequadamente todos os pré
+requisitos necessários para realizar uma etapa no Makefile.</para>
 
-    <para>If this occurs, the best way to proceed is to drop back to a single
-processor build.  Adding '-j1' to a make command will override the similar
-setting in the <envar>MAKEFLAGS</envar> environment variable.</para>
+    <para>Se isso ocorrer, [então] a melhor maneira de se proceder é a de se voltar
+para uma construção de processador único. Adicionar '-j1' a um comando make
+substituirá a configuração semelhante na variável de ambiente
+<envar>MAKEFLAGS</envar>.</para>
 
     <note><para>Quando se executar os testes de pacote ou a porção instalar do processo de
 construção do pacote, nós não recomendamos usar uma opção maior que '-j1', a
@@ -398,11 +400,12 @@ exemplo. Primeiro, emita o comando:</para>
 
 <screen><userinput>ls -l /usr/bin | more</userinput></screen>
 
-    <para>Of course, you'll be required to view the output one page at a time because
-the <command>more</command> filter was used. Now try the same command, but
-this time redirect the output to a file. The special file
-<filename>/dev/null</filename> can be used instead of the filename shown,
-but you will have no log file to examine:</para>
+    <para>Certamente, você será exigido(a) a visualizar a saída gerada uma página por
+vez, pois o filtro <command>more</command> foi usado. Agora tente o mesmo
+comando, porém, dessa vez, redirecione a saída gerada para um arquivo. O
+arquivo especial <filename>/dev/null</filename> pode ser usado em vez do
+nome de arquivo mostrado, porém você não terá arquivo de registro para
+examinar:</para>
 
 <screen><userinput>ls -l /usr/bin | more &gt; redirect_test.log 2&gt;&amp;1</userinput></screen>
 
@@ -424,12 +427,12 @@ acima?</quote>. Para esse exemplo, outro script curto do
 
 ls -l /usr/bin | more
 
-echo -n -e "\n\nDid you enjoy reading this? (y,n) "
+echo -n -e "\n\nVocê curtiu ler isso? (y,n) "
 
 read A_STRING
 
-if test "$A_STRING" = "y"; then A_STRING="You entered the 'y' key"
-else A_STRING="You did NOT enter the 'y' key"
+if test "$A_STRING" = "y"; then A_STRING="Você informou a tecla 'y'"
+else A_STRING="Você NÃO informou a tecla 'y'"
 fi
 
 echo -e "\n\n$A_STRING\n\n"</literal>
@@ -466,15 +469,16 @@ são listadas sob vários títulos, cujo significado é como segue:</para>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Required</emphasis> means that the target package cannot be
-correctly built without the dependency having first been installed.</para>
+        <para><emphasis>Exigida</emphasis> significa que o pacote alvo não consegue ser
+corretamente construído sem a dependência tendo primeiro sido instalada.</para>
       </listitem>
       <listitem>
-        <para><emphasis>Recommended</emphasis> means that BLFS strongly suggests this
-package is installed first for a clean and trouble-free build, that won't
-have issues either during the build process, or at run-time.  The
-instructions in the book assume these packages are installed.  Some changes
-or workarounds may be required if these packages are not installed.</para>
+        <para><emphasis>Recomendada</emphasis> significa que o BLFS enfaticamente sugere
+que esse pacote seja instalado primeiro para uma construção limpa e livre de
+problemas; que não teria problemas seja durante o processo de construção,
+seja em tempo de execução. As instruções no livro assumem que esses pacotes
+estejam instalados. Algumas mudanças ou gambiarras possivelmente sejam
+exigidas se esses pacotes não estiverem instalados.</para>
       </listitem>
       <listitem>
         <para><emphasis>Opcional</emphasis> significa que esse pacote poderia estar
@@ -511,91 +515,95 @@ você encontrar o sítio da web do(a) mantenedor(a).</para>
     <title>Despojando Mais Uma Vez</title>
 
     <para>
-      In LFS, stripping of debugging symbols and unneeded symbol table entries was
-discussed a couple of times.  When building BLFS packages, there are
-generally no special instructions that discuss stripping again. Stripping
-can be done while installing a package, or afterwards.
+      No LFS, a remoção de símbolos de depuração e entradas desnecessárias na
+tabela de símbolos foi discutida algumas vezes. Ao construir pacotes BLFS,
+geralmente não existem instruções especiais que discutam a remoção
+novamente. A remoção pode ser feita durante a instalação de um pacote ou
+posteriormente.
     </para>
 
-    <bridgehead renderas="sect3" id="stripping-install">Stripping while Installing a Package</bridgehead>
+    <bridgehead renderas="sect3" id="stripping-install">Despojando enquanto se Instala um Pacote</bridgehead>
 
     <para>
-      There are several ways to strip executables installed by a package. They
-depend on the build system used (see below <link linkend="buildsystems">the
-section about build systems</link>), so only some generalities can be listed
-here:
+      Existem várias maneiras de se despojar executáveis instalados por um
+pacote. Elas dependem do sistema de construção usado (veja-se abaixo <link
+linkend="buildsystems">a seção acerca de sistemas de construção</link>), de
+modo que somente algumas generalidades podem ser listadas aqui:
     </para>
 
     <note>
       <para>
-        The following methods using the feature of a building system (autotools,
-meson, or cmake) will not strip static libraries if any is installed.
-Fortunately there are not too many static libraries in BLFS, and a static
-library can always be stripped safely by running <command>strip
---strip-unneeded</command> on it manually.
+        Os métodos a seguir que usam o recurso de um sistema de construção
+("autotools", "meson" ou "cmake") não despojarão bibliotecas estáticas, se
+alguma estiver instalada. Felizmente não existem muitas bibliotecas
+estáticas no BLFS, e uma biblioteca estática sempre pode ser despojada com
+segurança executando <command>strip --strip-unneeded</command> nela
+manualmente.
       </para>
     </note>
 
     <itemizedlist>
       <listitem>
         <para>
-          The packages using autotools usually have an
-<parameter>install-strip</parameter> target in their generated
-<filename>Makefile</filename> files. So installing stripped executables is
-just a matter of using <command>make install-strip</command> instead of
-<command>make install</command>.
+          Os pacotes que usam "Autotools" geralmente tem um alvo
+<parameter>install-strip</parameter> nos arquivos
+<filename>Makefile</filename> gerados deles. Portanto, instalar executáveis
+despojados é apenas uma questão de usar <command>make
+install-strip</command> em vez de <command>make install</command>.
         </para>
       </listitem>
       <listitem>
         <para>
-          The packages using the meson build system can accept
-<parameter>-Dstrip=true</parameter> when running <command>meson</command>.
-If you've forgot to add this option running the <command>meson</command>,
-you can also run <command>meson install --strip</command> instead of
-<command>ninja install</command>.
+          Os pacotes que usam o sistema de construção "Meson" conseguem aceitar
+<parameter>-Dstrip=true</parameter> ao executar <command>meson</command>. Se
+esqueceu de adicionar essa opção executando o <command>meson</command>,
+[então] você também consegue executar <command>meson install
+--strip</command> em vez de <command>ninja install</command>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <command>cmake</command> generates <parameter>install/strip</parameter>
-targets for both the <parameter>Unix Makefiles</parameter> and
-<parameter>Ninja</parameter> generators (the default is <parameter>Unix
-Makefiles</parameter> on linux). So just run <command>make
-install/strip</command> or <command>ninja install/strip</command> instead of
-the <command>install</command> counterparts.
+          <command>cmake</command> gera alvos <parameter>install/strip</parameter>
+para ambos os geradores <parameter>Unix Makefiles</parameter> e
+<parameter>Ninja</parameter> (o padrão é <parameter>Unix
+Makefiles</parameter> no Linux). Portanto, basta executar <command>make
+install/strip</command> ou <command>ninja install/strip</command> em vez das
+contrapartes <command>install</command>.
         </para>
       </listitem>
       <listitem>
         <para>
-          Removing (or not generating) debug symbols can also be achieved by removing
-the <parameter>-g&lt;something&gt;</parameter> options in C/C++ calls. How
-to do that is very specific for each package.  And, it does not remove
-unneeded symbol table entries.  So it will not be explained in detail
-here. See also below the paragraphs about optimization.
+          A remoção (ou não geração) de símbolos de depuração também consegue ser
+obtida removendo-se as opções <parameter>-g&lt;alguma_coisa&gt;</parameter>
+em chamadas &quot;C/C++&quot;. Como fazer isso é muito específico para cada
+pacote. E não remove entradas desnecessárias da tabela de
+símbolos. Portanto, não será explicado em detalhes aqui. Veja-se também
+abaixo os parágrafos acerca de otimização.
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3" id="stripping-installed">Stripping Installed Executables</bridgehead>
+    <bridgehead renderas="sect3" id="stripping-installed">Despojando Executáveis Instalados</bridgehead>
 
     <para>
-      The <command>strip</command> utility changes files in place, which may break
-anything using it if it is loaded in memory. Note that if a file is in use
-but just removed from the disk (i.e. not overwritten nor modified), this is
-not a problem since the kernel can use <quote>deleted</quote> files.  Look
-at <filename>/proc/*/maps</filename> and it is likely that you'll see some
-<emphasis>(deleted)</emphasis> entries. The <command>mv</command> just
-removes the destination file from the directory but does not touch its
-content, so that it satisfies the condition for the kernel to use the old
-(deleted) file. The script below is just an example.  It should be run as
-the &root; user:
+      O utilitário <command>strip</command> muda arquivos no lugar, o que
+possivelmente quebre alguma coisa que os usem se estiverem carregados na
+memória. Observe que se um arquivo estiver em uso, mas recém removido, do
+disco (ou seja, não sobrescrito nem modificado), isso não será um problema,
+pois o núcleo consegue usar arquivos <quote>deletados</quote>. Veja-se
+<filename>/proc/*/maps</filename> e é provável que você veja algumas
+entradas <emphasis>(deleted)</emphasis>. O <command>mv</command> apenas
+remove o arquivo de destino a partir do diretório, mas não toca no conteúdo
+dele, de modo que satisfaça a condição para o núcleo usar o arquivo antigo
+(deletado). O script abaixo é apenas um exemplo. Ele deveria ser executado
+como o(a) usuário(a) &root;:
     </para>
 
 <screen><userinput>cat &gt; /usr/sbin/strip-all.sh &lt;&lt; "EOF"
 <literal>#!/usr/bin/bash
 
 if [ $EUID -ne 0 ]; then
-  echo "Need to be root"
+  echo "Precisa ser root"
   exit 1
 fi
 
@@ -614,15 +622,15 @@ EOF
 chmod 744 /usr/sbin/strip-all.sh</userinput></screen>
 
     <para>
-      If you install programs in other directories such as <filename
-class="directory">/opt</filename> or <filename
-class="directory">/usr/local</filename>, you may want to strip the files
-there too. Just add other directories to scan in the compound list of
-<command>find</command> commands between the braces.
+      Se você instalar aplicativos em outros diretórios, como <filename
+class="directory">/opt</filename> ou <filename
+class="directory">/usr/local</filename>, você possivelmente queira despojar
+os arquivos lá também . Basta adicionar outros diretórios a escanear na
+lista composta de comandos <command>find</command> entre chaves.
     </para>
 
     <para>
-      For more information on stripping, see <ulink
+      Para mais informações acerca de despojamento, veja-se <ulink
 url="https://www.technovelty.org/linux/stripping-shared-libraries.html"/>.
     </para>
 
@@ -657,48 +665,52 @@ url="https://www.technovelty.org/linux/stripping-shared-libraries.html"/>.
     <title>Trabalhando com diferentes sistemas de construção</title>
 
     <para>
-      There are now three different build systems in common use for converting C
-or C++ source code into compiled programs or libraries and their details
-(particularly, finding out about available options and their default values)
-differ. It may be easiest to understand the issues caused by some choices
-(typically slow execution or unexpected use of, or omission of,
-optimizatons) by starting with the CFLAGS and CXXFLAGS environment
-variables.  There are also some programs which use rust.
+      Existem, agora, três sistemas de construção em uso comum para converter
+código fonte C ou C++ em aplicativos ou bibliotecas compilados(as) e os
+detalhes deles (particularmente, descobrir acerca de opções disponíveis e os
+valores padrão delas) diferem. Possivelmente seja mais fácil entender os
+problemas causados por algumas escolhas (tipicamente, execução lenta; ou uso
+inesperado de, ou omissão de, otimizações) iniciando-se com as variáveis de
+ambiente CFLAGS e CXXFLAGS. Também existem alguns aplicativos que usam rust.
     </para>
 
     <para>
-      Most LFS and BLFS builders are probably aware of the basics of CFLAGS and
-CXXFLAGS for altering how a program is compiled. Typically, some form of
-optimization is used by upstream developers (-O2 or -O3), sometimes with the
-creation of debug symbols (-g), as defaults.
+      A maioria dos(as) construtores(as) do LFS e do BLFS provavelmente está
+ciente dos básicos de CFLAGS e CXXFLAGS para alterar como um aplicativo é
+compilado. Tipicamente, alguma forma de otimização é usada pelos(as)
+desenvolvedores(as) de aplicativos (-O2 ou -O3), ocasionalmente com a
+criação de símbolos de depuração (-g), como padrões.
     </para>
 
     <para>
-      If there are contradictory flags (e.g. multiple different -O values), the
-<emphasis>last</emphasis> value will be used. Sometimes this means that
-flags specified in environment variables will be picked up before values
-hardcoded in the Makefile, and therefore ignored.  For example, where a user
-specifies '-O2' and that is followed by '-O3' the build will use '-O3'.
+      Se existirem sinalizadores contraditórios (por exemplo, múltiplos valores
+-O), [então] o <emphasis>último</emphasis> valor será usado. Ocasionalmente,
+isso significa que os sinalizadores especificados em variáveis de ambiente
+serão escolhidos antes dos valores codificados rigidamente no Makefile, e,
+portanto, ignorados. Por exemplo, onde um(a) usuário(a) especificar '-O2' e
+isso for seguido por '-O3', a construção usará '-O3'.
     </para>
 
     <para>
-      There are various other things which can be passed in CFLAGS or CXXFLAGS,
-such as forcing compilation for a specific microarchitecture
-(e.g. -march=amdfam10, -march=native) or specifying a specific standard for
-C or C++ (-std=c++17 for example). But one thing which has now come to light
-is that programmers might include debug assertions in their code, expecting
-them to be disabled in releases by using -DNDEBUG.  Specifically, if <xref
-linkend="mesa"/> is built with these assertions enabled, some activities
-such as loading levels of games can take extremely long times, even on
-high-class video cards.
+      Existem várias outras coisas que podem ser passadas em CFLAGS ou em
+CXXFLAGS, tais como forçar-se a compilação para uma microarquitetura
+específica (por exemplo, -march=amdfam10; -march=native) ou especificar-se
+um padrão específico para C ou C++ (-std=c++17, por exemplo). Porém, uma
+coisa que agora veio à tona é que os(as) programadores(as) poderiam incluir
+asserções de depuração no código deles(as), esperando que sejam
+desabilitados em lançamentos usando-se -DNDEBUG. Especificamente, se o <xref
+linkend="mesa"/> for construído com essas asserções habilitadas, [então]
+algumas atividades, tais como o carregamento de níveis dos jogos, podem
+tomar tempos extremamente longos, mesmo em placas de vídeo de alta
+qualidade.
     </para>
 
     <bridgehead renderas="sect3" id="autotools-info">Autotools com Make</bridgehead>
 
       <para>
-       This combination is often described as 'CMMI' (configure, make, make
-install) and is used here to also cover the few packages which have a
-configure script that is not generated by autotools.
+       Essa combinação frequentemente é descrita como 'CMMI' (configure; make; make
+install) e é usada aqui também para cobrir os poucos pacotes que tem um
+script de configuração que não é gerado por autotools.
       </para>
 
       <para>
@@ -719,23 +731,25 @@ programador(a); ou usados depois da sugestão do(a) programador(a)).
       </para>
 
       <para>
-       In most CMMI packages, running 'make' will list each command and run it,
-interspersed with any warnings. But some packages try to be 'silent' and
-only show which file they are compiling or linking instead of showing the
-command line. If you need to inspect the command, either because of an
-error, or just to see what options and flags are being used, adding 'V=1' to
-the make invocation may help.
+       Na maioria dos pacotes CMMI, executar-se 'make' listará cada comando e o
+executará, intercalado com quaisquer avisos. Porém, alguns pacotes tentam
+ser 'silenciosos' e mostram somente qual arquivo eles estão compilando ou
+vinculando em vez de mostrar a linha de comando. Se você precisar
+inspecionar o comando, seja por causa de um erro, seja apenas para ver quais
+opções e sinalizadores estão sendo usados, [então] adicionar 'V=1' à
+invocação do make possivelmente ajude.
      </para>
 
     <bridgehead renderas="sect3" id="cmake-info">CMake</bridgehead>
 
       <para>
-        CMake works in a very different way, and it has two backends which can be
-used on BLFS: 'make' and 'ninja'. The default backend is make, but ninja can
-be faster on large packages with multiple processors. To use ninja, specify
-'-G Ninja' in the cmake command. However, there are some packages which
-create fatal errors in their ninja files but build successfully using the
-default of Unix Makefiles.
+        O CMake funciona de uma maneira muito diferente e ele tem duas estruturas de
+retaguarda que conseguem ser usadas no BLFS: 'make' e 'ninja'. A estrutura
+de retaguarda padrão é o make, porém o ninja pode ser mais rápido sobre
+pacotes largos com múltiplos processadores. Para usar o ninja, especifique
+'-G Ninja' no comando cmake. Entretanto, existem alguns pacotes que criam
+erros fatais nos arquivos ninja deles, porém constroem com sucesso usando o
+padrão dos Makefiles do Unix.
       </para>
 
       <para>
@@ -746,14 +760,15 @@ gerada para esta configuração padrão.
       </para>
 
       <para>
-        Perhaps the most-important thing about CMake is that it has a variety of
-CMAKE_BUILD_TYPE values, and these affect the flags. The default is that
-this is not set and no flags are generated. Any CFLAGS or CXXFLAGS in the
-environment will be used. If the programmer has coded any debug assertions,
-those will be enabled unless -DNDEBUG is used.  The following
-CMAKE_BUILD_TYPE values will generate the flags shown, and these will come
-<emphasis>after</emphasis> any flags in the environment and therefore take
-precedence.
+        Talvez a coisa mais importante acerca do CMake é que ele tem uma variedade
+de valores CMAKE_BUILD_TYPE e esses afetam os sinalizadores. O padrão é o de
+que isso não é configurado e nenhum sinalizador é gerado. Quaisquer CFLAGS
+ou CXXFLAGS no ambiente serão usados. Se o(a) programador(a) tiver
+codificado quaisquer asserções de depuração, [então] essas serão
+habilitadas, a menos que -&nbsp;DNDEBUG seja usado. Os seguintes valores
+CMAKE_BUILD_TYPE gerarão os sinalizadores mostrados e esses virão
+<emphasis>depois de</emphasis> quaisquer sinalizadores no ambiente e,
+portanto, terão precedência.
       </para>
 
       <informaltable align="center">
@@ -761,7 +776,7 @@ precedence.
           <colspec colnum="1" align="center"/>
           <colspec colnum="2" align="center"/>
           <thead>
-            <row><entry>Value</entry><entry>Flags</entry></row>
+            <row><entry>Valor</entry><entry>Sinalizadores</entry></row>
           </thead>
           <tbody>
             <row>
@@ -781,21 +796,21 @@ precedence.
       </informaltable>
 
       <para>
-        CMake tries to produce quiet builds. To see the details of the commands
-which are being run, use <command>make VERBOSE=1</command> or <command>ninja
--v</command>.
+        O "CMake" tenta produzir construções silenciosas. Para ver os detalhes dos
+comandos que estão sendo executados, use <command>make VERBOSE=1</command>
+ou <command>ninja -v</command>.
       </para>
 
       <para>
-        By default, CMake treats file installation differently from the other build
-systems: if a file already exists and is not newer than a file that would
-overwrite it, then the file is not installed. This may be a problem if a
-user wants to record which file belongs to a package, either using
-<envar>LD_PRELOAD</envar>, or by listing files newer than a timestamp. The
-default can be changed by setting the variable
-<envar>CMAKE_INSTALL_ALWAYS</envar> to 1 in the
-<emphasis>environment</emphasis>, for example by
-<command>export</command>'ing it.
+        Por padrão, o "CMake" trata a instalação de arquivos diferentemente dos
+outros sistemas de construção: se um arquivo já existir e não for mais
+recente que um arquivo que o sobrescreveria, então o arquivo não será
+instalado. Isso possivelmente seja um problema se um(a) usuário(a) quiser
+registrar qual arquivo pertence a um pacote, seja usando
+<envar>LD_PRELOAD</envar>, ou listando arquivos mais recentes que um carimbo
+de tempo. O padrão pode ser mudado definindo-se a variável
+<envar>CMAKE_INSTALL_ALWAYS</envar> como um ("1") no
+<emphasis>ambiente</emphasis>, por exemplo, via <command>export</command>.
       </para>
 
     <bridgehead renderas="sect3" id="meson-info">Meson</bridgehead>
@@ -831,17 +846,19 @@ quaisquer sinalizadores fornecidos no ambiente e, portanto, tem precedência.
 
       <itemizedlist>
         <listitem>
-          <para>plain : no added flags. This is for distributors to supply their own CLFAGS,
-CXXFLAGS and LDFLAGS. There is no obvious reason to use this in BLFS.</para>
+          <para>plano : nenhum sinalizador adicionado. Isso é para os(as) distribuidores(as)
+fornecerem os próprios CFLAGS, CXXFLAGS e LDFLAGS deles(as). Não existe
+razão óbvia para usar isso no BLFS.</para>
         </listitem>
         <listitem>
-          <para>debug : '-g' - this is the default if nothing is specified in either
-<filename>meson.build</filename> or the command line.  However it results
-large and slow binaries, so we should override it in BLFS.</para>
+          <para>depuração : '-g' - isso é o padrão, se nada for especificado, seja no
+<filename>meson.build</filename>, seja na linha de comando. Entretanto,
+resulta em binários largos e lentos, de forma que nós deveríamos
+substitui-lo no BLFS.</para>
         </listitem>
         <listitem>
-           <para>debugoptimized : '-O2 -g' : this is the default specified in
-<filename>meson.build</filename> of some packages.</para>
+           <para>depuração otimizada : '-O2 -g' : isso é o padrão, especificado no
+<filename>meson.build</filename>, de alguns pacotes.</para>
         </listitem>
         <listitem>
            <para>lançamento : '-O3 -DNDEBUG' (porém, ocasionalmente, um pacote forçará -O2
@@ -863,21 +880,23 @@ asserções de depuração presentes.
       </para>
 
       <para>
-        To see the details of the commands which are being run in a package using
-meson, use 'ninja -v'.
+        Para ver os detalhes dos comandos que estão sendo executados em um pacote
+usando o meson, use 'ninja -v'.
       </para>
 
     <bridgehead renderas="sect3" id="rust-info">Rustc e Cargo</bridgehead>
 
       <para>
-        Most released rustc programs are provided as crates (source tarballs)  which
-will query a server to check current versions of dependencies and then
-download them as necessary.  These packages are built using <command>cargo
---release</command>. In theory, you can manipulate the RUSTFLAGS to change
-the optimize-level (default is 3, like -O3, e.g.
-<literal>-Copt-level=3</literal>) or to force it to build for the machine it
-is being compiled on, using <literal>-Ctarget-cpu=native</literal> but in
-practice this seems to make no significant difference.
+        A maioria dos aplicativos rustc lançados é fornecida como engradado
+(tarballs de fonte), que consultarão um servidor para verificar as versões
+atuais de dependências e, então, as transferirão conforme necessário. Esses
+pacotes são construídos usando-se <command>cargo --release</command>. Na
+teoria, você consegue manipular o RUSTFLAGS para mudar o nível de otimização
+(padrão é 3, semelhante a -03; por exemplo,
+<literal>-Copt-level=3</literal>) ou para forçá-lo a construir para a
+máquina na qual está sendo compilado, usando
+<literal>-Ctarget-cpu=native</literal>; porém, na prática, isso parece não
+fazer uma diferença significante.
       </para>
 
       <para>
@@ -889,15 +908,17 @@ compilação não otimizada, com informação de depuração e executará
       </para>
 
       <para>
-        The rust developers seem to assume that everyone will compile on a machine
-dedicated to producing builds, so by default all CPUs are used.  This can
-often be worked around, either by exporting CARGO_BUILD_JOBS=&lt;N&gt; or
-passing --jobs &lt;N&gt; to cargo. For compiling rustc itself, specifying
---jobs &lt;N&gt; on invocations of x.py (together with the
-<envar>CARGO_BUILD_JOBS</envar> environment variable, which looks like a
-"belt and braces" approach but seems to be necessary) mostly works. The
-exception is running the tests when building rustc, some of them will
-nevertheless use all online CPUs, at least as of rustc-1.42.0.
+        Os(As) desenvolvedores(as) do rust parecem presumir que todos compilarão em
+uma máquina dedicada a produzir construções, de forma que, por padrão, todas
+as CPUs serão usadas. Isso, frequentemente, pode ser contornado, seja
+exportando-se CARGO_BUILD_JOBS=&lt;N&gt;, seja passando-se --jobs &lt;N&gt;
+para o cargo. Para compilar o próprio rustc, especificar-se --jobs &lt;N&gt;
+em invocações de x.py (junto com a variável de ambiente
+<envar>CARGO_BUILD_JOBS</envar>, que se parece com uma abordagem "cinto e
+suspensórios", porém parece ser necessária) na maioria das vezes funciona. A
+exceção é a de executar-se os testes quando construir-se o rustc; alguns
+deles, ainda assim, usarão todas as CPUs online, pelo menos desde o
+rustc-1.42.0.
       </para>
 
   </sect2>
@@ -906,38 +927,41 @@ nevertheless use all online CPUs, at least as of rustc-1.42.0.
     <title>Otimizando a construção</title>
 
       <para>
-        Many people will prefer to optimize compiles as they see fit, by providing
-CFLAGS or CXXFLAGS. For an introduction to the options available with gcc
-and g++ see <ulink
-url="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html"/> and <ulink
-url="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html"/> and
+        Muitas pessoas preferirão otimizar compilações como acharem melhor,
+fornecendo CFLAGS ou CXXFLAGS. Para uma introdução às opções disponíveis com
+o gcc e com o g++, veja-se <ulink
+url="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html"/>; e <ulink
+url="https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html"/>; e
 <command>info gcc</command>.
 
       </para>
 
       <para>
-        Some packages default to '-O2 -g', others to '-O3 -g', and if CFLAGS or
-CXXFLAGS are supplied they might be added to the package's defaults, replace
-the package's defaults, or even be ignored.  There are details on some
-desktop packages which were mostly current in April 2019 at <ulink
-url="https://www.linuxfromscratch.org/~ken/tuning/"/> - in particular,
-README.txt, tuning-1-packages-and-notes.txt, and tuning-notes-2B.txt. The
-particular thing to remember is that if you want to try some of the more
-interesting flags you may need to force verbose builds to confirm what is
-being used.
+        Alguns pacotes padronizam para '-O2 -g'; outros para '-O3 -g'; e, se CFLAGS
+ou CXXFLAGS forem fornecidos, [então] eles poderiam ser adicionados aos
+padrões do pacote; substituir os padrões do pacote; ou até serem
+ignorados. Existem detalhes acerca de alguns pacotes de área de trabalho que
+eram na maioria das vezes atuais em abril de 2019 em <ulink
+url="https://www.linuxfromscratch.org/~ken/tuning/"/> - em particular,
+README.txt, tuning-1-packages-and-notes.txt e tuning-notes-2B.txt. A coisa
+particular a se lembrar é a de que, se você quiser tentar algum dos mais
+interessantes sinalizadores, [então] você possivelmente precise forçar
+construções verbosas para confirmar o que está sendo usado.
       </para>
 
       <para>
-        Clearly, if you are optimizing your own program you can spend time to
-profile it and perhaps recode some of it if it is too slow. But for building
-a whole system that approach is impractical. In general, -O3 usually
-produces faster programs than -O2.  Specifying -march=native is also
-beneficial, but means that you cannot move the binaries to an incompatible
-machine - this can also apply to newer machines, not just to older
-machines. For example programs compiled for 'amdfam10' run on old Phenoms,
-Kaveris, and Ryzens : but programs compiled for a Kaveri will not run on a
-Ryzen because certain op-codes are not present.  Similarly, if you build for
-a Haswell not everything will run on a SandyBridge.
+        Claramente, se você estiver otimizando seu próprio aplicativo, [então] você
+pode gastar tempo para perfilá-lo e, talvez, re-codificar algo dele, se ele
+estiver lento demais. Porém, para construir um sistema inteiro, essa
+abordagem é impraticável. No geral, -O3 geralmente produz aplicativos mais
+rápidos que -O2. Especificar-se -march=native também é benéfico, porém
+significa que você não pode mover os binários para uma máquina incompatível
+- isso também pode se aplicar a máquinas mais novas, não apenas às máquinas
+mais antigas. Por exemplo, os aplicativos compilados para 'amdfam10'
+executam em Phenoms antigos; Kaveris; e Ryzens; porém, os aplicativos
+compilados para um Kaveri não executarão em um Ryzen, pois certos códigos de
+operação não estão presentes. Similarmente, se você construir para um
+Haswell, [então] nem tudo executará em um SandyBridge.
       </para>
 
       <para>
@@ -947,9 +971,9 @@ então, descobrir que, em seu uso, as opções não fornecem um benefício.
       </para>
 
       <para>
-        If building Perl or Python modules, or Qt packages which use qmake, in
-general the CFLAGS and CXXFLAGS used are those which were used by those
-'parent' packages.
+        Se construir módulos do Perl ou do Python; ou pacotes do Qt que usam o
+qmake, [então], no geral, os CFLAGS e CXXFLAGS usados são aqueles que foram
+usados por aqueles pacotes 'ancestrais'.
       </para>
 
   </sect2>
@@ -967,35 +991,36 @@ aplicará várias medidas de fortalecimento.
       </para>
 
       <para>
-        In the past, there was Hardened LFS where gcc (a much older version)  was
-forced to use hardening (with options to turn some of it off on a
-per-package basis).  The current LFS and BLFS books are carrying forward a
-part of its spirit by enabling PIE (<option>-fPIE -pie</option>) and SSP
-(<option>-fstack-protector-strong</option>) as the defaults for GCC and
-clang.  What is being covered here is different - first you have to make
-sure that the package is indeed using your added flags and not over-riding
-them.
+        No passado, existia o "LFS Reforçado", onde o "GCC" (uma versão muito mais
+antiga) era forçado a usar reforçamento (com opções para desativar parte
+dele por pacote). Os livros atuais LFS e BLFS estão levando adiante uma
+parte do espírito dele, habilitando "PIE" (<option>-fPIE -pie</option>) e
+"SSP" (<option>-fstack-protector-strong</option>) como padrões para o "GCC"
+e o "clang". O que está sendo abordado aqui é diferente - primeiro, você
+precisa ter certeza de que o pacote está realmente usando os teus
+sinalizadores adicionados e não os substituindo.
       </para>
 
       <para>
-        For hardening options which are reasonably cheap, there is some discussion
-in the 'tuning' link above (occasionally, one or more of these options might
-be inappropriate for a package). These options are
-<option>-D_FORTIFY_SOURCE=2</option> and (for C++)
-<option>-D_GLIBCXX_ASSERTIONS</option>. On modern machines these should only
-have a little impact on how fast things run, and often they will not be
-noticeable.
+        Para opções de reforço que são razoavelmente baratas, existe alguma
+discussão no link "ajuste" acima (ocasionalmente, uma ou mais dessas opções
+podem ser inadequadas para um pacote). Essas opções são
+<option>-D_FORTIFY_SOURCE=2</option> e (para "C++")
+<option>-D_GLIBCXX_ASSERTIONS</option>. Nas máquinas modernas, isso deveria
+ter somente um pequeno impacto na rapidez com que as coisas funcionam e,
+muitas vezes, não serão perceptíveis.
       </para>
 
       <para>
-        The main distros use much more, such as RELRO (Relocation Read Only)  and
-perhaps <option>-fstack-clash-protection</option>. You may also encounter
-the so-called <quote>userspace retpoline</quote>
-(<option>-mindirect-branch=thunk</option> etc.) which is the equivalent of
-the spectre mitigations applied to the linux kernel in late 2018. The kernel
-mitigations caused a lot of complaints about lost performance, if you have a
-production server you might wish to consider testing that, along with the
-other available options, to see if performance is still sufficient.
+        As principais distribuições usam muito mais, como "RELRO" ("Relocation Read
+Only") e talvez <option>-fstack-clash-protection</option>. Você também
+possivelmente encontre a chamada <quote>retpoline do espaço de
+usuário(a)</quote> (<option>-mindirect-branch=thunk</option> etc.), que é o
+equivalente às mitigações de espectro aplicadas ao núcleo Linux no final de
+2018. As mitigações do núcleo causaram muitas reclamações acerca de perda de
+desempenho; se você tiver um servidor de produção, você pode desejar
+considerar testá-las, juntamente com outras opções disponíveis, para ver se
+o desempenho ainda é suficiente.
       </para>
 
       <para>

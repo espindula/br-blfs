@@ -7,9 +7,9 @@
   <!ENTITY rpcbind-download-http "&sourceforge-dl;/rpcbind/rpcbind-&rpcbind-version;.tar.bz2">
   <!ENTITY rpcbind-download-ftp  "">
   <!ENTITY rpcbind-md5sum        "2d84ebbb7d6fb1fc3566d2d4b37f214b">
-  <!ENTITY rpcbind-size          "124Ko">
-  <!ENTITY rpcbind-buildsize     "1,6Mo">
-  <!ENTITY rpcbind-time          "menos que 0,1UPC">
+  <!ENTITY rpcbind-size          "124 KB">
+  <!ENTITY rpcbind-buildsize     "1,6 MB">
+  <!ENTITY rpcbind-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="rpcbind" xreflabel="rpcbind-&rpcbind-version;">
@@ -23,12 +23,13 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a rpcbind</title>
+    <title>Introdução ao <quote>rpcbind</quote></title>
 
     <para>
-      The <application>rpcbind</application> program is a replacement for
-<application>portmap</application>.  It is required for import or export of
-Network File System (NFS) shared directories.
+      O aplicativo &quot;<application>rpcbind</application>&quot; é um substituto
+para o &quot;<application>portmap</application>&quot;. Ele é exigido para
+importar ou exportar diretórios compartilhados do &quot;Network File
+System&quot; (&quot;NFS&quot;).
     </para>
 
     &lfs113_checked;
@@ -47,7 +48,7 @@ Network File System (NFS) shared directories.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &rpcbind-md5sum;
+          Soma de verificação MD5 da transferência: &rpcbind-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -77,9 +78,9 @@ url="&patch-root;/rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch"/>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de rpcbind</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;rpcbind&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="libtirpc"/>
     </para>
@@ -89,29 +90,32 @@ url="&patch-root;/rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch"/>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de rpcbind</title>
+    <title>Instalação do <quote>rpcbind</quote></title>
 
     <para revision="systemd">
-      There should be a dedicated user and group to take control of the
-<command>rpcbind</command> daemon after it is started.  Issue the following
-commands as the <systemitem class="username">root</systemitem> user:
+      Deveria existir um(a) usuário(a) e um grupo dedicado(a) para assumir o
+controle do processo de segundo plano &quot;<command>rpcbind</command>&quot;
+depois de ele ser iniciado. Emita os seguintes comandos como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <!-- Packages should adapt to standards, not the other way around -->
 <screen role="root" revision="systemd"><userinput>groupadd -g 28 rpc &amp;&amp;
-useradd -c "RPC Bind Daemon Owner" -d /dev/null -g rpc \
+useradd -c "Proprietário(a) do Processo de Segundo Plano de Ligação RPC" -d /dev/null -g rpc \
         -s /bin/false -u 28 rpc</userinput></screen>
 
     
     <para>
-      In order to get <application>rpcbind</application> to work properly, first
-fix the package to use correct service name:
+      Para a finalidade de conseguir que o
+&quot;<application>rpcbind</application>&quot; funcione corretamente,
+primeiro corrija o pacote para usar o nome correto do serviço:
     </para>
 
 <screen><userinput>sed -i "/servname/s:rpcbind:sunrpc:" src/rpcbind.c</userinput></screen>
 
     <para>
-      Instale <application>rpcbind</application> executando os seguintes comandos:
+      Instale o &quot;<application>rpcbind</application>&quot; executando os
+seguintes comandos:
     </para>
 
 
@@ -122,7 +126,7 @@ fix the package to use correct service name:
      alone. -renodr -->
 <userinput>patch -Np1 -i ../rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch &amp;&amp;
 
-./configure --prefix=/usr                                  \
+./configure --prefix=/usr                                 \
             --bindir=/usr/sbin                             \
             --with-rpcuser=root                            \
             --enable-warmstarts                            \
@@ -131,7 +135,7 @@ make</userinput></screen>
 
 <screen revision="systemd"><userinput>patch -Np1 -i ../rpcbind-&rpcbind-version;-vulnerability_fixes-1.patch &amp;&amp;
 
-./configure --prefix=/usr       \
+./configure --prefix=/usr      \
             --bindir=/usr/sbin  \
             --enable-warmstarts \
             --with-rpcuser=rpc  &amp;&amp;
@@ -142,7 +146,8 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -153,38 +158,40 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para revision="sysv">
-      <command>--with-rpcuser=root</command>: This works around an error in the
-configure script.
+      <command>--with-rpcuser=root</command>: Isso contorna um erro no conjunto de
+comandos sequenciais de configuração.
     </para>
 
     <para revision="sysv">
-      <command>--without-systemdsystemunitdir</command>: This version of BLFS does
-not support systemd.
+      <command>--without-systemdsystemunitdir</command>: Essa versão do BLFS não
+suporte o &quot;systemd&quot;.
     </para>
 
     <para revision="systemd">
-      <parameter>--with-rpcuser=rpc</parameter>: This switch is used so the
-<command>rpcbind</command> daemon will run as an unprivileged user instead
-of the <systemitem class="username">root</systemitem> user.
+      <parameter>--with-rpcuser=rpc</parameter>: Essa chave é usada de forma que o
+processo de segundo plano &quot;<command>rpcbind</command>&quot; executará
+como um(a) usuário(a) sem privilégios em vez do(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando rpcbind</title>
+    <title>Configurando o <quote>rpcbind</quote></title>
 
     <sect3 id="rpcbind-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+systemd</phrase></title>
 
       <para revision="sysv">
-        Install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/rpcbind</filename> init
-script</phrase> included in the <xref linkend="bootscripts"/> package.
+        Instale o conjunto de comandos sequenciais de iniciação <phrase
+revision="sysv">&quot;<filename>/etc/rc.d/init.d/rpcbind</filename>&quot;</phrase>
+incluso no pacote &quot;<xref linkend="bootscripts"/>&quot;.
       </para>
 
       <para revision="systemd">
-         Enable the systemd unit installed with the package:
+         Habilite a unidade do &quot;systemd&quot; instalada com o pacote:
       </para>
 
       <indexterm zone="rpcbind rpcbind-init" revision="sysv">
@@ -200,7 +207,7 @@ script</phrase> included in the <xref linkend="bootscripts"/> package.
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativo Instalado</segtitle>
@@ -208,9 +215,9 @@ script</phrase> included in the <xref linkend="bootscripts"/> package.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>rpcbind and rpcinfo</seg>
-        <seg>None</seg>
-        <seg>None</seg>
+        <seg>rpcbind e rpcinfo</seg>
+        <seg>Nenhum(a)</seg>
+        <seg>Nenhum(a)</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -222,9 +229,9 @@ script</phrase> included in the <xref linkend="bootscripts"/> package.
         <term><command>rpcbind</command></term>
         <listitem>
           <para>
-            is a server that converts RPC program numbers into universal addresses.  It
-must be running on the host to be able to make RPC calls on a server on that
-machine
+            é um servidor que converte números de aplicativos &quot;RPC&quot; em
+endereços universais. Ele precisa estar executando no dispositivo para estar
+apto a fazer chamadas &quot;RPC&quot; em um servidor nessa máquina
           </para>
           <indexterm zone="rpcbind rpcbind-prog">
             <primary sortas="b-rpcbind">rpcbind</primary>
@@ -236,8 +243,8 @@ machine
         <term><command>rpcinfo</command></term>
         <listitem>
           <para>
-            makes an RPC call to an RPC server and reports data according to the
-requested options
+            faz uma chamada &quot;RPC&quot; para um servidor &quot;RPC&quot; e informa
+dados de acordo com as opções solicitadas
           </para>
           <indexterm zone="rpcbind rpcinfo">
             <primary sortas="b-rpcinfo">rpcinfo</primary>

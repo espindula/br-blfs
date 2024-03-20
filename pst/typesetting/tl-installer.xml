@@ -9,10 +9,10 @@
   <!ENTITY tl-installer-download-ftp    "">
   <!ENTITY tl-installer-md5sum          "00268146cfced12c34fe5f515f032c69">
   <!ENTITY tl-installer-date             "20220321"> <!-- in the directory name -->
-  <!ENTITY tl-installer-size            "5,6Mo">
+  <!ENTITY tl-installer-size            "5,6 MB">
 
-  <!ENTITY tl-installer-buildsize        "118 MB for basic TeX and latex, 7.1 GB if everything is included">
-  <!ENTITY tl-installer-time            "varies, depending on network speed and traffic">
+  <!ENTITY tl-installer-buildsize        "118 MB para TeX e latex básicos; 7,1 GB se tudo for incluído">
+  <!ENTITY tl-installer-time            "varia, dependendo da velocidade e do tráfego da rede de intercomunicação">
 ]>
 
 <sect1 id="tl-installer" xreflabel="install-tl-unx">
@@ -26,34 +26,36 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a TeX Live and its installer</title>
+    <title>Introdução ao TeX Live e ao instalador dele</title>
 
     <para>
-      The <application>TeX Live</application> package is a comprehensive TeX
-document production system.  It includes TeX, LaTeX2e, ConTeXt, Metafont,
-MetaPost, BibTeX and many other programs; an extensive collection of macros,
-fonts and documentation; and support for typesetting in many different
-scripts from around the world.
+      O pacote <application>TeX Live</application> é um sistema abrangente de
+produção de documentos TeX. Ele inclui TeX, LaTeX2e, ConTeXt, Metafont,
+MetaPost, BibTeX e muitos outros aplicativos; uma extensiva coleção de
+macros, fontes e documentação; e suporte para composição tipográfica em
+muitos conjuntos de comandos sequenciais oriundos de todo o mundo.
     </para>
 
     <para>
-      This page is for people who wish to use the binary installer to provide the
-programs, the scripts, and a lot of supporting files and documentation.  The
-installer is updated frequently, so any published md5sum will soon be out of
-date.  Newer versions of the installer are expected to work with these
-instructions, for so long as they install to a <filename
-class="directory">&texlive-year;/</filename> directory.
+      Esta página é para pessoas que desejam usar o instalador binário para
+fornecer os aplicativos, os conjuntos de comandos sequenciais e muitos
+arquivos e documentação de suporte. O instalador é atualizado
+frequentemente, de forma que qualquer soma de verificação MD5 publicada
+ficará desatualizada em breve. Versões mais recentes do instalador são
+esperadas funcionarem com estas instruções, desde que sejam instaladas num
+diretório <filename class="directory">&texlive-year;/</filename>.
     </para>
 
     <para>
-      There are two reasons why you may wish to install the binaries in BLFS:
-either you need a smaller install (e.g. at a minimum plain TeX without
-LaTeX2e, ConTeXt, etc), or you wish to use <command>tlmgr</command> to get
-updates whilst this version is supported (typically, until April of the year
-after it was released). For the latter, you might prefer to install in your
-<filename class="directory">/home</filename> directory as an unprivileged
-user, and to then make corresponding changes to the PATH in your
-<filename>~/.bashrc</filename> or equivalent.
+      Existem duas razões pelas quais você possivelmente deseje instalar os
+binários no BLFS: ou você precisa de uma instalação menor (por exemplo, no
+mínimo TeX simples sem LaTeX2e, ConTeXt, etc), ou você deseja usar o
+<command>tlmgr</command> para obter atualizações enquanto essa versão for
+suportada (tipicamente, até abril do ano seguinte ao lançamento dela). Para
+o última, você pode preferir instalar em teu diretório <filename
+class="directory">/home</filename> como um(a) usuário(a) sem privilégios e,
+em seguida, fazer as mudanças correspondentes no PATH em teu
+<filename>~/.bashrc</filename> ou equivalente.
     </para>
 
     &lfs113_checked;
@@ -74,7 +76,7 @@ user, and to then make corresponding changes to the PATH in your
         <para>
           
           <!--Download MD5 sum: &tl-installer-md5sum; (for &tl-installer-date;)-->
-Soma de verificação MD5: Varies frequently
+Soma de verificação MD5 da transferência: Varies frequently
         </para>
       </listitem>
       <listitem>
@@ -94,33 +96,34 @@ Soma de verificação MD5: Varies frequently
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gnupg2"/> (to validate both the initial downloads, and also
-any updates you might later make using <command>tlmgr</command>.)  <xref
-linkend="perl-libwww-perl"/> (to use a single connection to the server,
-which will reduce its load and speed things up.)
+      <xref linkend="gnupg2"/> (para validar as transferências iniciais e também
+quaisquer atualizações que você possa fazer posteriormente usando o
+<command>tlmgr</command>). <xref linkend="perl-libwww-perl"/> (para usar uma
+conexão com o servidor, o que reduzirá a carga dele e acelerará as coisas).
     </para>
 
-    <bridgehead renderas="sect4">Recommended (at runtime)</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas (em tempo de execução)</bridgehead>
     <para role="recommended">
-      The binaries are mostly linked to included static libraries or general (LFS)
-system libraries, but a few of the programs and several scripts will fail if
-the following packages are not present:
+      Os binários estão vinculados principalmente a bibliotecas estáticas
+incluídas ou bibliotecas gerais do sistema (LFS), mas alguns dos aplicativos
+e vários conjuntos de comandos sequenciais falharão se os seguintes pacotes
+não estiverem presentes:
     </para>
     <para role="recommended">
-      <xref role="runtime" linkend="gs"/> is dynamically loaded by the external
-application <ulink url="https://dvisvgm.de/">dvisvgm</ulink>, which is used
-by <application>asy</application> when that creates SVG files.
+      O <xref role="runtime" linkend="gs"/> é carregado dinamicamente pelo
+aplicativo externo <ulink url="https://dvisvgm.de/">dvisvgm</ulink>, que é
+usado pelo <application>asy</application> quando esse cria arquivos SVG.
     </para>
     <para role="recommended">
-      <xref role="runtime" linkend="xorg7-lib"/> and <xref role="runtime"
-linkend="libxcb"/> are needed for inimf, mf, pdfclose, pdfopen and
-xdvi-xaw. But if you are using asy, or using a
-<application>TeX</application> engine to create a PDF file, you will need
-<xref role="runtime" linkend="x-window-system"/> (for PDF files, this is to
-support a PDF viewer of your choice, for example <xref role="nodep"
-linkend="epdfview"/>).
+      <xref role="runtime" linkend="xorg7-lib"/> e <xref role="runtime"
+linkend="libxcb"/> são necessários para inimf, mf, pdfclose, pdfopen e
+xdvi-xaw. Mas, se você estiver usando o asy, ou usando um mecanismo do
+<application>TeX</application> para criar um arquivo PDF, você precisará do
+<xref role="runtime" linkend="x-window-system"/> (para arquivos PDF, isso é
+para suportar um visualizador de PDF da tua escolha, por exemplo <xref
+role="nodep" linkend="epdfview"/>).
     </para>
 
     <!-- seems to not be needed in 2021
@@ -132,14 +135,14 @@ linkend="epdfview"/>).
       for xindy.run which is used by <application>xindy</application>
     </para> -->
 <para role="recommended">
-      The binary version of <application>asy</application> needs <xref
+      A versão binária do <application>asy</application> precisa do <xref
 linkend="freeglut"/>.
     </para>
     <note>
       <para>
-        As always with contributed binary software, it is possible that the required
-dependencies may change when the installer is updated. In particular, these
-dependencies have only been checked on x86_64.
+        Como sempre acontece com software binário contribuído, é possível que as
+dependências exigidas mudem quando o instalador for atualizado. Em
+particular, essas dependências só foram verificadas em x86_64.
       </para>
     </note>
     
@@ -147,49 +150,52 @@ dependencies have only been checked on x86_64.
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
      href="../../xincludes/texruntime.xml"/>
 
-    <para condition="html" role="usernotes">User Notes: <ulink url="&blfs-wiki;/tl-installer"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/tl-installer"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Binary Installation of TeX Live</title>
+    <title>Instalação Binária do TeX Live</title>
 
     <para>
-      The <application>TeX Live</application> set of programs with its supporting
-documents, fonts, and utilities is very large.  The upstream maintainers
-recommend placing all files in a single directory structure.  BLFS
-recommends <filename class='directory'>/opt/texlive</filename>.
+      O conjunto de aplicativos do <application>TeX Live</application> com os
+documentos de suporte deles, fontes e utilitários é muito grande. Os(As)
+mantenedores(as) originais recomendam colocar todos os arquivos em uma
+estrutura de diretórios única. O BLFS recomenda <filename
+class='directory'>/opt/texlive</filename>.
     </para>
 
     <para>
-      As with any other package, unpack the installer and change into its
-directory, <filename class='directory'>
-install-tl-&lt;CCYYMMDD&gt;</filename>.  This directory name changes when
-the installer is updated, so replace &lt;CCYYMMDD&gt; by the correct
-directory name.
+      Como acontece com qualquer outro pacote, desempacote o instalador e mude
+para o diretório dele, <filename class='directory'>
+install-tl-&lt;CCYYMMDD&gt;</filename>. Esse nome de diretório muda quando o
+instalador é atualizado, de forma que substitua &lt;CCYYMMDD&gt; pelo nome
+correto de diretório.
     </para>
 
     <note>
       <para>
-        The distribution binaries installed below may use static linking for general
-linux system libraries.  Additional libraries or interpreters as specified
-in the dependencies section do not need to be present during the install,
-but the programs that need them will not run until their specific
-dependencies have been installed.
+        Os binários de distribuição instalados abaixo podem usar lincagem estática
+para bibliotecas gerais do sistema Linux. Bibliotecas ou interpretadores
+adicionais, conforme especificado na seção de dependências, não precisam
+estar presentes durante a instalação, mas os aplicativos que precisam deles
+não serão executados até que as dependências específicas deles tenham sido
+instaladas.
       </para>
 
     
       <!-- please keep something like this in the future -->
 <para>
-        With all contributed binary software, there may be a mismatch between the
-builder's toolchain and your hardware.  In most of TeX this will probably
-not matter, but in uncommon corner cases you might hit problems. For
-example, if your x86_64 processor does not support 3dnowext or 3dnow, the
-2014-06-28 binary failed in conTeXt when running LuaTeX, although lualatex
-worked, as did the i686 binaries on the same machine. In such cases, the
-easiest solution is to install texlive from source. Similarly, the x86_64
-binary version of <command>asy</command> runs very slowly when creating 3-D
-diagrams.
+        Com todos os softwares binários contribuídos, possivelmente exista uma
+incompatibilidade entre o conjunto de ferramentas do(a) construtor(a) e o
+teu hardware. Na maior parte do TeX isso provavelmente não importará, mas em
+casos incomuns você poderá encontrar problemas. Por exemplo, se o teu
+processador x86_64 não suportar 3dnowext ou 3dnow, o binário 2014-06-28
+falharia no ConTeXt ao executar LuaTeX, embora lualatex funcionasse, assim
+como os binários i686 na mesma máquina. Nesses casos, a solução mais fácil é
+a de instalar o texlive a partir do fonte. Similarmente, a versão binária
+x86_64 do <command>asy</command> executa muito lentamente ao criar diagramas
+3D.
       </para>
     </note>
 
@@ -200,19 +206,20 @@ diagrams.
 <screen role="root"><userinput>TEXLIVE_INSTALL_PREFIX=/opt/texlive ./install-tl</userinput></screen>
 
     <para>
-      This command is interactive and allows selection or modification of
-platform, packages, directories, and other options. The full installation
-scheme will require about 4.9 gigabytes of disk space. The time to complete
-the download will depend on your internet connection speed and the number of
-packages selected.
+      Esse comando é interativo e permite seleção ou modificação de plataforma,
+pacotes, diretórios e outras opções. O esquema completo de instalação
+exigirá cerca de 4,9 gigabytes de espaço em disco. O tempo para concluir a
+transferência dependerá da velocidade da tua conexão de Internet e do número
+de pacotes selecionados.
     </para>
 
     <para>
-      It has been established by debian that the <command>python</command> scripts
-in <filename class="directory">latex-make</filename> will work with
-<command>python3</command>, so update them to invoke that by running the
-following command as the <systemitem class="username">root</systemitem>
-user:
+      Foi estabelecido pelo Debian que os conjuntos de comandos sequenciais do
+<command>python</command> em <filename
+class="directory">latex-make</filename> funcionarão com
+<command>python3</command>, de forma que atualize-os para invocar isso
+executando o seguinte comando como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>for F in /opt/texlive/&texlive-year;/texmf-dist/scripts/latex-make/*.py ; do
@@ -226,25 +233,26 @@ done
     <title>Explicações do Comando</title>
 
     <para>
-      <command>test -f $F &amp;&amp; sed ...</command>: in a small install these
-files might not be present, so test if they exist and if not return 'true'
-to avoid any error if this command has been copied into one of your own
-install scripts.
+      <command>test -f $F &amp;&amp; sed ...</command>: em uma instalação pequena
+esses arquivos podem não estar presentes, de forma que teste se eles existem
+e se não retornam 'true' para evitar qualquer erro se esse comando tiver
+sido copiado em um de teus próprios conjuntos de comandos sequenciais de
+instalação.
     </para>
 
     <para>
       <option>./install-tl --location
-http://mirror.aut.ac.nz/CTAN/systems/texlive/tlnet/</option>: use a
-variation of this if you wish to use a different mirror, for example,
-because you are in New Zealand but the installer chooses to use an
-Australian mirror. The list of mirrors is at <ulink
+http://mirror.aut.ac.nz/CTAN/systems/texlive/tlnet/</option>: use uma
+variação disso se você desejar usar um espelho diferente, por exemplo,
+porque está na Nova Zelândia, mas o instalador escolher usar um espelho
+australiano. A lista de espelhos está em <ulink
 url='https://ctan.org/mirrors/'/>.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -252,8 +260,9 @@ url='https://ctan.org/mirrors/'/>.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>Over 300 binaries and symlinks to scripts</seg>
-        <seg>None</seg>
+        <seg>Mais que trezentos (300) binários e links simbólicos para conjuntos de
+comandos sequenciais</seg>
+        <seg>Nenhum(a)</seg>
         <seg>/opt/texlive</seg>
       </seglistitem>
     </segmentedlist>
@@ -268,7 +277,7 @@ url='https://ctan.org/mirrors/'/>.
           <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
           href="../../xincludes/texprogs.xml"/>
           <indexterm zone="tl-installer tl-installer-programs">
-            <primary sortas="b-tl-installer-programs">TeX Live programs</primary>
+            <primary sortas="b-tl-installer-programs">Aplicativos do TeX Live</primary>
           </indexterm>
         </listitem>
       </varlistentry>

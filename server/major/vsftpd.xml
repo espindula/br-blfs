@@ -7,9 +7,9 @@
   <!ENTITY vsftpd-download-http "https://security.appspot.com/downloads/vsftpd-&vsftpd-version;.tar.gz">
   <!ENTITY vsftpd-download-ftp  "">
   <!ENTITY vsftpd-md5sum        "efbf362a65bec771bc15ad311f5a982e">
-  <!ENTITY vsftpd-size          "210Ko">
-  <!ENTITY vsftpd-buildsize     "1,9Mo">
-  <!ENTITY vsftpd-time          "menos que 0,1UPC">
+  <!ENTITY vsftpd-size          "210 KB">
+  <!ENTITY vsftpd-buildsize     "1,9 MB">
+  <!ENTITY vsftpd-time          "menos que 0,1 UPC">
   <!ENTITY vsftpd-empty         "/usr/share/vsftpd/empty">
 ]>
 
@@ -24,11 +24,12 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a vsftpd</title>
+    <title>Introdução ao <quote>vsftpd</quote></title>
 
     <para>
-      The <application>vsftpd</application> package contains a very secure and
-very small FTP daemon. This is useful for serving files over a network.
+      O pacote &quot;<application>vsftpd</application>&quot; contém um processo de
+segundo plano &quot;FTP&quot; muito seguro e muito pequeno. Isso é útil para
+servir arquivos em uma rede de intercomunicação.
     </para>
 
     &lfs113_checked;
@@ -47,7 +48,7 @@ very small FTP daemon. This is useful for serving files over a network.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &vsftpd-md5sum;
+          Soma de verificação MD5 da transferência: &vsftpd-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -67,14 +68,14 @@ very small FTP daemon. This is useful for serving files over a network.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de vsftpd</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;vsftpd&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="libnsl"/>
     </para>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="linux-pam"/>
     </para>
@@ -89,14 +90,15 @@ very small FTP daemon. This is useful for serving files over a network.
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de vsftpd</title>
+    <title>Instalação do <quote>vsftpd</quote></title>
 
     <para>
-      For security reasons, running <application>vsftpd</application> as an
-unprivileged user and group is encouraged. Also, a user should be created to
-map anonymous users. As the <systemitem class="username">root</systemitem>
-user, create the needed directories, users, and groups with the following
-commands:
+      Por motivos de segurança, executar o
+&quot;<application>vsftpd</application>&quot; como um(a) usuário(a) e grupo
+sem privilégios é encorajado. Além disso, um(a) usuário(a) deveria ser
+criado(a) para mapear usuários(as) anônimos(as). Como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;, crie os
+diretórios, usuários(as) e grupos necessários(as) com os seguintes comandos:
     </para>
 
 <screen role="root"><userinput>install -v -d -m 0755 &vsftpd-empty; &amp;&amp;
@@ -104,18 +106,19 @@ install -v -d -m 0755 /home/ftp               &amp;&amp;
 groupadd -g 47 vsftpd                         &amp;&amp;
 groupadd -g 45 ftp                            &amp;&amp;
 
-useradd -c "vsftpd User"  -d /dev/null -g vsftpd -s /bin/false -u 47 vsftpd &amp;&amp;
+useradd -c "Usuário(a) vsftpd"  -d /dev/null -g vsftpd -s /bin/false -u 47 vsftpd &amp;&amp;
 useradd -c anonymous_user -d /home/ftp -g ftp    -s /bin/false -u 45 ftp</userinput></screen>
 
     <para>
-      Gcc-10 and later flags an error for an implicit type cast. Make it explicit:
+      O &quot;Gcc-10&quot; e posteriores sinalizam um erro para uma conversão
+implícita de tipo. Torne isso explícito:
     </para>
 
 <screen><userinput>sed -e "s/kVSFSysStrOpenUnknown;/(enum EVSFSysUtilOpenMode)&amp;/" -i sysstr.c</userinput></screen>
 
     <para>
-      Build <application>vsftpd</application> as an unprivileged user using the
-following command:
+      Construa o &quot;<application>vsftpd</application>&quot; como um(a)
+usuário(a) sem privilégios usando o seguinte comando:
     </para>
 
 <screen><userinput>make</userinput></screen>
@@ -125,12 +128,13 @@ following command:
     </para>
 
     <para>
-      Once again, become the <systemitem class="username">root</systemitem> user
-and install <application>vsftpd</application> with the following commands:
+      Mais uma vez, torne-se o usuário &quot;<systemitem
+class="username">root</systemitem>&quot; e instale o
+&quot;<application>vsftpd</application>&quot; com os seguintes comandos:
     </para>
 
 <screen role="root"><userinput>install -v -m 755 vsftpd        /usr/sbin/vsftpd    &amp;&amp;
-install -v -m 644 vsftpd.8      /usr/share/man/man8 &amp;&amp;
+install -v -m 644 vsftpd.8     /usr/share/man/man8 &amp;&amp;
 install -v -m 644 vsftpd.conf.5 /usr/share/man/man5 &amp;&amp;
 install -v -m 644 vsftpd.conf   /etc</userinput></screen>
 
@@ -140,42 +144,45 @@ install -v -m 644 vsftpd.conf   /etc</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>install -v -d ...</command>: This creates the directory that
-anonymous users will use (<filename class='directory'>/home/ftp</filename>)
-and the directory the daemon will chroot into (<filename
-class='directory'>&vsftpd-empty;</filename>).
+      <command>install -v -d ...</command>: Isso cria o diretório que os(as)
+usuários(as) anônimos(as) usarão (&quot;<filename
+class='directory'>/home/ftp</filename>&quot;) e o diretório que o processo
+de segundo plano se enjaulará nele (&quot;<filename
+class='directory'>&vsftpd-empty;</filename>&quot;).
     </para>
 
     <note>
       <para>
-        <filename class="directory">/home/ftp</filename> should not be owned by the
-user <systemitem class="username">vsftpd</systemitem>, or the user
-<systemitem class="username">ftp</systemitem>.
+        &quot;<filename class="directory">/home/ftp</filename>&quot; não deveria ser
+titularizado pelo(a) usuário(a) &quot;<systemitem
+class="username">vsftpd</systemitem>&quot;, ou pelo(a) usuário(a)
+&quot;<systemitem class="username">ftp</systemitem>&quot;.
       </para>
     </note>
 
     <para>
       <command>echo "#define VSF_BUILD_TCPWRAPPERS" >>builddefs.h</command>: Use
-this prior to <command>make</command> to add support for
-<application>tcpwrappers</application>.
+isso antes do &quot;<command>make</command>&quot; para adicionar suporte a
+&quot;<application>tcpwrappers</application>&quot;.
     </para>
 
     <para>
-      <command>echo "#define VSF_BUILD_SSL" >>builddefs.h</command>: Use this
-prior to <command>make</command> to add support for SSL.
+      <command>echo "#define VSF_BUILD_SSL" >>builddefs.h</command>: Use isso
+antes do &quot;<command>make</command>&quot; para adicionar suporte a
+&quot;SSL&quot;.
     </para>
 
     <para>
-      <command>install -v -m ...</command>: The <filename>Makefile</filename> uses
-non-standard installation paths.  These commands install the files in
-<filename class='directory'>/usr</filename> and <filename
-class='directory'>/etc</filename>.
+      <command>install -v -m ...</command>: O <filename>Makefile</filename> usa
+caminhos de instalação não padrões. Esses comandos instalam os arquivos em
+&quot;<filename class='directory'>/usr</filename>&quot; e &quot;<filename
+class='directory'>/etc</filename>&quot;.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando vsftpd</title>
+    <title>Configurando o <quote>vsftpd</quote></title>
 
     <sect3 id="vsftpd-config">
       <title>Arquivos de Configuração</title>
@@ -194,14 +201,16 @@ class='directory'>/etc</filename>.
       <title>Informação de Configuração</title>
 
       <para>
-        <application>vsftpd</application> comes with a basic anonymous-only
-configuration file that was copied to <filename
-class='directory'>/etc</filename> above. While still as <systemitem
-class="username">root</systemitem>, this file should be modified because it
-is now recommended to run <command>vsftpd</command> in standalone
-mode. Also, you should specify the privilege separation user created
-above. Finally, you should specify the <command>chroot</command> directory.
-<command>man vsftpd.conf</command> will give you all the details.
+        O &quot;<application>vsftpd</application>&quot; vem com um arquivo básico de
+configuração somente anônimo que foi copiado para &quot;<filename
+class='directory'>/etc</filename>&quot; acima. Embora ainda como
+&quot;<systemitem class="username">root</systemitem>&quot;, esse arquivo
+deveria ser modificado porque agora é recomendado executar o
+&quot;<command>vsftpd</command>&quot; em modo autônomo. Além disso, você
+deveria especificar o(a) usuário(a) de separação de privilégios criado(a)
+acima. Finalmente, você deveria especificar o diretório
+&quot;<command>chroot</command>&quot;. &quot;<command>man
+vsftpd.conf</command>&quot; te dará todos os detalhes.
       </para>
 
 <!-- recheck this issue when vsftpd is updated -->
@@ -213,12 +222,14 @@ EOF</userinput></screen>
 
       
       <para>
-        The vsftpd daemon uses seccomp to improve security by default.  But it's
-known to cause vsftpd unable to handle ftp <literal>LIST</literal> command
-with recent kernel versions.  Append a line to
-<filename>/etc/vsftpd.conf</filename> (as the <systemitem
-class="username">root</systemitem> user) to disable seccomp and workaround
-this issue:
+        O processo de segundo plano &quot;vsftpd&quot; usa &quot;seccomp&quot; para
+melhorar a segurança por padrão. Mas é conhecido por fazer com que o
+&quot;vsftpd&quot; não consiga lidar com o comando
+&quot;<literal>LIST</literal>&quot; do &quot;ftp&quot; com versões recentes
+do núcleo. Anexe uma linha a
+&quot;<filename>/etc/vsftpd.conf</filename>&quot; (como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;) para desabilitar
+o &quot;seccomp&quot; e solucionar esse problema:
       </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/vsftpd.conf &lt;&lt; "EOF"
@@ -226,9 +237,9 @@ this issue:
 EOF</userinput></screen>
 
       <para>
-        To enable local logins, append the following to the
-<filename>/etc/vsftpd.conf</filename> file (as the <systemitem
-class="username">root</systemitem> user):
+        Para habilitar &quot;logins&quot; locais, anexe o seguinte ao arquivo
+&quot;<filename>/etc/vsftpd.conf</filename>&quot; (como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;):
       </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/vsftpd.conf &lt;&lt; "EOF"
@@ -236,17 +247,19 @@ class="username">root</systemitem> user):
 EOF</userinput></screen>
 
       <para>
-        In addition, if using <application>Linux-PAM</application> and
-<application>vsftpd</application> with local user logins, you will need a
-<application>Linux-PAM</application> configuration file. As the <systemitem
-class="username">root</systemitem> user, create the
-<filename>/etc/pam.d/vsftpd</filename> file, and add the needed
-configuration changes for <application>Linux-PAM</application> session
-support using the following commands:
+        Além disso, se usar o &quot;<application>Linux-PAM</application>&quot; e o
+&quot;<application>vsftpd</application>&quot; com &quot;logins&quot; locais
+de usuário(a), [então] você precisará de um arquivo de configuração do
+&quot;<application>Linux-PAM</application>&quot;. Como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;, crie o arquivo
+&quot;<filename>/etc/pam.d/vsftpd</filename>&quot; e adicione as mudanças
+necessárias de configuração para o suporte da sessão do
+&quot;<application>Linux-PAM</application>&quot; usando os seguintes
+comandos:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/vsftpd &lt;&lt; "EOF" &amp;&amp;
-<literal># Begin /etc/pam.d/vsftpd
+<literal># Inicia /etc/pam.d/vsftpd
 auth       required     /lib/security/pam_listfile.so item=user sense=deny \
                                                       file=/etc/ftpusers \
                                                       onerr=succeed
@@ -264,16 +277,17 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3  id="vsftpd-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        Install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/vsftpd</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>vsftpd.service</filename> unit</phrase>
-included in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package:
+        Instale <phrase revision="sysv">o conjunto de comandos sequenciais de
+inicialização &quot;<filename>/etc/rc.d/init.d/vsftpd</filename>&quot;
+incluso</phrase> <phrase revision="systemd">a unidade
+&quot;<filename>vsftpd.service</filename>&quot; inclusa</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;:
       </para>
 
 <screen role="root"><userinput>make install-vsftpd</userinput></screen>
@@ -283,7 +297,7 @@ linkend="systemd-units" revision="systemd"/> package:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativo Instalado</segtitle>
@@ -292,7 +306,7 @@ linkend="systemd-units" revision="systemd"/> package:
 
       <seglistitem>
         <seg>vsftpd</seg>
-        <seg>None</seg>
+        <seg>Nenhum(a)</seg>
         <seg>/usr/share/vsftpd, /home/ftp</seg>
       </seglistitem>
     </segmentedlist>
@@ -305,7 +319,7 @@ linkend="systemd-units" revision="systemd"/> package:
         <term><command>vsftpd</command></term>
         <listitem>
           <para>
-            is the FTP daemon
+            é o processo de segundo plano de &quot;FTP&quot;
           </para>
           <indexterm zone="vsftpd vsftpd-prog">
             <primary sortas="b-vsftpd">vsftpd</primary>

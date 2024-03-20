@@ -10,9 +10,9 @@
   <!ENTITY postfix-download-http "https://ghostarchive.org/postfix/postfix-release/official/postfix-&postfix-version;.tar.gz">
   <!ENTITY postfix-download-ftp  "ftp://ftp.porcupine.org/mirrors/postfix-release/official/postfix-&postfix-version;.tar.gz">
   <!ENTITY postfix-md5sum        "2442d1e53d58e61842d99fb5978fec4a">
-  <!ENTITY postfix-size          "4,6Mo">
-  <!ENTITY postfix-buildsize     "148Mo">
-  <!ENTITY postfix-time          "0.2 SBU (Using parallelism=4)">
+  <!ENTITY postfix-size          "4,6 MB">
+  <!ENTITY postfix-buildsize     "148 MB">
+  <!ENTITY postfix-time          "0,2 UPC (Usando paralelismo=4)">
 ]>
 
 <sect1 id="postfix" xreflabel="Postfix-&postfix-version;">
@@ -26,14 +26,15 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Postfix</title>
+    <title>Introdução ao <quote>Postfix</quote></title>
 
     <para>
-      The <application>Postfix</application> package contains a Mail Transport
-Agent (MTA). This is useful for sending email to other users of your host
-machine.  It can also be configured to be a central mail server for your
-domain, a mail relay agent or simply a mail delivery agent to your local
-Internet Service Provider.
+      O pacote &quot;<application>Postfix</application>&quot; contém um &quot;Mail
+Transport Agent&quot; (&quot;MTA&quot;). Isso é útil para enviar mensagem
+eletrônica para outros(as) usuários(as) da tua máquina anfitriã. Ele também
+pode ser configurado para ser um servidor central de mensagens para o teu
+domínio, um agente de retransmissão de mensagens ou simplesmente um agente
+de entrega de mensagens para o teu Provedor local de Serviços de Internet.
     </para>
 
     &lfs113_checked;
@@ -52,7 +53,7 @@ Internet Service Provider.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &postfix-md5sum;
+          Soma de verificação MD5 da transferência: &postfix-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -84,63 +85,66 @@ Additional Downloads</bridgehead>
       </listitem>
     </itemizedlist>
 -->
-<bridgehead renderas="sect3">Dependências de Postfix</bridgehead>
+<bridgehead renderas="sect3">Dependências do &quot;Postfix&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="db"/>, <xref linkend="cyrus-sasl"/>, and <xref
+      <xref linkend="db"/>, <xref linkend="cyrus-sasl"/> e <xref
 linkend="libnsl"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="icu"/> for Email Address Internationalization (SMTPUTF8)
-support, <xref linkend="mariadb"/> or <ulink
-url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
-<xref linkend="pcre"/>, <xref linkend="postgresql"/>, <xref
-linkend="sqlite"/>, and <ulink url="https://cr.yp.to/cdb.html">CDB</ulink>
-or <ulink url="https://www.corpit.ru/mjt/tinycdb.html">TinyCDB</ulink>
+      <xref linkend="icu"/> para suporte a Internacionalização de Endereços de
+Correio Eletrônico (&quot;SMTPUTF8&quot;), <xref linkend="mariadb"/> ou
+<ulink url="https://www.mysql.com/">MySQL</ulink>, <xref
+linkend="openldap"/>, <xref linkend="pcre"/>, <xref linkend="postgresql"/>,
+<xref linkend="sqlite"/> e <ulink
+url="https://cr.yp.to/cdb.html">CDB</ulink> ou <ulink
+url="https://www.corpit.ru/mjt/tinycdb.html">TinyCDB</ulink>
     </para>
 
     <para>
-      Note that <application>SQLite</application>,
-<application>MySQL</application>, <application>PostgreSQL</application> and
-<application>CDB</application> are only useful if there is a known need for
-them.
+      Observe que &quot;<application>SQLite</application>&quot;,
+&quot;<application>MySQL</application>&quot;,
+&quot;<application>PostgreSQL</application>&quot; e
+&quot;<application>CDB</application>&quot; são úteis somente se existir uma
+necessidade conhecida deles.
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/postfix"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/postfix"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Postfix</title>
+    <title>Instalação do <quote>Postfix</quote></title>
 
     <sect3>
-      <title>Adding Users and Groups</title>
+      <title>Adicionando Usuários(as) e Grupos</title>
 
       <para>
-        Before you compile the program, you need to create users and groups that
-will be expected to be in place during the installation. Add the users and
-groups with the following commands issued by the <systemitem
-class="username">root</systemitem> user:
+        Antes de compilar o aplicativo, você precisa criar usuários(as) e grupos que
+serão esperados estarem no lugar durante a instalação. Adicione os(as)
+usuários(as) e grupos com os seguintes comandos emitidos pelo(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>groupadd -g 32 postfix &amp;&amp;
 groupadd -g 33 postdrop &amp;&amp;
-useradd -c "Postfix Daemon User" -d /var/spool/postfix -g postfix \
+useradd -c "Usuário(a) do Processo de Segundo Plano do Postfix" -d /var/spool/postfix -g postfix \
         -s /bin/false -u 32 postfix &amp;&amp;
 chown -v postfix:postfix /var/mail</userinput></screen>
     </sect3>
 
     <sect3>
-      <title>Configuring the Build</title>
+      <title>Configurando a Construção</title>
 
       <para>
-        The README files are formatted to be read with a pager like
-<application>Less</application> or <application>More</application>.  If you
-want to use a text editor, make them legible with the following sed:
+        Os arquivos &quot;README&quot; são formatados para serem lidos com um
+paginador como &quot;<application>Less</application>&quot; ou
+&quot;<application>More</application>&quot;. Se você quiser usar um editor
+de texto, [então] torne-os legíveis com o seguinte &quot;sed&quot;:
       </para>
 
 <!--
@@ -155,11 +159,12 @@ want to use a text editor, make them legible with the following sed:
 <screen><userinput>sed -i 's/.\x08//g' README_FILES/*</userinput></screen>
 
       <para>
-        The <filename>Makefile</filename> looks at the running kernel to decide how
-to set various things. It does not recognize Linux-6 and fails to make the
-definitions. After that is fixed, the build references the newly defined
-version in a header, which also breaks the build. Fix both of these with the
-following commands:
+        O &quot;<filename>Makefile</filename>&quot; examina o núcleo em execução
+para decidir como configurar várias coisas. Ele não reconhece o
+&quot;Linux-6&quot; e falha em fazer as definições. Depois que isso for
+corrigido, a construção fará referência à versão recém-definida em um
+cabeçalho, o que também quebra a construção. Corrija ambos com os seguintes
+comandos:
       </para>
 
 
@@ -170,26 +175,29 @@ sed -i 's/LINUX2/LINUX6/' src/util/sys_defs.h</userinput></screen>
 
 
       <para>
-        The <application>Postfix</application> source tree does not contain a
-<filename>configure</filename> script, rather the makefile in the top-level
-directory contains a <option>makefiles</option> target that regenerates all
-the other makefiles in the build tree. If you wish to use additional
-software such as a database back-end for virtual users, or TLS/SSL
-authentication, you will need to regenerate the makefiles using one or more
-of the appropriate <envar>CCARGS</envar> and <envar>AUXLIBS</envar> settings
-listed below.
+        A árvore do fonte do &quot;<application>Postfix</application>&quot; não
+contém um conjunto de comandos sequenciais
+&quot;<filename>configure</filename>&quot;, em vez disso, o
+&quot;makefile&quot; no diretório de nível superior contém um alvo
+&quot;<option>makefiles</option>&quot; que regenera todos os outros
+&quot;makefiles&quot; na árvore de construção. Se desejar usar software
+adicional, como uma estrutura de retaguarda de base de dados para
+usuários(as) virtuais ou autenticação &quot;TLS&quot;/&quot;SSL&quot;,
+[então] você precisará regenerar os &quot;makefiles&quot; usando uma ou mais
+das configurações apropriadas &quot;<envar>CCARGS</envar>&quot; e
+&quot;<envar>AUXLIBS</envar>&quot; listadas abaixo.
       </para>
 
       <note>
         <para>
-          For all variants of the CCARGS you should ensure that -DNO_NIS is specified
-so that the build does not attempt to access an rpcsvc header which does not
-exist in BLFS.
+          Para todas as variantes do &quot;CCARGS&quot;, você deveria garantir que
+&quot;-DNO_NIS&quot; esteja especificado, de forma que a construção não
+tente acessar um cabeçalho &quot;rpcsvc&quot; que não existe no BLFS.
         </para>
       </note>
 
       <para>
-        For more details read the readme files.
+        Para mais detalhes, leiam-se os arquivos &quot;readme&quot;.
       </para>
 
       <!-- We reverted to Berkeley DB-5.3.28 and that is handled
@@ -207,8 +215,8 @@ exist in BLFS.
         <title>Cyrus-SASL</title>
 
         <para>
-          To use <application>Cyrus-SASL</application> with
-<application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>Cyrus-SASL</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl'
@@ -220,8 +228,8 @@ AUXLIBS='-lsasl2'</literal></screen>
         <title>OpenLDAP</title>
 
         <para>
-          To use <application>OpenLDAP</application> with
-<application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>OpenLDAP</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DHAS_LDAP'
@@ -233,8 +241,8 @@ AUXLIBS='-lldap -llber'</literal></screen>
         <title>Sqlite</title>
 
         <para>
-          To use <application>Sqlite</application> with
-<application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>Sqlite</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DHAS_SQLITE'
@@ -246,8 +254,8 @@ AUXLIBS='-lsqlite3 -lpthread'</literal></screen>
         <title>MySQL</title>
 
         <para>
-          To use <application>MySQL</application> with
-<application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>MySQL</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DHAS_MYSQL -I/usr/include/mysql'
@@ -259,8 +267,8 @@ AUXLIBS='-lmysqlclient -lz -lm'</literal></screen>
         <title>PostgreSQL</title>
 
         <para>
-          To use <application>PostgreSQL</application> with
-<application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>PostgreSQL</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DHAS_PGSQL -I/usr/include/postgresql'
@@ -272,21 +280,22 @@ AUXLIBS='-lpq -lz -lm'</literal></screen>
         <title>CDB/TinyCDB</title>
 
         <para>
-          To use <application>CDB</application> or <application>TinyCDB</application>
-with <application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>CDB</application>&quot; ou o
+&quot;<application>TinyCDB</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DHAS_CDB'
-AUXLIBS='<replaceable>&lt;/path/to/CDB&gt;</replaceable>/libcdb.a'</literal></screen>
+AUXLIBS='<replaceable>&lt;/caminho/para/CDB&gt;</replaceable>/libcdb.a'</literal></screen>
 
       </sect4>
 
       <sect4>
-        <title>StartTLS Authentication</title>
+        <title>Autenticação <quote>StartTLS</quote></title>
 
         <para>
-          To use <application>OpenSSL</application> with
-<application>Postfix</application>, use the following arguments:
+          Para usar o &quot;<application>OpenSSL</application>&quot; com o
+&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DUSE_TLS -I/usr/include/openssl/'
@@ -296,18 +305,19 @@ AUXLIBS='-lssl -lcrypto'</literal></screen>
     </sect3>
 
     <sect3>
-      <title>Installing Postfix</title>
+      <title>Instalando o <quote>Postfix</quote></title>
 
       <para>
-        Adjust the following according to your needs. For example, if you have
-<application>Cyrus SASL</application>, install
-<application>Postfix</application> by running the following commands:
+        Ajuste o seguinte de acordo com as tuas necessidades. Por exemplo, se você
+tiver o &quot;<application>Cyrus SASL</application>&quot;, [então] instale o
+&quot;<application>Postfix</application>&quot; executando os seguintes
+comandos:
       </para>
 
 <!-- There is a test suite, but it fails a lot. It seems to need
          the host to be specifically setup for the tests.
          Run with `make tests' and `make root_tests' -->
-<screen><userinput>make CCARGS="-DNO_NIS -DUSE_TLS -I/usr/include/openssl/            \
+<screen><userinput>make CCARGS="-DNO_NIS -DUSE_TLS -I/usr/include/openssl/           \
              -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl" \
      AUXLIBS="-lssl -lcrypto -lsasl2"                              \
      makefiles &amp;&amp;
@@ -315,11 +325,12 @@ make</userinput></screen>
 
     
     <para>
-      This package does not come with a useful test suite.
+      Esse pacote não vem com uma suíte de teste útil.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 
@@ -327,10 +338,10 @@ make</userinput></screen>
 <screen role="root"><!-- dev note: sh postfix-install -non-interactive install_root=<DESTDIR>
  ... -->
 <userinput>sh postfix-install -non-interactive \
-   daemon_directory=/usr/lib/postfix \
-   manpage_directory=/usr/share/man \
-   html_directory=/usr/share/doc/postfix-&postfix-version;/html \
-   readme_directory=/usr/share/doc/postfix-&postfix-version;/readme</userinput></screen>
+  daemon_directory=/usr/lib/postfix \
+  manpage_directory=/usr/share/man \
+  html_directory=/usr/share/doc/postfix-&postfix-version;/html \
+  readme_directory=/usr/share/doc/postfix-&postfix-version;/readme</userinput></screen>
 
     </sect3>
 
@@ -340,37 +351,39 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>make makefiles</command>: This command rebuilds the makefiles
-throughout the source tree to use the options contained in the
-<envar>CCARGS</envar> and <envar>AUXLIBS</envar> variables.
+      <command>make makefiles</command>: Esse comando reconstrói os
+&quot;makefiles&quot; em toda a árvore fonte para usar as opções contidas
+nas variáveis &quot;<envar>CCARGS</envar>&quot; e
+&quot;<envar>AUXLIBS</envar>&quot;.
     </para>
 
     <para>
-      <command>sh postfix-install -non-interactive</command>: This keeps the
-install script from asking any questions, thereby accepting default
-destination directories in all but the few cases. If the
-<option>html_directory</option> and <option>readme_directory</option>
-options are not set then the documentation will not be installed.
+      <command>sh postfix-install -non-interactive</command>: Isso evita que o
+conjunto de comandos sequenciais de instalação faça perguntas, aceitando
+assim os diretórios de destino padrão em todos os casos, exceto em uns
+poucos. Se as opções &quot;<option>html_directory</option>&quot; e
+&quot;<option>readme_directory</option>&quot; não estiverem configuradas,
+[então] a documentação não será instalada.
     </para>
 
     <para>
-      <option>CCARGS="-DNO_EAI ..."</option>: this will turn off SMTPUTF8 support,
-for example if the rest of your email address infrastructure cannot handle
-UTF-8 email addresses and message header values.
+      <option>CCARGS="-DNO_EAI ..."</option>: isso desligará o suporte a
+&quot;SMTPUTF8&quot;, por exemplo, se o restante da sua infraestrutura de
+endereço de correio eletrônico não puder lidar com endereços
+&quot;UTF-8&quot; de correio eletrônico e valores de cabeçalho de mensagem.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando Postfix</title>
+    <title>Configurando o <quote>Postfix</quote></title>
 
     <sect3 id="postfix-config">
       <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/aliases</filename>,
-<filename>/etc/postfix/main.cf</filename>, and
-<filename>/etc/postfix/master.cf</filename>
+        <filename>/etc/aliases</filename>, <filename>/etc/postfix/main.cf</filename>
+e <filename>/etc/postfix/master.cf</filename>
       </para>
 
       <indexterm zone="postfix postfix-config">
@@ -387,61 +400,68 @@ UTF-8 email addresses and message header values.
       <title>Informação de Configuração</title>
 
       <para>
-        Create (or append to an existing) <filename>/etc/aliases</filename> with the
-following command. Change <replaceable>&lt;LOGIN&gt;</replaceable> to your
-non-root login identity so mail addressed to <systemitem
-class="username">root</systemitem> can be forwarded to you.  As the
-<systemitem class="username">root</systemitem> user:
+        Crie (ou anexe a um existente) &quot;<filename>/etc/aliases</filename>&quot;
+com o seguinte comando. Mude
+&quot;<replaceable>&lt;LOGIN&gt;</replaceable>&quot; para a tua identidade
+de login não &quot;root&quot; de forma que as mensagens endereçadas para
+o(a) &quot;<systemitem class="username">root</systemitem>&quot; possam ser
+encaminhadas para você. Como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/aliases &lt;&lt; "EOF"
-<literal># Begin /etc/aliases
+<literal># Inicia /etc/aliases
 
 MAILER-DAEMON:    postmaster
 postmaster:       root
 
 root:             <replaceable>&lt;LOGIN&gt;</replaceable>
-# End /etc/aliases</literal>
+# Termina /etc/aliases</literal>
 EOF</userinput></screen>
 
       <para>
-        To protect an existing <filename>/etc/aliases</filename> file, the above
-command appends these aliases to it if it exists. This file should be
-checked and duplicate aliases removed, if present.
+        Para proteger um arquivo &quot;<filename>/etc/aliases</filename>&quot;
+existente, o comando acima anexa esses apelidos a ele, se existir. Esse
+arquivo deveria ser verificado e os apelidos duplicados removidos, se
+presentes.
       </para>
 
       <note>
         <para>
-          The <filename>/etc/postfix/main.cf</filename> and
-<filename>/etc/postfix/master.cf</filename> files must be personalized for
-your system. The <filename>main.cf</filename> file needs your fully
-qualified hostname. You will find that <filename>main.cf</filename> is self
-documenting, so load it into your editor to make the changes you need for
-your situation.
+          Os arquivos &quot;<filename>/etc/postfix/main.cf</filename>&quot; e
+&quot;<filename>/etc/postfix/master.cf</filename>&quot; precisam ser
+personalizados para o teu sistema. O arquivo
+&quot;<filename>main.cf</filename>&quot; precisa do teu nome de dispositivo
+totalmente qualificado. Você descobrirá que
+&quot;<filename>main.cf</filename>&quot; é auto documentado, de forma que
+carregue-o em teu editor para fazer as mudanças necessárias para a tua
+situação.
         </para>
       </note>
 
       <note>
         <para>
-          <application>Postfix</application> can also be set up to run in a chroot
-jail. See the file in the source
-<filename>examples/chroot-setup/LINUX2</filename> for details.
+          O &quot;<application>Postfix</application>&quot; também pode ser configurado
+para executar em uma jaula &quot;chroot&quot;. Veja-se o arquivo no fonte
+&quot;<filename>examples/chroot-setup/LINUX2</filename>&quot; para detalhes.
         </para>
       </note>
 
       <para>
-        If you have an existing configuration, you can run the
-<command>postfix</command> utility to add any necessary definitions to your
-existing files. As the <systemitem class="username">root</systemitem> user:
+        Se você tiver uma configuração existente, [então] poderá executar o
+utilitário &quot;<command>postfix</command>&quot; para adicionar quaisquer
+definições necessárias aos teus arquivos existentes. Como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="nodump"><userinput>/usr/sbin/postfix upgrade-configuration</userinput></screen>
 
       <para>
-        Before starting <application>Postfix</application>, you should check that
-your configuration and file permissions will work properly. Run the
-following commands as the <systemitem class="username">root</systemitem>
-user to check and start your <application>Postfix</application> server:
+        Antes de iniciar o &quot;<application>Postfix</application>&quot;, você
+deveria verificar se a tua configuração e permissões de arquivo funcionarão
+adequadamente. Execute os seguintes comandos como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot; para verificar e
+iniciar o teu servidor &quot;<application>Postfix</application>&quot;:
       </para>
 
 <screen role="nodump"><userinput>/usr/sbin/postfix check &amp;&amp;
@@ -450,16 +470,18 @@ user to check and start your <application>Postfix</application> server:
     </sect3>
 
     <sect3 id="postfix-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        To automate the running of Postfix at startup, install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/postfix</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>postfix.service</filename> unit</phrase>
-included in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package:
+        Para automatizar a execução do &quot;Postfix&quot; na inicialização, instale
+<phrase revision="sysv">o conjunto de comandos sequenciais de inicialização
+&quot;<filename>/etc/rc.d/init.d/postfix</filename>&quot; incluso</phrase>
+<phrase revision="systemd">a unidade
+&quot;<filename>postfix.service</filename>&quot; inclusa</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;:
       </para>
 
       <indexterm zone="postfix postfix-init">
@@ -473,7 +495,7 @@ linkend="systemd-units" revision="systemd"/> package:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -482,15 +504,15 @@ linkend="systemd-units" revision="systemd"/> package:
 
       <seglistitem>
         <seg>
-          mailq (symlink), newaliases (symlink), postalias, postcat, postconf,
-postdrop, postfix, postkick, postlock, postlog, postmap, postmulti,
-postqueue, postsuper, and sendmail
+          mailq (link simbólico), newaliases (link simbólico), postalias, postcat,
+postconf, postdrop, postfix, postkick, postlock, postlog, postmap,
+postmulti, postqueue, postsuper e sendmail
         </seg>
         <seg>
-          None
+          Nenhum(a)
         </seg>
         <seg>
-          /{etc,usr/lib}/postfix, /usr/share/doc/postfix-&postfix-version; and
+          /{etc,usr/lib}/postfix, /usr/share/doc/postfix-&postfix-version; e
 /var/{lib,spool}/postfix
         </seg>
       </seglistitem>
@@ -504,7 +526,7 @@ postqueue, postsuper, and sendmail
         <term><command>mailq</command></term>
         <listitem>
           <para>
-            A symlink to <filename>sendmail</filename>
+            Um link simbólico para &quot;<filename>sendmail</filename>&quot;
           </para>
           <indexterm zone="postfix mailq">
             <primary sortas="b-mailq">mailq</primary>
@@ -516,7 +538,7 @@ postqueue, postsuper, and sendmail
         <term><command>newaliases</command></term>
         <listitem>
           <para>
-            A symlink to <filename>sendmail</filename>
+            Um link simbólico para &quot;<filename>sendmail</filename>&quot;
           </para>
           <indexterm zone="postfix newaliases">
             <primary sortas="b-newaliases">newaliases</primary>
@@ -528,8 +550,8 @@ postqueue, postsuper, and sendmail
         <term><command>postalias</command></term>
         <listitem>
           <para>
-            is a utility for <application>Postfix</application> alias database
-maintenance
+            é um utilitário para manutenção de base de dados de apelidos do
+&quot;<application>Postfix</application>&quot;
           </para>
           <indexterm zone="postfix postalias">
             <primary sortas="b-postalias">postalias</primary>
@@ -541,8 +563,9 @@ maintenance
         <term><command>postcat</command></term>
         <listitem>
           <para>
-            Prints the contents of files from the <application>Postfix</application>
-queue in human readable format
+            Imprime o conteúdo dos arquivos originários da fila do
+&quot;<application>Postfix</application>&quot; em formato legível por
+humanos(as)
           </para>
           <indexterm zone="postfix postcat">
             <primary sortas="b-postcat">postcat</primary>
@@ -554,8 +577,8 @@ queue in human readable format
         <term><command>postconf</command></term>
         <listitem>
           <para>
-            Displays or changes the value of <application>Postfix</application>
-configuration parameters
+            Exibe ou muda o valor dos parâmetros de configuração do
+&quot;<application>Postfix</application>&quot;
           </para>
           <indexterm zone="postfix postconf">
             <primary sortas="b-postconf">postconf</primary>
@@ -567,8 +590,8 @@ configuration parameters
         <term><command>postdrop</command></term>
         <listitem>
           <para>
-            Creates a file in the maildrop directory and copies its standard input to
-the file
+            Cria um arquivo no diretório &quot;maildrop&quot; e copia a entrada gerada
+padrão dele para o arquivo
           </para>
           <indexterm zone="postfix postdrop">
             <primary sortas="b-postdrop">postdrop</primary>
@@ -580,7 +603,7 @@ the file
         <term><command>postfix</command></term>
         <listitem>
           <para>
-            is the <application>Postfix</application> control program
+            é o aplicativo de controle do &quot;<application>Postfix</application>&quot;
           </para>
           <indexterm zone="postfix postfix-bin">
             <primary sortas="b-postfix">postfix</primary>
@@ -592,7 +615,8 @@ the file
         <term><command>postkick</command></term>
         <listitem>
           <para>
-            Sends requests to the specified service over a local transport channel
+            Envia solicitações para o serviço especificado por intermédio de um canal
+local de transporte
           </para>
           <indexterm zone="postfix postkick">
             <primary sortas="b-postkick">postkick</primary>
@@ -604,7 +628,8 @@ the file
         <term><command>postlock</command></term>
         <listitem>
           <para>
-            Locks a mail folder for exclusive use, and executes commands passed to it
+            Tranca uma pasta de mensagens para uso exclusivo e executa comandos passados
+para ela
           </para>
           <indexterm zone="postfix postlock">
             <primary sortas="b-postlock">postlock</primary>
@@ -616,8 +641,9 @@ the file
         <term><command>postlog</command></term>
         <listitem>
           <para>
-            A <application>Postfix</application>-compatible logging interface for use
-in, for example, shell scripts
+            Uma interface de registro compatível com o
+&quot;<application>Postfix</application>&quot; para uso, por exemplo, em
+conjuntos de comandos sequenciais de &quot;shell&quot;
           </para>
           <indexterm zone="postfix postlog">
             <primary sortas="b-postlog">postlog</primary>
@@ -629,8 +655,8 @@ in, for example, shell scripts
         <term><command>postmap</command></term>
         <listitem>
           <para>
-            Creates or queries one or more Postfix lookup tables, or updates an existing
-one
+            Cria ou consulta uma ou mais tabelas de pesquisa do &quot;Postfix&quot; ou
+atualiza uma existente
           </para>
           <indexterm zone="postfix postmap">
             <primary sortas="b-postmap">postmap</primary>
@@ -642,9 +668,10 @@ one
         <term><command>postmulti</command></term>
         <listitem>
           <para>
-            is the <application>Postfix</application> multi-instance manager.  It allows
-a system administrator to manage multiple <application>Postfix</application>
-instances on a single host
+            é o gerenciador de múltiplas instâncias do
+&quot;<application>Postfix</application>&quot;. Ele permite que um(a)
+administrador(a) de sistema gerencie múltiplas instâncias do
+&quot;<application>Postfix</application>&quot; em um dispositivo
           </para>
           <indexterm zone="postfix postmulti">
             <primary sortas="b-postmulti">postmulti</primary>
@@ -656,7 +683,8 @@ instances on a single host
         <term><command>postqueue</command></term>
         <listitem>
           <para>
-            The <application>Postfix</application> user interface for queue management
+            A interface de usuário(a) do &quot;<application>Postfix</application>&quot;
+para gerenciamento de filas
           </para>
           <indexterm zone="postfix postqueue">
             <primary sortas="b-postqueue">postqueue</primary>
@@ -668,8 +696,8 @@ instances on a single host
         <term><command>postsuper</command></term>
         <listitem>
           <para>
-            The <application>Postfix</application> user interface for superuser queue
-management
+            A interface de usuário(a) do &quot;<application>Postfix</application>&quot;
+para gerenciamento de filas de superusuário(a)
           </para>
           <indexterm zone="postfix postsuper">
             <primary sortas="b-postsuper">postsuper</primary>
@@ -681,8 +709,9 @@ management
         <term><command>sendmail</command></term>
         <listitem>
           <para>
-            is the <application>Postfix</application> to
-<application>Sendmail</application> compatibility interface
+            é a interface de compatibilidade do
+&quot;<application>Postfix</application>&quot; com o
+&quot;<application>Sendmail</application>&quot;
           </para>
           <indexterm zone="postfix sendmail-postfix">
             <primary sortas="b-sendmail">sendmail</primary>

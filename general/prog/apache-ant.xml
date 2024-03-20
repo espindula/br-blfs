@@ -7,9 +7,9 @@
   <!ENTITY apache-ant-download-http "https://archive.apache.org/dist/ant/source/apache-ant-&apache-ant-version;-src.tar.xz">
   <!ENTITY apache-ant-download-ftp  "">
   <!ENTITY apache-ant-md5sum        "4cf5c6728612f4787eda265b0a2d266b">
-  <!ENTITY apache-ant-size          "3,7Mo">
-  <!ENTITY apache-ant-buildsize     "242Mo">
-  <!ENTITY apache-ant-time          "0.3 SBU (excluding download time)">
+  <!ENTITY apache-ant-size          "3,7 MB">
+  <!ENTITY apache-ant-buildsize     "242 MB">
+  <!ENTITY apache-ant-time          "0,3 UPC (excluindo o tempo de transferência)">
 ]>
 
 <sect1 id="apache-ant" xreflabel="apache-ant-&apache-ant-version;">
@@ -23,18 +23,22 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Apache Ant</title>
+    <title>Introdução ao <quote>Apache Ant</quote></title>
 
     <para>
-      The <application>Apache Ant</application> package is a
-<application>Java</application>-based build tool. In theory, it is like the
-<command>make</command> command, but without <command>make</command>'s
-wrinkles. <application>Ant</application> is different. Instead of a model
-that is extended with shell-based commands, <application>Ant</application>
-is extended using <application>Java</application> classes. Instead of
-writing shell commands, the configuration files are XML-based, calling out a
-target tree that executes various tasks. Each task is run by an object that
-implements a particular task interface.
+      O pacote &quot;<application>Apache Ant</application>&quot; é uma ferramenta
+de construção baseada em &quot;<application>Java</application>&quot;. Na
+teoria, é como o comando &quot;<command>make</command>&quot;, mas sem as
+rugas do
+&quot;<command>make</command>&quot;.
+&quot;<application>Ant</application>&quot; é diferente. Em vez de um modelo
+que é estendido com comandos baseados em &quot;shell&quot;,
+&quot;<application>Ant</application>&quot; é estendido usando classes
+&quot;<application>Java</application>&quot;. Em vez de escrever comandos de
+&quot;shell&quot;, os arquivos de configuração são baseados em
+&quot;XML&quot;, chamando uma árvore alvo que executa várias tarefas. Cada
+tarefa é executada por um objeto que implementa uma interface específica de
+tarefa.
     </para>
 
     &lfs113_checked;
@@ -53,7 +57,7 @@ implements a particular task interface.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &apache-ant-md5sum;
+          Soma de verificação MD5 da transferência: &apache-ant-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -103,12 +107,12 @@ Additional Downloads</bridgehead>
       </listitem>
     </itemizedlist>
 -->
-<bridgehead renderas="sect3">Dependências de Apache Ant</bridgehead>
+<bridgehead renderas="sect3">Dependências do <quote>Apache Ant</quote></bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      A JDK (<xref linkend="java-bin"/> or <xref linkend="openjdk"/>) and <xref
-linkend="glib2"/>
+      Uma &quot;JDK&quot; (&quot;<xref linkend="java-bin"/>&quot; ou &quot;<xref
+linkend="openjdk"/>&quot;) e &quot;<xref linkend="glib2"/>&quot;
     </para>
 
 
@@ -123,7 +127,7 @@ Recommended</bridgehead>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Apache Ant</title>
+    <title>Instalação do <quote>Apache Ant</quote></title>
 
 
 
@@ -138,15 +142,15 @@ Recommended</bridgehead>
 <screen><userinput>sed -i 's/- -add-modules java.activation/-html4/' build.xml</userinput></screen>
 -->
 <para>
-      Build a limited bootstrap version of <application>Apache Ant</application>
-using the following command:
+      Construa uma versão limitada de instruções de autoaprimoramento do
+&quot;<application>Apache Ant</application>&quot; usando o seguinte comando:
     </para>
 
 <screen><userinput>./bootstrap.sh</userinput></screen>
 
     <para>
-      Now fix a problem when the next command tries to download a file from a
-problem site:
+      Agora corrija um problema quando o próximo comando tentar baixar um arquivo
+a partir de um sítio problemático:
     </para>
 
 <screen><userinput>sed -e 's|ftp.software.ibm.com|anduin.linuxfromscratch.org|' \
@@ -154,24 +158,25 @@ problem site:
     -i fetch.xml </userinput></screen>
 
     <para>
-      Download the runtime dependencies using the <filename>fetch.xml</filename>
-ant build script:
+      Transfira as dependências de tempo de execução usando o &quot;script&quot;
+de construção &quot;ant&quot; &quot;<filename>fetch.xml</filename>&quot;:
     </para>
 
 <screen><userinput>bootstrap/bin/ant -f fetch.xml -Ddest=optional</userinput></screen>
 
     <para>
-      Build <application>Apache Ant</application> by running the following
-command:
+      Construa o &quot;<application>Apache Ant</application>&quot; executando o
+seguinte comando:
     </para>
 
 <screen><userinput>./build.sh -Ddist.dir=$PWD/ant-&apache-ant-version; dist</userinput></screen>
 
     <para>
-      Install, as the <systemitem class="username">root</systemitem> user:
+      Instale, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>cp -rv ant-&apache-ant-version; /opt/            &amp;&amp;
+<screen role="root"><userinput>cp -rv ant-&apache-ant-version; /opt/           &amp;&amp;
 chown -R root:root /opt/ant-&apache-ant-version; &amp;&amp;
 ln -sfv ant-&apache-ant-version; /opt/ant</userinput></screen>
 
@@ -181,29 +186,30 @@ ln -sfv ant-&apache-ant-version; /opt/ant</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>bootstrap/bin/ant -f fetch.xml -Ddest=optional</command>: Downloads
-the missing dependencies to the user's home directory, and copies them into
-the source tree (in the <filename>lib/optional</filename> directory, where
-<command>ant</command> picks them up at build time).
+      <command>bootstrap/bin/ant -f fetch.xml -Ddest=optional</command>: Transfere
+as dependências ausentes para o diretório inicial do(a) usuário(a) e as
+copia na árvore do fonte (no diretório
+&quot;<filename>lib/optional</filename>&quot;, onde o
+&quot;<command>ant</command>&quot; os coleta ao tempo da construção).
     </para>
 
     <para>
       <command>./build.sh -Ddist.dir=$PWD/ant-&apache-ant-version; dist</command>:
-This command builds, tests, then installs the package into a temporary
-directory.
+Esse comando constrói, testa e, então, instala o pacote em um diretório
+temporário.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring Apache Ant</title>
+    <title>Configurando o <quote>Apache Ant</quote></title>
 
     <sect3 id="apache-ant-config">
       <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/ant/ant.conf</filename>,
-<filename>~/.ant/ant.conf</filename>, and <filename>~/.antrc</filename>
+        <filename>/etc/ant/ant.conf</filename>, <filename>~/.ant/ant.conf</filename>
+e <filename>~/.antrc</filename>
       </para>
 
       <indexterm zone="apache-ant apache-ant-config">
@@ -224,24 +230,25 @@ directory.
       <title>Informação de Configuração</title>
 
       <para>
-        Some packages will require <command>ant</command> to be in the search path
-and the <envar>ANT_HOME</envar> environment variable defined. Satisfy these
-requirements by issuing, as the <systemitem
-class="username">root</systemitem> user:
+        Alguns pacotes exigirão que o &quot;<command>ant</command>&quot; esteja no
+caminho de pesquisa e que a variável de ambiente
+&quot;<envar>ANT_HOME</envar>&quot; esteja definida. Satisfaça essas
+exigências emitindo, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/ant.sh &lt;&lt; EOF
-<literal># Begin /etc/profile.d/ant.sh
+<literal># Inicia /etc/profile.d/ant.sh
 
 pathappend /opt/ant/bin
 export ANT_HOME=/opt/ant
 
-# End /etc/profile.d/ant.sh</literal>
+# Termina /etc/profile.d/ant.sh</literal>
 EOF</userinput></screen>
 
       <para>
-        The above instructions assume you have configured your system as described
-in <xref linkend="postlfs-config-profile"/>.
+        As instruções acima pressupõem que você configurou seu sistema conforme
+descrito em &quot;<xref linkend="postlfs-config-profile"/>&quot;.
       </para>
 
     </sect3>
@@ -249,7 +256,7 @@ in <xref linkend="postlfs-config-profile"/>.
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -258,10 +265,10 @@ in <xref linkend="postlfs-config-profile"/>.
 
       <seglistitem>
         <seg>
-          ant, antRun, antRun.pl, complete-ant-cmd.pl, runant.pl, and runant.py         </seg>
+          ant, antRun, antRun.pl, complete-ant-cmd.pl, runant.pl e runant.py         </seg>
         <seg>
-          Numerous <filename>ant*.jar</filename> and dependent libraries in
-<envar>$ANT_HOME</envar><filename>/lib</filename>
+          Numerosos &quot;<filename>ant*.jar</filename>&quot; e bibliotecas
+dependentes em &quot;<envar>$ANT_HOME</envar><filename>/lib</filename>&quot;
         </seg>
         <seg>/opt/ant-&apache-ant-version;</seg>
       </seglistitem>
@@ -275,8 +282,9 @@ in <xref linkend="postlfs-config-profile"/>.
         <term><command>ant</command></term>
         <listitem>
           <para>
-            is a <application>Java</application> based build tool used by many packages
-instead of the conventional <command>make</command> program
+            é uma ferramenta de construção baseada em
+&quot;<application>Java</application>&quot; usada por muitos pacotes em vez
+do aplicativo convencional &quot;<command>make</command>&quot;
           </para>
           <indexterm zone="apache-ant ant">
             <primary sortas="b-ant">ant</primary>
@@ -288,8 +296,8 @@ instead of the conventional <command>make</command> program
         <term><command>antRun</command></term>
         <listitem>
           <para>
-            is a support script used to start <command>ant</command> build scripts in a
-given directory
+            é um &quot;script&quot; de suporte usado para iniciar &quot;scripts&quot; de
+construção do &quot;<command>ant</command>&quot; em um dado diretório
           </para>
           <indexterm zone="apache-ant antRun">
             <primary sortas="b-antRun">antRun</primary>
@@ -301,8 +309,9 @@ given directory
         <term><command>antRun.pl</command></term>
         <listitem>
           <para>
-            is a <application>Perl</application> script that provides similar
-functionality offered by the <command>antRun</command> script
+            é um &quot;script&quot; &quot;<application>Perl</application>&quot; que
+fornece funcionalidade semelhante oferecida pelo &quot;script&quot;
+&quot;<command>antRun</command>&quot;
           </para>
           <indexterm zone="apache-ant antRun.pl">
             <primary sortas="b-antRun.pl">antRun.pl</primary>
@@ -314,9 +323,9 @@ functionality offered by the <command>antRun</command> script
         <term><command>complete-ant-cmd.pl</command></term>
         <listitem>
           <para>
-            is a <application>Perl</application> script that allows
-<application>Bash</application> to complete an <command>ant</command>
-command-line
+            é um conjunto de comandos &quot;<application>Perl</application>&quot; que
+permite ao &quot;<application>Bash</application>&quot; completar uma linha
+de comando do &quot;<command>ant</command>&quot;
           </para>
           <indexterm zone="apache-ant complete-ant-cmd.pl">
             <primary sortas="b-complete-ant-cmd.pl">complete-ant-cmd.pl</primary>
@@ -328,8 +337,9 @@ command-line
         <term><command>runant.pl</command></term>
         <listitem>
           <para>
-            is a <application>Perl</application> wrapper script used to invoke
-<command>ant</command>
+            é um conjunto envólucro de comandos
+&quot;<application>Perl</application>&quot; usado para invocar o
+&quot;<command>ant</command>&quot;
           </para>
           <indexterm zone="apache-ant runant.pl">
             <primary sortas="b-runant.pl">runant.pl</primary>
@@ -341,8 +351,9 @@ command-line
         <term><command>runant.py</command></term>
         <listitem>
           <para>
-            is a <application>Python</application> wrapper script used to invoke
-<command>ant</command>
+            é um conjunto envólucro de comandos
+&quot;<application>Python</application>&quot; usado para invocar o
+&quot;<command>ant</command>&quot;
           </para>
           <indexterm zone="apache-ant runant.py">
             <primary sortas="b-runant.py">runant.py</primary>
@@ -354,8 +365,9 @@ command-line
         <term><filename class="libraryfile">ant*.jar</filename></term>
         <listitem>
           <para>
-            files are the <application>Apache Ant</application>
-<application>Java</application> class libraries
+            arquivos são as bibliotecas de classes
+&quot;<application>Java</application>&quot; do &quot;<application>Apache
+Ant</application>&quot;
           </para>
           <indexterm zone="apache-ant ant-star">
             <primary sortas="c-ant-star">ant-*.jar</primary>

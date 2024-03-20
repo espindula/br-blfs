@@ -7,9 +7,9 @@
   <!ENTITY lua-download-http "https://www.lua.org/ftp/lua-&lua52-version;.tar.gz">
   <!ENTITY lua-download-ftp  "">
   <!ENTITY lua-md5sum        "913fdb32207046b273fdb17aad70be13">
-  <!ENTITY lua-size          "248Ko">
-  <!ENTITY lua-buildsize     "3,6Mo">
-  <!ENTITY lua-time          "menos que 0,1UPC">
+  <!ENTITY lua-size          "248 KB">
+  <!ENTITY lua-buildsize     "3,6 MB">
+  <!ENTITY lua-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="lua52" xreflabel="Lua-&lua52-version;">
@@ -23,22 +23,23 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Lua 5.2</title>
+    <title>Introdução ao "Lua" 5.2</title>
 
     <para>
-      <application>Lua</application> is a powerful light-weight programming
-language designed for extending applications. It is also frequently used as
-a general-purpose, stand-alone language. <application>Lua</application> is
-implemented as a small library of C functions, written in ANSI C, and
-compiles unmodified in all known platforms. The implementation goals are
-simplicity, efficiency, portability, and low embedding cost. The result is a
-fast language engine with small footprint, making it ideal in embedded
-systems too.
+      <application>Lua</application> é uma linguagem de programação poderosa e
+leve projetada para estender aplicativos. Também é frequentemente usada como
+uma linguagem autônoma de uso geral. <application>Lua</application> é
+implementada como uma pequena biblioteca de funções "C", escrita em "ANSI
+C", e compila sem modificações em todas as plataformas conhecidas. Os
+objetivos de implementação são simplicidade, eficiência, portabilidade e
+baixo custo de incorporação. O resultado é um mecanismo de linguagem rápido
+e compacto, tornando-a ideal em sistemas embarcados também.
     </para>
 
     <para>
-      This is an older version of <application>Lua</application> needed only for
-compatibility with other programs such as <xref linkend='wireshark'/>.
+      Essa é uma versão mais antiga da <application>Lua</application> necessária
+somente para compatibilidade com outros aplicativos como <xref
+linkend='wireshark'/>.
     </para>
 
     &lfs113_checked;
@@ -57,7 +58,7 @@ compatibility with other programs such as <xref linkend='wireshark'/>.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &lua-md5sum;
+          Soma de verificação MD5 da transferência: &lua-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -92,11 +93,11 @@ url="&patch-root;/lua-&lua52-version;-shared_library-1.patch"/>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Lua 5.2</title>
+    <title>Instalação do "Lua" 5.2</title>
 
     <para>
-      Some packages check for the <application>pkg-config</application> file for
-<application>Lua</application>, which is created with:
+      Alguns pacotes verificam o arquivo <application>pkg-config</application>
+para <application>Lua</application>, o qual é criado com:
     </para>
 
 <screen><userinput>cat &gt; lua.pc &lt;&lt; "EOF"
@@ -115,7 +116,7 @@ libdir=${exec_prefix}/lib
 includedir=${prefix}/include/lua5.2
 
 Name: Lua
-Description: An Extensible Extension Language
+Description: Uma Linguagem de Extensão Extensível
 Version: ${R}
 Requires:
 Libs: -L${libdir} -llua5.2 -lm -ldl
@@ -141,17 +142,17 @@ EOF</userinput></screen>
 sed -i '/#define LUA_ROOT/s:/usr/local/:/usr/:' src/luaconf.h &amp;&amp;
 
 sed -r -e '/^LUA_(SO|A|T)=/ s/lua/lua5.2/' \
-       -e '/^LUAC_T=/ s/luac/luac5.2/'     \
+       -e '/^LUAC_T=/ s/luac/luac5.2/'    \
        -i src/Makefile &amp;&amp;
 
 make MYCFLAGS="-fPIC" linux</userinput></screen>
 
     <para>
-      The installation of this package is complex, so we will use the DESTDIR
-method of installation:
+      A instalação desse pacote é complexa, de modo que usaremos o método
+"DESTDIR" de instalação:
     </para>
 
-<screen><userinput>make TO_BIN='lua5.2 luac5.2'                     \
+<screen><userinput>make TO_BIN='lua5.2 luac5.2'                    \
      TO_LIB="liblua5.2.so liblua5.2.so.5.2 liblua5.2.so.&lua52-version;" \
      INSTALL_DATA="cp -d"                        \
      INSTALL_TOP=$PWD/install/usr                \
@@ -174,7 +175,7 @@ mv install/usr/share/man/man1/{luac.1,luac5.2.1}</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>chown -R root:root install  &amp;&amp;
+<screen role="root"><userinput>chown -R root:root install &amp;&amp;
 cp -a install/* /</userinput></screen>
 
   </sect2>
@@ -183,19 +184,20 @@ cp -a install/* /</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i ... src/luaconf.h</command>: This command changes the
-<application>Lua</application> search path to match the install path.
+      <command>sed -i ... src/luaconf.h</command>: Esse comando muda o caminho de
+pesquisa de <application>Lua</application> para corresponder ao caminho de
+instalação.
     </para>
 
     <para>
-      <command>sed -i ... src/Makefile</command>: This command deconflicts this
-installation with the latest version of lua.
+      <command>sed -i ... src/Makefile</command>: Esse comando desconflita essa
+instalação com a versão mais recente de "Lua".
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -204,14 +206,14 @@ installation with the latest version of lua.
 
       <seglistitem>
         <seg>
-          lua5.2 and luac5.2
+          lua5.2 e luac5.2
         </seg>
         <seg>
           liblua5.2.so
         </seg>
         <seg>
-          /usr/include/lua5.2, /usr/lib/lua/5.2, /usr/share/doc/lua-&lua52-version;,
-and /usr/share/lua/5.2
+          /usr/include/lua5.2, /usr/lib/lua/5.2, /usr/share/doc/lua-&lua52-version; e
+/usr/share/lua/5.2
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -224,7 +226,7 @@ and /usr/share/lua/5.2
         <term><command>lua5.2</command></term>
         <listitem>
           <para>
-            is the standalone Lua version 5.2 interpreter
+            é o interpretador independente "Lua" versão 5.2
           </para>
           <indexterm zone="lua52 lua-prog">
             <primary sortas="b-lua52">lua5.2</primary>
@@ -236,7 +238,7 @@ and /usr/share/lua/5.2
         <term><command>luac5.2</command></term>
         <listitem>
           <para>
-            is the Lua version 5.2 compiler
+            é o compilador "Lua" versão 5.2
           </para>
           <indexterm zone="lua52 luac52">
             <primary sortas="b-luac52">luac5.2</primary>
@@ -248,7 +250,7 @@ and /usr/share/lua/5.2
         <term><filename class="libraryfile">liblua5.2.so</filename></term>
         <listitem>
           <para>
-            contains the <application>Lua</application> version 5.2 API functions
+            contém as funções da "API" da <application>Lua</application> versão 5.2
           </para>
           <indexterm zone="lua52 liblua52">
             <primary sortas="c-liblua52">liblua5.2.so</primary>

@@ -7,10 +7,10 @@
   <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-43;/mutter-&mutter-version;.tar.xz">
   <!ENTITY mutter-download-ftp  "&gnome-download-ftp;/mutter/&gnome-43;/mutter-&mutter-version;.tar.xz">
   <!ENTITY mutter-md5sum        "aba8f5170a27fe7d24f07a3b2fdf2725">
-  <!ENTITY mutter-size          "2,7Mo">
-  <!ENTITY mutter-buildsize     "151 MB (without tests)">
-  <!ENTITY mutter-time          "0.6 SBU (Using parallelism=4)">
-  <!ENTITY mutter-time-systemd  "0.6 SBU (Using parallelism=4, add 1.0 SBU for tests)">
+  <!ENTITY mutter-size          "2,7 MB">
+  <!ENTITY mutter-buildsize     "151 MB (sem testes)">
+  <!ENTITY mutter-time          "0,6 UPC (Usando paralelismo=4)">
+  <!ENTITY mutter-time-systemd  "0,6 UPC (Usando paralelismo=4, adicionar 1,0 UPC para testes)">
 ]>
 
 <sect1 id="mutter" xreflabel="Mutter-&mutter-version;">
@@ -24,13 +24,13 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Mutter</title>
+    <title>Introdução ao Mutter</title>
 
     <para>
-      <application>Mutter</application> is the window manager for
-<application>GNOME</application>. It is not invoked directly, but from
-<application>GNOME Session</application> (on a machine with a hardware
-accelerated video driver).
+      <application>Mutter</application> é o gerenciador de janelas para o
+<application>GNOME</application>. Ele não é invocado diretamente, mas a
+partir da <application>Sessão GNOME</application> (em uma máquina com um
+controlador de vídeo acelerado por hardware).
     </para>
 
     &lfs113_checked;
@@ -49,7 +49,7 @@ accelerated video driver).
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &mutter-md5sum;
+          Soma de verificação MD5 da transferência: &mutter-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -74,40 +74,40 @@ accelerated video driver).
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Mutter</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Mutter</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="gnome-settings-daemon"/>, <xref linkend="graphene"/>, <xref
-linkend="libxcvt"/>, <xref linkend="libxkbcommon"/>, and <xref
+linkend="libxcvt"/>, <xref linkend="libxkbcommon"/> e <xref
 linkend="pipewire"/>
     </para>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="desktop-file-utils"/>, <xref
-linkend="gobject-introspection"/>, <xref linkend="startup-notification"/>,
-and <xref linkend="sysprof"/>
+linkend="gobject-introspection"/>, <xref linkend="startup-notification"/> e
+<xref linkend="sysprof"/>
     </para>
 
-    <bridgehead renderas="sect4">Recommended (Required to build the Wayland compositor)</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas (exigidas para construir o compositor Wayland)</bridgehead>
     <para role="recommended">
       <xref linkend="libinput"/>, <xref linkend="wayland"/>, <xref
-linkend="wayland-protocols"/>, and <xref linkend="xwayland"/>.
-Additionally, <xref linkend="gtk3"/> needs to be built with
-<application>Wayland</application> support.
+linkend="wayland-protocols"/> e <xref linkend="xwayland"/>. Adicionalmente,
+<xref linkend="gtk3"/> precisa ser construído com suporte a
+<application>Wayland</application>.
     </para>
 
     <bridgehead renderas="sect4"
-                revision="sysv">Recommended (Runtime)</bridgehead>
+                revision="sysv">Recomendadas (tempo de execução)</bridgehead>
     <para role="recommended" revision="sysv">
       <xref linkend="blocaled" role="runtime"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="python-dbusmock"/> (required for tests), <xref
-linkend="xorg-server"/> (for X11 sessions)
+      <xref linkend="python-dbusmock"/> (exigido para testes), <xref
+linkend="xorg-server"/> (para sessões X11)
     </para>
 
     
@@ -121,10 +121,11 @@ linkend="xorg-server"/> (for X11 sessions)
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Mutter</title>
+    <title>Instalação do Mutter</title>
 
     <para>
-      Instale <application>Mutter</application> executando os seguintes comandos:
+      Instale o <application>Mutter</application> executando os seguintes
+comandos:
     </para>
 
 <!--
@@ -157,25 +158,25 @@ ninja</userinput></screen>
     
 
     <para>
-      The test suite requires debug functions to be enabled in the build, and an
-external program called <command>xvfb-run</command>.  If you wish to run the
-tests, you should download and install it before running
-<command>meson</command>.  You can obtain it from <ulink
-url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink>, and install it
-with executable permissions in <filename
-class="directory">/usr/bin</filename>.  <command>xvfb-run</command> needs
-<command>Xvfb</command> at runtime, and <command>Xvfb</command> can be
-installed from either <xref linkend='xorg-server'/> or <xref
-linkend='xwayland'/>.  You should also replace
-<parameter>-Dtests=false</parameter> in the <command>meson</command>
-command, with <parameter>-Dtests=true</parameter>.  The test suite requires
-the mutter schema to be installed on the system, so it is better to run the
-tests after installing the package.
+      A suíte de teste exige que funções de depuração estejam habilitadas na
+construção e um aplicativo externo chamado <command>xvfb-run</command>. Se
+desejar executar os testes, você deveria baixá-lo e instalá-lo antes de
+executar o <command>meson</command>. Você pode obtê-lo a partir de <ulink
+url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink> e instalá-lo
+com permissões executáveis em <filename
+class="directory">/usr/bin</filename>. <command>xvfb-run</command> precisa
+de <command>Xvfb</command> em tempo de execução, e <command>Xvfb</command>
+pode ser instalado a partir de <xref linkend='xorg-server'/> ou <xref
+linkend='xwayland'/>. Você também deveria substituir
+<parameter>-Dtests=false</parameter> no comando <command>meson</command> por
+<parameter>-Dtests=true</parameter>. A suíte de teste exige que o esquema
+mutter esteja instalado no sistema, de forma que é melhor executar os testes
+depois de instalar o pacote.
     </para>
 
     <para>
-      You can also test basic functions of <application>Mutter</application>
-following <xref linkend='mutter-starting'/>, after installing it.
+      Você também pode testar funções básicas do <application>Mutter</application>
+seguindo <xref linkend='mutter-starting'/>, depois de instalá-lo.
     </para>
 
     <para>
@@ -185,14 +186,14 @@ following <xref linkend='mutter-starting'/>, after installing it.
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      If you wish to run the tests, remove the reference to
-<application>Zenity</application> which is not a part of BLFS from one test:
+      Se você deseja executar os testes, remova a referência ao
+<application>Zenity</application>, que não faz parte do BLFS, de um teste:
     </para>
 
 <screen role='test'><userinput>sed 's/zenity --[a-z]*/gtk3-demo/' -i ../src/tests/x11-test.sh</userinput></screen>
 
     <para>
-      Now run the test suite:
+      Agora execute a suíte de teste:
     </para>
 
     
@@ -201,10 +202,11 @@ following <xref linkend='mutter-starting'/>, after installing it.
 <userinput>HOME= ninja test</userinput></screen>
 
     <para>
-      The tests require an active X or wayland session.  The
-<filename>native-unit</filename> test is known to fail.  A lot of tests will
-fail if the opengl rendering is not done in hardware.  Don't make any mouse
-or keyboard input while the test suite is running or some tests may fail.
+      Os testes exigem uma sessão ativa do X ou wayland. O teste
+<filename>native-unit</filename> é conhecido por falhar. Muitos testes
+falharão se a renderização do opengl não for feita no hardware. Não faça
+nenhuma entrada de mouse ou teclado enquanto a suíte de teste estiver
+executando ou alguns testes poderão falhar.
     </para>
   </sect2>
 
@@ -217,10 +219,10 @@ or keyboard input while the test suite is running or some tests may fail.
          failed" message will turn into a crash.  Enabling debug is just a
          work around, it's not a proper fix.  -->
 <para>
-      <parameter>--buildtype=debugoptimized</parameter>: Override the default
-buildtype (<quote>debug</quote>), which would produce unoptimized binaries.
-It's used instead of <option>--buildtype=release</option> to work around an
-issue causing gnome-shell to crash.
+      <parameter>--buildtype=debugoptimized</parameter>: Substitui o tipo de
+construção padrão (<quote>debug</quote>), o que produziria binários não
+otimizados. É usado em vez de <option>--buildtype=release</option> para
+contornar um problema que causa o travamento do gnome-shell.
     </para>
 
     <!--
@@ -229,20 +231,20 @@ issue causing gnome-shell to crash.
 
 -->
 <para>
-      <parameter>-Dtests=false</parameter>: Prevents building the tests, and
-removes a hard requirement on <command>xvfb-run</command>.
+      <parameter>-Dtests=false</parameter>: Impede a construção dos testes e
+remove um requisito difícil em <command>xvfb-run</command>.
     </para>
 
     <para>
-      <option>-Dprofiler=false</option>: Use this option if
-<application>Sysprof</application> is not installed, and you don't want
-meson to download <application>Sysprof</application> source code.
+      <option>-Dprofiler=false</option>: Use essa opção se o
+<application>Sysprof</application> não estiver instalado e você não quiser
+que o meson baixe o código fonte do <application>Sysprof</application>.
     </para>
 
   </sect2>
 
   <sect2 role="starting" id="mutter-starting">
-    <title>Starting Mutter</title>
+    <title>Iniciando o Mutter</title>
 
     
 
@@ -252,35 +254,35 @@ meson to download <application>Sysprof</application> source code.
          such a configuration recently (I don't build Xorg Server or xinit
          these days.  -->
 <para>
-      <application>Mutter</application> is normally used as a component of
-<application>gnome-shell</application>, but it can be used as a standalone
-Wayland compositor too.  To run <application>Mutter</application> as a
-Wayland compositor, in a virtual console, issue:
+      <application>Mutter</application> normalmente é usado como um componente do
+<application>gnome-shell</application>, mas também pode ser usado como um
+compositor autônomo Wayland. Para executar <application>Mutter</application>
+como um compositor Wayland, em um console virtual, emita:
     </para>
 
     <screen role='nodump'><userinput>mutter --wayland -- vte-2.91</userinput></screen>
 
     <para>
-      Replace <command>vte-2.91</command> with the command line for the first
-application you want in the Wayland session. Note that once this application
-exits, the Wayland session will be terminated.
+      Substitua <command>vte-2.91</command> pela linha de comando do primeiro
+aplicativo que você deseja na sessão do Wayland. Observe que assim que esse
+aplicativo sair, a sessão do Wayland será terminada.
     </para>
 
     <para>
-      <application>Mutter</application> can also function as a nested compositor
-in another Wayland session.  In a terminal emulator, issue:
+      <application>Mutter</application> também pode funcionar como um compositor
+aninhado em outra sessão do Wayland. Em um emulador de terminal, emita:
     </para>
 
     <screen role='nodump'><userinput>MUTTER_DEBUG_DUMMY_MODE_SPECS=1920x1080 mutter --wayland --nested -- vte-2.91</userinput></screen>
 
     <para>
-      Replace <replaceable>1920x1080</replaceable> with the size you want for the
-nested Wayland session.
+      Substitua <replaceable>1920x1080</replaceable> pelo tamanho que você quiser
+para a sessão aninhada do Wayland.
     </para>
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -308,8 +310,8 @@ nested Wayland session.
         <term><command>mutter</command></term>
         <listitem>
           <para>
-            is a <application>Clutter</application> based compositing
-<application>GTK+</application> Window Manager
+            é um gerenciador de janelas de composição <application>GTK+</application>
+baseado em <application>Clutter</application>
           </para>
           <indexterm zone="mutter mutter-prog">
             <primary sortas="b-mutter">mutter</primary>
@@ -321,7 +323,7 @@ nested Wayland session.
         <term><filename class="libraryfile">libmutter-11.so</filename></term>
         <listitem>
           <para>
-            contains the <application>Mutter</application> API functions
+            contém as funções da API do <application>Mutter</application>
           </para>
           <indexterm zone="mutter libmutter">
             <primary sortas="c-libmutter">libmutter-11.so</primary>

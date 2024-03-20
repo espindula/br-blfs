@@ -7,9 +7,9 @@
   <!ENTITY proftpd-download-http "https://github.com/proftpd/proftpd/archive/v&proftpd-version;/proftpd-&proftpd-version;.tar.gz">
   <!ENTITY proftpd-download-ftp  "ftp://ftp.proftpd.org/distrib/source/proftpd-&proftpd-version;.tar.gz">
   <!ENTITY proftpd-md5sum        "eafdca17287bec7b6e8d88aaeba0f6aa">
-  <!ENTITY proftpd-size          "18,8Mo">
-  <!ENTITY proftpd-buildsize     "66Mo">
-  <!ENTITY proftpd-time          "0,3UPC">
+  <!ENTITY proftpd-size          "18,8 MB">
+  <!ENTITY proftpd-buildsize     "66 MB">
+  <!ENTITY proftpd-time          "0,3 UPC">
 ]>
 
 <sect1 id="proftpd" xreflabel="ProFTPD-&proftpd-version;">
@@ -23,12 +23,13 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a ProFTPD</title>
+    <title>Introdução ao <quote>ProFTPD</quote></title>
 
     <para>
-      The <application>ProFTPD</application> package contains a secure and highly
-configurable FTP daemon. This is useful for serving large file archives over
-a network.
+      O pacote &quot;<application>ProFTPD</application>&quot; contém um processo
+de segundo plano &quot;FTP&quot; seguro e altamente configurável. Isso é
+útil para servir arquivamentos grandes de arquivos em uma rede de
+intercomunicação.
     </para>
 
     &lfs113_checked;
@@ -47,7 +48,7 @@ a network.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &proftpd-md5sum;
+          Soma de verificação MD5 da transferência: &proftpd-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -79,14 +80,14 @@ Additional Downloads</bridgehead>
       </listitem>
     </itemizedlist>
 -->
-<bridgehead renderas="sect3">Dependências de ProFTPD</bridgehead>
+<bridgehead renderas="sect3">Dependências do &quot;ProFTPD&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="libcap-pam"/>, <xref linkend="libssh2"/>, <xref
-linkend="linux-pam"/>, <xref linkend="mariadb"/> or <ulink
+linkend="linux-pam"/>, <xref linkend="mariadb"/> ou <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="pcre"/>, <xref
-linkend="postgresql"/>, and <ulink
+linkend="postgresql"/> e <ulink
 url="https://metacpan.org/pod/Net::SSH2">Net::SSH2</ulink>
     </para>
 
@@ -95,12 +96,13 @@ url="https://metacpan.org/pod/Net::SSH2">Net::SSH2</ulink>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de ProFTPD</title>
+    <title>Instalação do <quote>ProFTPD</quote></title>
 
     <para>
-      For security reasons, you should install <application>ProFTPD</application>
-using an unprivileged user and group.  As the <systemitem
-class="username">root</systemitem> user:
+      Por motivos de segurança, você deveria instalar o
+&quot;<application>ProFTPD</application>&quot; usando um(a) usuário(a) e
+grupo sem privilégios. Como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <!--
@@ -112,7 +114,7 @@ class="username">root</systemitem> user:
 
 <screen><userinput remap="pre">patch -Np1 -i ../proftpd-&proftpd-version;-consolidated_fixes-1.patch</userinput></screen>
 -->
-<screen role="root"><userinput>groupadd -g 46 proftpd                             &amp;&amp;
+<screen role="root"><userinput>groupadd -g 46 proftpd                            &amp;&amp;
 useradd -c proftpd -d /srv/ftp -g proftpd \
         -s /usr/bin/proftpdshell -u 46 proftpd     &amp;&amp;
 
@@ -121,15 +123,15 @@ ln -v -s /usr/bin/false /usr/bin/proftpdshell      &amp;&amp;
 echo /usr/bin/proftpdshell &gt;&gt; /etc/shells</userinput></screen>
 
     <para>
-      Install <application>ProFTPD</application> as an unprivileged user by
-running the following commands:
+      Instale o &quot;<application>ProFTPD</application>&quot; como um(a)
+usuário(a) sem privilégios executando os seguintes comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/run &amp;&amp;
 make</userinput></screen>
 
     <para>
-      This packages does not come with a usable test suite.
+      Esse pacote não vem com uma suíte de teste usável.
     </para>
 
     <para>
@@ -146,49 +148,51 @@ cp -Rv doc/*     /usr/share/doc/proftpd-&proftpd-version;</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>install -v -d -m775 -o proftpd -g proftpd /srv/ftp</command>:
-Create the home directory for <application>ProFTPD</application>.
+      <command>install -v -d -m775 -o proftpd -g proftpd /srv/ftp</command>: Crie
+o diretório lar para o &quot;<application>ProFTPD</application>&quot;.
     </para>
 
     <para>
-      <command>ln -v -s /usr/bin/false /usr/bin/proftpdshell</command>: Set the
-default shell as a link to an invalid shell.
+      <command>ln -v -s /usr/bin/false /usr/bin/proftpdshell</command>: Configure
+o &quot;shell&quot; padrão como um link para um &quot;shell&quot; inválido.
     </para>
 
     <para>
-      <command>echo /usr/bin/proftpdshell &gt;&gt; /etc/shells</command>: Fake a
-valid shell for compatibility purposes.
+      <command>echo /usr/bin/proftpdshell &gt;&gt; /etc/shells</command>:
+Falsifique um &quot;shell&quot; válido para fins de compatibilidade.
     </para>
 
     <note>
       <para>
-        The above two commands can be omitted if the following directive is placed
-in the configuration file:
+        Os dois comandos acima podem ser omitidos se a seguinte diretiva for
+colocada no arquivo de configuração:
       </para>
 
 <screen><literal>RequireValidShell off</literal></screen>
 
       <para>
-        By default, proftpd will require that users logging in have valid
-shells. The RequireValidShell directive turns off this requirement.  This is
-only recommended if you are setting up your FTP server exclusively for
-anonymous downloads.
+        Por padrão, o &quot;proftpd&quot; exigirá que os(as) usuários(as) se logando
+tenham &quot;shells&quot; válidos. A diretiva &quot;RequireValidShell&quot;
+desliga esse requisito. Isso é recomendado somente se você estiver
+configurando o teu servidor &quot;FTP&quot; exclusivamente para
+transferências anônimas.
       </para>
     </note>
 
     <note>
       <para>
-        Support for most of the dependency packages requires using options passed to
-the <command>configure</command> script. View the output from
-<command>./configure --help</command> for complete information about
-enabling dependency packages.
+        O suporte para a maioria dos pacotes de dependências exige usar opções
+passadas para o conjunto de comandos sequenciais
+&quot;<command>configure</command>&quot;. Veja-se a saída gerada a partir de
+&quot;<command>./configure --help</command>&quot; para informações completas
+relativas a habilitar pacotes de dependências.
       </para>
     </note>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando ProFTPD</title>
+    <title>Configurando o <quote>ProFTPD</quote></title>
 
     <sect3 id='proftpd-config'>
       <title>Arquivos de Configuração</title>
@@ -207,65 +211,66 @@ enabling dependency packages.
       <title>Informação de Configuração</title>
 
       <para>
-        This is a simple, download-only sample configuration. See the
-<application>ProFTPD</application> documentation in <filename
-class="directory">/usr/share/doc/proftpd</filename> and consult the website
-at <ulink url="http://www.proftpd.org/"/> for example configurations.
+        Esta é uma configuração de amostra simples, somente para baixar. Veja-se a
+documentação do &quot;<application>ProFTPD</application>&quot; em
+&quot;<filename class="directory">/usr/share/doc/proftpd</filename>&quot; e
+consulte o sítio da &quot;web&quot; em <ulink
+url="http://www.proftpd.org/"/> para configurações de exemplo.
       </para>
 
 <screen role="root"><!--# (such as xinetd)-->
 <?dbfo keep-together="auto"?><userinput>cat &gt; /etc/proftpd.conf &lt;&lt; "EOF"
-<literal># This is a basic ProFTPD configuration file
-# It establishes a single server and a single anonymous login.
+<literal># Este é um arquivo básico de configuração do "ProFTPD".
+# Ele estabelece um servidor e um login anônimo.
 
-ServerName                      "ProFTPD Default Installation"
+ServerName                      "Instalação Padrão do ProFTPD"
 ServerType                      standalone
 DefaultServer                   on
 
-# Port 21 is the standard FTP port.
+# A porta 21 é a porta padrão do "FTP".
 Port                            21
-# Umask 022 is a good standard umask to prevent new dirs and files
-# from being group and world writable.
+# "Umask" 022 é um bom padrão de "umask" para evitar que novos 
+# diretórios e arquivos sejam escrevíveis por grupo e mundialmente.
 Umask                           022
 
-# To prevent DoS attacks, set the maximum number of child processes
-# to 30.  If you need to allow more than 30 concurrent connections
-# at once, simply increase this value.  Note that this ONLY works
-# in standalone mode, in inetd mode you should use an inetd server
-# that allows you to limit maximum number of processes per service
+# Para evitar ataques "DoS", configure o número máximo de processos descendentes
+# como trinta (30). Se precisar permitir mais que trinta (30) conexões simultâneas,
+# [então] simplesmente aumente esse valor. Observe que isso funciona SOMENTE no modo
+# autônomo; no modo "inetd", você deveria usar um servidor "inetd" que te permita
+# limitar o número máximo de processos por serviço.
 
 MaxInstances                    30
 
-# Set the user and group that the server normally runs at.
+# Configure o(a) usuário(a) e o grupo em que o servidor normalmente executa.
 User                            proftpd
 Group                           proftpd
 
-# To cause every FTP user to be "jailed" (chrooted) into their home
-# directory, uncomment this line.
+# Para fazer com que cada usuário(a) "FTP" esteja "enjaulado(a)" (em "chroot") no
+# diretório inicial dele(a), descomente esta linha.
 #DefaultRoot ~
 
 
-# Normally, files should be overwritable.
+# Normalmente, os arquivos deveriam ser sobrescrevíveis.
 &lt;Directory /*&gt;
   AllowOverwrite                on
 &lt;/Directory&gt;
 
-# A basic anonymous configuration, no upload directories.
+# Uma configuração básica anônima, sem diretórios de "upload".
 &lt;Anonymous ~proftpd&gt;
   User                          proftpd
   Group                         proftpd
-  # Clients should be able to login with "anonymous" as well as "proftpd"
+  # Os clientes deveriam estar aptos a se logarem com "anonymous" bem como com "proftpd"
   UserAlias                     anonymous proftpd
 
-  # Limit the maximum number of anonymous logins
+  # Limite o número máximo de "logins" anônimos
   MaxClients                    10
 
-  # 'welcome.msg' should be displayed at login, and '.message' displayed
-  # in each newly chdired directory.
+  # 'welcome.msg' deveria ser exibida ao "login", e '.message' exibida
+  # a cada novo diretório acessado.
   DisplayLogin                  welcome.msg
   DisplayChdir                  .message
 
-  # Limit WRITE everywhere in the anonymous chroot
+  # Limite o "WRITE" em todos os lugares no "chroot" anônimo.
   &lt;Limit WRITE&gt;
     DenyAll
   &lt;/Limit&gt;
@@ -275,16 +280,17 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3  id="proftpd-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        Install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/proftpd</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>proftpd.service</filename> unit</phrase>
-included in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package:
+        Instale <phrase revision="sysv">o conjunto de comandos sequenciais de
+inicialização &quot;<filename>/etc/rc.d/init.d/proftpd</filename>&quot;
+incluso</phrase> <phrase revision="systemd">a unidade
+&quot;<filename>proftpd.service</filename>&quot; inclusa</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;:
       </para>
 
       <indexterm zone="proftpd proftpd-init">
@@ -298,7 +304,7 @@ linkend="systemd-units" revision="systemd"/> package:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -308,13 +314,13 @@ linkend="systemd-units" revision="systemd"/> package:
       <seglistitem>
         <seg>
           ftpasswd, ftpcount, ftpdctl, ftpmail, ftpquota, ftpscrub, ftpshut, ftptop,
-ftpwho, in.proftpd (symlink to proftpd), proftpd, and prxs
+ftpwho, in.proftpd (link simbólico para &quot;proftpd&quot;), proftpd e prxs
         </seg>
         <seg>
-          None
+          Nenhum(a)
         </seg>
         <seg>
-          /usr/{include,lib}/proftpd, /usr/share/doc/proftpd-&proftpd-version;, and
+          /usr/{include,lib}/proftpd, /usr/share/doc/proftpd-&proftpd-version; e
 /srv/ftp
         </seg>
       </seglistitem>
@@ -328,7 +334,7 @@ ftpwho, in.proftpd (symlink to proftpd), proftpd, and prxs
         <term><command>proftpd</command></term>
         <listitem>
           <para>
-            is the FTP daemon
+            é o processo de segundo plano de &quot;FTP&quot;
           </para>
           <indexterm zone="proftpd proftpd-prog">
             <primary sortas="b-proftpd">proftpd</primary>
@@ -340,7 +346,7 @@ ftpwho, in.proftpd (symlink to proftpd), proftpd, and prxs
         <term><command>ftpcount</command></term>
         <listitem>
           <para>
-            shows the current number of connections
+            mostra o número atual de conexões
           </para>
           <indexterm zone="proftpd ftpcount">
             <primary sortas="b-ftpcount">ftpcount</primary>
@@ -352,7 +358,8 @@ ftpwho, in.proftpd (symlink to proftpd), proftpd, and prxs
         <term><command>ftpdctl</command></term>
         <listitem>
           <para>
-            is used to control the proftpd daemon while it is running
+            é usado para controlar o processo de segundo plano &quot;proftpd&quot;
+enquanto ele está em execução
           </para>
           <indexterm zone="proftpd ftpdctl">
             <primary sortas="b-ftpdctl">ftpdctl</primary>
@@ -364,8 +371,9 @@ ftpwho, in.proftpd (symlink to proftpd), proftpd, and prxs
         <term><command>ftpasswd</command></term>
         <listitem>
           <para>
-            is a Perl script designed to create and manage AuthUserFiles and
-AuthGroupFiles of the correct format for proftpd
+            é um conjunto de comandos sequenciais &quot;Perl&quot; projetado para criar
+e gerenciar &quot;AuthUserFiles&quot; e &quot;AuthGroupFiles&quot; no
+formato correto para o &quot;proftpd&quot;
           </para>
           <indexterm zone="proftpd ftpasswd">
             <primary sortas="b-ftpasswd">ftpasswd</primary>
@@ -377,7 +385,9 @@ AuthGroupFiles of the correct format for proftpd
         <term><command>ftpmail</command></term>
         <listitem>
           <para>
-            is a Perl script for sending email based on the proftpd TransferLog
+            é um conjunto de comandos sequenciais &quot;Perl&quot; para envio de
+mensagens eletrônicas baseado no &quot;TransferLog&quot; do
+&quot;proftpd&quot;
           </para>
           <indexterm zone="proftpd ftpmail">
             <primary sortas="b-ftpmail">ftpmail</primary>
@@ -389,8 +399,10 @@ AuthGroupFiles of the correct format for proftpd
         <term><command>ftpquota</command></term>
         <listitem>
           <para>
-            is a Perl script designed to create and manage limits and tally files for
-the mod_quotatab + mod_quotatab_file module combination for proftpd
+            é um conjunto de comandos sequenciais &quot;Perl&quot; projetado para criar
+e gerenciar limites e arquivos de contagem para a combinação de módulos
+&quot;mod_quotatab&quot; + &quot;mod_quotatab_file&quot; para o
+&quot;proftpd&quot;
           </para>
           <indexterm zone="proftpd ftpquota">
             <primary sortas="b-ftpquota">ftpquota</primary>
@@ -402,7 +414,7 @@ the mod_quotatab + mod_quotatab_file module combination for proftpd
         <term><command>ftpscrub</command></term>
         <listitem>
           <para>
-            provides a way to scrub the scoreboard file on demand
+            fornece uma maneira de limpar o arquivo do placar sob demanda
           </para>
           <indexterm zone="proftpd ftpscrub">
             <primary sortas="b-ftpscrub">ftpscrub</primary>
@@ -414,7 +426,8 @@ the mod_quotatab + mod_quotatab_file module combination for proftpd
         <term><command>ftpshut</command></term>
         <listitem>
           <para>
-            shuts down all <application>proftpd</application> servers at a given time
+            desliga todos os servidores &quot;<application>proftpd</application>&quot;
+em uma dada hora
           </para>
           <indexterm zone="proftpd ftpshut">
             <primary sortas="b-ftpshut">ftpshut</primary>
@@ -426,7 +439,7 @@ the mod_quotatab + mod_quotatab_file module combination for proftpd
         <term><command>ftptop</command></term>
         <listitem>
           <para>
-            displays running status on connections
+            exibe a situação de execução relativa às conexões
           </para>
           <indexterm zone="proftpd ftptop">
             <primary sortas="b-ftptop">ftptop</primary>
@@ -438,7 +451,7 @@ the mod_quotatab + mod_quotatab_file module combination for proftpd
         <term><command>ftpwho</command></term>
         <listitem>
           <para>
-            shows current process information for each session
+            mostra informações atuais do processo para cada sessão
           </para>
           <indexterm zone="proftpd ftpwho">
             <primary sortas="b-ftpwho">ftpwho</primary>
@@ -450,8 +463,9 @@ the mod_quotatab + mod_quotatab_file module combination for proftpd
         <term><command>prxs</command></term>
         <listitem>
           <para>
-            is a Perl script designed to compile and install third-party modules, from
-source code, as DSO modules for the installed proftpd
+            é um conjunto de comandos sequenciais &quot;Perl&quot; projetado para
+compilar e instalar módulos de terceiros(as), a partir do fonte, como
+módulos &quot;DSO&quot; para o &quot;proftpd&quot; instalado
           </para>
           <indexterm zone="proftpd prxs">
             <primary sortas="b-prxs">prxs</primary>

@@ -9,8 +9,8 @@
   <!ENTITY gnome-session-download-ftp
            "&gnome-download-ftp;/gnome-session/&gnome-43;/gnome-session-&gnome-session-version;.tar.xz">
   <!ENTITY gnome-session-md5sum        "02ae90bc41fd06e780169b760fb55670">
-  <!ENTITY gnome-session-size          "476Ko">
-  <!ENTITY gnome-session-buildsize     "12Mo">
+  <!ENTITY gnome-session-size          "476 KB">
+  <!ENTITY gnome-session-buildsize     "12 MB">
   <!ENTITY gnome-session-time          "0,1 UPC">
 ]>
 
@@ -25,11 +25,11 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a GNOME Session</title>
+    <title>Introdução ao GNOME Session</title>
 
     <para>
-      The <application>GNOME Session</application> package contains the
-<application>GNOME</application> session manager.
+      O pacote <application>GNOME Session</application> contém o gerenciador de
+sessões do <application>GNOME</application>.
     </para>
 
     &lfs113_checked;
@@ -48,7 +48,7 @@
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &gnome-session-md5sum;
+          Soma de verificação MD5 da transferência: &gnome-session-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -68,21 +68,21 @@
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de GNOME Session</bridgehead>
+    <bridgehead renderas="sect3">Dependências do GNOME Session</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <phrase revision="sysv"><xref role="runtime" linkend="elogind"/>,</phrase>
 <xref linkend="gnome-desktop"/>, <xref linkend="json-glib"/>, <xref
-linkend="mesa"/>, <phrase revision="systemd"><xref role="runtime"
-linkend="systemd"/>,</phrase> and <xref linkend="upower"/>
+linkend="mesa"/> <phrase revision="systemd">, <xref role="runtime"
+linkend="systemd"/></phrase> e <xref linkend="upower"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="xmlto"/>, and <xref linkend="libxslt"/> with <xref
-linkend="DocBook"/> and <xref linkend="docbook-xsl"/> (to build the
-documentation)
+      <xref linkend="xmlto"/> e <xref linkend="libxslt"/> com <xref
+linkend="DocBook"/> e <xref linkend="docbook-xsl"/> (para construir a
+documentação)
     </para>
 
     <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gnome-session"/>
@@ -90,29 +90,30 @@ documentation)
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de GNOME Session</title>
+    <title>Instalação do GNOME Session</title>
 
     <para>
-      When running GNOME under <xref linkend="wayland"/>, environment settings are
-not imported for the user using the system profile. The Wayland developers
-are currently undecided on a standard method to provide system environment
-settings for user sessions. To work around this limitation, execute the
-following command to make <command>gnome-session</command> use a login
-shell:
+      Ao executar o GNOME sob o <xref linkend="wayland"/>, as configurações de
+ambiente não são importadas para o(a) usuário(a) que usa o perfil do
+sistema. Os(As) desenvolvedores(as) do Wayland estão atualmente indecisos a
+respeito de um método padrão para fornecer configurações de ambiente de
+sistema para sessões de usuário(a). Para contornar essa limitação, execute o
+seguinte comando para fazer com que <command>gnome-session</command> use um
+shell de login:
     </para>
 
 <screen><userinput>sed 's@/bin/sh@/bin/sh -l@' -i gnome-session/gnome-session.in</userinput></screen>
 
 
     <para revision="sysv">
-      Adapt meson.build so that gnome-session can build without systemd:
+      Adapte meson.build de forma que gnome-session consiga construir sem systemd:
     </para>
 
 <screen revision="sysv"><userinput remap="pre">sed -i "/  systemd_dep/,+3d;/if enable_systemd/a \    systemd_userunitdir = '/tmp\'" meson.build</userinput></screen>
 
     <para>
-      Install <application>GNOME Session</application> by running the following
-commands:
+      Instale o <application>GNOME Session</application> executando os seguintes
+comandos:
     </para>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
@@ -144,27 +145,29 @@ ninja</userinput></screen>
 
 
     <para>
-      Move the documentation to a versioned directory:
+      Mova a documentação para um diretório versionado:
     </para>
 
 <screen role="root"><userinput>mv -v /usr/share/doc/gnome-session{,-&gnome-session-version;}</userinput></screen>
 
 
     <para>
-      This package creates two Xorg based <filename>.desktop</filename> files in
-the <filename class="directory">/usr/share/xsessions/</filename> directory,
-and two Wayland based <filename>.desktop</filename> files in the <filename
-class="directory">/usr/share/wayland-sessions/</filename> directory.  Only
-one is needed in each directory on a BLFS system, so prevent the extra files
-showing up as options in a display manager.  As the &root; user:
+      Esse pacote cria dois arquivos <filename>.desktop</filename> baseados em
+Xorg no diretório <filename
+class="directory">/usr/share/xsessions/</filename> e dois arquivos
+<filename>.desktop</filename> baseados em Wayland no diretório <filename
+class="directory">/usr/share/wayland-sessions/</filename>. Somente um é
+necessário em cada diretório em um sistema BLFS, de forma que evite que os
+arquivos extras apareçam como opções em um gerenciador de exibição. Como
+o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>rm -v /usr/share/xsessions/gnome.desktop &amp;&amp;
 rm -v /usr/share/wayland-sessions/gnome.desktop</userinput></screen>
 
     <para revision="sysv">
-      Now, as the <systemitem class="username">root</systemitem> user, remove
-systemd units that are useless on SysV systems:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>,
+remova as unidades systemd que são inúteis em sistemas SysV:
     </para>
 
 <!-- this part is not needed on systemd, since the dbus session is created
@@ -173,10 +176,10 @@ by systemd-user.-->
 
 
     <para revision="sysv">
-      The startup sequence of gnome-wayland needs to create a dbus session.  On
-SysV, this has to be added to the shipped
-<filename>gnome-wayland.desktop</filename> file, which is written for
-systemd. As the &root; user:
+      A sequência de iniciação do gnome-wayland precisa criar uma sessão dbus. No
+SysV, isso tem de ser adicionado ao arquivo
+<filename>gnome-wayland.desktop</filename> enviado, que é escrito para
+systemd. Como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root" revision="sysv"><userinput>sed -e 's@^Exec=@&amp;/usr/bin/dbus-run-session @' \
@@ -192,25 +195,25 @@ systemd. As the &root; user:
    </sect2>
 
   <sect2 role="starting">
-    <title>Starting GNOME</title>
+    <title>Iniciando o GNOME</title>
 
     <para>
-      The easiest way to start GNOME is to use a display manager.  <xref
-linkend="gdm"/> is the recommended display manager.
+      A maneira mais fácil de iniciar o GNOME é a de usar um gerenciador de
+exibição. <xref linkend="gdm"/> é o gerenciador de exibição recomendado.
     </para>
 
     <para>
-      It is also possible to start <application>GNOME</application> from the
-command line. However, you must still have <xref linkend="gdm"/> installed
-for some portions of the desktop to work. One reason to start from the
-command line is if you want Wayland support on a system that has the
-proprietary NVIDIA driver installed, since GDM will not show the Wayland
-session type on such a system.
+      Também é possível iniciar o <application>GNOME</application> a partir da
+linha de comando. No entanto, você ainda precisa ter o <xref linkend="gdm"/>
+instalado para que algumas partes da área de trabalho funcionem. Um motivo
+para iniciar a partir da linha de comando é se você quiser suporte ao
+Wayland em um sistema que tenha o controlador proprietário NVIDIA instalado,
+uma vez que o GDM não mostrará o tipo de sessão do Wayland em tal sistema.
     </para>
 
     <para>
-      To start <application>GNOME</application> using <xref role="nodep"
-linkend="xinit"/>, run the following commands:
+      Para iniciar o <application>GNOME</application> usando <xref role="nodep"
+linkend="xinit"/>, execute os seguintes comandos:
     </para>
 
 <screen role="nodump"><userinput>cat &gt; ~/.xinitrc &lt;&lt; "EOF"
@@ -220,8 +223,8 @@ EOF
 startx</userinput></screen>
 
     <para>
-      Alternatively, to start <application>GNOME</application> with Wayland
-support, run the following command:
+      Alternativamente, para iniciar o <application>GNOME</application> com
+suporte ao Wayland, execute o seguinte comando:
     </para>
 
 <screen role="nodump"><userinput>XDG_SESSION_TYPE=wayland dbus-run-session gnome-session</userinput></screen>
@@ -229,7 +232,7 @@ support, run the following command:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -238,13 +241,13 @@ support, run the following command:
 
       <seglistitem>
         <seg>
-          gnome-session, gnome-session-inhibit, and gnome-session-quit
+          gnome-session, gnome-session-inhibit e gnome-session-quit
         </seg>
        <seg>
-          None
+          Nenhum(a)
         </seg>
         <seg>
-          /usr/share/doc/gnome-session-&gnome-session-version; and
+          /usr/share/doc/gnome-session-&gnome-session-version; e
 /usr/share/gnome-session
         </seg>
       </seglistitem>
@@ -258,7 +261,8 @@ support, run the following command:
         <term><command>gnome-session</command></term>
         <listitem>
           <para>
-            is used to start up the <application>GNOME</application> Desktop environment
+            é usado para iniciar o ambiente de área de trabalho do
+<application>GNOME</application>
           </para>
           <indexterm zone="gnome-session gnome-session-prog">
             <primary sortas="b-gnome-session">gnome-session</primary>
@@ -270,8 +274,8 @@ support, run the following command:
         <term><command>gnome-session-inhibit</command></term>
         <listitem>
           <para>
-            is used to inhibit certain <application>GNOME</application> Session
-functionality while executing the given command
+            é usado para inibir certas funcionalidades da sessão do
+<application>GNOME</application> enquanto executar o comando dado
           </para>
           <indexterm zone="gnome-session gnome-session-inhibit">
             <primary sortas="b-gnome-session-inhibit">gnome-session-inhibit</primary>
@@ -283,7 +287,7 @@ functionality while executing the given command
         <term><command>gnome-session-quit</command></term>
         <listitem>
           <para>
-            is used to end the <application>GNOME</application> Session
+            é usado para terminar a sessão do <application>GNOME</application>
           </para>
           <indexterm zone="gnome-session gnome-session-quit">
             <primary sortas="b-gnome-session-quit">gnome-session-quit</primary>

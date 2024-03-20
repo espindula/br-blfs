@@ -8,9 +8,9 @@
      "https://www.python.org/ftp/python/&python2-version;/Python-&python2-version;.tar.xz">
   <!ENTITY python2-download-ftp  "">
   <!ENTITY python2-md5sum        "fd6cc8ec0a78c44036f825e739f36e5a">
-  <!ENTITY python2-size          "12,2Mo">
-  <!ENTITY python2-buildsize     "228Mo (adicionar 17Mo para os testes)">
-  <!ENTITY python2-time          "0.5 SBU (Using parallelism=4; add 5.9 SBU for tests)">
+  <!ENTITY python2-size          "12,2 MB">
+  <!ENTITY python2-buildsize     "228 MB (adicionar 17 MB para os testes)">
+  <!ENTITY python2-time          "0,5 UPC (Usando paralelismo=4; adicionar 5,9 UPC para os testes)">
 
   <!ENTITY python2htmldoc-download-http
      "https://www.python.org/ftp/python/doc/&python2-version;/python-&python2-version;-docs-html.tar.bz2">
@@ -27,25 +27,27 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Python 2</title>
+    <title>Introdução ao <quote>Python</quote> 2</title>
 
     <para>
-      The <application>Python 2</application> package contains the
-<application>Python</application> development environment. It is useful for
-object-oriented programming, writing scripts, prototyping large programs or
-developing entire applications. This version is for backward compatibility
-with other dependent packages.
+      O pacote &quot;<application>Python 2</application>&quot; contém o ambiente
+de desenvolvimento &quot;<application>Python</application>&quot;. Ele é útil
+para programação orientada a objetos, escrita de conjuntos sequenciais de
+comandos, prototipagem de aplicativos grandes ou desenvolvimento de
+aplicativos inteiros. Essa versão é para compatibilidade retroativa com
+outros pacotes dependentes.
     </para>
 
     <note>
       <para>
-        Python2 has been deprecated by the upstream developers.  Support for Python2
-was discontinued on January 1st, 2020.
+        &quot;Python2&quot; foi descontinuado pelos(as) desenvolvedores(as)
+produtores(as). O suporte para &quot;Python2&quot; foi descontinuado em 1º
+de janeiro de 2020.
       </para>
 
       <para>
-        BLFS is attempting to use Python3 as much as possible, but some packages
-have not been updated to support Python3.
+        O BLFS está tentando usar &quot;Python3&quot; tanto quanto possível, mas
+alguns pacotes não foram atualizados para suportar &quot;Python3&quot;.
       </para>
     </note>
 
@@ -65,7 +67,7 @@ have not been updated to support Python3.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &python2-md5sum;
+          Soma de verificação MD5 da transferência: &python2-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -96,51 +98,52 @@ url="&patch-root;/Python-&python2-version;-security_fixes-1.patch"/>
       </listitem>
       <listitem>
         <para>
-          Optional HTML Documentation: <ulink url="&python2htmldoc-download-http;"/>
+          Documentação Opcional &quot;HTML&quot;: <ulink
+url="&python2htmldoc-download-http;"/>
         </para>
       </listitem>
     </itemizedlist>
 
 
-    <bridgehead renderas="sect3">Dependências de Python 2</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;Python&quot; 2</bridgehead>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="sqlite"/> (For an additional module)
+      <xref linkend="sqlite"/> (Para um módulo adicional)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="bluez"/> and <xref linkend="valgrind"/>
+      <xref linkend="bluez"/> e <xref linkend="valgrind"/>
     </para>
 
-    <bridgehead renderas="sect4">Optional (For more additional modules)</bridgehead>
+    <bridgehead renderas="sect4">Opcionais (Para mais módulos adicionais)</bridgehead>
     <para role="optional">
-      <xref linkend="libnsl"/> and <xref linkend="tk"/>
+      <xref linkend="libnsl"/> e <xref linkend="tk"/>
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/Python"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/Python"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Python 2</title>
+    <title>Instalação do <quote>Python</quote> 2</title>
 
     <para>
-      First, disable the installation of a script that overwrites a more recent
-script:
+      Primeiro, desabilite a instalação de um conjunto sequencial de comandos que
+sobrescreve um conjunto sequencial de comandos mais recente:
     </para>
 
 <screen><userinput>sed -i '/2to3/d' ./setup.py</userinput></screen>
 
     <para>
-      Install <application>Python 2</application> by running the following
-commands:
+      Instale o &quot;<application>Python 2</application>&quot; executando os
+seguintes comandos:
     </para>
 
 <screen><userinput>patch -Np1 -i ../Python-&python2-version;-security_fixes-1.patch &amp;&amp;
-./configure --prefix=/usr                              \
+./configure --prefix=/usr                             \
             --enable-shared                            \
             --with-system-expat                        \
             --with-system-ffi                          \
@@ -149,40 +152,45 @@ make</userinput></screen>
 
     <para>
       <!-- https://bugs.python.org/issue46811 -->
-If you invoke the tests, they will run through twice.  To test the results,
-issue: <command>make -k test</command>.  Several tests are known to fail,
-including <literal>test_ftplib</literal>, <literal>test_ssl</literal>,
-<literal>test_urllib2_localnet</literal>, <literal>test_xml_etree</literal>,
-<literal>test_xml_etree_c</literal>, and
-<literal>test_minidom</literal>. These failures are due to OpenSSL-3 and
-Expat-2.4.6.
+Se você invocar os testes, [então] eles executarão duas vezes. Para testar
+os resultados, emita: &quot;<command>make -k test</command>&quot;. Vários
+testes são conhecidos por falharem, incluindo
+&quot;<literal>test_ftplib</literal>&quot;,
+&quot;<literal>test_ssl</literal>&quot;,
+&quot;<literal>test_urllib2_localnet</literal>&quot;,
+&quot;<literal>test_xml_etree</literal>&quot;,
+&quot;<literal>test_xml_etree_c</literal>&quot; e
+&quot;<literal>test_minidom</literal>&quot;. Essas falhas são devidas ao
+&quot;OpenSSL-3&quot; e ao &quot;Expat-2.4.6&quot;.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>make altinstall                                &amp;&amp;
+<screen role="root"><userinput>make altinstall                               &amp;&amp;
 ln -s python2.7        /usr/bin/python2        &amp;&amp;
 ln -s python2.7-config /usr/bin/python2-config &amp;&amp;
 chmod -v 755 /usr/lib/libpython&python2-majorver;.so.1.0</userinput></screen>
 
     <para>
-      Since <application>Python 2</application> is in maintenance mode, and
-<application>Python 3</application> is recommended by upstream for
-development, you probably do not need to install the documentation.
-However, if you still want to install documentation for both
-<application>Python</application> versions, be sure to define the
-<envar>PYTHONDOCS</envar> variable for the version you want to use, each
-time you need to consult the documentation. If you have downloaded the
-preformatted documentation from <ulink
-url="https://docs.python.org/download.html"/>, install it as the <systemitem
-class="username">root</systemitem> user:
+      Como o &quot;<application>Python 2</application>&quot; está em modo de
+manutenção e o &quot;<application>Python 3</application>&quot; é recomendado
+pelo(a) produtor(a) para desenvolvimento, você provavelmente não precisa
+instalar a documentação. No entanto, se você ainda quiser instalar a
+documentação para ambas as versões do
+&quot;<application>Python</application>&quot;, [então] certifique-se de
+definir a variável &quot;<envar>PYTHONDOCS</envar>&quot; para a versão que
+deseja usar, cada vez que precisar consultar a documentação. Se você baixou
+a documentação pré-formatada a partir de <ulink
+url="https://docs.python.org/download.html"/>, [então] instale-a como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>install -v -dm755 /usr/share/doc/python-&python2-version; &amp;&amp;
 
-tar --strip-components=1                     \
+tar --strip-components=1                    \
     --no-same-owner                          \
     --directory /usr/share/doc/python-&python2-version; \
     -xvf ../python-&python2-version;-docs-html.tar.bz2 &amp;&amp;
@@ -195,54 +203,58 @@ find /usr/share/doc/python-&python2-version; -type f -exec chmod 0644 {} \;</use
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--with-system-expat</parameter>: This switch enables linking
-against system version of <application>Expat</application>.
+      <parameter>--with-system-expat</parameter>: Essa chave habilita vincular à
+versão do sistema do &quot;<application>Expat</application>&quot;.
     </para>
 
     <para>
-      <parameter>--with-system-ffi</parameter>: This switch enables linking
-against system version of <application>libffi</application>.
+      <parameter>--with-system-ffi</parameter>: Essa chave habilita vincular à
+versão do sistema da &quot;<application>libffi</application>&quot;.
     </para>
 
     <para>
-      <parameter>--enable-unicode=ucs4</parameter>: This switch enables 32-bit
-Unicode support in <application>Python</application>.
+      <parameter>--enable-unicode=ucs4</parameter>: Essa chave habilita o suporte
+&quot;Unicode&quot; de 32 bits no
+&quot;<application>Python</application>&quot;.
     </para>
 
     <para>
-      <option>--with-ensurepip=yes</option> : This switch enables building
-<command>pip</command> and <command>setuptools</command> packaging
-programs.  <command>setuptools</command> is needed for building some Python
-modules.  This switch is not recommended because this version of Python is
-no longer maintained.
+      <option>--with-ensurepip=yes</option> : Essa chave habilita construir os
+aplicativos de empacotamento &quot;<command>pip</command>&quot; e
+&quot;<command>setuptools</command>&quot;.
+&quot;<command>setuptools</command>&quot; é necessário para construir alguns
+módulos &quot;Python&quot;. Essa chave não é recomendada porque essa versão
+do &quot;Python&quot; não mais é mantida.
     </para>
 
     <para>
-      <option>--with-dbmliborder=bdb:gdbm:ndbm</option>: Use this switch if you
-want to build <application>Python</application> DBM Module against
-<application>Berkeley DB</application> instead of
-<application>GDBM</application>.
+      <option>--with-dbmliborder=bdb:gdbm:ndbm</option>: Use essa chave se você
+desejar construir o módulo &quot;DBM&quot; do
+&quot;<application>Python</application>&quot; contra
+&quot;<application>Berkeley DB</application>&quot; em vez do
+&quot;<application>GDBM</application>&quot;.
     </para>
 
     <para>
-      <command>make altinstall</command>: This make target omits some default
-symbolic links that may interfere with Python 3.
+      <command>make altinstall</command>: Esse alvo do &quot;make&quot; omite
+alguns links simbólicos padrão que possivelmente interfiram no
+&quot;Python&quot; 3.
     </para>
 
     <para>
-      <command>chmod ...</command>: Fix permissions for libraries to be consistent
-with other libraries.
+      <command>chmod ...</command>: Corrige permissões para bibliotecas serem
+consistentes com outras bibliotecas.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring Python 2</title>
+    <title>Configurando o <quote>Python</quote> 2</title>
 
     <para>
-      In order for <command>python</command> to find the installed documentation,
-you must add the following environment variable to individual user's or the
-system's profile:
+      Para a finalidade de que &quot;<command>python</command>&quot; encontre a
+documentação instalada, você precisa adicionar a seguinte variável de
+ambiente ao perfil individual do(a) usuário(a) ou ao do sistema:
     </para>
 
 <screen role="root"><userinput>export PYTHONDOCS=/usr/share/doc/python-&python2-version;</userinput></screen>
@@ -250,7 +262,7 @@ system's profile:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -259,15 +271,14 @@ system's profile:
 
       <seglistitem>
         <seg>
-          pydoc, python2 (symlink), python2-config (symlink),
-python&python2-majorver;, python&python2-majorver;-config, smtpd.py, and
-idle
+          pydoc, python2 (link simbólico), python2-config (link simbólico),
+python&python2-majorver;, python&python2-majorver;-config, smtpd.py e idle
         </seg>
         <seg>
           libpython&python2-majorver;.so
         </seg>
         <seg>
-          /usr/{include,lib}/python&python2-majorver; and
+          /usr/{include,lib}/python&python2-majorver; e
 /usr/share/doc/python-&python2-version;
         </seg>
       </seglistitem>
@@ -281,10 +292,12 @@ idle
         <term><command>idle</command></term>
         <listitem>
           <para>
-            is a wrapper script that opens a <application>Python</application> aware GUI
-editor. For this script to run, you must have installed
-<application>Tk</application> before Python so that the Tkinter Python
-module is built
+            é um conjunto sequencial de comandos envólucros que abre um editor
+&quot;GUI&quot; compatível com
+&quot;<application>Python</application>&quot;. Para esse conjunto sequencial
+de comandos executar, você precisa ter instalado o
+&quot;<application>Tk</application>&quot; antes do &quot;Python&quot;, de
+forma que o módulo &quot;Tkinter&quot; do &quot;Python&quot; seja construído
           </para>
           <indexterm zone="python2 idle">
             <primary sortas="b-idle">idle</primary>
@@ -296,7 +309,8 @@ module is built
         <term><command>pydoc</command></term>
         <listitem>
           <para>
-            is the <application>Python</application> documentation tool
+            é a ferramenta de documentação do
+&quot;<application>Python</application>&quot;
           </para>
           <indexterm zone="python2 pydoc2">
             <primary sortas="b-pydoc2">pydoc</primary>
@@ -308,7 +322,8 @@ module is built
         <term><command>python2</command></term>
         <listitem>
           <para>
-            is an interpreted, interactive, object-oriented programming language
+            é uma linguagem de programação interpretada, interativa e orientada a
+objetos
           </para>
           <indexterm zone="python2 python">
             <primary sortas="b-python2">python</primary>
@@ -320,7 +335,8 @@ module is built
         <term><command>python&python2-majorver;</command></term>
         <listitem>
           <para>
-            is a version-specific name for the <command>python</command> program
+            é um nome específico de versão para o aplicativo
+&quot;<command>python</command>&quot;
           </para>
           <indexterm zone="python2 python2-ver">
             <primary sortas="b-python&python2-majorver;">python&python2-majorver;</primary>
@@ -332,7 +348,8 @@ module is built
         <term><command>smtpd.py</command></term>
         <listitem>
           <para>
-            is an SMTP proxy implemented in <application>Python</application>
+            é um &quot;proxy&quot; &quot;SMTP&quot; implementado em
+&quot;<application>Python</application>&quot;
           </para>
           <indexterm zone="python2 smtpd.py">
             <primary sortas="b-smtpd.py">smtpd.py</primary>

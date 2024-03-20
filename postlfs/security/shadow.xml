@@ -132,7 +132,7 @@ comandos:
 
 sed -i "224s/rounds/min_rounds/" libmisc/salt.c        &amp;&amp;
 -->
-<userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in          &amp;&amp;
+<userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in         &amp;&amp;
 
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \; &amp;&amp;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \; &amp;&amp;
@@ -191,15 +191,16 @@ instaladas pelo <application>Man-pages</application> no LFS.
     <para>
       <command>sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' -e
 's@#\(SHA_CRYPT_..._ROUNDS 5000\)@\100@' -e 's@/var/spool/mail@/var/mail@'
--e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i etc/login.defs</command>: Instead of
-using the default 'DES' method, this command modifies the installation to
-use the more secure 'SHA512' method of hashing passwords, which also allows
-passwords longer than eight characters. The number of rounds is also
-increased to prevent brute force password attacks. The command also changes
-the obsolete <filename class="directory">/var/spool/mail</filename> location
-for user mailboxes that <application>Shadow</application> uses by default to
-the <filename class="directory">/var/mail</filename> location. It also
-changes the default path to be consistent with that set in LFS.
+-e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i etc/login.defs</command>: Em vez de
+usar o método padrão 'DES ', esse comando modifica a instalação para usar o
+método mais seguro 'SHA512' de hash de senhas, que também permite senhas
+maiores que oito caracteres. O número de rodadas também é aumentado para
+evitar ataques de senha de força bruta. O comando também muda o local
+obsoleto <filename class="directory">/var/spool/mail</filename> para caixas
+de correio de usuário(a) que <application>Shadow</application> usa por
+padrão para o local <filename class="directory">/var/mail</filename>. Ele
+também muda o caminho padrão para estar consistente com aquele configurado
+no LFS.
     </para>
 
     <!--
@@ -383,51 +384,51 @@ seguintes comandos:
         <title>'login'</title>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/login &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/login
+<literal># Início /etc/pam.d/login
 
-# Set failure delay before next prompt to 3 seconds
+# Configura atraso de falha antes do próximo prompt para 3 segundos
 auth      optional    pam_faildelay.so  delay=3000000
 
-# Check to make sure that the user is allowed to login
+# Verifica se o(a) usuário(a) tem permissão para se logar
 auth      requisite   pam_nologin.so
 
-# Check to make sure that root is allowed to login
-# Disabled by default. You will need to create /etc/securetty
-# file for this module to function. See man 5 securetty.
+# Verifica para assegurar que o(a) root tem permissão para se logar.
+# Desabilitado por padrão. Você precisará criar o arquivo /etc/securetty
+# para que este módulo funcione. Veja-se man 5 securetty.
 #auth      required    pam_securetty.so
 
-# Additional group memberships - disabled by default
+# Associações adicionais de grupo - desabilitadas por padrão
 #auth      optional    pam_group.so
 
-# include system auth settings
+# Inclui configurações de autenticação do sistema
 auth      include     system-auth
 
-# check access for the user
+# Verifica acesso para o(a) usuário(a)
 account   required    pam_access.so
 
-# include system account settings
+# Inclui configurações de conta do sistema
 account   include     system-account
 
-# Set default environment variables for the user
+# Configura variáveis padrão de ambiente para o(a) usuário(a)
 session   required    pam_env.so
 
-# Set resource limits for the user
+# Configura limites de recursos para o(a) usuário(a)
 session   required    pam_limits.so
 
-# Display date of last login - Disabled by default
+# Exibe data do login mais recente - Desabilitado por padrão
 #session   optional    pam_lastlog.so
 
-# Display the message of the day - Disabled by default
+# Exibe a mensagem do dia - Desabilitado por padrão
 #session   optional    pam_motd.so
 
-# Check user's mail - Disabled by default
+# Verifica mensagens eletrônicas para o(a) usuário(a) - Desabilitado por padrão
 #session   optional    pam_mail.so      standard quiet
 
-# include system session and password settings
+# inclui configurações da sessão e senha do sistema
 session   include     system-session
 password  include     system-password
 
-# End /etc/pam.d/login</literal>
+# Fim /etc/pam.d/login</literal>
 EOF</userinput></screen>
       </sect4>
 

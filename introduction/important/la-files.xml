@@ -22,46 +22,50 @@
 
     <para>
 
-      In LFS and BLFS, many packages use a internally shipped libtool copy to
-build on a variety of Unix platforms.  This includes platforms such as AIX,
-Solaris, IRIX, HP-UX, and Cygwin as well as Linux.  The origins of this tool
-are quite dated.  It was intended to manage libraries on systems with less
-advanced capabilities than a modern Linux system.
+      No LFS e no BLFS, muitos pacotes usam uma cópia da "libtool" enviada
+internamente para construir em uma variedade de plataformas Unix. Isso
+inclui plataformas como "AIX", "Solaris", "IRIX", "HP-UX" e "Cygwin", bem
+como Linux. As origens dessa ferramenta são bastante antigas. Ela era
+destinada gerenciar bibliotecas em sistemas com capacidades menos avançadas
+que um sistema Linux moderno.
 
     </para>
 
     <para>
 
-      On a Linux system, libtool specific files are generally unneeded.  Normally
-libraries are specified in the build process during the link phase.  Since a
-linux system uses the <ulink
-url="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">
-Executable and Linkable Format (ELF)</ulink> for executables and dynamic
-libraries, information needed to complete the task is embedded in the
-files.  Both the linker and the program loader can query the appropriate
-files and properly link or execute the program.
+      Em um sistema Linux, os arquivos específicos da "libtool" geralmente são
+desnecessários. Normalmente as bibliotecas são especificadas no processo de
+construção durante a fase de ligação. Como um sistema Linux usa o <ulink
+url="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">Executable
+and Linkable Format (ELF)</ulink> para executáveis e bibliotecas dinâmicas,
+as informações necessárias para concluir a tarefa são embutidas nos
+arquivos. Tanto o vinculador quanto o carregador de aplicativos podem
+consultar os arquivos apropriados e vincular ou executar o aplicativo
+adequadamente.
 
     </para>
 
     <para>
-      Static libraries are rarely used in LFS and BLFS.  And, nowadays most
-packages store the information needed for linking against a static library
-into a .pc file, instead of relying on libtool.  A <command>pkg-config
---static --libs</command> command will output the sufficient flags for the
-linker to link against a static library without any libtool magic.
+      Bibliotecas estáticas raramente são usadas no LFS e no BLFS. E hoje em dia a
+maioria dos pacotes armazena as informações necessárias para vincular a uma
+biblioteca estática em um arquivo ".pc", em vez de depender da "libtool". Um
+comando <command>pkg-config --static --libs</command> gerará os
+sinalizadores suficientes para o vinculador para vincular-se a uma
+biblioteca estática sem qualquer mágica da "libtool".
     </para>
 
     <para>
-      The problem is that libtool usually creates one or more text files for
-package libraries called libtool archives.  These small files have a ".la"
-extension and contain information that is similar to that embedded in the
-libraries or pkg-config files.  When building a package that uses libtool,
-the process automatically looks for these files.  Sometimes a .la file can
-contains the name or path of a static library used during build but not
-installed, then the build process will break because the .la file refers to
-something nonexistent on the system.  Similarly, if a package is updated and
-no longer uses the .la file, then the build process can break with the old
-.la files.
+      O problema é que a "libtool" geralmente cria um ou mais arquivos de texto
+para bibliotecas de pacotes, chamados arquivamentos "libtool". Esses
+pequenos arquivos tem uma extensão ".la" e contém informações semelhantes
+àquelas embutidas nas bibliotecas ou nos arquivos "pkg-config". Ao construir
+um pacote que usa "libtool", o processo procura automaticamente por esses
+arquivos. Às vezes, um arquivo ".la" pode conter o nome ou caminho de uma
+biblioteca estática usada durante a construção, mas não instalada, então o
+processo de construção será interrompido porque o arquivo ".la" se refere a
+algo inexistente no sistema. Da mesma forma, se um pacote for atualizado e
+não mais usar o arquivo ".la", então o processo de construção poderá quebrar
+com os arquivos ".la" antigos.
     </para>
 
     <para>
@@ -90,45 +94,45 @@ diretórios que possivelmente estejam causando problemas.
 <literal>#!/bin/bash
 
 # /usr/sbin/remove-la-files.sh
-# Written for Beyond Linux From Scratch
-# by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
+# Escrito para o Beyond Linux From Scratch
+# por Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
 
-# Make sure we are running with root privs
+# Certifique-se de que estamos executando com privilégios de "root"
 if test "${EUID}" -ne 0; then
-    echo "Error: $(basename ${0}) must be run as the root user! Exiting..."
+    echo "Erro: $(basename ${0}) precisa ser executado como o(a) usuário(a) root! Saindo..."
     exit 1
 fi
 
-# Make sure PKG_CONFIG_PATH is set if discarded by sudo
+# Certifique-se de que PKG_CONFIG_PATH esteja definido se descartado pelo "sudo"
 source /etc/profile
 
 OLD_LA_DIR=/var/local/la-files
 
 mkdir -p $OLD_LA_DIR
 
-# Only search directories in /opt, but not symlinks to directories
+# Pesquise somente diretórios em /opt, mas não links simbólicos para diretórios
 OPTDIRS=$(find /opt -mindepth 1 -maxdepth 1 -type d)
 
-# Move any found .la files to a directory out of the way
+# Mova todos os arquivos ".la" encontrados para um diretório fora do caminho
 find /usr/lib $OPTDIRS -name "*.la" ! -path "/usr/lib/ImageMagick*" \
   -exec mv -fv {} $OLD_LA_DIR \;
 ###############
 
-# Fix any .pc files that may have .la references
+# Corrija quaisquer arquivos ".pc" que possam ter referências ".la"
 
 STD_PC_PATH='/usr/lib/pkgconfig
              /usr/share/pkgconfig
              /usr/local/lib/pkgconfig
              /usr/local/share/pkgconfig'
 
-# For each directory that can have .pc files
+# Para cada diretório que pode conter arquivos ".pc"
 for d in $(echo $PKG_CONFIG_PATH | tr : ' ') $STD_PC_PATH; do
 
-  # For each pc file
+  # Para cada arquivo "pc"
   for pc in $d/*.pc ; do
     if [ $pc == "$d/*.pc" ]; then continue; fi
 
-    # Check each word in a line with a .la reference
+    # Verifique cada palavra em uma linha com uma referência ".la"
     for word in $(grep '\.la' $pc); do
       if $(echo $word | grep -q '.la$' ); then
         mkdir -p $d/la-backup
@@ -137,7 +141,7 @@ for d in $(echo $PKG_CONFIG_PATH | tr : ' ') $STD_PC_PATH; do
         basename=$(basename $word )
         libref=$(echo $basename|sed -e 's/^lib/-l/' -e 's/\.la$//')
 
-        # Fix the .pc file
+        # Corrige o arquivo ".pc"
         sed -i "s:$word:$libref:" $pc
       fi
     done

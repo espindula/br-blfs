@@ -7,9 +7,10 @@
   <!ENTITY rsync-download-http "https://www.samba.org/ftp/rsync/src/rsync-&rsync-version;.tar.gz">
   <!ENTITY rsync-download-ftp  "">
   <!ENTITY rsync-md5sum        "f216f350ef56b9ba61bc313cb6ec2ed6">
-  <!ENTITY rsync-size          "1,1Mo">
-  <!ENTITY rsync-buildsize     "9.6 MB (with tests; add 24 MB for HTML API documentation)">
-  <!ENTITY rsync-time          "0,7UPC (com os testes)">
+  <!ENTITY rsync-size          "1,1 MB">
+  <!ENTITY rsync-buildsize     "9,6 MB (com os testes; adicionar 24 MB para a documentação &quot;HTML&quot;
+da &quot;API&quot;)">
+  <!ENTITY rsync-time          "0,7 UPC (com os testes)">
 ]>
 
 <sect1 id="rsync" xreflabel="rsync-&rsync-version;">
@@ -23,12 +24,12 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a rsync</title>
+    <title>Introdução ao <quote>rsync</quote></title>
 
     <para>
-      The <application>rsync</application> package contains the
-<command>rsync</command> utility. This is useful for synchronizing large
-file archives over a network.
+      O pacote &quot;<application>rsync</application>&quot; contém o utilitário
+&quot;<command>rsync</command>&quot;. Isso é útil para sincronizar
+arquivamentos grandes por intermédio de uma rede de intercomunicação.
     </para>
 
     &lfs113_checked;
@@ -47,7 +48,7 @@ file archives over a network.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &rsync-md5sum;
+          Soma de verificação MD5 da transferência: &rsync-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -67,11 +68,11 @@ file archives over a network.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de rsync</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;rsync&quot;</bridgehead>
 
     
     <!-- This does now use OpenSSL and zstd from LFS. -->
-<bridgehead renderas="sect4">Recomendada</bridgehead>
+<bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="popt"/>
     </para>
@@ -79,7 +80,7 @@ file archives over a network.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="doxygen"/>, <ulink
-url="https://lz4.github.io/lz4/">lz4</ulink>, and <ulink
+url="https://lz4.github.io/lz4/">lz4</ulink> e <ulink
 url="https://cyan4973.github.io/xxHash/">xxhash</ulink>
     </para>
 
@@ -88,54 +89,60 @@ url="https://cyan4973.github.io/xxHash/">xxhash</ulink>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de rsync</title>
+    <title>Instalação do <quote>rsync</quote></title>
 
     <para>
-      For security reasons, running the <application>rsync</application> server as
-an unprivileged user and group is encouraged. If you intend to run
-<command>rsync</command> as a daemon, create the <systemitem
-class="username">rsyncd</systemitem> user and group with the following
-commands issued by the <systemitem class="username">root</systemitem> user:
+      Por razões de segurança, executar o servidor
+&quot;<application>rsync</application>&quot; como um(a) usuário(a) e grupo
+sem privilégios é encorajado. Se você pretende executar o
+&quot;<command>rsync</command>&quot; como um processo de segundo plano,
+[então] crie o(a) usuário(a) e grupo &quot;<systemitem
+class="username">rsyncd</systemitem>&quot; com os seguintes comandos
+emitidos pelo(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -g 48 rsyncd &amp;&amp;
-useradd -c "rsyncd Daemon" -m -d /home/rsync -g rsyncd \
+useradd -c "Processo de segundo plano rsyncd" -m -d /home/rsync -g rsyncd \
     -s /bin/false -u 48 rsyncd</userinput></screen>
 
     <para>
-      Instale <application>rsync</application> executando os seguintes comandos:
+      Instale o &quot;<application>rsync</application>&quot; executando os
+seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr    \
+<screen><userinput>./configure --prefix=/usr   \
             --disable-lz4    \
             --disable-xxhash \
             --without-included-zlib &amp;&amp;
 make</userinput></screen>
 
     <para>
-      If you have <xref linkend="doxygen"/> installed and wish to build HTML API
-documentation, issue:
+      Se você tiver o &quot;<xref linkend="doxygen"/>&quot; instalado e desejar
+construir a documentação &quot;HTML&quot; da &quot;API&quot;, [então] emita:
     </para>
 
 <screen remap="doc"><userinput>doxygen</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>.
+      Para testar os resultados, emita: &quot;<command>make check</command>&quot;.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role='root'><userinput>make install</userinput></screen>
 
     <para>
-      If you built the documentation, install it using the following commands as
-the <systemitem class="username">root</systemitem> user:
+      Se você construiu a documentação, [então] instale-a usando os seguintes
+comandos como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role='root'
-        remap="doc"><userinput>install -v -m755 -d          /usr/share/doc/rsync-&rsync-version;/api &amp;&amp;
+        remap="doc"><userinput>install -v -m755 -d         /usr/share/doc/rsync-&rsync-version;/api &amp;&amp;
 install -v -m644 dox/html/*  /usr/share/doc/rsync-&rsync-version;/api</userinput></screen>
 
   </sect2>
@@ -144,26 +151,28 @@ install -v -m644 dox/html/*  /usr/share/doc/rsync-&rsync-version;/api</userinput
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--disable-lz4</parameter>: This switch disables LZ4 compression
-support. Note that it uses the superior 'zstd' algorithm when this switch is
-in use, and zstd is provided in LFS.
+      <parameter>--disable-lz4</parameter>: Essa chave desabilita o suporte à
+compressão &quot;LZ4&quot;. Observe que ele usa o algoritmo superior
+&quot;zstd&quot; quando essa chave estiver em uso, e o &quot;zstd&quot; é
+fornecido no LFS.
     </para>
 
     <para>
-      <parameter>--disable-xxhash</parameter>: This switch disables advanced
-xxhash checksum support. Remove this switch if you have installed <ulink
+      <parameter>--disable-xxhash</parameter>: Essa chave desabilita o suporte
+avançado à soma de verificação &quot;xxhash&quot;. Remova essa chave se você
+tiver instalado <ulink
 url="https://cyan4973.github.io/xxHash/">xxhash</ulink>.
     </para>
 
     <para>
-      <parameter>--without-included-zlib</parameter>: This switch enables
-compilation with the system-installed zlib library.
+      <parameter>--without-included-zlib</parameter>: Essa chave habilita a
+compilação com a biblioteca &quot;zlib&quot; instalada no sistema.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando rsync</title>
+    <title>Configurando o <quote>rsync</quote></title>
 
     <sect3 id="rsync-config">
       <title>Arquivos de Configuração</title>
@@ -182,19 +191,21 @@ compilation with the system-installed zlib library.
       <title>Informação de Configuração</title>
 
       <para>
-        For client access to remote files, you may need to install the <xref
-linkend="openssh"/> package to connect to the remote server.
+        Para acesso de cliente a arquivos remotos, você possivelmente precise
+instalar o pacote &quot;<xref linkend="openssh"/>&quot; para se conectar ao
+servidor remoto.
       </para>
 
       <para>
-        This is a simple download-only configuration to set up running
-<command>rsync</command> as a server. See the rsyncd.conf(5)  man-page for
-additional options (i.e., user authentication).
+        Esta é uma configuração simples somente para download para configurar a
+execução do &quot;<command>rsync</command>&quot; como um servidor. Veja-se a
+página de manual &quot;rsyncd.conf(5)&quot; para opções adicionais (ou seja,
+autenticação de usuário(a)).
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/rsyncd.conf &lt;&lt; "EOF"
-<literal># This is a basic rsync configuration file
-# It exports a single module without user authentication.
+<literal># Este é um arquivo básico de configuração do "rsync".
+# Ele exporta um módulo sem autenticação de usuário(a).
 
 motd file = /home/rsync/welcome.msg
 use chroot = yes
@@ -210,52 +221,58 @@ use chroot = yes
 EOF</userinput></screen>
 
       <para>
-        You can find additional configuration information and general documentation
-about <command>rsync</command> at <ulink
-url="https://rsync.samba.org/documentation.html"/>.
+        Você consegue encontrar informações adicionais de configuração e
+documentação geral a respeito do &quot;<command>rsync</command>&quot; em
+<ulink url="https://rsync.samba.org/documentation.html"/>.
       </para>
 
     </sect3>
 
     <sect3 id="rsync-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        Note that you only need to start the <application>rsync</application> server
-if you want to provide an <application>rsync</application> archive on your
-local machine.  You don't need this <phrase revision="sysv">script</phrase>
-<phrase revision="systemd">unit</phrase> to run the
-<application>rsync</application> client.
+        Observe que você só precisa iniciar o servidor
+&quot;<application>rsync</application>&quot; se quiser fornecer um
+arquivamento &quot;<application>rsync</application>&quot; em sua máquina
+local. Você não precisa <phrase revision="sysv">deste conjunto de comandos
+sequenciais</phrase> <phrase revision="systemd">desta unidade</phrase> para
+executar o cliente &quot;<application>rsync</application>&quot;.
       </para>
 
       <para>
-        Install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/rsyncd</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>rsyncd.service</filename> unit</phrase>
-included in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package.
+        Instale <phrase revision="sysv">o conjunto de comandos sequenciais de
+iniciação &quot;<filename>/etc/rc.d/init.d/rsyncd</filename>&quot;
+incluso</phrase> <phrase revision="systemd">a unidade
+&quot;<filename>rsyncd.service</filename>&quot; inclusa</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;.
       </para>
 
 <screen role="root"><userinput>make install-rsyncd</userinput></screen>
 
       <note revision="systemd">
         <para>
-          This package comes with two types of units: A service file and a socket
-file. The service file will start rsync daemon once at boot and it will keep
-running until the system shuts down. The socket file will make systemd
-listen on rsync port (Default 873, needs to be edited for anything else) and
-will start rsync daemon when something tries to connect to that port and
-stop the daemon when the connection is terminated. This is called socket
-activation and is analogous to using <application>{,x}inetd</application> on
-a SysVinit based system.
+          Esse pacote vem com dois tipos de unidades: um arquivo de serviço e um
+arquivo de soquete. O arquivo de serviço iniciará o processo de segundo
+plano &quot;rsync&quot; uma vez na inicialização e ele continuará em
+execução até que o sistema seja desligado. O arquivo de soquete fará com que
+o &quot;systemd&quot; escute na porta do &quot;rsync&quot; (padrão 873,
+precisa ser editado para qualquer outra coisa) e iniciará o processo de
+segundo plano &quot;rsync&quot; quando algo tentar se conectar a essa porta
+e parará o processo de segundo plano quando a conexão for terminada. Isso é
+chamado de ativação de soquete e é análogo a usar
+&quot;<application>{,x}inetd</application>&quot; em um sistema baseado em
+&quot;SysVinit&quot;.
         </para>
 
         <para>
-          By default, the first method is used - rsync daemon is started at boot and
-stopped at shutdown. If the socket method is desired, you need to run as the
-<systemitem class="username">root</systemitem> user:
+          Por padrão, o primeiro método é usado - o processo de segundo plano
+&quot;rsync&quot; é iniciado na inicialização e parado no desligamento. Se o
+método de soquete for desejado, [então] você precisa executar como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
         </para>
 
 <screen role="nodump"><userinput>systemctl stop rsyncd &amp;&amp;
@@ -264,8 +281,9 @@ systemctl enable rsyncd.socket &amp;&amp;
 systemctl start rsyncd.socket</userinput></screen>
 
         <para>
-          Note that socket method is only useful for remote backups. For local backups
-you'll need the service method.
+          Observe que o método de soquete só é útil para cópias remotas de
+segurança. Para cópias locais de segurança, você precisará do método de
+serviço.
         </para>
       </note>
 
@@ -274,7 +292,7 @@ you'll need the service method.
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativo Instalado</segtitle>
@@ -282,9 +300,9 @@ you'll need the service method.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>rsync and rsync-ssl</seg>
-        <seg>None</seg>
-        <seg>Optionally, /usr/share/doc/rsync-&rsync-version;</seg>
+        <seg>rsync e rsync-ssl</seg>
+        <seg>Nenhum(a)</seg>
+        <seg>Opcionalmente, /usr/share/doc/rsync-&rsync-version;</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -296,11 +314,13 @@ you'll need the service method.
         <term><command>rsync</command></term>
         <listitem>
           <para>
-            is a replacement for <command>rcp</command> (and <command>scp</command>)
-that has many more features. It uses the <quote>rsync algorithm</quote>
-which provides a very fast method of syncing remote files. It does this by
-sending just the differences in the files across the link, without requiring
-that both sets of files are present at one end of the link beforehand
+            é um substituto para o &quot;<command>rcp</command>&quot; (e o
+&quot;<command>scp</command>&quot;) que tem muito mais recursos. Ele usa o
+<quote>algoritmo rsync</quote> que fornece um método muito rápido de
+sincronização de arquivos remotos. Ele faz isso enviando apenas as
+diferenças nos arquivos por intermédio do link, sem exigir que ambos os
+conjuntos de arquivos estejam presentes em uma extremidade do link
+antecipadamente
           </para>
           <indexterm zone="rsync rsync-prog">
             <primary sortas="b-rsync">rsync</primary>
@@ -312,8 +332,9 @@ that both sets of files are present at one end of the link beforehand
         <term><command>rsync-ssl</command></term>
         <listitem>
           <para>
-            is a helper script used when connecting to an rsync daemon that has SSL
-support built in
+            é um conjunto de comandos sequenciais auxiliares usado ao conectar-se a um
+processo de segundo plano &quot;rsync&quot; que tenha suporte
+&quot;SSL&quot; integrado
           </para>
           <indexterm zone="rsync rsync-ssl">
             <primary sortas="b-rsync-ssl">rsync-ssl</primary>

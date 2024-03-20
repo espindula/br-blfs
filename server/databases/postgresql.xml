@@ -8,9 +8,9 @@
   <!--  <!ENTITY postgresql-download-ftp  "ftp://ftp.postgresql.org/pub/source/v&postgresql-version;/postgresql-&postgresql-version;.tar.bz2"> -->
   <!ENTITY postgresql-download-ftp  "">
   <!ENTITY postgresql-md5sum        "968418dbdd700caaccfeabcee7516496">
-  <!ENTITY postgresql-size          "21,6Mo">
-  <!ENTITY postgresql-buildsize     "209 MB (add 42 MB for tests)">
-  <!ENTITY postgresql-time          "0.6 SBU (with parallelism=4, add 0.1 SBU for tests)">
+  <!ENTITY postgresql-size          "21,6 MB">
+  <!ENTITY postgresql-buildsize     "209 MB (adicionar 42 MB para os testes)">
+  <!ENTITY postgresql-time          "0,6 UPC (com paralelismo=4, adicionar 0,1 UPC para os testes)">
 ]>
 
 <sect1 id="postgresql" xreflabel="PostgreSQL-&postgresql-version;">
@@ -24,12 +24,13 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a PostgreSQL</title>
+    <title>Introdução ao <quote>PostgreSQL</quote></title>
 
     <para>
-      <application>PostgreSQL</application> is an advanced object-relational
-database management system (ORDBMS), derived from the Berkeley Postgres
-database management system.
+      &quot;<application>PostgreSQL</application>&quot; é um avançado sistema de
+gerenciamento de bases de dados objeto relacional (&quot;SAGBDOR&quot;),
+derivado do sistema de gerenciamento de bases de dados &quot;Berkeley
+Postgres&quot;.
     </para>
 
     &lfs113_checked;
@@ -48,7 +49,7 @@ database management system.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &postgresql-md5sum;
+          Soma de verificação MD5 da transferência: &postgresql-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -68,7 +69,7 @@ database management system.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de PostgreSQL</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;PostgreSQL&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -77,127 +78,138 @@ database management system.
 , (is in LFS core) -->
 <xref linkend="icu"/>, <xref linkend="libxml2"/>, <xref linkend="libxslt"/>,
 <xref linkend="openldap"/>, <xref linkend="linux-pam"/>, <xref
-linkend="mitkrb"/> and <ulink
+linkend="mitkrb"/> e <ulink
 url="https://developer.apple.com/bonjour/">Bonjour</ulink>
     </para>
 
-    <bridgehead renderas="sect4">Optional (To Regenerate Documentation)</bridgehead>
+    <bridgehead renderas="sect4">Opcionais (Para Regenerar a Documentação)</bridgehead>
     <para role="optional">
       <xref linkend="fop"/>, <xref linkend="sgml-dtd"/>, <xref
 linkend="docbook-dsssl"/>, <xref linkend="docbook-utils"/>, <xref
-linkend="openjade"/>, and <xref linkend="perl-sgmlspm"/>
+linkend="openjade"/> e <xref linkend="perl-sgmlspm"/>
     </para>
 
-    <para condition="html" role="usernotes">User Notes: <ulink url="&blfs-wiki;/postgresql"/></para>
+    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/postgresql"/></para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de PostgreSQL</title>
+    <title>Instalação do <quote>PostgreSQL</quote></title>
 
     <para>
-      For enhanced security, it is better to have a dedicated group and user for
-running the PostgreSQL server. First, issue as the <systemitem
-class="username">root</systemitem> user:
+      Para maior segurança, é melhor ter um grupo e usuário(a) dedicado para
+executar o servidor &quot;PostgreSQL&quot;. Primeiro, emita como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -g 41 postgres &amp;&amp;
-useradd -c "PostgreSQL Server" -g postgres -d /srv/pgsql/data \
+useradd -c "Servidor PostgreSQL" -g postgres -d /srv/pgsql/data \
         -u 41 postgres</userinput></screen>
 
     <note>
       <para>
-        There are several configuration items that add additional functionality with
-optional packages to <application>PostgreSQL</application>.  Use
-<command>./configure --help</command> to see a list.
+        Existem vários itens de configuração que adicionam funcionalidade adicional
+com pacotes opcionais ao
+&quot;<application>PostgreSQL</application>&quot;. Use
+&quot;<command>./configure --help</command>&quot; para ver uma lista.
       </para>
     </note>
 
     <para>
-      Install <application>PostgreSQL</application> with the following commands:
+      Instale o &quot;<application>PostgreSQL</application>&quot; com os seguintes
+comandos:
     </para>
 
 <screen><userinput>sed -i '/DEFAULT_PGSOCKET_DIR/s@/tmp@/run/postgresql@' src/include/pg_config_manual.h &amp;&amp;
 
-./configure --prefix=/usr          \
+./configure --prefix=/usr         \
             --enable-thread-safety \
             --docdir=/usr/share/doc/postgresql-&postgresql-version; &amp;&amp;
 make</userinput></screen>
 
     <para>
-      There are a number of programs in the <filename
-class="directory">contrib/</filename> directory. If you are going to run
-this installation as a server and wish to build some of them, enter
-<command>make -C contrib</command> or <command>make -C
-contrib/<replaceable>&lt;SUBDIR-NAME&gt;</replaceable></command> for each
-subdirectory.
+      Existem vários aplicativos no diretório &quot;<filename
+class="directory">contrib/</filename>&quot;. Se você for executar essa
+instalação como um servidor e desejar construir alguns deles, [então] digite
+&quot;<command>make -C contrib</command>&quot; ou &quot;<command>make -C
+contrib/<replaceable>&lt;NOME-SUB-DIRETÓRIO&gt;</replaceable></command>&quot;
+para cada subdiretório.
     </para>
 
     <para>
-      Tests must be run as an unprivileged user because they need to start a
-temporary server and this is prevented as the root user. For the same
-reason, you need to stop all PostgreSQL servers if any are running. If a
-previous version of PostgreSQL is installed, it may be necessary to use
-<command>--disable-rpath</command> with <command>configure</command> to
-avoid failures, but <emphasis>installing the binaries created using this
-switch is not recommended</emphasis>. To test the results, issue:
-<command>make check</command>.
+      Os testes precisam ser executados como um(a) usuário(a) sem privilégios
+porque precisam iniciar um servidor temporário e isso é evitado como o(a)
+usuário(a) &quot;root&quot;. Pela mesma razão, você precisa parar todos os
+servidores &quot;PostgreSQL&quot;, se algum estiver em execução. Se uma
+versão anterior do &quot;PostgreSQL&quot; estiver instalada, [então]
+possivelmente seja necessário usar
+&quot;<command>--disable-rpath</command>&quot; com o
+&quot;<command>configure</command>&quot; para evitar falhas, mas
+<emphasis>instalar os binários criados usando essa chave não é
+recomendado</emphasis>. Para testar os resultados, emita:
+&quot;<command>make check</command>&quot;.
     </para>
 
     <note>
-      <para>If you are installing <application>PostgreSQL</application> to upgrade an
-existing installation, there are important steps that you need to follow. If
-the major version of the new build is greater than the previous version,
-there is a chance that the data file format has changed.  new software
-cannot act on the existing data files. In this case, the server will not
-start because the old programs have been overwritten, so the data is
-unavailable until it's file format has been converted.</para>
+      <para>Se você estiver instalando o
+&quot;<application>PostgreSQL</application>&quot; para atualizar uma
+instalação existente, [então] existem etapas importantes que você precisa
+seguir. Se a versão principal da nova construção for superior à versão
+anterior, [então] existe uma chance de que o formato do arquivo de dados
+tenha mudado. O novo logiciário não consegue atuar nos arquivos de dados
+existentes. Nesse caso, o servidor não iniciará porque os aplicativos
+antigos foram sobrescritos, de forma que os dados estão indisponíveis até
+que o formato do arquivo deles tenha sido convertido.</para>
 
       <para>
-        Before upgrading an existing installation of PostgreSQL, check the
-documentation for any considerations that you must keep in mind during the
-upgrade. Note that new major versions might use a different binary format in
-the data objects, causing potential incompatibilities.  For more
-information, check out upstream's documentation about upgrading PostgreSQL
-here.  <ulink
+        Antes de atualizar uma instalação existente do &quot;PostgreSQL&quot;,
+verifique a documentação para quaisquer considerações que você precisa ter
+em mente durante a atualização. Observe que as novas versões principais
+podem usar um formato binário diferente nos objetos de dados, causando
+potenciais incompatibilidades. Para mais informações, verifique a
+documentação do(a) desenvolvedor(a) relativa a atualização do
+&quot;PostgreSQL&quot; aqui: <ulink
 url="https://www.postgresql.org/docs/current/upgrading.html"/>.
       </para>
 
-      <para>At this point, you may have both the old and the new binaries installed on
-your filesystem. These binaries can be used to perform an upgrade of your
-existing database files. For the following instructions it is assumed that
+      <para>Neste ponto, você possivelmente tenha os binários antigo e novo instalados
+em seu sistema de arquivos. Esses binários podem ser usados para realizar
+uma atualização dos teus arquivos de base de dados existentes. Para as
+instruções a seguir, presume-se que
       <itemizedlist>
-        <listitem><para>The actual data files are stored in <filename
-class="directory">/srv/pgsql/data</filename></para>
+        <listitem><para>Os arquivos de dados atuais estão armazenados em &quot;<filename
+class="directory">/srv/pgsql/data</filename>&quot;</para>
         </listitem>
-        <listitem><para>The upgraded data files will be stored in <filename
-class="directory">/srv/pgsql/newdata</filename></para>
+        <listitem><para>Os arquivos de dados atualizados serão armazenados em &quot;<filename
+class="directory">/srv/pgsql/newdata</filename>&quot;</para>
         </listitem>
-        <listitem><para>There is enough disk space to hold the actual data files twice. The upgrade
-is not an inline upgrade but it will copy the data to new database files.</para>
+        <listitem><para>Existe espaço em disco suficiente para armazenar os arquivos de dados atuais
+duas vezes. A atualização não é uma atualização em linha, mas copiará os
+dados para novos arquivos de base de dados.</para>
         </listitem>
       </itemizedlist>
       </para>
 
-      <para>First, do a temporary install which makes access to the new binaries much
-easier:</para>
+      <para>Primeiro, faça uma instalação temporária que torna o acesso aos novos
+binários muito mais fácil:</para>
 <screen role="nodump"><userinput>make DESTDIR=$(pwd)/DESTDIR install</userinput></screen>
 
-      <para>Next, create a directory which is writable by the <systemitem
-class="username">postgres</systemitem> user, as the <systemitem
-class="username">root</systemitem> user:</para>
+      <para>Em seguida, crie um diretório que seja escrevível pelo(a) usuário(a)
+&quot;<systemitem class="username">postgres</systemitem>&quot;, como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:</para>
 
 <screen role="nodump"><userinput>install -d -o postgres $(pwd)/DESTDIR/tmp</userinput></screen>
 
-      <para>Now, stop the existing instance of <application>PostgreSQL</application> and
-start the upgrade process as the <systemitem
-class="username">root</systemitem> user:</para>
+      <para>Agora, pare a instância existente do
+&quot;<application>PostgreSQL</application>&quot; e inicie o processo de
+atualização como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:</para>
 
 <screen revision="sysv" role="nodump"><userinput>pushd $(pwd)/DESTDIR/tmp
 /etc/rc.d/init.d/postgresql stop
 su postgres -c "../usr/bin/initdb -D /srv/pgsql/newdata"
 su postgres -c "../usr/bin/pg_upgrade \
-                    -d /srv/pgsql/data    -b /usr/bin \
+                    -d /srv/pgsql/data   -b /usr/bin \
                     -D /srv/pgsql/newdata -B ../usr/bin"
 popd</userinput></screen>
 
@@ -205,18 +217,21 @@ popd</userinput></screen>
 systemctl stop postgresql
 su postgres -c "../usr/bin/initdb -D /srv/pgsql/newdata"
 su postgres -c "../usr/bin/pg_upgrade \
-                    -d /srv/pgsql/data    -b /usr/bin \
+                    -d /srv/pgsql/data   -b /usr/bin \
                     -D /srv/pgsql/newdata -B ../usr/bin"
 popd</userinput></screen>
 
-      <para>At this point, your database files are available in two locations on
-disk. The old data is located in <filename
-class="directory">/srv/pgsql/data</filename>, and the new data is in
-<filename class="directory">/srv/pgsql/newdata</filename>.  Backing up the
-old database files is suggested before continuing.</para>
+      <para>Neste ponto, os teus arquivos da base de dados estão disponíveis em dois
+locais no disco. Os dados antigos estão localizados em &quot;<filename
+class="directory">/srv/pgsql/data</filename>&quot; e os novos dados estão em
+&quot;<filename
+class="directory">/srv/pgsql/newdata</filename>&quot;. Produzir uma cópia de
+segurança dos arquivos antigos da base de dados é sugerido antes de
+continuar.</para>
 
-      <para>Next, remove the old database files, and rename the new data directory as
-the <systemitem class="username">root</systemitem> user:</para>
+      <para>Em seguida, remova os arquivos antigos de base de dados e renomeie o novo
+diretório de dados como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:</para>
 
 <screen role="nodump"><userinput>rm -rf /srv/pgsql/data
 mv /srv/pgsql/newdata /srv/pgsql/data</userinput></screen>
@@ -224,36 +239,42 @@ mv /srv/pgsql/newdata /srv/pgsql/data</userinput></screen>
     </note>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>make install      &amp;&amp;
+<screen role="root"><userinput>make install     &amp;&amp;
 make install-docs</userinput></screen>
 
     <para>
-      If you made any of the <filename class="directory">contrib/</filename>
-programs, as the <systemitem class="username">root</systemitem> user:
+      Se você criou qualquer um dos aplicativos &quot;<filename
+class="directory">contrib/</filename>&quot;, como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="nodump"><userinput>make -C contrib/<replaceable>&lt;SUBDIR-NAME&gt;</replaceable> install</userinput></screen>
+<screen role="nodump"><userinput>make -C contrib/<replaceable>&lt;NOME-SUB-DIRETÓRIO&gt;</replaceable> install</userinput></screen>
 
     <tip>
       <para>
-        If you only intend to use <application>PostgreSQL</application> as a client
-to connect to a server on another machine, your installation is complete and
-you should not run the remaining commands.
+        Se você pretende usar o &quot;<application>PostgreSQL</application>&quot;
+somente como um cliente para conectar-se a um servidor em outra máquina,
+[então] a tua instalação está completa e você não deveria executar os
+comandos restantes.
       </para>
     </tip>
 
     <para>
-      If you have upgraded an existing database, skip the rest of the commands
-because your database is ready to use. If this is the first time you install
-<application>PostgreSQL</application>, continue with the initialization.
+      Se você atualizou uma base de dados existente, [então] ignore o restante dos
+comandos porque a tua base de dados está pronta para uso. Se essa for a
+primeira vez que você instala o
+&quot;<application>PostgreSQL</application>&quot;, [então] continue com a
+inicialização.
     </para>
 
     <para>
-      Initialize a database cluster with the following commands issued by the
-<systemitem class="username">root</systemitem> user:
+      Inicialize um agrupamento de bases de dados com os seguintes comandos
+emitidos pelo(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>install -v -dm700 /srv/pgsql/data &amp;&amp;
@@ -261,8 +282,8 @@ install -v -dm755 /run/postgresql &amp;&amp;
 chown -Rv postgres:postgres /srv/pgsql /run/postgresql</userinput></screen>
 
     <para>
-      Now, initialize the database as the <systemitem
-class="username">root</systemitem> user:
+      Agora, inicialize a base de dados como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>su - postgres -c '/usr/bin/initdb -D /srv/pgsql/data'</userinput></screen>
@@ -273,47 +294,51 @@ class="username">root</systemitem> user:
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i ...</command>: This sed changes the server socket location
-from <filename class="directory">/tmp</filename> to <filename
-class="directory">/run/postgresql</filename>.
+      <command>sed -i ...</command>: Esse &quot;sed&quot; muda o local do soquete
+do servidor de &quot;<filename class="directory">/tmp</filename>&quot; para
+&quot;<filename class="directory">/run/postgresql</filename>&quot;.
     </para>
 
     <para>
-      <parameter>--enable-thread-safety</parameter>: This switch makes the client
-libraries thread-safe by allowing concurrent threads in <filename
-class="libraryfile">libpq</filename> and ECPG programs to safely control
-their private connection handles.
+      <parameter>--enable-thread-safety</parameter>: Essa chave torna as
+bibliotecas cliente seguras em camadas, permitindo que camadas simultâneas
+em aplicativos &quot;<filename class="libraryfile">libpq</filename>&quot; e
+&quot;ECPG&quot; controlem com segurança os manuseadores privados de conexão
+deles.
     </para>
 
     <para>
-      <option>--with-openssl</option>: builds the package with support for
-<application>OpenSSL</application> encrypted connections.
+      <option>--with-openssl</option>: constrói o pacote com suporte para conexões
+encriptadas &quot;<application>OpenSSL</application>&quot;.
     </para>
 
     <para>
-      <option>--with-perl</option>: builds the PL/Perl server-side language.
+      <option>--with-perl</option>: constrói a linguagem
+&quot;PL&quot;/&quot;Perl&quot; do lado do servidor.
     </para>
 
     <para>
-      <option>--with-python</option>: builds the PL/Python server-side
-language. Python3 is used by default, Python2 is no longer supported.
+      <option>--with-python</option>: constrói a linguagem
+&quot;PL&quot;/&quot;Python&quot; do lado do servidor. &quot;Python3&quot; é
+usado por padrão; &quot;Python2&quot; não mais é suportado.
     </para>
 
     <para>
-      <option>--with-tcl</option>: builds the PL/Tcl server-side language.
+      <option>--with-tcl</option>: constrói a linguagem
+&quot;PL&quot;/&quot;Tcl&quot; do lado do servidor.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando PostgreSQL</title>
+    <title>Configurando o <quote>PostgreSQL</quote></title>
 
     <sect3 id="postgresql-config">
       <title>Arquivos de Configuração</title>
 
       <para>
         <filename>$PGDATA/pg_ident.con</filename>,
-<filename>$PGDATA/pg_hba.conf</filename>, and
+<filename>$PGDATA/pg_hba.conf</filename> e
 <filename>$PGDATA/postgresql.conf</filename>
       </para>
 
@@ -330,28 +355,30 @@ language. Python3 is used by default, Python2 is no longer supported.
       </indexterm>
 
       <para>
-        The <envar>PGDATA</envar> environment variable is used to distinguish
-database clusters from one another by setting it to the value of the
-directory which contains the cluster desired.  The three configuration files
-exist in every <filename class="directory">PGDATA/</filename>
-directory. Details on the format of the files and the options that can be
-set in each can be found in <filename>
-/usr/share/doc/postgresql-&postgresql-version;/html/index.html</filename>.
+        A variável de ambiente &quot;<envar>PGDATA</envar>&quot; é usada para
+distinguir agrupamentos de bases de dados uns dos outros, configurando-a com
+o valor do diretório que contém o agrupamento desejado. Os três arquivos de
+configuração existem em cada diretório &quot;<filename
+class="directory">PGDATA/</filename>&quot;. Detalhes relativos ao formato
+dos arquivos e as opções que podem ser configuradas em cada um podem ser
+encontrados em
+<filename>/usr/share/doc/postgresql-&postgresql-version;/html/index.html</filename>.
       </para>
 
     </sect3>
 
     <sect3  id="postgresql-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        Install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/postgresql</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>postgresql.service</filename> unit</phrase>
-included in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package:
+        Instale <phrase revision="sysv">o conjunto de comandos sequenciais de
+iniciação &quot;<filename>/etc/rc.d/init.d/postgresql</filename>&quot;
+incluso</phrase> <phrase revision="systemd">a unidade
+&quot;<filename>postgresql.service</filename>&quot; inclusa</phrase> no
+pacote &quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;:
       </para>
 
       <indexterm zone="postgresql postgresql-init">
@@ -363,28 +390,31 @@ linkend="systemd-units" revision="systemd"/> package:
     </sect3>
 
     <sect3>
-      <title>Starting the PostgreSQL Server and Creating a Sample Database</title>
+      <title>Iniciando o Servidor <quote>PostgreSQL</quote> e Criando uma Base de Dados
+de Exemplo</title>
 
       <para>
-        The database server can be manually started with the following command (as
-the <systemitem class="username">root</systemitem> user):
+        O servidor de base de dados pode ser iniciado manualmente com o seguinte
+comando (como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;):
       </para>
 
 <screen role="root"><userinput>su - postgres -c '/usr/bin/postgres -D /srv/pgsql/data > \
-                  /srv/pgsql/data/logfile 2&gt;&amp;1 &amp;'</userinput></screen>
+                 /srv/pgsql/data/logfile 2&gt;&amp;1 &amp;'</userinput></screen>
       <note>
         <para>
-          If you are scripting this part, you should wait for the server to start
-before going on, by adding for example <command>sleep 2</command> after the
-above command.
+          Se você estiver automatizando esta parte, [então] você deveria esperar o
+servidor iniciar antes de continuar, adicionando, por exemplo,
+&quot;<command>sleep 2</command>&quot; depois do comando acima.
         </para>
       </note>
 
       <para>
-        The instructions below show how to create a database, add a table to it,
-insert some rows into the table and select them, to verify that the
-installation is working properly. Still as user <systemitem
-class="username">root</systemitem>, issue:
+        As instruções abaixo mostram como criar uma base de dados, adicionar uma
+tabela nela, inserir algumas linhas na tabela e selecioná-las, para
+verificar se a instalação está funcionando corretamente. Ainda como
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;,
+emita:
       </para>
 
 <screen role="root"><userinput>su - postgres -c '/usr/bin/createdb test' &amp;&amp;
@@ -399,8 +429,8 @@ echo "insert into t1 values ('Jesse', 'Ontario');" \
 echo "select * from t1;" | (su - postgres -c '/usr/bin/psql test')</userinput></screen>
 
       <para>
-        When you are done with testing, you can shut down the server, by issuing as
-<systemitem class="username">root</systemitem>:
+        Quando terminar o teste, você pode desligar o servidor, emitindo como
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>su - postgres -c "/usr/bin/pg_ctl stop -D /srv/pgsql/data"</userinput></screen>
@@ -410,7 +440,7 @@ echo "select * from t1;" | (su - postgres -c '/usr/bin/psql test')</userinput></
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -424,20 +454,21 @@ pg_archivecleanup, pg_basebackup, pg_checksums, pg_config, pg_controldata,
 pg_ctl, pg_dump, pg_dumpall, pg_isready, pg_receivewal, pg_recvlogical,
 pg_resetwal, pg_restore, pg_rewind, pg_test_fsync, pg_test_timing,
 pg_upgrade, pg_verifybackup, pg_waldump, pgbench, postgres, postmaster
-(deprecated), psql, reindexdb, vacuumdb, optionally, if Tcl support has been
-built, pltcl_delmod, pltcl_listmod, pltcl_loadmod, and optionally (in
-contrib/) oid2name, pg_standby, vacuumlo, and many others
+(descontinuado), psql, reindexdb, vacuumdb, opcionalmente, se o suporte a
+&quot;Tcl&quot; tiver sido construído, pltcl_delmod, pltcl_listmod,
+pltcl_loadmod e, opcionalmente, (em &quot;contrib/&quot;) oid2name,
+pg_standby, vacuumlo e muitos outros
 
         </seg>
         <seg>
           libecpg.{so,a}, libecpg_compat.{so,a}, libpgcommon.a, libpgcommon_shlib.a,
 libpgfeutils.a, libpgport.a, libpgport_shlib.a, libpgtypes.{so,a},
-libpq.{so,a}, various charset modules and optionally programming language
-modules under /usr/lib/postgresql
+libpq.{so,a}, vários módulos de conjuntos de caracteres e opcionalmente
+módulos de linguagem de programação em &quot;/usr/lib/postgresql&quot;
         </seg>
         <seg>
           /usr/include/{libpq,postgresql}, /usr/lib/postgresql,
-/usr/share/{doc/postgresql-&postgresql-version;,postgresql}, and /srv/pgsql
+/usr/share/{doc/postgresql-&postgresql-version;,postgresql} e /srv/pgsql
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -450,8 +481,8 @@ modules under /usr/lib/postgresql
         <term><command>clusterdb</command></term>
         <listitem>
           <para>
-            is a utility for reclustering tables in a
-<application>PostgreSQL</application> database
+            é um utilitário para reagrupar tabelas em uma base de dados
+&quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql clusterdb">
             <primary sortas="b-clusterdb">clusterdb</primary>
@@ -463,7 +494,8 @@ modules under /usr/lib/postgresql
         <term><command>createdb</command></term>
         <listitem>
           <para>
-            creates a new <application>PostgreSQL</application> database
+            cria uma nova base de dados
+&quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql createdb">
             <primary sortas="b-createdb">createdb</primary>
@@ -475,7 +507,8 @@ modules under /usr/lib/postgresql
         <term><command>createuser</command></term>
         <listitem>
           <para>
-            defines a new <application>PostgreSQL</application> user account
+            define uma nova conta de usuário(a)
+&quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql createuser">
             <primary sortas="b-createuser">createuser</primary>
@@ -487,7 +520,7 @@ modules under /usr/lib/postgresql
         <term><command>dropdb</command></term>
         <listitem>
           <para>
-            removes a <application>PostgreSQL</application> database
+            remove uma base de dados &quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql dropdb">
             <primary sortas="b-dropdb">dropdb</primary>
@@ -499,7 +532,8 @@ modules under /usr/lib/postgresql
         <term><command>dropuser</command></term>
         <listitem>
           <para>
-            removes a <application>PostgreSQL</application> user account
+            remove uma conta de usuário(a)
+&quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql dropuser">
             <primary sortas="b-dropuser">dropuser</primary>
@@ -511,7 +545,7 @@ modules under /usr/lib/postgresql
         <term><command>ecpg</command></term>
         <listitem>
           <para>
-            is the embedded SQL preprocessor
+            é o pré processador incorporado &quot;SQL&quot;
           </para>
           <indexterm zone="postgresql ecpg">
             <primary sortas="b-ecpg">ecpg</primary>
@@ -523,7 +557,7 @@ modules under /usr/lib/postgresql
         <term><command>initdb</command></term>
         <listitem>
           <para>
-            creates a new database cluster
+            cria um novo agrupamento de bases de dados
           </para>
           <indexterm zone="postgresql initdb">
             <primary sortas="b-initdb">initdb</primary>
@@ -535,7 +569,8 @@ modules under /usr/lib/postgresql
         <term><command>oid2name</command></term>
         <listitem>
           <para>
-            resolves OIDs (Object IDs) and file nodes in a PostgreSQL data directory
+            resolve &quot;OIDs&quot; (&quot;Object IDs&quot;) e nós de arquivo em um
+diretório de dados do &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql oid2name">
             <primary sortas="b-oid2name">oid2name</primary>
@@ -547,7 +582,8 @@ modules under /usr/lib/postgresql
         <term><command>pg_amcheck</command></term>
         <listitem>
           <para>
-            checks for corruption in one or more PostgreSQL databases
+            verifica se existe corrupção em uma ou mais bases de dados
+&quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_amcheck">
             <primary sortas="b-pg_amcheck">pg_amcheck</primary>
@@ -559,7 +595,8 @@ modules under /usr/lib/postgresql
         <term><command>pg_archivecleanup</command></term>
         <listitem>
           <para>
-            cleans up PostgreSQL WAL (write-ahead log) archive files
+            limpa arquivos de arquivamento &quot;write-ahead log&quot; (&quot;WAL&quot;)
+do &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_archivecleanup">
             <primary sortas="b-pg_archivecleanup">pg_archivecleanup</primary>
@@ -571,8 +608,8 @@ modules under /usr/lib/postgresql
         <term><command>pg_basebackup</command></term>
         <listitem>
           <para>
-            takes base backups of a running <application>PostgreSQL</application>
-cluster
+            faz cópias básicas de segurança de um agrupamento do
+<application>PostgreSQL</application> em execução
           </para>
           <indexterm zone="postgresql pg_basebackup">
             <primary sortas="b-pg_basebackup">pg_basebackup</primary>
@@ -584,8 +621,9 @@ cluster
         <term><command>pg_checksums</command></term>
         <listitem>
           <para>
-            enables, disables, or checks data checksums in a
-<application>PostgreSQL</application> database cluster
+            habilita, desabilita ou verifica somas de verificação de dados em um
+agrupamento de bases de dados do
+&quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql pg_checksums">
             <primary sortas="b-pg_checksums">pg_checksums</primary>
@@ -597,7 +635,8 @@ cluster
         <term><command>pg_config</command></term>
         <listitem>
           <para>
-            retrieves <application>PostgreSQL</application> version information
+            recupera informações de versão do
+&quot;<application>PostgreSQL</application>&quot;
           </para>
           <indexterm zone="postgresql pg_config">
             <primary sortas="b-pg_config">pg_config</primary>
@@ -609,8 +648,9 @@ cluster
         <term><command>pg_controldata</command></term>
         <listitem>
           <para>
-            returns information initialized during <command>initdb</command>, such as
-the catalog version and server locale
+            retorna informações inicializadas durante o
+&quot;<command>initdb</command>&quot;, como a versão do catálogo e a
+localidade do servidor
           </para>
           <indexterm zone="postgresql pg_controldata">
             <primary sortas="b-pg_controldata">pg_controldata</primary>
@@ -622,7 +662,7 @@ the catalog version and server locale
         <term><command>pg_ctl</command></term>
         <listitem>
           <para>
-            controls stopping and starting the database server
+            controla a parada e inicialização do servidor de base de dados
           </para>
           <indexterm zone="postgresql pg_ctl">
             <primary sortas="b-pg_ctl">pg_ctl</primary>
@@ -634,8 +674,8 @@ the catalog version and server locale
         <term><command>pg_dump</command></term>
         <listitem>
           <para>
-            dumps database data and metadata into scripts which are used to recreate the
-database
+            despeja dados e metadados da base de dados em conjuntos de comandos
+sequenciais que são usados para recriar a base de dados
           </para>
           <indexterm zone="postgresql pg_dump">
             <primary sortas="b-pg_dump">pg_dump</primary>
@@ -647,7 +687,8 @@ database
         <term><command>pg_dumpall</command></term>
         <listitem>
           <para>
-            recursively calls <command>pg_dump</command> for each database in a cluster
+            chama recursivamente &quot;<command>pg_dump</command>&quot; para cada base
+de dados em um agrupamento
           </para>
           <indexterm zone="postgresql pg_dumpall">
             <primary sortas="b-pg_dumpall">pg_dumpall</primary>
@@ -659,7 +700,7 @@ database
         <term><command>pg_isready</command></term>
         <listitem>
           <para>
-            checks the connection status of a PostgreSQL server
+            verifica a situação da conexão de um servidor &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_isready">
             <primary sortas="b-pg_isready">pg_isready</primary>
@@ -671,7 +712,8 @@ database
         <term><command>pg_receivewal</command></term>
         <listitem>
           <para>
-            is used to stream write-ahead logs from a PostgreSQL server
+            é usado para transmitir &quot;write-ahead logs&quot; a partir de um servidor
+&quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_receivewal">
             <primary sortas="b-pg_receivewal">pg_receivewal</primary>
@@ -683,7 +725,7 @@ database
         <term><command>pg_recvlogical</command></term>
         <listitem>
           <para>
-            controls PostgreSQL logical decoding streams
+            controla fluxos de decodificação lógica do &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_recvlogical">
             <primary sortas="b-pg_recvlogical">pg_recvlogical</primary>
@@ -695,8 +737,8 @@ database
         <term><command>pg_resetwal</command></term>
         <listitem>
           <para>
-            resets the write-ahead log and other control information of a PostgreSQL
-database cluster
+            reconfigura o &quot;write-ahead log&quot; e outras informações de controle
+de um agrupamento de bases de dados &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_resetwal">
             <primary sortas="b-pg_resetwal">pg_resetwal</primary>
@@ -708,7 +750,8 @@ database cluster
         <term><command>pg_restore</command></term>
         <listitem>
           <para>
-            creates databases from dump files created by <command>pg_dump</command>
+            cria bases de dados a partir de arquivos de despejo criados pelo
+&quot;<command>pg_dump</command>&quot;
           </para>
           <indexterm zone="postgresql pg_restore">
             <primary sortas="b-pg_restore">pg_restore</primary>
@@ -720,8 +763,8 @@ database cluster
         <term><command>pg_rewind</command></term>
         <listitem>
           <para>
-            synchronizes a PostgreSQL data directory with another data directory that
-was forked from the first one
+            sincroniza um diretório de dados do &quot;PostgreSQL&quot; com outro
+diretório de dados que foi bifurcado a partir do primeiro
           </para>
           <indexterm zone="postgresql pg_rewind">
             <primary sortas="b-pg_rewind">pg_rewind</primary>
@@ -733,7 +776,7 @@ was forked from the first one
         <term><command>pg_standby</command></term>
         <listitem>
           <para>
-            supports the creation of a PostgreSQL warm standby server
+            suporta a criação de um servidor de espera quente do &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_standby">
             <primary sortas="b-pg_standby">pg_standby</primary>
@@ -745,7 +788,8 @@ was forked from the first one
         <term><command>pg_test_fsync</command></term>
         <listitem>
           <para>
-            determines the fastest wal_sync method for PostgreSQL
+            determina o método &quot;wal_sync&quot; mais rápido para o
+&quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_test_fsync">
             <primary sortas="b-pg_test_fsync">pg_test_fsync</primary>
@@ -757,7 +801,7 @@ was forked from the first one
         <term><command>pg_test_timing</command></term>
         <listitem>
           <para>
-            measures timing overhead
+            mede a sobrecarga de tempo
           </para>
           <indexterm zone="postgresql pg_test_timing">
             <primary sortas="b-pg_test_timing">pg_test_timing</primary>
@@ -769,7 +813,7 @@ was forked from the first one
         <term><command>pg_upgrade</command></term>
         <listitem>
           <para>
-            upgrades a PostgreSQL server instance
+            atualiza uma instância do servidor &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_upgrade">
             <primary sortas="b-pg_upgrade">pg_upgrade</primary>
@@ -781,7 +825,8 @@ was forked from the first one
         <term><command>pg_verifybackup</command></term>
         <listitem>
           <para>
-            verifies the integrity of a base backup of a PostgreSQL cluster
+            verifica a integridade de uma cópia básica de segurança de um agrupamento do
+&quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_verifybackup">
             <primary sortas="b-pg_upgrade">pg_verifybackup</primary>
@@ -793,8 +838,8 @@ was forked from the first one
         <term><command>pg_waldump</command></term>
         <listitem>
           <para>
-            displays a human-readable rendering of the write-ahead log of a PostgreSQL
-database cluster
+            exibe uma renderização legível por humanos(as) do &quot;write-ahead
+log&quot; de um agrupamento de bases de dados do &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pg_waldump">
             <primary sortas="b-pg_waldump">pg_waldump</primary>
@@ -806,7 +851,7 @@ database cluster
         <term><command>pgbench</command></term>
         <listitem>
           <para>
-            runs a benchmark test on PostgreSQL
+            executa um teste de avaliação comparativa no &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql pgbench">
             <primary sortas="b-pgbench">pgbench</primary>
@@ -818,10 +863,12 @@ database cluster
         <term><command>pltcl_delmod</command></term>
         <listitem>
           <para>
-            is a support script used to delete a module from a
-PL/<application>Tcl</application> table. The command requires the <ulink
-url="https://flightaware.github.io/Pgtcl/">Pgtcl</ulink> package to be
-installed
+            é um conjunto de comandos sequenciais de suporte usado para deletar um
+módulo originário de uma tabela
+&quot;PL&quot;/&quot;<application>Tcl</application>&quot;. O comando exige
+que o pacote &quot;<ulink
+url="https://flightaware.github.io/Pgtcl/">Pgtcl</ulink>&quot; esteja
+instalado
           </para>
           <indexterm zone="postgresql pltcl_delmod">
             <primary sortas="b-pltcl_delmod">pltcl_delmod</primary>
@@ -833,10 +880,12 @@ installed
         <term><command>pltcl_listmod</command></term>
         <listitem>
           <para>
-            is a support script used to list the modules in a
-PL/<application>Tcl</application> table. The command requires the <ulink
-url="https://flightaware.github.io/Pgtcl/">Pgtcl</ulink> package to be
-installed
+            é um conjunto de comandos sequenciais de suporte usado para listar os
+módulos em uma tabela
+&quot;PL&quot;/&quot;<application>Tcl</application>&quot;. O comando exige
+que o pacote &quot;<ulink
+url="https://flightaware.github.io/Pgtcl/">Pgtcl</ulink>&quot; esteja
+instalado
           </para>
           <indexterm zone="postgresql pltcl_listmod">
             <primary sortas="b-pltcl_listmod">pltcl_listmod</primary>
@@ -848,10 +897,12 @@ installed
         <term><command>pltcl_loadmod</command></term>
         <listitem>
           <para>
-            is a support script used to load a module into a
-PL/<application>Tcl</application> table. The command requires the <ulink
-url="https://flightaware.github.io/Pgtcl/">Pgtcl</ulink> package to be
-installed too
+            é um conjunto de comandos sequenciais de suporte usado para carregar um
+módulo em uma tabela
+&quot;PL&quot;/&quot;<application>Tcl</application>&quot;. O comando exige
+que o pacote &quot;<ulink
+url="https://flightaware.github.io/Pgtcl/">Pgtcl</ulink>&quot; esteja
+instalado
           </para>
           <indexterm zone="postgresql pltcl_loadmod">
             <primary sortas="b-pltcl_loadmod">pltcl_loadmod</primary>
@@ -863,7 +914,7 @@ installed too
         <term><command>postgres</command></term>
         <listitem>
           <para>
-            is the PostgreSQL database server
+            é o servidor de base de dados &quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql postgres">
             <primary sortas="b-postgres">postgres</primary>
@@ -875,8 +926,8 @@ installed too
         <term><command>postmaster</command></term>
         <listitem>
           <para>
-            (deprecated, a symlink to <command>postgres</command>) is a multi-user
-database daemon
+            (descontinuado, um link simbólico para <command>postgres</command>) é um
+processo multiusuário(a) de segundo plano de base de dados
           </para>
           <indexterm zone="postgresql postmaster">
             <primary sortas="b-postmaster">postmaster</primary>
@@ -888,7 +939,7 @@ database daemon
         <term><command>psql</command></term>
         <listitem>
           <para>
-            is a console based database shell
+            é um &quot;shell&quot; de base de dados baseado em console
           </para>
           <indexterm zone="postgresql psql">
             <primary sortas="b-psql">psql</primary>
@@ -900,7 +951,7 @@ database daemon
         <term><command>reindexdb</command></term>
         <listitem>
           <para>
-            is a utility for rebuilding indexes in a database
+            é um utilitário para reconstruir índices em uma base de dados
           </para>
           <indexterm zone="postgresql reindexdb">
             <primary sortas="b-reindexdb">reindexdb</primary>
@@ -912,7 +963,7 @@ database daemon
         <term><command>vacuumdb</command></term>
         <listitem>
           <para>
-            compacts databases and generates statistics for the query analyzer
+            compacta bases de dados e gera estatísticas para o analisador de consultas
           </para>
           <indexterm zone="postgresql vacuumdb">
             <primary sortas="b-vacuumdb">vacuumdb</primary>
@@ -924,7 +975,8 @@ database daemon
         <term><command>vacuumlo</command></term>
         <listitem>
           <para>
-            removes orphaned large objects from a PostgreSQL database
+            remove objetos grandes órfãos a partir de uma base de dados do
+&quot;PostgreSQL&quot;
           </para>
           <indexterm zone="postgresql vacuumlo">
             <primary sortas="b-vacuumlo">vacuumlo</primary>
@@ -936,7 +988,8 @@ database daemon
         <term><filename class="libraryfile">libecpg.{so,a}</filename></term>
         <listitem>
           <para>
-            contains functions to support embedded SQL in C programs
+            contém funções para suportar &quot;SQL&quot; incorporado em aplicativos
+&quot;C&quot;
           </para>
           <indexterm zone="postgresql libecpg">
             <primary sortas="c-libecpg">libecpg.{so,a}</primary>
@@ -948,7 +1001,7 @@ database daemon
         <term><filename class="libraryfile">libecpg_compat.{so,a}</filename></term>
         <listitem>
           <para>
-            is the ecpg compatibility library
+            é a biblioteca de compatibilidade &quot;ecpg&quot;
           </para>
           <indexterm zone="postgresql libecpg_compat">
             <primary sortas="c-libecpg_compat">libecpg_compat.{so,a}</primary>
@@ -960,7 +1013,8 @@ database daemon
         <term><filename class="libraryfile">libgport.a</filename></term>
         <listitem>
           <para>
-            is the port-specific subsystem of the Postgres backend
+            é o subsistema específico da porta da estrutura de retaguarda do
+&quot;Postgres&quot;
           </para>
           <indexterm zone="postgresql libgport">
             <primary sortas="c-libgport">libgport.a</primary>
@@ -972,7 +1026,7 @@ database daemon
         <term><filename class="libraryfile">libpgtypes.{so,a}</filename></term>
         <listitem>
           <para>
-            contains functions for dealing with Postgres data types
+            contém funções para lidar com tipos de dados &quot;Postgres&quot;
           </para>
           <indexterm zone="postgresql libpgtypes">
             <primary sortas="c-libpgtypes">libpgtypes.{so,a}</primary>
@@ -984,7 +1038,8 @@ database daemon
         <term><filename class="libraryfile">libpq.{so,a}</filename></term>
         <listitem>
           <para>
-            is the C programmer's API to Postgres
+            é a &quot;API&quot; do(a) programador(a) &quot;C&quot; para
+&quot;Postgres&quot;
           </para>
           <indexterm zone="postgresql libpq">
             <primary sortas="c-libpq">libpq.{so,a}</primary>

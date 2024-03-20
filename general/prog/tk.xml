@@ -7,12 +7,12 @@
   <!ENTITY tk-download-http "&sourceforge-dl;/tcl/tk&tk-version;-src.tar.gz">
   <!ENTITY tk-download-ftp  "">
   <!ENTITY tk-md5sum        "95adc33d55a133ee29bc9f81efdf31b2">
-  <!ENTITY tk-size          "4,3Mo">
-  <!ENTITY tk-buildsize     "25Mo">
-  <!ENTITY tk-time          "0,3UPC (adicionar 2,0UPC para os testes)">
+  <!ENTITY tk-size          "4,3 MB">
+  <!ENTITY tk-buildsize     "25 MB">
+  <!ENTITY tk-time          "0,3 UPC (adicionar 2,0 UPC para os testes)">
 
   <!-- Ensure this is updated when Tk moves from the 8.6.x branch -->
-  <!ENTITY tk-ver           "8,6">
+  <!ENTITY tk-ver           "8.6">
 ]>
 
 <sect1 id="tk" xreflabel="Tk-&tk-version;">
@@ -26,10 +26,11 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Tk</title>
+    <title>Introdução ao <quote>Tk</quote></title>
 
     <para>
-      The <application>Tk</application> package contains a TCL GUI Toolkit.
+      O pacote &quot;<application>Tk</application>&quot; contém um kit de
+ferramentas &quot;GUI&quot; &quot;TCL&quot;.
     </para>
 
     &lfs113_checked;
@@ -48,7 +49,7 @@
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &tk-md5sum;
+          Soma de verificação MD5 da transferência: &tk-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -68,9 +69,9 @@
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Tk</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;Tk&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       
       <!-- <xref linkend="tcl"/>
@@ -83,16 +84,17 @@
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Tk</title>
+    <title>Instalação do <quote>Tk</quote></title>
 
     <para>
-      Instale <application>Tk</application> executando os seguintes comandos:
+      Instale &quot;<application>Tk</application>&quot; executando os seguintes
+comandos:
     </para>
 
 <screen><userinput>cd unix &amp;&amp;
 ./configure --prefix=/usr \
-            --mandir=/usr/share/man \
-            $([ $(uname -m) = x86_64 ] &amp;&amp; echo --enable-64bit) &amp;&amp;
+           --mandir=/usr/share/man \
+           $([ $(uname -m) = x86_64 ] &amp;&amp; echo --enable-64bit) &amp;&amp;
 
 make &amp;&amp;
 
@@ -115,18 +117,21 @@ sed -e "s@^\(TK_SRC_DIR='\).*@\1/usr/include'@" \
       Total   9650    Passed  8847    Skipped 708     Failed  95
       Total   488     Passed  470     Skipped 17      Failed  1
       -->
-Running the tests is not recommended. Failures will be reported during the
-tests, depending on the screen resolution/capabilities, fonts installed and
-other X related parameters, but the end report can show 0 failures.  Some
-tests will steal focus and some might crash your X Server. To test the
-results anyway, issue: <command>make test</command>. Ensure you run it from
-an X Window display device with the GLX extensions loaded, but even so,
-tests might hang.
+Executar os testes não é recomendado. Falhas serão informadas durante os
+testes, dependendo da resolução/capacidades da tela, fontes instaladas e
+outros parâmetros relacionados ao &quot;X&quot;, mas o informe final pode
+mostrar zero (0) falhas. Alguns testes roubarão o foco e alguns poderão
+travar seu servidor &quot;X&quot;. Para testar os resultados de qualquer
+maneira, emita: &quot;<command>make test</command>&quot;. Certifique-se de
+executá-lo a partir de um dispositivo de exibição do &quot;X Window&quot;
+com as extensões &quot;GLX&quot; carregadas, mas mesmo assim, os testes
+podem travar.
       
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -141,35 +146,38 @@ chmod -v 755 /usr/lib/libtk&tk-ver;.so</userinput></screen>
 
     <para>
       <parameter>$([ $(uname -m) = x86_64 ] &amp;&amp; echo
---enable-64bit)</parameter>: This switch is used to enable 64 bit support in
-<application>Tk</application> on 64 bit operating systems.
+--enable-64bit)</parameter>: Essa chave é usada para habilitar o suporte de
+64 bits no &quot;<application>Tk</application>&quot; em sistemas
+operacionais de 64 bits.
     </para>
 
     <para>
-      <command>make install-private-headers</command>: This command is used to
-install the <application>Tk</application> library interface headers used by
-other packages if they link to the <application>Tk</application> library.
+      <command>make install-private-headers</command>: Esse comando é usado para
+instalar os cabeçalhos de interface da biblioteca
+&quot;<application>Tk</application>&quot; usados por outros pacotes se eles
+se vincularem à biblioteca &quot;<application>Tk</application>&quot;.
     </para>
 
     <para>
-      <command>ln -v -sf wish&tk-ver; /usr/bin/wish</command>: This command is
-used to create a compatibility symbolic link to the
-<command>wish&tk-ver;</command> file as many packages expect a file named
-<command>wish</command>.
+      <command>ln -v -sf wish&tk-ver; /usr/bin/wish</command>: Esse comando é
+usado para criar um link simbólico de compatibilidade para o arquivo
+&quot;<command>wish&tk-ver;</command>&quot; já que muitos pacotes esperam um
+arquivo chamado &quot;<command>wish</command>&quot;.
     </para>
 
     <para>
-      <command>sed -e ... tkConfig.sh</command>: The <application>Tk</application>
-package expects that its source tree is preserved so that packages depending
-on it for their compilation can utilize it. This <command>sed</command>
-removes the references to the build directory and replaces them with saner
-system-wide locations.
+      <command>sed -e ... tkConfig.sh</command>: O pacote
+&quot;<application>Tk</application>&quot; espera que a árvore fonte dele
+seja preservada, de forma que os pacotes que dependem dele para compilação
+possam utilizá-la. Esse &quot;<command>sed</command>&quot; remove as
+referências ao diretório de construção e as substitui por locais mais
+saudáveis abrangentes a todo o sistema.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -178,10 +186,10 @@ system-wide locations.
 
       <seglistitem>
         <seg>
-          wish and wish&tk-ver;
+          wish e wish&tk-ver;
         </seg>
         <seg>
-          libtk&tk-ver;.so and libtkstub&tk-ver;.a
+          libtk&tk-ver;.so e libtkstub&tk-ver;.a
         </seg>
         <seg>
           /usr/lib/tk&tk-ver;
@@ -197,7 +205,8 @@ system-wide locations.
         <term><command>wish</command></term>
         <listitem>
           <para>
-            is a symlink to the <command>wish&tk-ver;</command> program
+            é um link simbólico para o aplicativo
+&quot;<command>wish&tk-ver;</command>&quot;
           </para>
           <indexterm zone="tk wish">
             <primary sortas="b-wish">wish</primary>
@@ -209,9 +218,9 @@ system-wide locations.
         <term><command>wish&tk-ver;</command></term>
         <listitem>
           <para>
-            is a simple shell containing the <application>Tk</application> toolkit that
-creates a main window and then processes <application>Tcl</application>
-commands
+            é um &quot;shell&quot; simples contendo o kit de ferramentas
+&quot;<application>Tk</application>&quot; que cria uma janela principal e
+então processa comandos &quot;<application>Tcl</application>&quot;
           </para>
           <indexterm zone="tk wish-eight">
             <primary sortas="b-wish&tk-ver;">wish&tk-ver;</primary>
@@ -223,7 +232,8 @@ commands
         <term><filename class="libraryfile">libtk&tk-ver;.so</filename></term>
         <listitem>
           <para>
-            contains the API functions required by <application>Tk</application>
+            contém as funções da &quot;API&quot; exigidas pelo
+&quot;<application>Tk</application>&quot;
           </para>
           <indexterm zone="tk libtk">
             <primary sortas="c-libtk">libtk&tk-ver;.so</primary>

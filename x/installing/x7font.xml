@@ -6,8 +6,8 @@
 
   <!ENTITY x7fonts-download-http "&xorg-download-http;/font/">
   <!ENTITY x7fonts-download-ftp  "&xorg-download-ftp;/font/">
-  <!ENTITY x7fonts-size          "3,0Mo">
-  <!ENTITY x7fonts-buildsize     "8,8Mo">
+  <!ENTITY x7fonts-size          "3,0 MB">
+  <!ENTITY x7fonts-buildsize     "8,8 MB">
   <!ENTITY x7fonts-time          "0,1 UPC">
 
   <!ENTITY encodings-version               "1.0.6">
@@ -39,25 +39,26 @@
 
 ]>
 
-<sect1 id="xorg7-font" xreflabel="Fontes Xorg">
+<sect1 id="xorg7-font" xreflabel="Fontes do Xorg">
   <?dbhtml filename="x7font.html"?>
 
 
-  <title>Xorg Fonts</title>
+  <title>Fontes do Xorg</title>
 
   <indexterm zone="xorg7-font">
-    <primary sortas="a-xorg7-font">Xorg Fonts</primary>
+    <primary sortas="a-xorg7-font">Fontes do Xorg</primary>
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Xorg Fonts</title>
+    <title>Introdução às Fontes do <quote>Xorg</quote></title>
 
     <para>
-      The <application>Xorg</application> font packages provide some scalable
-fonts and supporting packages for <application>Xorg</application>
-applications. Many people will want to install other TTF or OTF fonts in
-addition to, or instead of, these. Some are listed at <xref
-linkend="TTF-and-OTF-fonts"/>.
+      Os pacotes de fontes do &quot;<application>Xorg</application>&quot; fornecem
+algumas fontes escaláveis e pacotes de suporte para aplicações do
+&quot;<application>Xorg</application>&quot;. Muitas pessoas vão querer
+instalar outras fontes &quot;TTF&quot; ou &quot;OTF&quot; além ou em vez
+delas. Algumas estão listadas em &quot;<xref
+linkend="TTF-and-OTF-fonts"/>&quot;.
     </para>
 
     &lfs113_checked;
@@ -91,9 +92,9 @@ linkend="TTF-and-OTF-fonts"/>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Xorg Fonts</bridgehead>
+    <bridgehead renderas="sect3">Dependências das fontes do &quot;Xorg&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="xcursor-themes"/>
     </para>
@@ -103,11 +104,12 @@ linkend="TTF-and-OTF-fonts"/>.
   </sect2>
 
   <sect2>
-    <title>Downloading Xorg Fonts</title>
+    <title>Transferindo as Fontes do <quote>Xorg</quote></title>
 
     <para>
-      First, create a list of files to be downloaded. This file will also be used
-to verify the integrity of the downloads when complete:
+      Primeiro, crie uma lista de arquivos a serem transferidos. Esse arquivo
+também será usado para verificar a integridade das transferências quando
+concluídas:
     </para>
 
 <screen><userinput>cat &gt; font-&xorg-version;.md5 &lt;&lt; "EOF"
@@ -123,8 +125,8 @@ to verify the integrity of the downloads when complete:
 EOF</userinput></screen>
 
     <para>
-      To download the needed files using <application>wget</application>, use the
-following commands:
+      Para transferir os arquivos necessários usando o
+&quot;<application>wget</application>&quot;, use os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir font &amp;&amp;
@@ -136,18 +138,18 @@ md5sum -c ../font-&xorg-version;.md5</userinput></screen>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Xorg Fonts</title>
+    <title>Instalação das Fontes do <quote>Xorg</quote></title>
 
 &as_root;
 
     <para>
-      First, start a subshell that will exit on error:
+      Primeiro, inicie um sub &quot;shell&quot; que sairá em caso de erro:
     </para>
 
 <screen><userinput>bash -e</userinput></screen>
 
     <para>
-      Install all of the packages by running the following commands:
+      Instale todos os pacotes executando os seguintes comandos:
     </para>
 
 <screen><userinput>for package in $(grep -v '^#' ../font-&xorg-version;.md5 | awk '{print $2}')
@@ -163,30 +165,33 @@ do
 done</userinput></screen>
 
     <para>
-      Finally, exit the shell that was started earlier:
+      Finalmente, saia do &quot;shell&quot; que foi iniciado anteriormente:
     </para>
 
 <screen><userinput>exit</userinput></screen>
 
     <para>
-      When all of the fonts have been installed, the system must be configured so
-that <application>Fontconfig</application> can find the TrueType
-fonts. Since the fonts are outside of the default search path of several
-packages <emphasis role="bold">if <envar>XORG_PREFIX</envar> is not
-<filename class="directory">/usr</filename></emphasis>, make symlinks to the
-<application>Xorg</application> TrueType font directories in <filename
-class="directory">/usr/share/fonts</filename> by running the following
-commands as the <systemitem class="username">root</systemitem> user:
+      Quando todas as fontes tiverem sido instaladas, o sistema precisará ser
+configurado de forma que o &quot;<application>Fontconfig</application>&quot;
+consiga encontrar as fontes &quot;TrueType&quot;. Como as fontes estão fora
+do caminho padrão de pesquisa de vários pacotes <emphasis role="bold">se o
+&quot;<envar>XORG_PREFIX</envar>&quot; não for &quot;<filename
+class="directory">/usr</filename>&quot;</emphasis>, [então] crie links
+simbólicos para os diretórios de fontes &quot;TrueType&quot; do
+&quot;<application>Xorg</application>&quot; em &quot;<filename
+class="directory">/usr/share/fonts</filename>&quot; executando os seguintes
+comandos como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>install -v -d -m755 /usr/share/fonts                               &amp;&amp;
+<screen role="root"><userinput>install -v -d -m755 /usr/share/fonts                              &amp;&amp;
 ln -svfn $XORG_PREFIX/share/fonts/X11/OTF /usr/share/fonts/X11-OTF &amp;&amp;
 ln -svfn $XORG_PREFIX/share/fonts/X11/TTF /usr/share/fonts/X11-TTF</userinput></screen>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -194,8 +199,8 @@ ln -svfn $XORG_PREFIX/share/fonts/X11/TTF /usr/share/fonts/X11-TTF</userinput></
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>bdftruncate and ucs2any</seg>
-        <seg>None</seg>
+        <seg>bdftruncate e ucs2any</seg>
+        <seg>Nenhum(a)</seg>
         <seg><envar>$XORG_PREFIX</envar>/share/fonts</seg>
       </seglistitem>
     </segmentedlist>
@@ -208,7 +213,8 @@ ln -svfn $XORG_PREFIX/share/fonts/X11/TTF /usr/share/fonts/X11-TTF</userinput></
         <term><command>bdftruncate</command></term>
         <listitem>
           <para>
-            generates a truncated BDF font from an ISO 10646-1 encoded BDF font
+            gera uma fonte &quot;BDF&quot; truncada a partir de uma fonte
+&quot;BDF&quot; codificada &quot;ISO 10646-1&quot;
           </para>
           <indexterm zone="xorg7-font bdftruncate-x7">
             <primary sortas="b-bdftruncate">bdftruncate</primary>
@@ -220,7 +226,8 @@ ln -svfn $XORG_PREFIX/share/fonts/X11/TTF /usr/share/fonts/X11-TTF</userinput></
         <term><command>ucs2any</command></term>
         <listitem>
           <para>
-            generates BDF fonts in any encoding from an ISO 10646-1 encoded BDF font
+            gera fontes &quot;BDF&quot; em qualquer codificação a partir de uma fonte
+&quot;BDF&quot; codificada &quot;ISO 10646-1&quot;
           </para>
           <indexterm zone="xorg7-font ucs2any-x7">
             <primary sortas="b-ucs2any">ucs2any</primary>

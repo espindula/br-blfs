@@ -7,9 +7,9 @@
   <!ENTITY dhcp-download-http "https://ftp.isc.org/isc/dhcp/&dhcp-version;/dhcp-&dhcp-version;.tar.gz">
   <!ENTITY dhcp-download-ftp  "ftp://ftp.isc.org/isc/dhcp/&dhcp-version;/dhcp-&dhcp-version;.tar.gz">
   <!ENTITY dhcp-md5sum        "36c6ca77212373b0cff478ae9e5d32af">
-  <!ENTITY dhcp-size          "9,6Mo">
-  <!ENTITY dhcp-buildsize     "199Mo">
-  <!ENTITY dhcp-time          "0,7UPC">
+  <!ENTITY dhcp-size          "9,6 MB">
+  <!ENTITY dhcp-buildsize     "199 MB">
+  <!ENTITY dhcp-time          "0,7 UPC">
 ]>
 
 <sect1 id="dhcp" xreflabel="DHCP-&dhcp-version;">
@@ -23,14 +23,17 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a ISC DHCP</title>
+    <title>Introdução ao <quote>ISC DHCP</quote></title>
 
     <para>
-      The <application>ISC DHCP</application> package contains both the client and
-server programs for DHCP. <command>dhclient</command> (the client) is used
-for connecting to a network which uses DHCP to assign network
-addresses. <command>dhcpd</command> (the server) is used for assigning
-network addresses on private networks.
+      O pacote &quot;<application>ISC DHCP</application>&quot; contém os
+aplicativos cliente e servidor para
+&quot;DHCP&quot;. &quot;<command>dhclient</command>&quot; (o cliente) é
+usado para conectar-se a uma rede de intercomunicação que usa
+&quot;DHCP&quot; para atribuir endereços de rede de
+intercomunicação. &quot;<command>dhcpd</command>&quot; (o servidor) é usado
+para atribuir endereços de rede de intercomunicação em redes de
+intercomunicação privadas.
     </para>
 
     &lfs113_checked;
@@ -49,7 +52,7 @@ network addresses on private networks.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &dhcp-md5sum;
+          Soma de verificação MD5 da transferência: &dhcp-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -95,10 +98,11 @@ Additional Downloads</bridgehead>
     <title>Configuração do Núcleo</title>
 
     <para>
-      You must have Packet Socket support.  IPv6 support is optional.
+      Você precisa ter suporte para &quot;Packet Socket&quot;. O suporte
+&quot;IPv6&quot; é opcional.
     </para>
 
-<screen><literal>[*] Networking support ---&gt;        [CONFIG_NET]
+<screen><literal>[*] Networking support ---&gt;       [CONFIG_NET]
       Networking options ---&gt;
         &lt;*&gt; Packet socket          [CONFIG_PACKET]
         &lt;*&gt; The IPv6 Protocol ---&gt; [CONFIG_IPV6]</literal></screen>
@@ -124,7 +128,7 @@ Additional Downloads</bridgehead>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de ISC DHCP</title>
+    <title>Instalação do <quote>ISC DHCP</quote></title>
 
 
     <!-- Not needed when building DHCP-4.4.3.
@@ -140,7 +144,7 @@ sed -r '/u.*(local|remote)_port/d'    \
 -->
 <note>
       <para>
-        This package does not support parallel build.
+        Esse pacote não suporta construção paralela.
       </para>
     </note>
 
@@ -155,14 +159,14 @@ sed -r '/u.*(local|remote)_port/d'    \
 -->
 <note>
       <para>
-        Be careful with the instructions below. The single and double quotes are
-important because the defined variables are used verbatim in the code.
+        Tenha cuidado com as instruções abaixo. As aspas simples e duplas são
+importantes porque as variáveis definidas são usadas literalmente no código.
       </para>
     </note>
 
     <para>
-      Install <application>ISC DHCP</application> by running the following
-commands:
+      Instale &quot;<application>ISC DHCP</application>&quot; executando os
+seguintes comandos:
     </para>
 
 
@@ -170,7 +174,7 @@ commands:
    Running ( export CFLAGS=... ./configure ... ) in a subshell
    preserves CFLAGS if they are set in environment
 -->
-<userinput>( export CFLAGS="${CFLAGS:--g -O2} -Wall -fno-strict-aliasing                 \
+<userinput>( export CFLAGS="${CFLAGS:--g -O2} -Wall -fno-strict-aliasing                \
         -D_PATH_DHCLIENT_SCRIPT='\"/usr/sbin/dhclient-script\"'     \
         -D_PATH_DHCPD_CONF='\"/etc/dhcp/dhcpd.conf\"'               \
         -D_PATH_DHCLIENT_CONF='\"/etc/dhcp/dhclient.conf\"'"        &amp;&amp;
@@ -192,35 +196,37 @@ Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      If you only want to install the <application>ISC DHCP</application> client,
-issue the following commands as the <systemitem
-class="username">root</systemitem> user:
+      Se você deseja instalar somente o cliente &quot;<application>ISC
+DHCP</application>&quot;, [então] emita os seguintes comandos como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>make -C client install             &amp;&amp;
+<screen role="root"><userinput>make -C client install            &amp;&amp;
 install -v -m755 client/scripts/linux /usr/sbin/dhclient-script</userinput></screen>
 
     <para>
-      Skip to <xref linkend="dhclient-config"/> in order to configure the client
+      Pule para &quot;<xref linkend="dhclient-config"/>&quot; para a finalidade de
+configurar o cliente
     </para>
 
     <para>
-      If you only want to install the <application>ISC DHCP</application> server,
-issue the following command as the <systemitem
-class="username">root</systemitem> user:
+      Se você deseja instalar somente o servidor &quot;<application>ISC
+DHCP</application>&quot;, [então] emita o seguinte comando como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make -C server install</userinput></screen>
 
     <para>
-      Skip to <xref linkend="dhcpd-config"/> in order to configure the server.
+      Pule para &quot;<xref linkend="dhcpd-config"/>&quot; para a finalidade de
+configurar o servidor.
     </para>
 
     <para>
-      Alternatively, you can install whole package which includes the client,
-server, relay, static libraries and development headers by running the
-following commands as the <systemitem class="username">root</systemitem>
-user:
+      Alternativamente, você consegue instalar o pacote inteiro, que inclui o
+cliente, servidor, retransmissão, bibliotecas estáticas e cabeçalhos de
+desenvolvimento executando os seguintes comandos como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -229,13 +235,13 @@ install -v -m755 client/scripts/linux /usr/sbin/dhclient-script</userinput></scr
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configuring ISC DHCP</title>
+    <title>Configurando o <quote>ISC DHCP</quote></title>
 
     <sect3 id="dhcp-config">
       <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/dhcp/dhclient.conf</filename> and
+        <filename>/etc/dhcp/dhclient.conf</filename> e
 <filename>/etc/dhcp/dhcpd.conf</filename>
       </para>
 
@@ -250,19 +256,19 @@ install -v -m755 client/scripts/linux /usr/sbin/dhclient-script</userinput></scr
     </sect3>
 
     <sect3 id="dhclient-config">
-      <title>Client Configuration</title>
+      <title>Configuração do Cliente</title>
 
       <para>
-        Create a basic <filename>/etc/dhcp/dhclient.conf</filename> by running the
-following command as the <systemitem class="username">root</systemitem>
-user:
+        Crie um &quot;<filename>/etc/dhcp/dhclient.conf</filename>&quot; básico
+executando o seguinte comando como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>install -vdm755 /etc/dhcp &amp;&amp;
 cat &gt; /etc/dhcp/dhclient.conf &lt;&lt; "EOF"
-<literal># Begin /etc/dhcp/dhclient.conf
+<literal># Inicia /etc/dhcp/dhclient.conf
 #
-# Basic dhclient.conf(5)
+# Um dhclient.conf(5) básico
 
 #prepend domain-name-servers 127.0.0.1;
 request subnet-mask, broadcast-address, time-offset, routers,
@@ -276,27 +282,31 @@ require subnet-mask, domain-name-servers;
 #select-timeout 5;
 #initial-interval 2;
 
-# End /etc/dhcp/dhclient.conf</literal>
+# Termina /etc/dhcp/dhclient.conf</literal>
 EOF</userinput></screen>
 
       <para>
-        See <command>man 5 dhclient.conf</command> for additional options.
+        Veja-se &quot;<command>man 5 dhclient.conf</command>&quot; para opções
+adicionais.
       </para>
 
       <para>
-        Now create the <filename class="directory">/var/lib/dhclient</filename>
-directory which will contain DHCP Client leases by running the following
-command as the <systemitem class="username">root</systemitem> user:
+        Agora crie o diretório &quot;<filename
+class="directory">/var/lib/dhclient</filename>&quot; que conterá concessões
+do cliente &quot;DHCP&quot; executando o seguinte comando como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>install -v -dm 755 /var/lib/dhclient</userinput></screen>
 
       <para id="dhclient-service-sysd" revision="systemd">
-        If you want to configure network interfaces at boot using
-<command>dhclient</command>, you need to install the
-<filename>dhclient@.service</filename> unit included in the <xref
-linkend="systemd-units"/> package by running the following command as the
-<systemitem class="username">root</systemitem> user:
+        Se você deseja configurar interfaces de rede de intercomunicação na
+inicialização usando o &quot;<command>dhclient</command>&quot;, [então] você
+precisa instalar a unidade
+&quot;<filename>dhclient@.service</filename>&quot; incluída no pacote
+&quot;<xref linkend="systemd-units"/>&quot; executando o seguinte comando
+como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
       <indexterm zone="dhcp dhclient-service-sysd" revision="systemd">
@@ -307,16 +317,18 @@ linkend="systemd-units"/> package by running the following command as the
 
       <note revision="systemd">
         <para>
-          Make sure that you disable the <command>systemd-networkd</command> service
-or configure it not to manage the interfaces you want to manage with
-<command>dhclient</command>.
+          Certifique-se de desabilitar o serviço
+&quot;<command>systemd-networkd</command>&quot; ou configurá-lo para não
+gerenciar as interfaces que você quer gerenciar com o
+&quot;<command>dhclient</command>&quot;.
         </para>
       </note>
 
       <para>
-        At this point you can test if <command>dhclient</command> is behaving as
-expected by running the following command as the <systemitem
-class="username">root</systemitem> user:
+        Neste ponto você consegue testar se o
+&quot;<command>dhclient</command>&quot; está se comportando conforme
+esperado executando o seguinte comando como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"
@@ -328,28 +340,30 @@ class="username">root</systemitem> user:
         revision="systemd"><userinput>systemctl start dhclient@<replaceable>eth0</replaceable></userinput></screen>
 
       <para revision="sysv">
-        Replace <replaceable>&lt;eth0&gt;</replaceable> with your desired
-interface. If you want more verbose output, add the <command>-v</command>
-parameter to the command above.
+        Substitua &quot;<replaceable>&lt;eth0&gt;</replaceable>&quot; pela tua
+interface desejada. Se você quiser uma saída gerada mais detalhada, [então]
+adicione o parâmetro &quot;<command>-v</command>&quot; ao comando acima.
       </para>
 
       <para id="dhclient-service" revision="sysv">
-        If you want to configure network interfaces at boot using
-<command>dhclient</command>, you need to install the
-<filename>/lib/services/dhclient</filename> script included in <xref
-linkend="bootscripts"/> package:
+        Se você deseja configurar interfaces de rede de intercomunicação na
+inicialização usando o &quot;<command>dhclient</command>&quot;, [então] você
+precisa instalar o conjunto sequencial de comandos
+&quot;<filename>/lib/services/dhclient</filename>&quot; incluído no pacote
+&quot;<xref linkend="bootscripts"/>&quot;:
       </para>
 
 <screen role="root" revision="sysv"><userinput>make install-service-dhclient</userinput></screen>
 
       <indexterm zone="dhcp dhclient-service" revision="sysv">
-        <primary sortas="f-dhclient">dhclient (service script)</primary>
+        <primary sortas="f-dhclient">dhclient (conjunto sequencial de comandos de serviço)</primary>
       </indexterm>
 
       <para id="dhclient-ifconfig" revision="sysv">
-        Next, create the <filename>/etc/sysconfig/ifconfig.eth0</filename>
-configuration file with the following commands as the <systemitem
-class="username">root</systemitem> user:
+        Em seguida, crie o arquivo de configuração
+&quot;<filename>/etc/sysconfig/ifconfig.eth0</filename>&quot; com os
+seguintes comandos como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /etc/sysconfig/ifconfig.eth0 &lt;&lt; "EOF"
@@ -359,12 +373,12 @@ SERVICE="dhclient"
 DHCP_START=""
 DHCP_STOP=""
 
-# Set PRINTIP="yes" to have the script print
-# the DHCP assigned IP address
+# Configure PRINTIP="yes" para que o conjunto sequencial de comandos imprima
+# o endereço "IP" atribuído pelo "DHCP"
 PRINTIP="no"
 
-# Set PRINTALL="yes" to print the DHCP assigned values for
-# IP, SM, DG, and 1st NS. This requires PRINTIP="yes".
+# Configure PRINTALL="yes" para imprimir os valores atribuídos pelo "DHCP" para
+# "IP", "SM", "DG" e 1º "NS". Isso exige PRINTIP="yes".
 PRINTALL="no"</literal>
 EOF</userinput></screen>
 
@@ -373,90 +387,98 @@ EOF</userinput></screen>
       </indexterm>
 
       <para revision="sysv">
-        Adjust the file to suit your needs.
+        Ajuste o arquivo para atender às tuas necessidades.
       </para>
 
       <para revision="sysv">
-        For more information on the appropriate <envar>DHCP_START</envar> and
-<envar>DHCP_STOP</envar> values see <command>man 8 dhclient</command>.
+        Para mais informações relativas aos valores apropriados
+&quot;<envar>DHCP_START</envar>&quot; e
+&quot;<envar>DHCP_STOP</envar>&quot;, veja-se &quot;<command>man 8
+dhclient</command>&quot;.
       </para>
 
       <para revision="systemd">
-        To start <command>dhclient</command> on a specific interface at boot, enable
-the previously installed systemd unit by running the following command as
-the <systemitem class="username">root</systemitem> user:
+        Para iniciar o &quot;<command>dhclient</command>&quot; em uma interface
+específica na inicialização, habilite a unidade &quot;systemd&quot;
+instalada anteriormente executando o seguinte comando como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root" revision="systemd"><userinput>systemctl enable dhclient@<replaceable>eth0</replaceable></userinput></screen>
 
       <para revision="systemd">
-        Replace <replaceable>eth0</replaceable> with the actual interface name.
+        Substitua &quot;<replaceable>eth0</replaceable>&quot; pelo nome real da
+interface.
       </para>
 
     </sect3>
 
     <sect3 id="dhcpd-config">
-      <title>Server Configuration</title>
+      <title>Configuração do Servidor</title>
 
       <para>
-        Note that you only need the DHCP server if you want to issue LAN addresses
-over your network. The DHCP client doesn't need the server in order to
-function properly.
+        Observe que você só precisa do servidor &quot;DHCP&quot; se quiser emitir
+endereços &quot;LAN&quot; pela sua rede de intercomunicação. O cliente
+&quot;DHCP&quot; não precisa do servidor para a finalidade de funcionar
+corretamente.
       </para>
 
       <para>
-        Start with creating <filename>/etc/dhcp/dhcpd.conf</filename> by running the
-following command as the <systemitem class="username">root</systemitem>
-user:
+        Comece criando &quot;<filename>/etc/dhcp/dhcpd.conf</filename>&quot;
+executando o seguinte comando como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/dhcp/dhcpd.conf &lt;&lt; "EOF"
-<literal># Begin /etc/dhcp/dhcpd.conf
+<literal># Inicia /etc/dhcp/dhcpd.conf
 #
-# Example dhcpd.conf(5)
+# Um dhcpd.conf(5) de exemplo
 
-# Use this to enable / disable dynamic dns updates globally.
+# Use isto para habilitar/desabilitar globalmente atualizações dinâmicas de DNS.
 ddns-update-style none;
 
-# option definitions common to all supported networks...
-option domain-name "example.org";
-option domain-name-servers ns1.example.org, ns2.example.org;
+# Definições de opções comuns a todas as redes de intercomunicação suportadas...
+option domain-name "exemplo.org";
+option domain-name-servers ns1.exemplo.org, ns2.exemplo.org;
 
 default-lease-time 600;
 max-lease-time 7200;
 
-# This is a very basic subnet declaration.
+# Esta é uma declaração de sub-rede muito básica.
 subnet 10.254.239.0 netmask 255.255.255.224 {
   range 10.254.239.10 10.254.239.20;
-  option routers rtr-239-0-1.example.org, rtr-239-0-2.example.org;
+  option routers rtr-239-0-1.exemplo.org, rtr-239-0-2.exemplo.org;
 }
 
-# End /etc/dhcp/dhcpd.conf</literal>
+# Termina /etc/dhcp/dhcpd.conf</literal>
 EOF</userinput></screen>
 
       <para>
-        Adjust the file to suit your needs. See <command>man 5 dhcpd.conf</command>
-for additional options.
+        Ajuste o arquivo para atender às suas necessidades. Veja-se
+&quot;<command>man 5 dhcpd.conf</command>&quot; para opções adicionais.
       </para>
 
 
       <!-- the "touch..." is needed according to dhcpd.leases(5) -->
 <para>
-        Now create the <filename>/var/lib/dhcpd/dhcpd.leases</filename> directory
-which will contain DHCP Server leases by running the following commands as
-the <systemitem class="username">root</systemitem> user:
+        Agora crie o diretório
+&quot;<filename>/var/lib/dhcpd/dhcpd.leases</filename>&quot; que conterá
+concessões do servidor &quot;DHCP&quot; executando os seguintes comandos
+como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>install -v -dm 755 /var/lib/dhcpd &amp;&amp;
 touch /var/lib/dhcpd/dhcpd.leases</userinput></screen>
 
        <para>
-        If you want to start the DHCP Server at boot, install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/dhcpd</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>dhcpd.service</filename> unit</phrase> included
-in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package:
+        Se você deseja iniciar o servidor &quot;DHCP&quot; na inicialização, [então]
+instale <phrase revision="sysv">o conjunto sequencial de comandos de
+iniciação &quot;<filename>/etc/rc.d/init.d/dhcpd</filename>&quot;
+incluído</phrase><phrase revision="systemd">a unidade
+&quot;<filename>dhcpd.service</filename>&quot; incluída</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;:
       </para>
 
 <screen role="root"><userinput>make install-dhcpd</userinput></screen>
@@ -466,11 +488,13 @@ linkend="systemd-units" revision="systemd"/> package:
       </indexterm>
 
       <para>
-        You will need to edit the <phrase
-revision="sysv"><filename>/etc/sysconfig/dhcpd</filename></phrase> <phrase
-revision="systemd"><filename>/etc/default/dhcpd</filename></phrase> in order
-to set the interface on which <command>dhcpd</command> will serve the DHCP
-requests.
+        Você precisará editar o <phrase
+revision="sysv">&quot;<filename>/etc/sysconfig/dhcpd</filename>&quot;</phrase>
+<phrase
+revision="systemd">&quot;<filename>/etc/default/dhcpd</filename>&quot;</phrase>
+para a finalidade de configurar a interface na qual o
+&quot;<command>dhcpd</command>&quot; atenderá as solicitações
+&quot;DHCP&quot;.
       </para>
 
     </sect3>
@@ -478,7 +502,7 @@ requests.
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -487,14 +511,14 @@ requests.
 
       <seglistitem>
         <seg>
-          dhclient, dhclient-script, dhcpd, dhcrelay and omshell
+          dhclient, dhclient-script, dhcpd, dhcrelay e omshell
         </seg>
         <seg>
-          libdhcpctl.a and libomapi.a
+          libdhcpctl.a e libomapi.a
         </seg>
         <seg>
           /etc/dhcp, /usr/include/dhcpctl, /usr/include/isc-dhcp, /usr/include/omapip,
-/var/lib/dhclient and /var/lib/dhcpd
+/var/lib/dhclient e /var/lib/dhcpd
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -507,7 +531,7 @@ requests.
         <term><command>dhclient</command></term>
         <listitem>
           <para>
-            is the implementation of the DHCP client
+            é a implementação do cliente &quot;DHCP&quot;
           </para>
           <indexterm zone="dhcp dhclient">
             <primary sortas="b-dhclient">dhclient</primary>
@@ -519,8 +543,9 @@ requests.
         <term><command>dhclient-script</command></term>
         <listitem>
           <para>
-            is used by dhclient to (re)configure interfaces. It can make extra changes
-by invoking custom dhclient-{entry,exit}-hooks
+            é usado pelo &quot;dhclient&quot; para (re)configurar interfaces. Ele pode
+fazer mudanças extras invocando &quot;dhclient-{entry,exit}-hooks&quot;
+personalizados
           </para>
           <indexterm zone="dhcp dhclient-script">
             <primary sortas="b-dhclient-script">dhclient-script</primary>
@@ -532,8 +557,9 @@ by invoking custom dhclient-{entry,exit}-hooks
         <term><command>dhcpd</command></term>
         <listitem>
           <para>
-            implements Dynamic Host Configuration Protocol (DHCP) and Internet Bootstrap
-Protocol (BOOTP) requests for network addresses
+            implementa solicitações de &quot;Dynamic Host Configuration Protocol&quot;
+(&quot;DHCP&quot;) e &quot;Internet Bootstrap Protocol&quot;
+(&quot;BOOTP&quot;) para endereços de rede de intercomunicação
           </para>
           <indexterm zone="dhcp dhcpd">
             <primary sortas="b-dhcpd">dhcpd</primary>
@@ -545,8 +571,9 @@ Protocol (BOOTP) requests for network addresses
         <term><command>dhcrelay</command></term>
         <listitem>
           <para>
-            provides a means to accept DHCP and BOOTP requests on a subnet without a
-DHCP server and relay them to a DHCP server on another subnet
+            fornece um meio de aceitar solicitações &quot;DHCP&quot; e &quot;BOOTP&quot;
+em uma sub-rede sem um servidor &quot;DHCP&quot; e retransmiti-las para um
+servidor &quot;DHCP&quot; em outra sub-rede
           </para>
           <indexterm zone="dhcp dhcrelay">
             <primary sortas="b-dhcrelay">dhcrelay</primary>
@@ -558,8 +585,9 @@ DHCP server and relay them to a DHCP server on another subnet
         <term><command>omshell</command></term>
         <listitem>
           <para>
-            provides an interactive way to connect to, query and possibly change the ISC
-DHCP Server's state via OMAPI, the Object Management API
+            fornece uma maneira interativa de conectar, consultar e possivelmente mudar
+o estado do servidor &quot;ISC DHCP&quot; via &quot;OMAPI&quot;, a
+&quot;Object Management API&quot;
           </para>
           <indexterm zone="dhcp omshell">
             <primary sortas="b-omshell">omshell</primary>

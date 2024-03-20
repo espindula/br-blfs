@@ -8,9 +8,9 @@
 <!--  <!ENTITY dhcpcd-download-ftp  "ftp://roy.marples.name/pub/dhcpcd/dhcpcd-&dhcpcd-version;.tar.xz">-->
   <!ENTITY dhcpcd-download-ftp  "">
   <!ENTITY dhcpcd-md5sum        "2b2f46648bc96979f96127f0e0e07d9b">
-  <!ENTITY dhcpcd-size          "251Ko">
-  <!ENTITY dhcpcd-buildsize     "3.6 MB (with tests)">
-  <!ENTITY dhcpcd-time          "less than 0.1 SBU (with tests)">
+  <!ENTITY dhcpcd-size          "251 KB">
+  <!ENTITY dhcpcd-buildsize     "3,6 MB (com os testes)">
+  <!ENTITY dhcpcd-time          "menos que 0,1 UPC (com os testes)">
 ]>
 
 
@@ -31,13 +31,15 @@ pierre: seems that it now returns Error 404 (November 2021).
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a dhcpcd</title>
+    <title>Introdução ao <quote>dhcpcd</quote></title>
 
     <para>
-      <application>dhcpcd</application> is an implementation of the DHCP client
-specified in RFC2131. A DHCP client is useful for connecting your computer
-to a network which uses DHCP to assign network addresses. dhcpcd strives to
-be a fully featured, yet very lightweight DHCP client.
+      &quot;<application>dhcpcd</application>&quot; é uma implementação do cliente
+&quot;DHCP&quot; especificado na &quot;RFC2131&quot;. Um cliente
+&quot;DHCP&quot; é útil para conectar seu computador a uma rede de
+intercomunicação que usa &quot;DHCP&quot; para atribuir endereços de rede de
+intercomunicação. O &quot;dhcpcd&quot; se esforça para ser um cliente
+&quot;DHCP&quot; completo, mas muito leve.
     </para>
 
     &lfs113_checked;
@@ -56,7 +58,7 @@ be a fully featured, yet very lightweight DHCP client.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &dhcpcd-md5sum;
+          Soma de verificação MD5 da transferência: &dhcpcd-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -76,12 +78,12 @@ be a fully featured, yet very lightweight DHCP client.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de dhcpcd</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;dhcpcd&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="llvm"/> (with Clang), <xref linkend="ntp"/>, <ulink
-url="https://chrony.tuxfamily.org/">chronyd</ulink>, and <ulink
+      <xref linkend="llvm"/> (com &quot;Clang&quot;), <xref linkend="ntp"/>,
+<ulink url="https://chrony.tuxfamily.org/">chronyd</ulink> e <ulink
 url="https://github.com/thkukuk/ypbind-mt/">ypbind</ulink>
     </para>
 
@@ -90,25 +92,26 @@ url="https://github.com/thkukuk/ypbind-mt/">ypbind</ulink>
   </sect2>
 
   <sect2 id='dhcpcd-privsep'>
-    <title>Privilege separation</title>
+    <title>Separação de privilégios</title>
 
     <para>
-      Recent releases of <application>dhcpcd</application> optionally support
-privilege separation. As the practical security benefits of this are unclear
-for a program like <application>dhcpcd</application> and the setup is more
-complicated, the book currently defaults to disable it.
+      Lançamentos recentes do &quot;<application>dhcpcd</application>&quot;
+suportam opcionalmente a separação de privilégios. Como os benefícios
+práticos de segurança disso não são claros para um aplicativo como o
+&quot;<application>dhcpcd</application>&quot; e a configuração é mais
+complicada, o livro atualmente usa como padrão desativá-lo.
     </para>
     <para>
-      If you however would like to use privilege separation, additional
-installation steps are necessary to set up the proper environment. Issue the
-following commands as the <systemitem class="username">root</systemitem>
-user:
+      No entanto, se você quiser usar a separação de privilégios, [então] etapas
+adicionais de instalação são necessárias para configurar o ambiente
+adequado. Emita os seguintes comandos como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>install  -v -m700 -d /var/lib/dhcpcd &amp;&amp;
 
 groupadd -g 52 dhcpcd        &amp;&amp;
-useradd  -c 'dhcpcd PrivSep' \
+useradd  -c 'Separação de privilégios do dhcpcd' \
          -d /var/lib/dhcpcd  \
          -g dhcpcd           \
          -s /bin/false       \
@@ -118,19 +121,20 @@ chown    -v dhcpcd:dhcpcd /var/lib/dhcpcd </userinput></screen>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de dhcpcd</title>
+    <title>Instalação do <quote>dhcpcd</quote></title>
 
-    <para>Fix a runtime error caused by a change in glibc-2.36:</para>
+    <para>Corrija um erro de tempo de execução causado por uma mudança na
+&quot;glibc-2.36&quot;:</para>
 
 <screen><userinput>sed '/Deny everything else/i SECCOMP_ALLOW(__NR_getrandom),' \
-    -i src/privsep-linux.c</userinput></screen>
+   -i src/privsep-linux.c</userinput></screen>
 
     <para>
-      Build <application>dhcpcd</application> without privilege separation by
-running the following command:
+      Construa o &quot;<application>dhcpcd</application>&quot; sem separação de
+privilégios executando o seguinte comando:
     </para>
 
-<screen><userinput>./configure --prefix=/usr                \
+<screen><userinput>./configure --prefix=/usr               \
             --sysconfdir=/etc            \
             --libexecdir=/usr/lib/dhcpcd \
             --dbdir=/var/lib/dhcpcd      \
@@ -139,11 +143,11 @@ running the following command:
 make</userinput></screen>
 
     <para>
-      Build <application>dhcpcd</application> with privilege separation by running
-the following commands:
+      Construa o &quot;<application>dhcpcd</application>&quot; com separação de
+privilégios executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr                \
+<screen><userinput>./configure --prefix=/usr               \
             --sysconfdir=/etc            \
             --libexecdir=/usr/lib/dhcpcd \
             --dbdir=/var/lib/dhcpcd      \
@@ -156,7 +160,8 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <!--
@@ -181,48 +186,51 @@ install -v -m 644 dhcpcd-hooks/50-dhcpcd-compat /lib/dhcpcd/dhcpcd-hooks/</useri
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--libexecdir=/usr/lib/dhcpcd</parameter>: Set a more proper
-location for dhcpcd internal libraries.
+      <parameter>--libexecdir=/usr/lib/dhcpcd</parameter>: Configura um local mais
+adequado para bibliotecas internas do &quot;dhcpcd&quot;.
     </para>
 
     <para>
-      <parameter>--dbdir=/var/lib/dhcpcd</parameter>: The default <filename
-class="directory">/var/db</filename> is not FHS-compliant
+      <parameter>--dbdir=/var/lib/dhcpcd</parameter>: O &quot;<filename
+class="directory">/var/db</filename>&quot; padrão não é compatível com a
+&quot;FHS&quot;
     </para>
 
     <para>
-      <parameter>--runstatedir=/run</parameter>: The default <filename
-class="directory">/var/run</filename> is a symbolic link to <filename
-class="directory">/run</filename>.
+      <parameter>--runstatedir=/run</parameter>: O &quot;<filename
+class="directory">/var/run</filename>&quot; padrão é um link simbólico para
+&quot;<filename class="directory">/run</filename>&quot;.
     </para>
 
     <para>
-      <option>--with-hook=...</option>: You can optionally install more hooks, for
-example to install some configuration files such as
-<filename>ntp.conf</filename>. The set of hooks is in the <filename
-class="directory">dhcpcd-hooks</filename> directory in the build tree.
+      <option>--with-hook=...</option>: Opcionalmente, você pode instalar mais
+ganchos, por exemplo, para instalar alguns arquivos de configuração como
+&quot;<filename>ntp.conf</filename>&quot;. O conjunto de ganchos está no
+diretório &quot;<filename class="directory">dhcpcd-hooks</filename>&quot; na
+árvore de construção.
     </para>
 
     <para>
-      <parameter>--disable-privsep</parameter>: Do not use privilege separation,
-which is the default.
+      <parameter>--disable-privsep</parameter>: Não use a separação de
+privilégios, que é o padrão.
     </para>
 
     <para>
-      <parameter>--privsepuser=dhcpcd</parameter>: Use this unprivileged user in a
-privilege separation setup.
+      <parameter>--privsepuser=dhcpcd</parameter>: Use esse(a) usuário(a) sem
+privilégios em uma configuração de separação de privilégios.
     </para>
 
     <para>
-      <option>--with-hook=...</option>: You can optionally install more hooks, for
-example to install some configuration files such as
-<filename>ntp.conf</filename>. The set of hooks is in the <filename
-class="directory">dhcpcd-hooks</filename> directory in the build tree.
+      <option>--with-hook=...</option>: Opcionalmente, você pode instalar mais
+ganchos, por exemplo, para instalar alguns arquivos de configuração como
+&quot;<filename>ntp.conf</filename>&quot;. O conjunto de ganchos está no
+diretório &quot;<filename class="directory">dhcpcd-hooks</filename>&quot; na
+árvore de construção.
     </para>
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando dhcpcd</title>
+    <title>Configurando o <quote>dhcpcd</quote></title>
 
     <sect3 id="dhcpcd-config">
       <title>Arquivos de Configuração</title>
@@ -238,50 +246,56 @@ class="directory">dhcpcd-hooks</filename> directory in the build tree.
     </sect3>
 
     <sect3 id="dhcpcd-init" revision="sysv">
-      <title>General Configuration Information</title>
+      <title>Informações Gerais de Configuração</title>
 
       <para>
-        To configure <command>dhcpcd</command>, you need to first install the
-network service script, <filename>/usr/lib/services/dhcpcd</filename>
-included in the <xref linkend="bootscripts"/> package (as user <systemitem
-class="username">root</systemitem>):
+        Para configurar o &quot;<command>dhcpcd</command>&quot;, você precisa
+primeiro instalar o conjunto sequencial de comandos de serviço de rede de
+intercomunicação, &quot;<filename>/usr/lib/services/dhcpcd</filename>&quot;
+incluído no pacote &quot;<xref linkend="bootscripts"/>&quot; (como usuário
+&quot;<systemitem class="username">root</systemitem>&quot;):
       </para>
 
       <indexterm zone="dhcpcd dhcpcd-init">
-        <primary sortas="f-dhcpcd">dhcpcd (service script)</primary>
+        <primary sortas="f-dhcpcd">dhcpcd (conjunto sequencial de comandos de serviço)</primary>
       </indexterm>
 
 <screen role='root'><userinput>make install-service-dhcpcd</userinput></screen>
 
       <note>
         <para id="dhcpcd-config6">
-          the network service script <filename>/usr/lib/services/dhcpcd</filename>
-contained in bootscripts up to blfs-bootscripts-20191204 is not compatible
-with latest dhcpcd, as the location of the pidfile changed.  To work around
-this, issue the following command: <screen role='root'><userinput>sed -i "s;/run/dhcpcd-;/run/dhcpcd/;g" /lib/services/dhcpcd</userinput></screen>
+          o conjunto sequencial de comandos de serviço de rede de intercomunicação
+&quot;<filename>/usr/lib/services/dhcpcd</filename>&quot; contido nos
+conjuntos sequenciais de comandos de inicialização até o
+&quot;blfs-bootscripts-20191204&quot; não é compatível com o
+&quot;dhcpcd&quot; mais recente, pois o local do arquivo do &quot;PID&quot;
+mudou. Para contornar isso, emita o seguinte comando: <screen role='root'><userinput>sed -i "s;/run/dhcpcd-;/run/dhcpcd/;g" /lib/services/dhcpcd</userinput></screen>
         </para>
       </note>
 
       <note>
         <para id="dhcpcd-config3">
-          The default for <command>dhcpcd</command> is to set the hostname and mtu. It
-also overwrites <filename>/etc/resolv.conf </filename> and
-<filename>/etc/ntp.conf</filename>. These modifications to system files are
-done by hooks which are stored in <filename
-class="directory">/usr/lib/dhcpcd/dhcpcd-hooks</filename>.  Set up
-<command>dhcpcd</command> by removing or adding hooks from/to that
-directory.  The execution of hooks can be disabled by using the
-<option>--nohook</option> (<option>-C</option>) command line option or by
-the <option>nohook</option> option in the
-<filename>/etc/dhcpcd.conf</filename> file.
+          O padrão para o &quot;<command>dhcpcd</command>&quot; é o de configurar o
+nome do dispositivo e o &quot;MTU&quot;. Ele também sobrescreve
+&quot;<filename>/etc/resolv.conf </filename>&quot; e
+&quot;<filename>/etc/ntp.conf</filename>&quot;. Essas modificações nos
+arquivos do sistema são feitas por ganchos que estão armazenados em
+&quot;<filename
+class="directory">/usr/lib/dhcpcd/dhcpcd-hooks</filename>&quot;. Configure o
+&quot;<command>dhcpcd</command>&quot; removendo ou adicionando ganchos
+de/para esse diretório. A execução de ganchos consegue ser desabilitada
+usando a opção de linha de comando &quot;<option>--nohook</option>&quot;
+(&quot;<option>-C</option>&quot;) ou pela opção
+&quot;<option>nohook</option>&quot; no arquivo
+&quot;<filename>/etc/dhcpcd.conf</filename>&quot;.
         </para>
       </note>
 
       <para id="dhcpcd-config2">
-        Finally, as the <systemitem class="username">root</systemitem> user create
-the <filename>/etc/sysconfig/ifconfig.eth0</filename> configuration file
-using the following commands. Adjust appropriately for additional
-interfaces:
+        Finalmente, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;, crie o arquivo de configuração
+&quot;<filename>/etc/sysconfig/ifconfig.eth0</filename>&quot; usando os
+seguintes comandos. Ajuste adequadamente para interfaces adicionais:
       </para>
 
       <indexterm zone="dhcpcd dhcpcd-config2">
@@ -292,14 +306,15 @@ interfaces:
 <literal>ONBOOT="yes"
 IFACE="eth0"
 SERVICE="dhcpcd"
-DHCP_START="-b -q -h ''<replaceable>&lt;insert appropriate start options here&gt;</replaceable>"
-DHCP_STOP="-k <replaceable>&lt;insert additional stop options here&gt;</replaceable>"</literal>
+DHCP_START="-b -q -h ''<replaceable>&lt;insira opções apropriadas de início aqui&gt;</replaceable>"
+DHCP_STOP="-k <replaceable>&lt;insira opções apropriadas de término aqui&gt;</replaceable>"</literal>
 EOF</userinput></screen>
 
       <para>
-        For more information on the appropriate <envar>DHCP_START</envar> and
-<envar>DHCP_STOP</envar> values, examine the man page for
-<command>dhcpcd</command>.
+        Para mais informações relativas aos valores apropriados
+&quot;<envar>DHCP_START</envar>&quot; e
+&quot;<envar>DHCP_STOP</envar>&quot;, examine a página de manual do
+&quot;<command>dhcpcd</command>&quot;.
       </para>
 
       <indexterm zone="dhcpcd dhcpcd-config3">
@@ -308,15 +323,16 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3 id="dhcpcd-init2" revision="sysv">
-      <title>Configuration Information: fixed ip</title>
+      <title>Informações de Configuração: <quote>IP</quote> fixo</title>
 
       <para id="dhcpcd-config4">
-        Although not usual, it is possible that you need to configure
-<application>dhcpcd</application> to use a fixed ip. Here, we give an
-example. As the <systemitem class="username">root</systemitem> user create
-the <filename>/etc/sysconfig/ifconfig.eth0</filename> configuration file
-using the following commands.  Adjust appropriately for additional
-interfaces and for the actual ip and router you need:
+        Embora não usual, é possível que você precise configurar o
+&quot;<application>dhcpcd</application>&quot; para usar um &quot;IP&quot;
+fixo. Aqui, nós damos um exemplo. Como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot; crie o arquivo de configuração
+&quot;<filename>/etc/sysconfig/ifconfig.eth0</filename>&quot; usando os
+seguintes comandos. Ajuste adequadamente para interfaces adicionais e para o
+&quot;IP&quot; e roteador reais que você precisa:
       </para>
 
       <indexterm zone="dhcpcd dhcpcd-config4">
@@ -332,13 +348,14 @@ DHCP_STOP="-k"</literal>
 EOF</userinput></screen>
 
       <para>
-        You can either use DNS servers in <filename>/etc/resolv.conf</filename> from
-another system, your preferred servers, or just the example
-<filename>/etc/resolv.conf.head</filename> file below as is:
+        Você consegue ou usar servidores &quot;DNS&quot; em
+&quot;<filename>/etc/resolv.conf</filename>&quot; oriundos de outro sistema,
+teus servidores preferidos, ou apenas o arquivo de exemplo
+&quot;<filename>/etc/resolv.conf.head</filename>&quot; abaixo, como está:
       </para>
 
 <screen role='nodump'><userinput>cat &gt; /etc/resolv.conf.head &lt;&lt; "EOF"
-<literal># OpenDNS servers
+<literal># Servidores abertos "DNS"
 nameserver 208.67.222.222
 nameserver 208.67.220.220</literal>
 EOF</userinput></screen>
@@ -346,13 +363,15 @@ EOF</userinput></screen>
     </sect3>
 
    <sect3 id="dhcpcd-init3" revision="systemd">
-      <title>General Configuration Information</title>
+      <title>Informações Gerais de Configuração</title>
 
       <para>
-        If you want to configure network interfaces at boot using
-<command>dhcpcd</command>, you need to install the systemd unit included in
-<xref linkend="systemd-units"/> package by running the following command as
-the <systemitem class="username">root</systemitem> user:
+        Se você quiser configurar interfaces de rede de intercomunicação na
+inicialização usando o &quot;<command>dhcpcd</command>&quot;, [então] você
+precisa instalar a unidade &quot;systemd&quot; incluída no pacote
+&quot;<xref linkend="systemd-units"/>&quot; executando o seguinte comando
+como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>make install-dhcpcd</userinput></screen>
@@ -363,16 +382,19 @@ the <systemitem class="username">root</systemitem> user:
 
       <note>
         <para id="dhcpcd-config5">
-          The default behavior of <command>dhcpcd</command> is to set the hostname and
-the mtu. It also overwrites <filename>/etc/resolv.conf </filename> and
-<filename>/etc/ntp.conf</filename>. These modifications to system
-configuration files are done by hooks which are stored in <filename
-class="directory"> /lib/dhcpcd/dhcpcd-hooks</filename>. Set up
-<command>dhcpcd</command> by removing or adding hooks from/to that
-directory. The execution of hooks can be disabled by using the
-<option>--nohook</option> (<option>-C</option>) command line option or by
-the <option>nohook</option> option in the <filename>/etc/dhcpcd.conf
-</filename> file.
+          O comportamento padrão do &quot;<command>dhcpcd</command>&quot; é o de
+configurar o nome do dispositivo e o &quot;MTU&quot;. Ele também sobrescreve
+&quot;<filename>/etc/resolv.conf</filename>&quot; e
+&quot;<filename>/etc/ntp.conf</filename>&quot;. Essas modificações nos
+arquivos de configuração do sistema são feitas por ganchos que estão
+armazenados em &quot;<filename
+class="directory">/lib/dhcpcd/dhcpcd-hooks</filename>&quot;. Configure o
+&quot;<command>dhcpcd</command>&quot; removendo ou adicionando ganchos
+de/para esse diretório. A execução de ganchos consegue ser desabilitada
+usando-se a opção de linha de comando &quot;<option>--nohook</option>&quot;
+(&quot;<option>-C</option>&quot;) ou pela opção
+&quot;<option>nohook</option>&quot; no arquivo
+&quot;<filename>/etc/dhcpcd.conf</filename>&quot;.
         </para>
       </note>
 
@@ -382,30 +404,33 @@ the <option>nohook</option> option in the <filename>/etc/dhcpcd.conf
 
       <note>
         <para>
-          Make sure that you disable the <command>systemd-networkd</command> service
-or configure it not to manage the interfaces you want to manage with
-<application>dhcpcd</application>.
+          Certifique-se de desabilitar o serviço
+&quot;<command>systemd-networkd</command>&quot; ou configurá-lo para não
+gerenciar as interfaces que você quer gerenciar com o
+&quot;<application>dhcpcd</application>&quot;.
         </para>
       </note>
 
       <para>
-        At this point you can test if <command>dhcpcd</command> is behaving as
-expected by running the following command as the <systemitem
-class="username">root</systemitem> user:
+        Neste ponto você consegue testar se o &quot;<command>dhcpcd</command>&quot;
+está se comportando conforme esperado executando o seguinte comando como
+o(a) usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>systemctl start dhcpcd@<replaceable>eth0</replaceable></userinput></screen>
 
       <para>
-        To start <command>dhcpcd</command> on a specific interface at boot, enable
-the previously installed systemd unit by running the following command as
-the <systemitem class="username">root</systemitem> user:
+        Para iniciar o &quot;<command>dhcpcd</command>&quot; em uma interface
+específica na inicialização, habilite a unidade &quot;systemd&quot;
+instalada anteriormente executando o seguinte comando como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>systemctl enable dhcpcd@<replaceable>eth0</replaceable></userinput></screen>
 
       <para>
-        Replace <replaceable>eth0</replaceable> with the actual interface name.
+        Substitua &quot;<replaceable>eth0</replaceable>&quot; pelo nome real da
+interface.
       </para>
 
     </sect3>
@@ -413,7 +438,7 @@ the <systemitem class="username">root</systemitem> user:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativo Instalado</segtitle>
@@ -423,7 +448,7 @@ the <systemitem class="username">root</systemitem> user:
       <seglistitem>
         <seg>dhcpcd</seg>
         <seg>/usr/lib/dhcpcd/dev/udev.so</seg>
-        <seg>/{usr,var}/lib/dhcpcd and /usr/share/dhcpcd</seg>
+        <seg>/{usr,var}/lib/dhcpcd e /usr/share/dhcpcd</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -435,7 +460,8 @@ the <systemitem class="username">root</systemitem> user:
         <term><command>dhcpcd</command></term>
         <listitem>
           <para>
-            is an implementation of the DHCP client specified in RFC2131
+            é uma implementação do cliente &quot;DHCP&quot; especificado na
+&quot;RFC2131&quot;
           </para>
           <indexterm zone="dhcpcd dhcpcd-prog">
             <primary sortas="b-dhcpcd">dhcpcd</primary>
@@ -447,8 +473,9 @@ the <systemitem class="username">root</systemitem> user:
         <term><filename class="libraryfile">udev.so</filename></term>
         <listitem>
           <para>
-            adds udev support for interface arrival and departure; this is because udev
-likes to rename the interface, which it can't do if dhcpcd grabs it first
+            adiciona suporte ao &quot;Udev&quot; para chegada e partida da interface;
+isso ocorre porque o &quot;Udev&quot; gosta de renomear a interface, o que
+não poderá ser feito se o &quot;dhcpcd&quot; a capturar primeiro
           </para>
           <indexterm zone="dhcpcd dhcpcd-udev">
             <primary sortas="c-dhcpcd-udev">udev.so</primary>

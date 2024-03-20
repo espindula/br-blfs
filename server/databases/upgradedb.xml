@@ -5,28 +5,29 @@
   %general-entities;
 ]>
 
-<sect1 id="upgradedb" xreflabel="Upgrade Database">
+<sect1 id="upgradedb" xreflabel="Atualização de Base de Dados">
   <?dbhtml filename="upgradedb.html"?>
 
 
-  <title>Important Notes About Upgrading Database Server Software</title>
+  <title>Observações Importantes Relativas a Atualização do Logiciário do Servidor de
+Base de Dados</title>
 
-    <note><para>This section is about reinstalling database software when an existing
-database is in use.  It is not applicable for initial installations or if
-there is no existing database for the package being updated, but users
-should read through it to become aware of issues that can arise in the
-future.</para></note>
+    <note><para>Esta seção é sobre reinstalar logiciário de base de dados quando uma base de
+dados existente estiver em uso. Ela não é aplicável para instalações
+iniciais ou se não existir base de dados para o pacote sendo atualizado, mas
+os(as) usuários(as) deveriam lê-la para ficarem cientes dos problemas que
+podem surgir no futuro.</para></note>
 
-    <para>Let's start this chapter with a dramatic screenshot of an error that really
-happened.  This error will not occur if you are installing database software
-for the first time:</para>
+    <para>Vamos começar este capítulo com uma captura de tela dramática de um erro que
+realmente aconteceu. Este erro não ocorrerá se você estiver instalando o
+logiciário de base de dados pela primeira vez:</para>
 
 <screen>$ sudo systemctl status postgresql
 -- postgresql.service - PostgreSQL database server
      Loaded: loaded (/usr/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
      Active: failed (Result: exit-code) since Tue 2021-10-26 17:11:53 CDT; 2min 49s ago
     Process: 17336 ExecStart=/usr/bin/pg_ctl -s -D ${PGROOT}/data start -w -t 120 (code=exited, status=1/FAILURE)
-        CPU: 7ms
+         CPU: 7ms
 
 Oct 26 17:11:53 SVRNAME systemd[1]: Starting PostgreSQL database server...
 Oct 26 17:11:53 SRVNAME postgres[17338]: 2021-10-26 17:11:53.420 CDT [17338] FATAL:
@@ -41,152 +42,173 @@ Oct 26 17:11:53 SRVNAME systemd[1]: postgresql.service: Failed with result 'exit
 Oct 26 17:11:53 SRVNAME systemd[1]: Failed to start PostgreSQL database server.</screen>
 
   <para>
-    To avoid situations like this (i.e., your database server software refuses
-to start), read the following discussion of the best way to upgrade a DBMS
-(Database Management System).
+    Para evitar situações como essa (ou seja, o teu logiciário do servidor de
+base de dados se recusa a iniciar), leia a discussão a seguir relativa a
+melhor maneira de atualizar um Sistema de Gerenciamento de Base de Dados
+(SGBD).
   </para>
 
   <para>
-    The root cause of the error shown above was an upgrade of the server
-software to a newer major version which left the data files untouched. In
-this case, the administrator was able to recover the DBMS without any loss
-of data.
+    A causa raiz do erro mostrado acima foi uma atualização do logiciário do
+servidor para uma versão principal mais recente que deixou os arquivos de
+dados intactos. Nesse caso, o(a) administrador(a) conseguiu recuperar o SGBD
+sem qualquer perda de dados.
   </para>
 
   <para>
-    Even if you are doing an initial DBMS install, read through this section. It
-provides information about implementing backup and restore procedures (or at
-least a strategy for creating them) which will satisfy your needs and
-guarantee the safety of your data.
+    Mesmo se você estiver fazendo uma instalação inicial do SGBD, leia esta
+seção. Ela fornece informações relativas a implementação de procedimentos de
+cópia de segurança e restauração (ou pelo menos uma estratégia para
+criá-las) que irão satisfazer as tuas necessidades e garantir a segurança
+dos teus dados.
   </para>
 
   <sect2>
-    <title>Upgrade Database Server Packages</title>
+    <title>Atualização de Pacotes do Servidor de Base de Dados</title>
 
     <para>
-      Database systems work on files which hold the database metadata and the data
-itself. The internal structure of these files is optimized for use by the
-server software. When such server software is upgraded, the new software may
-utilize a different file format than had previously been used. Sometimes the
-new software can work with the old format as well as the new one&mdash;but
-without the performance improvements the new format provides.  Other times,
-the new server software will reformat the data files automatically after the
-upgrade.
+      Os sistemas de base de dados funcionam em arquivos que contém os metadados
+da base de dados e os próprios dados. A estrutura interna desses arquivos é
+otimizada para uso pelo logiciário do servidor. Quando esse logiciário de
+servidor for atualizado, o novo logiciário poderá utilizar um formato de
+arquivo diferente do usado anteriormente. Às vezes, o novo logiciário pode
+funcionar tanto com o formato antigo quanto com o novo&dash;mas sem as
+melhorias de desempenho que o novo formato oferece. Outras vezes, o novo
+logiciário de servidor reformatará os arquivos de dados automaticamente após
+a atualização.
     </para>
 
     <para>
-      Unfortunately, the most likely case is that the new server software
-complains about out of date file formats and exits.  When this happens, and
-you have overwritten the old server software, you may end up with a broken
-system and lost data.
+      Infelizmente, o caso mais provável é o de que o novo logiciário de servidor
+reclame dos formatos desatualizados de arquivos e saia. Quando isso acontece
+e você sobrescreveu o antigo logiciário do servidor, você possivelmente
+acabe com um sistema quebrado e perda de dados.
     </para>
 
     <para>
-       Changes in data file formats usually happen at major version changes, but
-they can also occur at other times.  Before upgrading any DBMS software,
-check the documentation to see if this upgrade makes changes which require
-reformatting the database.
+       As mudanças nos formatos dos arquivos de dados geralmente ocorrem em
+mudanças da versão principal, mas também podem ocorrer em outros
+momentos. Antes de atualizar qualquer logiciário de SGBD, verifique a
+documentação para ver se essa atualização faz mudanças que exigem reformatar
+a base de dados.
     </para>
 
     <para>
-      Of course, if you have databases with content that is not easily rebuilt, it
-is always a good idea to create backups of the database from time to
-time. Before upgrading the server software, you should run another backup.
+      Claro, se você tiver bases de dados com conteúdo que não seja reconstruível
+facilmente, [então] é sempre uma boa ideia criar cópias de segurança da base
+de dados de tempos em tempos. Antes de atualizar o logiciário do servidor,
+você deveria executar outra cópia de segurança.
     </para>
 
     <sect3>
-      <title>Upgrade by Backup and Restore</title>
+      <title>Atualização por Cópia de Segurança e Restauração</title>
 
       <note>
         <para>
-          A backup is useless if there is no verified process to restore the data from
-this backup. When running a database server, you should not only create
-backups; you should also verify that the restore process really works. The
-time to test the restore procedure is <emphasis>before</emphasis> you
-urgently need to recover lost data.
+          Uma cópia de segurança é inútil se não existir um processo verificado para
+restaurar os dados a partir dessa cópia de segurança. Ao executar um
+servidor de base de dados, você não deveria somente criar cópias de
+segurança; você também deveria verificar se o processo de restauração
+realmente funciona. O momento de testar o procedimento de restauração é
+<emphasis>antes</emphasis> de você precisar recuperar urgentemente os dados
+perdidos.
         </para>
       </note>
 
       <para>
-        Most database server software provides some basic tools to create backups of
-your data. Usually the backups created with those tools can be read by newer
-versions of the software (via a restore tool). Using older restore tools
-with newer backup data is a bad idea; you should <emphasis>never</emphasis>
-blindly assume that it will work. It might, but usually it doesn't.
+        A maioria dos logiciários de servidor de base de dados fornece algumas
+ferramentas básicas para criar cópias de segurança dos dados
+deles. Normalmente, as cópias de segurança criadas com essas ferramentas
+conseguem ser lidas por versões mais recentes do logiciário (por meio de uma
+ferramenta de restauração). Usar ferramentas mais antigas de restauração com
+dados de cópia de segurança mais recentes é uma má ideia; você
+<emphasis>nunca</emphasis> deveria assumir cegamente que isso
+funcionará. Pode ser, mas geralmente não.
       </para>
 
       <para>
-        The easiest way to upgrade your database files is to
+        A maneira mais fácil de atualizar teus arquivos de base de dados é a de
       </para>
 
       <itemizedlist>
         <listitem>
-          <para>Create a full database backup using the old tools.</para>
+          <para>Criar uma cópia completa de segurança da base de dados usando as ferramentas
+antigas.</para>
 
-          <para>This step creates an offline copy of the database files&mdash;for long term
-archiving, for disaster recovery, or as preparation for an upgrade. This
-offline backup consists of either (1) a full one-to-one copy of the current
-database files, or (2) a full backup of the database files from a certain
-point in time, plus all the journal data (that is Oracle&reg; terminology,
-it is called "Continuous Archiving" or "write ahead log (WAL)" in
-Postgresql) describing the changes made after that point in time. This
-second form takes less time to create (if the DB software provides this type
-of journaling) because you only have to save the data that have changed
-since the last full backup was created.</para>
+          <para>Essa etapa cria uma cópia fora de linha dos arquivos da base de
+dados&mdash;para arquivamento de longo prazo, para recuperação de desastres
+ou como preparação para uma atualização. Essa cópia de segurança fora de
+linha consiste ou em (1) uma cópia completa um-para-um dos arquivos atuais
+da base de dados ou (2) uma cópia completa de segurança dos arquivos da base
+de dados a partir de um determinado ponto no tempo, além de todos os dados
+do diário (ou seja, na terminologia da &quot;Oracle&reg;&quot;, é chamado de
+&quot;Arquivamento Contínuo&quot; ou &quot;write ahead log&quot;
+(&quot;WAL&quot;) no &quot;Postgresql&quot;) descrevendo as mudanças feitas
+depois desse ponto no tempo. Essa segunda forma leva menos tempo para ser
+criada (se o logiciário da Base de Dados fornecer esse tipo de registro em
+diário) porque você tem de salvar somente os dados que foram mudados desde
+quando a cópia completa de segurança mais recente foi criada.</para>
 
-          <para>When upgrading database server software, a full backup (which can be used
-for subsequent incremental backups) should be created; but if there is a lot
-of data, an incremental backup will suffice. The best strategy for you
-depends on the amount of data stored in your database (is it a few hundred
-table rows, or is it hundreds of terabytes?). A full backup in the latter
-case can't be done quickly.  To fully protect your data, create a backup of
-the old programs (and/or their sources) and save it, along with the data
-files, to be certain there is a fallback solution if the new software cannot
-read the old data.</para>
+          <para>Ao atualizar o logiciário do servidor de base de dados, uma cópia completa
+de segurança (que pode ser usada para cópias incrementais de segurança
+subsequentes) deveria ser criada; mas se existirem muitos dados, [então] uma
+cópia incremental de segurança será suficiente. A melhor estratégia para
+você depende da quantidade de dados armazenados em tua base de dados (são
+algumas centenas de linhas da tabela ou centenas de terabytes?). Uma cópia
+completa de segurança nesse último caso não pode ser feita rapidamente. Para
+proteger totalmente teus dados, crie uma cópia de segurança dos aplicativos
+antigos (e(ou) dos fontes deles) e salve-a, junto com os arquivos de dados,
+para ter certeza de que existe uma solução alternativa caso o novo
+logiciário não consiga ler os dados antigos.</para>
           </listitem>
 
           <listitem>
-            <para>Upgrade the server software</para>
+            <para>Atualizar o logiciário do servidor</para>
 
-            <para>In this step, instructions to build the database server software are
-executed just as they are shown in subsequent sections talking about the
-DBMs like MariaDB or Postgresql. That is, build the software as usual using
-BLFS instructions.</para>
+            <para>Nessa etapa, as instruções para construir o logiciário do servidor de base
+de dados são executadas exatamente como são mostradas nas seções
+subsequentes falando sobre &quot;GBDs&quot; como &quot;MariaDB&quot; ou
+&quot;Postgresql&quot;. Ou seja, construa o logiciário normalmente usando as
+instruções do BLFS.</para>
           </listitem>
 
           <listitem>
-            <para>Restore the database by using the new tools.</para>
+            <para>Restaurar a base de dados usando as novas ferramentas.</para>
 
-            <para>To restore the data, the tools of the newly installed server software should
-be used. During the restoration process, the new tools will create and/or
-upgrade the data files in the format the new software requires. It is
-assumed that newer software is capable of reading old data.</para>
+            <para>Para restaurar os dados, as ferramentas do logiciário de servidor
+recém-instalado deveriam ser usadas. Durante o processo de restauração, as
+novas ferramentas criarão e (ou) atualizarão os arquivos de dados no formato
+que o novo logiciário exige. Supõe-se que o logiciário mais recente seja
+capaz de ler os dados antigos.</para>
           </listitem>
           </itemizedlist>
 
       <para>
-        Since you already have a backup procedure in place (and you have tested your
-restore procedure, right?), this might be the easiest way to upgrade as you
-can use your well known processes to upgrade just as you always do&mdash;at
-least in terms of the backup and restore.
+        Como você já tem um procedimento de cópia de segurança em vigor (e testou
+teu procedimento de restauração, certo?), essa pode ser a maneira mais fácil
+de atualizar, pois você pode usar teus processos bem conhecidos para
+atualizar como sempre faz&mdash;pelo menos em termos de cópia de segurança e
+de restauração.
       </para>
 
     </sect3>
 
     <sect3>
-      <title>Upgrade the Database Files by Using System Tools</title>
+      <title>Atualização dos Arquivos da Base de Dados Usando Ferramentas do Sistema</title>
 
       <para>
-        Some database systems (for instance Postgresql) provide a tool which can
-reformat (upgrade) the existing database files to the new format.  If you
-need to restore from a backup (for example, running the upgrade tool failed)
-you will have to reinstall the old software to recover your data.
+        Alguns sistemas de base de dados (por exemplo, o &quot;Postgresql&quot;)
+fornecem uma ferramenta que pode reformatar (atualizar) os arquivos
+existentes de base de dados para o novo formato. Se precisar restaurar a
+partir de uma cópia de segurança (por exemplo, executar a ferramenta de
+atualização falhou), [então] você terá que reinstalar o logiciário antigo
+para recuperar os teus dados.
       </para>
 
       <para>
-        Even though the reformatting tools might work as advertised, you should
-create a full backup before running them. A failure could cause serious
-damage to the database.
+        Mesmo que as ferramentas de reformatação funcionem conforme anunciado, você
+deveria criar uma cópia completa de segurança antes de executá-las. Uma
+falha poderia causar sérios danos à base de dados.
       </para>
 
     </sect3>
@@ -194,7 +216,7 @@ damage to the database.
   </sect2>
 
   <sect2>
-    <title>Notes for Specific DBMS</title>
+    <title>Observações para SGBDs Específicos</title>
 
     <sect3>
       <title>PostgreSQL</title>
@@ -202,8 +224,8 @@ damage to the database.
       
 
       <!-- might add some advanced notes for the DBMS here -->
-<para>Upstream documentation for Backup/Restore: <ulink
-url="https://www.postgresql.org/docs/current/backup.html"/>
+<para>Documentação do(a) desenvolvedor(a) para Cópia de Segurança/Restauração:
+<ulink url="https://www.postgresql.org/docs/current/backup.html"/>
       </para>
 
     </sect3>
@@ -214,8 +236,8 @@ url="https://www.postgresql.org/docs/current/backup.html"/>
       
 
       <!-- might add some advanced notes for the DBMS here -->
-<para>Upstream documentation for Backup/Restore: <ulink
-url="https://mariadb.com/kb/en/backup-and-restore-overview/"/>
+<para>Documentação do(a) desenvolvedor(a) para Cópia de Segurança/Restauração:
+<ulink url="https://mariadb.com/kb/en/backup-and-restore-overview/"/>
       </para>
 
     </sect3>
@@ -226,45 +248,50 @@ url="https://mariadb.com/kb/en/backup-and-restore-overview/"/>
       
 
       <!-- might add some advanced notes for the DBMS here -->
-<para>Do not underestimate <application>Sqlite</application>. It is a feature-rich
-DBMS. The main difference from the two big players above is that Sqlite does
-not provide access via a network API. Sqlite databases are always stored on
-the machine running the program which uses the database. The manipulation of
-data content is done via API calls to library functions directly within the
-program.</para>
+<para>Não subestime o &quot;<application>Sqlite</application>&quot;. Ele é um SGBD
+rico em recursos. A principal diferença para os dois grandes concorrentes
+acima é a de que o &quot;SQLite&quot; não fornece acesso por meio de uma
+&quot;API&quot; de rede de intercomunicação. As bases de dados
+&quot;SQLite&quot; são sempre armazenadas na máquina que executa o
+aplicativo que usa a base de dados. A manipulação do conteúdo dos dados é
+feita por meio de chamadas de &quot;API&quot; para funções de biblioteca
+diretamente no aplicativo.</para>
 
-      <para>In the upstream documentation you may find the following useful:</para>
+      <para>Na documentação do(a) desenvolvedor(a) você possivelmente ache o seguinte
+útil:</para>
 
-      <para>Documentation of the sqlite3 command line tool: <ulink
+      <para>Documentação da ferramenta de linha de comando &quot;sqlite3&quot;: <ulink
 url="https://www.sqlite.org/cli.html"/>
       </para>
 
-      <para>Documentation of backup API calls: <ulink
+      <para>Documentação de chamadas da &quot;API&quot; de cópia de segurança: <ulink
 url="https://www.sqlite.org/backup.html"/>
       </para>
 
-      <para>Unfortunately, there is no dedicated chapter in the upstream documentation
-talking about backup/restore, but there are several articles about it on the
-Internet. Here is an example.</para>
+      <para>Infelizmente, não existe nenhum capítulo dedicado na documentação do(a)
+desenvolvedor(a) falando a respeito de cópia de segurança/restauração, mas
+existem vários artigos referentes a isso na Internet. Aqui está um exemplo.</para>
 
-      <para>Documentation for Backup/Restore: <ulink
+      <para>Documentação para Cópia de Segurança/Restauração: <ulink
 url="https://database.guide/backup-sqlite-database/"/>
       </para>
 
     </sect3>
 
     <sect3>
-      <title>Berkeley DB</title>
+      <title>Base de Dados Berkeley</title>
 
       
 
       <!-- might add some advanced notes for the DBMS here -->
-<para>Like <application>Sqlite</application>, this software acts on local database
-files; there is no network interface.</para>
+<para>Assim como o <application>Sqlite</application>, esse logiciário atua em
+arquivos locais de base de dados; não existe interface de rede de
+intercomunicação.</para>
 
-      <para>The relevant resources to back up/restore a Berkeley database are the man
-pages for <filename>db_dump</filename> and its counterpart
-<filename>db_load</filename>.</para>
+      <para>Os recursos relevantes para produzir cópia de segurança/restaurar uma base
+de dados Berkeley são as páginas de manual de
+&quot;<filename>db_dump</filename>&quot; e a contraparte dele
+&quot;<filename>db_load</filename>&quot;.</para>
 
     </sect3>
   </sect2>

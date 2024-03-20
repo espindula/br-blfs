@@ -13,13 +13,13 @@ When updating, do not forget the above entities... They are anyway -->
   <!ENTITY sqlite-download-http "https://sqlite.org/2022/sqlite-autoconf-&sqlite-dl-version;.tar.gz">
   <!ENTITY sqlite-download-ftp  "">
   <!ENTITY sqlite-md5sum        "42175b1a1d23529cb133bbd2b5900afd">
-  <!ENTITY sqlite-size          "3,0Mo">
-  <!ENTITY sqlite-buildsize     "78Mo">
-  <!ENTITY sqlite-time          "0.3 SBU (Using parallelism=4)">
+  <!ENTITY sqlite-size          "3,0 MB">
+  <!ENTITY sqlite-buildsize     "78 MB">
+  <!ENTITY sqlite-time          "0,3 UPC (Usando paralelismo=4)">
 
   <!ENTITY sqlite-docs-download "https://sqlite.org/2022/sqlite-doc-&sqlite-doc-version;.zip">
   <!ENTITY sqlite-docs-md5sum   "f4cc9073ea45b01f62b9652e5e28a383">
-  <!ENTITY sqlite-docs-size     "11Mo">
+  <!ENTITY sqlite-docs-size     "11 MB">
 ]>
 
 <sect1 id="sqlite" xreflabel="SQLite-&sqlite-version;">
@@ -33,12 +33,12 @@ When updating, do not forget the above entities... They are anyway -->
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a SQLite</title>
+    <title>Introdução ao <quote>SQLite</quote></title>
 
     <para>
-      The <application>SQLite</application> package is a software library that
-implements a self-contained, serverless, zero-configuration, transactional
-SQL database engine.
+      O pacote &quot;<application>SQLite</application>&quot; é uma biblioteca de
+logiciário que implementa um mecanismo de base de dados &quot;SQL&quot;
+transacional independente, sem servidor e com configuração zero.
     </para>
 
     &lfs113_checked;
@@ -57,7 +57,7 @@ SQL database engine.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &sqlite-md5sum;
+          Soma de verificação MD5 da transferência: &sqlite-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -79,7 +79,7 @@ SQL database engine.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
-      <title>Optional Documentation</title>
+      <title>Documentação Opcional</title>
       <listitem>
         <para>
           Transferência (HTTP): <ulink url="&sqlite-docs-download;"/>
@@ -87,7 +87,7 @@ SQL database engine.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &sqlite-docs-md5sum;
+          Soma de verificação MD5 da transferência: &sqlite-docs-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -97,12 +97,12 @@ SQL database engine.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de SQLite</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;SQLite&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <ulink url="https://www.thrysoee.dk/editline/">libedit</ulink> and <xref
-linkend="unzip"/> (required to unzip the documentation)
+      <ulink url="https://www.thrysoee.dk/editline/">libedit</ulink> e <xref
+linkend="unzip"/> (exigido para deszipar a documentação)
     </para>
 
     <para condition="html" role="usernotes">
@@ -111,20 +111,21 @@ linkend="unzip"/> (required to unzip the documentation)
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de SQLite</title>
+    <title>Instalação do <quote>SQLite</quote></title>
 
     <para>
-      If you downloaded the optional documentation, issue the following command to
-install the documentation into the source tree:
+      Se você baixou a documentação opcional, [então] emita o seguinte comando
+para instalar a documentação na árvore do fonte:
     </para>
 
 <screen><userinput>unzip -q ../sqlite-doc-&sqlite-doc-version;.zip</userinput></screen>
 
     <para>
-      Instale <application>SQLite</application> executando os seguintes comandos:
+      Instale o &quot;<application>SQLite</application>&quot; executando os
+seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr     \
+<screen><userinput>./configure --prefix=/usr    \
             --disable-static  \
             --enable-fts5     \
             CPPFLAGS="-DSQLITE_ENABLE_FTS3=1            \
@@ -141,14 +142,16 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      If you downloaded the optional documentation, issue the following commands
-as the <systemitem class="username">root</systemitem> user to install it:
+      Se você baixou a documentação opcional, [então] emita os seguintes comandos
+como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot; para instalá-la:
     </para>
 
 <screen role="root"><userinput>install -v -m755 -d /usr/share/doc/sqlite-&sqlite-version; &amp;&amp;
@@ -163,27 +166,29 @@ cp -v -R sqlite-doc-&sqlite-doc-version;/* /usr/share/doc/sqlite-&sqlite-version
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>--enable-fts5</parameter>: This switch enables support for
-version 5 of the full text search extension.
+      <parameter>--enable-fts5</parameter>: Essa chave habilita o suporte para a
+versão cinco da extensão completa de pesquisa de texto.
     </para>
 
     <para>
       <parameter>CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1
 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1
 -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1
--DSQLITE_ENABLE_DBSTAT_VTAB=1"</parameter>: Applications such as
-<application>SeaMonkey</application> require these options to be turned on.
-The only way to do this is to include them in the <envar>CFLAGS</envar> or
-<envar>CPPFLAGS</envar>.  We use the latter so the default value (or any
-value set by the user)  of <envar>CFLAGS</envar> won't be affected.  For
-further information on what can be specified see <ulink
+-DSQLITE_ENABLE_DBSTAT_VTAB=1"</parameter>: Aplicativos como o
+&quot;<application>SeaMonkey</application>&quot; exigem que essas opções
+estejam ativadas. A única maneira de fazer isso é a de incluí-las na
+&quot;<envar>CFLAGS</envar>&quot; ou na
+&quot;<envar>CPPFLAGS</envar>&quot;. Nós usamos a última, de forma que o
+valor padrão (ou qualquer valor configurado pelo(a) usuário(a)) de
+<envar>CFLAGS</envar> não seja afetado. Para mais informações relativas ao
+que pode ser especificado, veja-se <ulink
 url="https://www.sqlite.org/compile.html"/>.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativo Instalado</segtitle>
@@ -211,8 +216,9 @@ url="https://www.sqlite.org/compile.html"/>.
         <term><command>sqlite3</command></term>
         <listitem>
           <para>
-            is a terminal-based front-end to the <application>SQLite</application>
-library that can evaluate queries interactively and display the results
+            é uma estrutura de interação direta com o(a) usuário(a) baseada em terminal
+para a biblioteca &quot;<application>SQLite</application>&quot; que consegue
+avaliar consultas interativamente e exibir os resultados
           </para>
           <indexterm zone="sqlite sqlite3">
             <primary sortas="b-sqlite3">sqlite3</primary>
@@ -224,7 +230,8 @@ library that can evaluate queries interactively and display the results
         <term><filename class="libraryfile">libsqlite3.so</filename></term>
         <listitem>
           <para>
-            contains the <application>SQLite</application> API functions
+            contém as funções da &quot;API&quot; do
+&quot;<application>SQLite</application>&quot;
           </para>
           <indexterm zone="sqlite libsqlite3">
             <primary sortas="c-libsqlite3">libsqlite3.so</primary>

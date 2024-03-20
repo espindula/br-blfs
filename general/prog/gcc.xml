@@ -8,9 +8,10 @@
   <!ENTITY gcc-download-ftp   "&gnu-ftp;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
   <!-- Update this also on the grub-uefi page -->
   <!ENTITY gcc-md5sum         "73bafd0af874439dcdb9fc063b6fb069">
-  <!ENTITY gcc-size           "81Mo">
-  <!ENTITY gcc-buildsize      "10.5 GB (2.4 GB installed with all listed languages; add 1.3 GB for tests)">
-  <!ENTITY gcc-time           "32 SBU (add 66 SBU for tests; both with parallelism=4)">
+  <!ENTITY gcc-size           "81 MB">
+  <!ENTITY gcc-buildsize      "10,5 GB (2,4 GB instalado com todas as linguagens listadas; adicionar 1,3 GB
+para os testes)">
+  <!ENTITY gcc-time           "32 UPC (adicionar 66 UPC para os testes; ambos com paralelismo=4)">
 ]>
 
 <sect1 id="gcc" xreflabel="GCC-&gcc-version;">
@@ -24,24 +25,25 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a GCC</title>
+    <title>Introdução ao "GCC"</title>
 
     <para>
-      The <application>GCC</application> package contains the GNU Compiler
-Collection. This page describes the installation of compilers for the
-following languages: C, C++, Fortran, Objective C, Objective C++, and Go.
-Since C and C++ are installed in LFS, this page is either for upgrading C
-and C++, or for installing additional compilers.
+      O pacote <application>GCC</application> contém a coleção de compiladores
+"GNU". Esta página descreve a instalação de compiladores para as seguintes
+linguagens: "C", "C++", "Fortran", "Objective C", "Objective C++" e
+"Go". Como "C" e "C++" são instalados no LFS, esta página é tanto para
+atualizar "C" e "C++" quanto para instalar compiladores adicionais.
     </para>
 
     <note>
       <para>
-        Additional languages, among which D and ADA, are available in the
-collection. D and ADA have a binary bootstrap requirement for the first
-installation, so their installation is not described here. To install them,
-you can proceed along the same lines as below after installing the
-corresponding compiler from a binary package, adding <option>ada</option> or
-<option>d</option> to the <parameter>--enable-languages</parameter> line.
+        Linguagens adicionais, entre as quais "D" e "ADA", estão disponíveis na
+coleção. "D" e "ADA" tem um requisito de instruções iniciais de carregamento
+de binário para a primeira instalação, de modo que a instalação deles não é
+descrita aqui. Para instalá-los, você pode proceder da mesma forma abaixo
+depois de instalar o compilador correspondente a partir de um pacote
+binário, adicionando <option>ada</option> ou <option>d</option> à linha
+<parameter>--enable-languages</parameter>.
       </para>
     </note>
 
@@ -49,32 +51,36 @@ corresponding compiler from a binary package, adding <option>ada</option> or
 
     <caution>
       <para>
-        If you are upgrading <application>GCC</application> from any other version
-prior to &gcc-version;, then you must be careful compiling 3rd party kernel
-modules. You should ensure that the kernel and all its native modules are
-also compiled using the same version of <application>GCC</application> that
-you use to build the 3rd party module.  This issue does not affect native
-kernel (and kernel modules) updates, as the instructions below are a
-complete reinstallation of <application>GCC</application>. If you have
-existing 3rd party modules installed, ensure they are recompiled using the
-updated version of <application>GCC</application>. As always, never update
-the kernel headers from the ones used when <application>Glibc</application>
-was compiled during LFS.
+        Se você estiver atualizando o <application>GCC</application> a partir de
+qualquer outra versão anterior ao &gcc-version;, então você precisa ser
+cuidadoso(a) ao compilar módulos de terceiros do núcleo. Você deveria
+garantir que o núcleo e todos os módulos nativos dele também sejam
+compilados usando a mesma versão do <application>GCC</application> que você
+usa para construir o módulo de terceiros. Esse problema não afeta as
+atualizações do núcleo nativo (e dos módulos do núcleo), pois as instruções
+abaixo são uma reinstalação completa do <application>GCC</application>. Se
+você tiver módulos de terceiros instalados, certifique-se de que eles sejam
+recompilados usando a versão atualizada do
+<application>GCC</application>. Como sempre, nunca atualize os cabeçalhos do
+núcleo a partir daqueles usados quando o <application>Glibc</application>
+foi compilado durante o LFS.
       </para>
 
       <para>
-        Some system headers need to be fixed to be used with GCC. This is done
-during the installation of GCC, and the <quote>fixed</quote> headers are
-installed in <filename class="directory"> /usr/lib/gcc/&lt;machine
-triplet&gt;/&lt;GCC version&gt;/include-fixed </filename>. This is harmless
-if GCC is built during the LFS stage. But if you reinstall GCC in BLFS, some
-of the BLFS packages may be <quote>fixed</quote>. If one of those packages
-is reinstalled afterwards, the <quote>fixed</quote> headers are not updated,
-which may lead to version mismatches. In case that happens, the
-<quote>fixed</quote> headers must be updated by running (as <systemitem
-class="username">root</systemitem>): <command>
-/usr/libexec/gcc/x86_64-pc-linux-gnu/&gcc-version;/install-tools/mkheaders
-</command>. The machine triplet may be different on a 32-bit system.
+        Alguns cabeçalhos do sistema precisam ser corrigidos para serem usados com o
+"GCC". Isso é feito durante a instalação do "GCC", e os cabeçalhos
+<quote>corrigidos</quote> são instalados em <filename class="directory">
+/usr/lib/gcc/&lt;trio da máquina&gt;/&lt;GCC version&gt;/include-fixed
+</filename>. Isso é inofensivo se o "GCC" for construído durante o estágio
+LFS. Mas se você reinstalar o "GCC" no BLFS, [então] alguns dos pacotes do
+BLFS possivelmente sejam <quote>corrigidos</quote>. Se um desses pacotes for
+reinstalado posteriormente, [então] os cabeçalhos <quote>corrigidos</quote>
+não serão atualizados, o que possivelmente leve a incompatibilidades de
+versões. Caso isso aconteça, os cabeçalhos <quote>corrigidos</quote>
+precisam ser atualizados executando (como <systemitem
+class="username">root</systemitem>): <command> /usr/libexec/gcc/x86_64-pc
+-linux-gnu/&gcc-version;/install-tools/mkheaders </command>. O trio da
+máquina possivelmente seja diferente em um sistema de 32 bits.
       </para>
     </caution>
 
@@ -92,7 +98,7 @@ class="username">root</systemitem>): <command>
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &gcc-md5sum;
+          Soma de verificação MD5 da transferência: &gcc-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -124,48 +130,51 @@ Additional Downloads</bridgehead>
       </listitem>
     </itemizedlist>
 -->
-<bridgehead renderas="sect3">Dependências de GCC</bridgehead>
+<bridgehead renderas="sect3">Dependências do "GCC"</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gdb"/>, <xref linkend="valgrind"/> (for tests), and <ulink
-url="https://repo.or.cz/isl.git">ISL</ulink> (to enable graphite
-optimization)
+      <xref linkend="gdb"/>, <xref linkend="valgrind"/> (para os testes) e <ulink
+url="https://repo.or.cz/isl.git">ISL</ulink> (para habilitar a otimização
+"graphite")
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/gcc"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/gcc"/>
     </para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de GCC</title>
+    <title>Instalação do "GCC"</title>
 
     <important>
       <para>
-        Even if you specify only languages other than C and C++ to the
-<command>./configure</command> command below, the installation process will
-overwrite your existing <application>GCC</application> C and C++ compilers
-and libraries.  Running the full suite of tests is recommended.
+        Mesmo se você especificar somente linguagens diferentes de "C" e "C++" para
+o comando <command>./configure</command> abaixo, o processo de instalação
+substituirá seus compiladores e bibliotecas "C" e "C++" do
+<application>GCC</application> existentes. Executar a suíte completa de
+teste é recomendado.
       </para>
 
       <para>
-        Do not continue with the <command>make install</command> command until you
-are confident the build was successful. You can compare your test results
-with those found at <ulink
-url="https://gcc.gnu.org/ml/gcc-testresults/"/>. You may also want to refer
-to the information found in the <application>GCC</application> section of
-Chapter 8 in the LFS book (<ulink url="&lfs-root;/chapter08/gcc.html"/>).
+        Não continue com o comando <command>make install</command> até ter certeza
+de que a construção foi bem-sucedida. Você pode comparar seus resultados de
+teste com aqueles encontrados em <ulink
+url="https://gcc.gnu.org/ml/gcc-testresults/"/>. Você também possivelmente
+deseje consultar as informações encontradas na seção do
+<application>GCC</application> do Capítulo 8 no livro LFS (<ulink
+url="&lfs-root;/chapter08/gcc.html"/>).
       </para>
     </important>
 
     <para>
-      The instructions below are intentionally performing a
-<quote>bootstrap</quote> process. Bootstrapping is needed for robustness and
-is highly recommended when upgrading the compilers version. To disable
-bootstrap anyway, add <parameter>--disable-bootstrap</parameter> to the
-<command>./configure</command> options below.
+      As instruções abaixo estão intencionalmente realizando um processo de
+<quote>bootstrap</quote>. As instruções iniciais de carregamento são
+necessárias para robustez e são altamente recomendadas ao atualizar a versão
+dos compiladores. Para desabilitar as instruções iniciais de carregamento de
+qualquer maneira, adicione <parameter>--disable-bootstrap</parameter> às
+opções <command>./configure</command> abaixo.
     </para>
 
     <!--
@@ -186,7 +195,7 @@ bootstrap anyway, add <parameter>--disable-bootstrap</parameter> to the
   ;;
 esac
 
-mkdir build                                            &amp;&amp;
+mkdir build                                           &amp;&amp;
 cd    build                                            &amp;&amp;
 
 ../configure                                           \
@@ -199,15 +208,17 @@ cd    build                                            &amp;&amp;
 make</userinput></screen>
 
     <para>
-      If you have installed additional packages such as
-<application>Valgrind</application> and <application>GDB</application>, the
-<application>GCC</application> part of the test suite will run more tests
-than in LFS. Some of those will report FAIL and others XPASS (pass when
-expected to FAIL). As of gcc-12.2.0, about 60 FAIL occur in the
-<quote>guality</quote> suite, as well as miscellaneous failures throughout
-the rest of the test suite, fifteen of which are already present in the GCC
-tests of LFS. If all the compilers above are built, there will be around 80
-unexpected failures out of over 482,000 tests. To run the tests, issue:
+      Se você tiver instalado pacotes adicionais, como
+<application>Valgrind</application> e <application>GDB</application>,
+[então] a parte <application>GCC</application> da suíte de teste executará
+mais testes que no LFS. Alguns deles informarão "FAIL" e outros "XPASS"
+(aprovados quando esperado "FAIL"). A partir do "gcc-12.2.0", cerca de
+sessenta (60) "FAIL" ocorrem no conjunto <quote>guality</quote>, bem como
+falhas diversas em todo o resto da suíte de teste, quinze dos quais já estão
+presentes nos testes "GCC" do LFS. Se todos os compiladores acima forem
+construídos, [então] existirão em torno de oitenta (80) falhas inesperadas
+em mais que quatrocentos e oitenta e dois mil (482.000) testes. Para
+executar os testes, emita:
     </para>
 
 <!-- The command above may error out, so using && may prevent the summary
@@ -217,9 +228,9 @@ make -k check</userinput></screen>
 
 
     <para>
-      The tests are very long, and the results may be hard to find in the logs,
-specially if you use parallel jobs with make. You can get a summary of the
-tests with:
+      Os testes são muito longos e os resultados possivelmente sejam difíceis de
+encontrar nos registros, especialmente se você usar tarefas paralelas com
+"make". Você consegue obter um resumo dos testes com:
     </para>
 
 <screen><userinput>../contrib/test_summary</userinput></screen>
@@ -230,23 +241,23 @@ tests with:
 
 <screen role="root"><userinput>make install &amp;&amp;
 
-mkdir -pv /usr/share/gdb/auto-load/usr/lib              &amp;&amp;
+mkdir -pv /usr/share/gdb/auto-load/usr/lib             &amp;&amp;
 mv -v /usr/lib/*gdb.py /usr/share/gdb/auto-load/usr/lib &amp;&amp;
 
 chown -v -R root:root \
     /usr/lib/gcc/*linux-gnu/&gcc-version;/include{,-fixed}</userinput></screen>
 
     <para>
-      Some packages expect to find the C preprocessor in <filename
-class="directory">/lib</filename> or may refer to the C compiler under the
-name <command>cc</command>. The following symbolic links are not needed if
-you have followed the LFS instructions, since they have been already
-created. If you do not have them on your system, issue as the <systemitem
-class="username">root</systemitem> user:
+      Alguns pacotes esperam encontrar o pré-processador "C" em <filename
+class="directory">/lib</filename> ou possivelmente se refiram ao compilador
+"C" sob o nome <command>cc</command>. Os seguintes vinculos simbólicos não
+são necessários se você tiver seguido as instruções do LFS, pois eles já
+foram criados. Se você não os tiver em seu sistema, [então] emita como o(a)
+usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ln -v -sf ../usr/bin/cpp /lib          &amp;&amp;
-ln -v -sf gcc /usr/bin/cc              &amp;&amp;
+ln -v -sf gcc /usr/bin/cc             &amp;&amp;
 install -v -dm755 /usr/lib/bfd-plugins &amp;&amp;
 ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /usr/lib/bfd-plugins/</userinput></screen>
 
@@ -256,94 +267,98 @@ ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /us
     <title>Explicações do Comando</title>
 
     <para>
-      <command>mkdir build; cd build</command>: The <application>GCC</application>
-documentation recommends building the package in a dedicated build
-directory.
+      <command>mkdir build; cd build</command>: A documentação do
+<application>GCC</application> recomenda construir o pacote em um diretório
+de construção dedicado.
     </para>
 
     <para>
-      <parameter>--disable-multilib</parameter>: This parameter ensures that files
-are created for the specific architecture of your computer.
+      <parameter>--disable-multilib</parameter>: Esse parâmetro garante que os
+arquivos sejam criados para a arquitetura específica do seu computador.
     </para>
 
     <para>
-      <parameter>--with-system-zlib</parameter>: Uses the system
-<application>zlib</application> instead of the bundled one.
-<application>zlib</application> is used for compressing and decompressing
-<application>GCC</application>'s intermediate language in LTO (Link Time
-Optimization) object files.
+      <parameter>--with-system-zlib</parameter>: Usa a
+<application>zlib</application> do sistema em vez daquela empacotada. A
+<application>zlib</application> é usada para comprimir e descomprimir a
+linguagem intermediária do <application>GCC</application> em arquivos de
+objeto "Link Time Optimization" ("LTO").
     </para>
 
     <para>
-      <parameter>--enable-default-pie</parameter>: Makes the
-<option>-fpie</option> option the default when compiling programs.  Together
-with the <xref linkend="gASLR"/> feature enabled in the kernel, this defeats
-some kind of attacks based on known memory layouts.
+      <parameter>--enable-default-pie</parameter>: Torna a opção
+<option>-fpie</option> o padrão ao compilar aplicativos. Juntamente com o
+recurso <xref linkend="gASLR"/> habilitado no núcleo, isso derrota alguns
+tipos de ataques baseados em esquemas conhecidos de memória.
     </para>
 
     <para>
-      <parameter>--enable-default-ssp</parameter>: Makes the
-<option>-fstack-protector-strong</option> option the default when compiling
-programs. <xref linkend="gSSP"/> is a technique preventing alteration of the
-program flow by corrupting the parameter stack.
+      <parameter>--enable-default-ssp</parameter>: Torna a opção
+<option>-fstack-protector-strong</option> o padrão ao compilar
+aplicativos. <xref linkend="gSSP"/> é uma técnica que evita a alteração do
+fluxo do programa por corrompimento da pilha de parâmetros.
     </para>
 
     <para>
       <parameter>--enable-languages=c,c++,fortran,go,objc,obj-c++</parameter>:
-This command identifies which languages to build. You may modify this
-command to remove undesired languages. Other languages can be added,
-including ADA, D, BRIG (add <parameter>brig</parameter> to the list of
-enabled languages), a binary format for HSAIL (Heterogeneous System
-Architecture Intermediate Language), and JIT (add <parameter>jit</parameter>
-to the list of enabled languages), a library which can be linked into
-interpreters that want to generate machine code <quote>on the fly</quote> at
-run-time. They have not been tested by the BLFS developers.
+Esse comando identifica quais linguagens construir. Você possivelmente
+modifique esse comando para remover linguagens indesejadas. Outras
+linguagens podem ser adicionadas, incluindo "ADA", "D", "BRIG" (adicionar
+<parameter>brig</parameter> à lista de linguagens habilitadas), um formato
+binário para "Heterogeneous System Architecture Intermediate Language"
+("HSAIL") e "JIT" (adicionar <parameter>jit</parameter> à lista de
+linguagens habilitadas), uma biblioteca que pode ser vinculada a
+interpretadores que desejam gerar código de máquina <quote>em voo</quote> em
+tempo de execução. Eles não foram testados pelos(as) desenvolvedores(as) do
+BLFS.
     </para>
 
     <para>
-      <command>ulimit -s 32768</command>: This command prevents several tests from
-running out of stack space.
+      <command>ulimit -s 32768</command>: Esse comando evita que vários testes
+fiquem sem espaço na pilha.
     </para>
 
     <para>
-      <command>make -k check</command>: This command runs the test suite without
-stopping if any errors are encountered.
+      <command>make -k check</command>: Esse comando executa a suíte de teste sem
+parar se quaisquer erros forem encontrados.
     </para>
 
     <para>
-      <command>../contrib/test_summary</command>: This command will produce a
-summary of the test suite results. You can append <command>| grep -A7
-Summ</command> to the command to produce an even more condensed version of
-the summary. You may also wish to redirect the output to a file for review
-and comparison later on.
+      <command>../contrib/test_summary</command>: Esse comando produzirá um resumo
+dos resultados da suíte de teste. Você pode anexar <command>| grep -A7
+Summ</command> ao comando para produzir uma versão ainda mais condensada do
+resumo. Você possivelmente também deseje redirecionar a saída gerada para um
+arquivo para revisão e comparação posterior.
     </para>
 
     <para>
-      <command>mv -v /usr/lib/*gdb.py ...</command>: The installation stage puts
-some files used by <application>gdb</application> under the <filename
-class="directory">/usr/lib</filename> directory. This generates spurious
-error messages when performing <command>ldconfig</command>. This command
-moves the files to another location.
+      <command>mv -v /usr/lib/*gdb.py ...</command>: A etapa de instalação coloca
+alguns arquivos usados pelo <application>gdb</application> sob o diretório
+<filename class="directory">/usr/lib</filename>. Isso gera mensagens de erro
+falsas ao executar o <command>ldconfig</command>. Esse comando move os
+arquivos para outro local.
     </para>
 
     <para>
-      <command>chown -v -R root:root /usr/lib/gcc/*linux-gnu/...</command>: If the
-package is built by a user other than root, the ownership of the installed
-<filename class="directory">include</filename> directory (and its content)
-will be incorrect. This command changes the ownership to the <systemitem
-class="username">root</systemitem> user and group.
+      <command>chown -v -R root:root /usr/lib/gcc/*linux-gnu/...</command>: Se o
+pacote for construído por um(a) usuário(a) diferente de "root", [então]
+titularidade da propriedade do diretório <filename
+class="directory">include</filename> instalado (e o conteúdo dele) estará
+incorreta. Esse comando muda a titularidade da propriedade para o(a)
+usuário(a) e grupo <systemitem class="username">root</systemitem>.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <para>
-      Some program and library names and descriptions are not listed here, but can
-be found at <ulink url="&lfs-root;/chapter08/gcc.html#contents-gcc">LFS
-section for GCC</ulink> as they were initially installed during the building
-of LFS.
+      Alguns nomes e descrições de aplicativos e bibliotecas não estão listados
+aqui, mas podem ser encontrados na <ulink
+url="&lfs-root;/chapter08/gcc.html#contents-gcc">seção do LFS para
+"GCC"</ulink>, já que foram inicialmente instalados durante a construção do
+LFS.
     </para>
 
     <segmentedlist>
@@ -353,11 +368,13 @@ of LFS.
 
       <seglistitem>
         <seg>
-          gccgo, gfortran, go, and gofmt, hard-linked to architecture specific names
+          gccgo, gfortran, go e gofmt, rigidamente vinculados a nomes específicos de
+arquitetura
         </seg>
         <seg>
           libgfortran.{so,a}, libgo.{so,a}, libgobegin.a, libgolibbegin.a,
-libobjc.{so,a}, and numerous other run-time libraries and executables
+libobjc.{so,a} e numerosos(as) outros(as) bibliotecas e executáveis de tempo
+de execução
         </seg>
         <seg>
           /usr/lib/go
@@ -373,7 +390,8 @@ libobjc.{so,a}, and numerous other run-time libraries and executables
         <term><command>gccgo</command></term>
         <listitem>
           <para>
-            is a GCC-based compiler for the <application>Go</application> language
+            é um compilador baseado em "GCC" para a linguagem
+<application>Go</application>
           </para>
           <indexterm zone="gcc gccgo">
             <primary sortas="b-gccgo">gccgo</primary>
@@ -385,7 +403,8 @@ libobjc.{so,a}, and numerous other run-time libraries and executables
         <term><command>go</command></term>
         <listitem>
           <para>
-            is a tool for managing <application>Go</application> source code
+            é uma ferramenta para gerenciar o código-fonte da
+<application>Go</application>
           </para>
           <indexterm zone="gcc go">
             <primary sortas="b-go">go</primary>
@@ -397,7 +416,8 @@ libobjc.{so,a}, and numerous other run-time libraries and executables
         <term><command>gofmt</command></term>
         <listitem>
           <para>
-            is a tool for formatting <application>Go</application> source code
+            é uma ferramenta para formatar o código-fonte da
+<application>Go</application>
           </para>
           <indexterm zone="gcc gofmt">
             <primary sortas="b-gofmt">gofmt</primary>
@@ -424,7 +444,8 @@ libobjc.{so,a}, and numerous other run-time libraries and executables
         <term><command>gfortran</command></term>
         <listitem>
           <para>
-            is a GCC-based compiler for the <application>Fortran</application> language
+            é um compilador baseado em "GCC" para a linguagem
+<application>Fortran</application>
           </para>
           <indexterm zone="gcc gfortran">
             <primary sortas="b-gfortran">gfortran</primary>

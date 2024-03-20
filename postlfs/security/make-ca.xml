@@ -6,7 +6,7 @@
 
   <!ENTITY certhost              "https://hg.mozilla.org/">
   <!ENTITY certpath              "/lib/ckfw/builtins/certdata.txt">
-  <!ENTITY make-ca-buildsize     "6.9 MB (with all runtime deps)">
+  <!ENTITY make-ca-buildsize     "6,9 MB (com todas as dependências em tempo de execução)">
   <!ENTITY make-ca-time          "0,1 UPC (com todas as dependências em tempo de execução)">
 
   <!ENTITY make-ca-download      "https://github.com/lfs-book/make-ca/releases/download/v&make-ca-version;/make-ca-&make-ca-version;.tar.xz">
@@ -128,9 +128,9 @@ quando se usar o utilitário <command>trust</command> oriundo do
 install -vdm755 /etc/ssl/local</userinput></screen>
 
    <para>
-     As the <systemitem class="username">root</systemitem> user, after installing
-<xref linkend="p11-kit"/>, download the certificate source and prepare for
-system use with the following command:
+     Como o(a) usuário(a) <systemitem class="username">root</systemitem>, depois
+de instalar o <xref linkend="p11-kit"/>, baixe o fonte do certificado e
+apronte para uso do sistema com o seguinte comando:
    </para>
 
     <note>
@@ -176,17 +176,19 @@ chmod 754 /etc/cron.weekly/update-pki.sh</userinput></screen>
     <title>Configurando make-ca</title>
 
     <para>
-      For most users, no additional configuration is necessary, however, the
-default <filename>certdata.txt</filename> file provided by make-ca is
-obtained from the mozilla-release branch, and is modified to provide a
-Mercurial revision. This will be the correct version for most systems.
-There are several other variants of the file available for use that might be
-preferred for one reason or another, including the files shipped with
-Mozilla products in this book. RedHat and OpenSUSE, for instance, use the
-version included in <xref linkend="nss"/>. Additional upstream downloads are
-available at the links included in
-<filename>/etc/make-ca/make-ca.conf.dist</filename>. Simply copy the file to
-<filename>/etc/make-ca.conf</filename> and edit as appropriate.
+      Para a maioria dos(as) usuários(as), nenhuma configuração adicional é
+necessária; entretanto, o arquivo <filename>certdata.txt</filename> padrão
+fornecido pelo "make-ca" é obtido a partir da ramificação "mozilla-release"
+e é modificado para fornecer uma revisão "Mercurial". Essa será a versão
+correta para a maior parte dos sistemas. Existem muitas outras variantes do
+arquivo disponíveis para uso que poderiam ser preferidas por uma razão ou
+por outra, incluindo os arquivos enviados com os produtos da "Mozilla" neste
+livro. "RedHat" e "OpenSUSE", por exemplo, usam a versão inclusa no <xref
+linkend="nss"/>. Transferências adicionais do(a) desenvolvedor(a) estão
+disponíveis nos links inclusos em
+<filename>/etc/make-ca/make-ca.conf.dist</filename>. Simplesmente copie o
+arquivo para <filename>/etc/make-ca.conf</filename> e edite conforme
+apropriado.
     </para>
 
     <indexterm zone="make-ca make-ca-config">
@@ -278,64 +280,64 @@ diferentes. Por exemplo, se você gostaria de desconfiar do arquivo
   </sect2>
 
   <sect2 role="configuration" id="make-ca-python">
-    <title>Using make-ca with Python3</title>
+    <title>Usando o <quote>make-ca</quote> com o <quote>Python3</quote></title>
 
     <para>
-      When <application>Python3</application> was installed in LFS it included the
-<application>pip3</application> module with vendored certificates from the
-<application>Certifi</application> module. That was necessary, but it means
-that whenever <command>pip3</command> is used it can reference those
-certificates, primarily when creating a virtual environment or when
-installing a module with all its wheel dependencies in one go.
+      Quando o <application>Python3</application> foi instalado no LFS ele incluiu
+o módulo <application>pip3</application> com certificados fornecidos pelo
+módulo <application>Certifi</application>. Isso foi necessário, mas
+significa que, sempre que o <command>pip3</command> for usado, ele poderá
+referenciar esses certificados, principalmente ao criar um ambiente virtual
+ou ao instalar um módulo com todas as dependências "wheel" dele de uma vez.
     </para>
 
     <para>
-      It is generally considered that the System Administrator should be in charge
-of which certificates are available. Now that <xref linkend="make-ca"/> and
-<xref linkend="p11-kit"/> have been installed and
-<application>make-ca</application> has been configured, it is possible to
-make <command>pip3</command> use the system certificates.
+      Geralmente considera-se que o(a) Administrador(a) do Sistema(a) deveria ser
+responsável por quais certificados estão disponíveis. Agora que <xref
+linkend="make-ca"/> e <xref linkend="p11-kit"/> foram instalados e
+<application>make-ca</application> foi configurado, é possível fazer com que
+<command >pip3</command> use os certificados do sistema.
     </para>
 
     <para>
-      The vendored certificates installed in LFS are a snapshot from when the
-pulled-in version of <application>Certifi</application> was created. If you
-regularly update the system certificates, the vendored version will become
-out of date.
+      Os certificados fornecidos instalados no LFS são um instantâneo de quando a
+versão extraída do <application>Certifi</application> foi criada. Se você
+atualizar regularmente os certificados do sistema, [então] a versão
+fornecida se tornará desatualizada.
     </para>
 
     <para>
-      To use the system certificates in <application>Python3</application> you
-should set <envar>_PIP_STANDALONE_CERT</envar> to point to them, e.g for the
-<application>bash</application> shell:
+      Para usar os certificados do sistema no <application>Python3</application>
+você deveria configurar <envar>_PIP_STANDALONE_CERT</envar> para apontar
+para eles, por exemplo, para o "shell" <application>bash</application>:
     </para>
 
 <screen><userinput>export _PIP_STANDALONE_CERT=/etc/pki/tls/certs/ca-bundle.crt</userinput></screen>
 
     <warning>
       <para>
-        If you have created virtual environments, for example when testing modules,
-and those include the <application>Requests</application> and
-<application>Certifi</application> modules in <filename
-class="directory">~/.local/lib/python3.11/</filename> then those local
-modules will be used instead of the system certificates unless you remove
-the local modules.
+        Se você tiver criado ambientes virtuais, por exemplo, ao testar módulos, e
+eles incluem os módulos <application>Requests</application> e
+<application>Certifi</application> em <filename
+class="directory">~/.local/lib/python3.11/</filename>, então esses módulos
+locais serão usados em vez dos certificados do sistema, a menos que você
+remova os módulos locais.
       </para>
     </warning>
 
     <para>
-      To use the system certificates in <application>Python3</application> with
-the BLFS profiles add the following variable to your system or personal
-profiles:
+      Para usar os certificados do sistema no <application>Python3</application>
+com os perfis BLFS, adicione a seguinte variável aos teus perfis de sistema
+ou pessoal:
     </para>
 
 <screen role="root"><userinput>mkdir -pv /etc/profile.d &amp;&amp;
 cat &gt; /etc/profile.d/pythoncerts.sh &lt;&lt; "EOF"
-<literal># Begin /etc/profile.d/pythoncerts.sh
+<literal># Inicia /etc/profile.d/pythoncerts.sh
 
 export _PIP_STANDALONE_CERT=/etc/pki/tls/certs/ca-bundle.crt
 
-# End /etc/profile.d/pythoncerts.sh</literal>
+# Termina /etc/profile.d/pythoncerts.sh</literal>
 EOF</userinput></screen>
 
   </sect2>

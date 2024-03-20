@@ -88,7 +88,7 @@ sejam necessárias para eles.
 
   <para>
     Decida quais arquivos de inicialização deveriam ser fornecidos em cada (ou
-na maioria) diretório home do(a) usuário(a) novo(a). As decisões que você
+na maioria) diretório "home" do(a) usuário(a) novo(a). As decisões que você
 tomar afetarão o que você fizer nas próximas duas seções, <xref
 linkend="postlfs-config-profile"/> e <xref
 linkend="postlfs-config-vimrc"/>. Alguns, ou todos, daqueles arquivos serão
@@ -114,13 +114,13 @@ class="directory">/etc/skel</filename>. Cada seção te lembrará disso. Em
 resumo, os comandos do livro foram escritos para arquivos
 <emphasis>não</emphasis> adicionados ao <filename
 class="directory">/etc/skel</filename>; e, em vez disso, apenas envia os
-resultados para o diretório home do(a) usuário(a). Se o arquivo estará no
+resultados para o diretório "home" do(a) usuário(a). Se o arquivo estará no
 <filename class="directory">/etc/skel</filename>, [então] mude o(s)
 comando(s) do livro para enviar a saída gerada para lá em vez disso; e,
 então, apenas copie o arquivo a partir do <filename
 class="directory">/etc/skel</filename> para os diretórios apropriados, como
 o <filename class="directory">/etc</filename>; o <filename
-class="directory">~</filename>; ou o diretório home de qualquer outro(a)
+class="directory">~</filename>; ou o diretório "home" de qualquer outro(a)
 usuário(a) já no sistema.
   </para>
 
@@ -129,33 +129,35 @@ usuário(a) já no sistema.
   <para>
     Quando se adicionar um(a) usuário(a) novo(a) com o
 <command>useradd</command>, use o parâmetro <option>-m</option>, o qual diz
-ao <command>useradd</command> para criar o diretório home do(a) usuário(a);
-e para copiar arquivos a partir do <filename
+ao <command>useradd</command> para criar o diretório "home" do(a)
+usuário(a); e para copiar arquivos a partir do <filename
 class="directory">/etc/skel</filename> (pode ser anulado) para o diretório
-home do(a) usuário(a) novo(a). Por exemplo, (realize como o(a) usuário(a)
+"home" do(a) usuário(a) novo(a). Por exemplo, (realize como o(a) usuário(a)
 <systemitem class="username">root</systemitem>):
   </para>
 
 <screen role="root"><userinput>useradd -m <replaceable>&lt;novo(a)_usuário(a)&gt;</replaceable></userinput></screen>
 
   <para>
-    If you are sharing a <filename class="directory">/home</filename> or
-<filename class="directory">/usr/src</filename> with another Linux distro
-(for example, the host distro used for building LFS), you can create a user
-with the same UID (and, same primary group GID) to keep the file ownership
-consistent across the systems.  First, on <emphasis>the other
-distro</emphasis>, get the UID of the user and the GID of the user's primary
-group:
+    Se você estiver compartilhando um <filename
+class="directory">/home</filename> ou <filename
+class="directory">/usr/src</filename> com outra distribuição Linux (por
+exemplo, a distribuição anfitriã usada para construir o LFS), [então] você
+pode criar um(a) usuário(a) com o mesmo "UID" (e o mesmo "GID" de grupo
+primário) para manter a titularidade da propriedade do arquivo consistente
+em todos os sistemas. Primeiro, na <emphasis>outra distribuição</emphasis>,
+obtenha o "UID" do(a) usuário(a) e o "GID" do grupo primário do(a)
+usuário(a):
   </para>
 
-<screen role="nodump"><userinput>getent passwd <replaceable>&lt;username&gt;</replaceable> | cut -d ':' -f 3,4</userinput></screen>
+<screen role="nodump"><userinput>getent passwd <replaceable>&lt;nome_usuário(a)&gt;</replaceable> | cut -d ':' -f 3,4</userinput></screen>
 
   <para>
-    The command should output the UID and GID, separated by a colon.  Now on the
-BLFS system, create the primary group and the user:
+    O comando deveria gerar o "UID" e o "GID", separados por dois pontos. Agora
+no sistema BLFS, crie o grupo primário e o(a) usuário(a):
   </para>
 
-<screen role="root"><userinput>groupadd -g <replaceable>&lt;GID&gt;</replaceable> <replaceable>&lt;username&gt;</replaceable> &amp;&amp;
-useradd -u <replaceable>&lt;UID&gt;</replaceable> -g <replaceable>&lt;username&gt;</replaceable> <replaceable>&lt;username&gt;</replaceable></userinput></screen>
+<screen role="root"><userinput>groupadd -g <replaceable>&lt;GID&gt;</replaceable> <replaceable>&lt;nome_usuário(a)&gt;</replaceable> &amp;&amp;
+useradd -u <replaceable>&lt;UID&gt;</replaceable> -g <replaceable>&lt;nome_usuário(a)&gt;</replaceable> <replaceable>&lt;nome_usuário(a)&gt;</replaceable></userinput></screen>
 
 </sect1>

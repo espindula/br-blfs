@@ -7,9 +7,9 @@
   <!ENTITY xindy-download-http "https://tug.ctan.org/support/xindy/base/xindy-&xindy-version;.tar.gz">
   <!ENTITY xindy-download-ftp  "">
   <!ENTITY xindy-md5sum        "221acfeeb0f6f8388f89a59c56491041">
-  <!ENTITY xindy-size          "506Ko">
-  <!ENTITY xindy-buildsize     "15Mo">
-  <!ENTITY xindy-time          "menos que 0,1UPC">
+  <!ENTITY xindy-size          "506 KB">
+  <!ENTITY xindy-buildsize     "15 MB">
+  <!ENTITY xindy-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="xindy" xreflabel="xindy-&xindy-version;">
@@ -23,16 +23,16 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a xindy</title>
+    <title>Introdução ao xindy</title>
 
     <para>
       
       <!-- LaTeX for the system, but just latex for the command -->
-<application>Xindy</application> is an index processor that can be used to
-generate book-like indexes for arbitrary document-preparation systems.  This
-includes systems such as TeX and LaTeX, the roff-family, and SGML/XML-based
-systems (e.g., HTML) that process some kind of text and generate indexing
-information.
+<application>Xindy</application> é um processador de índice que pode ser
+usado para gerar índices semelhantes a livros para sistemas arbitrários de
+preparação de documentos. Isso inclui sistemas como TeX e LaTeX, a família
+roff e sistemas baseados em SGML/XML (por exemplo, HTML) que processam algum
+tipo de texto e geram informações de indexação.
     </para>
 
     &lfs113_checked;
@@ -51,7 +51,7 @@ information.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &xindy-md5sum;
+          Soma de verificação MD5 da transferência: &xindy-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -71,7 +71,7 @@ information.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Required Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais Exigidas</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -81,11 +81,11 @@ url="&patch-root;/xindy-&xindy-version;-upstream_fixes-2.patch"/>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Xindy</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Xindy</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="clisp"/> and <xref linkend="texlive"/>
+      <xref linkend="clisp"/> e <xref linkend="texlive"/>
     </para>
 
     <para condition="html" role="usernotes">
@@ -94,10 +94,10 @@ url="&patch-root;/xindy-&xindy-version;-upstream_fixes-2.patch"/>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de xindy</title>
+    <title>Instalação do xindy</title>
 
     <para>
-      Instale <application>xindy</application> executando os seguintes comandos:
+      Instale o <application>xindy</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &amp;&amp;
@@ -118,7 +118,7 @@ patch -Np1 -i ../xindy-&xindy-version;-upstream_fixes-2.patch &amp;&amp;
 make LC_ALL=POSIX</userinput></screen>
 
     <para>
-      This package does not have a test suite.
+      Esse pacote não tem uma suíte de teste.
     </para>
 
     <para>
@@ -133,54 +133,55 @@ make LC_ALL=POSIX</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i "s/ grep -v '^;'/ awk NF/" ...</command>: The build sorts
-files in latin{1..3} encodings to create latin.xdy, and unicode versions of
-these to create utf8.xdy after using <command>grep -v '^;'</command> to
-remove blank lines. With <application>grep-2.23</application> any data not
-in the expected encoding is treated as binary, resulting in a useless
-file. This command uses an alternative way of removing blank lines.
+      <command>sed -i "s/ grep -v '^;'/ awk NF/" ...</command>: A construção
+classifica os arquivos em codificações latinas{1..3} para criar latin.xdy, e
+versões Unicode desses, para criar utf8.xdy depois de usar <command>grep -v
+'^;'</command> para remover linhas em branco. Com
+<application>grep-2.23</application>, qualquer dado que não esteja na
+codificação esperada é tratado como binário, resultando em um arquivo
+inútil. Esse comando usa uma forma alternativa de remover linhas em branco.
     </para>
 
     <para>
-      <command>sed -i 's%\(indexentry\)%\1\\%' ...</command>: A regexp contains
-<literal>indexentry{</literal> - perl has warned about the unescaped left
-brace for some time and now treats it as illegal.  Change it to
-<literal>indexentry\{</literal>, doubling the backslash for
+      <command>sed -i 's%\(indexentry\)%\1\\%' ...</command>: Uma expressão
+regular contém <literal>indexentry{</literal> - Perl avisou acerca da chave
+esquerda sem escape por algum tempo e agora a trata como ilegal. Mude para
+<literal>indexentry\{</literal>, duplicando a barra invertida para o
 <command>sed</command>.
     </para>
 
     <para>
       <command>patch -Np1 -i
-../xindy-&xindy-version;-upstream_fixes-2.patch</command>:
-<application>Xindy</application> is now maintained at CTAN. This patch
-updates the source with some of the changes made there (but ignoring changes
-which were only made to allow for spaces in pathnames and some trivial
-recent changes).
+../xindy-&xindy-version;-upstream_fixes-2.patch</command>: O
+<application>Xindy</application> agora é mantido no CTAN. Esse remendo
+atualiza o fonte com algumas das mudanças feitas lá (mas ignorando as
+mudanças que foram feitas somente para permitir espaços nos nomes de
+caminhos e algumas mudanças triviais recentes).
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
      href="../../xincludes/tex-prefix.xml"/>
 
     <para>
-      <parameter>--includedir=/usr/include</parameter>: This parameter ensures
-that the <filename>kpathsea</filename> headers from <xref
-linkend="texlive"/> will be found.
+      <parameter>--includedir=/usr/include</parameter>: Esse parâmetro garante que
+os cabeçalhos <filename>kpathsea</filename> oriundos do <xref
+linkend="texlive"/> serão encontrados.
     </para>
 
     <para>
-      <command>make LC_ALL=POSIX</command>: with the current version of
-<application>coreutils</application> it is essential to build
-<application>xindy</application> in the POSIX (or C) locale because in a
-UTF-8 locale the file <filename>latin.xdy</filename> will contain only a
-heading and then a line '<literal>Binary file (standard input)
-matches</literal>' instead of the many lines of
-<application>lisp</application> merge-rule commands it ought to contain.
+      <command>make LC_ALL=POSIX</command>: com a versão atual do
+<application>coreutils</application>, é essencial construir o
+<application>xindy</application> na localidade POSIX (ou C), porque em uma
+localidade UTF -8 o arquivo <filename>latin.xdy</filename> conterá somente
+um cabeçalho e então uma linha '<literal>Binary file (standard input)
+matches</literal>' em vez das muitas linhas de comandos de regra de
+mesclagem do <application>lisp</application> que deve conter.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -192,7 +193,7 @@ matches</literal>' instead of the many lines of
           tex2xindy, texindy, xindy
         </seg>
         <seg>
-          None
+          Nenhum(a)
         </seg>
         <seg>
           $TEXLIVE_PREFIX/texmf-dist/xindy
@@ -208,7 +209,8 @@ matches</literal>' instead of the many lines of
         <term><command>tex2xindy</command></term>
         <listitem>
           <para>
-            transforms a LaTeX index file into a xindy raw index file
+            transforma um arquivo de índice do LaTeX em um arquivo de índice bruto do
+xindy
           </para>
           <indexterm zone="xindy tex2xindy">
             <primary sortas="b-tex2xindy">tex2xindy</primary>
@@ -220,7 +222,8 @@ matches</literal>' instead of the many lines of
         <term><command>texindy</command></term>
         <listitem>
           <para>
-            is a wrapper for xindy that turns on many LaTeX conventions by default
+            é um envolucrador para o xindy que ativa muitas convenções do LaTeX por
+padrão
           </para>
           <indexterm zone="xindy texindy">
             <primary sortas="b-texindy">texindy</primary>
@@ -232,7 +235,7 @@ matches</literal>' instead of the many lines of
         <term><command>xindy</command></term>
         <listitem>
           <para>
-            creates a sorted and tagged index from a raw LaTeX index
+            cria um índice classificado e rotulado a partir de um índice bruto do LaTeX
           </para>
           <indexterm zone="xindy xindy">
             <primary sortas="b-xindy">xindy</primary>

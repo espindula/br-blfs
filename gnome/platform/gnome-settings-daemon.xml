@@ -9,9 +9,9 @@
   <!ENTITY gnome-settings-daemon-download-ftp
            "&gnome-download-ftp;/gnome-settings-daemon/&gnome-43;/gnome-settings-daemon-&gnome-settings-daemon-version;.tar.xz">
   <!ENTITY gnome-settings-daemon-md5sum        "eea402f0a87aea7f4d8428af3917fb0c">
-  <!ENTITY gnome-settings-daemon-size          "1,4Mo">
-  <!ENTITY gnome-settings-daemon-buildsize     "45Mo">
-  <!ENTITY gnome-settings-daemon-time          "0.1 SBU (Using parallelism=4)">
+  <!ENTITY gnome-settings-daemon-size          "1,4 MB">
+  <!ENTITY gnome-settings-daemon-buildsize     "45 MB">
+  <!ENTITY gnome-settings-daemon-time          "0,1 UPC (Usando paralelismo=4)">
 ]>
 
 <sect1 id="gnome-settings-daemon" xreflabel="gnome-settings-daemon-&gnome-settings-daemon-version;">
@@ -25,12 +25,12 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a GNOME Settings Daemon</title>
+    <title>Introdução ao GNOME Settings Daemon</title>
 
     <para>
-      The <application>GNOME Settings Daemon</application> is responsible for
-setting various parameters of a <application>GNOME Session</application> and
-the applications that run under it.
+      O <application>GNOME Settings Daemon</application> é responsável por
+configurar vários parâmetros de uma <application>Sessão do
+GNOME</application> e dos aplicativos que executam sob ela.
     </para>
 
     &lfs113_checked;
@@ -49,7 +49,7 @@ the applications that run under it.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &gnome-settings-daemon-md5sum;
+          Soma de verificação MD5 da transferência: &gnome-settings-daemon-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -69,9 +69,9 @@ the applications that run under it.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de GNOME Settings Daemon</bridgehead>
+    <bridgehead renderas="sect3">Dependências do GNOME Settings Daemon</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="alsa-lib"/>, <xref linkend="colord"/>, <xref
 linkend="fontconfig"/>, <xref linkend="gcr4"/>, <xref linkend="geoclue2"/>,
@@ -79,28 +79,28 @@ linkend="fontconfig"/>, <xref linkend="gcr4"/>, <xref linkend="geoclue2"/>,
 linkend="lcms2"/>, <xref linkend="libcanberra"/>, <xref
 linkend="libgweather"/>, <xref linkend="libnotify"/>, <xref
 linkend="libwacom"/>, <xref linkend="pulseaudio"/>, <phrase
-revision="sysv"><xref linkend="elogind"/>,</phrase> <phrase
-revision="systemd"><xref linkend="systemd"/>,</phrase> and <xref
+revision="sysv"><xref linkend="elogind"/></phrase> <phrase
+revision="systemd"><xref linkend="systemd"/></phrase> e <xref
 linkend="upower"/>
     </para>
 
-    <bridgehead renderas="sect4">Recomendada</bridgehead>
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="alsa"/>, <xref linkend="cups"/>, <xref
-linkend="NetworkManager"/>, <xref linkend="nss"/>, and <xref
+linkend="NetworkManager"/>, <xref linkend="nss"/> e <xref
 linkend="wayland"/>
     </para>
 
     <note>
       <para>
-        Recommended dependencies are not strictly required for this package to build
-and function, but you may not get expected results at runtime if you don't
-install them.
+        As dependências recomendadas não são estritamente exigidas para esse pacote
+construir e funcionar, mas você possivelmente não obtenha os resultados
+esperados em tempo de execução se não as instalar.
       </para>
     </note>
 
     <bridgehead renderas="sect4"
-                revision="sysv">Recommended (Runtime)</bridgehead>
+                revision="sysv">Recomendadas (tempo de execução)</bridgehead>
     <para role="recommended" revision="sysv">
       <xref linkend="blocaled" role="runtime"/>
     </para>
@@ -108,9 +108,9 @@ install them.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="gnome-session"/>, <xref linkend="mutter"/>, <xref
-linkend="python-dbusmock"/>, <xref linkend="umockdev"/>, and
-<command>Xvfb</command> (for tests, from <xref linkend="xorg-server"/> or
-<xref role="nodep" linkend="xwayland"/>)
+linkend="python-dbusmock"/>, <xref linkend="umockdev"/> e
+<command>Xvfb</command> (para testes, originário de <xref
+linkend="xorg-server"/> ou <xref role="nodep" linkend="xwayland"/>)
     </para>
 
     <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gnome-settings-daemon"/>
@@ -118,7 +118,7 @@ linkend="python-dbusmock"/>, <xref linkend="umockdev"/>, and
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de GNOME Settings Daemon</title>
+    <title>Instalação do GNOME Settings Daemon</title>
 
 
 
@@ -132,22 +132,22 @@ linkend="python-dbusmock"/>, <xref linkend="umockdev"/>, and
 <screen><userinput>sed "/  policy,/d" -i plugins/{power,wacom}/meson.build</userinput></screen>
 -->
 <para revision="sysv">
-      Next, fix libelogind detection for tests:
+      A seguir, corrija a detecção da libelogind para testes:
     </para>
 
 <screen revision="sysv"><userinput>sed -e 's/libsystemd/libelogind/' \
     -i plugins/power/test.py</userinput></screen>
 
     <para revision="sysv">
-       Next, fix backlight functionality in gnome-control-center:
+       A seguir, corrija a funcionalidade da luz de fundo no gnome-control-center:
     </para>
 
 <screen revision="sysv"><userinput>sed -e 's/(backlight->logind_proxy)/(0)/' \
     -i plugins/power/gsd-backlight.c</userinput></screen>
 
     <para>
-      Install <application>GNOME Settings Daemon</application> by running the
-following commands:
+      Instale o <application>Gnome Settings Daemon</application> executando os
+seguintes comandos:
     </para>
 
 <!-- [renodr, June 29th, 2019]: for some reason, on elogind, all tests
@@ -171,10 +171,11 @@ ninja</userinput></screen>
 
     
     <para>
-      To check the results, execute: <command>ninja test</command>. Note that you
-must have <application>python-dbusmock</application> installed in order for
-the tests to complete successfully. Some tests may fail depending on the
-init system in use.
+      Para verificar os resultados, execute: <command>ninja
+test</command>. Observe que você precisa ter o
+<application>python-dbusmock</application> instalado para a finalidade de
+que os testes completem com sucesso. Alguns testes possivelmente falhem
+dependendo do sistema init em uso.
     </para>
 
     <para>
@@ -194,7 +195,7 @@ init system in use.
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -203,14 +204,14 @@ init system in use.
 
       <seglistitem>
         <seg>
-          None
+          Nenhum(a)
         </seg>
        <seg>
           libgsd.so
         </seg>
         <seg>
           /etc/xdg/Xwayland-session.d, /usr/include/gnome-settings-daemon-43,
-/usr/lib/gnome-settings-daemon-43, and /usr/share/gnome-settings-daemon
+/usr/lib/gnome-settings-daemon-43 e /usr/share/gnome-settings-daemon
         </seg>
       </seglistitem>
     </segmentedlist>

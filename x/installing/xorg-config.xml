@@ -8,60 +8,70 @@
   <?dbhtml filename="xorg-config.html"?>
 
 
-  <title>Xorg-&xorg-version; Testing and Configuration</title>
+  <title>Testagem e Configuração do Xorg-&xorg-version;</title>
 
   <indexterm zone="xorg-config">
-    <primary sortas="g-configuring-xorg">Configurando Xorg</primary>
+    <primary sortas="g-configuring-xorg">Configurando o <quote>Xorg</quote></primary>
   </indexterm>
 
   <sect2 id='X11-testing' xreflabel="Testando o Xorg">
-    <title>Testing Xorg</title>
+    <title>Testando o Xorg</title>
 
     <note>
       <para>
-        Before starting Xorg for the first time, is is useful to rebuild the library
-cache by running <userinput>ldconfig</userinput> as the <systemitem
-class="username">root</systemitem> user.
+        Antes de iniciar o &quot;Xorg&quot; pela primeira vez, é útil reconstruir o
+&quot;cache&quot; da biblioteca executando-se o
+&quot;<userinput>ldconfig</userinput>&quot; como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;.
       </para>
     </note>
 
     <note>
       <para>
-        Before starting Xorg for the first time, is is often needed to reboot the
-system to ensure all appropriate daemons are started and appropriate
-security issues are properly set.  As an alternative, logging out and
-logging back in may work, but as of this writing has not been tested.
+        Antes de iniciar o &quot;Xorg&quot; pela primeira vez, muitas vezes é
+necessário reinicializar o sistema para garantir que todos os processos de
+segundo plano apropriados sejam iniciados e que os problemas de segurança
+apropriados estejam configurados adequadamente. Como alternativa, sair e
+logar-se novamente possivelmente funcione, mas ao tempo deste texto, não foi
+testado.
       </para>
     </note>
 
     <warning>
       <para>
-        If Xorg hangs for some reason (for example, lacking a proper input driver),
-the system may stop responding to any user input.  As a precaution, you can
-enable a magic <keycap>SysRq</keycap> key before testing Xorg.  As the
-<systemitem class="username">root</systemitem> user, issue:
+        Se o &quot;Xorg&quot; travar por algum motivo (por exemplo, ausência de um
+controlador de entrada adequado), [então] o sistema poderá parar de
+responder a qualquer entrada gerada de usuário(a). Como precaução, você pode
+habilitar uma tecla mágica &quot;<keycap>SysRq</keycap>&quot; antes de
+testar o &quot;Xorg&quot;. Como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;, emita:
       </para>
 
 <screen><userinput>echo 4 > /proc/sys/kernel/sysrq</userinput></screen>
 
       <para>
-        Then if Xorg hangs, it's possible to use <keycombo> <keycap>Alt</keycap>
-<keycap>SysRq</keycap> <keycap>R</keycap> </keycombo> to reset the keyboard
-mode.  Now it should be able to use <keycombo> <keycap>Ctrl</keycap>
-<keycap>Alt</keycap> <keycap>Fx</keycap> </keycombo> (replace x with a VT
-number) to switch to another VT.  If it works, login and kill Xorg using
-command line in the new VT.
+        Então, se o &quot;Xorg&quot; travar, é possível usar &quot;<keycombo>
+<keycap>Alt</keycap> <keycap>SysRq</keycap> <keycap>R</keycap>
+</keycombo>&quot; para reconfigurar o modo do teclado. Agora ele deveria ser
+capaz de usar &quot;<keycombo> <keycap>Ctrl</keycap> <keycap>Alt</keycap>
+<keycap>Fx</keycap> </keycombo>&quot; (substitua o &quot;x&quot; por um
+número de &quot;VT&quot;) para comutar para outro &quot;VT&quot;. Se
+funcionar, [então] logue-se e mate o &quot;Xorg&quot; usando a linha de
+comando no novo &quot;VT&quot;.
       </para>
     </warning>
 
     <para>
-      To test the <application>Xorg</application> installation, issue
-<command>startx</command>. This command brings up a rudimentary window
-manager called <emphasis>twm</emphasis> with three xterm windows and one
-xclock window.  The xterm window in the upper left is a login terminal and
-running <emphasis>exit</emphasis> from this terminal will exit the
-<application>X Window</application> session.  The third xterm window may be
-obscured on your system by the other two xterms.
+      Para testar a instalação do &quot;<application>Xorg</application>&quot;,
+emita &quot;<command>startx</command>&quot;. Esse comando traz um
+gerenciador de janelas rudimentar chamado
+&quot;<emphasis>twm</emphasis>&quot; com três janelas do &quot;xterm&quot; e
+uma janela do &quot;xclock&quot;. A janela do &quot;xterm&quot; no canto
+superior esquerdo é um terminal de &quot;login&quot; e executar-se
+&quot;<emphasis>exit</emphasis>&quot; a partir desse terminal sairá da
+sessão do &quot;<application>Janelas X</application>&quot;. A terceira
+janela do &quot;xterm&quot; possivelmente esteja obscurecida em teu sistema
+pelos outros dois &quot;xterms&quot;.
     </para>
 
     <note>
@@ -71,52 +81,60 @@ obscured on your system by the other two xterms.
         /var/log/Xorg.0.log</filename><filename revision="systemd">-->
 <!--</filename>
 -->
-When testing <application>Xorg</application> with the
-<application>twm</application> window manager, there will be several
-warnings in the Xorg log file, $HOME/.local/share/xorg/Xorg.0.log, about
-missing font files. In addition, there will be several warnings on the text
-mode terminal (usually tty1) about missing fonts. These warnings do not
-affect functionality, but can be removed if desired by installing the <xref
-linkend="xorg7-legacy"/>.
+Ao testar o &quot;<application>Xorg</application>&quot; com o gerenciador de
+janelas &quot;<application>twm</application>&quot;, existirão vários avisos
+no arquivo de registro do &quot;Xorg&quot;,
+&quot;$HOME/.local/share/xorg/Xorg.0.log&quot;, a respeito de arquivos de
+fontes ausentes. Além disso, existirão vários avisos no terminal de modo
+texto (geralmente &quot;tty1&quot;) a respeito de fontes ausentes. Esses
+avisos não afetam a funcionalidade, mas podem ser removidos, se desejado,
+instalando-se o &quot;<xref linkend="xorg7-legacy"/>&quot;.
       </para>
     </note>
 
     <para>
-      Generally, there is no specific configuration required for
-<application>Xorg</application>, but customization is possible. For details,
-see <xref linkend='xconfig'/> below.
+      Geralmente, não existe configuração específica exigida para o
+&quot;<application>Xorg</application>&quot;, mas a personalização é
+possível. Para detalhes, veja-se &quot;<xref linkend='xconfig'/>&quot;
+abaixo.
     </para>
 
   </sect2>
 
-  <sect2 role="configuration" id="checking-dri" xreflabel="Verificando a instalação da DRI">
-    <title>Checking the Direct Rendering Infrastructure (DRI)  Installation</title>
+  <sect2 role="configuration" id="checking-dri" xreflabel="Verificando a instalação do &quot;DRI&quot;">
+    <title>Verificando a Instalação da <quote>Direct Rendering Infrastructure</quote>
+(<quote>DRI</quote>)</title>
 
     <para>
-      DRI is a framework for allowing software to access graphics hardware in a
-safe and efficient manner. It is installed in <application>X</application>
-by default (using <application>Mesa</application>) if you have a supported
-video card.
+      &quot;DRI&quot; é uma estrutura que permite que logiciário acesse
+&quot;hardware&quot; gráfico de maneira segura e eficiente. Ela é instalada
+no &quot;<application>X</application>&quot; por padrão (usando
+&quot;<application>Mesa</application>&quot;) se você tiver uma placa de
+vídeo suportada.
     </para>
 
     <para>
-      To check if DRI drivers are installed properly, check the log file
-<filename>$HOME/.local/share/xorg/Xorg.0.log</filename> (or
-<filename>/var/log/Xorg.0.log</filename> if you have built <xref
-linkend="xorg-server"/> with the suid bit) for statements such as:
+      Para verificar se os controladores da &quot;DRI&quot; estão instalados
+adequadamente, verifique o arquivo de registro
+&quot;<filename>$HOME/.local/share/xorg/Xorg.0.log</filename>&quot; (ou
+&quot;<filename>/var/log/Xorg.0.log</filename>&quot; se você tiver
+construído o &quot;<xref linkend="xorg-server"/>&quot; com o &quot;bit&quot;
+&quot;suid&quot;) para declarações como:
     </para>
 
 <screen><literal>(II) intel(0): direct rendering: DRI2 Enabled</literal></screen>
 
-    <para>or</para>
+    <para>ou</para>
 
 <screen><literal>(II) NOUVEAU(0): Loaded DRI module</literal></screen>
 
     <note>
       <para>
-        DRI configuration may differ if you are using alternate drivers, such as
-those from <ulink url="https://www.nvidia.com/page/home.html">NVIDIA</ulink>
-or <ulink url="https://www.amd.com/">AMD</ulink>.
+        A configuração da &quot;DRI&quot; possivelmente seja diferente se você
+estiver usando controladores alternativos, como aqueles oriundos da
+&quot;<ulink
+url="https://www.nvidia.com/page/home.html">NVIDIA</ulink>&quot; ou da
+&quot;<ulink url="https://www.amd.com/">AMD</ulink>&quot;.
       </para>
     </note>
 
@@ -145,39 +163,47 @@ or <ulink url="https://www.amd.com/">AMD</ulink>.
 <screen role="root" revision="sysv"><userinput>usermod -a -G video <replaceable>&lt;username&gt;</replaceable></userinput></screen>
 -->
 <para>
-      Another way to determine if DRI is working properly is to use one of the two
-optionally installed OpenGL demo programs in <xref linkend="mesa"/>. From an
-X terminal, run <command>glxinfo</command> and look for the phrase:
+      Outra maneira de determinar se a &quot;DRI&quot; está funcionando
+adequadamente é a de usar um dos dois aplicativos de demonstração
+&quot;OpenGL&quot; instalados opcionalmente no &quot;<xref
+linkend="mesa"/>&quot;. A partir de um terminal do &quot;X&quot;, execute
+&quot;<command>glxinfo</command>&quot; e procure pela frase:
     </para>
 
-<screen><computeroutput>name of display: :0
-display: :0  screen: 0
+<screen><computeroutput>nome da tela: :0
+display: :0   screen: 0
 direct rendering: Yes</computeroutput></screen>
 
     <para>
-      If direct rendering is enabled, you can add verbosity by running
-<command>LIBGL_DEBUG=verbose glxinfo</command>. This will show the drivers,
-device nodes and files used by the DRI system.
+      Se a Renderização Direta estiver habilitada, [então] você poderá adicionar
+detalhamento executando &quot;<command>LIBGL_DEBUG=verbose
+glxinfo</command>&quot;. Isso mostrará os controladores, nós de dispositivos
+e arquivos usados pelo sistema da &quot;DRI&quot;.
     </para>
 
     <para>
-      To confirm that DRI2 hardware acceleration is working, you can (still in the
-X terminal) run the command <command>glxinfo | grep -E "(OpenGL
-vendor|OpenGL renderer|OpenGL version)"</command>.  If that reports
-something <emphasis>other than</emphasis> <literal>Software
-Rasterizer</literal> then you have working acceleration for the user who ran
-the command.
+      Para confirmar se a aceleração de &quot;hardware&quot; &quot;DRI2&quot; está
+funcionando, você pode (ainda no terminal do &quot;X&quot;) executar o
+comando <command>glxinfo | grep -E "(OpenGL vendor|OpenGL renderer|OpenGL
+version)"</command>. Se isso informar algo <emphasis>diferente de</emphasis>
+&quot;<literal>Software Rasterizer</literal>&quot;, então você tem
+aceleração funcional para o(a) usuário(a) que executou o comando.
     </para>
 
     <para>
-      If your hardware does not have any DRI2 driver available, it will use a
-Software Rasterizer for Direct Rendering. In such cases, you can use a new,
-LLVM-accelerated, Software Rasterizer called LLVMPipe. In order to build
-LLVMPipe just make sure that <xref linkend="llvm"/> is present at Mesa build
-time. Note that all decoding is done on the CPU instead of the GPU, so the
-display will run slower than with hardware acceleration.  To check if you
-are using LLVMpipe, review the output of the glxinfo command above.  An
-example of the output using the Software Rasterizer is shown below:
+      Se o teu &quot;hardware&quot; não tiver nenhum controlador &quot;DRI2&quot;
+disponível, [então] ele usará um &quot;Software Rasterizer&quot; para
+Renderização Direta. Nesses casos, você pode usar um novo &quot;Software
+Rasterizador&quot;, acelerado por &quot;LLVM&quot;, chamado
+&quot;LLVMPipe&quot;. Para a finalidade de construir o &quot;LLVMPipe&quot;,
+apenas certifique-se de que o &quot;<xref linkend="llvm"/>&quot; esteja
+presente ao tempo da construção do &quot;Mesa&quot;. Observe que toda a
+decodificação é feita na &quot;CPU&quot; e não na &quot;GPU&quot;, de forma
+que a exibição ficará mais lenta que com aceleração de
+&quot;hardware&quot;. Para verificar se você está usando o
+&quot;LLVMpipe&quot;, revise a saída gerada do comando &quot;glxinfo&quot;
+acima. Um exemplo de saída gerada usando o &quot;Software Rasterizer&quot; é
+mostrado abaixo:
     </para>
 
 <screen><computeroutput>OpenGL vendor string: VMware, Inc.
@@ -185,124 +211,140 @@ OpenGL renderer string: Gallium 0.4 on llvmpipe (LLVM 3.5, 256 bits)
 OpenGL version string: 3.0 Mesa 10.4.5</computeroutput></screen>
 
     <para>
-      You can also force LLVMPipe by exporting the
-<envar>LIBGL_ALWAYS_SOFTWARE=1</envar> environment variable when starting
-Xorg.
+      Você também consegue forçar o &quot;LLVMPipe&quot; exportando a variável de
+ambiente &quot;<envar>LIBGL_ALWAYS_SOFTWARE=1</envar>&quot; ao iniciar o
+&quot;Xorg&quot;.
     </para>
 
     <para>
-      Again, if you have built the Mesa OpenGL demos, you can also run the test
-program <command>glxgears</command>. This program brings up a window with
-three gears turning. The X terminal will display how many frames were drawn
-every five seconds, so this will give a rough benchmark. The window is
-scalable, and the frames drawn per second is highly dependent on the size of
-the window. On some hardware, <command>glxgears</command> will run
-synchronized with the vertical refresh signal and the frame rate will be
-approximately the same as the monitor refresh rate.
+      Novamente, se você tiver construído os demonstrativos &quot;OpenGL&quot; do
+&quot;Mesa&quot;, [então] também poderá executar o aplicativo de teste
+&quot;<command>glxgears</command>&quot;. Esse aplicativo abre uma janela com
+três engrenagens girando. O terminal do &quot;X&quot; exibirá quantos
+quadros foram desenhados a cada cinco segundos, de forma que isso dará uma
+avaliação comparativa aproximada. A janela é escalonável e os quadros
+desenhados por segundo são altamente dependentes do tamanho da janela. Em
+alguns &quot;hardwares&quot;, o &quot;<command>glxgears</command>&quot;
+executará sincronizado com o sinal de atualização vertical e a taxa de
+quadros será aproximadamente a mesma que a taxa de atualização do monitor.
     </para>
 
   </sect2>
 
-  <sect2 role="configuration" id="xorg-debug" xreflabel="Debugging Xorg">
-    <title>Debugging Xorg</title>
+  <sect2 role="configuration" id="xorg-debug" xreflabel="Depurando o Xorg">
+    <title>Depurando o Xorg</title>
 
     <para>
-      When starting xorg, there are a couple of ways to check what any issues you
-may have.  If the system comes up, you can see what driver is being used by
-running <command>xdriinfo</command>. If there are issues or you just want to
-check, look at <filename>Xorg.0.log</filename>.
+      Ao iniciar o &quot;Xorg&quot;, existem algumas maneiras de verificar
+quaisquer problemas que você possa ter. Se o sistema funcionar, [então] você
+poderá ver qual controlador está sendo usado executando o
+&quot;<command>xdriinfo</command>&quot;. Se existirem problemas ou você
+quiser apenas verificar, {então} consulte <filename>Xorg.0.log</filename>.
     </para>
 
     <para>
-      The location of <filename>Xorg.0.log</filename> depends on how Xorg is
-installed.  If the instructions in the book are followed closely and Xorg is
-started from the command line, it will be located in the <filename
-class="directory">$HOME/.local/share/xorg/</filename> directory.  If Xorg is
-started by a display manager (e.g. <xref linkend='lightdm'/>, <xref
-linkend='lxdm'/>, or <xref linkend='gdm'/>) or if
-<filename>$XORG_PREFIX/libexec/Xorg</filename> has the suid bit set, it will
-be located in the <filename class="directory">/var/log/</filename>
-directory.
+      O local do &quot;<filename>Xorg.0.log</filename>&quot; depende de como o
+&quot;Xorg&quot; está instalado. Se as instruções no livro forem seguidas à
+risca e o &quot;Xorg&quot; for iniciado a partir da linha de comando,
+[então] ele estará localizado no diretório &quot;<filename
+class="directory">$HOME/.local/share/xorg/</filename>&quot;. Se o
+&quot;Xorg&quot; for iniciado por um gerenciador de exibição (por exemplo,
+&quot;<xref linkend='lightdm'/>&quot;, &quot;<xref linkend='lxdm'/>&quot; ou
+&quot;<xref linkend='gdm'/>&quot;) ou se
+&quot;<filename>$XORG_PREFIX/libexec /Xorg</filename>&quot; tiver o
+&quot;bit&quot; &quot;suid&quot; configurado, [então] ele estará localizado
+no diretório &quot;<filename class="directory">/var/log/</filename>&quot;.
     </para>
 
-    <bridgehead renderas="sect3">Xorg.0.log Issues</bridgehead>
+    <bridgehead renderas="sect3">Problemas do &quot;Xorg.0.log&quot;</bridgehead>
 
     <para>
-      When you look at Xorg.0.log, check for entries like (EE) or (WW).  Below are
-some common entries:
+      Ao olhar para o &quot;Xorg.0.log&quot;, verifique entradas como
+(&quot;EE&quot;) ou (&quot;WW&quot;). Abaixo estão algumas entradas comuns:
     </para>
 
     <bridgehead renderas="sect5">(WW) Open ACPI failed (/var/run/acpid.socket)</bridgehead>
 
     <para>
-      This warning is because <xref linkend='acpid'/> is not installed. If you are
-not on a laptop, it can be safely ignored. On a laptop, install <xref
-linkend='acpid'/> to enable actions like recognizing when the lid is closed.
+      Esse aviso ocorre porque o &quot;<xref linkend='acpid'/>&quot; não está
+instalado. Se você não estiver em um &quot;laptop&quot;, [então] ele pode
+ser seguramente ignorado. Em um &quot;laptop&quot;, instale o &quot;<xref
+linkend='acpid'/>&quot; para habilitar ações como reconhecer quando a tampa
+está fechada.
     </para>
 
     <bridgehead renderas="sect5">(WW) VGA arbiter: cannot open kernel arbiter, no multi-card support</bridgehead>
 
     <para>
-      This warning is displayed when a regular user starts Xorg.  The library
-<filename>libpciaccess.so</filename> issues this warning when it tries to
-open <filename>/dev/vga_arbiter</filename>.  If there is only one video card
-in the system, it can safely be ignored. If desired, the permissions of this
-device can be changed by adding a udev rule and adding the local user to the
-video group. As the &root; user:
+      Esse aviso é exibido quando um(a) usuário(a) normal inicia o
+&quot;Xorg&quot;. A biblioteca
+&quot;<filename>libpciaccess.so</filename>&quot; emite esse aviso quando ela
+tenta abrir o &quot;<filename>/dev/vga_arbiter</filename>&quot;. Se existir
+somente uma placa de vídeo no sistema, [então] ele pode ser seguramente
+ignorado. Se desejado, [então] as permissões desse dispositivo podem ser
+mudadas adicionando-se uma regra do &quot;Udev&quot; e adicionando-se o(a)
+usuário(a) local ao grupo de vídeo. Como o(a) usuário(a) &quot;&root;&quot;:
     </para>
 
 <screen role="root"><userinput>cat > /etc/udev/rules.d/99-vga-arbiter.rules &lt;&lt; EOF
-# /etc/udev/rules.d/99-vga-arbiter.rules: Set vga_arbiter group/mode
+# /etc/udev/rules.d/99-vga-arbiter.rules: Configura grupo/modo do "vga_arbiter"
 
 ACTION=="add", KERNEL=="vga_arbiter", GROUP="video" MODE="0660"
 EOF
 
-usermod -a -G video &lt;user running xorg&gt;</userinput></screen>
+usermod -a -G video &lt;usuário(a) executando o Xorg&gt;</userinput></screen>
 
     <bridgehead renderas="sect5">(EE) AIGLX error: dlopen of /opt/xorg/lib/dri/i965_dri.so failed</bridgehead>
 
   <para>
-    This error, accompanied by (EE) AIGLX error: unable to load driver i965,
-occurs in some systems with Intel based graphics devices.  It is caused by a
-mismatch between the current <xref linkend='xorg-server'/> and <xref
-linkend='mesa'/>. Xorg no longer uses the i965 driver and uses the crocus or
-iris mesa drivers as indicated by the <command>xdriinfo</command> command.
-It can safely be ignored.
+    Esse erro, acompanhado por &quot;(EE) AIGLX error: unable to load driver
+i965&quot;, ocorre em alguns sistemas com dispositivos gráficos baseados em
+Intel. Isso é causado por uma incompatibilidade entre o &quot;<xref
+linkend='xorg-server'/>&quot; e o &quot;<xref linkend='mesa'/>&quot;
+atuais. O &quot;Xorg&quot; não mais usa o controlador &quot;i965&quot; e usa
+os controladores Mesa &quot;crocus&quot; ou &quot;iris&quot;, conforme
+indicado pelo comando &quot;<command>xdriinfo</command>&quot;. Ele pode
+seguramente ser ignorado.
   </para>
 
   <para>
-    If desired, this warning can be removed by commenting out lines 330-331 and
-337-338 (LogMessage) of <filename>glx/glxdricommon.c</filename> in the <xref
-linkend='xorg-server'/> package.
+    Se desejado, [então] esse aviso pode ser removido comentando-se as linhas
+330-331 e 337-338 (&quot;LogMessage&quot;) do
+&quot;<filename>glx/glxdricommon.c</filename>&quot; no pacote &quot;<xref
+linkend='xorg-server'/>&quot;.
   </para>
 
   </sect2>
 
   <sect2 role="configuration" id="hybrid-graphics" xreflabel="Gráficos Híbridos">
-    <title>Hybrid Graphics</title>
+    <title>Gráficos Híbridos</title>
 
     <para>
-      Hybrid Graphics is still in experimental state for Linux. Xorg Developers
-have developed a technology called PRIME that can be used for switching
-between integrated and muxless discrete GPU at will. Automatic switching is
-not possible at the moment.
+      Os Gráficos Híbridos ainda estão em estado experimental para o Linux. Os(As)
+desenvolvedores(as) do &quot;Xorg&quot; desenvolveram uma tecnologia chamada
+&quot;PRIME&quot; que pode ser usada para comutar entre &quot;GPU&quot;
+discreta integrada e sem &quot;mux&quot; à vontade. A comutação automática
+não é possível no momento.
     </para>
 
     <para>
-      In order to use PRIME for GPU switching, make sure that you are using Linux
-Kernel 3.4 or later (recommended). You will need latest DRI and DDX drivers
-for your hardware and <application>Xorg Server</application> 1.13 or later.
+      Para a finalidade de usar a &quot;PRIME&quot; para comutação de
+&quot;GPU&quot;, certifique-se de que está usando o Núcleo Linux 3.4 ou
+posterior (recomendado). Você precisará dos controladores &quot;DRI&quot; e
+&quot;DDX&quot; mais recentes para o teu &quot;hardware&quot; e do
+<application>Servidor &quot;Xorg&quot;</application> 1.13 ou posterior.
     </para>
 
     <para>
-      <application>Xorg Server</application> should load both GPU drivers
-automatically. You can check that by running:
+      O <application>Servidor &quot;Xorg&quot;</application> deveria carregar
+ambos os controladores de &quot;GPU&quot; automaticamente. Você pode
+verificar isso executando:
     </para>
 
 <screen><userinput>xrandr --listproviders</userinput></screen>
 
     <para>
-      There should be two (or more) providers listed, for example:
+      Deveria existir dois (ou mais) provedores listados, por exemplo:
     </para>
 
 <screen><computeroutput>Providers: number : 2
@@ -310,107 +352,112 @@ Provider 0: id: 0x7d cap: 0xb, Source Output, Sink Output, Sink Offload crtcs: 3
 Provider 1: id: 0x56 cap: 0xf, Source Output, Sink Output, Source Offload, Sink Offload crtcs: 6 outputs: 1 associated providers: 1 name:radeon</computeroutput></screen>
 
     <para>
-      In order to be able to run a GLX application on a discrete GPU, you will
-need to run the following command, where &lt;provider&gt; is the more
-powerful discrete card, and &lt;sink&gt; is the card which has a display
-connected:
+      Para a finalidade de poder executar um aplicativo &quot;GLX&quot; em uma
+&quot;GPU&quot; discreta, você precisará executar o seguinte comando, onde
+&lt;provider&gt; é a placa discreta mais poderosa e &lt;sink&gt; é o cartão
+que tem uma tela conectada:
     </para>
 
 <screen><userinput>xrandr --setprovideroffloadsink <replaceable>&lt;provider&gt; &lt;sink&gt;</replaceable></userinput></screen>
 
     <note>
       <para>
-        With newer <application>Xorg</application> drivers, such as modesetting or
-intel, which are DRI3 capable, the above command is no longer necessary. It
-does no harm however.
+        Com controladores do &quot;<application>Xorg</application>&quot; mais
+recentes, como &quot;modesetting&quot; ou &quot;intel&quot;, que são
+compatíveis com &quot;DRI3&quot;, o comando acima não mais é necessário. No
+entanto, ele não danifica.
       </para>
     </note>
 
     <para>
-      Then, you will need to export the <envar>DRI_PRIME=1</envar> environment
-variable each time you want the powerful GPU to be used. For example,
-<screen><userinput>DRI_PRIME=1 glxinfo | grep -E "(OpenGL vendor|OpenGL renderer|OpenGL version)"</userinput></screen> will show OpenGL vendor, renderer and
-version for the discrete GPU.
+      Então, você precisará exportar a variável de ambiente
+&quot;<envar>DRI_PRIME=1</envar>&quot; toda vez que quiser que a poderosa
+&quot;GPU&quot; seja usada. Por exemplo, <screen><userinput>DRI_PRIME=1 glxinfo | grep -E "(OpenGL vendor|OpenGL renderer|OpenGL version)"</userinput></screen>
+mostrará o fornecedor, o renderizador e a versão do &quot;OpenGL&quot; para
+a &quot;GPU&quot; discreta.
     </para>
 
     <para>
-      If the last command reports same OpenGL renderer with and without
-<envar>DRI_PRIME=1</envar>, you will need to check your installation.
+      Se o último comando informar o mesmo renderizador &quot;OpenGL&quot; com e
+sem &quot;<envar>DRI_PRIME=1</envar>&quot;, [então] você precisará verificar
+a tua instalação.
     </para>
 
   </sect2>
 
   <sect2 role="configuration" id='xconfig'>
-    <title>Setting up Xorg Devices</title>
+    <title>Configurando Dispositivos do <quote>Xorg</quote></title>
 
     <para>
-      For most hardware configurations, modern Xorg will automatically get the
-server configuration correct without any user intervention. There are,
-however, some cases where auto-configuration will be incorrect.  Following
-are some example manual configuration items that may be of use in these
-instances.
+      Para a maioria das configurações de &quot;hardware&quot;, o &quot;Xorg&quot;
+moderno corrigirá automaticamente a configuração do servidor sem qualquer
+intervenção do(a) usuário(a). Existem, no entanto, alguns casos em que a
+configuração automática estará incorreta. A seguir estão alguns de itens de
+configuração manual de exemplo que possivelmente sejam de uso nesses casos.
     </para>
 
     <sect3 id="xinput">
-      <title>Setting up X Input Devices</title>
+      <title>Configurando Dispositivos de Entrada do <quote>X</quote></title>
       <para>
-        For most input devices, no additional configuration will be necessary. This
-section is provided for informational purposes only.
+        Para a maioria dos dispositivos de entrada, nenhuma configuração adicional
+será necessária. Esta seção é fornecida somente para fins informativos.
       </para>
 
       <para>
-        A sample default XKB setup could look like the following (executed as the
-<systemitem class="username">root</systemitem> user):
+        Uma amostra de configuração padrão do &quot;XKB&quot; poderia ser semelhante
+ao seguinte (executado como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;):
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/X11/xorg.conf.d/xkb-defaults.conf &lt;&lt; "EOF"
 <literal>Section "InputClass"
-    Identifier "XKB Defaults"
-    MatchIsKeyboard "yes"
-    Option "XkbLayout" "fr"
-    Option "XkbOptions" "terminate:ctrl_alt_bksp"
+     Identifier "XKB Defaults"
+     MatchIsKeyboard "yes"
+     Option "XkbLayout" "fr"
+     Option "XkbOptions" "terminate:ctrl_alt_bksp"
 EndSection</literal>
 EOF</userinput></screen>
 
       <para>
-        The <quote>XkbLayout</quote> line is an example for a French (AZERTY)
-keyboard. Change it to your keyboard model. That line is not needed for a
-QWERTY (US) keyboard.
+        A linha <quote>XkbLayout</quote> é um exemplo para um teclado francês
+(&quot;AZERTY&quot;). Mude-a para o modelo do teu teclado. Essa linha não é
+necessária para um teclado &quot;QWERTY&quot; (&quot;EUA&quot;).
       </para>
     </sect3>
 
     <sect3 id="xdisplay">
-      <title>Fine Tuning Display Settings</title>
+      <title>Configurações de Ajuste Fino de Exibição</title>
 
       <para>
-        Again, with modern Xorg, little or no additional configuration is
-necessary. If you should need extra options passed to your video driver, for
-instance, you could use something like the following (again, executed as the
-<systemitem class="username">root</systemitem> user):
+        Novamente, com o &quot;Xorg&quot; moderno, pouca ou nenhuma configuração
+adicional é necessária. Se devesse precisar de opções extras passadas para o
+teu controlador de vídeo, por exemplo, você poderia usar algo como o
+seguinte (novamente, executado como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;):
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/X11/xorg.conf.d/videocard-0.conf &lt;&lt; "EOF"
 <literal>Section "Device"
     Identifier  "Videocard0"
     Driver      "radeon"
-    VendorName  "Videocard vendor"
+    VendorName  "Fornecedor da placa de vídeo"
     BoardName   "ATI Radeon 7500"
     Option      "NoAccel" "true"
 EndSection</literal>
 EOF</userinput></screen>
 
       <para>
-        Another common setup is having multiple server layouts for use in different
-environments. Though the server will automatically detect the presence of
-another monitor, it may get the order incorrect:
+        Outra configuração comum é ter vários esquemas de servidor para uso em
+ambientes diferentes. Apesar de que o servidor automaticamente detectará a
+presença de outro monitor, ele possivelmente obtenha a ordem incorreta:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/X11/xorg.conf.d/server-layout.conf &lt;&lt; "EOF"
 <literal>Section "ServerLayout"
-    Identifier     "DefaultLayout"
-    Screen      0  "Screen0" 0 0
-    Screen      1  "Screen1" LeftOf "Screen0"
-    Option         "Xinerama"
+     Identifier     "DefaultLayout"
+     Screen      0  "Screen0" 0 0
+     Screen      1  "Screen1" LeftOf "Screen0"
+     Option         "Xinerama"
 EndSection</literal>
 EOF</userinput></screen>
 

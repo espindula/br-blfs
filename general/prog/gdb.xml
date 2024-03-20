@@ -7,9 +7,10 @@
   <!ENTITY gdb-download-http "&gnu-http;/gdb/gdb-&gdb-version;.tar.xz">
   <!ENTITY gdb-download-ftp  "&gnu-ftp;/gdb/gdb-&gdb-version;.tar.xz">
   <!ENTITY gdb-md5sum        "4aaad768ff2585464173c091947287ec">
-  <!ENTITY gdb-size          "23Mo">
-  <!ENTITY gdb-buildsize     "1.1 GB (add 406 MB for docs; add 373 MB for tests)">
-  <!ENTITY gdb-time          "2.1 SBU (Using parallelism=4; add 0.5 SBU for docs; add 20 SBU for tests)">
+  <!ENTITY gdb-size          "23 MB">
+  <!ENTITY gdb-buildsize     "1,1 GB (adicionar 406 MB para documentos; adicionar 373 MB para os testes)">
+  <!ENTITY gdb-time          "2,1 UPC (Usando paralelismo=4; adicionar 0,5 UPC para documentos; adicionar
+20 UPC para os testes)">
 ]>
 
 
@@ -26,14 +27,15 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a GDB</title>
+    <title>Introdução ao "GDB"</title>
 
     <para>
-      <application>GDB</application>, the GNU Project debugger, allows you to see
-what is going on <quote>inside</quote> another program while it executes --
-or what another program was doing at the moment it crashed.  Note that
-<application>GDB</application> is most effective when tracing programs and
-libraries that were built with debugging symbols and not stripped.
+      <application>GDB</application>, o depurador do Projeto "GNU", permite que
+você veja o que está acontecendo <quote>dentro</quote> de outro aplicativo
+enquanto ele é executado - ou o que outro aplicativo estava fazendo no
+momento em que travou. Observe que <application>GDB</application> é mais
+eficaz ao rastrear aplicativos e bibliotecas que foram construídos(as) com
+símbolos de depuração e não despojados(as).
     </para>
 
     &lfs113_checked;
@@ -52,7 +54,7 @@ libraries that were built with debugging symbols and not stripped.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &gdb-md5sum;
+          Soma de verificação MD5 da transferência: &gdb-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -84,12 +86,13 @@ Additional Downloads</bridgehead>
       </listitem>
     </itemizedlist>
 -->
-<bridgehead renderas="sect3">Dependências de GDB</bridgehead>
+<bridgehead renderas="sect3">Dependências do "GDB"</bridgehead>
 
-    <bridgehead renderas="sect4">Recommended Runtime Dependency</bridgehead>
+    <bridgehead renderas="sect4">Dependência de Tempo de Execução Recomendada</bridgehead>
     <para role="recommended">
-      <xref linkend="six"/> (Python 3 module, required at run-time to use GDB
-scripts from various LFS/BLFS packages with Python 3 installed in LFS)
+      <xref linkend="six"/> (módulo "Python" 3, exigido em tempo de execução para
+usar scripts GDB a partir de vários pacotes do LFS/BLFS com "Python" 3
+instalado no LFS)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -97,11 +100,12 @@ scripts from various LFS/BLFS packages with Python 3 installed in LFS)
       
       <!-- <xref linkend="dejagnu"/>
  (required for tests), -->
-<xref linkend="doxygen"/>, <xref linkend="gcc"/> (ada, gfortran, and go are
-used for tests), <xref linkend="guile"/>, <xref linkend="python2"/>, <xref
-linkend="rust"/> (used for some tests), <xref linkend="valgrind"/>, and
-<ulink url="https://sourceware.org/systemtap/">SystemTap</ulink> (run-time,
-used for tests)
+<xref linkend="doxygen"/>, <xref linkend="gcc"/> ("ada", "gfortran" e "go"
+são usadas para testes), <xref linkend="guile"/>, <xref linkend="python2"/>,
+<xref linkend="rust"/> (usado para alguns testes), <xref
+linkend="valgrind"/> e <ulink
+url="https://sourceware.org/systemtap/">SystemTap</ulink> (tempo de
+execução, usado para testes)
     </para>
 
     <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gdb"/>
@@ -109,14 +113,14 @@ used for tests)
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de GDB</title>
+    <title>Instalação do "GDB"</title>
 
     <para>
       Instale <application>GDB</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd    build &amp;&amp;
+cd   build &amp;&amp;
 
 ../configure --prefix=/usr          \
              --with-system-readline \
@@ -124,40 +128,40 @@ cd    build &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Optionally, to build the API documentation using <xref linkend="doxygen"/>,
-run:
+      Opcionalmente, para construir a documentação da "API" usando <xref
+linkend="doxygen"/>, execute:
     </para>
 
 <screen remap="doc"><userinput>make -C gdb/doc doxy</userinput></screen>
 
     <para>
-      To test the results, issue:
+      Para testar os resultados, emita:
     </para>
 
 <screen remap="test"><userinput>pushd gdb/testsuite &amp;&amp;
-make  site.exp      &amp;&amp;
+make  site.exp     &amp;&amp;
 echo  "set gdb_test_timeout 120" &gt;&gt; site.exp &amp;&amp;
 runtest
 popd</userinput></screen>
 
     <para>
-      See <emphasis>gdb/testsuite/README</emphasis> and <ulink
-url="https://sourceware.org/gdb/wiki/TestingGDB">TestingGDB</ulink>.  There
-are many problems with the test suite:
+      Veja-se <emphasis>gdb/testsuite/README</emphasis> e <ulink
+url="https://sourceware.org/gdb/wiki/TestingGDB">TestingGDB</ulink>. Existem
+muitos problemas com a suíte de teste:
     </para>
 
     <itemizedlist>
       <listitem>
         <para>
-          Clean directories are needed if re-running the tests.  For that reason, make
-a copy of the compiled source code directory before the tests in case you
-need to run the tests again.
+          Diretórios limpos são necessários se reexecutar-se os testes. Por esse
+motivo, produza uma cópia do diretório do código-fonte compilado antes dos
+testes, caso precise executar os testes novamente.
         </para>
       </listitem>
 
       <listitem>
         <para>
-          Results depend on installed compilers.
+          Os resultados dependem dos compiladores instalados.
         </para>
       </listitem>
 
@@ -213,21 +217,22 @@ or this
           A test run of the test suite had a little over 200 unexpected failures
           out of over 94000 tests.-->
 <!-- for gdb-13.0, gcc-12.2.0 - bdubbs -->
-A test run of the test suite had 33 unexpected failures out of over 106000
-tests.
+Uma execução de teste da suíte de teste teve trinta e três (33) falhas
+inesperadas em mais de cento e seis mil (106.000) testes.
         </para>
       </listitem>
 
       <listitem>
         <para>
-          On some systems, the gdb.tui test suite will fail if running over SSH.
+          Em alguns sistemas, a suíte de teste "gdb.tui" falhará se executada em SSH.
         </para>
       </listitem>
 
       <listitem>
         <para>
-          On some AMD-based systems, over 200 additional tests may fail due to a
-difference in the threading implementation on those CPUs.
+          Em alguns sistemas baseados em "AMD", mais que duzentos (200) testes
+adicionais possivelmente falhem devido a uma diferença na implementação de
+camadas nessas "CPUs".
         </para>
       </listitem>
 
@@ -240,8 +245,9 @@ difference in the threading implementation on those CPUs.
 <screen role="root"><userinput>make -C gdb install</userinput></screen>
 
     <para>
-      If you have built the API documentation, it is now in gdb/doc/doxy.  You can
-install it (as the <systemitem class="username">root</systemitem> user):
+      Se você construiu a documentação da "API", [então] ela agora está em
+"gdb/doc/doxy". Você consegue instalá-la (como o(a) usuário(a) <systemitem
+class="username">root</systemitem>):
     </para>
 
 <screen role="root"
@@ -255,22 +261,22 @@ cp -Rv gdb/doc/doxy /usr/share/doc/gdb-&gdb-version;</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--with-system-readline</parameter>: This switch forces
-<application>GDB</application> to use the copy of
-<application>Readline</application> installed in LFS.
+      <parameter>--with-system-readline</parameter>: Essa chave força o
+<application>GDB</application> a usar a cópia do
+<application>Readline</application> instalada no LFS.
     </para>
 
     <para>
-      <parameter>--with-python=/usr/bin/python3</parameter>: This switch forces
-<application>GDB</application> to use Python 3.  Remove this switch if you
-have installed <xref linkend="python2"/> and want to use it instead of
-Python 3.
+      <parameter>--with-python=/usr/bin/python3</parameter>: Essa chave força o
+<application>GDB</application> a usar o "Python" 3. Remova essa chave se
+você instalou o <xref linkend="python2"/> e deseja usá-lo em vez do "Python"
+3.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -279,15 +285,15 @@ Python 3.
 
       <seglistitem>
         <seg>
-          gcore, gdb and gdbserver
+          gcore, gdb e gdbserver
         </seg>
         <seg>
           
           <!--libinproctrace.so-->
-None
+Nenhum(a)
         </seg>
         <seg>
-          /usr/{include,share}/gdb and /usr/share/doc/gdb-&gdb-version;
+          /usr/{include,share}/gdb e /usr/share/doc/gdb-&gdb-version;
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -300,7 +306,7 @@ None
         <term><command>gcore</command></term>
         <listitem>
           <para>
-            generates a core dump of a running program
+            gera um despejo principal de um aplicativo em execução
           </para>
           <indexterm zone="gdb gcore">
             <primary sortas="b-gcore">gcore</primary>
@@ -312,7 +318,7 @@ None
         <term><command>gdb</command></term>
         <listitem>
           <para>
-            is the GNU Debugger
+            é o Depurador "GNU"
           </para>
           <indexterm zone="gdb gdb-prog">
             <primary sortas="b-gdb-prog">gdb-prog</primary>
@@ -324,8 +330,8 @@ None
         <term><command>gdbserver</command></term>
         <listitem>
           <para>
-            is a remote server for the GNU debugger (it allows programs to be debugged
-from a different machine)
+            é um servidor remoto para o depurador "GNU" (permite que aplicativos sejam
+depurados a partir de uma máquina diferente)
           </para>
           <indexterm zone="gdb gdbserver">
             <primary sortas="b-gdbserver">gdbserver</primary>

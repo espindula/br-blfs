@@ -8,9 +8,9 @@
   "https://www.dovecot.org/releases/&dovecot-major;.&dovecot-minor;/dovecot-&dovecot-version;.tar.gz">
   <!ENTITY dovecot-download-ftp  "">
   <!ENTITY dovecot-md5sum        "b8add62d0311dcc95ac25b379e8ba043">
-  <!ENTITY dovecot-size          "7,4Mo">
+  <!ENTITY dovecot-size          "7,4 MB">
   <!ENTITY dovecot-buildsize     "235 MB">
-  <!ENTITY dovecot-time          "4,8UPC">
+  <!ENTITY dovecot-time          "4,8 UPC">
 ]>
 
 <sect1 id="dovecot" xreflabel="Dovecot-&dovecot-version;">
@@ -24,14 +24,15 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Dovecot</title>
+    <title>Introdução ao <quote>Dovecot</quote></title>
 
     <para>
-      <application>Dovecot</application> is an Internet Message Access Protocol
-(IMAP) and Post Office Protocol (POP) server, written primarily with
-security in mind. <application>Dovecot</application> aims to be lightweight,
-fast and easy to set up as well as highly configurable and easily extensible
-with plugins.
+      O &quot;<application>Dovecot</application>&quot; é um servidor
+&quot;Internet Message Access Protocol&quot; (&quot;IMAP&quot;) e &quot;Post
+Office Protocol&quot; (&quot;POP&quot;), escrito principalmente com a
+segurança em mente. &quot;<application>Dovecot</application>&quot; pretende
+ser leve, rápido e fácil de configurar, bem como altamente configurável e
+facilmente extensível com &quot;plug-ins&quot;.
     </para>
 
     &lfs113_checked;
@@ -50,7 +51,7 @@ with plugins.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &dovecot-md5sum;
+          Soma de verificação MD5 da transferência: &dovecot-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -86,9 +87,9 @@ url="&patch-root;/dovecot-&dovecot-version;-security_fix-1.patch"/>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Dovecot</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;Dovecot&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="libtirpc"/>
     </para>
@@ -97,13 +98,13 @@ url="&patch-root;/dovecot-&dovecot-version;-security_fix-1.patch"/>
     <para role="optional">
       <xref linkend="clucene"/>, <xref linkend="icu"/>, <xref
 linkend="libcap-pam"/>, <xref linkend="linux-pam"/>, <xref linkend="lua"/>,
-<xref linkend="mariadb"/> or <ulink
+<xref linkend="mariadb"/> ou <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
 <xref linkend="postgresql"/>, <xref linkend="sqlite"/>, <xref
 linkend="valgrind"/>, <xref linkend="xfsprogs"/>, <ulink
 url="https://cassandra.apache.org/">Cassandra</ulink>, <ulink
 url="https://github.com/Cyan4973/lz4">lz4</ulink>, <ulink
-url="https://github.com/shibukawa/snowball_py">stemmer</ulink> and <ulink
+url="https://github.com/shibukawa/snowball_py">stemmer</ulink> e <ulink
 url="https://libsodium.gitbook.io/doc/">libsodium</ulink>
     </para>
 
@@ -112,40 +113,43 @@ url="https://libsodium.gitbook.io/doc/">libsodium</ulink>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Dovecot</title>
+    <title>Instalação do <quote>Dovecot</quote></title>
 
     <para>
-      There should be dedicated users and groups for unprivileged Dovecot
-processes and for processing users' logins. Issue the following commands as
-the <systemitem class="username">root</systemitem> user:
+      Deveria existir usuários(as) e grupos dedicados(as) para processos sem
+privilégios do &quot;Dovecot&quot; e para processamento de
+&quot;logins&quot; de usuários(as). Emita os seguintes comandos como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -g 42 dovecot &amp;&amp;
-useradd -c "Dovecot unprivileged user" -d /dev/null -u 42 \
+useradd -c "Usuário(a) sem privilégios do Dovecot" -d /dev/null -u 42 \
         -g dovecot -s /bin/false dovecot &amp;&amp;
 groupadd -g 43 dovenull &amp;&amp;
-useradd -c "Dovecot login user" -d /dev/null -u 43 \
+useradd -c "Usuário(a) de login do Dovecot" -d /dev/null -u 43 \
         -g dovenull -s /bin/false dovenull</userinput></screen>
 
     <para>
-      First, apply a patch to fix problems with OpenSSL-3:
+      Primeiro, aplique um remendo para corrigir problemas com o
+&quot;OpenSSL-3&quot;:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../dovecot-&dovecot-version;-openssl3_fixes-1.patch</userinput></screen>
 
     <para>
-      Next, apply a patch to fix a security vulnerability:
+      A seguir, aplique um remendo para corrigir uma vulnerabilidade de segurança:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../dovecot-&dovecot-version;-security_fix-1.patch</userinput></screen>
 
     <para>
-      Instale <application>Dovecot</application> executando os seguintes comandos:
+      Instale o &quot;<application>Dovecot</application>&quot; executando os
+seguintes comandos:
     </para>
 
 <screen revision="sysv"><userinput>CPPFLAGS="-I/usr/include/tirpc" \
 LDFLAGS+=" -ltirpc" \
-./configure --prefix=/usr                          \
+./configure --prefix=/usr                         \
             --sysconfdir=/etc                      \
             --localstatedir=/var                   \
             --with-systemd=no                      \
@@ -155,7 +159,7 @@ make</userinput></screen>
 
 <screen revision="systemd"><userinput>CPPFLAGS="-I/usr/include/tirpc" \
 LDFLAGS+=" -ltirpc" \
-./configure --prefix=/usr                          \
+./configure --prefix=/usr                         \
             --sysconfdir=/etc                      \
             --localstatedir=/var                   \
             --docdir=/usr/share/doc/dovecot-&dovecot-version; \
@@ -167,11 +171,13 @@ make</userinput></screen>
       may be reported if <xref linkend="valgrind"/>
  is present when running
       the test.-->
-Para testar os resultados, emita: <command>make -k check</command>. 
+Para testar os resultados, emita &quot;<command>make -k
+check</command>&quot;. 
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -182,8 +188,9 @@ Para testar os resultados, emita: <command>make -k check</command>.
     <title>Explicações do Comando</title>
 
     <para>
-      <command>CPPFLAGS=... LDFLAGS+=...</command>: build with libtirpc instead of
-the recently removed RPC code provided by GlibC.
+      <command>CPPFLAGS=... LDFLAGS+=...</command>: construa com
+&quot;libtirpc&quot; em vez do código &quot;RPC&quot; recentemente removido
+fornecido pela &quot;GlibC&quot;.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -200,34 +207,34 @@ the recently removed RPC code provided by GlibC.
     </para>
     -->
 <para>
-      <option>--with-ldap</option>: This switch enables
-<application>OpenLDAP</application> authentication support.
+      <option>--with-ldap</option>: Essa chave habilita o suporte a autenticação
+&quot;<application>OpenLDAP</application>&quot;.
     </para>
 
     <para>
-      <option>--with-pgsql</option>: This switch enables
-<application>PostgreSQL</application> database support.
+      <option>--with-pgsql</option>: Essa chave habilita o suporte a base de dados
+&quot;<application>PostgreSQL</application>&quot;.
     </para>
 
     <para>
-      <option>--with-mysql</option>: This switch enables
-<application>MySQL</application> database support.
+      <option>--with-mysql</option>: Essa chave habilita o suporte a base de dados
+&quot;<application>MySQL</application>&quot;.
     </para>
 
     <para>
-      <option>--with-sqlite</option>: This switch enables
-<application>SQLite</application> database support.
+      <option>--with-sqlite</option>: Essa chave habilita o suporte a base de
+dados &quot;<application>SQLite</application>&quot;.
     </para>
 
     <para>
-      <option>--with-lucene</option>: This switch enables
-<application>CLucene</application> full text search support.
+      <option>--with-lucene</option>: Essa chave habilita o suporte pesquisa
+completa de texto &quot;<application>CLucene</application>&quot;.
     </para>
 
     <para>
-      <option>--with-lua</option>: This switch enables
-<application>Lua</application> plugin support. This includes a mail and push
-notification plugin.
+      <option>--with-lua</option>: Essa chave habilita o suporte ao
+&quot;plugin&quot; &quot;<application>Lua</application>&quot;. Isso inclui
+um &quot;plugin&quot; de notificação de mensagem e envio.
     </para>
 
 
@@ -241,14 +248,14 @@ notification plugin.
 </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando Dovecot</title>
+    <title>Configurando o <quote>Dovecot</quote></title>
 
     <sect3 id="dovecot-config">
       <title>Arquivos de Configuração</title>
 
       <para>
         <filename>/etc/dovecot/dovecot.conf</filename>,
-<filename>/etc/dovecot/conf.d/*</filename>, and
+<filename>/etc/dovecot/conf.d/*</filename> e
 <filename>/etc/dovecot/local.conf</filename>
       </para>
 
@@ -268,17 +275,20 @@ notification plugin.
       <title>Informação de Configuração</title>
 
       <para>
-        Copy an example configuration, which you can use as a starting point:
+        Copie uma configuração de exemplo, a qual você pode usar como um ponto de
+partida:
       </para>
 
 <screen role="root"><userinput>cp -rv /usr/share/doc/dovecot-&dovecot-version;/example-config/* /etc/dovecot</userinput></screen>
 
       <para>
-        The following configuration is a simple proof of concept with IMAP service
-using local users for authentication and mailbox location.  Reading files
-from the <filename class="directory">conf.d</filename> directory is
-commented out since the included example configuration requires
-<application>OpenSSL</application> and <application>Linux PAM</application>.
+        A configuração a seguir é uma simples prova de conceito com serviço
+&quot;IMAP&quot; usando usuários(as) locais para autenticação e local de
+caixa de mensagens. A leitura de arquivos a partir do diretório
+&quot;<filename class="directory">conf.d</filename>&quot; está comentada,
+pois a configuração de exemplo inclusa exige
+&quot;<application>OpenSSL</application>&quot; e &quot;<application>Linux
+PAM</application>&quot;.
       </para>
 
 <screen role="root"><userinput>sed -i '/^\!include / s/^/#/' /etc/dovecot/dovecot.conf &amp;&amp;
@@ -286,7 +296,7 @@ chmod -v 1777 /var/mail &amp;&amp;
 cat &gt; /etc/dovecot/local.conf &lt;&lt; "EOF"
 <literal>protocols = imap
 ssl = no
-# The next line is only needed if you have no IPv6 network interfaces
+# A próxima linha é necessária somente se você não tiver interfaces de rede de intercomunicação "IPv6"
 listen = *
 mail_location = mbox:~/Mail:INBOX=/var/mail/%u
 userdb {
@@ -298,27 +308,30 @@ passdb {
 EOF</userinput></screen>
 
       <para>
-        You will definitely want to read the official documentation at <ulink
-url="https://wiki2.dovecot.org/"/> if you plan to use
-<application>Dovecot</application> in a production environment.
+        Você definitivamente vai querer ler a documentação oficial em <ulink
+url="https://wiki2.dovecot.org/"/> se planeja usar o
+&quot;<application>Dovecot</application>&quot; em um ambiente de produção.
       </para>
 
     </sect3>
 
     <sect3 id="dovecot-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para revision="sysv">
-        If you want the <application>Dovecot</application> server to start
-automatically when the system is booted, install the
-<filename>/etc/rc.d/init.d/dovecot</filename> init script included in the
-<xref linkend="bootscripts"/> package.
+        Se você quer que o servidor &quot;<application>Dovecot</application>&quot;
+inicie automaticamente quando o sistema for inicializado, [então] instale o
+conjunto de comandos sequenciais de iniciação
+&quot;<filename>/etc/rc.d/init.d/dovecot</filename>&quot; incluso no pacote
+&quot;<xref linkend="bootscripts"/>&quot;.
       </para>
 
       <para revision="systemd">
-        To start the <command>dovecot</command> daemon at boot, enable the
-previously installed systemd unit with the following command:
+        Para iniciar o processo de segundo plano
+&quot;<command>dovecot</command>&quot; na inicialização, habilite a unidade
+do &quot;systemd&quot; instalada anteriormente com o seguinte comando:
       </para>
 
       <indexterm zone="dovecot dovecot-init">
@@ -334,7 +347,7 @@ previously installed systemd unit with the following command:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -343,14 +356,14 @@ previously installed systemd unit with the following command:
 
       <seglistitem>
         <seg>
-          doveadm, doveconf, dovecot, dovecot-sysreport, and dsync (symbolic link)
+          doveadm, doveconf, dovecot, dovecot-sysreport e dsync (link simbólico)
         </seg>
         <seg>
-          various internal plugins in <filename
-class="directory">/usr/lib/dovecot</filename>
+          vários &quot;plugins&quot; internos em &quot;<filename
+class="directory">/usr/lib/dovecot</filename>&quot;
         </seg>
         <seg>
-          /etc/dovecot, /usr/{include,lib,libexec,share}/dovecot and
+          /etc/dovecot, /usr/{include,lib,libexec,share}/dovecot e
 /usr/share/doc/dovecot-&dovecot-version;
         </seg>
       </seglistitem>
@@ -364,7 +377,8 @@ class="directory">/usr/lib/dovecot</filename>
         <term><command>doveadm</command></term>
         <listitem>
           <para>
-            is the <application>Dovecot</application> administration tool
+            é a ferramenta de administração do
+&quot;<application>Dovecot</application>&quot;
           </para>
           <indexterm zone="dovecot doveadm">
             <primary sortas="b-doveadm">doveadm</primary>
@@ -376,7 +390,8 @@ class="directory">/usr/lib/dovecot</filename>
         <term><command>doveconf</command></term>
         <listitem>
           <para>
-            is <application>Dovecot</application>'s configuration dumping utility
+            é o utilitário de despejo da configuração do
+&quot;<application>Dovecot</application>&quot;
           </para>
           <indexterm zone="dovecot doveconf">
             <primary sortas="b-doveconf">doveconf</primary>
@@ -388,7 +403,7 @@ class="directory">/usr/lib/dovecot</filename>
         <term><command>dovecot</command></term>
         <listitem>
           <para>
-            is the IMAP and POP server
+            é o servidor &quot;IMAP&quot; e &quot;POP&quot;
           </para>
           <indexterm zone="dovecot dovecot-prog">
             <primary sortas="b-dovecot">dovecot</primary>
@@ -400,8 +415,8 @@ class="directory">/usr/lib/dovecot</filename>
         <term><command>dovecot-sysreport</command></term>
         <listitem>
           <para>
-            prints system information that is useful to the Dovecot developers when
-submitting bug reports upstream
+            imprime informações do sistema que são úteis para os(as) desenvolvedores(as)
+do &quot;Dovecot&quot; ao submeter informes de defeitos
           </para>
           <indexterm zone="dovecot dovecot-sysreport">
             <primary sortas="b-dovecot-sysreport">dovecot-sysreport</primary>
@@ -413,7 +428,8 @@ submitting bug reports upstream
         <term><command>dsync</command></term>
         <listitem>
           <para>
-            is <application>Dovecot</application>'s mailbox synchronization utility
+            é o utilitário de sincronização de caixa de mensagem do
+&quot;<application>Dovecot</application>&quot;
           </para>
           <indexterm zone="dovecot dsync">
             <primary sortas="b-dsync">dsync</primary>

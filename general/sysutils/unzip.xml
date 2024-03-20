@@ -7,9 +7,9 @@
   <!ENTITY unzip-download-http "&sourceforge-dl;/infozip/unzip60.tar.gz">
   <!ENTITY unzip-download-ftp  "ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz">
   <!ENTITY unzip-md5sum        "62b490407489521db863b523a7f86375">
-  <!ENTITY unzip-size          "1,3Mo">
-  <!ENTITY unzip-buildsize     "9Mo">
-  <!ENTITY unzip-time          "menos que 0,1UPC">
+  <!ENTITY unzip-size          "1,3 MB">
+  <!ENTITY unzip-buildsize     "9 MB">
+  <!ENTITY unzip-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="unzip" xreflabel="UnZip-&unzip-version;">
@@ -23,27 +23,28 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a UnZip</title>
+    <title>Introdução ao "UnZip"</title>
 
     <para>
-      The <application>UnZip</application> package contains
-<filename>ZIP</filename> extraction utilities. These are useful for
-extracting files from <filename>ZIP</filename> archives.
-<filename>ZIP</filename> archives are created with
-<application>PKZIP</application> or <application>Info-ZIP</application>
-utilities, primarily in a DOS environment.
+      O pacote <application>UnZip</application> contém utilitários de extração
+<filename>ZIP</filename>. Eles são úteis para extrair arquivos a partir de
+arquivamentos <filename>ZIP</filename>. Os arquivamentos
+<filename>ZIP</filename> são criados com os utilitários
+<application>PKZIP</application> ou <application>Info-ZIP</application>,
+principalmente em um ambiente "DOS".
     </para>
 
     &lfs113_checked;
 
     <caution>
       <para>
-        The previous version of the <application>UnZip</application> package had
-some locale related issues. Currently there are no BLFS editors capable of
-testing these locale issues. Therefore, the locale related information is
-left on this page, but has not been tested. A more general discussion of
-these problems can be found in the <xref linkend="locale-assumed-encoding"/>
-section of the <xref linkend="locale-issues"/> page.
+        A versão anterior do pacote <application>UnZip</application> tinha alguns
+problemas relacionados à localidade. Atualmente não existem editores(as) do
+BLFS capazes de testar esses problemas de localidade. Portanto, as
+informações relacionadas à localidade são deixadas nesta página, mas não
+foram testadas. Uma discussão mais geral desses problemas pode ser
+encontrada na seção <xref linkend="locale-assumed-encoding"/> da página
+<xref linkend="locale-issues"/>.
       </para>
     </caution>
 
@@ -61,7 +62,7 @@ section of the <xref linkend="locale-issues"/> page.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &unzip-md5sum;
+          Soma de verificação MD5 da transferência: &unzip-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -96,64 +97,65 @@ url="&patch-root;/unzip-&unzip-version;-consolidated_fixes-1.patch"/>
   </sect2>
 
   <sect2 id="unzip-locale-issues">
-    <title>UnZip Locale Issues</title>
+    <title>Problemas de Localidade do "UnZip"</title>
 
     <note>
       <para>
-        Use of <application>UnZip</application> in the
-<application>JDK</application>, <application>Mozilla</application>,
-<application>DocBook</application> or any other BLFS package installation is
-not a problem, as BLFS instructions never use
-<application>UnZip</application> to extract a file with non-ASCII characters
-in the file's name.
+        O uso de <application>UnZip</application> no <application>JDK</application>,
+<application>Mozilla</application>, <application>DocBook</application> ou
+qualquer outra instalação de pacote do BLFS não é um problema, pois as
+instruções do BLFS nunca usam <application>UnZip</application> para extrair
+um arquivo com caracteres não "ASCII" no nome do arquivo.
       </para>
     </note>
 
     <para>
-      These issues are thought to be fixed in the patch. But since none of the
-editors have data to test this, the following workarounds are retained in
-case they might still be needed.
+      Esses problemas são presumidos terem sido corrigidos no remendo. Mas, como
+nenhum(a) dos(a) editores(a) tem dados para testar isso, as seguintes
+soluções alternativas são mantidas caso ainda sejam necessárias.
     </para>
 
     <para>
-      The <application>UnZip</application> package assumes that filenames stored
-in the ZIP archives created on non-Unix systems are encoded in CP850, and
-that they should be converted to ISO-8859-1 when writing files onto the
-filesystem. Such assumptions are not always valid. In fact, inside the ZIP
-archive, filenames are encoded in the DOS codepage that is in use in the
-relevant country, and the filenames on disk should be in the locale
-encoding. In MS Windows, the OemToChar() C function (from
-<filename>User32.DLL</filename>) does the correct conversion (which is
-indeed the conversion from CP850 to a superset of ISO-8859-1 if MS Windows
-is set up to use the US English language), but there is no equivalent in
-Linux.
+      O pacote <application>UnZip</application> assume que os nomes de arquivos
+armazenados nos arquivamentos "ZIP" criados em sistemas não Unix estejam
+codificados em "CP850" e que deveriam ser convertidos para "ISO-8859-1" ao
+escrever arquivos no sistema de arquivos. Tais suposições nem sempre são
+válidas. Na verdade, dentro do arquivamento "ZIP", os nomes dos arquivos são
+codificados na página de códigos do "DOS" que estiver em uso no país
+relevante, e os nomes dos arquivos no disco deveriam estar na codificação da
+localidade. No "MS Windows", a função C "OemToChar()" (originária de
+<filename>User32.DLL</filename>) faz a conversão correta (que é, de fato, a
+conversão de "CP850" para um superconjunto de "ISO-8859-1", se o "MS
+Windows" estiver configurado para usar o idioma inglês dos Estados Unidos da
+América do Norte), mas não existe equivalente no Linux.
     </para>
 
     <para>
-      When using <command>unzip</command> to unpack a ZIP archive containing
-non-ASCII filenames, the filenames are damaged because
-<command>unzip</command> uses improper conversion when any of its encoding
-assumptions are incorrect. For example, in the ru_RU.KOI8-R locale,
-conversion of filenames from CP866 to KOI8-R is required, but conversion
-from CP850 to ISO-8859-1 is done, which produces filenames consisting of
-undecipherable characters instead of words (the closest equivalent
-understandable example for English-only users is rot13). There are several
-ways around this limitation:
+      Ao usar <command>unzip</command> para desempacotar um arquivamento "ZIP"
+contendo nomes de arquivos não "ASCII", os nomes dos arquivos são
+danificados porque <command>unzip</command> usa conversão inadequada quando
+qualquer uma das suposições dele de codificação estiver incorreta. Por
+exemplo, na localidade "ru_RU.KOI8-R", a conversão de nomes de arquivos de
+"CP866" para "KOI8-R" é necessária, mas a conversão de "CP850" para
+"ISO-8859-1" é feita, o que produz nomes de arquivos que consistem em
+caracteres indecifráveis em vez de palavras (o mais próximo exemplo
+compreensível equivalente para usuários(as) somente em inglês é
+"rot13"). Existem várias maneiras de contornar essa limitação:
     </para>
 
     <para>
-      1) For unpacking ZIP archives with filenames containing non-ASCII
-characters, use <ulink url="https://www.winzip.com/">WinZip</ulink> while
-running the <ulink url="https://www.winehq.com/">Wine</ulink> Windows
-emulator.
+      1) Para descompactar arquivamentos "ZIP" com nomes de arquivos contendo
+caracteres não "ASCII", use <ulink
+url="https://www.winzip.com/">WinZip</ulink> enquanto executa o emulador de
+"Windows" <ulink url="https://www.winehq.com/">Wine</ulink>.
     </para>
 
     <para>
-      2) Use <command>bsdtar -xf</command> from <xref role="nodep"
-linkend="libarchive"/> to unpack the ZIP archive.  Then fix the damage made
-to the filenames using the <command>convmv</command> tool (<ulink
-url="https://j3e.de/linux/convmv/"/>). The following is an example for the
-zh_CN.UTF-8 locale:
+      2) Use <command>bsdtar -xf</command> oriundo de <xref role="nodep"
+linkend="libarchive"/> para descompactar o arquivamento "ZIP". Em seguida,
+corrija os danos causados aos nomes dos arquivos usando a ferramenta
+<command>convmv</command> (<ulink url="https://j3e.de/linux/convmv/"/>). A
+seguir está um exemplo para a localidade "zh_CN.UTF-8":
     </para>
 
 <!--
@@ -182,27 +184,27 @@ zh_CN.UTF-8 locale:
     </para>
 -->
 <screen><userinput>convmv -f cp936 -t utf-8 -r --nosmart --notest \
-    <replaceable>&lt;/path/to/unzipped/files&gt;</replaceable></userinput></screen>
+    <replaceable>&lt;/caminho/para/arquivos/descomprimidos&gt;</replaceable></userinput></screen>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de UnZip</title>
+    <title>Instalação do "UnZip"</title>
 
     <para>
-      First apply the patch:
+      Primeiro aplique o remendo:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../unzip-&unzip-version;-consolidated_fixes-1.patch</userinput></screen>
 
     <para>
-      Now compile the package:
+      Agora compile o pacote:
     </para>
 
 <screen><userinput>make -f unix/Makefile generic</userinput></screen>
 
     <para>
-      The test suite does not work for target <quote>generic</quote>.
+      A suíte de teste não funciona para o alvo <quote>generic</quote>.
     </para>
 
     <para>
@@ -210,7 +212,7 @@ zh_CN.UTF-8 locale:
     </para>
 
 <screen role="root"><userinput>make prefix=/usr MANDIR=/usr/share/man/man1 \
- -f unix/Makefile install</userinput></screen>
+-f unix/Makefile install</userinput></screen>
 
   </sect2>
 
@@ -218,17 +220,18 @@ zh_CN.UTF-8 locale:
     <title>Explicações do Comando</title>
 
     <para>
-      <command>make -f unix/Makefile generic</command>: This target begins by
-running a configure script (unlike the older targets such as linux and
-linux_noasm) which creates a flags file that is then used in the build. This
-ensures that the 32-bit x86 build receives the right flags to unzip files
-which which are larger than 2GB when extracted.
+      <command>make -f unix/Makefile generic</command>: Esse alvo começa
+executando um script de configuração (ao contrário dos alvos mais antigos,
+como "linux" e "linux_noasm") que cria um arquivo de sinalizadores que é
+então usado na construção. Isso garante que a construção "x86" de 32 bits
+receba os sinalizadores corretos para descompactar arquivos os quais sejam
+maiores que 2 GB quando extraídos.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -236,9 +239,9 @@ which which are larger than 2GB when extracted.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>funzip, unzip, unzipfsx, zipgrep, and zipinfo</seg>
-        <seg>None</seg>
-        <seg>None</seg>
+        <seg>funzip, unzip, unzipfsx, zipgrep e zipinfo</seg>
+        <seg>Nenhum(a)</seg>
+        <seg>Nenhum(a)</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -250,7 +253,8 @@ which which are larger than 2GB when extracted.
         <term><command>funzip</command></term>
         <listitem>
           <para>
-            allows the output of <command>unzip</command> commands to be redirected
+            permite que a saída gerada dos comandos <command>unzip</command> seja
+redirecionada
           </para>
           <indexterm zone="unzip funzip">
             <primary sortas="b-funzip">funzip</primary>
@@ -262,7 +266,8 @@ which which are larger than 2GB when extracted.
         <term><command>unzip</command></term>
         <listitem>
           <para>
-            lists, tests or extracts files from a <filename>ZIP</filename> archive
+            lista, testa ou extrai arquivos a partir de um arquivamento
+<filename>ZIP</filename>
           </para>
           <indexterm zone="unzip unzip-prog">
             <primary sortas="b-unzip">unzip</primary>
@@ -274,10 +279,9 @@ which which are larger than 2GB when extracted.
         <term><command>unzipfsx</command></term>
         <listitem>
           <para>
-            is a self-extracting stub that can be prepended to a
-<filename>ZIP</filename> archive.  Files in this format allow the recipient
-to decompress the archive without installing
-<application>UnZip</application>
+            é um toco auto-extraível que pode ser preposto a um arquivamento
+<filename>ZIP</filename>. Arquivos nesse formato permitem ao destinatário
+descomprimir o arquivamento sem instalar o <application>UnZip</application>
           </para>
           <indexterm zone="unzip unzipfsx">
             <primary sortas="b-unzipfsx">unzipfsx</primary>
@@ -289,8 +293,8 @@ to decompress the archive without installing
         <term><command>zipgrep</command></term>
         <listitem>
           <para>
-            searches files in a <filename>ZIP</filename> archive for lines matching a
-pattern
+            pesquisa arquivos em um arquivamento <filename>ZIP</filename> em busca de
+linhas que correspondam a um padrão
           </para>
           <indexterm zone="unzip zipgrep">
             <primary sortas="b-zipgrep">zipgrep</primary>
@@ -302,9 +306,9 @@ pattern
         <term><command>zipinfo</command></term>
         <listitem>
           <para>
-            produces technical information about the files in a <filename>ZIP</filename>
-archive, including file access permissions, encryption status, type of
-compression, etc
+            produz informações técnicas relativas aos arquivos em um arquivamento
+<filename>ZIP</filename>, incluindo permissões de acesso a arquivos,
+situação de encriptação, tipo de compressão, etc
           </para>
           <indexterm zone="unzip zipinfo">
             <primary sortas="b-zipinfo">zipinfo</primary>

@@ -78,18 +78,21 @@ controlador de núcleo.
     </para>
 
     <para>
-      Access to raw USB device nodes is needed when a userspace program is acting
-as a device driver. However, for the program to open the device
-successfully, the permissions have to be set correctly. By default, due to
-security concerns, all raw USB devices are owned by user root and group usb,
-and have 0664 permissions (the read access is needed, e.g., for lsusb to
-work and for programs to access USB hubs). Packages (such as SANE and
-libgphoto2) containing userspace USB device drivers also ship udev rules
-that change the permissions of the controlled raw USB devices. That is,
-rules installed by SANE change permissions for known scanners, but not
-printers.  If a package maintainer forgot to write a rule for your device,
-report a bug to both BLFS (if the package is there) and upstream, and you
-will need to write your own rule.
+      O acesso a nós de dispositivo USB crus é necessário quando um aplicativo do
+espaço do(a) usuário(a) estiver atuando como um controlador de
+dispositivo. Entretanto, para o aplicativo abrir o dispositivo com sucesso,
+as permissões tem de ser configuradas corretamente. Por padrão, devido a
+motivos de segurança, todos os dispositivos USB crus são de propriedade
+do(a) usuário(a) root e do grupo usb; e tem permissões 0664 (o acesso de
+leitura é necessário, por exemplo, para o lsusb funcionar e para os
+aplicativos acessarem hubs USB). Os pacotes (tais como SANE e libgphoto2)
+contendo controladores de dispositivo USB do espaço do(a) usuário(a) também
+embarcam regras do udev que mudam as permissões dos dispositivos USB crus
+controlados. Isto é, as regras instaladas pelo SANE mudam as permissões para
+escaneadores conhecidos, porém não para impressoras. Se um(a) mantenedor(a)
+de pacote se esqueceu de escrever uma regra para o seu dispositivo, [então]
+informe um defeito para ambos, o BLFS (se o pacote estiver lá) e o(a)
+desenvolvedor(a), e você precisará escrever sua própria regra.
     </para>
 
     <para>
@@ -108,13 +111,14 @@ todos os dispositivos USB.
     </para>
 
     <para>
-      Before Linux-2.6.15, raw USB device access was performed not with
-/dev/bus/usb/BBB/DDD device nodes, but with /proc/bus/usb/BBB/DDD
-pseudofiles. Some applications (e.g., VMware Workstation) still use only
-this deprecated technique and can't use the new device nodes. For them to
-work, use the "usb" group, but remember that members will have unrestricted
-access to all USB devices.  To create the fstab entry for the obsolete usbfs
-filesystem:
+      Antes do Linux-2.6.15, o acesso de dispositivo USB cru era realizado não com
+nós de dispositivo /dev/bus/usb/BBB/DDD, porém com pseudo arquivos
+/proc/bus/usb/BBB/DDD. Alguns aplicativos (por exemplo, o VMware
+Workstation) ainda usam somente essa técnica obsoleta e não conseguem usar
+os novos nós de dispositivo. Para eles funcionarem, use o grupo "usb", porém
+lembre-se de que os(as) membros(as) terão acesso irrestrito a todos os
+dispositivos USB. Para criar a entrada fstab para o obsoleto sistema de
+arquivos usbfs:
     </para>
 
 <screen><literal>usbfs  /proc/bus/usb  usbfs  devgid=14,devmode=0660  0  0</literal></screen>

@@ -9,33 +9,35 @@
   <?dbhtml filename="ojdk-conf.html"?>
 
 
-  <title>Configuring the JAVA environment</title>
+  <title>Configurando o ambiente JAVA</title>
 
   <sect2 id="java-profile">
-    <title>Setting up the environment</title>
+    <title>Configurando o ambiente</title>
 
     <para>
-      After the package installation is complete, the next step is to make sure
-that the system can properly find the files.  If you set up your login
-scripts as recommended in <xref linkend='postlfs-config-profile'/>, update
-the environment by creating the <filename>openjdk.sh</filename> script, as
-the <systemitem class="username">root</systemitem> user:
+      Depois que a instalação do pacote estiver completa, a próxima etapa é a de
+garantir que o sistema consiga encontrar os arquivos corretamente. Se você
+configurar teus &quot;scripts&quot; de login conforme recomendado em
+&quot;<xref linkend='postlfs-config-profile'/>&quot;, [então] atualize o
+ambiente criando o &quot;script&quot;
+&quot;<filename>openjdk.sh</filename>&quot;, como o(a) usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/openjdk.sh &lt;&lt; "EOF"
-<literal># Begin /etc/profile.d/openjdk.sh
+<literal># Inicia /etc/profile.d/openjdk.sh
 
-# Set JAVA_HOME directory
+# Configura o diretório "JAVA_HOME"
 JAVA_HOME=/opt/jdk
 
-# Adjust PATH
+# Ajusta o "PATH"
 pathappend $JAVA_HOME/bin
 
-# Add to MANPATH
+# Adiciona ao "MANPATH"
 pathappend $JAVA_HOME/man MANPATH
 
-# Auto Java CLASSPATH: Copy jar files to, or create symlinks in, the
-# /usr/share/java directory.
+# Auto "Java" "CLASSPATH": Copia arquivos "jar" para, ou cria links simbólicos em, o
+# diretório "/usr/share/java".
 
 AUTO_CLASSPATH_DIR=/usr/share/java
 
@@ -52,13 +54,14 @@ done
 export JAVA_HOME
 unset AUTO_CLASSPATH_DIR dir jar
 
-# End /etc/profile.d/openjdk.sh</literal>
+# Termina /etc/profile.d/openjdk.sh</literal>
 EOF</userinput></screen>
 
     <para>
-      If <xref linkend="sudo"/> is installed, the super user should have access to
-the above variables. Execute the following commands as the <systemitem
-class="username">root</systemitem> user:
+      Se &quot;<xref linkend="sudo"/>&quot; estiver instalado, [então] o(a)
+superusuário(a) deveria ter acesso às variáveis acima. Execute os seguintes
+comandos como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/sudoers.d/java &lt;&lt; "EOF"
@@ -67,17 +70,17 @@ Defaults env_keep += CLASSPATH</literal>
 EOF</userinput></screen>
 
     <para>
-      To use <command>mandb</command> to include the OpenJDK man pages in its
-database, issue, as the <systemitem class="username">root </systemitem>
-user:
+      Para usar &quot;<command>mandb</command>&quot; para incluir as páginas de
+manual do &quot;OpenJDK&quot; na base de dados dele, emita como o(a)
+usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/man_db.conf &lt;&lt; "EOF" &amp;&amp;
-<literal># Begin Java addition
+<literal># Inicia adição "Java"
 MANDATORY_MANPATH     /opt/jdk/man
 MANPATH_MAP           /opt/jdk/bin     /opt/jdk/man
 MANDB_MAP             /opt/jdk/man     /var/cache/man/jdk
-# End Java addition</literal>
+# Termina Java addition</literal>
 EOF
 
 mkdir -p /var/cache/man &amp;&amp;
@@ -85,41 +88,48 @@ mandb -c /opt/jdk/man</userinput></screen>
 
   </sect2>
 
-  <sect2 id="ojdk-certs" xreflabel="installing the JVM Certificate Authority Certificates">
+  <sect2 id="ojdk-certs" xreflabel="instalando os Certificados de Autoridade Certificadora da &quot;JVM&quot;">
 
-    <title>Setting up the Certificate Authority Certificates for Java</title>
+    <title>Configurando os Certificados de Autoridade Certificadora para
+<quote>Java</quote></title>
 
     <para>
-      <application>OpenJDK</application> uses its own format for the CA
-certificates. The Java security modules use
-<envar>$JAVA_HOME</envar><filename>/lib/security/cacerts</filename> by
-default. In order to keep all the certificates in one place, we use
-<filename>/etc/ssl/java/cacerts</filename>. The instructions on the <xref
-linkend="make-ca"/> page previously created the file located in <filename
-class="directory">/etc/ssl/java</filename>.  Set up a symlink in the default
-location as the <systemitem class="username">root</systemitem> user:
+      O &quot;<application>OpenJDK</application>&quot; usa o próprio formato dele
+para os certificados de &quot;AC&quot;. Os módulos de segurança do
+&quot;Java&quot; usam
+&quot;<envar>$JAVA_HOME</envar><filename>/lib/security/cacerts</filename>&quot;
+por padrão. Para a finalidade de manter todos os certificados em um lugar,
+nós usamos &quot;<filename>/etc/ssl/java/cacerts</filename>&quot;. As
+instruções na página &quot;<xref linkend="make-ca"/>&quot; criaram
+anteriormente o arquivo localizado em &quot;<filename
+class="directory">/etc/ssl/java</filename>&quot;. Configure um link
+simbólico no local padrão como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>ln -sfv /etc/pki/tls/java/cacerts /opt/jdk/lib/security/cacerts</userinput></screen>
 
     <para>
-      Use the following command to check if the <filename>cacerts</filename> file
-has been successfully installed:
+      Use o seguinte comando para verificar se o arquivo
+&quot;<filename>cacerts</filename>&quot; foi instalado com sucesso:
     </para>
 
 <screen role="root"><userinput>/opt/jdk/bin/keytool -list -cacerts</userinput></screen>
 
     <para>
-      At the prompt <computeroutput>Enter keystore password:</computeroutput>,
-enter <userinput>changeit</userinput> (the default) or just press the
-<quote>Enter</quote> key. If the <filename>cacerts</filename> file was
-installed correctly, you will see a list of the certificates with related
-information for each one. If not, you need to reinstall them.
+      No &quot;prompt&quot; &quot;<computeroutput>Enter keystore
+password:</computeroutput>&quot;, digite
+&quot;<userinput>changeit</userinput>&quot; (o padrão) ou simplesmente
+pressione a tecla <quote>Enter</quote>. Se o arquivo
+&quot;<filename>cacerts</filename>&quot; foi instalado corretamente, [então]
+você verá uma lista dos certificados com informações relacionadas a cada
+um. Caso contrário, você precisa reinstalá-los.
     </para>
 
     <para>
-      If you later install a new JVM, you just have to create the symlink in the
-default location to be able to use the cacerts.
+      Se instalar posteriormente uma nova &quot;JVM&quot;, [então] você apenas tem
+de criar o link simbólico no local padrão para estar apto(a) a usar o
+&quot;cacerts&quot;.
     </para>
 
   </sect2>

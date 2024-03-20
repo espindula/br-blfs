@@ -8,9 +8,9 @@
            "https://archive.apache.org/dist/httpd/httpd-&apache-version;.tar.bz2">
   <!ENTITY apache-download-ftp  "">
   <!ENTITY apache-md5sum        "b6a8b9d8741db43cf5b4dd8e9bdb0ce7">
-  <!ENTITY apache-size          "7,1Mo">
-  <!ENTITY apache-buildsize     "87Mo">
-  <!ENTITY apache-time          "0.3 SBU (Using parallelism=4)">
+  <!ENTITY apache-size          "7,1 MB">
+  <!ENTITY apache-buildsize     "87 MB">
+  <!ENTITY apache-time          "0,3 UPC (Usando paralelismo=4)">
 ]>
 
 <sect1 id="apache" xreflabel="Apache-&apache-version;">
@@ -24,12 +24,13 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Apache HTTPD</title>
+    <title>Introdução ao <quote>Apache HTTPD</quote></title>
 
     <para>
-      The <application>Apache HTTPD</application> package contains an open-source
-HTTP server. It is useful for creating local intranet web sites or running
-huge web serving operations.
+      O pacote &quot;<application>Apache HTTPD</application>&quot; contém um
+servidor &quot;HTTP&quot; de fonte aberto. Ele é útil para criar sítios
+&quot;web&quot; locais de intranet ou executar grandes operações de serviço
+&quot;web&quot;.
     </para>
 
     &lfs113_checked;
@@ -48,7 +49,7 @@ huge web serving operations.
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5: &apache-md5sum;
+          Soma de verificação MD5 da transferência: &apache-md5sum;
         </para>
       </listitem>
       <listitem>
@@ -78,47 +79,49 @@ url="&patch-root;/httpd-&apache-version;-blfs_layout-1.patch"/>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências de Apache HTTPD</bridgehead>
+    <bridgehead renderas="sect3">Dependências do &quot;Apache HTTPD&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="apr-util"/> and <xref linkend="pcre2"/>
+      <xref linkend="apr-util"/> e <xref linkend="pcre2"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="brotli"/>, <xref linkend="db"/>, <xref linkend="doxygen"/>,
-<xref linkend="libxml2"/>, <xref linkend="lua"/>, <xref linkend="lynx"/> or
-<xref linkend="Links"/> or <ulink url="&elinks-url;">ELinks</ulink>, <xref
+<xref linkend="libxml2"/>, <xref linkend="lua"/>, <xref linkend="lynx"/> ou
+<xref linkend="Links"/> ou <ulink url="&elinks-url;">ELinks</ulink>, <xref
 linkend="nghttp2"/>, <xref linkend="openldap"/> (<xref linkend="apr-util"/>
-needs to be installed with ldap support), <xref linkend="rsync"/>, and
-<ulink url="https://sourceforge.net/projects/distcache">Distcache</ulink>
+precisa ser instalado com suporte a &quot;ldap&quot;), <xref
+linkend="rsync"/> e <ulink
+url="https://sourceforge.net/projects/distcache">Distcache</ulink>
     </para>
 
     <para condition="html" role="usernotes">
-      User Notes: <ulink url="&blfs-wiki;/apache"/>
+      Observações de Usuário(a): <ulink url="&blfs-wiki;/apache"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação de Apache HTTPD</title>
+    <title>Instalação do <quote>Apache HTTPD</quote></title>
 
     <para>
-      For security reasons, running the server as an unprivileged user and group
-is strongly encouraged. Create the following group and user using the
-following commands as <systemitem class="username">root</systemitem>:
+      Por motivos de segurança, executar o servidor como um(a) usuário(a) e grupo
+sem privilégios é fortemente encorajado. Crie o seguinte grupo e usuário(a)
+usando os seguintes comandos como &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>groupadd -g 25 apache &amp;&amp;
-useradd -c "Apache Server" -d /srv/www -g apache \
+useradd -c "Servidor Apache" -d /srv/www -g apache \
         -s /bin/false -u 25 apache</userinput></screen>
 
     <para>
-      Build and install <application>Apache HTTPD</application> by running the
-following commands:
+      Construa e instale o &quot;<application>Apache HTTPD</application>&quot;
+executando os seguintes comandos:
     </para>
 
-<screen><userinput>patch -Np1 -i ../httpd-&apache-version;-blfs_layout-1.patch             &amp;&amp;
+<screen><userinput>patch -Np1 -i ../httpd-&apache-version;-blfs_layout-1.patch            &amp;&amp;
 
 sed '/dir.*CFG_PREFIX/s@^@#@' -i support/apxs.in              &amp;&amp;
 
@@ -147,7 +150,8 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><!-- changing the patch allows doing DESTDIR install as a normal user
@@ -162,7 +166,7 @@ make</userinput></screen>
 <userinput>make install  &amp;&amp;
 
 mv -v /usr/sbin/suexec /usr/lib/httpd/suexec &amp;&amp;
-chgrp apache           /usr/lib/httpd/suexec &amp;&amp;
+chgrp apache          /usr/lib/httpd/suexec &amp;&amp;
 chmod 4754             /usr/lib/httpd/suexec &amp;&amp;
 
 chown -v -R apache:apache /srv/www</userinput></screen>
@@ -173,71 +177,82 @@ chown -v -R apache:apache /srv/www</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed '/dir.*CFG_PREFIX/s@^@#@'...</command>: Forces the
-<application>apxs</application> utility to use absolute pathnames for
-modules, when instructed to do so.
+      <command>sed '/dir.*CFG_PREFIX/s@^@#@'...</command>: Força o utilitário
+&quot;<application>apxs</application>&quot; a usar nomes absolutos de
+caminho para módulos, quando instruído a fazê-lo.
     </para>
 
     <para>
-      <parameter>--enable-authnz-fcgi</parameter>: Build FastCGI authorizer-based
-authentication and authorization (mod_authnz_fcgi.so fast CGI module).
+      <parameter>--enable-authnz-fcgi</parameter>: Construa autenticação e
+autorização baseada no autorizador &quot;FastCGI&quot; (módulo CGI rápido
+&quot;mod_authnz_fcgi.so&quot;).
     </para>
 
     <para>
-      <parameter>--enable-mods-shared="all cgi"</parameter>: The modules should be
-compiled and used as Dynamic Shared Objects (DSOs) so they can be included
-and excluded from the server using the run-time configuration directives.
+      <parameter>--enable-mods-shared="all cgi"</parameter>: Os módulos deveriam
+ser compilados e usados como &quot;Dynamic Shared Objects&quot;
+(&quot;DSOs&quot;) de forma que possam ser incluídos e excluídos a partir do
+servidor usando as diretivas de configuração de tempo de execução.
     </para>
 
     <para>
-      <parameter>--enable-mpms-shared=all</parameter>: This switch ensures that
-all MPM (Multi Processing Modules) are built as Dynamic Shared Objects
-(DSOs), so the user can choose which one to use at runtime.
+      <parameter>--enable-mpms-shared=all</parameter>: Essa chave garante que
+todos os &quot;Multi Processing Modules&quot; (&quot;MPM&quot;) sejam
+construídos como &quot;Dynamic Shared Objects&quot; (&quot;DSOs&quot;), de
+forma que o(a) usuário(a) consiga escolher qual usar em tempo de execução.
     </para>
 
     <para>
-      <parameter>--enable-suexec</parameter>: This switch enables building of the
-<application>Apache</application> suEXEC module which can be used to allow
-users to run CGI and SSI scripts under user IDs different from the user ID
-of the calling web server.
+      <parameter>--enable-suexec</parameter>: Essa chave habilita a construção do
+módulo &quot;suEXEC&quot; do &quot;<application>Apache</application>&quot;
+que pode ser usado para permitir que os(as) usuários(as) executem conjuntos
+de comandos sequenciais &quot;CGI&quot; e &quot;SSI&quot; sob
+&quot;IDs&quot; de usuário(a) diferentes do &quot;ID&quot; de usuário(a) do
+servidor web chamante.
     </para>
 
     <para>
-      <parameter>--with-suexec-*</parameter>: These switches control suEXEC module
-behavior, such as default document root, minimal UID that can be used to run
-the script under the suEXEC. Please note that with minimal UID 100, you
-can't run CGI or SSI scripts under suEXEC as the <systemitem
-class="username">apache</systemitem> user.
+      <parameter>--with-suexec-*</parameter>: Essas chaves controlam o
+comportamento do módulo &quot;suEXEC&quot;, tais como a raiz padrão do
+documento, &quot;UID&quot; mínimo que pode ser usado para executar o
+conjunto de comandos sequenciais sob o &quot;suEXEC&quot;. Por favor,
+observe que, com &quot;UID&quot; mínimo de 100, você não consegue executar
+conjuntos de comandos sequenciais &quot;CGI&quot; ou &quot;SSI&quot; sob o
+s&quot;uEXEC&quot; como o(a) usuário(a) &quot;<systemitem
+class="username">apache</systemitem>&quot;.
     </para>
 
     <para>
-      <command>... /usr/lib/httpd/suexec</command>: These commands put
-<command>suexec</command> wrapper into proper location, since it is not
-meant to be run directly. They also adjust proper permissions of the binary,
-making it setgid <systemitem class="username">apache</systemitem>.
+      <command>... /usr/lib/httpd/suexec</command>: Esses comandos colocam o
+envólucro &quot;<command>suexec</command>&quot; no local apropriado, já que
+ele não se destina a ser executado diretamente. Eles também ajustam as
+permissões adequadas do binário, tornando-o &quot;setgid&quot; do
+&quot;<systemitem class="username">apache</systemitem>&quot;.
     </para>
 
     <para>
-      <command>chown -R apache:apache /srv/www</command>: By default, the
-installation process installs files (documentation, error messages, default
-icons, etc.) with the ownership of the user that extracted the files from
-the tar file. If you want to change the ownership to another user, you
-should do so at this point. The only requirement is that the document
-directories need to be accessible by the <command>httpd</command> process
-with (r-x) permissions and files need to be readable (r--) by the
-<systemitem class="username">apache</systemitem> user.
+      <command>chown -R apache:apache /srv/www</command>: Por padrão, o processo
+de instalação instala arquivos (documentação, mensagens de erro, ícones
+padrão, etc.) com a titularidade de propriedade do(a) usuário(a) que extraiu
+os arquivos a partir do arquivo &quot;tar&quot;. Se quiser mudar a
+titularidade de propriedade para outro(a) usuário(a), [então] você deveria
+fazê-lo neste ponto. O único requisito é o de que os diretórios de
+documentos precisam ser acessíveis pelo processo
+&quot;<command>httpd</command>&quot; com permissões (&quot;r-x&quot;) e os
+arquivos precisam ser legíveis (&quot;r--&quot;) pelo(a) usuário(a)
+&quot;<systemitem class="username">apache</systemitem>&quot;.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando Apache</title>
+    <title>Configurando o <quote>Apache</quote></title>
 
     <sect3 id="apache-config">
       <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/httpd/httpd.conf</filename> and
+        <filename>/etc/httpd/httpd.conf</filename> e
 <filename>/etc/httpd/extra/*</filename>
       </para>
 
@@ -255,25 +270,28 @@ with (r-x) permissions and files need to be readable (r--) by the
       <title>Informação de Configuração</title>
 
       <para>
-        See <ulink url="file:///usr/share/httpd/manual/configuring.html"/> for
-detailed instructions on customising your <application>Apache</application>
-HTTP server configuration file.
+        Veja-se <ulink url="file:///usr/share/httpd/manual/configuring.html"/> para
+instruções detalhadas relativas a personalizar o teu arquivo de configuração
+do servidor de &quot;HTTP&quot;
+&quot;<application>Apache</application>&quot;.
       </para>
 
     </sect3>
 
     <sect3  id="httpd-init">
-      <title><phrase revision="sysv">Script de Inicialização</phrase> <phrase
-revision="systemd">Unidade do systemd</phrase></title>
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
+Inicialização</phrase> <phrase revision="systemd">Unidade do
+<quote>systemd</quote></phrase></title>
 
       <para>
-        If you want the <application>Apache</application> server to start
-automatically when the system is booted, install the <phrase
-revision="sysv"><filename>/etc/rc.d/init.d/httpd</filename> init
-script</phrase> <phrase
-revision="systemd"><filename>httpd.service</filename> unit</phrase> included
-in the <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> package:
+        Se você quiser que o servidor &quot;<application>Apache</application>&quot;
+inicie automaticamente quando o sistema for inicializado, [então] instale
+<phrase revision="sysv">o conjunto de comandos sequenciais de inicialização
+&quot;<filename>/etc/rc.d/init.d/httpd</filename>&quot; incluído</phrase>
+<phrase revision="systemd">a unidade
+&quot;<filename>httpd.service</filename>&quot; incluída</phrase> no pacote
+&quot;<xref linkend="bootscripts" revision="sysv"/>&quot; &quot;<xref
+linkend="systemd-units" revision="systemd"/>&quot;:
       </para>
 
       <indexterm zone="apache httpd-init">
@@ -287,7 +305,7 @@ linkend="systemd-units" revision="systemd"/> package:
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
@@ -298,15 +316,15 @@ linkend="systemd-units" revision="systemd"/> package:
         <seg>
           <!-- not executable from path, and suexec -->
 ab, apachectl, apxs, checkgid, dbmmanage, fcgistarter, htcacheclean, htdbm,
-htdigest, htpasswd, httpd, httxt2dbm, logresolve, and rotatelogs
+htdigest, htpasswd, httpd, httxt2dbm, logresolve e rotatelogs
           
         </seg>
         <seg>
-          Several libraries under /usr/lib/httpd/modules/
+          Várias bibliotecas sob &quot;/usr/lib/httpd/modules/&quot;
         </seg>
         <seg>
           /etc/httpd, /srv/www, /usr/include/httpd, /usr/lib/httpd, /usr/share/httpd,
-/var/log/httpd, and /var/run/httpd
+/var/log/httpd e /var/run/httpd
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -319,8 +337,8 @@ htdigest, htpasswd, httpd, httxt2dbm, logresolve, and rotatelogs
         <term><command>ab</command></term>
         <listitem>
           <para>
-            is a tool for benchmarking your <application>Apache</application> HTTP
-server
+            é uma ferramenta para avaliar comparativamente o teu servidor de
+&quot;HTTP&quot; &quot;<application>Apache</application>&quot;
           </para>
           <indexterm zone="apache ab">
             <primary sortas="b-ab">ab</primary>
@@ -332,9 +350,11 @@ server
         <term><command>apachectl</command></term>
         <listitem>
           <para>
-            is a front end to the <application>Apache</application> HTTP server which is
-designed to help the administrator control the functioning of the
-<application>Apache</application> httpd daemon
+            é uma estrutura de interação direta com o(a) usuário(a) para o servidor de
+&quot;HTTP&quot; &quot;<application>Apache</application>&quot; o qual foi
+projetado para ajudar o(a) administrador(a) a controlar o funcionamento do
+processo de segundo plano &quot;httpd&quot; do
+&quot;<application>Apache</application>&quot;
           </para>
           <indexterm zone="apache apachectl">
             <primary sortas="b-apachectl">apachectl</primary>
@@ -346,8 +366,8 @@ designed to help the administrator control the functioning of the
         <term><command>apxs</command></term>
         <listitem>
           <para>
-            is a tool for building and installing extension modules for the
-<application>Apache</application> HTTP server
+            é uma ferramenta para construir e instalar módulos de extensão para o
+servidor de &quot;HTTP&quot; &quot;<application>Apache</application>&quot;
           </para>
           <indexterm zone="apache apxs">
             <primary sortas="b-apxs">apxs</primary>
@@ -359,10 +379,11 @@ designed to help the administrator control the functioning of the
         <term><command>checkgid</command></term>
         <listitem>
           <para>
-            is a program that checks whether it can setgid to the group specified. This
-is to see if it is a valid group for Apache2 to use at runtime. If the user
-(should be run as superuser) is in that group, or can setgid to it, it will
-return 0
+            é um aplicativo que verifica se pode &quot;setgid&quot; para o grupo
+especificado. Isso é para ver se é um grupo válido para o
+&quot;Apache2&quot; usar em tempo de execução. Se o(a) usuário(a) (deveria
+ser executado como superusuário(a)) estiver nesse grupo, ou puder
+&quot;setgid&quot; para ele, [então] ele retornará 0
           </para>
           <indexterm zone="apache checkgid">
             <primary sortas="b-checkgid">checkgid</primary>
@@ -374,8 +395,9 @@ return 0
         <term><command>dbmmanage</command></term>
         <listitem>
           <para>
-            is used to create and update the DBM format files used to store usernames
-and passwords for basic authentication of HTTP users
+            é usado para criar e atualizar os arquivos no formato &quot;DBM&quot; usados
+para armazenar nomes de usuário(a) e senhas para autenticação básica de
+usuários(as) &quot;HTTP&quot;
           </para>
           <indexterm zone="apache dbmmanage">
             <primary sortas="b-dbmmanage">dbmmanage</primary>
@@ -387,7 +409,7 @@ and passwords for basic authentication of HTTP users
         <term><command>fcgistarter</command></term>
         <listitem>
           <para>
-            is a tool to start a FastCGI program
+            é uma ferramenta para iniciar um aplicativo &quot;FastCGI&quot;
           </para>
           <indexterm zone="apache fcgistarter">
             <primary sortas="b-fcgistarter">fcgistarter</primary>
@@ -399,7 +421,7 @@ and passwords for basic authentication of HTTP users
         <term><command>htcacheclean</command></term>
         <listitem>
           <para>
-            is used to clean up the disk cache
+            é usado para limpar o &quot;cache&quot; do disco
           </para>
           <indexterm zone="apache htcacheclean">
             <primary sortas="b-htcacheclean">htcacheclean</primary>
@@ -411,7 +433,7 @@ and passwords for basic authentication of HTTP users
         <term><command>htdbm</command></term>
         <listitem>
           <para>
-            is used to manipulate the DBM password databases
+            é usado para manipular as bases de dados de senha &quot;DBM&quot;
           </para>
           <indexterm zone="apache htdbm">
             <primary sortas="b-htdbm">htdbm</primary>
@@ -423,8 +445,9 @@ and passwords for basic authentication of HTTP users
         <term><command>htdigest</command></term>
         <listitem>
           <para>
-            is used to create and update the flat-files used to store usernames, realms
-and passwords for digest authentication of HTTP users
+            é usado para criar e atualizar os arquivos simples usados para armazenar
+nomes de usuário(a), domínios e senhas para autenticação de resumo dos(as)
+usuários(as) &quot;HTTP&quot;
           </para>
           <indexterm zone="apache htdigest">
             <primary sortas="b-htdigest">htdigest</primary>
@@ -436,8 +459,9 @@ and passwords for digest authentication of HTTP users
         <term><command>htpasswd</command></term>
         <listitem>
           <para>
-            is used to create and update the flat-files used to store usernames and
-passwords for basic authentication of HTTP users
+            é usado para criar e atualizar os arquivos simples usados para armazenar
+nomes de usuários(as) e senhas para autenticação básica dos(as) usuários(as)
+&quot;HTTP&quot;
           </para>
           <indexterm zone="apache htpasswd">
             <primary sortas="b-htpasswd">htpasswd</primary>
@@ -449,7 +473,8 @@ passwords for basic authentication of HTTP users
         <term><command>httpd</command></term>
         <listitem>
           <para>
-            is the <application>Apache</application> HTTP server program
+            é o aplicativo servidor de &quot;HTTP&quot;
+&quot;<application>Apache</application>&quot;
           </para>
           <indexterm zone="apache httpd">
             <primary sortas="b-httpd">httpd</primary>
@@ -461,7 +486,8 @@ passwords for basic authentication of HTTP users
         <term><command>httxt2dbm</command></term>
         <listitem>
           <para>
-            is used to generate DBM files from text, for use in RewriteMap
+            é usado para gerar arquivos &quot;DBM&quot; a partir de texto, para uso no
+&quot;RewriteMap&quot;
           </para>
           <indexterm zone="apache httxt2dbm">
             <primary sortas="b-httxt2dbm">httxt2dbm</primary>
@@ -473,8 +499,9 @@ passwords for basic authentication of HTTP users
         <term><command>logresolve</command></term>
         <listitem>
           <para>
-            is a post-processing program to resolve IP-addresses in
-<application>Apache</application>'s access log files
+            é um aplicativo de pós-processamento para resolver endereços &quot;IP&quot;
+nos arquivos de registro de acesso do
+&quot;<application>Apache</application>&quot;
           </para>
           <indexterm zone="apache logresolve">
             <primary sortas="b-logresolve">logresolve</primary>
@@ -486,8 +513,8 @@ passwords for basic authentication of HTTP users
         <term><command>rotatelogs</command></term>
         <listitem>
           <para>
-            is a simple program for use in conjunction with
-<application>Apache</application>'s piped log file feature
+            é um aplicativo simples para uso em conjunto com o recurso de arquivo de
+registro canalizado do &quot;<application>Apache</application>&quot;
           </para>
           <indexterm zone="apache rotatelogs">
             <primary sortas="b-rotatelogs">rotatelogs</primary>
@@ -499,7 +526,8 @@ passwords for basic authentication of HTTP users
         <term><command>suexec</command></term>
         <listitem>
           <para>
-            allows users to run CGI and SSI applications as a different user
+            permite que os(as) usuários(as) executem aplicativos &quot;CGI&quot; e
+&quot;SSI&quot; como um(a) usuário(a) diferente
           </para>
           <indexterm zone="apache suexec">
             <primary sortas="b-suexec">suexec</primary>

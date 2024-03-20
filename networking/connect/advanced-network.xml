@@ -9,10 +9,10 @@
   <?dbhtml filename="advanced-network.html"?>
 
 
-  <title>Advanced Network Setup</title>
+  <title>Configuração Avançada de Rede de Intercomunicação</title>
 
   <sect2 id="network-bridge">
-    <title>Network Bridge</title>
+    <title>Ponte de Rede de Intercomunicação</title>
 
     <sect3 role="kernel" id="advanced-network-bridge-kernel">
       <title>Configuração do Núcleo</title>
@@ -27,26 +27,27 @@ se necessário:
     802.1d Ethernet Bridging: M or Y</literal></screen>
 
       <indexterm zone="advanced-network advanced-network-bridge-kernel">
-        <primary sortas="d-advanced-network-bridge">Advanced Network Bridge</primary>
+        <primary sortas="d-advanced-network-bridge">Ponte Avançada de Rede de Intercomunicação</primary>
       </indexterm>
 
     </sect3>
 
     <sect3>
-      <title>Setting up a Network Bridge</title>
+      <title>Configurando uma Ponte de Rede de Intercomunicação</title>
 
       <para>
-        In this section we are are going to discuss how to set up a network bridge
-using <command>systemd-networkd</command>. In the examples below,
-<replaceable>eth0</replaceable> represents the external interface that is
-being bridged, while <replaceable>br0</replaceable> represents the bridge
-interface.
+        Nessa seção discutiremos como configurar uma ponte de rede de
+intercomunicação usando o
+&quot;<command>systemd-networkd</command>&quot;. Nos exemplos abaixo,
+&quot;<replaceable>eth0</replaceable>&quot; representa a interface externa
+que está sendo interligada, enquanto
+&quot;<replaceable>br0</replaceable>&quot; representa a interface de ponte.
       </para>
 
       <para>
-        To create a bridge interface, create the following configuration file by
-running the following command as the <systemitem
-class="username">root</systemitem> user:
+        Para criar uma interface de ponte, crie o seguinte arquivo de configuração
+executando o seguinte comando como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/50-br0.netdev &lt;&lt; EOF
@@ -56,9 +57,9 @@ Kind=bridge</literal>
 EOF</userinput></screen>
 
       <para>
-        To assign a network interface to a bridge, create the following
-configuration file by running the following command as the <systemitem
-class="username">root</systemitem> user:
+        Para atribuir uma interface de rede de intercomunicação para uma ponte, crie
+o seguinte arquivo de configuração executando o seguinte comando como
+o(a)usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/51-eth0.network &lt;&lt; EOF
@@ -72,17 +73,18 @@ EOF</userinput></screen>
       <para>
         <!--or <xref linkend="wicd"/>
 i,-->
-Repeat the process for any other interfaces that need to be bridged.  Note
-that it is important that nothing assigns any addresses to the bridged
-interfaces. If you are using <xref linkend="NetworkManager"/>, make sure you
-configure them to ignore the bridged interfaces, as well as the bridge
-interface itself.
+Repita o processo para quaisquer outras interfaces que precisem ser
+interligadas. Observe que é importante que nada atribua quaisquer endereços
+para as interfaces de ponte. Se você estiver usando &quot;<xref
+linkend="NetworkManager"/>&quot;, [então] certifique-se de configurá-las
+para ignorar as interfaces em ponte, bem como a própria interface de ponte.
       </para>
 
       <para>
-        If you are on a network which uses DHCP for assigning ip addresses, create
-the following configuration file by running the following command as the
-<systemitem class="username">root</systemitem> user:
+        Se você estiver em uma rede de intercomunicação que usa &quot;DHCP&quot;
+para atribuir endereços &quot;IP&quot;, [então] crie o seguinte arquivo de
+configuração executando o seguinte comando como o(a)usuário(a)
+&quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/60-br0.network &lt;&lt; EOF
@@ -94,9 +96,10 @@ DHCP=yes</literal>
 EOF</userinput></screen>
 
       <para>
-        Alternatively, if using a static ip setup, create the following
-configuration file by running the following command as the <systemitem
-class="username">root</systemitem> user:
+        Alternativamente, se usar uma configuração de &quot;IP&quot; estático,
+[então] crie o seguinte arquivo de configuração executando o seguinte
+comando como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/60-br0.network &lt;&lt; EOF
@@ -110,9 +113,10 @@ DNS=192.168.0.1</literal>
 EOF</userinput></screen>
 
       <para>
-        To bring up the bridge interface, simply restart the
-<command>systemd-networkd</command> daemon by running the following command
-as the <systemitem class="username">root</systemitem> user:
+        Para ativar a interface de ponte, simplesmente reinicie o processo de
+segundo plano &quot;<command>systemd-networkd</command>&quot; executando o
+seguinte comando como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>systemctl restart systemd-networkd</userinput></screen>
