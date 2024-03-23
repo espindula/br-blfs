@@ -8,18 +8,16 @@
 
   <!ENTITY git-download-http "&git-root;/git-&git-version;.tar.xz">
   <!ENTITY git-download-ftp  "">
-  <!ENTITY git-md5sum        "32d34dc65ae0955cc68c7152b5ca8b13">
+  <!ENTITY git-md5sum        "c1f58a12b891ad73927b8e4a3aa29c7b">
 
-  <!ENTITY git-size          "6,8 MB">
+  <!ENTITY git-size          "11 MB">
   <!-- but people keep forgetting that an install not only needs the net build
        space, it also needs the install space (or DESTDIR) -->
-  <!ENTITY git-buildsize     "392 MB (com a documentação baixada; adicionar 18 MB para construir a
-documentação)">
+  <!ENTITY git-buildsize     "252 MB (with downloaded documentation">
   <!-- With 2.23.0, there was a large increase in time for tests. Possibly disk related? -->
   <!-- Confirmed that it is disk related.-->
-  <!ENTITY git-time          "0,3 UPC (com paralelismo=4; adicionar 0,4 UPC para construir a documentação
-e 1,6 UPC (dependente da velocidade do disco) para testes, ambos com
-paralelismo=4)">
+  <!ENTITY git-time          "0.3 SBU (with parallelism=4; add up to 1.6 SBU (disk speed dependent) for
+tests, both with parallelism=4)">
 ]>
 
 <sect1 id="git" xreflabel="git-&git-version;">
@@ -51,7 +49,7 @@ url="https://www.nongnu.org/cvs/">CVS</ulink>,
 Server</application>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -117,24 +115,23 @@ por meio de "HTTP", "HTTPS", "FTP" or "FTPS")
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref role="runtime" linkend="gnupg2"/> (tempo de execução, possivelmente
-seja usado para assinar "commits" ou "tags" do
-<application>Git</application> ou para verificar as assinaturas deles),
-<xref role="runtime" linkend="openssh"/> (tempo de execução, necessário para
-usar <application>Git</application> por meio de "SSH"), <xref
-linkend="pcre2"/> (<emphasis>ou</emphasis> o obsoleto <xref role="nodep"
-linkend="pcre"/>), em ambos os casos configurados com
+      <xref linkend="apache"/> (for some tests), <xref role="runtime"
+linkend="gnupg2"/> (runtime, may be used to sign
+<application>Git</application> commits or tags, or verify the signatures of
+them), <xref role="runtime" linkend="openssh"/> (runtime, needed to use
+<application>Git</application> over ssh), <xref linkend="pcre2"/>
+(<emphasis>or</emphasis> the deprecated <xref role="nodep"
+linkend="pcre"/>), in either case configured with
 <literal>--enable-jit</literal>, <xref role="runtime" linkend="subversion"/>
-com ligações "Perl" (tempo de execução, para <command>git svn</command>),
-<xref role="runtime" linkend="tk"/> ("gitk", um visualizador simples de
-repositórios do <application>Git</application>, usa
-<application>Tk</application> em tempo de execução), <xref
+with Perl bindings (runtime, for <command>git svn</command>), <xref
+role="runtime" linkend="tk"/> (gitk, a simple <application>Git</application>
+repository viewer, uses <application>Tk</application> at runtime), <xref
 linkend="valgrind"/>, <ulink
-url="https://metacpan.org/pod/Authen::SASL">Authen::SASL</ulink> e <ulink
-url="https://metacpan.org/pod/MIME::Base64">MIME::Base64</ulink> (ambos em
-tempo de execução, para <command>git send-email</command>) e <xref
-linkend='perl-io-socket-ssl'/> (tempo de execução, para <command>git
-send-email</command> se conectar a um servidor "SMTP" com encriptação "SSL")
+url="https://metacpan.org/pod/Authen::SASL">Authen::SASL</ulink> and <ulink
+url="https://metacpan.org/pod/MIME::Base64">MIME::Base64</ulink> (both
+runtime, for <command>git send-email</command>), and <xref
+linkend='perl-io-socket-ssl'/> (runtime, for <command>git
+send-email</command> to connect to a SMTP server with SSL encryption)
     </para>
 
     <bridgehead renderas="sect4">Opcional (para criar as páginas de manual, documentos "HTML" e outros
@@ -148,8 +145,6 @@ url="https://docbook2x.sourceforge.net/">docbook2x</ulink> para criar
 páginas "info"
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/git"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -185,13 +180,22 @@ versão "HTML" das páginas de manual e outros documentos:
 <screen remap="doc"><userinput>make man</userinput></screen>
 
     <para>
-      A suíte de teste pode ser executada em modo paralelo. Para executar a suíte
-de teste, emita: <command>make test</command>. Se executada como um(a)
-usuário(a) normal, [então] zero (0) testes deveriam ser informados como
-falhos no resumo final.
+      <!--If run as a normal user, 0 tests
+      should be reported as failed in the final summary.-->
+The test suite can be run in parallel mode. To run the test suite, issue:
+<command>make -k test</command>.  If <xref linkend="apache"/> is installed,
+three tests in <filename>t5559-http-fetch-smart-http2.sh</filename> are
+known to fail due to cURL-8.1.x.
     </para>
 
-    <para>
+    
+
+    <!-- The tests in question are "GIT_TRACE_CURL redirects auth details",
+         "GIT_CURL_VERBOSE redacts auth details", and "cookies are redacted by
+         default". I sent upstream a bug report:
+         https://lore.kernel.org/git/3843d97f-0073-e2d4-b98d-5a38c33b25f3@linuxfromscratch.org/T/#u
+         and hopefully will hear back soon. -renodr -->
+<para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
@@ -286,9 +290,9 @@ p4</command> para repositórios "Perforce" e também usado em alguns testes.
     </para>
 
     <para>
-      <option>--with-libpcre2</option>: Use essa chave se
-<application>PCRE2</application> estiver instalado e tiver sido construído
-com o "JIT" não padrão habilitado.
+      <option>--with-libpcre2</option>: Use this switch if
+<application>PCRE2</application> is installed and has been built with the
+non-default JIT enabled.
     </para>
 
     <para>
@@ -360,7 +364,7 @@ vinculados entre eles), git-cvsserver, git-shell, gitk e scalar
           Nenhum(a)
         </seg>
         <seg>
-          /usr/libexec/git-core e
+          /usr/libexec/git-core, and
 /usr/share/{doc/git-&git-version;,git-core,git-gui,gitk,gitweb}
         </seg>
       </seglistitem>

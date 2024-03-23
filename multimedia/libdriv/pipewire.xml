@@ -6,10 +6,10 @@
 
   <!ENTITY pipewire-download-http "https://github.com/PipeWire/pipewire/archive/&pipewire-version;/pipewire-&pipewire-version;.tar.gz">
   <!ENTITY pipewire-download-ftp  "">
-  <!ENTITY pipewire-md5sum        "8a85d990c159409578b456f8c8dcf075">
-  <!ENTITY pipewire-size          "1,9 MB">
-  <!ENTITY pipewire-buildsize     "62 MB (com os testes)">
-  <!ENTITY pipewire-time          "0,5 UPC (com testes, ambos usando paralelismo=4)">
+  <!ENTITY pipewire-md5sum        "04906e549ffd8feb1caad23f687c5257">
+  <!ENTITY pipewire-size          "2.1 MB">
+  <!ENTITY pipewire-buildsize     "66 MB (with tests)">
+  <!ENTITY pipewire-time          "0.5 SBU (with tests, both using parallelism=4)">
 ]>
 
 <sect1 id="pipewire" xreflabel="pipewire-&pipewire-version;">
@@ -32,7 +32,7 @@ API universal para conectar-se a dispositivos multimídia, bem como
 compartilhar arquivos multimídia entre aplicativos.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,31 +75,33 @@ compartilhar arquivos multimídia entre aplicativos.
       <xref linkend="bluez"/>, <phrase revision="sysv"><xref
 linkend="dbus"/>,</phrase> <xref linkend="gstreamer10"/>, <xref
 linkend="gst10-plugins-base"/>, <xref linkend="pulseaudio"/>, <xref
-linkend="sbc"/> e <xref linkend="v4l-utils"/>
+linkend="sbc"/>, and <xref linkend="v4l-utils"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="alsa-lib"/>, <xref linkend="avahi"/>, <xref
 linkend="bluez"/>, <xref linkend="fdk-aac"/>, <xref linkend="ffmpeg"/>,
-<xref linkend="libcanberra"/>, <xref linkend="libdrm"/> (para um exemplo e
-suporte a libcamera), <xref linkend="libxcb"/>, <xref
-linkend="libsndfile"/>, <xref linkend="libusb"/>, <xref linkend="opus"/>,
-<xref linkend="sdl2"/> (para alguns exemplos), <xref linkend="valgrind"/>,
-<xref linkend="xorg7-lib"/>, <xref linkend="doxygen"/> e <xref
-linkend="graphviz"/> (para documentação), <ulink
+<xref linkend="libcanberra"/>, <xref linkend="libdrm"/> (for one example and
+libcamera support), <xref linkend="libxcb"/>, <xref linkend="libsndfile"/>,
+<xref linkend="libusb"/>, <xref linkend="opus"/>, <xref linkend="sdl2"/>
+(for some examples), <xref linkend="valgrind"/>, <xref
+linkend="xorg7-lib"/>, <xref linkend="doxygen"/> and <xref
+linkend="graphviz"/> (for documentation), <ulink
 url="https://jackaudio.org/">JACK</ulink>, <ulink
 url="https://github.com/EHfive/ldacBT">ldacBT</ulink>, <ulink
 url="https://libcamera.org/">libcamera</ulink>, <ulink
+url="https://github.com/hoene/libmysofa">libmysofa</ulink>, <ulink
 url="https://vulkan.lunarg.com/sdk/home/">Vulkan</ulink>, <ulink
 url="https://gitlab.freedesktop.org/pipewire/wireplumber/">WirePlumber</ulink>
-(tempo de execução, para executar o processo de segundo plano Pipewire) e
-<ulink url="https://sourceforge.net/projects/xmltoman/">xmltoman</ulink>
+(runtime, for running the Pipewire daemon), and <ulink
+url="https://sourceforge.net/projects/xmltoman/">xmltoman</ulink>
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/pipewire"/>
+      Editor Notes: <ulink url="&blfs-wiki;/pipewire"/>
     </para>
+
   </sect2>
 
   <sect2 role="installation">
@@ -113,14 +115,23 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release -Dsession-managers= .. &amp;&amp;
+meson setup ..                \
+      --prefix=/usr           \
+      --buildtype=release     \
+      -Dsession-managers="[]" &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar o resultado, emita: <command>ninja test</command>. <phrase
-revision='systemd'>Um teste chamado <filename>test-support</filename> é
-conhecido por falhar.</phrase>
+      To test the result, issue: <command>ninja test</command>.
     </para>
+
+    <para>
+      If upgrading from an earlier release of Pipewire, it's needed to remove any
+old binary executables that interfere with the installation.  As the &root;
+user:
+    </para>
+
+<screen role='root'><userinput>rm -vf /usr/bin/pipewire-*</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -136,8 +147,12 @@ conhecido por falhar.</phrase>
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dsession-managers=</parameter>: Essa chave impede o download
-automático de dependências externas.
+      <parameter>-Dsession-managers=[]</parameter>: This switch allows to specify
+the session managers to build as subprojects. Since the recommended session
+manager (<ulink url="https://gitlab.freedesktop.org/pipewire/wireplumber">
+WirePlumber</ulink>) is available as a standalone project, don't specify
+anything here. This prevents downloading external dependencies during the
+meson step.
     </para>
 
     <para>
@@ -168,39 +183,19 @@ conversão de áudio como uma estrutura de retaguarda SPA.
 
       <seglistitem>
         <seg>
-          pipewire, pipewire-avb, pipewire-pulse, pw-cat, pw-cli, pw-dot, pw-dump,
-pw-jack, pw-link, pw-loopback, pw-metadata, pw-mididump, pw-mon,
-pw-profiler, pw-reserve, pw-top, pw-v4l2, spa-acp-tool, spa-inspect,
-spa-json-dump, spa-monitor, spa-resample e pw-dsdplay, pw-midiplay,
-pw-midirecord, pw-play e pw-record (links simbólicos para pw-cat)
+          pipewire, pw-cat, pw-cli, pw-config, pw-dot, pw-dump, pw-jack, pw-link,
+pw-loopback, pw-metadata, pw-mididump, pw-mon, pw-profiler, pw-reserve,
+pw-top, pw-v4l2, spa-acp-tool, spa-inspect, spa-json-dump, spa-monitor,
+spa-resample, and pipewire-aes67, pipewire-avb, pipewire-pulse (symlinks to
+pipewire), pw-dsdplay, pw-encplay, pw-midiplay, pw-midirecord, pw-play,
+pw-record (symlinks to pw-cat)
         </seg>
         <seg>
-          <!--,
-     [pierre July 29th, 2020]: all the following libs are in subdirectories
-     of /usr/lib. I'm not sure they should appear. But if they should, there
-     are many more libs to list...
-          libpulse-mainloop-glib-pw.so,
-          libpulse.so,
-          libpulse-simple.so,
-          libasound_module_pcm_pipewire.so, and
-          libgstpipewire.so
-      [bdubbs Sep 29th, 2020]: add
-          libpipewire-module-{access,adapter,client-device,client-node,
-            link-factory,metadata,portal,profiler,protocol-native,
-            rtkit,session-manager,spa-device,spa-device-factory,spa-node,
-            spa-node-factory}.so
-          libasound_module_ctl_pipewire.so
-          libasound_module_pcm_pipewire.so
-          libspa-{alsa,audioconvert,audiomixer,bluez5,control,dbus,support
-            v4l2,videoconvert}.so
-          -->
-libpipewire-0.3.so e cinquenta e seis (56) módulos abaixo de
-/usr/lib/pipewire-0.3 e /usr/lib/spa-0.2
+          libpipewire-0.3.so and 58 modules below /usr/lib/pipewire-0.3 and
+/usr/lib/spa-0.2
         </seg>
         <seg>
-          
-          <!--/etc/pipewire,-->
-<!--/usr/lib/gstreamer-1.0, already installed by gstreamer-->
+          <!--/usr/lib/gstreamer-1.0, already installed by gstreamer-->
 /usr/include/pipewire-0.3, /usr/include/spa-0.2, /usr/lib/alsa-lib,
 /usr/lib/pipewire-0.3, /usr/lib/spa-0.2, /usr/share/alsa-card-profile,
 /usr/share/pipewire e /usr/share/spa-0.2
@@ -224,21 +219,23 @@ compartilhamento de arquivos multimídia entre aplicativos
           </indexterm>
         </listitem>
       </varlistentry>
-
+      
+      <!-- not installed now: deprecated
       <varlistentry id="pipewire-media-session">
+
         <term><command>pipewire-media-session</command></term>
         <listitem>
           <para>
-            é um serviço que permite que um ambiente de área de trabalho saiba quando
-arquivos de mídia estão sendo reproduzidos por intermédio do pipewire
+            is a service that allows a desktop environment to know when media
+            files are being played through pipewire
           </para>
           <indexterm zone="pipewire pipewire-media-session">
             <primary sortas="b-pipewire-media-session">pipewire-media-session</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="pipewire-pulse">
+      -->
+<varlistentry id="pipewire-pulse">
         <term><command>pipewire-pulse</command></term>
         <listitem>
           <para>
@@ -270,6 +267,19 @@ arquivos de mídia estão sendo reproduzidos por intermédio do pipewire
           </para>
           <indexterm zone="pipewire pw-cli">
             <primary sortas="b-pw-cli">pw-cli</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="pw-config">
+        <term><command>pw-config</command></term>
+        <listitem>
+          <para>
+            allows you to interact with pipewire's configuration system for debugging
+purposes or syntax checking
+          </para>
+          <indexterm zone="pipewire pw-config">
+            <primary sortas="b-pw-config">pw-config</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -384,23 +394,7 @@ testar e depurar
         </listitem>
       </varlistentry>
 
-
-
-      <!--
-      <varlistentry id="pw-pulse">
-
-        <term><command>pw-pulse</command></term>
-        <listitem>
-          <para>
-            runs Pulseaudio applications on pipewire.
-          </para>
-          <indexterm zone="pipewire pw-pulse">
-            <primary sortas="b-pw-pulse">pw-pulse</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
--->
-<varlistentry id="pw-reserve">
+      <varlistentry id="pw-reserve">
         <term><command>pw-reserve</command></term>
         <listitem>
           <para>
@@ -507,22 +501,9 @@ testar e depurar
           </indexterm>
         </listitem>
       </varlistentry>
-<!--
-      <varlistentry id="libpulse-mainloop-glib-pw">
-
-        <term><filename class="libraryfile">libpulse-mainloop-glib-pw.so</filename></term>
-        <listitem>
-          <para>
-            provides a glib main() loop for pulseaudio to route media through
-            pipewire.
-          </para>
-          <indexterm zone="pipewire libpulse-mainloop-glib-pw">
-            <primary sortas="c-libpulse-mainloop-glib-pw">libpulse-mainloop-glib-pw.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
+<!-- not in /usr/lib
       <varlistentry id="libpulse">
+
         <term><filename class="libraryfile">libpulse.so</filename></term>
         <listitem>
           <para>
@@ -569,7 +550,7 @@ testar e depurar
           </indexterm>
         </listitem>
       </varlistentry>-->
-
+      
     </variablelist>
   </sect2>
 

@@ -6,11 +6,11 @@
 
   <!ENTITY btrfs-progs-download-http "&kernel-dl;/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v&btrfs-progs-version;.tar.xz">
   <!ENTITY btrfs-progs-download-ftp  "">
-  <!ENTITY btrfs-progs-md5sum        "d5f703b4085dc745003c16d046d32c2b">
-  <!ENTITY btrfs-progs-size          "2,2 MB">
-  <!ENTITY btrfs-progs-buildsize     "53 MB (adicionar 8,2 GB para os testes)">
-  <!ENTITY btrfs-progs-time          "0,2 UPC (adicione 5,0 UPC para os testes, porém será mais longo em discos
-lentos)">
+  <!ENTITY btrfs-progs-md5sum        "1b5705b3e9503f09a9598dad1e7bfbc8">
+  <!ENTITY btrfs-progs-size          "3.0 MB">
+  <!ENTITY btrfs-progs-buildsize     "62 MB (transient files created during tests need up to 10 GB)">
+  <!ENTITY btrfs-progs-time          "0.2 SBU (add 3.8 SBU for tests, up to 80 SBU on slow disks if reiserfsprogs
+is installed)">
 ]>
 
 <sect1 id="btrfs-progs" xreflabel="btrfs-progs-&btrfs-progs-version;">
@@ -31,7 +31,7 @@ lentos)">
 administração e de depuração para o sistema de arquivos B-tree (btrfs).
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -86,22 +86,23 @@ Additional Downloads</bridgehead>
     <para role="required">
       <xref linkend="lzo"/>
     </para>
-
-    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    
+    <!-- In v6.2.1 (and maybe previous), sphinx is required for the doc
+    <bridgehead renderas="sect4">
+Recommended</bridgehead>
     <para role="recommended">
-      <xref linkend="asciidoc"/> (ou <xref role="nodep" linkend="asciidoctor"/>) e
-<xref linkend="xmlto"/> (ambos exigidos para gerar as páginas de manual)
+      <xref linkend="asciidoc"/> (or <xref role="nodep" linkend="asciidoctor"/>)
+      and <xref linkend="xmlto"/> (both required to generate man pages)
     </para>
-
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    -->
+<bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="lvm2"/> (<command>dmsetup</command> é usado em testes), <xref
-linkend="reiserfs"/> (para os testes) e <xref linkend="sphinx"/> (exigido
-para construir a documentação),
+      <xref linkend="lvm2"/> (<command>dmsetup</command> is used in tests), <xref
+linkend="reiserfs"/> (for tests), and <xref linkend="sphinx"/> (required to
+build documentation)
 
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/btrfs-progs"/></para>
 
   </sect2>
 
@@ -112,19 +113,17 @@ para construir a documentação),
       Habilite a seguinte opção na configuração do núcleo e recompile o núcleo:
     </para>
 
-<screen><literal>File systems ---&gt;
-  &lt;*/M&gt; Btrfs filesystem support [CONFIG_BTRFS_FS]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="btrfs-progs-kernel.xml"/>
 
     <para>
-      Além do acima e das opções exigidas para <xref linkend="lvm2"/> e <xref
-linkend="reiserfs"/>, as seguintes opções precisam ser habilitadas para
-execução de testes:
+      In addition to the above and to the options required for <xref
+linkend="lvm2"/> and <xref linkend="reiserfs"/>, the following options must
+be enabled for running tests:
     </para>
 
-<screen><literal>File systems  ---&gt;
-  [*]   Btrfs POSIX Access Control Lists      [CONFIG_BTRFS_FS_POSIX_ACL]
-  [*]   ReiserFS extended attributes         [CONFIG_REISERFS_FS_XATTR]
-  [*]     ReiserFS POSIX Access Control Lists [CONFIG_REISERFS_FS_POSIX_ACL]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="btrfs-progs-test-kernel.xml"/>
 
     <indexterm zone="btrfs-progs btrfs-progs-kernel">
       <primary sortas="d-btrfs-progs">Aplicativos BTRFS</primary>
@@ -140,7 +139,9 @@ execução de testes:
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-documentation &amp;&amp;
+<screen><userinput>./configure --prefix=/usr           \
+            --disable-static        \
+            --disable-documentation &amp;&amp;
 make</userinput></screen>
 
     <note>
@@ -183,7 +184,10 @@ Substitute your test failure with the one above.
    ./fsck-tests.sh
    ./mkfs-tests.sh
    ./cli-tests.sh
+   sed 's/,orphan_file//' /etc/mke2fs.conf >./custom_mke2fs.conf &amp;&amp;
+   export MKE2FS_CONFIG=$PWD/custom_mke2fs.conf                  &amp;&amp;
    ./convert-tests.sh
+   unset MKE2FS_CONFIG &amp;&amp; rm custom_mke2fs.conf
    ./misc-tests.sh
    ./fuzz-tests.sh
 popd</userinput></screen>
@@ -191,41 +195,58 @@ popd</userinput></screen>
 
     <note>
       <para>
-        Se as opções do núcleo mencionadas acima não estiverem habilitadas, [então]
-alguns testes falharão e impedirão que todos os testes restantes sejam
-executados, porque a imagem de teste do disco não foi desmontada
-corretamente.
+        If the above mentioned kernel options are not enabled, some tests fail, and
+prevent all the remaining tests from running because the test disk image is
+not cleanly unmounted.
       </para>
     </note>
 
+    <!--  Now passes in version 6.3.1.
     <para>
-      O teste mkfs "025-zoned-parallel" é conhecido por falhar.
-    </para>
 
-    <para>
+      The mkfs test 025-zoned-parallel is known to fail.
+    </para>
+-->
+<para>
       Instale o pacote como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
+
+    <para>
+      If you have passed <parameter>--disable-documentation</parameter> to
+<command>configure</command> and you need the manual pages, install them by
+running, as the &root; user:
+    </para>
+
+<screen role="root"><userinput>for i in 5 8; do
+   install Documentation/*.$i /usr/share/man/man$i
+done</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/static-libraries.xml"/>
+
     <para>
-      <option>--disable-documentation</option>: Essa opção é necessária se as
-dependências recomendadas não estiverem instaladas.
+      <parameter>--disable-documentation</parameter>: This switch disables
+rebuilding the manual pages, because it requires <xref linkend="sphinx"/>.
     </para>
-
-  <!-- not anymore in the commands
     <para>
-
-      <command>mv tests/{cli,convert,misc,fuzz}-tests/ ...</command>: Disables
-      tests that fail and prevent tests from completing.
+      <command>sed 's/,orphan_file//" ...</command>: In this version of
+<application>btrfs-progs</application>, the <command>btrfs-convert</command>
+program produces a btrfs filesystem containing errors if converting from an
+ext4 filesystem created with the <quote>orphan_file</quote> feature. This
+command creates a custom configuration file that prevents creating a
+filesystem with this feature.
     </para>
-
+    
+  <!--
     <para>
+
       <command>ln -s ... /usr/lib/libbtrfs.so</command>: Creates a
       symbolic link in the directory where it is expected.
     </para>
@@ -236,6 +257,24 @@ dependências recomendadas não estiverem instaladas.
     </para>
 -->
 </sect2>
+
+  <sect2 role="using" id="using-btrfs-convert">
+    <title>Using the btrfs-convert Program</title>
+
+    <para>
+      This version of <application>btrfs-progs</application> does not convert
+correctly ext4 filesystems to btrfs if the ext4 <option>orphan_file</option>
+feature is turned on. If you happen to convert such a filesystem, you need
+to first run:
+    </para>
+
+<screen role="nodump"><userinput>tune2fs -O ^orphan_file <replaceable>/dev/sdxx</replaceable></userinput></screen>
+
+    <para>
+      where <filename>/dev/sdxx</filename> is the partition of the filesystem you
+want to convert.
+    </para>
+  </sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>
@@ -280,7 +319,8 @@ mkfs.btrfs
         <term><command>btrfs-convert</command></term>
         <listitem>
           <para>
-            converte de um sistema de arquivos ext2/3/4 ou reiserfs para btrfs
+            converts from an ext2/3/4 or reiserfs filesystem to btrfs (see <xref
+linkend="using-btrfs-convert"/> above)
           </para>
           <indexterm zone="btrfs-progs btrfs-convert">
             <primary sortas="b-btrfs-convert">btrfs-convert</primary>

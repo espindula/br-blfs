@@ -6,11 +6,13 @@
 
 
   <!ENTITY mariadb-download-http "https://downloads.mariadb.org/interstitial/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
-  <!ENTITY mariadb-download-ftp  "ftp://mirrors.fe.up.pt/pub/mariadb/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
-  <!ENTITY mariadb-md5sum        "70b118a5a82846fe64adbf99d766d3e9">
-  <!ENTITY mariadb-size          "91 MB">
-  <!ENTITY mariadb-buildsize     "2,3 GB (659 MB instalado)">
-  <!ENTITY mariadb-time          "7,9 UPC (com paralelismo=4, adicionar 0,4 UPC para os testes)">
+  <!--<!ENTITY mariadb-download-ftp  "ftp://mirrors.fe.up.pt/pub/mariadb/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">-->
+  <!-- FTP site only keeps the most current version.-->
+  <!ENTITY mariadb-download-ftp  "">
+  <!ENTITY mariadb-md5sum        "b6f3b3af44f72bcf32cba31071e7642d">
+  <!ENTITY mariadb-size          "92 MB">
+  <!ENTITY mariadb-buildsize     "2.6 GB (723 MB installed)">
+  <!ENTITY mariadb-time          "8.4 SBU (with parallelism=4, add 0.3 SBU for tests)">
 ]>
 
 <sect1 id="mariadb" xreflabel="MariaDB-&mariadb-version;">
@@ -32,7 +34,7 @@ pela comunidade e um substituto imediato para o sistema de gerenciamento de
 bases de dados relacionais &quot;<application>MySQL</application>&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -70,10 +72,10 @@ bases de dados relacionais &quot;<application>MySQL</application>&quot;.
 
     <note>
       <para>
-        O tamanho instalado do &quot;MariaDB&quot; é 658 MB, mas pode ser reduzido
-em cerca de 252 MB, se desejado, removendo-se o diretório &quot;<filename
-class="directory">/usr/share/mysql/test</filename>&quot; depois da
-instalação.
+        The installed size of MariaDB is 658 MB, but this can be reduced by about
+252 MB, if desired, by removing the <filename
+class="directory">/usr/share/mysql/test</filename> directory after
+installation.
       </para>
     </note>
 
@@ -106,23 +108,21 @@ Additional Downloads</bridgehead>
       <!--<ulink url="https://mariadb.com/kb/en/mariadb/tokudb/">
 TokuDB</ulink>, and-->
 <xref linkend="boost"/>, <xref linkend="libaio"/>, <xref
-linkend="libxml2"/>, <xref linkend="linux-pam"/>, <xref linkend="mitkrb"/>,
-<xref linkend="pcre2"/>, <xref linkend="ruby"/>, <xref linkend="sphinx"/>,
-<xref linkend="unixodbc"/>, <xref linkend="valgrind"/>, <ulink
-url="https://groonga.org/">Groonga</ulink>, <ulink
-url="https://www.phontron.com/kytea/">KyTea</ulink>, <ulink
+linkend="libxml2"/>, <xref linkend="linux-pam"/>, <xref linkend="lzo"/>,
+<xref linkend="mitkrb"/>, <xref linkend="pcre2"/>, <xref linkend="ruby"/>,
+<xref linkend="sphinx"/>, <xref linkend="unixodbc"/>, <xref
+linkend="valgrind"/>, <ulink url="https://groonga.org/">Groonga</ulink>,
+<ulink url="https://www.phontron.com/kytea/">KyTea</ulink>, <ulink
 url="https://sourceforge.net/projects/judy/">Judy</ulink>, <ulink
 url="https://github.com/Cyan4973/lz4">lz4</ulink>, <ulink
 url="https://taku910.github.io/mecab">MeCab</ulink>, <ulink
 url="https://msgpack.org/">MessagePack</ulink>, <ulink
 url="https://www.mruby.org/">mruby</ulink>, <ulink
 url="https://mariadb.com/kb/en/myrocks/">MyRocks</ulink>, <ulink
-url="https://github.com/google/snappy">Snappy</ulink> e <ulink
+url="https://github.com/google/snappy">Snappy</ulink>, and <ulink
 url="https://zeromq.org/">ZeroMQ</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/mariadb"/>
-    </para>
 
   </sect2>
 
@@ -161,7 +161,7 @@ seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
 cmake -DCMAKE_BUILD_TYPE=Release                      \
       -DCMAKE_INSTALL_PREFIX=/usr                     \
@@ -213,6 +213,14 @@ class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
+
+    <para>
+      If you have <xref linkend="linux-pam" role="nodep"/> installed, move the PAM
+module and configuration file installed by this package as the &root; user:
+    </para>
+
+<screen role="nodump"><userinput>mv -v /usr/share/pam_use_map.so /lib/security &amp;&amp;
+mv -v /usr/share/user_map.conf /etc/security</userinput></screen>
 
   </sect2>
 

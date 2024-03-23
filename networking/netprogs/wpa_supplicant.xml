@@ -38,7 +38,7 @@ autenticação/associação &quot;IEEE 802.11&quot; do controlador de
 sem fio protegido por senha.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -76,6 +76,11 @@ sem fio protegido por senha.
 
     <bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
 
+    <bridgehead renderas="sect4">Required (Runtime)</bridgehead>
+    <para role="nodump">
+      <xref linkend="wireless-kernel"/>
+    </para>
+
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="desktop-file-utils"/> (para executar
@@ -85,11 +90,9 @@ sem fio protegido por senha.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <phrase revision="sysv"><xref linkend="dbus"/>,</phrase> <xref
-linkend="libxml2"/> e <xref linkend="qt5"/>
+linkend="libxml2"/>, and &qt5-deps;
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/wpa_supplicant"/>
-    </para>
 
   </sect2>
 
@@ -97,25 +100,9 @@ linkend="libxml2"/> e <xref linkend="qt5"/>
     <title>Configuração do Núcleo</title>
 
     <para>
-      Habilite as seguintes opções na configuração do núcleo, bem como
-controladores específicos de dispositivos para o teu hardware e recompile o
-núcleo, se necessário:
-    </para>
-
-<screen><literal>[*] Networking support  ---&gt;                             [CONFIG_NET]
-  [*] Wireless  ---&gt;                                      [CONFIG_WIRELESS]
-    &lt;*/M&gt; cfg80211 - wireless configuration API           [CONFIG_CFG80211]
-    [*]     cfg80211 wireless extensions compatibility    [CONFIG_CFG80211_WEXT]
-    &lt;*/M&gt; Generic IEEE 802.11 Networking Stack (mac80211) [CONFIG_MAC80211]
-Device Drivers  ---&gt;
-  [*] Network device support  ---&gt;                        [CONFIG_NETDEVICES]
-    [*] Wireless LAN  ---&gt;                                [CONFIG_WLAN]</literal></screen>
-
-    <para>
-      Abra o submenu e selecione as opções que suportam o teu hardware:
-&quot;<command>lspci</command>&quot; oriundo de &quot;<xref
-linkend="pciutils"/>&quot; pode ser usado para visualizar a configuração do
-teu hardware.
+      To use <application>wpa_supplicant</application>, the kernel must have the
+appropriate drivers and other support available.  Read <xref
+linkend='wireless-kernel'/> for details.
     </para>
 
     <indexterm zone="wpa_supplicant wpa_supplicant-kernel">
@@ -179,19 +166,23 @@ CONFIG_CTRL_IFACE_DBUS_NEW=y
 CONFIG_CTRL_IFACE_DBUS_INTRO=y</literal>
 EOF</userinput></screen>
 
+    <para>
+      Install <application>WPA Supplicant</application> by running the following
+commands:
+    </para>
+
 <screen><userinput>cd wpa_supplicant &amp;&amp;
 make BINDIR=/usr/sbin LIBDIR=/usr/lib</userinput></screen>
 
     <para>
-      Se você tiver instalado o &quot;<xref linkend="qt5"/>&quot; e desejar
-construir o aplicativo &quot;GUI&quot; do &quot;<application>WPA
-Supplicant</application>&quot;, [então] execute os seguintes comandos:
+      If you have installed &qt5-deps; and wish to build the <application>WPA
+Supplicant</application> GUI program, run the following commands:
     </para>
 
     <note>
       <para>
-        O seguinte nome de diretório é rotulado como &quot;qt4&quot;, mas é
-compatível com o &quot;<xref linkend="qt5"/>&quot;.
+        The following directory name is labelled qt4, but is compatible with
+&qt5-deps;.
       </para>
     </note>
 
@@ -391,42 +382,12 @@ inicialização usando o &quot;<command>wpa_supplicant</command>&quot;,
       </indexterm>
 
       <para revision="sysv">
-        Se o teu roteador/ponto de acesso usar &quot;DHCP&quot; para alocar
-endereços &quot;IP&quot;, [então] você pode instalar o cliente &quot;<xref
-linkend="dhcp"/>&quot; e usá-lo para automaticamente obter endereços de rede
-de intercomunicação. Crie o
-&quot;<filename>/etc/sysconfig/ifconfig-<replaceable>wifi0</replaceable>
-</filename>&quot; executando o seguinte comando como o(a) usuário(a)
-&quot;<systemitem class="username">root</systemitem>&quot;:
-      </para>
-
-<screen role="root" revision="sysv"><userinput>cat &gt; /etc/sysconfig/ifconfig.<replaceable>wifi0</replaceable> &lt;&lt; "EOF"
-<literal>ONBOOT="yes"
-IFACE="<replaceable>wlan0</replaceable>"
-SERVICE="wpa"
-
-# Argumentos adicionais para o "wpa_supplicant"
-WPA_ARGS=""
-
-WPA_SERVICE="dhclient"
-DHCP_START=""
-DHCP_STOP=""
-
-# Configure PRINTIP="yes" para que o conjunto de comandos sequenciais imprima
-# o endereço IP atribuído pelo DHCP
-PRINTIP="no"
-
-# Configure PRINTALL="yes" para imprimir os valores atribuídos pelo DHCP para
-# IP, SM, DG e 1° NS. Isso exige PRINTIP="yes".
-PRINTALL="no"</literal>
-EOF</userinput></screen>
-
-      <para revision="sysv">
-        Se você preferir &quot;<xref linkend="dhcpcd"/>&quot; em vez do cliente
-&quot;<xref linkend="dhcp"/>&quot;, [então] crie o
-&quot;<filename>/etc/sysconfig/ifconfig-<replaceable>wifi0</replaceable>
-</filename>&quot; executando o seguinte comando como o(a) usuário(a)
-&quot;<systemitem class="username">root</systemitem>&quot;:
+        If your router/access point uses DHCP to allocate IP addresses, you can
+install <xref linkend="dhcpcd" role="nodep"/> and use it to automatically
+obtain network addresses. Create the
+<filename>/etc/sysconfig/ifconfig-<replaceable>wifi0</replaceable>
+</filename> by running the following command as the <systemitem
+class="username">root</systemitem> user:
       </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /etc/sysconfig/ifconfig.<replaceable>wifi0</replaceable> &lt;&lt; "EOF"

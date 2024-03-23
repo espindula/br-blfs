@@ -38,7 +38,7 @@ habilitará o suporte a senha forte. Se você tiver instalado o
 <command>login</command> e <command>su</command> utilizem o PAM.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -93,9 +93,6 @@ Additional Downloads</bridgehead>
       <xref linkend="linux-pam"/> ou <xref role="nodep" linkend="cracklib"/>
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/shadow"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -132,20 +129,20 @@ comandos:
 
 sed -i "224s/rounds/min_rounds/" libmisc/salt.c        &amp;&amp;
 -->
-<userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in         &amp;&amp;
+<userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in          &amp;&amp;
 
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \; &amp;&amp;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \; &amp;&amp;
 find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \; &amp;&amp;
 
-sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' \
-    -e 's@#\(SHA_CRYPT_..._ROUNDS 5000\)@\100@'       \
-    -e 's@/var/spool/mail@/var/mail@'                 \
-    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                \
-    -i etc/login.defs                                 &amp;&amp;
+sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
+    -e 's@/var/spool/mail@/var/mail@'                   \
+    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
+    -i etc/login.defs                                   &amp;&amp;
 
 ./configure --sysconfdir=/etc               \
             --disable-static                \
+            --with-{b,yes}crypt             \
             --with-group-name-max-length=32 &amp;&amp;
 make</userinput></screen>
 
@@ -189,18 +186,16 @@ instaladas pelo <application>Man-pages</application> no LFS.
     </para>
 
     <para>
-      <command>sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' -e
-'s@#\(SHA_CRYPT_..._ROUNDS 5000\)@\100@' -e 's@/var/spool/mail@/var/mail@'
--e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i etc/login.defs</command>: Em vez de
-usar o método padrão 'DES ', esse comando modifica a instalação para usar o
-método mais seguro 'SHA512' de hash de senhas, que também permite senhas
-maiores que oito caracteres. O número de rodadas também é aumentado para
-evitar ataques de senha de força bruta. O comando também muda o local
-obsoleto <filename class="directory">/var/spool/mail</filename> para caixas
-de correio de usuário(a) que <application>Shadow</application> usa por
-padrão para o local <filename class="directory">/var/mail</filename>. Ele
-também muda o caminho padrão para estar consistente com aquele configurado
-no LFS.
+      <command>sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' -e
+'s@/var/spool/mail@/var/mail@' -e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i
+etc/login.defs</command>: Instead of using the default 'DES' method, this
+command modifies the installation to use the much more secure 'YESCRYPT'
+method of hashing passwords, which also allows passwords longer than eight
+characters.  The command also changes the obsolete <filename
+class="directory">/var/spool/mail</filename> location for user mailboxes
+that <application>Shadow</application> uses by default to the <filename
+class="directory">/var/mail</filename> location. It also changes the default
+path to be consistent with that set in LFS.
     </para>
 
     <!--
@@ -384,51 +379,48 @@ seguintes comandos:
         <title>'login'</title>
 
 <screen role="root"><userinput>cat &gt; /etc/pam.d/login &lt;&lt; "EOF"
-<literal># Início /etc/pam.d/login
+<literal># Begin /etc/pam.d/login
 
-# Configura atraso de falha antes do próximo prompt para 3 segundos
+# Set failure delay before next prompt to 3 seconds
 auth      optional    pam_faildelay.so  delay=3000000
 
-# Verifica se o(a) usuário(a) tem permissão para se logar
+# Check to make sure that the user is allowed to login
 auth      requisite   pam_nologin.so
 
-# Verifica para assegurar que o(a) root tem permissão para se logar.
-# Desabilitado por padrão. Você precisará criar o arquivo /etc/securetty
-# para que este módulo funcione. Veja-se man 5 securetty.
+# Check to make sure that root is allowed to login
+# Disabled by default. You will need to create /etc/securetty
+# file for this module to function. See man 5 securetty.
 #auth      required    pam_securetty.so
 
-# Associações adicionais de grupo - desabilitadas por padrão
+# Additional group memberships - disabled by default
 #auth      optional    pam_group.so
 
-# Inclui configurações de autenticação do sistema
+# include system auth settings
 auth      include     system-auth
 
-# Verifica acesso para o(a) usuário(a)
+# check access for the user
 account   required    pam_access.so
 
-# Inclui configurações de conta do sistema
+# include system account settings
 account   include     system-account
 
-# Configura variáveis padrão de ambiente para o(a) usuário(a)
+# Set default environment variables for the user
 session   required    pam_env.so
 
-# Configura limites de recursos para o(a) usuário(a)
+# Set resource limits for the user
 session   required    pam_limits.so
 
-# Exibe data do login mais recente - Desabilitado por padrão
-#session   optional    pam_lastlog.so
-
-# Exibe a mensagem do dia - Desabilitado por padrão
+# Display the message of the day - Disabled by default
 #session   optional    pam_motd.so
 
-# Verifica mensagens eletrônicas para o(a) usuário(a) - Desabilitado por padrão
+# Check user's mail - Disabled by default
 #session   optional    pam_mail.so      standard quiet
 
-# inclui configurações da sessão e senha do sistema
+# include system session and password settings
 session   include     system-session
 password  include     system-password
 
-# Fim /etc/pam.d/login</literal>
+# End /etc/pam.d/login</literal>
 EOF</userinput></screen>
       </sect4>
 

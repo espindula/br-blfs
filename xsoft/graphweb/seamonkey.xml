@@ -6,9 +6,9 @@
 
   <!ENTITY seamonkey-download-http "&mozilla-http;/seamonkey/releases/&seamonkey-version;/source/seamonkey-&seamonkey-version;.source.tar.xz">
   <!ENTITY seamonkey-download-ftp  "">
-  <!ENTITY seamonkey-md5sum        "d04916f10d082a503af9a309184365dd">
-  <!ENTITY seamonkey-size          "249 MB">
-  <!ENTITY seamonkey-buildsize     "3,2 GB (159 MB instalado)">
+  <!ENTITY seamonkey-md5sum        "5fd91a88005c2cc2a3ba4addfb5ff35e">
+  <!ENTITY seamonkey-size          "254 MB">
+  <!ENTITY seamonkey-buildsize     "4.4 GB (159 MB installed)">
   <!ENTITY seamonkey-time          "11 UPC (com paralelismo=4)">
 ]>
 
@@ -23,12 +23,12 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução ao SeaMonkey</title>
+    <title>Introduction to SeaMonkey</title>
 
     <para>
-      <application>SeaMonkey</application> é uma suíte de navegadores, descendente
-do <application>Netscape</application>. Inclui o navegador, o compositor, os
-clientes de mensagens e notícias e um cliente de IRC.
+      <application>SeaMonkey</application> is a browser suite, a descendant of
+<application>Netscape</application>. It includes the browser, composer, mail
+and news clients, and an IRC client.
     </para>
 
     <para>
@@ -38,7 +38,7 @@ navegação e mensagens eletrônicas. Esses aplicativos são <xref
 linkend="firefox"/> e <xref linkend="thunderbird"/>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,7 +74,7 @@ linkend="firefox"/> e <xref linkend="thunderbird"/>.
       </listitem>
     </itemizedlist>
 
- 
+
 
     <!--
     <bridgehead renderas="sect3">
@@ -83,7 +83,7 @@ Additional Downloads</bridgehead>
       <listitem>
         <para>
           Required patch:
-          <ulink url="&patch-root;/seamonkey-&seamonkey-version;-security_fix-1.patch"/>
+          <ulink url="&patch-root;/seamonkey-&seamonkey-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -96,13 +96,13 @@ desempacotará para o diretório
       </para>
     </note>
 
-    <bridgehead renderas="sect3">Dependências do SeaMonkey</bridgehead>
+    <bridgehead renderas="sect3">SeaMonkey Dependencies</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="autoconf213"/>, <xref linkend="cbindgen"/>, <xref
-linkend="gtk3"/>, <xref linkend="python2"/>, <xref linkend="unzip"/>, <xref
-linkend="yasm"/> e <xref linkend="zip"/>
+linkend="gtk3"/>, <xref linkend="nodejs"/>, <xref linkend="python2"/>, <xref
+linkend="unzip"/>, <xref linkend="yasm"/>, and <xref linkend="zip"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -148,28 +148,27 @@ mas podem estar desatualizadas ou conter falhas de segurança.
 linkend="GConf"/>, <xref linkend="startup-notification"/>, <xref
 linkend="valgrind"/>, <xref linkend="wget"/>, <xref
 linkend="wireless_tools"/>, <ulink
-url="https://hunspell.sourceforge.net/">Hunspell</ulink> e <ulink
+url="https://hunspell.sourceforge.net/">Hunspell</ulink>, and <ulink
 url="https://facebook.github.io/watchman/">Watchman</ulink>
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/seamonkey"/>
+      Editor Notes: <ulink url="&blfs-wiki;/seamonkey"/>
     </para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do SeaMonkey</title>
+    <title>Installation of SeaMonkey</title>
 
     <para>
-      A configuração do <application>SeaMonkey</application> é realizada
-criando-se um arquivo <filename>mozconfig</filename> contendo as opções
-desejadas de configuração. Um arquivo <filename>mozconfig</filename> padrão
-é criado abaixo. Para ver a lista completa de opções disponíveis de
-configuração (e uma descrição abreviada de cada uma), emita
-<command>./configure --help</command>. Você também possivelmente revise o
-arquivo inteiro e descomente quaisquer outras opções desejadas. Crie o
-arquivo emitindo o seguinte comando:
+      The configuration of <application>SeaMonkey</application> is accomplished by
+creating a <filename>mozconfig</filename> file containing the desired
+configuration options. A default <filename>mozconfig</filename> file is
+created below. To see the entire list of available configuration options
+(and an abbreviated description of each one), issue <command>./configure
+--help</command>. You may also wish to review the entire file and uncomment
+any other desired options. Create the file by issuing the following command:
     </para>
 
 <screen><!-- comments cause a blank line, following was for icu in the past
@@ -177,55 +176,55 @@ arquivo emitindo o seguinte comando:
      line below was with comment and explanation
 # Use the internal version of icu due to execution problems-->
 <?dbfo keep-together="auto"?><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
-<literal># Se você tiver uma máquina multi Elementos de Processamento, todos os Elementos de Processamento serão usados
+<literal># If you have a multicore machine, all cores will be used
 
-# Se você tiver instalado o DBus-Glib, comente esta linha:
+# If you have installed DBus-Glib comment out this line:
 ac_add_options --disable-dbus
 
-# Se você tiver instalado o dbus-glib e tiver instalado (ou instalará)
-# o "wireless-tools" e deseja usar serviços de geolocalização da web,
-# comente esta linha
+# If you have installed dbus-glib, and you have installed (or will install)
+# wireless-tools, and you wish to use geolocation web services, comment out
+# this line
 ac_add_options --disable-necko-wifi
 
-# Descomente estas linhas se você tiver instalado dependências opcionais:
+# Uncomment these lines if you have installed optional dependencies:
 #ac_add_options --enable-system-hunspell
 #ac_add_options --enable-startup-notification
 
-# Descomente a seguinte opção se você não tiver instalado o PulseAudio:
+# Uncomment the following option if you have not installed PulseAudio
 #ac_add_options --disable-pulseaudio
-# e descomente esta se você instalou alsa-lib em vez de PulseAudio:
+# and uncomment this if you installed alsa-lib instead of PulseAudio
 #ac_add_options --enable-alsa
 
-# Comente a seguinte opção se você tiver o gconf instalado:
+# Comment out following option if you have gconf installed
 ac_add_options --disable-gconf
 
-# Comente as seguintes opções se você não tiver instalado
-# as dependências recomendadas:
+# Comment out following options if you have not installed
+# recommended dependencies:
 ac_add_options --with-system-icu
 ac_add_options --with-system-libevent
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-webp
 
-# Desativar símbolos de depuração torna a construção muito menor e um pouco
-# mais rápida. Comente isto se você precisar executar um depurador. Observação:
-# Isto é necessário para compilação em i686.
+# Disabling debug symbols makes the build much smaller and a little
+# faster. Comment this if you need to run a debugger. Note: This is
+# required for compilation on i686.
 ac_add_options --disable-debug-symbols
 
-# Foi informado que o elf-hack causa instalações falhas (depois de construções bem-sucedidas)
-# em algumas máquinas. Supõe-se que melhore o tempo de inicialização e reduza
-# a libxul.so em alguns MB - comente isto se você souber que tua máquina não é afetada.
+# The elf-hack is reported to cause failed installs (after successful builds)
+# on some machines. It is supposed to improve startup time and it shrinks
+# libxul.so by a few MB - comment this if you know your machine is not affected.
 ac_add_options --disable-elf-hack
 
-# Seamonkey tem alguns recursos adicionais que não estão ativados por padrão,
-# como cliente IRC, calendário e Inspetor DOM. O Inspetor DOM auxilia no
-# projeto de páginas da web. Comente estas opções se você não deseja
-# esses recursos.
+# Seamonkey has some additional features that are not turned on by default,
+# such as an IRC client, calendar, and DOM Inspector. The DOM Inspector
+# aids with designing web pages. Comment these options if you do not
+# desire these features.
 ac_add_options --enable-calendar
 ac_add_options --enable-dominspector
 ac_add_options --enable-irc
 
-# Os(as) editores(as) do BLFS recomendam não mudar nada abaixo desta linha:
+# The BLFS editors recommend not changing anything below this line:
 ac_add_options --prefix=/usr
 ac_add_options --enable-application=comm/suite
 
@@ -233,8 +232,8 @@ ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-tests
 
-# Rust-simd não compila com versões recentes do Rust.
-# Está desabilitado nas versões recentes do Firefox
+# rust-simd does not compile with recent versions of rust.
+# It is disabled in recent versions of firefox
 ac_add_options --disable-rust-simd
 
 ac_add_options --enable-optimize="-O2"
@@ -242,7 +241,7 @@ ac_add_options --enable-strip
 ac_add_options --enable-install-strip
 ac_add_options --enable-official-branding
 
-# A opção de usar o Cairo do sistema foi removida em 2.53.9.
+# The option to use system cairo was removed in 2.53.9.
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
 
@@ -259,53 +258,38 @@ EOF</userinput></screen>
        href="../../xincludes/mozmach.xml"/>
     </note>
 
- 
+
+
 
     <!--
     <para>
 
-      Apply a patch to fix a critical security vulnerability in Seamonkey:
+      First remove an obsolete flag in python code, that has been removed
+      in python-3.11:
     </para>
 
-<screen><userinput>patch -Np1 -i ../seamonkey-&seamonkey-version;-security_fix-1.patch</userinput></screen>
+<screen><userinput>grep -rl \'rU\' | xargs sed -i "s/'rU'/'r'/"</userinput></screen>
 -->
-<para>
-      Primeiro remova um sinalizador obsoleto no código Python, que foi removido
-em python-3.11:
-    </para>
-
-<!-- Causes issues since xpidl is python2 in Seamonkey
+<!--
     <para>
 
-      Then fix an issue with regular expressions in python-3.11:
-    </para>
-
-<screen><userinput>sed -e 's/?s)\./?s:.)/'               \
-    -e '/?m)/{s/?m)/?m:/;s/\$"/$)"/}' \
-    -e '/?s)%/{s/?s)/?s:/;s/?"/?)"/}' \
-    -i xpcom/idl-parser/xpidl/xpidl.py</userinput></screen>
--->
-<screen><userinput>grep -rl \"rU\" | xargs sed -i 's/"rU"/"r"/'</userinput></screen>
-
-
-
-    <para>
-      A seguir, contorne um problema no ambiente virtual Python:
+      Next, work around a problem in the Python virtual environment:
     </para>
 
 <screen><userinput>sed -i "/if sys.executable !=/i\    open(join(bin_dir, 'pyvenv.cfg'), 'w').close()" \
     third_party/python/virtualenv/virtualenv.py</userinput></screen>
-
-    <para>
-      A seguir, contorne uma falha que ocorre durante a reprodução de áudio quando
-o Seamonkey é compilado com rustc-1.67 ou superior:
+-->
+<para>
+      Fix a problem with the bundled 'distro' python module:
     </para>
 
-<screen><userinput>sed -i '/USE_PULSE_RUST/d' media/libcubeb/src/moz.build</userinput></screen>
+<screen><userinput>sed -e '1012 s/stderr=devnull/stderr=subprocess.DEVNULL/' \
+    -e '1013 s/OSError/(OSError, subprocess.CalledProcessError)/' \
+    -i third_party/python/distro/distro.py</userinput></screen>
 
     <para>
-      Compile o <application>SeaMonkey</application> executando os seguintes
-comandos:
+      Compile <application>SeaMonkey</application> by running the following
+commands:
     </para>
 
 <!-- comment this since llvm must have been installed for rust
@@ -317,7 +301,7 @@ comandos:
       </para>
     </note>-->
 <screen><userinput>export CC=clang CXX=clang++          &amp;&amp;
-./mach configure || ./mach configure &amp;&amp;
+./mach configure &amp;&amp;
 ./mach build</userinput></screen>
 
 
@@ -328,9 +312,8 @@ comandos:
     </para>
 
     <para>
-      Instale o <application>SeaMonkey</application> emitindo os seguintes
-comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      Install <application>SeaMonkey</application> by issuing the following
+commands as the <systemitem class="username">root</systemitem> user:
     </para>
 
 
@@ -345,21 +328,21 @@ cp -v $(find -name seamonkey.1 | head -n1) /usr/share/man/man1</userinput></scre
     <title>Explicações do Comando</title>
 
     <para>
-      <command>export CC=clang CXX=clang++</command>: Com a introdução do
-<application>gcc-12</application>, muitos mais avisos são gerados ao
-compilar aplicativos Mozilla e isso resulta em uma construção muito mais
-lenta e maior. Além disso, construir com GCC no i?86 está atualmente
-quebrado. Embora o código de desenvolvedor(a) do Mozilla tenha como padrão
-usar o <application>llvm</application>, a menos que substituído, o código de
-configuração mais antigo no <application>SeaMonkey</application> tem como
-padrão o gcc.
+      <command>export CC=clang CXX=clang++</command>: With the introduction of
+<application>gcc-12</application>, many more warnings are generated when
+compiling mozilla applications and that results in a much slower, and
+larger, build. Furthermore, building with GCC on i?86 is currently broken.
+Although upstream mozilla code defaults to using
+<application>llvm</application> unless overridden, the older configure code
+in <application>SeaMonkey</application> defaults to gcc.
     </para>
 
     <para>
-      <command>./mach configure || ./mach configure</command>: Isso valida as
-dependências fornecidas e o <filename>mozconfig</filename>. Isso é executado
-duas vezes porque problemas com mach farão com que ele falhe na primeira
-vez.
+      <!--This is run twice because problems with mach will cause it to fail the
+      first time.-->
+<command>./mach configure</command>: This validates the supplied
+dependencies and the <filename>mozconfig</filename>.
+      
     </para>
 
     <para>
@@ -380,34 +363,31 @@ poderá ser mais rápido.
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando o SeaMonkey</title>
+    <title>Configuring SeaMonkey</title>
 
     <para>
-      Para instalar vários complementos do <application>SeaMonkey</application>,
-consulte <ulink
-url="https://addons.thunderbird.net/en-US/seamonkey/">Complementos para
+      For installing various <application>SeaMonkey</application> add-ons, refer
+to <ulink url="https://addons.thunderbird.net/en-US/seamonkey/">Add-ons for
 Seamonkey</ulink>.
     </para>
 
     <para>
-      Juntamente com usar o menu <quote>Preferências</quote> para configurar as
-opções e preferências do <application>SeaMonkey</application> para atender
-aos gostos individuais, um controle mais refinado de muitas opções somente
-está disponível usando uma ferramenta não disponível a partir do sistema
-geral de menus. Para acessar essa ferramenta, você precisará abrir uma
-janela do navegador e digitar <systemitem
-role="url">about:config</systemitem> na barra de endereço. Isso exibirá uma
-lista de preferências de configuração e informações relacionadas a cada uma
-delas. Você pode usar a barra <quote>Pesquisar:</quote> para inserir
-critérios de pesquisa e restringir os itens listados. A mudança de uma
-preferência pode ser feita usando dois métodos. Primeiro, se a preferência
-tiver um valor booleano (Verdadeiro/Falso), basta clicar duas vezes na
-preferência para alternar o valor; e dois, para outras preferências, basta
-clicar com o botão direito na linha desejada, escolher
-<quote>Modificar</quote> no menu e mudar o valor. A criação de novos itens
-de preferência é realizada da mesma maneira, exceto que escolha
-<quote>Novo</quote> no menu e forneça os dados desejados nos campos quando
-solicitado.
+      Along with using the <quote>Preferences</quote> menu to configure
+<application>SeaMonkey</application>'s options and preferences to suit
+individual tastes, finer grain control of many options is only available
+using a tool not available from the general menu system. To access this
+tool, you'll need to open a browser window and enter <systemitem
+role="url">about:config</systemitem> in the address bar. This will display a
+list of the configuration preferences and information related to each
+one. You can use the <quote>Search:</quote> bar to enter search criteria and
+narrow down the listed items. Changing a preference can be done using two
+methods. One, if the preference has a boolean value (True/False), simply
+double-click on the preference to toggle the value and two, for other
+preferences simply right-click on the desired line, choose
+<quote>Modify</quote> from the menu and change the value. Creating new
+preference items is accomplished in the same way, except choose
+<quote>New</quote> from the menu and provide the desired data into the
+fields when prompted.
     </para>
 
 
@@ -423,14 +403,13 @@ solicitado.
     </tip>
 -->
 <para>
-      Se você usa um ambiente de área de trabalho, como
-<application>Gnome</application> ou <application>KDE</application>, você
-possivelmente deseje criar um arquivo
-<filename>seamonkey.desktop</filename>, de forma que o
-<application>SeaMonkey</application> apareça nos menus do painel. Se você
-não habilitou <application>Startup-Notification</application> em teu
-mozconfig, mude a linha StartupNotify para false. Como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
+      If you use a desktop environment like <application>Gnome</application> or
+<application>KDE</application> you may wish to create a
+<filename>seamonkey.desktop</filename> file so that
+<application>SeaMonkey</application> appears in the panel's menus. If you
+didn't enable <application>Startup-Notification</application> in your
+mozconfig change the StartupNotify line to false. As the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>mkdir -pv /usr/share/{applications,pixmaps}              &amp;&amp;
@@ -440,7 +419,7 @@ cat &gt; /usr/share/applications/seamonkey.desktop &lt;&lt; "EOF"
 Encoding=UTF-8
 Type=Application
 Name=SeaMonkey
-Comment=A Suíte Mozilla
+Comment=The Mozilla Suite
 Icon=seamonkey
 Exec=seamonkey
 Categories=Network;GTK;Application;Email;Browser;WebBrowser;News;

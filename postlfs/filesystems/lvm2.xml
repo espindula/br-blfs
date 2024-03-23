@@ -6,15 +6,20 @@
 
   <!ENTITY lvm2-download-http "https://sourceware.org/ftp/lvm2/LVM2.&lvm2-version;.tgz">
   <!ENTITY lvm2-download-ftp  "ftp://sourceware.org/pub/lvm2/LVM2.&lvm2-version;.tgz">
-  <!ENTITY lvm2-md5sum        "cda7b89ae45ddb4a0cee768645ac9757">
+  <!ENTITY lvm2-md5sum        "a97cf533222a5760225dbd26c3982ca6">
   <!ENTITY lvm2-size          "2,6 MB">
-  <!ENTITY lvm2-buildsize     "48 MB (adicione 25 MB para os testes; arquivos transitórios podem crescer
-até cerca de 800 MB no diretório /tmp durante os testes)">
+  <!ENTITY lvm2-buildsize     "38 MB (add 20 MB for tests; transient files can grow up to around 300 MB in
+the /tmp directory during tests)">
   <!-- My build size was 124 MB with tests, but I'll leave this here. -renodr
        The files in /tmp are transient. I monitor /tmp with a loop during
-       tests. -pierre, August 2020 -->
-  <!ENTITY lvm2-time          "0,1 UPC (usando paralelismo = 4; adicione de 9 a 48 UPC para os testes,
-dependendo da velocidade do disco)">
+       tests. -pierre, August 2020
+
+       Build size with tests was 58M.  The largest size of /tmp I saw was 289MB.
+       ### 412 tests: 245 passed, 155 skipped, 0 timed out, 1 warned, 11 failed
+       Aug 2023 LVM2.2.03.22 - bdubbs
+       -->
+  <!ENTITY lvm2-time          "0.1 SBU (using parallelism=4; add 9 to 48 SBU for tests, depending on disk
+speed and whether ram block device is enabled in the kernel)">
 ]>
 
 <sect1 id="lvm2" xreflabel="LVM2-&lvm2-version;">
@@ -38,7 +43,7 @@ fornece crescimento dinâmico ou redução de partições lógicas, espelhamento
 instantâneos de baixo consumo de armazenamento.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -85,14 +90,12 @@ instantâneos de baixo consumo de armazenamento.
     <para role="optional">
       <xref linkend='mdadm'/>, <xref linkend='reiserfs'/>, <xref
 linkend='valgrind'/>, <xref linkend='which'/>, <xref linkend='xfsprogs'/>
-(todos os cinco podem ser usados, porém não são exigidos, para os testes),
-<ulink url='https://github.com/jthornber/thin-provisioning-tools'>
-thin-provisioning-tools</ulink> e <ulink
+(all five may be used, but are not required, for tests), <ulink
+url='https://github.com/jthornber/thin-provisioning-tools'>
+thin-provisioning-tools</ulink>, and <ulink
 url="https://github.com/dm-vdo/vdo">vdo</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/lvm2"/>
-    </para>
 
   </sect2>
 
@@ -110,21 +113,8 @@ todas precisam ser habilitadas, seja internamente ou como um módulo. Todos
 os testes expirarão se a chave Magic SysRq não estiver habilitada.
     </para></note>
 
-<screen><literal>Device Drivers ---&gt;
-  [*] Multiple devices driver support (RAID and LVM) ---&gt; [CONFIG_MD]
-    &lt;*/M&gt;   Device mapper support                        [CONFIG_BLK_DEV_DM]
-    &lt;*/M&gt;   Crypt target support                          [CONFIG_DM_CRYPT]
-    &lt;*/M&gt;   Snapshot target                               [CONFIG_DM_SNAPSHOT]
-    &lt;*/M&gt;   Thin provisioning target                      [CONFIG_DM_THIN_PROVISIONING]
-    &lt;*/M&gt;   Cache target (EXPERIMENTAL)                   [CONFIG_DM_CACHE]
-    &lt;*/M&gt;   Mirror target                                 [CONFIG_DM_MIRROR]
-    &lt;*/M&gt;   Zero target                                   [CONFIG_DM_ZERO]
-    &lt;*/M&gt;   I/O delaying target                           [CONFIG_DM_DELAY]
-  [*] Block devices ---&gt;
-    &lt;*/M&gt;   RAM block device support                      [CONFIG_BLK_DEV_RAM]
-Kernel hacking ---&gt;
-  Generic Kernel Debugging Instruments ---&gt;
-    [*] Magic SysRq key                                   [CONFIG_MAGIC_SYSRQ]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="lvm2-kernel.xml"/>
 
     <indexterm zone="lvm2 lvm2-kernel">
       <primary sortas="d-lvm2">lvm2</primary>
@@ -203,6 +193,9 @@ habilitadas.
 
     Results for LVM2.2.03.17:
     ### 403 tests: 333 passed, 61 skipped, 0 timed out, 3 warned, 6 failed
+
+    Results for LVM2.2.03.20 [pierre]:
+    ### 407 tests: 324 passed, 75 skipped, 0 timed out, 3 warned, 5 failed
     -->
 <para>
       <!-- 1 -->

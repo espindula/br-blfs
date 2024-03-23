@@ -8,10 +8,10 @@
 <!--  <!ENTITY vte-download-ftp "&gnome-download-ftp;/vte/&vte-minor;/vte-&vte-version;.tar.xz">-->
   <!ENTITY vte-download-http "https://gitlab.gnome.org/GNOME/vte/-/archive/&vte-version;/vte-&vte-version;.tar.gz">
   <!ENTITY vte-download-ftp  "">
-  <!ENTITY vte-md5sum        "86d2b49dcb1d05b489d228892b49c28a">
-  <!ENTITY vte-size          "616 KB">
-  <!ENTITY vte-buildsize     "14 MB (com os testes)">
-  <!ENTITY vte-time          "0,4 UPC (usando paralelismo = 4; com os testes)">
+  <!ENTITY vte-md5sum        "1954cae9b70ce35bdf1f383b4ddc7d32">
+  <!ENTITY vte-size          "620 KB">
+  <!ENTITY vte-buildsize     "16 MB (with tests)">
+  <!ENTITY vte-time          "0.3 SBU (using parallelism=4; with tests)">
 
   <!-- For "Contents" and "Short Descriptions" sections -->
   <!ENTITY vte-nano          "91">
@@ -35,7 +35,7 @@
 termcap para emuladores de terminal.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -81,7 +81,7 @@ termcap para emuladores de terminal.
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="icu"/>, <xref linkend="gnutls"/>, <xref
-linkend="gobject-introspection"/> e <xref linkend="vala"/>
+linkend="gobject-introspection"/>, and <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -90,8 +90,6 @@ linkend="gobject-introspection"/> e <xref linkend="vala"/>
 linkend="gtk4"/>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/vte"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -102,18 +100,18 @@ linkend="gtk4"/>
     </para>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release -Dfribidi=false .. &amp;&amp;
+meson setup --prefix=/usr --buildtype=release -Dfribidi=false .. &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr       \
-      --buildtype=release \
-      -Dfribidi=false     \
-      -D_systemd=false .. &amp;&amp;
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dfribidi=false     \
+            -D_systemd=false    &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -127,7 +125,7 @@ documentação da API para esse pacote, emita:
          "vte-2.91" inside.  The reason is when -Dgtk4 is enabled,
          another directory "vte-2.91-gtk4" will also be there.  -->
 <userinput>sed -e "/docdir =/s@\$@/ 'vte-&vte-version;'@" \
-    -e "/fatal-warnings/d"               \
+    -e "/fatal-warnings/d"              \
     -i ../doc/reference/meson.build     &amp;&amp;
 meson configure -Ddocs=true             &amp;&amp;
 ninja</userinput></screen>
@@ -201,7 +199,8 @@ engenhoca GTK4.
           libvte-2.&vte-nano;.so
         </seg>
         <seg>
-          /usr/include/vte-2.&vte-nano; e (opcional) /usr/share/doc/vte-&vte-version;
+          /usr/include/vte-2.&vte-nano; and (optional)
+/usr/share/doc/vte-&vte-version;
         </seg>
       </seglistitem>
     </segmentedlist>

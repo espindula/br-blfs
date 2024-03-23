@@ -24,58 +24,98 @@
     <title>Acerca das fontes <quote>TTF</quote> e <quote>OTF</quote></title>
 
     <para>
-      Originalmente, o &quot;Xorg&quot; fornecia somente fontes
-&quot;bitmap&quot;. Mais tarde, algumas fontes escaláveis &quot;Type1&quot;
-foram adicionadas, mas o mundo da área de trabalho passou a usar fontes
-&quot;TrueType&quot; e &quot;Open Type&quot;. Para suportá-las, o
-&quot;Xorg&quot; usa &quot;Xft&quot;, a biblioteca de interface
-&quot;FreeType&quot; do &quot;X&quot;.
+      Originally, Xorg provided only bitmap fonts. Later, some scalable Type1
+fonts were added, but the desktop world moved on to using TrueType and Open
+Type fonts. To support these, Xorg uses Xft, the X FreeType interface
+library.
     </para>
 
     <para>
-      Essas fontes conseguem fornecer dicas, que o
-&quot;<application>fontconfig</application>&quot; usa para ajustá-las para
-máxima legibilidade em monitores de computador. No Linux você deveria sempre
-preferir as versões com dicas, se disponíveis (em geral os alfabetos latino,
-cirílico e grego conseguem usar dicas; a maioria dos outros sistemas de
-escrita não usa dicas).
+      These fonts can provide hints, which <application>fontconfig</application>
+uses to adjust them for maximum readability on computer monitors. On Linux
+you should always use the hinted versions if they are available (in general
+the Latin, Cyrillic and Greek alphabets can use hints, most other writing
+systems do not use hinting).
     </para>
 
     <para>
-      Algumas fontes são fornecidas como coleções (&quot;TTC&quot; ou
-&quot;OTC&quot;) onde os dados das fontes são compartilhados entre
-diferentes fontes, portanto economizando espaço em disco. Trate-as
-exatamente da mesma maneira que os arquivos &quot;TTF&quot; ou
-&quot;OTF&quot; individuais.
+      A few fonts are provided as collections (TTC or OTC) where font data is
+shared between different fonts, which saves disk space. These should be
+treated in exactly the same way as individual TTF or OTF files.
     </para>
 
     <para>
-      Se uma fonte fornecer ambos os formatos &quot;TTF&quot; e &quot;OTF&quot;,
-[então] prefira o formato &quot;OTF&quot; no Linux; ela possivelmente
-forneça mais recursos para aplicativos que saibam como usá-las (como o
-&quot;xelatex&quot;).
+      If a font provides both TTF and OTF forms, you should prefer the OTF form in
+Linux, as it may provide more features for programs which know how to use
+them (such as xelatex).
     </para>
 
     <para>
-      Para alguns conjuntos de comandos sequenciais, o
-&quot;<application>pango</application>&quot; é exigido para renderizar as
-coisas corretamente, seja selecionando diferentes formas de glifos ou
-combinando glifos - em ambos os casos, de acordo com o contexto. Isso se
-aplica particularmente aos conjuntos de comandos sequenciais arábico e
-índico.
+      A font may have multiple variations.  For example, Noto Sans has 9 weights
+(ExtraLight, Light, Thin, Normal, Medium, SemiBold, Bold, ExtraBold, and
+Black) and 2 styles (Regular and Italic), thus 18 variations in total.
+Normally each variation is provided as a separate TTF or OTF file.  For full
+coverage you need to install all these TTF or OTF files.  Even if you are
+low on disk space, you should still install two weights (Regular and Bold)
+by two styles (Normal and Italic) if the font has these variations.  Some
+fonts do not have Italic style (for example most CJK fonts and some
+monospace fonts), and some fonts only have one variation (for example Noto
+Sans Math, it only provides the glyph of some mathematic symbols).
     </para>
 
     <para>
-      Fontes escaláveis padrão que vem com o
-&quot;<application>X</application>&quot; fornecem uma cobertura
-&quot;Unicode&quot; muito fraca. Você possivelmente note em aplicações que
-usam o &quot;<application>Xft</application>&quot; que alguns caracteres
-aparecem como uma caixa com quatro dígitos binários dentro. Nesse caso, uma
-fonte com os glifos exigidos não foi encontrada. Outras vezes, os
-aplicativos que não usam outras famílias de fontes por padrão e não aceitam
-substituições originárias do
-&quot;<application>Fontconfig</application>&quot; exibirão linhas em branco
-quando a fonte padrão não cobrir a ortografia do idioma do(a) usuário(a).
+      Some fonts are also available as <emphasis>variable</emphasis> font files.
+Unlike a normal font file which only contains one variation, a variable font
+file contains infinite variations.  Each variation can be defined by the
+application using this font by assigning number(s) to one or more
+variables.  There are also pre-defined <emphasis>named instances</emphasis>
+analogous to the traditional variations.  For example, with the variable
+version of Noto Sans, the weight variable can be assigned any number not
+less than 100 and not greater than 900, and 9 named instances are
+pre-defined: ExtraLight for weight=100, Regular for weight=400, Bold for
+weight=700, etc.  So once a variable variable font file for Noto Sans is
+installed, all the 9 named instances (or <quote>variations</quote>) are
+available.  Note that the slope is not defined as a variable in the variable
+version of Noto Sans, so Regular and Italic are still traditional variations
+and a separate variable font file is needed for the Italic variation.
+    </para>
+
+    <para>
+      A variable font file is obviously more flexiable than the normal (static)
+font files.  It's extremely useful for fine tuning the font for Web pages or
+publications.  And, the size of a variable font file is usually
+significantly smaller than the total size of several static font files for
+multiple variations.  For example, the variable font file for Noto Sans SC
+is only 11M, while the total size of 9 static font files for Noto Sans SC is
+91M.  But you must make sure your applications really support variable fonts
+before installing one.  For example, <command>lualatex</command> supports
+variable font but <command>xelatex</command> does not.  So if you want to
+use a font for an article and use <command>xelatex</command> for
+typesetting, you must not install the variable font files.
+    </para>
+
+    <para>
+      For information about variable fonts, please see <ulink
+url="https://fonts.google.com/knowledge/introducing_type/introducing_variable_fonts/">
+Variable Fonts</ulink>.
+    </para>
+
+    <para>
+      For some scripts, <application>Pango</application> is required to render
+things correctly, either by selecting different glyph forms, or by combining
+glyphs - in both cases, according to the context. This applies particularly
+to Arabic and Indic scripts.
+    </para>
+
+    <para>
+      Standard scalable fonts that come with <application>X</application> provide
+very poor Unicode coverage. You may notice in applications that use
+<application>Xft</application> that some characters appear as a box with
+four binary digits inside.  In this case, a font with the required glyphs
+has not been found.  Other times, applications that don't use other font
+families by default and don't accept substitutions from
+<application>Fontconfig</application> will display blank lines when the
+default font doesn't cover the orthography of the user's language.
     </para>
 
     <para>
@@ -97,15 +137,12 @@ o mesmo nome de fonte.
     </para>
 
     <para>
-      No passado, todos(as) recomendavam executar
-&quot;<command>fc-cache</command>&quot; como o(a) usuário(a)
-&quot;<systemitem class="username">root</systemitem>&quot; depois de
-instalar ou remover fontes, mas isso não mais é necessário no Linux; o
-&quot;<application>fontconfig</application>&quot; fará isso automaticamente
-se necessário e se os &quot;caches&quot; dele forem mais antigos que trinta
-(30) segundos. Mas se você adicionar uma fonte e quiser usá-la
-imediatamente, então poderá executar esse comando (como um(a) usuário(a)
-normal).
+      In the past, everybody recommended running <command>fc-cache</command> as
+the &root; user after installing or removing fonts, but this is not
+necessary anymore on Linux, <application>fontconfig</application> will do it
+automatically if needed as well as if the font caches are more than 30
+seconds old. However, if you add a font and want to use it immediately, you
+can run that command as a normal user.
     </para>
 
     <para>
@@ -136,52 +173,46 @@ nenhuma dessas fontes mostra informações de versão ou &quot;MD5&quot;.
     </para>
 
     <para>
-      A lista abaixo não fornecerá cobertura completa &quot;Unicode&quot;. O
-&quot;Unicode&quot; é atualizado a cada ano e a maioria das adições agora é
-para sistemas históricos de escrita. Para uma cobertura quase completa, você
-pode instalar as &quot;<xref linkend="noto-fonts"/>&quot; (cerca de cento e
-oitenta (180) fontes quando da última verificação), mas esse número de
-fontes torna <emphasis>muito</emphasis> menos conveniente selecionar uma
-fonte específica em um documento, e a maioria das pessoas considerará muitas
-delas um desperdício de espaço. Nós costumávamos recomendar o &quot;<ulink
-url="https://unifont.org/fontguide/">Guia de fontes Unicode</ulink>&quot;,
-mas ele não tem sido atualizado desde 2008 e muitos dos links dele estão
-mortos.
+      The list below will not provide complete Unicode coverage.  Unicode is
+updated every year, and most additions are now for historic writing
+systems. For almost-complete coverage you can install <xref
+linkend="noto-fonts"/> (about 180 fonts when last checked) but that number
+of fonts makes it <emphasis>much</emphasis> less convenient to select a
+specific font in a document, and most people will regard many of them as a
+waste of space. We used to recommend the <ulink
+url="https://unifont.org/fontguide/">Unicode Font Guide</ulink>, but that
+has not been updated since 2008 and many of its links are dead.
     </para>
 
     <para>
-      Exemplos renderizados da maioria dessas fontes, e muitas outras, com
-detalhes de quais idiomas elas cobrem, alguns exemplos de fontes latinas com
-as mesmas métricas (listadas como "Fontes substitutas latinas") e vários
-arquivos de texto fictício para comparar fontes de tipos semelhantes , podem
-ser encontrados nesta página de <ulink
-url="http://zarniwhoop.uk/ttf-otf-notes.html#examples">comparação de
-fontes</ulink>. Esse sítio também cobre outros sistemas atuais de escrita.
+      Rendered examples of most of these fonts, and many others, with details of
+what languages they cover, some examples of latin fonts with the same
+metrics (listed as "Substitute latin fonts") and various files of dummy text
+to compare fonts of similar types, can be found at this <ulink
+url="http://zarniwhoop.uk/ttf-otf-notes.html#examples"> font
+comparison</ulink> page. That site also covers other current writing
+systems.
     </para>
 
     <para>
-      As fontes frequentemente são fornecidas em arquivos &quot;zip&quot;,
-exigindo o &quot;<xref linkend="unzip"/>&quot; para listá-las e extraí-las,
-mas mesmo que o lançamento atual seja um &quot;tarball&quot;, você ainda
-deveria verificar para ver se ele criará um diretório (espalhar-se o
-conteúdo de um arquivo &quot;zip&quot; ou &quot;tarball&quot; ao longo do
-diretório atual pode ser muito confuso, e algumas fontes criam estranhos
-diretórios __MACOSX/. Além disso, muitas fontes são fornecidas com
-permissões que não permitem que &quot;outros(as)&quot; as leiam - se uma
-fonte é para ser instalada para uso abrangente a todo o sistema, [então]
-quaisquer diretórios precisam estar no modo 755 e todos os arquivos no modo
-644, de forma que mude-os se necessário. Se você se esquecer, [então] o(a)
-usuário(a) &quot;root&quot; possivelmente esteja apto(a) a ver uma fonte
-específica em &quot;<command>fc-list</command>&quot;, mas um(a) usuário(a)
-normal não.
+      Fonts are often supplied in zip files, requiring <xref linkend="unzip"/> to
+list and extract them, but even if the current release is a tarball, you
+should still check to see if it will create a directory (scattering the
+contents of a zipfile or tarball across the current directory can be very
+messy, and a few fonts create __MACOSX/ directories). In addition, many
+fonts are supplied with permissions which do not let 'other' users read them
+- if a font is to be installed for system-wide use, any directories must be
+mode 755 and all the files mode 644, so you need to change them if the
+permissions are different. If you forget, the root user may be able to see a
+particular font in <command>fc-list</command>, but a normal user will not be
+able to use them.
     </para>
 
     <para>
-      Como um exemplo de instalação de fontes, considere a instalação das
-&quot;<xref linkend="dejavu-fonts"/>&quot;. Nesse pacote específico, os
-arquivos &quot;TTF&quot; estão em um subdiretório. A partir do diretório do
-fonte desempacotado, execute os seguintes comandos como o(a) usuário(a)
-&quot;<systemitem class="username">root</systemitem>&quot;:
+      As a font installation example, consider the installation of the <xref
+linkend="dejavu-fonts"/>. In this particular package, the TTF files are in a
+subdirectory. From the unpacked source directory, run the following commands
+as the &root; user:
     </para>
 
 <screen role="root"><userinput>install -v -d -m755 /usr/share/fonts/dejavu &amp;&amp;
@@ -195,28 +226,25 @@ documentação, seja junto com a fonte ou em um diretório correspondente sob
     </para>
 
     <para>
-      Umas poucas fontes vem com o fonte, bem como com o(s) arquivo(s)
-&quot;TTF&quot; ou &quot;OTF&quot; completo(s). A menos que você pretenda
-modificar a fonte e tenha as ferramentas corretas (às vezes &quot;<xref
-linkend="fontforge"/>&quot;, mas frequentemente ferramentas comerciais), o
-fonte não fornecerá nenhum benefício, de forma que não o instale. Uma ou
-duas fontes até mesmo vem com arquivos &quot;Web Open Font Format&quot;
-(&quot;WOFF&quot;) - úteis se você executar um servidor &quot;web&quot; e
-desejar usar essa fonte nele, mas não é útil para áreas de trabalho.
+      A few fonts ship with source as well as the completed TTF or OTF
+file(s). Unless you intend to modify the font, and have the correct tools
+(sometimes <xref linkend="fontforge"/>, but often commercial tools), the
+source will provide no benefit, so do not install it. One or two fonts even
+ship with Web Open Font Format (WOFF) files - this is useful if you run a
+webserver and want to use that font on your website, but not useful for a
+desktop system.
     </para>
 
     <para>
-      Para fornecer maior cobertura &quot;Unicode&quot;, recomendamos instalar
-algumas das fontes a seguir, dependendo de quais sites da &quot;web&quot; e
-idiomas você desejar ler. A próxima parte desta página detalha algumas
-fontes que cobrem pelo menos os alfabetos latinos; a parte final trata de
-problemas relacionados ao &quot;CJK&quot;.
+      To provide greater Unicode coverage, you should install some of the
+following fonts, depending on what websites and languages you want to
+read. The next part of this page details some fonts which cover at least
+Latin alphabets, and the final part deals with some CJK issues.
     </para>
 
     <note>
       <para>
-        É altamente recomendável instalar as &quot;<xref
-linkend="dejavu-fonts"/>&quot;.
+        Installation of the <xref linkend="dejavu-fonts"/> is strongly recommended. 
       </para>
     </note>
 
@@ -230,12 +258,10 @@ linkend="dejavu-fonts"/>&quot;.
     xreflabel="Caladea">Caladea</bridgehead>
 
     <para>
-      &quot;<ulink
-url="https://fonts.google.com/specimen/Caladea">Caladea</ulink>&quot;
-(criada como uma fonte extra do &quot;Chrome OS&quot;) é metricamente
-compatível com a &quot;MS Cambria&quot; e pode ser usada se você tiver de
-editar um documento que alguém iniciou no &quot;Microsoft Office&quot;
-usando &quot;Cambria&quot; e depois devolvê-lo a eles(as).
+      <ulink url="https://fonts.google.com/specimen/Caladea">Caladea</ulink>
+(created as a Chrome OS extra font)  is metrically compatible with MS
+Cambria and can be used if you have to edit a document which somebody
+started in Microsoft Office using Cambria.
     </para>
 
     <bridgehead renderas="sect3" id="cantarell-fonts"
@@ -246,33 +272,21 @@ usando &quot;Cambria&quot; e depois devolvê-lo a eles(as).
     </indexterm>
 
     <para>
-      <ulink url= "&gnome-download-http;/cantarell-fonts/">Fontes
-Cantarell</ulink> &ndash; A família de fontes &quot;Cantarell&quot; fornece
-uma &quot;Serif&quot; contemporânea &quot;Sans&quot;
-&quot;Humanist&quot;. Ela é particularmente otimizada para legibilidade em
-tamanhos pequenos e é a família de fontes preferida para a interface de
-usuário(a) &quot;<application>GNOME-3</application>&quot;.
-    </para>
-
-    <para>
-      Por favor, esteja ciente de que a versão atual inclui um arquivo
-&quot;Variable Font&quot; (&quot;VF&quot;) que pode fornecer todas as fontes
-individuais (também fornecidas), mas quebra o
-&quot;<application>xelatex</application>&quot; se ele for encontrado pelo
-&quot;<application>fontconfig</application>&quot;. As fontes individuais
-funcionam bem.
+      <ulink url="https://fonts.google.com/specimen/Cantarell">Cantarell
+fonts</ulink> &ndash; The Cantarell typeface family provides a contemporary
+Humanist Sans Serif. It is particularly optimised for legibility at small
+sizes and is the preferred font family for the
+<application>GNOME</application> user interface.
     </para>
 
     <bridgehead renderas="sect3" id="Carlito"
     xreflabel="Carlito">Carlito</bridgehead>
 
     <para>
-      &quot;<ulink url=
-"https://github.com/googlefonts/carlito">Carlito</ulink>&quot; (criada como
-outra fonte extra do &quot;Chrome OS&quot;) é metricamente compatível com
-&quot;MS Calibri&quot; e pode ser usada se você tiver de editar um documento
-que alguém iniciou no &quot;Microsoft Office&quot; usando
-&quot;Calibri&quot; e então devolvê-lo a eles(as).
+      <ulink url= "https://github.com/googlefonts/carlito">Carlito</ulink>
+(created as another Chrome OS extra font)  is metrically compatible with MS
+Calibri and can be used if you have to edit a document which somebody
+started in Microsoft Office using Calibri.
     </para>
 
     <bridgehead renderas="sect3" id="dejavu-fonts"
@@ -283,14 +297,13 @@ que alguém iniciou no &quot;Microsoft Office&quot; usando
     </indexterm>
 
     <para>
-      <ulink url="https://sourceforge.net/projects/dejavu/files/dejavu/">Fontes
-DejaVu</ulink> &ndash; Essas fontes são uma extensão das, e substituição
-para as, fontes &quot;Bitstream Vera&quot; e fornecem conjuntos de comandos
-sequenciais baseados em latim com acentos e pontuação, como &quot;aspas
-inteligentes&quot; e caracteres de espaçamento variantes, bem como Cirílico,
-Grego, Árabe, Hebraico, Armênio, Georgiano e alguns outros glifos. Na
-ausência das fontes &quot;Bitstream Vera&quot; (que tinham muito menos
-cobertura), essas são as fontes substitutas padrão.
+      <ulink url="https://sourceforge.net/projects/dejavu/files/dejavu/">DejaVu
+fonts</ulink> &ndash; These fonts are an extension of, and replacement for,
+the Bitstream Vera fonts and provide Latin-based scripts with accents and
+punctuation such as "smart-quotes" and variant spacing characters, as well
+as Cyrillic, Greek, Arabic, Hebrew, Armenian, Georgian and some other
+glyphs. In the absence of the Bitstream Vera fonts (which had much less
+coverage), these are the default fallback fonts.
     </para>
 
     <bridgehead renderas="sect3" id="freefont"
@@ -298,26 +311,24 @@ cobertura), essas são as fontes substitutas padrão.
 
     <para>
       <ulink url="https://ftpmirror.gnu.org/gnu/freefont/">GNU FreeFont</ulink>
-&ndash; Esse conjunto de fontes cobre muitos caracteres não &quot;CJK&quot;,
-em particular algumas das variantes de letras latinas e cirílicas usadas em
-idiomas minoritários, mas os glifos são comparativamente pequenos (ao
-contrário das fontes &quot;DejaVu&quot; que são comparativamente grandes) e
-bastante leves (&quot;menos preto&quot; quando preto sobre branco é usado),
-o que significa que, em alguns contextos, como terminais, eles não são
-visualmente agradáveis, por exemplo, quando a maioria dos outros glifos for
-fornecida por outra fonte. Por outro lado, algumas fontes usadas
-principalmente para impressão, e muitas fontes &quot;CJK&quot;, também são
-leves.
+&ndash; This set of fonts covers many non-CJK characters, in particular some
+of the variants of Latin and Cyrillic letters used in minority languages,
+but the glyphs are comparatively small (unlike DejaVu fonts which are
+comparatively large) and rather light weight ("less black" when black on
+white is used) which means that in some contexts such as terminals they are
+not visually pleasing, for example when most other glyphs are provided by
+another font. On the other hand, some fonts used primarily for printed
+output, and many CJK fonts, are also light weight.
     </para>
 
     <bridgehead renderas="sect3" id="Gelasio"
     xreflabel="Gelasio">Gelasio</bridgehead>
 
     <para>
-      <ulink url="https://fontlibrary.org/en/font/gelasio">Gelasio</ulink> é
-metricamente compatível com &quot;MS Georgia&quot; e o
-&quot;<application>fontconfig</application>&quot; irá usá-la se alguma vez a
-Geórgia for solicitada, mas não instalada.
+      <ulink url="https://fontlibrary.org/en/font/gelasio">Gelasio</ulink> is
+metrically compatible with MS Georgia and
+<application>fontconfig</application> will use it if MS Georgia is requested
+but is not installed.
     </para>
 
     <bridgehead renderas="sect3" id="liberation-fonts"
@@ -328,15 +339,13 @@ Geórgia for solicitada, mas não instalada.
     </indexterm>
 
     <para>
-      As <ulink url="https://github.com/liberationfonts/">fontes
-Liberation</ulink> fornecem substitutas livres para &quot;Arial&quot;,
-&quot;Courier New&quot; e &quot;Times New Roman&quot;. O
-&quot;<application>fontconfig</application>&quot; irá usá-las como
-substitutas para essas fontes, e também para as similares
-&quot;Helvetica&quot;, &quot;Courier&quot;, &quot;Times Roman&quot;, embora
-para essas últimas possa preferir uma fonte diferente (vejam-se os exemplos
-nos &quot;PDFs&quot; &quot;Substitutes&quot; em <ulink
-url="http://zarniwhoop.uk/files/PDF-substitutes/">zarniwhoop.uk</ulink>).
+      The <ulink url="https://github.com/liberationfonts/"> Liberation
+fonts</ulink> provide libre substitutes for Arial, Courier New, and Times
+New Roman. <application>Fontconfig</application> will use them as
+substitutes for those fonts, and also for the similar Helvetica, Courier,
+and Times Roman, though for these it can prefer a different font (see the
+examples in the 'Substitutes' PDFs at <ulink
+url="http://zarniwhoop.uk/files/PDF-substitutes/">zarniwhoop.uk.)</ulink>
     </para>
 
     <para>
@@ -348,20 +357,16 @@ onde uma dessas fontes for solicitada.
     xreflabel="corefonts">Fontes Centrais da Microsoft</bridgehead>
 
     <para>
-      As <ulink url="https://corefonts.sourceforge.net/">Fontes Centrais
-Microsoft</ulink> datam de 2002. Elas foram fornecidas com versões antigas
-do &quot;Microsoft Windows&quot; e aparentemente foram disponibilizadas para
-uso geral. Você pode extraí-las a partir dos arquivos &quot;exe&quot; usando
-o &quot;<application>bsd-tar</application>&quot; originário do &quot;<xref
-linkend="libarchive"/>&quot;. Certifique-se de ler a licença antes de
-usá-las. Ao mesmo tempo, algumas dessas fontes (particularmente
-&quot;Arial&quot;, &quot;Times New Roman&quot; e, em menor grau,
-&quot;Courier New&quot;) foram amplamente especificadas em páginas da
-&quot;web&quot;. O conjunto completo contém &quot;Andale Mono&quot;,
-&quot;Arial&quot;, &quot;Arial Black&quot;, &quot;Comic Sans MS&quot;,
-&quot;Courier New&quot;, &quot;Georgia&quot;, &quot;Impact&quot;,
-&quot;Times New Roman&quot;, &quot;Trebuchet MS&quot;, &quot;Verdana&quot; e
-&quot;Webdings&quot;.
+      The <ulink url="https://corefonts.sourceforge.net/">Microsoft Core
+Fonts</ulink> date from 2002. They were supplied with old versions of
+Microsoft Windows and were apparently made available for general use.  You
+can extract them from the '.exe' files using
+<application>bsd-tar</application> from <xref linkend="libarchive"/>.  Make
+sure that you read the license before using them. At one time some of these
+fonts (particularly Arial, Times New Roman, and to a lesser extent Courier
+New) were widely used on web pages. The full set contains Andale Mono,
+Arial, Arial Black, Comic Sans MS, Courier New, Georgia, Impact, Times New
+Roman, Trebuchet MS, Verdana and Webdings.
     </para>
 
     <para>
@@ -373,19 +378,16 @@ consegue substituir a &quot;Georgia&quot; pela &quot;Gelasio&quot;.
     </para>
 
     <para>
-      Embora muitas postagens antigas recomendem a instalação dessas fontes para
-uma saída gerada mais bonita, existem postagens mais recentes que essas são
-feias ou &quot;quebradas&quot;. Uma sugestão é a de que elas não suportam
-suavização.
+      Although many old posts recommend installing these fonts for output which
+looks better, there are more recent posts that these are 'ugly' or
+'broken'. One suggestion is that they do not support anti-aliasing.
     </para>
 
     <para>
-      As fontes mais recentes que a &quot;Microsoft&quot; tornou padrão em
-lançamentos posteriores do &quot;MS Windows&quot; ou do &quot;MS
-Office&quot; (&quot;Calibri&quot; e &quot;Cambria&quot;) nunca estiveram
-disponíveis gratuitamente. Mas, se você não as tiver instaladas, [então]
-poderá encontrar equivalentes métricas (&quot;Carlito&quot;,
-&quot;Caladea&quot;) acima.
+      The newer fonts which Microsoft made their defaults in later releases of MS
+Windows or MS Office (Calibri and Cambria) have never been freely
+available. However, if you do not have them installed you can find metric
+equivalents (Carlito and Caladea) above.
     </para>
 
     <bridgehead renderas="sect3" id="noto-fonts"
@@ -396,74 +398,63 @@ poderá encontrar equivalentes métricas (&quot;Carlito&quot;,
     </indexterm>
 
     <para>
-      As <ulink url="https://www.google.com/get/noto/">fontes Noto</ulink>
-(&quot;No Tofu&quot;, ou seja, evitando caixas com pontos [dígitos
-hexadecimais] quando um glifo não puder ser encontrado) é um conjunto de
-fontes que visa a cobrir <emphasis>cada glifo em &quot;Unicode&quot;, não
-importa quão obscuro</emphasis>. Essas fontes, ou pelo menos as fontes
-&quot;Sans Serif&quot;, são usadas pelo &quot;KF5&quot; (inicialmente
-somente para aplicações &quot;GTK&quot;). Se quiser cobrir idiomas
-históricos, [então] você pode baixar todas as fontes clicando no link no
-topo dessa página.
+      The <ulink url="https://fonts.google.com/noto/">Noto fonts</ulink> ('No
+Tofu', i.e.  avoiding boxes with dots [hex digits] when a glyph cannot be
+found) are a set of fonts which aim to cover <emphasis>every glyph in
+Unicode, no matter how obscure</emphasis>. Noto Sans is the preferred font
+for KDE Plasma and applications, except for monospace fonts where <ulink
+url="https://github.com/source-foundry/Hack">Hack</ulink> is preferred.
     </para>
 
     <para>
-      Pessoas que usam idiomas escritos em alfabetos Latino, Grego ou Cirílico
-precisam instalar somente a própria &quot;Noto Sans&quot; e talvez a
-&quot;Noto Sans Symbols&quot; para símbolos monetários. Para mais detalhes a
-respeito das fontes &quot;CJK&quot;, veja-se &quot;<xref
-linkend="NotoSansCJK"/>&quot; abaixo. Existem também fontes separadas para
-todos os outros sistemas de escrita atuais, mas essas também exigirão a
-&quot;Noto Sans&quot; (ou &quot;Noto Serif&quot;) e talvez a &quot;Noto
-Symbols&quot;.
+      People using languages written in Latin, Greek or Cyrillic alphabets only
+need to install Noto Sans itself, and perhaps Noto Sans Symbols for currency
+symbols. For more details on the organization of Noto fonts see <ulink
+url="https://fonts.google.com/noto/use#how-are-noto-fonts-organized/">how
+are noto fonts organized</ulink>. There are also separate fonts for every
+other current writing system, but these will also require Noto Sans (or Noto
+Serif) and perhaps Noto Symbols.
     </para>
 
     <para>
-      No entanto, você deveria estar ciente de que o
-&quot;<application>fontconfig</application>&quot; não sabe nada a respeito
-das fontes &quot;Noto&quot;. As fontes &quot;Noto Sans Something&quot; são
-tratadas como fontes separadas (e para o Árabe não existe um nome
-especificamente &quot;Sans&quot;), de forma que, se você tiver outras fontes
-instaladas, então a escolha de qual fonte usar para glifos ausentes onde a
-&quot;Noto Sans&quot; estiver especificada será aleatória, exceto que as
-fontes &quot;Sans&quot; serão preferidas às fontes
-<emphasis>conhecidas</emphasis> &quot;Serif&quot; e &quot;Monospace&quot;,
-porque &quot;Sans&quot; é a substituta para fontes desconhecidas.
+      It may be easier to download a specific Noto font by going to <ulink
+url="https://fonts.google.com/specimen/Noto+Sans">Noto Sans</ulink> and
+changing the font name as appropriate, with '+' between each word,
+e.g. 'Noto+Kufi+Arabic', 'Noto+Serif+Georgian' or whatever, then clicking on
+'Download family'.
+    </para>
+
+    <para>
+      However, you should be aware that <application>fontconfig</application>
+knows nothing about Noto fonts. The 'Noto Sans Something' fonts are each
+treated as separate fonts (and for Arabic there is not a specific Sans
+name), so if you have other fonts installed then the choice of which font to
+use for missing glyphs where 'Noto Sans' is specified will be random, except
+that Sans fonts will be preferred over <emphasis>known</emphasis> Serif and
+Monospace fonts because Sans is the fallback for unknown fonts.
     </para>
 
 
-    <bridgehead renderas="sect3" id="oxygen-fonts"
-    xreflabel="Fontes Oxygen">Fontes Oxygen</bridgehead>
+
+    <!--<bridgehead renderas="sect3" id="oxygen-fonts"
+    xreflabel="Oxygen fonts">
+Oxygen fonts</bridgehead>
 
     <indexterm zone="TTF-and-OTF-fonts oxygen-fonts">
-      <primary sortas="a-oxygen-fonts">Fontes Oxygen</primary>
+      <primary sortas="a-oxygen-fonts">Oxygen fonts</primary>
     </indexterm>
 
     <para>
-      Quando o &quot;KDE Frameworks 5&quot; foi lançado pela primeira vez, ele
-usava as <ulink url=
-"https://download.kde.org/stable/plasma/5.4.3/oxygen-fonts-5.4.3.tar.xz">fontes
-Oxygen</ulink> que foram projetadas para uso integrado com a área de
-trabalho &quot;KDE&quot;. Essas fontes não mais são mantidas ativamente, de
-forma que o &quot;KDE&quot; tomou a decisão de mudar para as &quot;<xref
-linkend="noto-fonts"/>&quot;, mas, no momento, elas ainda são
-<emphasis>exigidas</emphasis> pelo &quot;startkde&quot;.
-    </para>
-
-    <para>
-      Originalmente essas fontes eram fornecidas somente como fonte, necessitando
-do &quot;<xref linkend="cmake"/>&quot; e do &quot;<xref
-linkend="fontforge"/>&quot; para criar os arquivos &quot;TTF&quot;. Mas, por
-um tempo, o fonte também incluiu o &quot;TTF&quot; preparado. A única
-característica incomum é a de que cada arquivo &quot;TTF&quot; fica no
-próprio subdiretório dele (<filename
-class="directory">oxygen-fonts/{*-?00}/</filename>) com o fonte em
-subdiretórios adicionais. Você poderia simplesmente instalar o
-&quot;tarball&quot; inteiro, se preferir, embora isso desperdice espaço.
-    </para>
-
-
-    <bridgehead renderas="sect3" id="source-code-pro"
+      When KDE Frameworks 5 was first released, it used the <ulink url=
+      "https://fonts.google.com/specimen/Oxygen">Oxygen Sans</ulink> and
+      <ulink url=
+      "https://fonts.google.com/specimen/Oxygen+Mono">OxygenMono</ulink> fonts
+      which were designed for integrated use with the KDE desktop. Those fonts
+      are not actively maintained anymore, so KDE made a decision to switch to
+      <xref linkend="noto-fonts"/>, but for the moment they are still
+      <emphasis>required</emphasis> by 'startkde'.
+    </para>-->
+<bridgehead renderas="sect3" id="source-code-pro"
     xreflabel="Source Code Pro">Source Code Pro</bridgehead>
 
     <indexterm zone="TTF-and-OTF-fonts source-code-pro">
@@ -481,83 +472,99 @@ fontes &quot;WOFF&quot;.
     </para>
 
     <para>
-      Para usar isso em terminais, você provavelmente deseja somente a fonte
-&quot;Regular&quot;.
+      To use this in terminals, you probably will only want the Regular font.
     </para>
 
     <para>
-      Existe também uma versão &quot;TTF&quot; disso mais antiga disponível a
-partir de <ulink url=
-"https://fonts.google.com/specimen/Source+Code+Pro?selection.family=Source+Code+Pro">fontes
-do Google</ulink>, mas tem uma cobertura muito limitada (adequada para a
-maioria dos idiomas Europeus que usam o alfabeto latino).
+      There is also an older TTF version of this available from <ulink url=
+"https://fonts.google.com/specimen/Source+Code+Pro?selection.family=Source+Code+Pro">
+Google fonts</ulink> but that has very limited coverage (adequate for most
+European languages using a Latin alphabet).
     </para>
-
 
     <bridgehead renderas="sect3" id="CJKfonts"
     xreflabel="CJKfonts">Fontes &quot;CJK&quot;:</bridgehead>
 
     <para>
-      Conforme indicado anteriormente, o uso de uma combinação de Chinês, Japonês
-e Coreano pode ser complicado - cada fonte cobre somente um subconjunto dos
-pontos de código disponíveis; as formas preferidas dos glifos podem diferir
-entre os idiomas e muitas das fontes &quot;CJK&quot; atualmente não suportam
-o Coreano moderno.
+      As indicated earlier, usage of a combination of Chinese, Japanese and Korean
+characters can be tricky - each font only covers a subset of the available
+codepoints, the preferred shapes of the glyphs can differ between the
+languages, and many of the CJK fonts do not actually support modern Korean.
     </para>
 
     <para>
-      Além disso, por padrão, o &quot;<application>fontconfig</application>&quot;
-prefere o Chinês ao Japonês. Ajustar isso é abordado em <xref
+      Also, <application>fontconfig</application> prefers Chinese to Japanese by
+default. Tuning that is covered at <xref
 linkend="prefer-chosen-CJK-fonts"/>.
     </para>
 
     <para>
-      Embora o &quot;Unicode&quot; tenha sido estendido para permitir um número
-muito grande de pontos de código &quot;CJK&quot;, aqueles fora do Plano Base
-(maiores que &quot;U+0xFFFF&quot;) não são comumente usados em Mandarim (a
-forma normal do Chinês escrito, seja Simplificado (&quot;PRC&quot;) ou
-Tradicional (Taiwan)) ou em Japonês.
+      Although Unicode has been extended to allow a very large number of CJK
+codepoints, those outside the Base Plane (greater than U+0xFFFF) are not
+commonly used in Mandarin (the normal form of written Chinese, whether
+Simplified (Mainland China, Malaysia, and Singapore) or Traditional (Hong
+Kong and Taiwan)), or Japanese.
     </para>
 
     <para>
-      Para Hong Kong, que usa Chinês Tradicional e onde o Cantonês é o idioma
-dominante, o Conjunto de Caracteres Suplementares de Hong Kong foi
-adicionado ao &quot;Unicode&quot; em 2005 e revisado em 2009 (ele é parte da
-Extensão B do &quot;CJK&quot; e contém mais que mil e novecentos (1.900)
-caracteres). As fontes anteriores não serão capazes de suportar o Cantonês
-ou o uso desses caracteres onde os nomes locais forem escritos em
-Mandarim. As fontes &quot;UMing HK&quot;, &quot;Noto Sans CJK HK&quot; e
-&quot;WenQuanYi Zen Hei&quot; parecem cobrir o uso em Hong Kong (o
-&quot;<application>fontconfig</application>&quot; discorda a respeito da
-&quot;Noto Sans CJK HK&quot;).
+      For Hong Kong, which uses Traditional Chinese and where Cantonese is the
+dominant language, the Hong Kong Supplementary Character Set was added to
+Unicode in 2005 and revised in 2009 (it is part of CJK Extension B and
+contains more than 1900 characters). Earlier fonts will not be able to
+support either Cantonese or use these characters where local names are
+written in Mandarin. The UMing HK, Noto Sans HK and WenQuanYi Zen Hei fonts
+all seem to cover Hong Kong usage (<application>fontconfig</application>
+disagrees about Noto Sans HK).
     </para>
 
     <para>
-      Os glifos &quot;Han&quot; tem largura dupla; outros glifos na mesma fonte
-possivelmente sejam mais estreitos. Para o conteúdo &quot;CJK&quot; deles,
-todas essas fontes podem ser consideradas mono espaçadas (ou seja, largura
-fixa).
+      The Han glyphs are double width, and other glyphs in the same font may be
+narrower. For their CJK content, all of these fonts can be regarded as
+monospaced (i.e. fixed width).
     </para>
 
     <para>
-      Se tudo o que você deseja fazer é estar apto(a) a renderizar glifos
-&quot;CJK&quot;, [então] instalar &quot;<xref
-linkend="wenquanyi-zenhei"/>&quot; possivelmente seja um bom lugar para
-começar, se você ainda não tiver uma preferência.
+      If you wish to use Noto fonts, there are also Serif versions of their
+various CJK fonts.  The Noto Sans/Serif SC/TC/HK/JP/KR fonts are derived
+from a monolithic <ulink
+url="https://github.com/notofonts/noto-cjk">noto-cjk</ulink> repository and
+you can find the <filename class='extension'>.ttc</filename> files for the
+entire Noto Sans CJK (including SC/TC/HK/JP/KR) or Noto Serif CJK font
+family there. Google recommends the normal users to use the separate Noto
+Sans/Serif SC/TC/HK/JP/KR fonts instead, but if you are capable and willing
+to read texts in more than one CJK character systems it may be easier to use
+a monolithic <filename class='extension'>.ttc</filename> file for full
+coverage.
+    </para>
+
+    <para>
+      If all you wish to do is render CJK glyphs, installing <xref
+linkend="wenquanyi-zenhei"/> may be a good place to start if you do not
+already have a preference.
     </para>
 
     <bridgehead renderas="sect3" id="Chinese-fonts"
     xreflabel="Fontes chinesas">Fontes chinesas:</bridgehead>
 
     <para>
-      Em Chinês, existem três estilos de fonte de uso comum: &quot;Sung&quot;
-(também conhecido como &quot;Song&quot; ou &quot;Ming&quot;), que é a forma
-ornamentada (&quot;Serif&quot;) mais comum; &quot;Kai&quot;
-(&quot;pinceladas&quot;), que é um estilo ornamentado anterior que parece
-bem diferente; e &quot;Hei&quot; moderno (&quot;Sans&quot;). A menos que
-você aprecie as diferenças, provavelmente não desejará instalar as fontes
-&quot;Kai&quot;.
+      In Chinese, there are three font styles in common use: Sung (also known as
+Song or Ming), which is the most-common ornamented ("serif")  form, Kai
+("brush strokes") which is an earlier ornamented style that looks quite
+different, and modern Hei ("sans"). Unless you appreciate the differences,
+you probably do not want to install Kai fonts.
     </para>
+
+    <para>
+      The current versions of Chinese Noto Sans fonts can be found at <ulink
+url="https://fonts.google.com/specimen/Noto+Sans+SC">Noto Sans SC</ulink>
+for Simplified Chinese, <ulink
+url="https://fonts.google.com/specimen/Noto+Sans+TC">Noto Sans TC</ulink>
+for Traditional Chinese, and as mentioned above <ulink
+url="https://fonts.google.com/specimen/Noto+Sans+HK">Noto Sans HK</ulink>
+for use in Hong Kong.
+    </para>
+
+
 
 
 
@@ -573,25 +580,30 @@ Fireflysung</bridgehead>
       provides Chinese coverage. <application>fontconfig</application> knows
       it is to be treated as a Serif font.
     </para> -->
-<bridgehead renderas="sect4" id="NotoSansCJK"
-    xreflabel="Noto Sans CJK">Noto Sans CJK</bridgehead>
+<!-- the get/noto/help/cjk url now gives general info on the organization of
+    Noto fonts, linked from above.  The current versions are no-longer in
+    ttc packages, there is a separate set of files for each CJK language.
+    Therefore, this appears to be redundant.
 
-    
+    <bridgehead renderas="sect4" id="NotoSansCJK"
+    xreflabel="Noto Sans CJK">
+Noto Sans CJK</bridgehead>
+
+    <!\-\- indexterm entry retained for future linkage from kde \-\->
     <indexterm zone="TTF-and-OTF-fonts NotoSansCJK">
-      <!-- indexterm entry retained for future linkage from kde -->
-<primary sortas="a-noto-sans-cjk">Noto Sans CJK</primary>
+      <primary sortas="a-noto-sans-cjk">Noto Sans CJK</primary>
     </indexterm>
 
     <para>
-      <ulink url="https://www.google.com/get/noto/help/cjk/"> Noto Sans CJK
-</ulink> &ndash; conjuntos &quot;Sans-Serif&quot; de todas as fontes
-&quot;CJK&quot; em um &quot;ttc&quot; &ndash; conforme o link diz, você
-consegue escolher instalar o &quot;TTC&quot; e cobrir todos os idiomas em
-todos os pesos em um arquivo de 110MB ou pode baixar sub conjuntos. Existem
-também versões mono espaçadas.
-    </para>
-
-    <bridgehead renderas="sect4" id="Opendesktop-fonts"
+      <ulink url="https://www.google.com/get/noto/help/cjk/">
+        Noto Sans CJK
+      </ulink>
+      &ndash; Sans-Serif sets of all CJK fonts in a ttc &ndash; as the link
+      says, you can choose to install the TTC and cover all the languages in
+      all weights in a 110MB file, or you can download subsets. There are
+      also Monospace versions.
+    </para> -->
+<bridgehead renderas="sect4" id="Opendesktop-fonts"
     xreflabel="Opendesktop-fonts">Fontes Opendesktop</bridgehead>
 
     <para>
@@ -636,17 +648,15 @@ UKai</bridgehead>
     xreflabel="UMing">UMing</bridgehead>
 
     <para>
-      <ulink url= "https://packages.debian.org/sid/fonts-arphic-uming">Fontes
-UMing</ulink> &ndash; conjuntos de fontes chinesas &quot;Ming&quot;
-(originários do &quot;Debian&quot;, use o &quot;tarball&quot;
-&quot;.orig&quot;) em um &quot;ttc&quot; que contém variações de Chinês
-Simplificado e Tradicional (Taiwanês, com segunda variante para diferentes
-&quot;<ulink
-url="https://en.wikipedia.org/wiki/Bopomofo">bopomofo</ulink>&quot; e
-Cantonês para Hong Kong). Isso vem com arquivos de sintaxe antiga que você
-pode instalar em &quot;<filename
-class="directory">/etc/fonts/conf.d/</filename>&quot;, mas veja-se
-&quot;<xref linkend="editing-old-style-conf-files"/>&quot;.
+      <ulink url=
+"http://ftp.debian.org/debian/pool/main/f/fonts-arphic-uming/">UMing
+fonts</ulink> &ndash; sets of Chinese Ming fonts (from Debian, use the
+'.orig' tarball)  in a ttc which contain variations of Simplified and
+Traditional Chinese (Taiwanese, with second variant for different <ulink
+url="https://en.wikipedia.org/wiki/Bopomofo">bopomofo</ulink>, and Cantonese
+for Hong Kong). This ships with old-syntax files which you can install to
+<filename class="directory">/etc/fonts/conf.d/</filename> but see <xref
+linkend="editing-old-style-conf-files"/>.
     </para>
 
     <bridgehead renderas="sect4" id="wenquanyi-zenhei"
@@ -659,32 +669,28 @@ class="directory">/etc/fonts/conf.d/</filename>&quot;, mas veja-se
     <para>
       <ulink
 url="https://sourceforge.net/projects/wqy/files/wqy-zenhei/">WenQuanYi Zen
-Hei</ulink> fornece uma fonte &quot;Sans-Serif&quot; que cobre todos os
-scripts &quot;CJK&quot;, incluindo o Coreano. Embora inclua arquivos de
-configuração de estilo antigo, eles não são exigidos: o
-&quot;<application>fontconfig</application>&quot; já tratará essas fontes (o
-&quot;sharp&quot; contém &quot;bitmaps&quot;, o &quot;monospace&quot; parece
-não ser &quot;Mono&quot; na parte &quot;ASCII&quot; dela) como
-&quot;Sans&quot;, &quot;Serif&quot; e mono espaçada. Se tudo o que você
-deseja fazer é estar apto(a) a renderizar texto em &quot;Han&quot; e Coreano
-sem se preocupar com as sutilezas das formas usadas, [então] a fonte
-principal proveniente desse pacote é uma boa fonte para usar.
+Hei</ulink> provides a Sans-Serif font which covers all CJK scripts
+including Korean. Although it includes old-style conf files, these are not
+required: <application>fontconfig</application> will already treat these
+fonts (the 'sharp' contains bitmaps, the monospace appears not to be Mono in
+its ASCII part) as Sans, Serif, and Monospace. If all you wish to do is to
+be able to render Han and Korean text without worrying about the niceties of
+the shapes used, the main font from this package is a good font to use.
     </para>
-
 
     <bridgehead renderas="sect3" id="Japanese-fonts"
     xreflabel="Fontes japonesas">Fontes japonesas:</bridgehead>
 
     <para>
-      Em Japonês, as fontes góticas são &quot;Sans&quot;, &quot;Mincho&quot; são
-&quot;Serif&quot;. O BLFS costumava mencionar somente as fontes
-&quot;Kochi&quot;, mas agora essas parecem ser as menos preferidas das
-fontes japonesas.
+      In Japanese, Gothic fonts are Sans, and Mincho are Serif. BLFS used to only
+mention the Kochi fonts, but those appear to now be the least-preferred of
+the Japanese fonts.
     </para>
 
     <para>
-      Além das fontes detalhadas abaixo, considere também &quot;<xref
-linkend="NotoSansCJK"/>&quot;.
+      Apart from the fonts detailed below, also consider <ulink
+url="https://fonts.google.com/specimen/Noto+Sans+JP">Noto Sans JP</ulink>.
+
     </para>
 
     <bridgehead renderas="sect4" id="IPAex"
@@ -697,20 +703,16 @@ linkend="NotoSansCJK"/>&quot;.
     </indexterm>
 
     <para>
-      As <ulink url="https://moji.or.jp/ipafont/">fontes IPAex</ulink> são a
-versão atual das fontes &quot;IPA&quot;. Use o <ulink
-url='https://moji-or-jp.translate.goog/ipafont/?_x_tr_sl=auto&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp'>Tradutor
-do Google</ulink> na página inicial e, então, clique no link de
-transferência para a Fonte &quot;IPAex&quot;
-&quot;Ver.004.01&quot;. Infelizmente, o
-&quot;<application>fontconfig</application>&quot; somente conhece as fontes
-&quot;IPAfonts&quot; mais antigas e a fonte &quot;IPA Mona&quot; bifurcada
-(que não está facilmente disponível e que aparentemente não atende às
-diretrizes de Software Livre do Debian). Portanto, se você instalar as
-fontes &quot;IPAex&quot;, [então] você possivelmente deseje torná-las
-conhecidas para o &quot;fontconfig&quot;; veja-se &quot;<xref
-linkend="prefer-chosen-CJK-fonts"/>&quot; para uma maneira possível de fazer
-isso.
+      The <ulink url="https://moji.or.jp/ipafont/">IPAex fonts</ulink> are the
+current version of the IPA fonts. Use <ulink
+url='https://moji-or-jp.translate.goog/ipafont/?_x_tr_sl=auto&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp'>Google
+Translate</ulink> on the home page, then click on the download link for
+IPAex Font Ver.004.01.  Unfortunately, <application>fontconfig</application>
+only knows about the older IPAfonts and the forked IPA Mona font (which is
+not easily available and which apparently does not meet Debian's Free
+Software guidelines). If you install the IPAex fonts, you may want to make
+it known to fontconfig. Please see <xref linkend="prefer-chosen-CJK-fonts"/>
+for one way to accomplish this.
     </para>
 
     <bridgehead renderas="sect4" id="Kochi"
@@ -736,18 +738,14 @@ Gothic</ulink>&quot; é uma fonte japonesa moderna em duas variantes com
 espaçamento monotônico ou proporcional para caracteres não japoneses.
     </para>
 
-
     <bridgehead renderas="sect3" id="Korean-fonts"
     xreflabel="Fontes coreanas">Fontes coreanas:</bridgehead>
 
     <para>
-      Em Coreano, &quot;Batang&quot; ou &quot;Myeongjo&quot; (o nome mais antigo)
-são &quot;Serif&quot;, &quot;Dotum&quot; ou &quot;Gothic&quot; são as
-principais fontes &quot;Sans&quot;. O BLFS recomendava anteriormente as
-fontes &quot;Baekmuk&quot;, mas as fontes &quot;Nanum&quot; e &quot;Un&quot;
-agora são preferidas ao &quot;Baekmuk&quot; pelo
-&quot;<application>fontconfig</application>&quot; devido a solicitações de
-usuários(as).
+      In Korean, Batang or Myeongjo (the older name) are Serif, Dotum or Gothic
+and are the main Sans fonts. BLFS previously recommended the Baekmuk fonts,
+but the Nanum and Un fonts are now preferred to Baekmuk by
+<application>fontconfig</application> because of user requests.
     </para>
 
     
@@ -769,9 +767,9 @@ class="directory">releases/</filename>&quot;.
     </para>
 
     <para>
-      Alternativamente, considere &quot;<xref linkend="NotoSansCJK"/>&quot; (todas
-as variantes abrangem &quot;Hangul&quot;) ou &quot;<xref
-linkend="wenquanyi-zenhei"/>&quot;.
+      Alternatively, consider <ulink
+url="https://fonts.google.com/specimen/Noto+Sans+KR">Noto Sans KR</ulink> or
+<xref linkend="wenquanyi-zenhei"/>.
     </para>
 
   </sect2>

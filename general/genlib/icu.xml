@@ -7,10 +7,10 @@
   <!ENTITY icu-download-http
            "https://github.com/unicode-org/icu/releases/download/release-&icu-major;-&icu-minor;/icu4c-&icu-major;_&icu-minor;-src.tgz">
   <!ENTITY icu-download-ftp  "">
-  <!ENTITY icu-md5sum        "4de6484a6c460d3d1468a6fe50369439">
+  <!ENTITY icu-md5sum        "b8a4b8cf77f2e2f6e1341eac0aab2fc4">
   <!ENTITY icu-size          "25 MB">
-  <!ENTITY icu-buildsize     "337 MB (adicionar 41 MB para os testes)">
-  <!ENTITY icu-time          "0,6 UPC (usando paralelismo=4; adicione 1,6 UPC para os testes)">
+  <!ENTITY icu-buildsize     "389 MB (add 43 MB for tests)">
+  <!ENTITY icu-time          "0.5 SBU (Using parallelism=4; add 1.0 SBU for tests)">
 ]>
 
 <sect1 id="icu" xreflabel="ICU-&icu-version;">
@@ -34,7 +34,40 @@ software. <application>ICU</application> é amplamente portável e dá aos
 aplicativos os mesmos resultados em todas as plataformas.
     </para>
 
-    &lfs113_checked;
+    <warning>
+      <para>
+        Upgrading this package to a new major version (for example, from 72.1 to
+&icu-version;) will require rebuilding of many other packages. If some
+packages that use the libraries built by icu4c-&icu-major; are rebuilt, they
+will use the new libraries while current packages will use the previous
+libraries.  If the Linux application loader (<filename
+class='libraryfile'>/usr/lib/ld-linux-x86-64.so.2</filename>)  determines
+that both the old and new libraries are needed, and a symbol (name of data
+or function) exists in both versions of the library, all references to the
+symbol will be resolved to the version appearing earlier in the
+breadth-first sequence of the dependency graph.  This may result in the
+application failing if the definition of the data or the behavior of the
+function referred by the symbol differs in two versions.  To avoid the
+issue, users will need to rebuild every package linked to an ICU library as
+soon as possible once ICU is updated to a new major version.
+      </para>
+
+      <para>
+        To determine what external libraries are needed (directly or indirectly)  by
+an application or a library, run:
+      </para>
+
+<screen><userinput>ldd &lt;application or library&gt; </userinput></screen>
+
+      <para>
+        or to see only the directly needed libraries:
+      </para>
+
+<screen><userinput>readelf -d  &lt;application or library&gt; | grep NEEDED</userinput></screen>
+
+    </warning>
+
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -90,9 +123,6 @@ Additional Downloads</bridgehead>
 documentação)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/icu"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">

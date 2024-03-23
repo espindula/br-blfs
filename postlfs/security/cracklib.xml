@@ -6,16 +6,16 @@
 
   <!ENTITY cracklib-url "https://github.com/cracklib/cracklib/releases/download">
 
-  <!ENTITY cracklib-download-http "&cracklib-url;/v&cracklib-version;/cracklib-&cracklib-version;.tar.bz2">
+  <!ENTITY cracklib-download-http "&cracklib-url;/v&cracklib-version;/cracklib-&cracklib-version;.tar.xz">
   <!ENTITY cracklib-download-ftp  "">
-  <!ENTITY cracklib-md5sum        "a242301bad13421476db8eecbbc9536a">
-  <!ENTITY cracklib-size          "600 KB">
-  <!ENTITY cracklib-buildsize     "6,7 MB">
+  <!ENTITY cracklib-md5sum        "a6dfb1766aab43a54e1cbd78abf0a20a">
+  <!ENTITY cracklib-size          "452 KB">
+  <!ENTITY cracklib-buildsize     "6.8 MB">
   <!ENTITY cracklib-time          "0,1 UPC">
 
-  <!ENTITY crackdict-download     "&cracklib-url;/v&cracklib-version;/cracklib-words-&cracklib-version;.bz2">
-  <!ENTITY crackdict-size         "6,7 MB">
-  <!ENTITY crackdict-md5sum       "94e9963e4786294f7fb0f2efd7618551">
+  <!ENTITY crackdict-download     "&cracklib-url;/v&cracklib-version;/cracklib-words-&cracklib-version;.xz">
+  <!ENTITY crackdict-size         "4.0 MB">
+  <!ENTITY crackdict-md5sum       "f27804022dbf2682a7f7c353317f9a53">
 ]>
 
 <sect1 id="cracklib" xreflabel="CrackLib-&cracklib-version;">
@@ -37,7 +37,7 @@ para impor senhas fortes comparando senhas selecionadas pelo(a) usuário(a) a
 palavras em listas de palavras escolhidas.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,11 +75,20 @@ palavras em listas de palavras escolhidas.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
+      <para>Recommended word list for English-speaking countries:</para>
       <listitem>
         <para>
-          Lista das palavras recomendadas para países de língua inglesa (tamanho:
-&crackdict-size;; soma de verificação md5: &crackdict-md5sum;): <ulink
-url="&crackdict-download;"/>
+          Download (HTTP): <ulink url="&crackdict-download;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+           Download MD5 sum: &crackdict-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+            Download size: &crackdict-size;
         </para>
       </listitem>
     </itemizedlist>
@@ -121,8 +130,6 @@ tornam as senhas incorretas .
       </para>
     </important>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/cracklib"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -157,13 +164,13 @@ instalando-as em <filename class="directory">/usr/share/dict</filename> e
 adicionando-as ao comando <command>create-cracklib -dict</command>.
     </para>
 
-<screen role="root"><userinput>install -v -m644 -D    ../cracklib-words-&cracklib-version;.bz2 \
-                        /usr/share/dict/cracklib-words.bz2    &amp;&amp;
+<screen role="root"><userinput>install -v -m644 -D    ../cracklib-words-&cracklib-version;.xz \
+                         /usr/share/dict/cracklib-words.xz    &amp;&amp;
 
-bunzip2 -v               /usr/share/dict/cracklib-words.bz2    &amp;&amp;
-ln -v -sf cracklib-words /usr/share/dict/words                 &amp;&amp;
-echo $(hostname) >>      /usr/share/dict/cracklib-extra-words  &amp;&amp;
-install -v -m755 -d      /usr/lib/cracklib                     &amp;&amp;
+unxz -v                  /usr/share/dict/cracklib-words.xz    &amp;&amp;
+ln -v -sf cracklib-words /usr/share/dict/words                &amp;&amp;
+echo $(hostname) >>      /usr/share/dict/cracklib-extra-words &amp;&amp;
+install -v -m755 -d      /usr/lib/cracklib                    &amp;&amp;
 
 create-cracklib-dict     /usr/share/dict/cracklib-words \
                          /usr/share/dict/cracklib-extra-words</userinput></screen>
@@ -194,11 +201,6 @@ será reinstalado depois da instalação do
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i '/skipping/d' util/packer.c</command>: Remove um aviso sem
-significado.
-    </para>
-
-    <para>
       <command>autoreconf -fiv</command>: O script de configuração fornecido com o
 pacote é muito antigo para obter a sequência correta de caracteres de versão
 do Python 3.10 ou posterior. Esse comando o regenera com uma versão mais
@@ -209,20 +211,11 @@ recente do autotools, que corrige o problema.
       <envar>PYTHON=python3</envar>: Isso força a instalação de vínculos python
 para Python 3, mesmo se o Python 2 estiver instalado.
     </para>
-    
-    <!-- fixed by autoreconf
-    <para>
 
-      <envar>CPPFLAGS=-I/usr/include/python&python3-majorver;</envar>:
-      This works around an issue caused by incorrect usage of Python 3
-      headers.
-    </para>
-    -->
-<para>
-      <parameter>--with-default-dict=/lib/cracklib/pw_dict</parameter>: Esse
-parâmetro força a instalação do dicionário
-<application>CrackLib</application> na hierarquia <filename
-class="directory">/lib</filename>.
+    <para>
+      <parameter>--with-default-dict=/lib/cracklib/pw_dict</parameter>: This
+parameter forces the installation of the <application>CrackLib</application>
+dictionary to the <filename class="directory">/lib</filename> hierarchy.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -271,12 +264,12 @@ palavras que você tiver instalado.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>cracklib-check, cracklib-format, cracklib-packer, cracklib-unpacker e
-create-cracklib-dict</seg>
+        <seg>cracklib-check, cracklib-format, cracklib-packer, cracklib-unpacker,
+cracklib-update, and create-cracklib-dict</seg>
 
         <seg>libcrack.so e o _cracklib.so (módulo <application>Python</application>)</seg>
 
-        <seg>/lib/cracklib, /usr/share/dict e /usr/share/cracklib</seg>
+        <seg>/usr/lib/cracklib, /usr/share/dict and /usr/share/cracklib</seg>
       </seglistitem>
     </segmentedlist>
 

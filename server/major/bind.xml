@@ -8,9 +8,9 @@
   <!ENTITY bind-download-ftp  "ftp://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
   <!ENTITY bind-md5sum        "&bind-md5;">
   <!ENTITY bind-size          "5,2 MB">
-  <!ENTITY bind-buildsize     "143 MB (26 MB instalado)"><!-- differs much from prev maybe because of docs? -->
-  <!ENTITY bind-time          "0,4 UPC (com paralelismo=4; cerca de 40 minutos, um tanto independente do
-processador, para executar a suíte completa de teste)">
+  <!ENTITY bind-buildsize     "122 MB (21 MB installed)">
+  <!ENTITY bind-time          "0.4 SBU (with parallelism=4; about 40 minutes somewhat processor
+independent, to run the complete test suite)">
 ]>
 
 <sect1 id="bind" xreflabel="BIND-&bind-version;">
@@ -32,7 +32,7 @@ utilitários clientes. Se você estiver interessado(a) somente nos
 utilitários, [então] consulte <xref linkend="bind-utils"/>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -89,43 +89,32 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="json-c"/> e <xref linkend="libcap-pam"/>
+      <xref linkend="json-c"/>, <xref linkend="libcap-pam"/>, and <xref
+linkend="nghttp2"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="curl"/>, <xref linkend="libidn2"/>, <xref
 linkend="libxml2"/>, <xref linkend="lmdb"/>, <xref linkend="mitkrb"/>, <xref
-linkend="pytest"/>, <xref linkend="sphinx"/> (exigido para construir a
-documentação), <ulink url="https://cmocka.org/">cmocka</ulink>, <ulink
+linkend="pytest"/>, <xref linkend="sphinx"/> (required to build
+documentation), <ulink url="https://cmocka.org/">cmocka</ulink>, <ulink
 url="https://github.com/cjheath/geoip">geoip</ulink>, <ulink
+url="https://github.com/jemalloc/jemalloc">jemalloc</ulink>, <ulink
 url="&w3m-url;">w3m</ulink>
     </para>
 
     <bridgehead renderas="sect4">Estruturas de retaguarda opcionais de base de dados</bridgehead>
     <para role="optional">
-      <xref linkend="db"/>, <xref linkend="mariadb"/> ou <ulink
+      <xref linkend="db"/>, <xref linkend="mariadb"/> or <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
-<xref linkend="postgresql"/> e <xref linkend="unixodbc"/>
+<xref linkend="postgresql"/>, and <xref linkend="unixodbc"/>
     </para>
 
     <bridgehead renderas="sect4">Opcional (para executar a suíte de teste)</bridgehead>
     <para role="optional">
       <xref linkend="perl-net-dns"/>
     </para>
-
-
-
-    <!-- docs are now all sphinx based
-    <bridgehead renderas="sect4">
-Optional (to rebuild the documentation)</bridgehead>
-    <para role="optional">
-      <xref linkend="doxygen"/>,
-      <xref linkend="libxslt"/>, and
-      <xref linkend="texlive"/> (or <xref linkend="tl-installer"/>)
-    </para>
--->
-<para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/bind"/></para>
 
   </sect2>
 
@@ -175,13 +164,12 @@ permitted&quot;. Essas mensagens não afetam os testes.
         remap="test"><userinput>bin/tests/system/ifconfig.sh up</userinput></screen>
 
     <para>
-      <!--One test, <quote>
-CPU</quote>, is known to fail.-->
-A suíte de teste possivelmente indique alguns testes ignorados dependendo de
-quais opções de configuração são usadas. Alguns testes são marcados como
-<quote>UNTESTED</quote> ou até falham se o &quot;<xref
-linkend="perl-net-dns"/>&quot; não estiver instalado. Para executar os
-testes, como um(a) usuário(a) sem privilégios, execute:
+      The test suite may indicate some skipped tests depending on what
+configuration options are used. Some tests are marked
+<quote>UNTESTED</quote> or do even fail if <xref linkend="perl-net-dns"/> is
+not installed. Two tests, <filename>resolver</filename> and
+<filename>dispatch</filename>, are known to fail.  To run the tests, as an
+unprivileged user, execute:
     </para>
 
 <screen remap="test"><userinput>make -k check</userinput></screen>
@@ -261,6 +249,12 @@ alguma perda de segurança.
 (ou mais) dessas opções para adicionar suporte a Zonas Dinamicamente
 Carregáveis. Para mais informações, consulte-se <ulink
 url="https://bind-dlz.sourceforge.net/">bind-dlz.sourceforge.net</ulink>.
+    </para>
+
+    <para>
+      <option>--disable-doh</option>: Use this option if you do not have <xref
+linkend="nghttp2" role="nodep"/> installed and do not need support for DNS
+over HTTPS.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -350,9 +344,9 @@ utilitário &quot;<command>rndc</command>&quot;. Gere uma chave para uso no
 <screen role="root"><userinput>rndc-confgen -a -b 512 -t /srv/named</userinput></screen>
 
       <para>
-        Complete o arquivo &quot;<filename>named.conf</filename>&quot; a partir do
-qual o &quot;<command>named</command>&quot; lerá o local dos arquivos de
-zona, servidores raiz de nomes e chaves seguras &quot;DNS&quot;:
+        Create the <filename>named.conf</filename> file from which
+<command>named</command> will read the location of zone files, root name
+servers and secure DNS keys:
       </para>
 
 <screen role="root"><?dbfo keep-together="auto"?><userinput>cat &gt;&gt; /srv/named/etc/named.conf &lt;&lt; "EOF"
@@ -438,7 +432,7 @@ arquivo.
       </note>
 
 <screen role="root"><userinput>cat &gt; /srv/named/etc/named/root.hints &lt;&lt; "EOF"
-<literal>.                      6D  IN      NS      A.ROOT-SERVERS.NET.
+<literal>.                       6D  IN      NS      A.ROOT-SERVERS.NET.
 .                       6D  IN      NS      B.ROOT-SERVERS.NET.
 .                       6D  IN      NS      C.ROOT-SERVERS.NET.
 .                       6D  IN      NS      D.ROOT-SERVERS.NET.
@@ -583,22 +577,19 @@ opções de configuração.
     <title>Manual de Referência do(a) Administrador(a) (<quote>MRA</quote>)</title>
 
     <para>
-      A documentação &quot;MRA&quot; (não confunda com a arquitetura do
-processador) está incluída no pacote fonte. A documentação está no formato
-&quot;.rst&quot;, o que significa que ela pode ser convertida em formatos
-legíveis por humanos se o &quot;<xref linkend="sphinx"/>&quot; estiver
-instalado.
+      The ARM documentation (do not confuse with the processor architecture)  is
+included in the source package. The documentation is in .rst format which
+means that it can be converted in human readable formats if <xref
+linkend="sphinx"/> is installed.
     </para>
 
     <para>
-      Quando o &quot;<application>BIND</application>&quot; for configurado,
-especialmente quando for operar em um cenário da vida real, é
-<emphasis>altamente</emphasis> recomendado consultar a documentação
-&quot;MRA&quot;. O &quot;ISC&quot; fornece um conjunto atualizado de
-excelente documentação junto com cada lançamento de forma que possa ser
-facilmente visualizada e (ou) baixada &ndash; então, não existe desculpa
-para não ler os documentos. Os formatos que o &quot;ISC&quot; fornece são
-&quot;PDF&quot;, &quot;epub&quot; e &quot;HTML&quot; em <ulink
+      When <application>BIND</application> is set up, especially if it is going to
+be operating in a real live scenario, it is <emphasis>highly</emphasis>
+recommended to consult the ARM documentation. ISC provides an updated set of
+excellent documentation along with every release so it can be easily viewed
+and/or downloaded &ndash; so there is no excuse to not read the docs. The
+formats ISC provides are PDF, epub and html at <ulink
 url="https://downloads.isc.org/isc/bind9/&bind-version;/doc/arm/"/>.
     </para>
   </sect2>
@@ -613,20 +604,17 @@ url="https://downloads.isc.org/isc/bind9/&bind-version;/doc/arm/"/>.
 
       <seglistitem>
 
-        <seg><!--bind9-config hardlinked to isc-config.sh,-->
-arpaname, ddns-confgen, delv, dig, dnssec-cds, dnssec-checkds,
-dnssec-coverage, dnssec-dsfromkey, dnssec-importkey, dnssec-keyfromlabel,
-dnssec-keygen, dnssec-keymgr, dnssec-revoke, dnssec-settime,
-dnssec-signzone, dnssec-verify, host, mdig, named, named-checkconf,
-named-checkzone, named-compilezone (link simbólico), named-journalprint,
+        <seg>arpaname, ddns-confgen, delv, dig, dnssec-cds, dnssec-dsfromkey,
+dnssec-importkey, dnssec-keyfromlabel, dnssec-keygen, dnssec-revoke,
+dnssec-settime, dnssec-signzone, dnssec-verify, host, mdig, named,
+named-checkconf, named-checkzone, named-compilezone, named-journalprint,
 named-nzd2nzf, named-rrchecker, nsec3hash, nslookup, nsupdate, rndc,
-rndc-confgen e tsig-keygen (link simbólico)</seg>
+rndc-confgen, and tsig-keygen (symlink)</seg>
 
         <seg>libbind9.so, libdns.so, libirs.so, libisc.so, libisccc.so, libisccfg.so e
 libns.so</seg>
 
-        <seg>/usr/include/{bind9,dns,dst,irs,isc,isccc,isccfg,ns,pk11,pkcs11},
-/usr/lib/named, /usr/lib/python&python3-majorver;/site-packages/isc e
+        <seg>/usr/include/{bind9,dns,dst,irs,isc,isccc,isccfg,ns}, /usr/lib/bind, and
 /srv/named</seg>
       </seglistitem>
     </segmentedlist>
@@ -648,23 +636,7 @@ correspondentes
         </listitem>
       </varlistentry>
 
-
-
-      <!-- Not present as of 9.16.5
-      <varlistentry id="bind9-config">
-
-        <term><command>bind9-config</command></term>
-        <listitem>
-          <para>
-            is hardlinked to <command>isc-config.sh</command>.
-          </para>
-          <indexterm zone="bind bind9-config">
-            <primary sortas="b-bind9-config">bind9-config</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
--->
-<varlistentry id="ddns-confgen">
+      <varlistentry id="ddns-confgen">
         <term><command>ddns-confgen</command></term>
         <listitem>
           <para>
@@ -714,33 +686,6 @@ correspondentes
         </listitem>
       </varlistentry>
 
-      <varlistentry id="dnssec-checkds">
-        <term><command>dnssec-checkds</command></term>
-        <listitem>
-          <para>
-            é uma ferramenta de verificação de consistência de delegação
-&quot;DNSSEC&quot;
-          </para>
-          <indexterm zone="bind dnssec-checkds">
-            <primary sortas="b-dnssec-checkds">dnssec-checkds</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-     <varlistentry id="dnssec-coverage">
-        <term><command>dnssec-coverage</command></term>
-        <listitem>
-          <para>
-            verifica se as chaves &quot;DNSSEC&quot; para uma dada zona ou conjunto de
-zonas tem metadados de hora configurados corretamente para garantir que não
-existam lapsos futuros na cobertura &quot;DNSSEC&quot;
-          </para>
-          <indexterm zone="bind dnssec-coverage">
-            <primary sortas="b-dnssec-coverage">dnssec-coverage</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
       <varlistentry id="dnssec-dsfromkey">
         <term><command>dnssec-dsfromkey</command></term>
         <listitem>
@@ -777,18 +722,6 @@ existam lapsos futuros na cobertura &quot;DNSSEC&quot;
           </para>
           <indexterm zone="bind dnssec-keyfromlabel">
             <primary sortas="b-dnssec-keyfromlabel">dnssec-keyfromlabel</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="dnssec-keygen">
-        <term><command>dnssec-keygen</command></term>
-        <listitem>
-          <para>
-            é um gerador de chaves para &quot;DNS&quot; seguro
-          </para>
-          <indexterm zone="bind dnssec-keygen">
-            <primary sortas="b-dnssec-keygen">dnssec-keygen</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -856,23 +789,7 @@ no conjunto &quot;RR&quot; do &quot;DNSKEY&quot; para a zona e se as cadeias
         </listitem>
       </varlistentry>
 
-
-
-      <!-- No longer present with 9.16.5
-      <varlistentry id="genrandom">
-
-        <term><command>genrandom</command></term>
-        <listitem>
-          <para>
-            generates a file containing random data.
-          </para>
-          <indexterm zone="bind genrandom">
-            <primary sortas="b-genrandom">genrandom</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
--->
-<varlistentry id="host">
+      <varlistentry id="host">
         <term><command>host</command></term>
         <listitem>
           <para>
@@ -884,47 +801,7 @@ no conjunto &quot;RR&quot; do &quot;DNSKEY&quot; para a zona e se as cadeias
         </listitem>
       </varlistentry>
 
- 
-
-      <!-- No longer present with 9.16.5
-      <varlistentry id="isc-config.sh">
-
-        <term><command>isc-config.sh</command></term>
-        <listitem>
-          <para>
-            prints information related to the installed version of ISC BIND.
-          </para>
-          <indexterm zone="bind isc-config.sh">
-            <primary sortas="b-isc-config.sh">isc-config.sh</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="isc-hmac-fixup">
-        <term><command>isc-hmac-fixup</command></term>
-        <listitem>
-          <para>
-            fixes HMAC keys generated by older versions of BIND.
-          </para>
-          <indexterm zone="bind isc-hmac-fixup">
-            <primary sortas="b-isc-hmac-fixup">isc-hmac-fixup</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="lwresd">
-        <term><command>lwresd</command></term>
-        <listitem>
-          <para>
-            is a caching-only name server for local process use.
-          </para>
-          <indexterm zone="bind lwresd">
-            <primary sortas="b-lwresd">lwresd</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
--->
-<varlistentry id="mdig">
+      <varlistentry id="mdig">
         <term><command>mdig</command></term>
         <listitem>
           <para>

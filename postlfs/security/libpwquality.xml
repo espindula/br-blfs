@@ -32,7 +32,7 @@ aleatoriedade dela. A biblioteca também fornece uma função para gerar senhas
 aleatórias com boa pronúncia.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -80,16 +80,14 @@ aleatórias com boa pronúncia.
       <xref linkend="linux-pam"/>
     </para>
 
-    <!-- Do not advertise python 2 since python 3 can be used
+  <!-- Do not advertise python 2 since python 3 can be used
     <bridgehead renderas="sect4">
 Optional</bridgehead>
     <para role="optional">
       <xref linkend="python2"/>
     </para>
 -->
-<para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libpwquality"/>
-    </para>
-  </sect2>
+</sect2>
 
   <sect2 role="installation">
     <title>Instalação do libpwquality</title>
@@ -99,7 +97,7 @@ Optional</bridgehead>
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr                     \
+<screen><userinput>./configure --prefix=/usr                      \
             --disable-static                   \
             --with-securedir=/usr/lib/security \
             --with-python-binary=python3       &amp;&amp;
@@ -141,9 +139,9 @@ como o(a) usuário(a) <systemitem class="username">root</systemitem>:
 
 <screen role="root"><userinput>mv /etc/pam.d/system-password{,.orig} &amp;&amp;
 cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
-<literal># Início /etc/pam.d/system-password
+<literal># Begin /etc/pam.d/system-password
 
-# verifica novas senhas para robustez (man pam_pwquality)
+# check new passwords for strength (man pam_pwquality)
 password  required    pam_pwquality.so   authtok_type=UNIX retry=1 difok=1 \
                                          minlen=8 dcredit=0 ucredit=0 \
                                          lcredit=0 ocredit=0 minclass=1 \
@@ -152,14 +150,13 @@ password  required    pam_pwquality.so   authtok_type=UNIX retry=1 difok=1 \
                                          dictcheck=1 usercheck=1 \
                                          enforcing=1 badwords="" \
                                          dictpath=/usr/lib/cracklib/pw_dict
-# use hash sha512 para encriptação; use sombreamento e use o token de 
-# autenticação (senha escolhida) configurada pelo pam_pwquality acima 
-# (ou quaisquer módulos anteriores). Também configure o número de voltas 
-# de cripta para o valor usado no sombreamento.
-password  required    pam_unix.so        sha512 shadow use_authtok \
-                                         rounds=500000
 
-# Fim /etc/pam.d/system-password</literal>
+# use yescrypt hash for encryption, use shadow, and try to use any
+# previously defined authentication token (chosen password) set by any
+# prior module.
+password  required    pam_unix.so        yescrypt shadow try_first_pass
+
+# End /etc/pam.d/system-password</literal>
 EOF
 </userinput></screen>
 

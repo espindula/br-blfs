@@ -6,11 +6,10 @@
 
   <!ENTITY mercurial-download-http "https://www.mercurial-scm.org/release/mercurial-&mercurial-version;.tar.gz">
   <!ENTITY mercurial-download-ftp  "">
-  <!ENTITY mercurial-md5sum        "37f5c2c5efee02fe25a0f344b2e3ca72">
-  <!ENTITY mercurial-size          "7,7 MB">
-  <!ENTITY mercurial-buildsize     "79 MB (com os documentos, adicionar 892 MB para os testes)">
-  <!ENTITY mercurial-time          "0,3 UPC (com os documentos, adicionar 6,2 UPC para os testes usando
-&quot;-j4&quot;)">
+  <!ENTITY mercurial-md5sum        "fccff6981f362466b8e9e0fa0de0ddb6">
+  <!ENTITY mercurial-size          "7.9 MB">
+  <!ENTITY mercurial-buildsize     "115 MB (with docs, add 1.5 GB for tests)">
+  <!ENTITY mercurial-time          "0.3 SBU (with docs; add 30 SBU for tests; both using parallelism=4)">
 ]>
 
 <sect1 id="mercurial" xreflabel="Mercurial-&mercurial-version;">
@@ -35,7 +34,7 @@ escrita em <application>Python</application> e é usada por projetos como
 &quot;Mozilla&quot; para &quot;Firefox&quot; e &quot;Thunderbird&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -90,7 +89,6 @@ url="https://github.com/google/re2/">re2</ulink>
 
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/mercurial"/></para>
 
   </sect2>
 
@@ -112,30 +110,42 @@ url="https://github.com/google/re2/">re2</ulink>
 <screen remap="doc"><userinput>make doc</userinput></screen>
 
     <para>
+      If you wish to run the tests, the rust tests must be removed as they are
+currently broken due to syntax errors. To do this, issue:
+    </para>
+
+<screen><userinput>sed -i '138,142d' Makefile</userinput></screen>
+
+    <para>
       Para executar a suíte de teste, emita:
     </para>
 <!-- The blacklists have to be checked every release of Mercurial, do a listing
-     of tests/blacklists, but do not include the README. -->
-<screen remap="test"><userinput>TESTFLAGS="-j<replaceable>&lt;N&gt;</replaceable> --tmpdir tmp --blacklist blacklists/fsmonitor --blacklist blacklists/linux-vfat" make check</userinput></screen>
+     of tests/blacklists, but do not include the README.
+     For 6.4.1 removing the -blacklist entries did not affect the test results
+     although blacklists/fsmonitor and blacklists/linux-vfat still exist. -->
+<screen remap="test"><userinput>TESTFLAGS="-j<replaceable>&lt;N&gt;</replaceable> --tmpdir tmp" make check</userinput></screen>
 
 
     <para>
       <!--
-      # Ran 908 tests, 65 skipped, 4 failed.  real  10m37.422s -bdubbs 6 Sep 22.
-      # Ran 881 tests, 102 skipped, 23 failed. -plabs 17 Nov 22.
+      # Ran 908 tests, 65 skipped, 4 failed.  real  10m37.422s -bdubbs  6 Sep 22.
+      # Ran 881 tests,102 skipped, 23 failed.                  -plabs  17 Nov 22.
       # Ran 919 tests, 64 skipped, 23 failed. real  10m25.285s -bdubbs 10 Jan 23.
-
+      # Ran 893 tests,101 skipped,  9 failed. real  29m03.014s -bdubbs  5 Mar 23.
+      # Ran 938 tests, 64 skipped,  8 failed. real  32m13.014s -bdubbs 17 Apr 23.
+      # Ran 935 tests, 69 skipped,  8 failed. real  26m15.875s -bdubbs 10 Jun 23.
+      # Ran 940 tests, 64 skipped,  8 failed. real  omitted    -bdubbs 26 Jun 23.
+      # Ran 948 tests, 66 skipped, 0 failed. -pierre 12 Jul 23 (mercurial-6.5).
       -->
-onde <replaceable>&lt;N&gt;</replaceable> é um número inteiro entre um e o
-número de (camadas X do processador), inclusive. Vários testes (cerca de
-vinte (20)) falham porque algumas mensagens de erro foram mudadas em
-&quot;Python&quot; ou alguns avisos de descontinuação são impressos, que não
-estavam presentes quando o teste foi projetado. Para a finalidade de
-investigar quaisquer testes aparentemente falhos, você possivelmente use o
-script <command>run-tests.py</command>. Para ver as quase quarenta chaves,
-algumas delas muito úteis, emita <command>tests/run-tests.py
---help</command>. Executando os seguintes comandos, você executará somente
-os testes que falharam antes:
+where <replaceable>&lt;N&gt;</replaceable> is an integer between one and the
+number of ( processor X threads ), inclusive. Several tests fail because
+some error messages have changed in Python or some deprecation warnings are
+printed that were not present when the test was designed.  In order to
+investigate any apparently failing tests, you may use the
+<command>run-tests.py</command> script. To see the almost forty switches,
+some of them very useful, issue <command>tests/run-tests.py
+--help</command>.  Running the following commands, you will execute only the
+tests that failed before:
     </para>
 
 <screen remap="test"><userinput>pushd tests &amp;&amp;

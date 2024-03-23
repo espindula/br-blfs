@@ -10,15 +10,18 @@
            " "> <!-- at the moment, unable to connect via ftp: ken
            "ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-&openssh-version;.tar.gz"> -->
   <!ENTITY openssh-md5sum        "&openssh-md5sum;">
-  <!ENTITY openssh-size          "1,8 MB">
-  <!ENTITY openssh-buildsize     "44 MB (adicionar 22 MB para os testes)">
-  <!ENTITY openssh-time "0,2 UPC (Usando paralelismo=4; executar os testes toma cerca de vinte (20) 
-  minutos, independentemente da velocidade do processador)">
+  <!ENTITY openssh-size          "1.7 MB">
+  <!ENTITY openssh-buildsize     "45 MB (add 22 MB for tests)">
+  <!ENTITY openssh-time          "0.2 SBU (Using parallelism=4;
+                                  running the tests takes about 20 minutes,
+                                  irrespective of processor speed)">
 ]>
 
   
+  
 
-<!-- make check: real 18m13.005s;  9.2p1 3 Feb 2023 -->
+<!-- make check: real 18m13.005s;  9.2p1  3 Feb 2023 -->
+<!-- make check: real 18m08.654s;  9.3p1 17 Mar 2023 -->
 <sect1 id="openssh" xreflabel="OpenSSH-&openssh-version;">
   <?dbhtml filename="openssh.html"?>
 
@@ -40,7 +43,7 @@ tráfego subsequente em uma rede de comunicação. Os comandos
 do <command>telnet</command> e do <command>rcp</command> respectivamente.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -92,12 +95,12 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gdb"/> (para os testes), <xref linkend="linux-pam"/>, <xref
-linkend="x-window-system"/>, <xref linkend="mitkrb"/>, <xref
-linkend="which"/> (para os testes), <ulink
-url="https://www.thrysoee.dk/editline/">libedit</ulink>, <ulink
-url="https://www.libressl.org/">LibreSSL Portable</ulink>, <ulink
-url="https://github.com/OpenSC/OpenSC/wiki">OpenSC</ulink> e <ulink
+      <xref linkend="gdb"/> (for tests), <xref linkend="linux-pam"/>, <xref
+linkend="xorg7-app"/> (or <xref linkend='xorg-env' role='nodep'/>, see
+Command Explanations), <xref linkend="mitkrb"/>, <xref linkend="which"/>
+(for tests), <ulink url="https://www.thrysoee.dk/editline/">libedit</ulink>,
+<ulink url="https://www.libressl.org/">LibreSSL Portable</ulink>, <ulink
+url="https://github.com/OpenSC/OpenSC/wiki">OpenSC</ulink>, and <ulink
 url="http://www.citi.umich.edu/projects/smartcard/sectok.html">libsectok</ulink>
     </para>
 
@@ -111,7 +114,7 @@ linkend="sysstat"/>
     </para>
 
     <para condition="html" role="usernotes">
-        Observações de Usuário(a): <ulink url="&blfs-wiki;/OpenSSH"/>
+        Editor Notes: <ulink url="&blfs-wiki;/OpenSSH"/>
     </para>
   </sect2>
 
@@ -157,8 +160,7 @@ usuário(a) <systemitem class="username">root</systemitem>:
         -i sandbox-seccomp-filter.c
 fi</userinput></screen>
 -->
-<screen role="root"><userinput>install  -v -m700 -d /var/lib/sshd &amp;&amp;
-chown   -v root:sys /var/lib/sshd &amp;&amp;
+<screen role="root"><userinput>install -v -g sys -m700 -d /var/lib/sshd &amp;&amp;
 
 groupadd -g 50 sshd        &amp;&amp;
 useradd  -c 'sshd PrivSep' \
@@ -175,6 +177,25 @@ comandos:
     </para>
 
 
+<!--  I got all tests passed without this with 9.3p1, June 12, 2023.
+    <para>
+
+      The test suite requires an installed copy of <command>scp</command> to
+      complete the multiplexing tests. To run the test suite, first copy the
+      <command>scp</command> program to
+      <filename class="directory">/usr/bin</filename>, making sure that you
+      backup any existing copy first.
+    </para>
+-->
+<!--  I got all tests passed without this with 9.0p1.  Apr 13, 2022.
+    <para>
+
+      If you wish to run the tests, remove a test suite that is not valid on
+      Linux-based platforms:
+    </para>
+
+<screen><userinput>sed -i 's/conch-ciphers//' regress/Makefile</userinput></screen>
+-->
 <screen><!-- -\-with-md5-passwords used to be here, but a comment inside of a <screen>
 
      block leaves an eyesore. -->
@@ -186,24 +207,9 @@ comandos:
             --with-pid-dir=/run                      &amp;&amp;
 make</userinput></screen>
 
+
+
     <para>
-      A suíte de teste exige uma cópia instalada do <command>scp</command> para
-concluir os testes de multiplexação. Para executar a suíte de teste,
-primeiro copie o aplicativo <command>scp</command> para <filename
-class="directory">/usr/bin</filename>, certificando-se de produzir uma cópia
-de segurança de qualquer cópia existente primeiro.
-    </para>
-
-    <!--  I got all tests passed without this with 9.0p1.  Apr 13, 2022.
-    <para>
-
-      If you wish to run the tests, remove a test suite that is not valid on
-      Linux-based platforms:
-    </para>
-
-<screen><userinput>sed -i 's/conch-ciphers//' regress/Makefile</userinput></screen>
--->
-<para>
       <!--One test, <filename>
 key options</filename>, fails when run in chroot.-->
 Para testar os resultados, emita: <command>make -j1 tests</command>.
@@ -281,12 +287,12 @@ class="directory">/var/run</filename>.
     </para>
 
     <para>
-      <option>--with-xauth=/usr/bin/xauth</option>: Configura o local padrão para
-o binário <command>xauth</command> para autenticação do X. Mude o local se o
-<command>xauth</command> for instalado em um caminho diferente. Isso também
-pode ser controlado a partir de <filename>sshd_config</filename> com a
-palavra-chave "XAuthLocation". Você pode omitir essa chave se o
-<application>Xorg</application> já estiver instalado.
+      <option>--with-xauth=$XORG_PREFIX/bin/xauth</option>: Set the default
+location for the <command>xauth</command> binary for X authentication.  The
+environment variable <envar>XORG_PREFIX</envar> should be set following
+<xref linkend='xorg-env'/>. This can also be controlled from
+<filename>sshd_config</filename> with the XAuthLocation keyword. You can
+omit this switch if <application>Xorg</application> is already installed.
     </para>
 
     <para>
@@ -349,7 +355,7 @@ ssh-copy-id seja bem-sucedido:
       </para>
 
 <screen><userinput>ssh-keygen &amp;&amp;
-ssh-copy-id -i ~/.ssh/id_rsa.pub <replaceable>NOME_USUARIO(A)_REMOTO</replaceable>@<replaceable>NOME_DISPOSITIVO_REMOTO</replaceable></userinput></screen>
+ssh-copy-id -i ~/.ssh/id_rsa.pub <replaceable>REMOTE_USERNAME</replaceable>@<replaceable>REMOTE_HOSTNAME</replaceable></userinput></screen>
 
       <para>
         Tão logo tenha obtido logins sem senha funcionando, atualmente é mais seguro

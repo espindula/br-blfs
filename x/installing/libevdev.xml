@@ -4,14 +4,14 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libevdev-version "1.13.0">
+  <!ENTITY libevdev-version "1.13.1">
 
   <!ENTITY libevdev-download-http "https://www.freedesktop.org/software/libevdev/libevdev-&libevdev-version;.tar.xz">
   <!ENTITY libevdev-download-ftp  "">
-  <!ENTITY libevdev-md5sum        "5b15b4cf97c4f9f1393e499526a57665">
-  <!ENTITY libevdev-size          "444 KB">
-  <!ENTITY libevdev-buildsize     "6,3 MB (com os testes)">
-  <!ENTITY libevdev-time          "0,2 UPC (com os testes)">
+  <!ENTITY libevdev-md5sum        "58fe71aa6fd5e80d0928e9b691761311">
+  <!ENTITY libevdev-size          "448 KB">
+  <!ENTITY libevdev-buildsize     "6.0 MB (with tests)">
+  <!ENTITY libevdev-time          "0.1 SBU (with tests)">
 ]>
 
   
@@ -35,7 +35,7 @@
 controladores de entrada do Xorg.
       </para>
 
-      &lfs113_checked;
+      &lfs120_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -79,9 +79,6 @@ controladores de entrada do Xorg.
 testes)
       </para>
 
-      <para condition="html" role="usernotes">
-        Observações de Usuário(a): <ulink url="&blfs-wiki;/libevdev"/>
-      </para>
     </sect3>
 
     <sect3 role="kernel" id="libevdev-kernel">
@@ -92,17 +89,20 @@ testes)
 se necessário:
       </para>
 
-<screen><literal>Device Drivers  ---&gt;
-  Input device support ---&gt;
-    &lt;*&gt; Generic input layer (needed for keyboard, mouse, ...) [CONFIG_INPUT]
-    &lt;*&gt;   Event interface                   [CONFIG_INPUT_EVDEV]
-    [*]   Miscellaneous devices  ---&gt;       [CONFIG_INPUT_MISC]
-      &lt;*/m&gt;    User level driver support    [CONFIG_INPUT_UINPUT]</literal></screen>
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+        href="libevdev-kernel.xml"/>
 
       <para>
-        O último item não é estritamente exigido para o libevdev. Se for compilado
-como um módulo, não será carregado automaticamente. É necessário para
-cobertura completa do teste.
+        If you want to test this package with full coverage, the following options
+are needed as well:
+      </para>
+
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+        href="libevdev-test-kernel.xml"/>
+
+      <para>
+        If you build this as a module, it needs to be inserted before the test suite
+runs.
       </para>
 
       <indexterm zone="libevdev libevdev-kernel">
@@ -121,7 +121,8 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=$XORG_PREFIX    \
+meson setup ..                 \
+      --prefix=$XORG_PREFIX    \
       --buildtype=release      \
       -Ddocumentation=disabled &amp;&amp;
 ninja</userinput></screen>

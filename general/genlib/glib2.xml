@@ -6,10 +6,10 @@
 
   <!ENTITY glib2-download-http "&gnome-download-http;/glib/&glib2-minor;/glib-&glib2-version;.tar.xz">
   <!ENTITY glib2-download-ftp  "&gnome-download-ftp;/glib/&glib2-minor;/glib-&glib2-version;.tar.xz">
-  <!ENTITY glib2-md5sum        "7561501d9f63f3418ddb23d2903cc968">
-  <!ENTITY glib2-size          "5,0 MB">
-  <!ENTITY glib2-buildsize     "122 MB (adicionar 8 MB para os testes)">
-  <!ENTITY glib2-time          "0,5 UPC (adicionar 0,4 UPC para os testes; ambos usando paralelismo=4)">
+  <!ENTITY glib2-md5sum        "b0df5864ec08248e79c13f71a717aa03">
+  <!ENTITY glib2-size          "5.0 MB">
+  <!ENTITY glib2-buildsize     "150 MB (with tests)">
+  <!ENTITY glib2-time          "0.7 SBU (add 0.4 SBU for tests; both using parallelism=4)">
 ]>
 
 <sect1 id="glib2" xreflabel="GLib-&glib2-version;">
@@ -26,13 +26,13 @@
     <title>Introdução a GLib</title>
 
     <para>
-      O pacote <application>GLib</application> contém bibliotecas de baixo nível
-úteis para fornecer manipulação de estrutura de dados para C, amarradores de
-portabilidade e interfaces para funcionalidades em tempo de execução, como
-um loop de eventos, camadas, carregamento dinâmico e um sistema de objetos.
+      The <application>GLib</application> package contains low-level libraries
+useful for providing data structure handling for C, portability wrappers and
+interfaces for such runtime functionality as an event loop, threads, dynamic
+loading and an object system.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,8 +72,7 @@ um loop de eventos, camadas, carregamento dinâmico e um sistema de objetos.
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo opcional: <ulink
-url="&patch-root;/glib-&glib2-version;-skip_warnings-1.patch"/>
+          Optional patch: <ulink url="&patch-root;/glib-skip_warnings-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -82,17 +81,17 @@ url="&patch-root;/glib-&glib2-version;-skip_warnings-1.patch"/>
 
     <bridgehead renderas="sect4">Recomendada</bridgehead>
     <para role="recommended">
-      <xref linkend="libxslt"/> e <xref linkend="pcre2"/>
+      <xref linkend="libxslt"/> and <xref linkend="pcre2"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="dbus"/> (para alguns testes), <xref linkend="fuse3"/> e
-<ulink url="https://bindfs.org/">bindfs</ulink> (ambos necessários para um
-teste), <xref linkend="gdb"/> (para vinculações), <xref linkend="DocBook"/>,
-<xref linkend="docbook-xsl"/>, <xref linkend="gtk-doc"/> (para construir a
-documentação da API), <xref linkend="glib-networking"/> (para alguns testes,
-porém isso é uma dependência circular) e <xref linkend="sysprof"/>
+      <xref linkend="dbus"/> (for some tests), <xref linkend="fuse3"/> and <ulink
+url="https://bindfs.org/">bindfs</ulink> (both needed for one test), <xref
+linkend="gdb"/> (for bindings), <xref linkend="DocBook"/>, <xref
+linkend="docbook-xsl"/>, <xref linkend="gtk-doc"/> (to build API
+documentation), <xref linkend="glib-networking"/> (for some tests, but this
+is a circular dependency), and <xref linkend="sysprof"/>
     </para>
 
     <bridgehead renderas="sect4">Dependências Adicionais de Tempo de Execução</bridgehead>
@@ -110,8 +109,6 @@ linkend="desktop-file-utils"/>, respectivamente. Esses dois utilitários
 também são necessários para alguns testes.
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/glib2"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -141,7 +138,7 @@ estiverem ativadas). Se <envar>GLIB_LOG_LEVEL</envar> não estiver definida,
 a saída gerada normal de mensagem não será afetada.
     </para>
 
-<screen><userinput>patch -Np1 -i ../glib-&glib2-version;-skip_warnings-1.patch</userinput></screen>
+<screen><userinput>patch -Np1 -i ../glib-skip_warnings-1.patch</userinput></screen>
 
     <warning>
       <para>
@@ -164,10 +161,10 @@ fi</userinput></screen>
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr       \
+meson setup ..            \
+      --prefix=/usr       \
       --buildtype=release \
-      -Dman=true          \
-      ..                  &amp;&amp;
+      -Dman=true          &amp;&amp;
 ninja</userinput></screen>
 
     <note><para>
@@ -209,10 +206,13 @@ hierarquia <filename class='directory'>/usr</filename>.
     </warning>
 
     <para>
-      <!-- https://gitlab.gnome.org/GNOME/glib/-/issues/2913 -->
-Para testar os resultados, depois de ter instalado o pacote, emita:
-<command>LC_ALL=C ninja test</command> como um(a) usuário(a) não &root;. Um
-teste chamado <filename>glib:glib / error</filename> é conhecido por falhar.
+      <!-- https://gitlab.gnome.org/GNOME/glib/-/issues/2965
+           Fixed for 2.78, but NOT any 2.76.x patch releases.
+           PLEASE DO NOT REMOVE UNLESS YOU'VE TESTED WITH COREUTILS 9.2 OR
+           LATER! -->
+To test the results, after having installed the package, issue:
+<command>LC_ALL=C ninja test</command> as a non-&root; user.  One test named
+<literal>glib:gio / file</literal> is known to fail.
     </para>
   </sect2>
 
@@ -223,8 +223,8 @@ teste chamado <filename>glib:glib / error</filename> é conhecido por falhar.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dman=true</parameter>: Essa chave faz com que a construção crie
-e instale as páginas de manual do pacote.
+      <parameter>-Dman=true</parameter>: This switch causes the build to create
+and install the package man pages.
     </para>
 
     <para>
@@ -246,17 +246,18 @@ instale a documentação da API.
         <seg>
           gapplication, gdbus, gdbus-codegen, gio, gio-querymodules,
 glib-compile-resources, glib-compile-schemas, glib-genmarshal,
-glib-gettextize, glib-mkenums, gobject-query, gresource, gsettings, gtester
-e gtester-report
+glib-gettextize, glib-mkenums, gobject-query, gresource, gsettings, gtester,
+and gtester-report
         </seg>
         <seg>
-          libgio-2.0.so, libglib-2.0.so, libgmodule-2.0.so, libgobject-2.0.so e
+          libgio-2.0.so, libglib-2.0.so, libgmodule-2.0.so, libgobject-2.0.so, and
 libgthread-2.0.so
         </seg>
         <seg>
-          /usr/include/gio-unix-2.0, /usr/include/glib-2.0, /usr/lib/glib-2.0,
-/usr/share/glib-2.0, /usr/share/doc/glib-&glib2-version; e
-/usr/share/gtk-doc/html/{gio,glib,gobject} (opcional)
+          /usr/include/gio-unix-2.0, /usr/include/glib-2.0, /usr/lib/gio,
+/usr/lib/glib-2.0, /usr/share/glib-2.0,
+/usr/share/doc/{glib-2.0,glib-&glib2-version;}, and
+/usr/share/gtk-doc/html/{gio,glib,gobject} (optional)
         </seg>
       </seglistitem>
     </segmentedlist>

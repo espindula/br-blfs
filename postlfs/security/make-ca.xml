@@ -38,18 +38,18 @@ Autoridade Certificadora (AC) que é acreditada pela máquina local.
     </para>
 
     <para>
-      Estabelecer confiança com uma AC envolve validar coisas como endereço da
-companhia, propriedade, informação de contato, etc., e assegurar que a AC
-tenha seguido as melhores práticas, tais como se submeter a auditorias
-periódicas de segurança por investigadores(as) independentes e manter uma
-sempre disponível lista de revogação de certificado. Isso está bem fora do
-escopo do BLFS (como está para a maior parte das distribuições do Linux). A
-loja de certificado fornecida aqui é tomada a partir da Fundação Mozilla,
-que estabeleceu políticas de inclusão muito estritas descritas <ulink
-url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/">aqui</ulink>.
+      Establishing trust with a CA involves validating things like company
+address, ownership, contact information, etc., and ensuring that the CA has
+followed best practices, such as undergoing periodic security audits by
+independent investigators and maintaining an always available certificate
+revocation list. This is well outside the scope of BLFS (as it is for most
+Linux distributions). The certificate store provided here is taken from the
+Mozilla Foundation, who have established very strict inclusion policies
+described <ulink
+url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/">here</ulink>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -84,8 +84,13 @@ url="https://www.mozilla.org/en-US/about/governance/policies/security-group/cert
 
     <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
-      <xref linkend="p11-kit"/> (exigido em tempo de execução para gerar lojas de
-certificado a partir de âncoras de confiança)
+      
+      <!-- Attention: no role="runtime" here because jhalfs don't assume
+           runtime dependencies are needed to run commands.  -->
+<xref linkend="p11-kit"/> (runtime, built after <xref role="nodep"
+linkend="libtasn1"/>, required in the following instructions to generate
+certificate stores from trust anchors, and each time
+<command>make-ca</command> is run)
     </para>
     
 
@@ -95,11 +100,10 @@ certificado a partir de âncoras de confiança)
       <xref role="runtime" linkend="nss"/> (para gerar um NSSDB compartilhado)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url='&blfs-wiki;/make-ca'/></para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do make-ca</title>
+    <title>Installation of make-ca and Generation of the CA-certificates stores</title>
 
     <para>
       O script <application>make-ca</application> baixará e processará os
@@ -127,10 +131,22 @@ quando se usar o utilitário <command>trust</command> oriundo do
 <screen role="root"><userinput>make install &amp;&amp;
 install -vdm755 /etc/ssl/local</userinput></screen>
 
+   <note>
+     <para>
+       Technically, this package is already installed at this point.  But most
+packages listing <application>make-ca</application> as a dependency actually
+requires the system certificate store set up by this package, instead of
+requiring the <command>make-ca</command> program itself.  So the
+instructions for using <command>make-ca</command> for setting up the system
+certificate store is included in this section.  You should make sure the
+required runtime dependency for <application>make-ca</application> is
+satisfied now, and continue to follow the instructions.
+     </para>
+   </note>
+
    <para>
-     Como o(a) usuário(a) <systemitem class="username">root</systemitem>, depois
-de instalar o <xref linkend="p11-kit"/>, baixe o fonte do certificado e
-apronte para uso do sistema com o seguinte comando:
+     As the <systemitem class="username">root</systemitem> user, download the
+certificate source and prepare for system use with the following command:
    </para>
 
     <note>

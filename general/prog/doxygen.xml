@@ -6,10 +6,10 @@
 
   <!ENTITY doxygen-download-http "https://doxygen.nl/files/doxygen-&doxygen-version;.src.tar.gz">
   <!ENTITY doxygen-download-ftp  "">
-  <!ENTITY doxygen-md5sum        "5f7ab15c8298d013c5ef205a4febc7b4">
-  <!ENTITY doxygen-size          "5,1 MB">
-  <!ENTITY doxygen-buildsize     "217 MB (com os testes)">
-  <!ENTITY doxygen-time          "1,4 UPC (usando paralelismo = 4; com os testes)">
+  <!ENTITY doxygen-md5sum        "95008edf2d84aeefb7c65a6a4857dc2c">
+  <!ENTITY doxygen-size          "5.5 MB">
+  <!ENTITY doxygen-buildsize     "240 MB (with tests)">
+  <!ENTITY doxygen-time          "1.6 SBU (using parallelism=4; with tests)">
 ]>
 
 <sect1 id="doxygen" xreflabel="Doxygen-&doxygen-version;">
@@ -47,7 +47,7 @@ diagramas de herança e diagramas de colaboração, todos gerados
 automaticamente.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -106,19 +106,31 @@ Additional Downloads</bridgehead>
     <para role="optional">
       <!-- Can someone check this? With LLVM7, it fails to build. -->
 <xref linkend="graphviz"/>, <xref linkend="gs"/>, <xref linkend="libxml2"/>
-(exigido para os testes), <xref linkend="llvm"/> (com "clang"), <xref
-linkend="python2"/>, <xref linkend="qt5"/> (para "doxywizard"), <xref
-linkend="texlive"/> (ou <xref linkend="tl-installer"/>), <xref
-linkend="xapian"/> (para "doxyindexer") e <ulink
-url="https://javacc.github.io/javacc/">javacc</ulink>
+(required for the tests), <xref linkend="llvm"/> (with clang), &qt5-deps;
+(for doxywizard), <xref linkend="texlive"/> (or <xref
+linkend="tl-installer"/>), <xref linkend="xapian"/> (for doxyindexer), and
+<ulink url="https://javacc.github.io/javacc/">javacc</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/doxygen"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do "Doxygen"</title>
+
+    <note>
+      <para>
+        When untarring this package, you may see messages such as <quote>Ignoring
+unknown extended header keyword
+'LIBARCHIVE.xattr.com.apple.TextEncoding'</quote>.  These messages are
+harmless, and can be safely ignored.
+      </para>
+    </note>
+
+    <para>
+      First, fix up some python scripts:
+    </para>
+
+<screen><userinput>grep -rl '^#!.*python$' | xargs sed -i '1s/python/&amp;3/'</userinput></screen>
 
     <para>
       Instale <application>Doxygen</application> executando os seguintes comandos:
@@ -135,9 +147,8 @@ cmake -G "Unix Makefiles"         \
 make</userinput></screen>
 
     <para>
-      <!--One test, 012_cite.dox, is known to fail.-->
-Para testar os resultados, emita: <command>make tests</command>.
-      
+      To test the results, issue: <command>make tests</command>.  One test,
+061_U��nicod���_file, is known to fail.
     </para>
 
     <para>
@@ -201,14 +212,14 @@ estiverem instalados, para adicionar suporte para análise da "libclang".
     <title>Configurando o "Doxygen"</title>
 
     <para>
-      Não existe nenhuma configuração real necessária para o pacote
-<application>Doxygen</application> embora três pacotes adicionais sejam
-exigidos se você desejar usar recursos estendidos. Se precisar usar os
-recursos de tradução de idiomas, [então] você precisa ter <xref
-linkend="python2"/> instalado. Se precisar de fórmulas para criar
-documentação em "PDF", então você precisa ter o <xref linkend="texlive"/>
-instalado. Se precisar de fórmulas para converter arquivos "PostScript" para
-"bitmaps", então você precisa ter o <xref linkend="gs"/> instalado.
+      There is no real configuration necessary for the
+<application>Doxygen</application> package although three additional
+packages are required if you wish to use extended capabilities. If you need
+to use the language translation features, you must have <xref
+linkend="python2"/> installed. If you require formulas to create PDF
+documentation, then you must have <xref linkend="texlive"/> installed.  If
+you require formulas to convert PostScript files to bitmaps, then you must
+have <xref linkend="gs"/> installed.
     </para>
 
   </sect2>

@@ -6,10 +6,10 @@
 
   <!ENTITY ibus-download-http "https://github.com/ibus/ibus/releases/download/&ibus-version;/ibus-&ibus-version;.tar.gz">
   <!ENTITY ibus-download-ftp  "">
-  <!ENTITY ibus-md5sum        "3590d33fbd84e041acb75fcee818b504">
-  <!ENTITY ibus-size          "3,6 MB">
-  <!ENTITY ibus-buildsize     "66 MB (adicionar 3 MB para os testes)">
-  <!ENTITY ibus-time          "0,2 UPC (Usando paralelismo=4; adicionar 0,6 UPC para os testes)">
+  <!ENTITY ibus-md5sum        "e788203d60e2b9cf56d95f1ee73a6898">
+  <!ENTITY ibus-size          "3.7 MB">
+  <!ENTITY ibus-buildsize     "66 MB (add 5 MB for tests)">
+  <!ENTITY ibus-time          "0.2 SBU (Using parallelism=4; add 0.6 SBU for tests)">
 <!-- Since UCD.zip can be used by gucharmap too, let's use the same version:
      This prevents version mismatches, since UCD.zip filename is not versioned.
 -->
@@ -36,7 +36,7 @@ operacional Linux. Ele fornece uma interface de usuário de método de entrada
 amigável e com todos os recursos.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,7 +72,7 @@ amigável e com todos os recursos.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferência Opcional</bridgehead>
+    <bridgehead renderas="sect3">Optional Download</bridgehead>
 
     <itemizedlist spacing="compact">
       <listitem>
@@ -93,7 +93,7 @@ linkend="vala"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <xref linkend="gtk2"/> e <xref
+      <xref linkend="gobject-introspection"/>, <xref linkend="gtk2"/>, and <xref
 linkend="libnotify"/>
     </para>
 
@@ -103,18 +103,14 @@ linkend="libnotify"/>
 
       (runtime, for the <command>ibus-setup</command>), and
       NOTE: The reference to the 'xdg' python module is commented out in the source -->
-<xref linkend="gtk3"/> (para construir o módulo "IM" para "it"), <xref
-linkend="gtk4"/> (para construir o módulo "IM" para "it"), <xref
-linkend="dbus-python"/> e <xref linkend="pygobject3"/> (ambos para construir
-a biblioteca de suporte a "Python"), <xref linkend="gtk-doc"/> e <xref
-linkend="libxkbcommon"/>, <xref linkend="wayland"/> (ambos para construir os
-aplicativos de suporte a "Wayland") e <ulink
+<xref linkend="gtk3"/> (to build IM module for it), <xref linkend="gtk4"/>
+(to build IM module for it), <xref linkend="dbus-python"/> and <xref
+linkend="pygobject3"/> (both to build the Python support library), <xref
+linkend="gtk-doc"/>, and <xref linkend="libxkbcommon"/>, <xref
+linkend="wayland"/> (both to build the Wayland support programs), and <ulink
 url="https://www.joypixels.com/">EmojiOne</ulink>
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/ibus"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -126,7 +122,7 @@ instale-a agora como o(a) usuário(a) <systemitem
 class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>mkdir -p               /usr/share/unicode/ucd &amp;&amp;
+<screen role="root"><userinput>mkdir -p                /usr/share/unicode/ucd &amp;&amp;
 unzip -uo ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
 
     <note>
@@ -140,13 +136,13 @@ unzip -uo ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
       Corrija um problema com entradas de esquema obsoletas:</para>
 
 <screen><userinput>sed -i 's@/desktop/ibus@/org/freedesktop/ibus@g' \
-   data/dconf/org.freedesktop.ibus.gschema.xml</userinput></screen>
+    data/dconf/org.freedesktop.ibus.gschema.xml</userinput></screen>
 
     <para>
       Instale <application>ibus</application> executando os seguintes comandos:
     </para>
 
-<screen revision='sysv'><userinput>./configure --prefix=/usr             \
+<screen revision='sysv'><userinput>./configure --prefix=/usr              \
             --sysconfdir=/etc          \
             --disable-python2          \
             --disable-emoji-dict       \
@@ -155,7 +151,7 @@ unzip -uo ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
 rm -f tools/main.c                     &amp;&amp;
 make</userinput></screen>
 
-<screen revision='systemd'><userinput>./configure --prefix=/usr         \
+<screen revision='systemd'><userinput>./configure --prefix=/usr          \
             --sysconfdir=/etc      \
             --disable-python2      \
             --disable-emoji-dict   \
@@ -164,14 +160,14 @@ rm -f tools/main.c                 &amp;&amp;
 make</userinput></screen>
 
     <para>
-      <!-- xkeyboard-config MR #400 -->
-Para testar os resultados, emita: <command>make -k check</command>. O teste
-chamado "ibus-compose" falha porque usa alguns "locales" não instalados no
-LFS. O teste chamado "ibus-keypress" é conhecido por falhar em um ambiente
-de área de trabalho baseado em "Wayland". O teste chamado
-"xkb-latin-layouts" é conhecido por falhar com um lançamento recente do
-"xkeyboard-config". O teste chamado "test-override-ibus.py" é conhecido por
-falhar se a biblioteca de suporte do "Python" estiver habilitada.
+      <!-- The log says "No idea to simulate key events in Wayland"
+           in a Mutter wayland session.  -->
+<!-- https://github.com/ibus/ibus/issues/2542 -->
+To test the results, issue: <command>make -k check</command>.  The test
+named ibus-compose fails because it uses some locales not installed in LFS.
+The test named ibus-keypress is known to fail in a Wayland-based graphical
+environment.  The test named xkb-latin-layouts is known to fail with a
+recent xkeyboard-config release.
     </para>
 
     <para>
@@ -215,23 +211,23 @@ instalado o <application>GTK+ 2</application>.
     </para>
 
     <para>
-      <option>--enable-python-library</option>: Essa chave habilita construir a
-biblioteca de suporte <application>Python</application>. Use-a se tiver
-instalado as dependências opcionais.
+      <option>--enable-python-library</option>: This switch enables building the
+<application>Python</application> support library. Use it if you have
+installed the optional dependencies.
     </para>
 
     <para>
-      <option>--enable-wayland</option>: Essa chave habilita construir os
-aplicativos de suporte <application>Wayland</application>. Use-a se você
-tiver instalado as dependências opcionais.
+      <option>--enable-wayland</option>: This switch enables building the
+<application>Wayland</application> support programs.  Use it if you have
+installed the optional dependencies.
     </para>
 
     <para>
-      <option>--with-python=python3</option>: Essa chave induz o script
-<command>configure</command> a procurar por <application>Python
-3</application>. Use-a se você quiser construir a biblioteca de suporte do
-<application>Python 3</application> juntamente com a do <application>Python
-2</application>.
+      <option>--with-python=python3</option>: This switch makes the
+<command>configure</command> script look for <application>Python
+3</application>. Use it if you want to build the <application>Python
+3</application> support library alongside the <application>Python
+2</application> one.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"

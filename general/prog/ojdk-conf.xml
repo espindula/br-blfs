@@ -9,7 +9,7 @@
   <?dbhtml filename="ojdk-conf.html"?>
 
 
-  <title>Configurando o ambiente JAVA</title>
+  <title>Configuring the JAVA environment</title>
 
   <sect2 id="java-profile">
     <title>Configurando o ambiente</title>
@@ -25,19 +25,19 @@ ambiente criando o &quot;script&quot;
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/openjdk.sh &lt;&lt; "EOF"
-<literal># Inicia /etc/profile.d/openjdk.sh
+<literal># Begin /etc/profile.d/openjdk.sh
 
-# Configura o diretório "JAVA_HOME"
+# Set JAVA_HOME directory
 JAVA_HOME=/opt/jdk
 
-# Ajusta o "PATH"
+# Adjust PATH
 pathappend $JAVA_HOME/bin
 
-# Adiciona ao "MANPATH"
+# Add to MANPATH
 pathappend $JAVA_HOME/man MANPATH
 
-# Auto "Java" "CLASSPATH": Copia arquivos "jar" para, ou cria links simbólicos em, o
-# diretório "/usr/share/java".
+# Auto Java CLASSPATH: Copy jar files to, or create symlinks in, the
+# /usr/share/java directory.
 
 AUTO_CLASSPATH_DIR=/usr/share/java
 
@@ -52,9 +52,18 @@ for jar in `find ${AUTO_CLASSPATH_DIR} -name "*.jar" 2>/dev/null`; do
 done
 
 export JAVA_HOME
-unset AUTO_CLASSPATH_DIR dir jar
 
-# Termina /etc/profile.d/openjdk.sh</literal>
+# By default, Java creates several files in a directory named
+# /tmp/hsperfdata_[username]. This directory contains files that are used for
+# performance monitoring and profiling, but aren't normally needed on a BLFS
+# system. This environment variable disables that feature.
+_JAVA_OPTIONS="-XX:-UsePerfData"
+
+export _JAVA_OPTIONS
+
+unset AUTO_CLASSPATH_DIR dir jar _JAVA_OPTIONS
+
+# End /etc/profile.d/openjdk.sh</literal>
 EOF</userinput></screen>
 
     <para>
@@ -66,7 +75,8 @@ class="username">root</systemitem>&quot;:
 
 <screen role="root"><userinput>cat &gt; /etc/sudoers.d/java &lt;&lt; "EOF"
 <literal>Defaults env_keep += JAVA_HOME
-Defaults env_keep += CLASSPATH</literal>
+Defaults env_keep += CLASSPATH
+Defaults env_keep += _JAVA_OPTIONS</literal>
 EOF</userinput></screen>
 
     <para>

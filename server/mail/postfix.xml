@@ -9,10 +9,10 @@
   mirror status, some of the mirrors shown as http are actually https -->
   <!ENTITY postfix-download-http "https://ghostarchive.org/postfix/postfix-release/official/postfix-&postfix-version;.tar.gz">
   <!ENTITY postfix-download-ftp  "ftp://ftp.porcupine.org/mirrors/postfix-release/official/postfix-&postfix-version;.tar.gz">
-  <!ENTITY postfix-md5sum        "2442d1e53d58e61842d99fb5978fec4a">
+  <!ENTITY postfix-md5sum        "956d0baca1259189c80a9311ef4daaa1">
   <!ENTITY postfix-size          "4,6 MB">
-  <!ENTITY postfix-buildsize     "148 MB">
-  <!ENTITY postfix-time          "0,2 UPC (Usando paralelismo=4)">
+  <!ENTITY postfix-buildsize     "152 MB">
+  <!ENTITY postfix-time          "0.2 SBU (Using parallelism=4)">
 ]>
 
 <sect1 id="postfix" xreflabel="Postfix-&postfix-version;">
@@ -37,7 +37,7 @@ domínio, um agente de retransmissão de mensagens ou simplesmente um agente
 de entrega de mensagens para o teu Provedor local de Serviços de Internet.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -89,19 +89,18 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="db"/>, <xref linkend="cyrus-sasl"/> e <xref
+      <xref linkend="db"/>, <xref linkend="cyrus-sasl"/>, and <xref
 linkend="libnsl"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="icu"/> para suporte a Internacionalização de Endereços de
-Correio Eletrônico (&quot;SMTPUTF8&quot;), <xref linkend="mariadb"/> ou
-<ulink url="https://www.mysql.com/">MySQL</ulink>, <xref
-linkend="openldap"/>, <xref linkend="pcre"/>, <xref linkend="postgresql"/>,
-<xref linkend="sqlite"/> e <ulink
-url="https://cr.yp.to/cdb.html">CDB</ulink> ou <ulink
-url="https://www.corpit.ru/mjt/tinycdb.html">TinyCDB</ulink>
+      <xref linkend="icu"/> for Email Address Internationalization (SMTPUTF8)
+support, <xref linkend="mariadb"/> or <ulink
+url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
+<xref linkend="pcre"/>, <xref linkend="postgresql"/>, <xref
+linkend="sqlite"/>, and <ulink url="https://cr.yp.to/cdb.html">CDB</ulink>
+or <ulink url="https://www.corpit.ru/mjt/tinycdb.html">TinyCDB</ulink>
     </para>
 
     <para>
@@ -113,7 +112,7 @@ necessidade conhecida deles.
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/postfix"/>
+      Editor Notes: <ulink url="&blfs-wiki;/postfix"/>
     </para>
   </sect2>
 
@@ -141,38 +140,12 @@ chown -v postfix:postfix /var/mail</userinput></screen>
       <title>Configurando a Construção</title>
 
       <para>
-        Os arquivos &quot;README&quot; são formatados para serem lidos com um
-paginador como &quot;<application>Less</application>&quot; ou
-&quot;<application>More</application>&quot;. Se você quiser usar um editor
-de texto, [então] torne-os legíveis com o seguinte &quot;sed&quot;:
+        The README files are formatted to be read with a pager like
+<application>less</application> or <application>more</application>.  If you
+want to use a text editor, make them legible with the following sed:
       </para>
 
-<!--
-      <para>
-
-        Make an adjustment to allow <application>Postfix</application> to compile
-        on <application>Glibc-2.34</application> and later:
-      </para>
-
-<screen><userinput>sed -i '/&lt;linux/i #define HAS_CLOSEFROM' src/util/sys_defs.h</userinput></screen>
--->
 <screen><userinput>sed -i 's/.\x08//g' README_FILES/*</userinput></screen>
-
-      <para>
-        O &quot;<filename>Makefile</filename>&quot; examina o núcleo em execução
-para decidir como configurar várias coisas. Ele não reconhece o
-&quot;Linux-6&quot; e falha em fazer as definições. Depois que isso for
-corrigido, a construção fará referência à versão recém-definida em um
-cabeçalho, o que também quebra a construção. Corrija ambos com os seguintes
-comandos:
-      </para>
-
-
-<screen><!-- '&&' on a sed only fails if the file is not present,
-    not if it changes nothing, but we seem to like it -->
-<userinput>sed -i 's/Linux..345/&amp;6/' makedefs &amp;&amp;
-sed -i 's/LINUX2/LINUX6/' src/util/sys_defs.h</userinput></screen>
-
 
       <para>
         A árvore do fonte do &quot;<application>Postfix</application>&quot; não
@@ -190,9 +163,9 @@ das configurações apropriadas &quot;<envar>CCARGS</envar>&quot; e
 
       <note>
         <para>
-          Para todas as variantes do &quot;CCARGS&quot;, você deveria garantir que
-&quot;-DNO_NIS&quot; esteja especificado, de forma que a construção não
-tente acessar um cabeçalho &quot;rpcsvc&quot; que não existe no BLFS.
+          For all variants of the CCARGS you should ensure that -DNO_NIS is specified
+so that the build does not attempt to access an rpcsvc header which does not
+exist in BLFS.
         </para>
       </note>
 
@@ -200,18 +173,7 @@ tente acessar um cabeçalho &quot;rpcsvc&quot; que não existe no BLFS.
         Para mais detalhes, leiam-se os arquivos &quot;readme&quot;.
       </para>
 
-      <!-- We reverted to Berkeley DB-5.3.28 and that is handled
-       <para>
-
-         The current version of <xref linkend="db"/> is not recognised by a
-         hard-coded test for known versions. To build with this version use the
-         following sed:
-      </para>
-
-<screen><userinput>sed -i 's/DB_VERSION_MAJOR == 6 .*||/DB_VERSION_MAJOR &gt; 4 ||/' \
-  src/util/dict_db.c</userinput></screen>
--->
-<sect4>
+      <sect4>
         <title>Cyrus-SASL</title>
 
         <para>
@@ -286,7 +248,7 @@ AUXLIBS='-lpq -lz -lm'</literal></screen>
         </para>
 
 <screen><literal>CCARGS='-DNO_NIS -DHAS_CDB'
-AUXLIBS='<replaceable>&lt;/caminho/para/CDB&gt;</replaceable>/libcdb.a'</literal></screen>
+AUXLIBS='<replaceable>&lt;/path/to/CDB&gt;</replaceable>/libcdb.a'</literal></screen>
 
       </sect4>
 

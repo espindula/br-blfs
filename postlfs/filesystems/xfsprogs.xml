@@ -6,9 +6,9 @@
 
   <!ENTITY xfsprogs-download-http "&kernel-dl;/linux/utils/fs/xfs/xfsprogs/xfsprogs-&xfsprogs-version;.tar.xz">
   <!ENTITY xfsprogs-download-ftp  "">
-  <!ENTITY xfsprogs-md5sum        "9befb0877b9f874b0ff16bcc1f858985">
+  <!ENTITY xfsprogs-md5sum        "81c09e5ea47412c3a109a316cf4dd39d">
   <!ENTITY xfsprogs-size          "1,3 MB">
-  <!ENTITY xfsprogs-buildsize     "77 MB">
+  <!ENTITY xfsprogs-buildsize     "56 MB">
   <!ENTITY xfsprogs-time          "0,3 UPC (Usando paralelismo=4)">
 ]>
 
@@ -30,7 +30,7 @@
 administração e de depuração para o sistema de arquivos XFS.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,8 +78,6 @@ administração e de depuração para o sistema de arquivos XFS.
       <xref linkend="icu"/> (para escaneamento de nome Unicode em xfs_scrub)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/xfs"/></para>
-
   </sect2>
 
   <sect2 role="kernel" id="xfsprogs-kernel">
@@ -89,8 +87,8 @@ administração e de depuração para o sistema de arquivos XFS.
       Habilite as seguintes opções na configuração do núcleo e recompile o núcleo:
     </para>
 
-<screen><literal>File systems ---&gt;
-  &lt;*/M&gt; XFS filesystem support [CONFIG_XFS_FS]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="xfsprogs-kernel.xml"/>
 
     <indexterm zone="xfsprogs xfsprogs-kernel">
       <primary sortas="d-xfs">Aplicativos XFS</primary>
@@ -101,7 +99,18 @@ administração e de depuração para o sistema de arquivos XFS.
   <sect2 role="installation">
     <title>Instalação do xfsprogs</title>
 
+      
+
+    <!-- Now appears to be fixed -->
+<!--
     <para>
+
+      First, fix an incompatibility with gettext-0.22:
+    </para>
+
+<screen><userinput remap="pre">sed -i 's/0.lf/0.1f/' po/de.po</userinput></screen>
+-->
+<para>
       Instale <application>xfsprogs</application> executando os seguintes
 comandos:
     </para>
@@ -129,12 +138,12 @@ rm -rfv /usr/lib/libhandle.{a,la}</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>make DEBUG=-DNDEBUG</command>: Desliga os símbolos de depuração.
+      <command>make DEBUG=-DNDEBUG</command>: Turns off debugging symbols.
     </para>
 
     <para>
-      <parameter>INSTALL_USER=root INSTALL_GROUP=root</parameter>: Isso configura
-o(a) proprietário(a) e o grupo dos arquivos instalados.
+      <parameter>INSTALL_USER=root INSTALL_GROUP=root</parameter>: This sets the
+owner and group of the installed files.
     </para>
 
     <para>

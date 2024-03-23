@@ -7,11 +7,10 @@
   <!ENTITY gpgme-download-http "&gnupg-http;/gpgme/gpgme-&gpgme-version;.tar.bz2">
   <!ENTITY gpgme-download-ftp  "&gnupg-ftp;/gpgme/gpgme-&gpgme-version;.tar.bz2">
   <!ENTITY gpgme-download-ftp  "">
-  <!ENTITY gpgme-md5sum        "98f25a7e494d294c4b2c1a769113510e">
-  <!ENTITY gpgme-size          "1,7 MB">
-  <!ENTITY gpgme-buildsize     "168 MB (Adicione 33 MB para os testes)">
-  <!ENTITY gpgme-time          "0,7 UPC (com todas as vinculações; adicione 0,8 UPC para os testes; tudo com
-paralelismo=4)">
+  <!ENTITY gpgme-md5sum        "3a83288e753a7da53a5626d29e4416fd">
+  <!ENTITY gpgme-size          "1.8 MB">
+  <!ENTITY gpgme-buildsize     "305 MB (with tests)">
+  <!ENTITY gpgme-time          "1.7 SBU (with all bindings and tests; with parallelism=4)">
 ]>
 
 <sect1 id="gpgme" xreflabel="GPGME-&gpgme-version;">
@@ -37,7 +36,7 @@ criptográfica de alto nível para encriptação, desencriptação, assinatura,
 verificação de assinatura e gerenciamento de chaves.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -73,17 +72,19 @@ verificação de assinatura e gerenciamento de chaves.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo recomendado (exigido se SWIG estiver instalado): <ulink
-url="&patch-root;/gpgme-&gpgme-version;-gpg_error_1_46-1.patch"/>
+          Recommended patch (required if SWIG is installed):
+          <ulink url="&patch-root;/gpgme-&gpgme-version;-gpg_error_1_46-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do GPGME</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do GPGME</bridgehead>
 
     <bridgehead renderas="sect4">Exigida</bridgehead>
     <para role="required">
@@ -97,34 +98,16 @@ gpgme can still use python 2.7, but can use python3 as well,
 so do not advertise python2
       <xref linkend="python2"/>
 ,-->
-<xref linkend="doxygen"/> e <xref linkend="graphviz"/> (para documentação da
-API), <xref linkend="gnupg2"/> (exigido se Qt ou SWIG estiverem instalados;
-usado durante a suíte de teste), <xref linkend="clisp"/>, <xref
-linkend="qt5"/> e (ou) <xref linkend="swig"/> (para vinculações de idioma)
+<xref linkend="doxygen"/> and <xref linkend="graphviz"/> (for API
+documentation), <xref linkend="gnupg2"/> (required if Qt or SWIG are
+installed; used during the test suite), <xref linkend="clisp"/>, &qt5-deps;,
+and/or <xref linkend="swig"/> (for language bindings)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gpgme"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do GPGME</title>
-
-    <para>
-      Primeiro, corrija um problema de construção com Python &python3-majorver;
-instalado:
-    </para>
-
-<screen><userinput remap="pre">sed -e 's/3\.9/&python3-majorver;/'                   \
-    -e 's/:3/:4/'                        \
-    -i configure</userinput></screen>
-
-    <para>
-      Aplique um remendo para corrigir uma falha de construção com SWIG e
-libgpg-error-1.46 ou posterior:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../gpgme-&gpgme-version;-gpg_error_1_46-1.patch</userinput></screen>
 
     <para>
       Instale <application>GPGME</application> executando os seguintes comandos:
@@ -134,9 +117,9 @@ libgpg-error-1.46 ou posterior:
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, você deveria ter <xref linkend="gnupg2"/>
-instalado e remover o <command>--disable-gpg-test</command> acima. Emita:
-<command>make -k check</command>.
+      To test the results, you should have <xref linkend="gnupg2"/> installed and
+remove the <command>--disable-gpg-test</command> above. Issue: <command>make
+-k check</command>. One test, TestRemarks, is known to fail.
     </para>
 
     <para>
@@ -172,12 +155,13 @@ parâmetro não é necessário se <xref linkend="gnupg2"/> estiver instalado.
           gpgme-json e gpgme-tool
         </seg>
         <seg>
-          libgpgme, libgpgmepp.so e libqgpgme.so
+          libgpgme, libgpgmepp.so, and libqgpgme.so
         </seg>
         <seg>
-          /usr/include/{gpgme++,qgpgme,QGpgME}, /usr/lib/cmake/{Gpgmepp,QGpgme},
-/usr/lib/python{2.7,3.9}/site-packages/gpg e
-/usr/share/common-lisp/source/gpgme
+          /usr/include/{gpgme++,qgpgme,QGpgME}, /usr/lib/cmake/{Gpgmepp,QGpgme}.
+/usr/lib/python&python2-majorver;/site-packages/gpg,
+/usr/lib/python&python3-majorver;/site-packages/gpg-&gpgme-version;-py&python3-majorver;-linux-&lt;arch&gt;.egg,
+and /usr/share/common-lisp/source/gpgme
         </seg>
       </seglistitem>
     </segmentedlist>

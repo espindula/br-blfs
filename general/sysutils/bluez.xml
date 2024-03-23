@@ -6,9 +6,9 @@
 
   <!ENTITY bluez-download-http "&kernel-dl;/linux/bluetooth/bluez-&bluez-version;.tar.xz">
   <!ENTITY bluez-download-ftp  "">
-  <!ENTITY bluez-md5sum        "3f9496fedf878fba985e56713ed7752e">
+  <!ENTITY bluez-md5sum        "00a72fed12e706b2d8bb40786154d3aa">
   <!ENTITY bluez-size          "2,2 MB">
-  <!ENTITY bluez-buildsize     "149 MB (com os testes)">
+  <!ENTITY bluez-buildsize     "158 MB (with tests)">
   <!ENTITY bluez-time          "0,4 UPC (usando paralelismo = 4; com os testes)">
 ]>
 
@@ -30,7 +30,7 @@
 "Bluetooth" para Linux.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -88,9 +88,6 @@ url="&patch-root;/bluez-&bluez-version;-obexd_without_systemd-1.patch"/>
       <xref linkend="docutils"/> (para gerar páginas de manual)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/bluez"/>
-    </para>
   </sect2>
 
 
@@ -105,56 +102,11 @@ opções na configuração do núcleo, também as opções na seção
 recompile o núcleo, se necessário:
     </para>
 
-<screen><literal>General Setup ---&gt;
-  [ /*] Configure standard kernel features (expert users)   [CONFIG_EXPERT]
-    (Note: if CONFIG_EXPERT is disabled, the following options will be
-          hidden and enabled implicitly.  We DO NOT recommend to enable
-          CONFIG_EXPERT unless you are really an expert user.)
-    [*] Enable timerfd() system call                        [CONFIG_TIMERFD]
-    [*] Enable eventfd() system call                        [CONFIG_EVENTFD]
-
-[*] Networking support ---&gt;                [CONFIG_NET]
-  &lt;*/M&gt; Bluetooth subsystem support ---&gt;   [CONFIG_BT]
-    &lt;*/M&gt; RFCOMM protocol support          [CONFIG_BT_RFCOMM]
-    [*]   RFCOMM TTY support               [CONFIG_BT_RFCOMM_TTY]
-    &lt;*/M&gt; BNEP protocol support            [CONFIG_BT_BNEP]
-    [*]   Multicast filter support         [CONFIG_BT_BNEP_MC_FILTER]
-    [*]   Protocol filter support          [CONFIG_BT_BNEP_PROTO_FILTER]
-    &lt;*/M&gt; HIDP protocol support            [CONFIG_BT_HIDP]
-        Bluetooth device drivers ---&gt;
-          (Select the appropriate drivers for your Bluetooth hardware)
-
-   &lt;*/M&gt; RF switch subsystem support ----  [CONFIG_RFKILL]
-
--*- Cryptographic API ---&gt;
-   Crypto core or helper --- &gt;
-      &lt;*/M&gt; User-space cryptographic algorithm configuration   [CONFIG_CRYPTO_USER]
-   Block ciphers ---&gt;
-      &lt;*/M&gt; AES (Advanced Encryption Standard)                 [CONFIG_CRYPTO_AES]
-   AEAD (authenticated encryption with associated data) ciphers ---&gt;
-      &lt;*/M&gt; CCM (Counter with Cipher Block Chaining-MAC)       [CONFIG_CRYPTO_CCM]
-   Hashes, digests, and MACs ---&gt;
-      &lt;*/M&gt; CMAC (Cipher-based MAC)                            [CONFIG_CRYPTO_CMAC]
-   Userspace interface ---&gt;
-      &lt;*/M&gt; Hash algorithms                                    [CONFIG_CRYPTO_USER_API_HASH]
-      &lt;*/M&gt; Symmetric key cipher algorithms                    [CONFIG_CRYPTO_USER_API_SKCIPHER]
-      &lt;*/M&gt; AEAD cipher algorithms                             [CONFIG_CRYPTO_USER_API_AEAD]</literal></screen>
-
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="bluez-kernel.xml"/>
 
     <indexterm zone="bluez bluez-kernel">
-      <!--
-    <para>
-
-      If you wish to run the test suite (even if treating this package as a build
-      dependency), you will need to enable the following options in the kernel
-      configuration and recompile the kernel if necessary:
-    </para>
-
-<screen><literal>-*- Cryptographic API - - -&gt;                                      [CONFIG_CRYPTO]
-  &lt;*/M&gt; User-space interface for hash algorithms                 [CONFIG_CRYPTO_USER_API_HASH]
-  &lt;*/M&gt; User-space interface for symmetric key cipher algorithms [CONFIG_CRYPTO_USER_API_SKCIPHER]</literal></screen>
--->
-<primary sortas="d-bluez">bluez</primary>
+      <primary sortas="d-bluez">bluez</primary>
     </indexterm>
   </sect2>
 
@@ -206,16 +158,16 @@ make</userinput></screen>
 ln -svf ../libexec/bluetooth/bluetoothd /usr/sbin</userinput></screen>
 
     <para>
-      Instale o principal arquivo de configuração como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      Install the main configuration file as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>install -v -dm755 /etc/bluetooth &amp;&amp;
 install -v -m644 src/main.conf /etc/bluetooth/main.conf</userinput></screen>
 
     <para>
-      Se desejado, [então] instale a documentação da "API" como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
+      If desired, install the API documentation as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>install -v -dm755 /usr/share/doc/bluez-&bluez-version; &amp;&amp;
@@ -260,19 +212,18 @@ conveniente.
     <sect3 id="bluez-config">
       <title>Arquivos de Configuração</title>
       <para revision="sysv">
-        <filename>/etc/bluetooth/main.conf</filename> é instalado automaticamente
-durante a instalação. Além disso, existem três arquivos de configuração
-suplementares. "/etc/sysconfig/bluetooth" é instalado como parte do script
-de inicialização abaixo. Além disso, você pode opcionalmente instalar o
-seguinte, como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        <filename>/etc/bluetooth/main.conf</filename> is installed automatically
+during the install.  Additionally, there are three supplementary
+configuration files.  /etc/sysconfig/bluetooth is installed as a part of the
+boot script below.  In addition, you optionally can install the following,
+as the <systemitem class="username">root</systemitem> user:
       </para>
 
       <para revision="systemd">
-        <filename>/etc/bluetooth/main.conf</filename> é instalado automaticamente
-durante a instalação. Além disso, existem dois arquivos de configuração
-suplementares. Você pode opcionalmente instalar os seguintes arquivos como
-o(a) usuário(a) <systemitem class="username">root</systemitem>:
+        <filename>/etc/bluetooth/main.conf</filename> is installed automatically
+during the installation. Additionally, there are two supplementary
+configuration files. You can optionally install the following files as the
+<systemitem class="username">root</systemitem> user:
      </para>
 
 <screen role="root"><userinput>cat > /etc/bluetooth/rfcomm.conf &lt;&lt; "EOF"</userinput>
@@ -313,20 +264,18 @@ originário do pacote <xref linkend="bootscripts"/>.
       </para>
 
       <para revision="systemd">
-        Para iniciar o processo de segundo plano <command>bluetoothd</command> na
-inicialização, habilite a unidade do systemd instalada anteriormente
-executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        To start the <command>bluetoothd</command> daemon at boot, enable the
+previously installed systemd unit by running the following command as the
+<systemitem class="username">root</systemitem> user:
       </para>
 
 <screen role="root" revision="systemd"><userinput>systemctl enable bluetooth</userinput></screen>
 
       <para revision="systemd">
-         Para iniciar o processo de segundo plano <command>obexd</command> para uma
-sessão de usuário(a) (para suportar alguns aplicativos "Bluetooth" que o
-utilizam), habilite a unidade do "systemd" instalada anteriormente para
-todos(as) os(as) usuários(as) executando o seguinte comando como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+         To start the <command>obexd</command> daemon for a user session (to support
+some Bluetooth programs using it), enable the previously installed systemd
+unit for all users by running the following command as the <systemitem
+class="username">root</systemitem> user:
        </para>
 
 <screen role="root" revision="systemd"><userinput>systemctl enable --global obex</userinput></screen>

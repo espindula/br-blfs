@@ -4,13 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-43;/mutter-&mutter-version;.tar.xz">
-  <!ENTITY mutter-download-ftp  "&gnome-download-ftp;/mutter/&gnome-43;/mutter-&mutter-version;.tar.xz">
-  <!ENTITY mutter-md5sum        "aba8f5170a27fe7d24f07a3b2fdf2725">
+  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-44;/mutter-&mutter-version;.tar.xz">
+  <!ENTITY mutter-download-ftp  "&gnome-download-ftp;/mutter/&gnome-44;/mutter-&mutter-version;.tar.xz">
+  <!ENTITY mutter-md5sum        "c9a692911a8ff849c6bbfb44eca7a92f">
   <!ENTITY mutter-size          "2,7 MB">
-  <!ENTITY mutter-buildsize     "151 MB (sem testes)">
-  <!ENTITY mutter-time          "0,6 UPC (Usando paralelismo=4)">
-  <!ENTITY mutter-time-systemd  "0,6 UPC (Usando paralelismo=4, adicionar 1,0 UPC para testes)">
+  <!ENTITY mutter-buildsize     "99 MB (with tests)">
+  <!ENTITY mutter-time          "0.8 SBU (Using parallelism=4; add 1.4 SBU for tests)">
 ]>
 
 <sect1 id="mutter" xreflabel="Mutter-&mutter-version;">
@@ -33,7 +32,7 @@ partir da <application>Sessão GNOME</application> (em uma máquina com um
 controlador de vídeo acelerado por hardware).
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -62,14 +61,9 @@ controlador de vídeo acelerado por hardware).
           Espaço em disco estimado exigido: &mutter-buildsize;
         </para>
       </listitem>
-      <listitem revision='sysv'>
+      <listitem>
         <para>
           Tempo de construção estimado: &mutter-time;
-        </para>
-      </listitem>
-      <listitem revision='systemd'>
-        <para>
-          Tempo de construção estimado: &mutter-time-systemd;
         </para>
       </listitem>
     </itemizedlist>
@@ -79,23 +73,21 @@ controlador de vídeo acelerado por hardware).
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="gnome-settings-daemon"/>, <xref linkend="graphene"/>, <xref
-linkend="libxcvt"/>, <xref linkend="libxkbcommon"/> e <xref
+linkend="libxcvt"/>, <xref linkend="libxkbcommon"/>, and <xref
 linkend="pipewire"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="desktop-file-utils"/>, <xref
-linkend="gobject-introspection"/>, <xref linkend="startup-notification"/> e
-<xref linkend="sysprof"/>
+linkend="gobject-introspection"/>, and <xref
+linkend="startup-notification"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas (exigidas para construir o compositor Wayland)</bridgehead>
     <para role="recommended">
       <xref linkend="libinput"/>, <xref linkend="wayland"/>, <xref
-linkend="wayland-protocols"/> e <xref linkend="xwayland"/>. Adicionalmente,
-<xref linkend="gtk3"/> precisa ser construído com suporte a
-<application>Wayland</application>.
+linkend="wayland-protocols"/>, and <xref linkend="xwayland"/>.
     </para>
 
     <bridgehead renderas="sect4"
@@ -106,19 +98,19 @@ linkend="wayland-protocols"/> e <xref linkend="xwayland"/>. Adicionalmente,
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="python-dbusmock"/> (exigido para testes), <xref
-linkend="xorg-server"/> (para sessões X11)
+      <xref linkend="python-dbusmock"/> (required for tests), <xref
+linkend="sysprof"/>, <xref linkend="xorg-server"/> (for X11 sessions)
     </para>
 
     
 
-    <!-- NOTE: Mutter compiles git versions of COGL and Clutter for it's own
-    internal use. This is because the wayland support upstream isn't advanced
-    enough for the graphics stack used in Mutter. -->
-<para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/mutter"/>
-    </para>
-
-  </sect2>
+  <!-- NOTE: Mutter compiles shipped Cogl and Clutter for it's own
+    internal use. This is because upstream have decided that Cogl and
+    Clutter should be only used by Mutter in the future, so the development
+    of Cogl and Clutter is now performed in the Mutter repository.  The
+    "standalone" Cogl and Clutter are considered obsolete now and we have
+    archived them.  -->
+</sect2>
 
   <sect2 role="installation">
     <title>Instalação do Mutter</title>
@@ -151,27 +143,31 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=debugoptimized -Dtests=false .. &amp;&amp;
+meson setup --prefix=/usr              \
+            --buildtype=release        \
+            -Dtests=false              \
+            -Dprofiler=false           \
+            ..                         &amp;&amp;
 ninja</userinput></screen>
 
 
     
 
     <para>
-      A suíte de teste exige que funções de depuração estejam habilitadas na
-construção e um aplicativo externo chamado <command>xvfb-run</command>. Se
-desejar executar os testes, você deveria baixá-lo e instalá-lo antes de
-executar o <command>meson</command>. Você pode obtê-lo a partir de <ulink
-url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink> e instalá-lo
-com permissões executáveis em <filename
-class="directory">/usr/bin</filename>. <command>xvfb-run</command> precisa
-de <command>Xvfb</command> em tempo de execução, e <command>Xvfb</command>
-pode ser instalado a partir de <xref linkend='xorg-server'/> ou <xref
-linkend='xwayland'/>. Você também deveria substituir
-<parameter>-Dtests=false</parameter> no comando <command>meson</command> por
-<parameter>-Dtests=true</parameter>. A suíte de teste exige que o esquema
-mutter esteja instalado no sistema, de forma que é melhor executar os testes
-depois de instalar o pacote.
+      The test suite requires an external program called
+<command>xvfb-run</command>.  If you wish to run the tests, you should
+download and install it before running <command>meson</command>.  You can
+obtain it from <ulink
+url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink>, and install it
+with executable permissions in <filename
+class="directory">/usr/bin</filename>.  <command>xvfb-run</command> needs
+<command>Xvfb</command> at runtime, and <command>Xvfb</command> can be
+installed from either <xref linkend='xorg-server'/> or <xref
+linkend='xwayland'/>.  You should also replace
+<parameter>-Dtests=false</parameter> in the <command>meson</command>
+command, with <parameter>-Dtests=true -Dclutter_tests=false</parameter>.
+The test suite requires the mutter schema to be installed on the system, so
+it is better to run the tests after installing the package.
     </para>
 
     <para>
@@ -190,7 +186,7 @@ seguindo <xref linkend='mutter-starting'/>, depois de instalá-lo.
 <application>Zenity</application>, que não faz parte do BLFS, de um teste:
     </para>
 
-<screen role='test'><userinput>sed 's/zenity --[a-z]*/gtk3-demo/' -i ../src/tests/x11-test.sh</userinput></screen>
+<screen role='test'><userinput>sed 's/zenity --[a-z]*/gtk4-demo/' -i ../src/tests/x11-test.sh</userinput></screen>
 
     <para>
       Agora execute a suíte de teste:
@@ -202,43 +198,42 @@ seguindo <xref linkend='mutter-starting'/>, depois de instalá-lo.
 <userinput>HOME= ninja test</userinput></screen>
 
     <para>
-      Os testes exigem uma sessão ativa do X ou wayland. O teste
-<filename>native-unit</filename> é conhecido por falhar. Muitos testes
-falharão se a renderização do opengl não for feita no hardware. Não faça
-nenhuma entrada de mouse ou teclado enquanto a suíte de teste estiver
-executando ou alguns testes poderão falhar.
+      <!-- https://gitlab.gnome.org/GNOME/mutter/-/issues/2848 -->
+<!-- This needs a pipewire daemon running.  As at Aug 2023
+           the method to run a pipewire daemon is not in BLFS
+           (but in editor notes), so claim this a known failure.  -->
+The tests require an active X or wayland session.  Two tests named
+<filename>cogl-test-framebuffer-get-bits-gl3</filename> and
+<filename>native-unit</filename> are known to fail.  A few other tests may
+fail depending on the configuration.  Don't make any mouse or keyboard input
+while the test suite is running or some tests may fail.
     </para>
+
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    
-    <!-- https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/5512
-         If debug is disabled, the "assertion 'CLUTTER_IS_ACTOR (self)'
-         failed" message will turn into a crash.  Enabling debug is just a
-         work around, it's not a proper fix.  -->
-<para>
-      <parameter>--buildtype=debugoptimized</parameter>: Substitui o tipo de
-construção padrão (<quote>debug</quote>), o que produziria binários não
-otimizados. É usado em vez de <option>--buildtype=release</option> para
-contornar um problema que causa o travamento do gnome-shell.
-    </para>
-
-    <!--
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
--->
-<para>
+    <para>
       <parameter>-Dtests=false</parameter>: Impede a construção dos testes e
 remove um requisito difícil em <command>xvfb-run</command>.
     </para>
 
     <para>
-      <option>-Dprofiler=false</option>: Use essa opção se o
-<application>Sysprof</application> não estiver instalado e você não quiser
-que o meson baixe o código fonte do <application>Sysprof</application>.
+      <parameter>-Dprofiler=false</parameter>: Allow building this package without
+<application>Sysprof</application>.  Remove this option if you've installed
+<application>Sysprof</application> and want to analysis the rendering
+performance of <application>Mutter</application>.
+    </para>
+
+    <para>
+      <option>-Dtests=true -Dclutter_tests=false</option>: Building all the tests
+but the tests for the shipped <application>Clutter</application> library.
+The <application>Clutter</application> tests are known to fail with
+<option>--buildtype=release</option>.
     </para>
 
   </sect2>
@@ -248,7 +243,7 @@ que o meson baixe o código fonte do <application>Sysprof</application>.
 
     
 
-    <!-- Mutter as a Wayland compositor Works with mutter-42.4 and 43.0.
+    <!-- Mutter as a Wayland compositor works with recent mutter releases.
          IIRC mutter can also be used as a X window manager: just replace
          "twm" with "mutter &dash;&dash;x11" in xinitrc. But I've not tested
          such a configuration recently (I don't build Xorg Server or xinit
@@ -294,10 +289,10 @@ para a sessão aninhada do Wayland.
           mutter
         </seg>
         <seg>
-          libmutter-11.so
+          libmutter-12.so and libmutter-test-12.so (optional)
         </seg>
         <seg>
-          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-11
+          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-12
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -320,13 +315,27 @@ baseado em <application>Clutter</application>
       </varlistentry>
 
       <varlistentry id="libmutter">
-        <term><filename class="libraryfile">libmutter-11.so</filename></term>
+        <term><filename class="libraryfile">libmutter-12.so</filename></term>
         <listitem>
           <para>
             contém as funções da API do <application>Mutter</application>
           </para>
           <indexterm zone="mutter libmutter">
-            <primary sortas="c-libmutter">libmutter-11.so</primary>
+            <primary sortas="c-libmutter">libmutter-12.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libmutter-test">
+        <term><filename class="libraryfile">libmutter-test-12.so</filename></term>
+        <listitem>
+          <para>
+            contains the <application>Mutter</application> test suite API functions;
+this library is only installed if the test suite of this package is enabled
+and it is needed by <application>gnome-shell</application> test suite
+          </para>
+          <indexterm zone="mutter libmutter-test">
+            <primary sortas="c-libmutter-test">libmutter-test-12.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

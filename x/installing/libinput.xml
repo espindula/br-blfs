@@ -4,16 +4,16 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libinput-version "1.22.1">
+  <!ENTITY libinput-version "1.23.0">
 
 <!--  <!ENTITY libinput-download-http "https://www.freedesktop.org/software/libinput/libinput-&libinput-version;.tar.xz">-->
   <!ENTITY libinput-download-http "https://gitlab.freedesktop.org/libinput/libinput/-/archive/&libinput-version;/libinput-&libinput-version;.tar.gz"
 >
   <!ENTITY libinput-download-ftp  "">
-  <!ENTITY libinput-md5sum        "d164313f9a92162df7af3505b6915c76">
-  <!ENTITY libinput-size          "967 KB">
-  <!ENTITY libinput-buildsize     "13 MB (adicionar 22 MB para documentação e 9,6 MB para testes)">
-  <!ENTITY libinput-time          "0,1 UPC (adicionar 0,1 UPC para documentação e 4,7 UPC para testes)">
+  <!ENTITY libinput-md5sum        "1faafdbe54745b5b59305b0764155a15">
+  <!ENTITY libinput-size          "980 KB">
+  <!ENTITY libinput-buildsize     "13 MB (add 23 MB for documentation and 9.6 MB for tests)">
+  <!ENTITY libinput-time          "less than 0.1 SBU (add 0.1 SBU for documentation and 4.7 SBU for tests)">
 ]>
 
   <sect2 id="libinput" xreflabel="libinput-&libinput-version;">
@@ -37,7 +37,7 @@ dispositivos de entrada para servidores de exibição e outras aplicações que
 precisam lidar diretamente com dispositivos de entrada.
       </para>
 
-      &lfs113_checked;
+      &lfs120_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -89,9 +89,6 @@ linkend="libunwind"/> (exigido para testes), <xref linkend="libwacom"/>,
 linkend="pyparsing"/> (para um teste não root)
       </para>
 
-      <para condition="html" role="usernotes">
-        Observações de Usuário(a): <ulink url="&blfs-wiki;/libinput"/>
-      </para>
     </sect3>
 
     <sect3 role="kernel" id="libinput-kernel">
@@ -109,10 +106,11 @@ linkend="valgrind"/> e <xref linkend="libunwind"/>).
 configuração do núcleo e recompile o núcleo se necessário:
       </para>
 
-<screen><literal>Device Drivers ---&gt;
-  Input device support ---&gt;
-    Miscellaneous Devices ---&gt;
-    &lt;*/M&gt;   User level driver support        [CONFIG_INPUT_UINPUT]</literal></screen>
+      
+      <!-- Yes, "libevdev" is not a typo.  libinput test suite needs the
+           same option as libevdev.  -->
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+        href="libevdev-test-kernel.xml"/>
 
       <para>
         Se você construir isso como um módulo, ele precisará ser inserido antes da
@@ -254,9 +252,8 @@ libinput
             libinput.so
           </seg>
           <seg>
-            /etc/libinput, $XORG_PREFIX/libexec/libinput,
-$XORG_PREFIX/usr/share/libinput e (opcionalmente)
-$XORG_PREFIX/share/doc/libinput-&libinput-version;
+            /etc/libinput, $XORG_PREFIX/libexec/libinput, $XORG_PREFIX/share/libinput,
+and (optionally)  $XORG_PREFIX/share/doc/libinput-&libinput-version;
           </seg>
         </seglistitem>
       </segmentedlist>

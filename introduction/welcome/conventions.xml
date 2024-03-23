@@ -100,17 +100,23 @@ uma ou mais seções separadas: Exigidas, Recomendadas e Opcionais.</para>
 
     <bridgehead renderas="sect3">Dependências Exigidas</bridgehead>
 
-    <para>Essas dependências são o mínimo necessário para construir o pacote. Pacotes
-no LFS e as dependências exigidas desses pacotes exigidos estão omitidos
-dessa lista. Lembre-se sempre de verificar dependências aninhadas.</para>
+    <para>These dependencies are the bare minimum needed to build the package.
+Packages in LFS, and the required dependencies of these required packages,
+are omitted from this list.  Always remember to check for nested
+dependencies. If a dependency is said to be <quote>runtime</quote>, then it
+is not needed for building the package, but only to use it after
+installation.</para>
 
     <bridgehead renderas="sect3">Dependências Recomendadas</bridgehead>
 
-    <para>Essas são dependências que os(as) editores(as) do BLFS determinaram que são
-importantes para fornecer recursos razoáveis ao pacote. As instruções de
-instalação do pacote assumem que elas estão instaladas. Se um pacote
-recomendado não estiver instalado, [então] as instruções possivelmente
-exigirão modificações para acomodar o pacote ausente.</para>
+    <para>These are dependencies the BLFS editors have determined are important to
+give the package reasonable capabilities.  If a recommended dependency is
+not said to be <quote>runtime</quote>, package installation instructions
+assume it is installed.  If it is not installed, the instructions may
+require modification, to accommodate the missing package. A recommended
+<quote>runtime</quote> dependency does not need to be installed before
+building the package, but must be built afterwards for running the package
+with reasonable capabilities.</para>
 
     <bridgehead renderas="sect3">Dependências Opcionais</bridgehead>
 
@@ -119,7 +125,7 @@ use. A integração de dependências opcionais possivelmente seja automática
 pelo pacote, ou etapas adicionais não apresentadas pelo BLFS possivelmente
 sejam necessárias. Dependências opcionais são, ocasionalmente, listadas sem
 instruções BLFS explícitas. Nesse caso, você mesmo(a) precisa determinar
-como realizar a instalação. </para>
+como realizar a instalação.</para>
 
     <para>&nbsp;</para> 
   <!-- add extra white space to improve readability -->
@@ -131,18 +137,13 @@ como realizar a instalação. </para>
     <para>Alguns pacotes exigem opções específicas de configuração do núcleo. O
 esquema geral para esses se parece com isto:</para>
 
-<screen><literal>Seção mestre ---&gt;
-  Subseção ---&gt;
-    [*]     Parâmetro exigido                      [CONFIG_REQU_PAR]
-    &lt;*&gt;     Parâmetro exigido (não como módulo)     [CONFIG_REQU_PAR_NMOD]
-    &lt;*/M&gt;   Parâmetro exigido (poderia ser um módulo) [CONFIG_REQU_PAR_MOD]
-    &lt;*/M/ &gt; Parâmetro opcional                      [CONFIG_OPT_PAR]
-    [ ] Parâmetro incompatível                      [CONFIG_INCOMP_PAR]
-    &lt; &gt; Parâmetro incompatível (mesmo como módulo)    [CONFIG_INCOMP_PAR_MOD]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="conventions-kernel.xml"/>
 
-    <para>[CONFIG_...] na direita fornece o nome da opção, de forma que você pode
-facilmente verificar se ela está configurada no seu arquivo
-<filename>config</filename>. O significado das várias entradas é:
+    <para>[...] on the right gives the symbolic name of the option, so you can easily
+check whether it is set in your <filename>.config</filename> file. Note that
+the <filename>.config</filename> file contains a <literal>CONFIG_</literal>
+prefix before all symbolic names.  The meaning of the various entries is:
 
     <blockquote>
     <informaltable frame='none'><tgroup cols="2">
@@ -183,11 +184,31 @@ selecionada, ou como integrada ou como um módulo
       </row>
       <row>
         <entry>
+          <emphasis role="bold">Required parameter (as a module)</emphasis>
+        </entry>
+        <entry>
+          the option can be built-in, a module, or not selected: it must be selected
+as a module; selecting it as built-in may cause unwanted effects
+        </entry>
+      </row>
+      <row>
+        <entry>
           <emphasis role="bold">Parâmetro opcional</emphasis>
         </entry>
         <entry>
-          raramente usada: a opção pode ser integrada, um módulo ou não selecionada:
-ela possivelmente seja configurada da maneira que você desejar
+          the option can be built-in, a module, or not selected: it may be selected as
+a module or built-in if you need it for driving the hardware or optional
+kernel features
+        </entry>
+      </row>
+      <row>
+        <entry>
+          <emphasis role="bold">Parâmetro opcional</emphasis>
+        </entry>
+        <entry>
+          the option can be built-in, a module, or not selected: it may be selected as
+a module if you need it for driving the hardware or optional kernel
+features, but selecting it as built-in may cause unwanted effects
         </entry>
       </row>
       <row>
@@ -218,6 +239,13 @@ se a opção não puder ser desmarcada; ou mesmo traços (-*- ou -M-), quando a
 escolha for imposta. O texto de ajuda descrevente da opção especifica as
 outras seleções das quais essa opção depende e como aquelas outras seleções
 são configuradas.</para>
+
+    <para>
+      The letter in <emphasis role='blue'>blue</emphasis> is the hotkey for this
+option.  If you are running <command>make menuconfig</command>, you can
+press a key to quickly traverse all the options with this key as the hotkey
+on the screen.
+    </para>
 
     <para>&nbsp;</para> 
   <!-- add extra white space to improve readability -->

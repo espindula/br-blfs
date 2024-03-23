@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY gjs-download-http "&gnome-download-http;/gjs/1.74/gjs-&gjs-version;.tar.xz">
-  <!ENTITY gjs-download-ftp  "&gnome-download-ftp;/gjs/1.74/gjs-&gjs-version;.tar.xz">
-  <!ENTITY gjs-md5sum        "f82d0acac0c750ce5298a2d4789af401">
-  <!ENTITY gjs-size          "624 KB">
-  <!ENTITY gjs-buildsize     "239 MB (com os testes)">
-  <!ENTITY gjs-time          "1,1 UPC (com os testes)">
+  <!ENTITY gjs-download-http "&gnome-download-http;/gjs/1.76/gjs-&gjs-version;.tar.xz">
+  <!ENTITY gjs-download-ftp  "&gnome-download-ftp;/gjs/1.76/gjs-&gjs-version;.tar.xz">
+  <!ENTITY gjs-md5sum        "0dd8d901d88cb4907791256f1cced8d5">
+  <!ENTITY gjs-size          "631 KB">
+  <!ENTITY gjs-buildsize     "240 MB (with tests)">
+  <!ENTITY gjs-time          "0.3 SBU (with tests; with parallelism=4)">
 ]>
 
 <sect1 id="gjs" xreflabel="Gjs-&gjs-version;">
@@ -30,7 +30,7 @@
 <application>GNOME</application>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -71,7 +71,7 @@
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cairo"/>, <xref linkend="dbus"/>, <xref
-linkend="gobject-introspection"/> e <xref linkend="js102"/>
+linkend="gobject-introspection"/>, and <xref linkend="js102"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas (exigidas para GNOME)</bridgehead>
@@ -81,14 +81,12 @@ linkend="gobject-introspection"/> e <xref linkend="js102"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="sysprof"/>, <xref linkend="valgrind"/> (para testes), <ulink
+      <xref linkend="sysprof"/>, <xref linkend="valgrind"/> (for tests), <ulink
 url="http://dtrace.org/blogs/about">DTrace</ulink>, <ulink
-url="https://ltp.sourceforge.net/coverage/lcov.php">LCOV</ulink> e <ulink
+url="https://github.com/linux-test-project/lcov">LCOV</ulink>, and <ulink
 url="https://sourceware.org/systemtap">Systemtap</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gjs"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -108,11 +106,7 @@ meson setup --prefix=/usr          \
 ninja</userinput></screen>
 
     <para>
-      <!-- https://github.com/mesonbuild/meson/issues/10577 -->
-Para testar os resultados, emita: <command>ninja test</command>. Os testes
-<application>GTK</application> e <application>Cairo</application> falharão
-se não executarem em uma sessão do Xorg. Quatro testes são conhecidos por
-atingirem o tempo limite.
+      To test the results, issue: <command>ninja test</command>.
     </para>
 
     <para>
@@ -133,9 +127,8 @@ atingirem o tempo limite.
       href="../../xincludes/meson-wrap-nofallback.xml"/>
 
     <para>
-      <option>-Dprofiler=disabled</option>: evita a construção da estrutura de
-retaguarda do perfilador, mesmo se o <xref linkend="sysprof"/> estiver
-instalado.
+      <option>-Dprofiler=disabled</option>: prevents building the profiler backend
+even if <xref linkend="sysprof"/> is installed.
     </para>
 
   </sect2>

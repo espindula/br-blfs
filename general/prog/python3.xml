@@ -7,16 +7,16 @@
   <!ENTITY python3-download-http
            "https://www.python.org/ftp/python/&python3-version;/Python-&python3-version;.tar.xz">
   <!ENTITY python3-download-ftp  "">
-  <!ENTITY python3-md5sum        "a957cffb58a89303b62124896881950b">
+  <!ENTITY python3-md5sum        "fb7f7eae520285788449d569e45b6718">
   <!ENTITY python3-size          "19 MB">
-  <!ENTITY python3-buildsize     "283 MB (adicionar 897 MB para os testes)">
-  <!ENTITY python3-time          "2,2 UPC (adicionar 3,4 UPC para os testes; ambos usando paralelismo=4)">
+  <!ENTITY python3-buildsize     "282 MB (add 63 MB for tests)">
+  <!ENTITY python3-time          "1.9 SBU (add 2.8 SBU for tests; both using parallelism=4)">
   <!--
   Note: Size does not reflect docs that were install in LFS.
   -->
   <!ENTITY python3htmldoc-download-http
   "https://www.python.org/ftp/python/doc/&python3-version;/python-&python3-version;-docs-html.tar.bz2">
-  <!ENTITY python3-docs-md5sum "eb4132c780b60b5782a4f66b29b08d5c" >
+  <!ENTITY python3-docs-md5sum "cdce7b1189bcf52947f3b434ab04d7e2" >
 ]>
 
 <sect1 id="python3" xreflabel="Python-&python3-version;">
@@ -48,38 +48,33 @@ atualizar esse pacote.
       </para>
     </note>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <important>
       <para>
-         Se atualizar para uma nova versão menor do &quot;Python&quot; 3 (por
-exemplo, de &quot;Python-3.10.x&quot; para &quot;Python-3.11.0&quot;),
-[então] você precisará reinstalar quaisquer módulos &quot;Python3&quot; que
-tiver instalado. Você também deveria reinstalar pacotes que gerem módulos
-&quot;Python3&quot;, incluindo &quot;<xref
-linkend="gobject-introspection"/>&quot;, &quot;<xref
-linkend="opencv"/>&quot;, &quot;<xref linkend="graphviz"/>&quot; (se o
-&quot;swig&quot; estiver instalado).
+         If upgrading to a new Python-3 minor version (for example, from
+Python-3.10.x to Python-3.11.0), you will need to reinstall any Python3
+modules you have installed.  You should also reinstall packages that
+generate Python3 modules including <xref linkend="gobject-introspection"/>,
+<xref linkend="opencv"/>, <xref linkend="graphviz"/> (if swig is installed).
       </para>
 
-      <para>Antes de atualizar, você pode obter uma lista completa dos módulos
-instalados com &quot;<command>pip3 list</command>&quot;.
+      <para>Before you upgrade, you can get a list of modules installed with
+<command>pip3 list</command>.  The list may be incomplete as some Python
+modules are not installed with <command>pip3</command>, for example the
+<literal>cracklib</literal> module installed by <xref role='nodep'
+linkend='cracklib'/>.  Use <command>ls
+/usr/lib/python3.<replaceable>minor</replaceable>/site-packages</command>
+for a comprehensive list.
       </para>
 
       <para>
-         O módulo &quot;wheel&quot; e &quot;meson&quot; oriundos do LFS também terão
-de ser reinstalados: <ulink
-url="https://www.linuxfromscratch.org/lfs/view/development/chapter08/wheel.html"/>
-e <ulink
-url="https://www.linuxfromscratch.org/lfs/view/development/chapter08/meson.html"/>.
-      </para>
-
-      <para revision="systemd">
-        Em sistemas &quot;systemd&quot;, também é necessário reinstalar os módulos
-&quot;MarkupSafe&quot; e &quot;Jinja2&quot; oriundos do LFS: <ulink
-url="https://www.linuxfromscratch.org/lfs/view/systemd/chapter08/markupsafe.html"/>
-e <ulink
-url="https://www.linuxfromscratch.org/lfs/view/systemd/chapter08/jinja2.html"/>.
+         The Python modules from LFS will also have to be reinstalled: <ulink
+url="&lfs-root;/chapter08/flit-core.html">flit-core</ulink>, <ulink
+url="&lfs-root;/chapter08/wheel.html">wheel</ulink>, <ulink
+url="&lfs-root;/chapter08/meson.html">meson</ulink>, <ulink
+url="&lfs-root;/chapter08/markupsafe.html">MarkupSafe</ulink>, and <ulink
+url="&lfs-root;/chapter08/jinja2.html">Jinja2</ulink>.
       </para>
     </important>
 
@@ -148,10 +143,10 @@ url="https://www.bytereef.org/mpdecimal/">libmpdec</ulink>
 
     <bridgehead renderas="sect4">Opcionais (Para Módulos Adicionais)</bridgehead>
     <para role="optional">
-      <xref linkend="db"/>, <xref linkend="libnsl"/> e <xref linkend="tk"/>
+      <xref linkend="db"/>, <xref linkend="libnsl"/>, and <xref linkend="tk"/>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/Python3"/>
+    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/Python3"/>
     </para>
   </sect2>
 
@@ -163,7 +158,7 @@ url="https://www.bytereef.org/mpdecimal/">libmpdec</ulink>
 seguintes comandos:
     </para>
 
-<screen><userinput>CXX="/usr/bin/g++"              \
+<screen><userinput>CXX="/usr/bin/g++"               \
 ./configure --prefix=/usr        \
             --enable-shared      \
             --with-system-expat  \
@@ -172,10 +167,9 @@ seguintes comandos:
 make</userinput></screen>
 
     <para>
-      Para testar o resultado, emita &quot;<command>make
-test</command>&quot;. Alguns testes possivelmente precisem de uma conexão
-com a Internet. Dois testes, &quot;test_distutils&quot; e
-&quot;test_embed&quot;, são conhecidos por falharem.
+      To test the result, issue <command>make test</command>.  Some tests may need
+an Internet connection. Two tests, test_distutils and test_embed are known
+to fail.
     </para>
 
     <para>
@@ -284,11 +278,10 @@ usuário(a) ou ao do sistema:
           <!--
           easy_install-&python3-majorver;,
           -->
-2to3 (link simbólico) e 2to3-&python3-majorver;, idle3 (link simbólico) e
-idle&python3-majorver;, pip3 (link simbólico) e pip&python3-majorver;,
-pydoc3 e pydoc&python3-majorver;, python3 (link simbólico);
-python&python3-majorver; e python3-config (link simbólico) e
-python&python3-majorver;-config
+2to3 (symlink) and 2to3-&python3-majorver;, idle3 (symlink) and
+idle&python3-majorver;, pip3 (symlink) and pip&python3-majorver;, pydoc3 and
+pydoc&python3-majorver;, python3 (symlink); python&python3-majorver;, and
+python3-config (symlink) and python&python3-majorver;-config
         </seg>
         <seg>
           libpython&python3-majorver;.so e libpython3.so

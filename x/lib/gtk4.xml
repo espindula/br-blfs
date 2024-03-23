@@ -6,15 +6,14 @@
 
   <!ENTITY gtk4-download-http "&gnome-download-http;/gtk/&gtk4-minor;/gtk-&gtk4-version;.tar.xz">
   <!ENTITY gtk4-download-ftp  "&gnome-download-ftp;/gtk/&gtk4-minor;/gtk-&gtk4-version;.tar.xz">
-  <!ENTITY gtk4-md5sum        "d735b9c2a534f034553e2e27bc5af994">
-  <!ENTITY gtk4-size          "19 MB">
-  <!ENTITY gtk4-buildsize     "484 MB (adicionar 12 MB para os testes)">
-  <!ENTITY gtk4-time          "1,1 UPC (usando paralelismo=4, adicionar 0,3 UPC para testes)">
+  <!ENTITY gtk4-md5sum        "69372ddb998c125c3a04c44b8c68b339">
+  <!ENTITY gtk4-size          "16 MB">
+  <!ENTITY gtk4-buildsize     "562 MB (with docs; add 29 MB for tests)">
+  <!ENTITY gtk4-time          "1.3 SBU (using parallelism=4; with docs; add 0.6 SBU for tests)">
 ]>
 
 <sect1 id="gtk4" xreflabel="GTK-&gtk4-version;">
   <?dbhtml filename="gtk4.html"?>
-
 
   <title>GTK-&gtk4-version;</title>
 
@@ -30,7 +29,7 @@
 usadas para criar interfaces gráficas de usuário(a) para aplicativos.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -95,22 +94,29 @@ linkend="hicolor-icon-theme"/> (necessário para testes e para padrões) e
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="colord"/>, <xref linkend="cups"/>, <xref
-linkend="docutils"/>, <xref linkend="ffmpeg"/> (construído com <xref
+linkend="docutils"/>, <xref linkend="ffmpeg"/> (built with <xref
 role='nodep' linkend='libvpx'/>), <xref linkend="gi-docgen"/>, <xref
-role="runtime" linkend="highlight"/> (tempo de execução, somente usado pelo
-&quot;<command>gtk4-demo</command>&quot; para realçamento de sintaxe do
-código fonte de demonstração), <xref linkend="libcloudproviders"/>, <xref
-linkend="sassc"/>, <xref linkend="tracker3"/> e <ulink
+role="runtime" linkend="highlight"/> (runtime, only used by
+<command>gtk4-demo</command> for syntax highlighting of demo source code),
+<xref linkend="libcloudproviders"/>, <xref linkend="sassc"/>, <xref
+linkend="tracker3"/>, <ulink
+url="https://github.com/OpenPrinting/cpdb-libs">cpdb</ulink>, and <ulink
 url="https://vulkan.lunarg.com/sdk/home">vulkan</ulink>
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/gtk4"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do <quote>GTK 4</quote></title>
+
+    <para>
+      First, make some changes from upstream:
+    </para>
+
+<screen><userinput>sed -e '/glib-object.h/a #include &lt;gdk/gdk.h&gt;'        \
+    -e '/ gtk_printer_option/i GDK_AVAILABLE_IN_ALL'  \
+    -e '/\*gtk_printer_option/i GDK_AVAILABLE_IN_ALL' \
+    -i.orig gtk/print/gtkprinteroptionprivate.h</userinput></screen>
 
     <para>
       Instale o &quot;<application>GTK 4</application>&quot; executando os
@@ -118,11 +124,12 @@ seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
 meson setup --prefix=/usr           \
             --buildtype=release     \
             -Dbroadway-backend=true \
+            -Dintrospection=enabled \
             .. &amp;&amp;
 ninja</userinput></screen>
 
@@ -131,15 +138,20 @@ ninja</userinput></screen>
 construir a documentação da &quot;API&quot; para esse pacote, [então] emita:
     </para>
 
-<screen role='nodump'><userinput>sed "s@'doc'@&amp; / 'gtk-&gtk4-version;'@" -i ../docs/reference/meson.build &amp;&amp;
+<screen remap='doc'><userinput>sed "s@'doc'@&amp; / 'gtk-&gtk4-version;'@" -i ../docs/reference/meson.build &amp;&amp;
 meson configure -Dgtk_doc=true                                   &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para executar os testes, emita: &quot;<command>meson test --setup
-x11</command>&quot;. Se você estiver em uma sessão do &quot;Wayland&quot;,
-[então] substitua &quot;x11&quot; por &quot;wayland&quot;. Uns poucos testes
-possivelmente falhem.
+      To run the tests, issue: <command>dbus-run-session meson test --setup
+x11</command>. If you are in a Wayland session, replace x11 with wayland.
+Nine tests are known to fail if <ulink
+url="https://gitlab.gnome.org/GNOME/cantarell-fonts">Cantrell fonts</ulink>
+are not installed. Many tests will fail if
+<filename>~/.config/gtk-4.0/settings.ini</filename> exists and the
+gtk-modules line is not commented out.  On systems with NVIDIA graphics
+cards, the tests may take significantly longer than the advertised test
+time.
     </para>
 
 
@@ -150,7 +162,14 @@ possivelmente falhem.
      [bdubbs]: 4.6.7, x11,     758 OK, 2 Expected Fail,  9 Fail. 1 Skipped. 1 Timeout
      [pierre]: 4.8.1, wayland, 765 OK, 2 Expected Fail,  2 Fail. 1 Skipped
      [bdubbs]: 4.8.2, x11,     753 OK, 2 Expected Fail, 14 Fail. 1 Skipped
-     [pierre]: 4.8.3, wayland, 760 OK, 2 Expected Fail,  5 Fail. 3 Skipped-->
+     [pierre]: 4.8.3, wayland, 760 OK, 2 Expected Fail,  5 Fail. 3 Skipped
+     [bdubbs]: 4.10.0, x11,    701 OK, 0 Expected Fail, 15 Fail. 1 Skipped, 2 Timeout
+               above over ssh
+     [bdubbs]: 4.10.0, x11,    712 OK, 0 Expected Fail,  6 Fail. 1 Skipped, 0 Timeout
+               above on native x11
+     [bdubbs]: 4.12.0, x11,   1453 OK, 0 Expected Fail,  9 Fail. 5 Skipped, 0 Timeout
+               above on native x11
+-->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
@@ -171,6 +190,12 @@ estrutura &quot;HTML5&quot; de retaguarda do &quot;GDK&quot;.
     </para>
 
     <para>
+      <parameter>-Dintrospection=enabled</parameter>: This switch enables using
+<xref linkend='gobject-introspection'/> to generate GIR bindings of this
+packages.  These bindings are required by GNOME.
+    </para>
+
+    <para>
       <option>-Dcloudproviders=enabled</option>: Use essa chave se você tiver o
 &quot;<xref linkend="libcloudproviders" role="nodep"/>&quot; instalado e
 desejar habilitar o suporte para provedores de nuvem em uma janela de
@@ -178,9 +203,9 @@ seleção de arquivos.
     </para>
 
     <para>
-      <option>-Dsysprof=enabled</option>: Use essa chave se você tiver o
-&quot;<xref linkend="sysprof"/>&quot; instalado e desejar habilitar o
-suporte de rastreamento para aplicativos baseados em &quot;GTK4&quot;.
+      <option>-Dsysprof=enabled</option>: Use this switch if you have <xref
+linkend="sysprof"/> installed and wish to enable tracing support for
+GTK4-based applications.
     </para>
 
     <para>
@@ -194,13 +219,6 @@ funcionalidade de pesquisa ao executar um seletor de arquivos.
 &quot;<xref linkend="colord"/>&quot; instalado e desejar usar o
 &quot;colord&quot; com a estrutura de retaguarda de impressão do
 &quot;CUPS&quot;.
-    </para>
-
-    <para>
-      
-      <!-- The tarball ships a copy of gi-docgen but we need the Python
-           dependencies, so we require gi-docgen to be installed. -->
-<option>-Dgtk_doc=true</option>: &gi-doc-disable;
     </para>
 
     <para>
@@ -234,21 +252,18 @@ de manual.
     <sect3><title>Informação de Configuração</title>
 
       <para>
-        Os temas do &quot;<application>GTK 4</application>&quot; mudam a aparência
-de um aplicativo &quot;<application>GTK 4</application>&quot;. Um tema de
-ícones pode ser usado para mudar os ícones que aparecem na barra de
-ferramentas do aplicativo. Se tiver instalado um tema do
-&quot;<application>GTK 4</application>&quot; (por exemplo, o tema
-&quot;Adwaita&quot; construído em &quot;<application>GTK
-4</application>&quot;), um tema de ícone (como &quot;<xref
-linkend="oxygen-icons5"/>&quot;) e (ou) uma fonte (&quot;<xref
-linkend="dejavu-fonts"/>&quot;), [então] você consegue configurar tuas
-preferências em
-&quot;<filename>~/.config/gtk-4.0/settings.ini</filename>&quot; ou no
-arquivo padrão de configuração abrangente a todo o sistema (como o(a)
-usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;), em
-&quot;<filename>/usr/share/gtk-4.0/settings.ini</filename>&quot;. Para o(a)
-usuário(a) local, um exemplo é:
+        <application>GTK 4</application> themes change the way a <application>GTK
+4</application> application looks. An icon theme can be used to change the
+icons that appear on the application's toolbar.  If you have installed a
+<application>GTK 4</application> theme (e.g.  the Adwaita theme built in
+<application>GTK 4</application>), an icon theme (such as <xref
+linkend="oxygen-icons5"/>) and/or a font (<xref linkend="dejavu-fonts"/>),
+you can set your preferences in
+<filename>~/.config/gtk-4.0/settings.ini</filename>, or the default
+system-wide configuration file (as the <systemitem
+class="username">root</systemitem> user), in
+<filename>/usr/share/gtk-4.0/settings.ini</filename>. For the local user, an
+example is:
       </para>
 
 <screen><userinput>mkdir -pv ~/.config/gtk-4.0

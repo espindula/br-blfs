@@ -24,68 +24,56 @@
  all belong in section G (others) and not only do they add noise in longindex,
  the links all point to the top of the page. -->
 <para>
-      Se você lê texto somente em inglês e está satisfeito(a) com as fontes livres
-comuns listadas na próxima página, [então] possivelmente você nunca precise
-se preocupar com os detalhes do como o
-&quot;<application>fontconfig</application>&quot; funciona. Mas existem
-muitas coisas que podem ser alteradas se não atenderem às tuas necessidades.
+      If you only read text in English, and are happy with the common libre fonts
+listed on the next page, you may never need to worry about the details of
+how <application>fontconfig</application> works. But there are many things
+which can be altered if they do not suit your needs.
     </para>
 
     <para>
-      Embora esta página seja longa, ela mal arranha a superfície e você estará
-apto(a) a encontrar muitas visões alternativas na &quot;web&quot; (mas, por
-favor, lembre-se de que algumas coisas mudaram ao longo dos anos; por
-exemplo, o &quot;autohinter&quot; não mais é o padrão). O objetivo aqui é o
-de te fornecer informações suficientes para entender as mudanças que você
-está fazendo.
+      Although this page is long, it barely scratches the surface and you will be
+able to find many alternative views on the web (but please remember that
+some things have changed over the years, for example the autohinter is no
+longer the default). The aim here is to give you enough information to
+understand the changes you are making.
     </para>
 
-    
-    <!-- use the existing wiki page for fontconfig -->
-<para condition="html" role="usernotes">Observações de Usuário(a): <ulink url='&blfs-wiki;/Fontconfig'/>
-    </para>
     </sect2>
 
     <sect2 role="configuration" id="xft-font-protocol" xreflabel="O Protocolo de Fonte Xft">
     <title>O Protocolo de Fonte Xft</title>
 
     <para>
-      O protocolo de fonte &quot;Xft&quot; fornece renderização de fonte suavizada
-por intermédio do &quot;<application>freetype</application>&quot;, e as
-fontes são controladas a partir do lado cliente usando o
-&quot;<application>fontconfig</application>&quot; (exceto para o &quot;<xref
-linkend="rxvt-unicode"/>&quot;, que consegue usar fontes listadas em
-&quot;<filename>~/.Xresources</filename>&quot; e o &quot;<xref
-linkend="abiword"/>&quot; que usa somente a fonte especificada). O caminho
-de pesquisa padrão é &quot;<filename
-class="directory">/usr/share/fonts</filename>&quot; e &quot;<filename
-class="directory">~/.local/share/fonts</filename>&quot; embora, no momento,
-o antigo e obsoleto local &quot;<filename
-class="directory">~/.fonts</filename>&quot; ainda funcione. O
-&quot;<application>Fontconfig</application>&quot; pesquisa diretórios no
-caminho dele recursivamente e mantém um &quot;cache&quot; das
-características da fonte em cada diretório. Se o &quot;cache&quot; parecer
-desatualizado, [então] ele será ignorado e as informações serão obtidas a
-partir das próprias fontes (isso pode levar alguns segundos se você instalou
-muitas fontes).
+      The Xft font protocol provides antialiased font rendering through
+<application>freetype</application>, and fonts are controlled from the
+client side using <application>fontconfig</application> (except for <xref
+linkend="rxvt-unicode"/> which can use fonts listed in
+<filename>~/.Xresources</filename>, and <xref linkend="abiword"/> which only
+uses the specified font). The default search path is <filename
+class="directory">/usr/share/fonts</filename> and <filename
+class="directory">~/.local/share/fonts</filename>, although for the moment
+the old and deprecated location <filename
+class="directory">~/.fonts</filename> still works.
+<application>Fontconfig</application> searches directories in its path
+recursively and maintains a cache of the font characteristics in each
+directory. If the cache appears to be out of date, it is ignored, and
+information is fetched from the fonts themselves (that can take a few
+seconds if you have a lot of fonts installed).
     </para>
 
     <para>
       <!-- fonts-misc-ethiopic installs an OTF directory ! -->
-Se você tiver instalado o &quot;<application>Xorg</application>&quot; em
-qualquer prefixo diferente de &quot;<filename
-class="directory">/usr</filename>&quot;, {então} nenhuma fonte do
-&quot;<application>X</application>&quot; foi instalada em um local conhecido
-para o &quot;<application>Fontconfig</application>&quot;. Links simbólicos
-foram criados a partir dos diretórios de fontes do
-&quot;<application>X</application>&quot; &quot;<filename
-class="directory">OTF</filename>&quot; e &quot;<filename
-class="directory">TTF</filename>&quot; para &quot;<filename
-class="directory">/usr/share/fonts/X11-{OTF,TTF}</filename>&quot;. Isso
-permite que o &quot;<application>Fontconfig</application>&quot; use as
-fontes &quot;OpenType&quot; e &quot;TrueType&quot; fornecidas pelo
-&quot;<application>X</application>&quot;, embora muitas pessoas preferirão
-usar fontes mais modernas.
+If you've installed <application>Xorg</application> in any prefix other than
+<filename class="directory">/usr</filename>, any
+<application>X</application> fonts were not installed in a location known to
+<application>Fontconfig</application>. Symlinks were created from the
+<filename class="directory">OTF</filename> and <filename
+class="directory">TTF</filename> <application>X</application> font
+directories to <filename
+class="directory">/usr/share/fonts/X11-{OTF,TTF}</filename>. This allows
+<application>Fontconfig</application> to use the OpenType and TrueType fonts
+provided by <application>X</application>, although many people will prefer
+to use more modern fonts.
     </para>
 
     <para>
@@ -108,31 +96,27 @@ indicado pelas configurações de localidade.
     </para>
 
     <para>
-      <command>fc-list | less</command> : mostra uma lista de todas as fontes
-disponíveis (/caminho/para/nome_do_arquivo: Nome da Fonte:estilo). Se você
-instalou uma fonte há mais de tinta (30) segundos, mas ela não aparece,
-então ela ou um dos diretórios dela não está legível pelo(a) teu(ua)
-usuário(a).
+      <command>fc-list | less</command> : shows a list of all available fonts
+(/path/to/filename: Font Name:style). If you installed a font more than 30
+seconds ago but it does not show, then it or one of its directories is not
+readable by your user.
     </para>
 
     <para>
-      <command>fc-match 'Nome da Fonte'</command> : informará qual fonte será
-usada se a fonte nomeada for solicitada. Normalmente você usaria isso para
-ver o que acontece se uma fonte que você não tenha instalado for solicitada,
-mas você também pode usá-lo se o sistema estiver fornecendo uma fonte
-diferente da que você esperava (talvez porque o
-&quot;<application>fontconfig</application>&quot; não concorde que a fonte
-suporte o teu idioma).
+      <command>fc-match 'Font Name'</command> : tells you which font will be used
+if the named font is requested. Typically you would use this to see what
+happens if a font you have not installed is requested, but you can also use
+it if the system is giving you a different font from what you expected
+(perhaps because <application>fontconfig</application> does not think that
+the font supports your language).
     </para>
 
     <para>
-      <command>fc-match -a 'Tipo' | less</command> : fornecerá uma lista de todas
-as fontes que podem ser usadas para esse tipo (&quot;Monospace&quot;,
-&quot;Sans&quot;, &quot;Serif&quot;). Observe que, no extremo, o
-&quot;<application>fontconfig</application>&quot; pegará um glifo a partir
-de qualquer fonte disponível, mesmo que ela não seja do tipo especificado,
-e, a menos que saiba a respeito do tipo da fonte, ele assumirá que é
-&quot;Sans&quot;.
+      <command>fc-match -a 'Type' | less</command> : provides a list of all fonts
+which can be used for that type (Monospace, Sans, Serif). Note that
+in-extremis <application>fontconfig</application> will take a glyph from any
+available font, even if it is not of the specified type, and unless it knows
+about the font's type it will assume it is Sans.
     </para>
 
     <para>
@@ -144,20 +128,19 @@ pelo texto de teu interesse:
 
     <para>
       <command>FC_DEBUG=4 pango-view --font=monospace -t xyz | grep
-family</command> : isso exige o &quot;<xref linkend="pango"/>&quot; e o
-&quot;<xref linkend="imagemagick"/>&quot; - ele invocará &quot;<xref
-linkend="display"/>&quot; para mostrar o texto em uma pequena janela, e,
-depois de fechá-la, a última linha da saída gerada mostrará qual fonte foi
-escolhida. Isso é particularmente útil para idiomas &quot;CJK&quot;, e você
-também pode passar um idioma, por exemplo, &quot;PANGO_LANGUAGE=en;ja&quot;
-(inglês, então assuma o japonês) ou apenas &quot;zh-cn&quot; (ou outras
-variantes - &quot;zh&quot; por si só não é válido).
+family</command> : this requires <xref linkend="pango"/> and <xref
+linkend="imagemagick"/> - it will invoke <xref linkend="display"/> to show
+the text in a tiny window, and after closing that the last line of the
+output will show which font was chosen. This is particularly useful for CJK
+languages, and you can also pass a language, e.g. PANGO_LANGUAGE=en;ja
+(English, then assume Japanese)  or just zh-cn (or other variants - 'zh' on
+its own is not valid).
     </para>
 
     </sect2>
 
-    <sect2 role="configuration" id="the-various-files" xreflabel="Os vários arquivos">
-    <title>Os vários arquivos</title>
+    <sect2 role="configuration" id="the-various-files" xreflabel="The various files">
+    <title>The various files</title>
 
     <para>
       Os arquivos principais estão em &quot;<filename
@@ -182,7 +165,7 @@ de arquivo precisa estar na forma de dois dígitos, um travessão,
       </listitem>
       <listitem>
         <para>
-          10-19 padrões de renderização do sistema (suavização, etc.)
+          10-19 system rendering defaults (such as antialiasing)
         </para>
       </listitem>
       <listitem>
@@ -228,9 +211,9 @@ de arquivo precisa estar na forma de dois dígitos, um travessão,
     </itemizedlist>
 
     <para>
-      Você também pode ter um &quot;<filename>fonts.conf</filename>&quot; pessoal
-em &quot;$XDG_CONFIG_HOME&quot; que é &quot;<filename
-class="directory">~/.config/fontconfig/</filename>&quot;.
+      You can also have a personal <filename>fonts.conf</filename> in
+$XDG_CONFIG_HOME (which is <filename
+class="directory">~/.config/fontconfig/</filename>).
     </para>
 
   </sect2>
@@ -246,29 +229,24 @@ class="directory">fc-lang/</filename>&quot;), [então] ela será usada.
     </para>
 
     <para>
-      Mas, se o documento ou página solicitou uma fonte que não está instalada
-(ou, ocasionalmente, não contém todos os pontos de código exigidos), [então]
-as seguintes regras entram em jogo: Primeiro,
-&quot;<filename>30-metric-aliases.conf</filename>&quot; é usado para mapear
-apelidos para algumas fontes com as mesmas métricas (mesmo tamanho,
-etc.). Depois disso, uma fonte desconhecida será procurada em
-&quot;<filename>45-latin.conf</filename>&quot; - se for encontrada, [então]
-será mapeada como &quot;Serif&quot; ou &quot;Monospace&quot; ou
-&quot;Sans&quot;; caso contrário, [então] será considerada
-&quot;Sans&quot;. Então &quot;<filename>50-latin.conf</filename>&quot;
-fornece listas ordenadas de substitutas - as &quot;<xref
-linkend="dejavu-fonts"/>&quot; serão usadas se você as instalou. O cirílico
-e o grego parecem ser tratados da mesma forma. Existem arquivos semelhantes
-com um prefixo &quot;65-&quot; para o Persa e outros sistemas de escrita não
-latinos. Todos esses arquivos preferem fontes comerciais, se elas estiverem
-presentes, embora as fontes livres modernas frequentemente sejam, pelo
-menos, os iguais delas.
+      However, if the document or page requested a font which is not installed
+(or, occasionally, does not contain all the required codepoints) the
+following rules come into play: First,
+<filename>30-metric-aliases.conf</filename> is used to map aliases for some
+fonts with the same metrics (same size, etc). After that, an unknown font
+will be searched for in <filename>45-latin.conf</filename> - if it is found
+it will be mapped as Serif or Monospace or Sans, otherwise it will be
+assumed to be Sans. Then <filename>50-latin.conf</filename> provides ordered
+lists of the fallbacks - <xref linkend="dejavu-fonts"/> will be used if you
+installed them. Cyrillic and Greek appear to be treated in the same
+way. There are similar files with a 65- prefix for Persian and other
+non-latin writing systems. All of these files prefer commercial fonts if
+they are present, although modern libre fonts are often at least equal.
     </para>
 
     <para>
-      Desde &quot;fontconfig-2.12.5&quot;, também existe correspondência genérica
-de família para algumas fontes &quot;emoji&quot; e matemáticas; veja-se
-&quot;{45,60}-generic.conf&quot;.
+      Since fontconfig-2.12.5, there is also generic family matching for some
+emoji and math fonts, please see {45,60}-generic.conf.
     </para>
 
     <para>
@@ -292,12 +270,10 @@ possivelmente piore outras. O local preferido para esse arquivo é:
     </para>
 
     <para>
-      Para testar configurações diferentes, você possivelmente precise sair do
-&quot;Xorg&quot; e então executar novamente o
-&quot;<command>startx</command>&quot; de forma que todos os aplicativos usem
-as novas configurações. E, se você usa &quot;Gnome&quot; ou &quot;KDE&quot;,
-[então] as áreas de trabalhos deles podem substituir essas mudanças. Para
-explorar as possibilidades, crie um arquivo para o teu(ua) usuário(a):
+      To try out different settings, you may need to exit from Xorg and then run
+<command>startx</command> again so that all applications use the new
+settings. If you use GNOME, KDE, or LXQt, their desktops can override these
+changes. To explore the possibilities, create a file for your user:
     </para>
 
 <screen><userinput>mkdir -pv ~/.config/fontconfig &amp;&amp;
@@ -307,37 +283,37 @@ cat > ~/.config/fontconfig/fonts.conf &lt;&lt; "EOF"
 &lt;fontconfig&gt;
 
   &lt;match target="font" &gt;
-    &lt;!-- autohint era o antigo prompt automático quando as dicas eram protegidas
-    por patente, de forma que desligue-o para garantir que qualquer informação de
-    dicas na própria fonte seja usada; esse é o padrão --&gt;
+    &lt;!-- autohint was the old automatic hinter when hinting was patent
+    protected, so turn it off to ensure any hinting information in the font
+    itself is used, this is the default --&gt;
     &lt;edit mode="assign" name="autohint"&gt;  &lt;bool&gt;false&lt;/bool&gt;&lt;/edit&gt;
 
-    &lt;!-- a dica está habilitada por padrão --&gt;
+    &lt;!-- hinting is enabled by default --&gt;
     &lt;edit mode="assign" name="hinting"&gt;   &lt;bool&gt;true&lt;/bool&gt;&lt;/edit&gt;
 
-    &lt;!-- para o "lcdfilter", veja-se https://www.spasche.net/files/lcdfiltering/ --&gt;
+    &lt;!-- for the lcdfilter see https://www.spasche.net/files/lcdfiltering/ --&gt;
     &lt;edit mode="assign" name="lcdfilter"&gt; &lt;const&gt;lcddefault&lt;/const&gt;&lt;/edit&gt;
 
-    &lt;!-- opções para estilo de dica:
-    hintfull: é presumido fornecer uma fonte nítida que se alinhe bem à
-    grade de células de caracteres, mas ao custo do formato adequado dela.
+    &lt;!-- options for hintstyle:
+    hintfull: is supposed to give a crisp font that aligns well to the
+    character-cell grid but at the cost of its proper shape.
 
-    hintmedium: mal documentado, talvez um sinônimo para "hintfull".
-    "hintslight" é o padrão: - presumido ser mais confuso, mas mantém a forma.
+    hintmedium: poorly documented, maybe a synonym for hintfull.
+    hintslight is the default: - supposed to be more fuzzy but retains shape.
 
-    hintnone: parece desligar a dica.
-    As variações são marginais e os resultados variam com diferentes fontes --&gt;
+    hintnone: seems to turn hinting off.
+    The variations are marginal and results vary with different fonts --&gt;
     &lt;edit mode="assign" name="hintstyle"&gt; &lt;const&gt;hintslight&lt;/const&gt;&lt;/edit&gt;
 
-    &lt;!-- a suavização está ligada por padrão e realmente ajuda para caracteres fracos
-    e também para fontes "xft": fontes usadas em "rxvt-unicode" --&gt;
+    &lt;!-- antialiasing is on by default and really helps for faint characters
+    and also for 'xft:' fonts used in rxvt-unicode --&gt;
     &lt;edit mode="assign" name="antialias"&gt; &lt;bool&gt;true&lt;/bool&gt;&lt;/edit&gt;
 
-    &lt;!-- subpixels são usualmente "rgb"; veja-se
+    &lt;!-- subpixels are usually rgb, see
     http://www.lagom.nl/lcd-test/subpixel.php --&gt;
     &lt;edit mode="assign" name="rgba"&gt;      &lt;const&gt;rgb&lt;/const&gt;&lt;/edit&gt;
 
-    &lt;!-- agradecimentos ao "wiki" da "Arch" pelos links "lcd" e subpixel --&gt;
+    &lt;!-- thanks to the Arch wiki for the lcd and subpixel links --&gt;
   &lt;/match&gt;
 
 &lt;/fontconfig&gt;</literal>
@@ -365,14 +341,11 @@ Existem outros exemplos em &quot;<xref linkend="arch-fontconfig"/>&quot; e
   <title>Desabilitando as Fontes &quot;Bitmap&quot;</title>
 
     <para>
-      Nas versões anteriores do BLFS, as feias e antigas fontes de
-&quot;bitmap&quot; do &quot;Xorg&quot; foram instaladas. Agora, muitas
-pessoas não precisarão instalar nenhuma delas. Mas, se por algum motivo,
-você tiver instalado uma ou mais fontes &quot;bitmap&quot;, [então] você
-consegue evitar que elas sejam usadas pelo
-&quot;<application>fontconfig</application>&quot; criando o seguinte arquivo
-como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      In previous versions of BLFS, the ugly old Xorg bitmap fonts were
+installed. Now, many people will not need to install any of them. But if for
+some reason you have installed one or more bitmap fonts, you can prevent
+them from being used by <application>fontconfig</application> by creating
+the following file as the &root; user :
     </para>
 
 <screen role="root"><userinput>cat > /etc/fonts/conf.d/70-no-bitmaps.conf &lt;&lt; "EOF"
@@ -413,7 +386,7 @@ problemas com essa abordagem:
     <orderedlist>
       <listitem>
         <para>
-          Existem centenas de arquivos, o que dificulta a seleção da fonte.
+          There are hundreds of files, which makes selecting fonts difficult.
         </para>
       </listitem>
       <listitem>
@@ -427,21 +400,19 @@ precisa, mas doloroso para uso normal.
       </listitem>
       <listitem>
         <para>
-          Várias fontes tem vários tamanhos e nomes curtos impenetráveis, o que torna
-ainda mais difícil selecionar a fonte correta.
+          Several fonts have multiple sizes and impenetrable short names, which both
+make selecting the correct font even more difficult.
         </para>
       </listitem>
       <listitem>
         <para>
-          Quando uma fonte é adicionada ao &quot;CTAN&quot;, ela é acompanhada por
-pacotes do &quot;TeX&quot; para usá-la nos motores antigos
-(&quot;<application>xelatex</application>&quot; normalmente não precisa
-disso), e então a versão frequentemente é congelada enquanto a fonte é
-mantida separadamente. Algumas dessas fontes, como as &quot;<xref
-linkend="dejavu-fonts"/>&quot;, provavelmente já estão instaladas em teu
-sistema BLFS em uma versão mais recente, e se você tiver múltiplas versões
-de uma fonte, [então] não fica claro qual delas será usada pelo
-&quot;<application>fontconfig</application>&quot;.
+          When a font is added to CTAN, it is accompanied by TeX packages to use it in
+the old engines (<application>xelatex</application> does not normally need
+this), and then the version is often frozen whilst the font is separately
+maintained. Some of these fonts such as <xref linkend="dejavu-fonts"/> are
+probably already installed on your BLFS system in a newer version, and if
+you have multiple versions of a font it is unclear which one will be used by
+<application>fontconfig</application>.
         </para>
       </listitem>
     </orderedlist>
@@ -478,20 +449,18 @@ para um lançamento posterior.
 
   </sect2>
 
-
   <sect2 role="configuration" id="preferring-certain-fonts" xreflabel="Preferindo certas fontes">
   <title>Preferindo certas fontes</title>
 
     <para>
-      Existem muitos motivos pelos quais as pessoas possivelmente desejem que
-páginas que especifiquem uma fonte específica usem uma fonte diferente ou
-prefiram fontes específicas em &quot;Monospace&quot;, &quot;Sans&quot; ou
-&quot;Serif&quot;. Como você esperará, existem várias maneiras de conseguir
-isso.
+      There are many reasons why people may wish to have pages which specify a
+particular font use a different font, or prefer specific fonts in Monospace
+or Sans or Serif. As you will expect, there a number of different ways of
+achieving this.
     </para>
 
     <bridgehead renderas="sect3" id="fontconfig-user-docs"
-    xreflabel="fontconfig-documentos-usuário(a)">Documentos de usuário(a) do &quot;Fontconfig&quot;</bridgehead>
+    xreflabel="fontconfig-user-docs">Fontconfig user docs</bridgehead>
 
       <para>
         O &quot;<application>Fontconfig</application>&quot; instala a documentação
@@ -509,15 +478,14 @@ preferidas se tivessem sido instaladas).
       </para>
 
       <para>
-        Se você tiver instalado a versão atual, [então] a documentação de usuário(a)
-estará disponível em versões &quot;HTML&quot;, &quot;PDF&quot; e texto em
-<filename
-class="directory">/usr/share/doc/fontconfig-&fontconfig-version;/</filename>:
-mude a versão se você instalou uma diferente.
+        If you have installed the current version, the user documentation is
+available in HTML, PDF, and text versions at <filename
+class="directory">/usr/share/doc/fontconfig-&fontconfig-version;/</filename>
+: change the version if you installed a different one.
       </para>
 
     <bridgehead renderas="sect3" id="prefer-a-specific-font"
-    xreflabel="fontconfig-preferir-fonte-específica">Prefira uma fonte específica</bridgehead>
+    xreflabel="fontconfig-prefer-specific-font">Prefira uma fonte específica</bridgehead>
 
       <para>
         Como um exemplo, se por algum motivo você desejou usar a fonte &quot;<ulink
@@ -535,9 +503,9 @@ cat >  ~/.config/fontconfig/conf.d/35-prefer-nimbus-for-timesnew.conf &lt;&lt; "
 <literal>&lt;?xml version='1.0'?&gt;
 &lt;!DOCTYPE fontconfig SYSTEM 'fonts.dtd'&gt;
 &lt;fontconfig&gt;
-&lt;!-- prefira a "Nimbus Roman No9 L" para "Times New Roman", bem como para "Times";
-sem isso, "Tinos" e "Liberation Serif" tem precedência para "Times New Roman" antes
-que o "fontconfig" volte para o que corresponde a "Times" --&gt;
+&lt;!-- prefer Nimbus Roman No9 L for Times New Roman as well as for Times,
+ without this Tinos and Liberation Serif take precedence for Times New Roman
+ before fontconfig falls back to whatever matches Times --&gt;
     &lt;alias binding="same"&gt;
         &lt;family&gt;Times New Roman&lt;/family&gt;
         &lt;accept&gt;
@@ -594,19 +562,17 @@ escolha das &quot;<xref linkend="Korean-fonts"/>&quot;.
         </listitem>
         <listitem>
           <para>
-            As fontes &quot;Monospace&quot; são forçadas para as fontes preferidas
-&quot;Sans&quot;. Se o texto estiver em coreano, então a &quot;<xref
-linkend="wenquanyi-zenhei"/>&quot; será usada.
+            The Monospace fonts are forced to the preferred Sans fonts. If the text is
+in Korean then <xref linkend="wenquanyi-zenhei"/> will be used.
           </para>
         </listitem>
       </orderedlist>
 
       <para>
-        Em uma localidade não &quot;CJK&quot;, o resultado é que fontes adequadas
-serão usadas para todas as variantes de chinês, japonês e coreano
-&quot;Hangul&quot;. Todos os outros idiomas já deveriam funcionar se uma
-fonte estiver presente. Como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+        In a non-CJK locale, the result is that suitable fonts will be used for all
+variants of Chinese, Japanese and Hangul Korean. All other languages should
+already work if a font is present. As the <systemitem
+class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>cat > /etc/fonts/local.conf &lt;&lt; "EOF"
@@ -618,8 +584,8 @@ class="username">root</systemitem>&quot;:
         &lt;prefer&gt;
             &lt;family&gt;AR PL UMing&lt;/family&gt;
             &lt;family&gt;IPAexMincho&lt;/family&gt;
-            &lt;!-- "WenQuanYi" é preferida como "Serif" em "65-nonlatin.conf";
-            substitua isso, de forma que uma fonte real coreana possa ser usada para "Serif" --&gt;
+            &lt;!-- WenQuanYi is preferred as Serif in 65-nonlatin.conf,
+            override that so a real Korean font can be used for Serif --&gt;
             &lt;family&gt;UnBatang&lt;/family&gt;
         &lt;/prefer&gt;
     &lt;/alias&gt;
@@ -650,12 +616,11 @@ EOF</userinput></screen>
   <title>Editando Arquivos de Configuração no Estilo Antigo</title>
 
     <para>
-      Algumas fontes, especialmente fontes chinesas, vem com arquivos de
-configuração que podem ser instalados em &quot;<filename
-class="directory">/etc/fonts/conf.d</filename>&quot;. No entanto, se você
-fizer isso e então usar um terminal para executar qualquer comando que use o
-&quot;<application>fontconfig</application>&quot;, [então] você
-possivelmente veja mensagens de erro como:
+      Some fonts, particularly Chinese fonts, ship with conf files which can be
+installed in <filename class="directory">/etc/fonts/conf.d</filename>.
+However, if you do that and then use a terminal to run any command which
+uses <application>fontconfig</application> you may see error messages such
+as :
     </para>
 
     <para>
@@ -665,26 +630,23 @@ possivelmente não funcione conforme o esperado</literal>.
     </para>
 
     <para>
-      Na prática, essas regras antigas não funcionam. Para usuários não
-&quot;CJK&quot;, o &quot;<application>fontconfig</application>&quot;
-geralmente fará um bom trabalho <emphasis>sem</emphasis> essas regras. A
-origem delas remonta a quando os usuários &quot;CJK&quot; precisavam que os
-&quot;bitmaps&quot; feitos à mão fossem legíveis em tamanhos pequenos, e
-eles pareciam feios perto dos glifos latinos suavizados - eles preferiam
-usar a mesma fonte &quot;CJK&quot; para os glifos latinos. Existe um efeito
-colateral em fazer isso: a fonte (&quot;Serif&quot;) também é frequentemente
-usada para &quot;Sans&quot;, e em tal situação o texto (em inglês) nos menus
-do &quot;<application>Gtk</application>&quot; usará essa fonte - comparadas
-às fontes do sistema, além de ser serifada, é fraca e bastante pequena. Isso
-pode tornar a leitura desconfortável.
+      In practice, these old rules do not work. For non-CJK users,
+<application>fontconfig</application> will usually do a good job
+<emphasis>without</emphasis> these rules. Their origin dates back to when
+CJK users needed handcrafted bitmaps to be legible at small sizes, and those
+looked ugly next to antialiased Latin glyphs - they preferred to use the
+same CJK font for the Latin glyphs. There is a side-effect of doing this :
+the (Serif) font is often also used for Sans, and in such a situation the
+(English) text in <application>Gtk</application> menus will use this font -
+compared to system fonts, as well as being serif it is both faint and rather
+small. That can make it uncomfortable to read.
     </para>
 
     <para>
-      No entanto, esses arquivos antigos de configuração podem ser corrigidos se
-você desejar usá-los. O exemplo a seguir é a primeira parte do
-&quot;<filename>64-arphic-uming.conf</filename>&quot; originário de
-&quot;<xref linkend="UMing"/>&quot; - existem muitos outros itens
-semelhantes que também precisam de mudanças:
+      Nevertheless, these old conf files can be fixed if you wish to use them.
+The following example is the first part of
+<filename>64-arphic-uming.conf</filename> from <xref linkend="UMing"/> -
+there are many more similar items which also need changing :
     </para>
 
     <para>
@@ -704,15 +666,14 @@ semelhantes que também precisam de mudanças:
     </para>
 
     <para>
-      O processo para corrigir isso é simples, mas tedioso - para cada item que
-produzir uma mensagem de erro, usando o teu editor (como o(a) usuário(a)
-&quot;<systemitem class="username">root</systemitem>&quot;) edite o arquivo
-instalado para repetir todo o bloco tantas vezes quantas forem as múltiplas
-variáveis, então reduza cada exemplo para ter somente uma delas. Você
-possivelmente deseje trabalhar em um erro de cada vez, salvar o arquivo
-depois de cada correção e, a partir de um terminal separado, executar um
-comando como &quot;<command>fc-list 2>&amp;1 | less</command>&quot; para ver
-se a correção funcionou. Para o bloco acima, a versão corrigida será:
+      The process to correct this is straightforward but tedious - for every item
+which produces an error message, using your editor (as the &root; user),
+edit the installed file to repeat the whole block as many times as there are
+multiple variables, then reduce each example to have only one of them. You
+may wish to work on one error at a time, save the file after each fix, and
+from a separate term run a command such as <command>fc-list 2>&amp;1 |
+less</command> to see that the fix worked. For the block above, the fixed
+version will be :
     </para>
 
     <para>
@@ -751,12 +712,11 @@ se a correção funcionou. Para o bloco acima, a versão corrigida será:
     xreflabel="Eu olhei fixamente para o &quot;fontconfig&quot;">Eu olhei fixamente para o &quot;fontconfig&quot; ...</bridgehead>
 
     <para>
-      As entradas do blog de &quot;<ulink
-url="https://eev.ee/blog/2015/05/20/i-stared-into-the-fontconfig-and-the-fontconfig-stared-back-at-me/">Eevee</ulink>&quot;
-são particularmente úteis se o
-&quot;<application>fontconfig</application>&quot; não pensar que a tua fonte
-escolhida suporta o teu idioma e para preferir algumas fontes japonesas não
-&quot;MS&quot; quando uma fonte feia &quot;MS&quot; já estiver instalada.
+      The blog entries by <ulink
+url="https://eev.ee/blog/2015/05/20/i-stared-into-the-fontconfig-and-the-fontconfig-stared-back-at-me/">Eevee</ulink>
+are particularly useful if <application>fontconfig</application> does not
+think your chosen font supports your language, and for preferring some
+non-MS Japanese fonts when an ugly MS font is already installed.
     </para>
 
     <bridgehead renderas="sect3" id="arch-fontconfig"

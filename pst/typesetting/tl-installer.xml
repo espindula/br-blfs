@@ -7,11 +7,11 @@
   <!ENTITY tl-installer-download-http   "https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz">
 
   <!ENTITY tl-installer-download-ftp    "">
-  <!ENTITY tl-installer-md5sum          "00268146cfced12c34fe5f515f032c69">
-  <!ENTITY tl-installer-date             "20220321"> <!-- in the directory name -->
-  <!ENTITY tl-installer-size            "5,6 MB">
+  <!ENTITY tl-installer-md5sum          "cec36f23d7d4e1a4a2a90f77bad8e667">
+  <!ENTITY tl-installer-date             "20230313"> <!-- in the directory name -->
+  <!ENTITY tl-installer-size            "5.5 MB">
 
-  <!ENTITY tl-installer-buildsize        "118 MB para TeX e latex básicos; 7,1 GB se tudo for incluído">
+  <!ENTITY tl-installer-buildsize        "310 MB for basic TeX and latex, 7.9GB if everything is included">
   <!ENTITY tl-installer-time            "varia, dependendo da velocidade e do tráfego da rede de intercomunicação">
 ]>
 
@@ -29,11 +29,11 @@
     <title>Introdução ao TeX Live e ao instalador dele</title>
 
     <para>
-      O pacote <application>TeX Live</application> é um sistema abrangente de
-produção de documentos TeX. Ele inclui TeX, LaTeX2e, ConTeXt, Metafont,
-MetaPost, BibTeX e muitos outros aplicativos; uma extensiva coleção de
-macros, fontes e documentação; e suporte para composição tipográfica em
-muitos conjuntos de comandos sequenciais oriundos de todo o mundo.
+      The <application>TeX Live</application> package is a comprehensive TeX
+document production system.  It includes TeX, LaTeX2e, ConTeXt, Metafont,
+MetaPost, BibTeX and many other programs; an extensive collection of macros,
+fonts and documentation; and support for typesetting in many different
+scripts from around the world.
     </para>
 
     <para>
@@ -47,18 +47,23 @@ diretório <filename class="directory">&texlive-year;/</filename>.
     </para>
 
     <para>
-      Existem duas razões pelas quais você possivelmente deseje instalar os
-binários no BLFS: ou você precisa de uma instalação menor (por exemplo, no
-mínimo TeX simples sem LaTeX2e, ConTeXt, etc), ou você deseja usar o
-<command>tlmgr</command> para obter atualizações enquanto essa versão for
-suportada (tipicamente, até abril do ano seguinte ao lançamento dela). Para
-o última, você pode preferir instalar em teu diretório <filename
-class="directory">/home</filename> como um(a) usuário(a) sem privilégios e,
-em seguida, fazer as mudanças correspondentes no PATH em teu
-<filename>~/.bashrc</filename> ou equivalente.
+      There are two reasons why you may wish to install the binaries in BLFS:
+either you need a smaller install (e.g. at a minimum plain TeX without
+LaTeX2e, ConTeXt, etc), or you wish to use <command>tlmgr</command> to get
+updates whilst this version is supported (typically, until April of the year
+after it was released). For the latter, you might prefer to install in your
+<filename class="directory">/home</filename> directory as an unprivileged
+user, and to then make corresponding changes to the PATH in your
+<filename>~/.bashrc</filename> or equivalent.
     </para>
 
-    &lfs113_checked;
+    
+    <!-- editors: latex-test-20230819.tar.xz at ~/ken/tex-testfiles and the
+    ABOUT.pdf now deal with specifying which collections are needed when using
+    binary texlive. Please do not sign off this package without at least
+    testing asy to ensure that the symlinks are as needed. Plese also be aware
+    that removing a collection might leave huge backups in tlpkg/backups -->
+&lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -138,6 +143,15 @@ role="nodep" linkend="epdfview"/>).
       A versão binária do <application>asy</application> precisa do <xref
 linkend="freeglut"/>.
     </para>
+    <para> 
+      <!-- needed, but cannot recommend :-) -->
+The binary version of asy is linked to libGLX.so.0 from <ulink
+url="https://gitlab.freedesktop.org/glvnd/libglvnd/">libglvnd</ulink>, but
+installing that will break future updates of BLFS packages such as <xref
+linkend="mesa"/>. Work around that by creating a symlink as the <systemitem
+class="username">root</systemitem> user:
+    </para>
+    <screen role="nodump"><userinput>ln -sv libGL.so.1 /usr/lib/libGLX.so.0</userinput></screen>
     <note>
       <para>
         Como sempre acontece com software binário contribuído, é possível que as
@@ -150,7 +164,7 @@ particular, essas dependências só foram verificadas em x86_64.
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
      href="../../xincludes/texruntime.xml"/>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/tl-installer"/></para>
+    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/tl-installer"/></para>
 
   </sect2>
 
@@ -172,6 +186,16 @@ install-tl-&lt;CCYYMMDD&gt;</filename>. Esse nome de diretório muda quando o
 instalador é atualizado, de forma que substitua &lt;CCYYMMDD&gt; pelo nome
 correto de diretório.
     </para>
+
+    <warning>
+      <para>
+        If you have installed any of the luatex programs (luatex, luahbtex,
+luajitex, luajithbtex) or ConTeXt with the luametatex backend there was a
+security issue fixed by the introduction of luatex v1.17.0.  You should
+check the version with 'luatex --version' and if it is less than 1.17.0 you
+can use tlmgr to update.
+      </para>
+    </warning>
 
     <note>
       <para>
@@ -214,12 +238,11 @@ de pacotes selecionados.
     </para>
 
     <para>
-      Foi estabelecido pelo Debian que os conjuntos de comandos sequenciais do
-<command>python</command> em <filename
-class="directory">latex-make</filename> funcionarão com
-<command>python3</command>, de forma que atualize-os para invocar isso
-executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      It has been established by Debian that the <command>python</command> scripts
+in <filename class="directory">latex-make</filename> will work with
+<command>python3</command>, so update them to invoke that by running the
+following command as the <systemitem class="username">root</systemitem>
+user:
     </para>
 
 <screen role="root"><userinput>for F in /opt/texlive/&texlive-year;/texmf-dist/scripts/latex-make/*.py ; do

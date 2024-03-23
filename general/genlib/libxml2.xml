@@ -8,9 +8,9 @@
   <!ENTITY libxml2-download-http "https://download.gnome.org/sources/libxml2/2.10/libxml2-&libxml2-version;.tar.xz">
 <!--  <!ENTITY libxml2-download-http "http://xmlsoft.org/sources/libxml2-&libxml2-version;.tar.xz">-->
   <!ENTITY libxml2-download-ftp  "">
-  <!ENTITY libxml2-md5sum        "f9edac7fac232b3657a003fd9a5bbe42">
+  <!ENTITY libxml2-md5sum        "76808c467a58c31e2dbd511e71d5fd13">
   <!ENTITY libxml2-size          "2,5 MB">
-  <!ENTITY libxml2-buildsize     "105 MB (com os testes)">
+  <!ENTITY libxml2-buildsize     "106 MB (with tests)">
   <!ENTITY libxml2-time          "0,4 UPC (Usando paralelismo=4; com os testes)">
   <!ENTITY testsuite-version     "20130923">
 ]>
@@ -33,7 +33,7 @@
 usados para analisar arquivos "XML".
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -91,8 +91,8 @@ Optional</bridgehead>
 -->
 <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="icu"/> (veja-se abaixo) e <xref linkend="valgrind"/>
-(possivelmente seja usado nos testes)
+      <xref linkend="icu"/> (see below) and <xref linkend="valgrind"/> (may be
+used in the tests)
     </para>
 
     <note>
@@ -103,9 +103,6 @@ instalada; veja-se <xref linkend="libxml2py2"/>.
       </para>
     </note>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/libxml2"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -115,7 +112,7 @@ instalada; veja-se <xref linkend="libxml2py2"/>.
       Instale <application>libxml2</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr          \
+<screen><userinput>./configure --prefix=/usr           \
             --sysconfdir=/etc       \
             --disable-static        \
             --with-history          \
@@ -130,12 +127,11 @@ make</userinput></screen>
 <screen><userinput>tar xf ../xmlts&testsuite-version;.tar.gz</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check &gt;
-check.log</command>. Um sumário dos resultados pode ser obtido com
-<command>grep -E '^Total|expected' check.log</command>. Se <xref
-linkend="valgrind"/> estiver instalado e você desejar verificar vazamentos
-de memória, [então] substitua <command>check</command> por
-<command>check-valgrind</command>.
+      To test the results, issue: <command>make check &gt; check.log</command>.  A
+summary of the results can be obtained with <command>grep -E
+'^Total|expected' check.log</command>. If <xref linkend="valgrind"/> is
+installed and you want to check for memory leaks, replace
+<command>check</command> with <command>check-valgrind</command>.
     </para>
 
     <note>
@@ -181,6 +177,20 @@ class="username">root</systemitem>:
       <option>--with-icu</option>: Adicione essa chave se você tiver construído
 <xref linkend="icu"/>, para melhor suporte a Unicode.
     </para>
+
+    <note>
+      <para>
+        If the <option>--with-icu</option> switch is used, the BLFS editors
+recommend removing unneeded references to the ICU libraries. This will
+prevent many packages that use libxml2 from unnecessarily linking to the ICU
+libraries.  This, in turn, will prevent the need for rebuilding many
+packages when upgrading ICU to a new major version.  After installing
+libxml2, as the &root; user, issue:
+      </para>
+
+<screen role="nodump"><userinput>rm -vf /usr/lib/libxml2.la &amp;&amp;
+sed '/libs=/s/xml2.*/xml2"/' -i /usr/bin/xml2-config</userinput></screen>
+    </note>
 
   </sect2>
 

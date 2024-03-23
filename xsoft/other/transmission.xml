@@ -6,11 +6,11 @@
 
   <!ENTITY transmission-download-http "https://github.com/transmission/transmission/releases/download/&transmission-version;/transmission-&transmission-version;.tar.xz">
   <!ENTITY transmission-download-ftp  "">
-  <!ENTITY transmission-md5sum        "29521f4373900a3077849e41b16801f9">
-  <!ENTITY transmission-size          "10 MB">
-  <!ENTITY transmission-buildsize     "202 MB">
-  <!ENTITY transmission-time          "1,4 UPC (com interfaces GUI GTK; usando paralelismo=4) 5 UPC com ambos GTK e
-QT5">
+  <!ENTITY transmission-md5sum        "1d92edb61c82422211dbc751f4657489">
+  <!ENTITY transmission-size          "9.6 MB">
+  <!ENTITY transmission-buildsize     "347 MB (with GTK and QT5 gui interfaces)">
+  <!ENTITY transmission-time          "1.4 SBU (with GTK gui interfaces; using parallelism=4) 5 SBU with both GTK
+and QT5">
 ]>
 
 <sect1 id="transmission" xreflabel="Transmission-&transmission-version;">
@@ -33,7 +33,7 @@ multiplataforma e de fonte aberto. Isso é útil para baixar arquivos grandes
 fornecerem largura de banda de servidor.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -85,7 +85,7 @@ do sistema, em vez das agrupadas)
 
     <bridgehead renderas="sect4">Recomendadas (para construir uma GUI)</bridgehead>
     <para role="recommended">
-      <xref linkend="gtkmm3"/> ou <xref linkend="qt5"/>
+      <xref linkend="gtkmm3"/> or &qt5-deps;
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -102,14 +102,12 @@ url="https://github.com/miniupnp/miniupnp">miniupnp</ulink>
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/transmission"/>
+      Editor Notes: <ulink url="&blfs-wiki;/transmission"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do Transmission</title>
-
-
 
     <para>
       Instale o <application>Transmission</application> executando os seguintes
@@ -147,15 +145,15 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <option>-DENABLE_QT=OFF</option>: Essa chave desabilita a construção do
-cliente <application>Qt5</application>. O padrão é o de construí-lo se o
-<xref linkend="qt5"/> estiver instalado.
+      <option>-DENABLE_QT=OFF</option>: This switch disables building the
+<application>Qt5</application> client. The default is to build it if
+&qt5-deps; is installed.
     </para>
 
     <para>
-      <option>-DENABLE_GTK=OFF</option>: Essa chave desabilita a construção do
-cliente GTK+-3 de CLI. O padrão é o de construí-lo se o <xref
-linkend="gtkmm3"/> estiver instalado.
+      <option>-DENABLE_GTK=OFF</option>: This switch disables building the GTK+-3
+cli client. The default is to build it <xref linkend="gtkmm3"/> is
+installed.
     </para>
 
     <para>
@@ -164,6 +162,11 @@ cliente web. O padrão é o de construí-lo se o <xref linkend="nodejs"/>
 estiver instalado.
     </para>
 
+    <para>
+      <option>-DREBUILD_WEB=ON</option>: This switch forces rebuilding of the web
+client. Needs <xref linkend="nodejs"/> and a network connection.  The
+default is to not rebuild.
+    </para>
   </sect2>
 
   <sect2 role="content">
@@ -177,14 +180,14 @@ estiver instalado.
       <seglistitem>
         <seg>
           transmission-cli, transmission-create, transmission-daemon,
-transmission-edit, transmission-gtk ou transmission-qt, transmission-remote
-e transmission-show
+transmission-edit, transmission-gtk or transmission-qt, transmission-remote,
+and transmission-show
         </seg>
         <seg>
           Nenhum(a)
         </seg>
         <seg>
-          /usr/share/transmission (contém o cliente web, opcional) e
+          /usr/share/transmission (contains the web client, optional) and
 /usr/share/doc/transmission-&transmission-version;
         </seg>
       </seglistitem>
@@ -223,9 +226,9 @@ comandos sequenciais
         <term><command>transmission-daemon</command></term>
         <listitem>
           <para>
-            é uma sessão do Transmission baseada em processo de segundo plano que pode
-ser controlada por meio de comandos RPC a partir da interface web do
-Transmission ou do <command>transmission-remote</command>
+            is a daemon-based Transmission session that can be controlled via RPC
+commands from transmission's web interface or
+<command>transmission-remote</command>
           </para>
           <indexterm zone="transmission transmission-daemon">
             <primary sortas="b-transmission-daemon">transmission-daemon</primary>
@@ -237,8 +240,7 @@ Transmission ou do <command>transmission-remote</command>
         <term><command>transmission-edit</command></term>
         <listitem>
           <para>
-            é um utilitário de linha de comando para modificar URLs de anúncio de
-arquivos .torrent
+            is a command-line utility to modify .torrent files' announce URLs
           </para>
           <indexterm zone="transmission transmission-edit">
             <primary sortas="b-transmission-edit">transmission-edit</primary>
@@ -262,7 +264,7 @@ arquivos .torrent
         <term><command>transmission-qt</command></term>
         <listitem>
           <para>
-            é um cliente bittorrent Qt
+            is a Qt bittorrent client
           </para>
           <indexterm zone="transmission transmission-qt">
             <primary sortas="b-transmission-qt">transmission-qt</primary>

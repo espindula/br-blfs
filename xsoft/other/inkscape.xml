@@ -3,15 +3,15 @@
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
-  <!ENTITY inkscape-download-http "https://inkscape.org/gallery/item/37360/inkscape-&inkscape-minor-version;.tar.xz">
+  <!ENTITY inkscape-download-http "https://inkscape.org/gallery/item/42328/inkscape-&inkscape-minor-version;.tar.xz">
 
   <!-- When updating, remember to change the numeric part of the URL -->
 
   <!ENTITY inkscape-download-ftp  "">
-  <!ENTITY inkscape-md5sum        "490c40bbb3ce3441ceee88e61775bbf4">
-  <!ENTITY inkscape-size          "38 MB">
-  <!ENTITY inkscape-buildsize     "911 MB (184 MB instalado)">
-  <!ENTITY inkscape-time          "4,7 UPC (com paralelismo=4)">
+  <!ENTITY inkscape-md5sum        "3b16db43ffdae2156c4f318a44c32bbd">
+  <!ENTITY inkscape-size          "82 MB">
+  <!ENTITY inkscape-buildsize     "870 MB (190 MB installed)">
+  <!ENTITY inkscape-time          "3.5 SBU (with parallelism=8)">
 
   <!-- To find newer tarballs, look here:
        https://inkscape.org/release/all/source/archive/?pre=0
@@ -37,7 +37,7 @@ obtém de gráficos vetoriais escaláveis. É útil para criar, visualizar e
 mudar imagens SVG.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -106,16 +106,26 @@ de teste)
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <!-- there might be others, or other needed dependencies:
+      
+      <!-- Imagemagick is used for two different purposes:
+           For raster extensions and image import resolution, Imagemagick
+           libraries are needed but this requires Imagemagick 6:
+           https://gitlab.com/inkscape/inkscape/-/issues/1294
+           TODO: add Imagemagick 6 back or add GraphicsMagick, or port
+                 inkscape to Imagemagick 7 API.
+           For WebSlicer export to JPG or GIF, Imagemagick program
+           "convert" is needed and this is only a runtime dependency.  -->
+<!-- there might be others, or other needed dependencies:
        needs someone who knows how to use *all" the core extensions -->
-<xref linkend="imagemagick"/>, <xref linkend="lcms2"/> ou <xref role="nodep"
-linkend="lcms"/>, <xref linkend="libcanberra"/> (para eliminar avisos de
-plugin), <xref linkend="potrace"/> (para a ferramenta bucket-fill), também
-vários módulos Python em tempo de execução para a extensões centrais: <xref
-role="runtime" linkend="cachecontrol"/>, <xref role="runtime"
-linkend="cssselect"/>, <xref role="runtime" linkend="lxml"/>, <xref
-role="runtime" linkend="numpy"/>, <xref role="runtime" linkend="pyserial"/>
-e <xref role="runtime" linkend="scour"/>
+<xref role="runtime" linkend="imagemagick"/> (runtime), <xref
+linkend="lcms2"/> or <xref role="nodep" linkend="lcms"/>, <xref
+linkend="libcanberra"/> (to eliminate plugin warnings), <xref
+linkend="potrace"/> (for the bucket-fill tool), also various Python modules
+at runtime for the core extensions: <xref role="runtime"
+linkend="cachecontrol"/>, <xref role="runtime" linkend="cssselect"/>, <xref
+role="runtime" linkend="lxml"/>, <xref role="runtime" linkend="numpy"/>,
+<xref role="runtime" linkend="pyserial"/>, and <xref role="runtime"
+linkend="scour"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -129,18 +139,18 @@ libcdr</ulink>,
       <ulink url="https://wiki.documentfoundation.org/DLP/Libraries/libvisio">libvisio</ulink>,-->
 <!--<ulink url="https://gtkspell.sourceforge.net">
 gtkspell</ulink>,-->
-<xref linkend="aspell"/>, <xref linkend="dbus"/> (para executar o inkscape a
-partir de conjuntos de comandos sequenciais), <xref linkend="doxygen"/>,
-<xref linkend="gspell"/>, <ulink
-url="https://github.com/LibreOffice/libcdr">libcdr</ulink>, <ulink
+<xref linkend="aspell"/>, <xref linkend="dbus"/> (to run inkscape from
+scripts), <xref linkend="doxygen"/>, <xref linkend="gspell"/>, <ulink
+url="https://sourceforge.net/projects/graphicsmagick">GraphicsMagick</ulink>,
+<ulink url="https://github.com/LibreOffice/libcdr">libcdr</ulink>, <ulink
 url="https://github.com/LibreOffice/libvisio">libvisio</ulink>, <ulink
-url="https://libwpg.sourceforge.net/">libwpg</ulink> (ou <ulink
+url="https://libwpg.sourceforge.net/">libwpg</ulink> (or <ulink
 url="https://libwpd.sourceforge.net/">libwpd</ulink>)
     </para>
 
 
 
-    <!-- no trace of this perl module in the core extensions for 1.2.2
+  <!-- no trace of this perl module in the core extensions for 1.2.2
     <bridgehead renderas="sect4">
 Optional Runtime Dependencies
     (for some of the Inkscape extensions)</bridgehead>
@@ -148,10 +158,7 @@ Optional Runtime Dependencies
       <ulink role="runtime"
              url="https://metacpan.org/pod/release/TJMATHER/XML-XQL-0.68/lib/XML/XQL.pm">XML::XQL</ulink>
     </para>-->
-<para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/inkscape"/>
-    </para>
-  </sect2>
+</sect2>
 
   <sect2 role="installation">
     <title>Instalação do Inkscape</title>
@@ -261,10 +268,10 @@ que manipulam imagens.
           inkscape e inkview
         </seg>
         <seg>
-          lib2geom.so e libinkscape_base.so (em /usr/lib/inkscape)
+          lib2geom.so and libinkscape_base.so (in /usr/lib/inkscape)
         </seg>
         <seg>
-          /usr/include/2geom-&lib2geom-version;, /usr/lib/inkscape e
+          /usr/include/2geom-&lib2geom-version;, /usr/lib/inkscape, and
 /usr/share/inkscape
         </seg>
       </seglistitem>

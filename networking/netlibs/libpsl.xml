@@ -32,7 +32,7 @@ Suffix List&quot; (&quot;PSL&quot;). O &quot;PSL&quot; é um conjunto de
 nomes de domínio além dos sufixos padrão, como &quot;.com&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,7 +72,7 @@ nomes de domínio além dos sufixos padrão, como &quot;.com&quot;.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libidn2"/>
+      <xref linkend="libidn2"/> and <xref linkend='libunistring'/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -81,9 +81,6 @@ nomes de domínio além dos sufixos padrão, como &quot;.com&quot;.
 (para os testes)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/libpsl"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -94,12 +91,15 @@ nomes de domínio além dos sufixos padrão, como &quot;.com&quot;.
 seguintes comandos:
     </para>
 
-<screen><userinput>sed -i 's/env python/&amp;3/' src/psl-make-dafsa             &amp;&amp;
-./configure --prefix=/usr --disable-static PYTHON=python3 &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release &amp;&amp;
+
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: &quot;<command>make check</command>&quot;.
+      To test the results, issue: <command>ninja test</command>.
     </para>
 
     <para>
@@ -107,16 +107,14 @@ make</userinput></screen>
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <command>sed -i ...</command>: Esse comando força o uso do
-&quot;<application>Python 3</application>&quot; em um utilitário.
-    </para>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
 
   </sect2>
   <sect2 role="content">

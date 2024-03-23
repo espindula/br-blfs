@@ -5,9 +5,9 @@
 <!ENTITY % release     "INCLUDE"> <!-- set to INCLUDE for release,
                                       set to IGNORE for development or rc -->
 <!ENTITY % relyear    "2023">
-<!ENTITY % relnum     "11.3">
-<!ENTITY % reldate    "1º de março de 2023">
-<!ENTITY % relpubdate "2023-03-01">
+<!ENTITY % relnum     "12.0">
+<!ENTITY % reldate    "September 1st, 2023">
+<!ENTITY % relpubdate "2023-09-01">
 <!-- ================================================================== -->
 <!-- Do not change anything below unless the www or book layouts change -->
 
@@ -95,7 +95,7 @@
 <!ENTITY fedora-http-repo     "http://pkgs.fedoraproject.org/repo/pkgs">
 <!ENTITY jaist-ftp-repo       "ftp://ftp.jaist.ac.jp/pub//sourceforge">
 <!ENTITY lxqt-http-repo       "http://downloads.lxqt.org/lxqt">
-<!ENTITY publisher            "Unknown">
+<!ENTITY publisher            "Desconhecido">
 <!ENTITY xorg-download-http   "https://www.x.org/pub/individual">
 <!ENTITY xorg-download-ftp    "ftp://ftp.x.org/pub/individual">
 <!ENTITY pypi                 "https://pypi.python.org/pypi">
@@ -110,54 +110,86 @@
 <!-- These entities are used to identify versions of LFS
      packages referenced throughout the BLFS book. -->
 
-<!ENTITY lfs-perl-version             "5.36"> <!-- used in git -->
+<!ENTITY lfs-perl-version             "5.38"> <!-- used in git -->
 
 <!-- End LFS versions -->
 
-<!ENTITY blfs-bootscripts-version     "20230101">
-<!ENTITY systemd-units-version        "20220720">
+<!ENTITY blfs-bootscripts-version     "20230824">
+<!ENTITY systemd-units-version        "20230816">
 
 <!ENTITY blfs-wiki                    "https://wiki.&lfs-domainname;/blfs/wiki">
 
 <!-- These entities are used to annotate the current status of a package as it
      relates to the version of LFS it will build/work against -->
+<!--
+<!ENTITY lfs113_checked  "<note><para>Development versions of BLFS may not build or run
+                          some packages properly if LFS or dependencies have been updated
+                          since the most recent stable versions of the books.</para></note>">
+-->
 
-<!ENTITY lfs113_checked       "<para>Esse pacote é conhecido por construir e funcionar adequadamente usando uma plataforma LFS 11.3.</para>">
+<!ENTITY lfs120_checked  "<para>This package is known to build and work properly
+                          using an LFS 12.0 platform.</para>">
+
 
 <!-- End special entities about LFS compatibility -->
 
-<!ENTITY as_root "<note><para>Ao instalar-se múltiplos pacotes em um &quot;script&quot;, a instalação precisa ser feita como o(a) usuário(a) &quot;root&quot;. Existem três opções gerais que podem ser usadas para fazer isso:</para>
 
+
+<!ENTITY not-katamari "<para>Este pacote não faz parte do Xorg Katamari e é fornecido apenas como uma dependência de outros pacotes ou para testar a instalação completa do Xorg.</para>">
+
+<!ENTITY % package-entities SYSTEM      "packages.ent">
+%package-entities;
+
+<!ENTITY parallel_issues "<note><para>Às vezes, esse pacote pode falhar quando construído com vários processadores. Consulte <xref linkend='parallel-builds'/> para obter mais informações.</para></note>">
+
+<!ENTITY shell-env "<note><para>If installing in the chroot environment, be
+                    sure to export the <envar>SHELL</envar> environment
+                    variable or configuration of the package will
+                    fail.</para></note>">
+
+<!ENTITY gi-doc-disable
+         "Allow building this package without <xref linkend='gi-docgen'/>
+          installed.  If you have <xref linkend='gi-docgen'/> installed and
+          you wish to rebuild and install the API documentation, a
+          <command>meson configure</command> command will reset this
+          option.">
+
+<!ENTITY build-use-internet
+         "<note><para>An Internet connection is needed for building this
+          package.</para></note>">
+
+<!ENTITY test-use-internet
+         "<note><para>An Internet connection is needed for some tests of
+          this package.</para></note>">
+
+<!ENTITY logind
+         "<phrase revision='sysv'><xref linkend='elogind'/></phrase>
+          <phrase revision='systemd'><xref linkend='systemd'/></phrase>">
+
+<!ENTITY qt5-deps
+         "(<xref linkend='qt5'/> or <xref role='nodep' linkend='qt5-alternate'/>)">
+<!ENTITY as_root "<note><para>Pour l'installation de paquets multiples dans un script, les installations doivent être faites en tant qu'utilisateur
+  root. Il y a trois options générales qui peuvent être utilisées pour faire cela&nbsp;:</para>
   <orderedlist>
-
-  <listitem><para>Executar o &quot;script&quot; inteiro como o(a) usuário(a) &quot;root&quot; (não recomendado).</para></listitem>
-
-  <listitem><para>Usar o comando &quot;<command>sudo</command>&quot; oriundo do pacote <xref linkend='sudo'/>.</para></listitem>
-
-  <listitem><para>Usar <command>su -c &quot;argumentos do comando&quot;</command> (aspas exigidas) o qual solicitará a senha do(a) &quot;root&quot; para cada interação do &quot;loop&quot;.</para></listitem>
-
+  <listitem><para>Lancer le script entièrement en tant qu'utilisateur root (pas recommandé).</para></listitem>
+  <listitem><para>Use the <command>sudo</command> command from the <xref
+  linkend='sudo'/> package.</para></listitem>
+  <listitem><para>Use <command>su -c &quot;command arguments&quot;</command>
+  (guillemet requis) qui demandera le mot de passe root à chaque itération de la boucle.</para></listitem>
   </orderedlist>
-
-  <para>Uma maneira de se lidar com essa situação é a de criar uma função curta do &quot;<command>bash</command>&quot; que seleciona automaticamente o método apropriado.  Tão logo o comando seja configurado no ambiente, ele não precisa ser novamente configurado.</para>
-
-  <screen><userinput>as_root()
+  <para>Une façon de gérer cette situation est de créer une petite fonction
+  <command>bash</command> qui sélectionne automatiquement la méthode appropriée.
+  Une fois que la commande est initialisée dans l'environnement, il n'est plus nécessaire de le refaire.</para>
+  
+<screen>
+<userinput>as_root()
 {
   if   [ $EUID = 0 ];        then $*
   elif [ -x /usr/bin/sudo ]; then sudo $*
   else                            su -c \\&quot;$*\\&quot;
   fi
 }
-
-export -f as_root</userinput></screen>
+export -f as_root</userinput>
+</screen>
 </note>">
 
-<!ENTITY not-katamari "<para>Esse pacote é fornecido para testagem da instalação completada do &quot;Xorg&quot;.</para>">
-
-<!ENTITY % package-entities SYSTEM      "packages.ent">
-%package-entities;
-
-<!ENTITY parallel_issues "<note><para>Esse pacote ocasionalmente possivelmente falhe ao construir com múltiplos processadores.  Veja-se <xref linkend='parallel-builds'/> para mais informações.</para></note>">
-
-<!ENTITY shell-env "<note><para>Se instalar no ambiente &quot;chroot&quot;, [então] assegure-se de exportar a variável de ambiente &quot;<envar>SHELL</envar>&quot; ou a configuração do pacote falhará.</para></note>">
-
-<!ENTITY gi-doc-disable "Permite construir esse pacote sem &quot;<xref linkend='gi-docgen'/>&quot; instalado.  Se tiver &quot;<xref linkend='gi-docgen'/>&quot; instalado e você desejar reconstruir e instalar a documentação da &quot;API&quot;, [então] um comando &quot;<command>meson configure</command>&quot; reconfigurará essa opção.">

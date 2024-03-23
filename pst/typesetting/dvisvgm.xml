@@ -8,10 +8,10 @@
        NOT via the tags at github - those use autogen.sh -->
   <!ENTITY dvisvgm-download-http "https://github.com/mgieseki/dvisvgm/releases/download/&dvisvgm-version;/dvisvgm-&dvisvgm-version;.tar.gz">
   <!ENTITY dvisvgm-download-ftp  "">
-  <!ENTITY dvisvgm-md5sum        "e3de28609b74a61ea496c85b3e0f0ef1">
+  <!ENTITY dvisvgm-md5sum        "bf042da299b1f7208e11df210b3fd6a2">
   <!ENTITY dvisvgm-size          "2,9 MB">
-  <!ENTITY dvisvgm-buildsize     "310 MB (44 MB instalado; adicionar 962 MB para os testes)">
-  <!ENTITY dvisvgm-time          "0,8 UPC (adicionar 0,6 UPC para os testes, ambos usando paralelismo=4)">
+  <!ENTITY dvisvgm-buildsize     "311 MB (45 MB installed, add 962 MB for the tests)">
+  <!ENTITY dvisvgm-time          "0.9 SBU (add 0.6 SBU for the tests, both using parallelism=4)">
 ]>
 
 <sect1 id="dvisvgm" xreflabel="dvisvgm-&dvisvgm-version;">
@@ -32,7 +32,7 @@
 para o formato SVG.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,7 +75,8 @@ para o formato SVG.
       
       <!-- EDITORS: the docs say it needs clipper, but it uses an internal
        modified version and cannot be built with system clipper -->
-<xref linkend="brotli"/>, <xref linkend="gs"/> e <xref linkend="potrace"/>
+<xref linkend="brotli"/>, <xref linkend="gs"/>, and <xref
+linkend="potrace"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -96,14 +97,14 @@ url="https://github.com/Cyan4973/xxHash/releases/latest">xxHash</ulink> (a
 versão atual está incluída no tarball)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/dvisvgm"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do dvisvgm</title>
 
+
+
+   
 
     <!-- Editors: This is in the book for svg output from asymptote. tested in
  https://www.linuxfromscratch.org/~ken/asy-nontex-testfiles/asy-test-20200123.tar.xz
@@ -111,16 +112,9 @@ versão atual está incluída no tarball)
  https://www.linuxfromscratch.org/~ken/tex-testfiles/ https://www.linuxfromscratch.org/~ken/
  Or, use use it to convert first or specified page(s) of a PDF to SVG - see the man page
 -->
+<!-- symlink for kpathsea moved to texlive so that if it already exists for
+   evince from a previous year it will be recreated -->
 <para>
-      Para habilitar que o sistema de construção se vincule a <filename
-class="libraryfile">libkpathsea.so</filename>, como o(a) usuário(a)
-<systemitem class="username">root</systemitem>, crie um link simbólico a
-partir de <filename class="directory">/usr/lib</filename>:
-    </para>
-
-<screen role="root"><userinput>ln -svf $TEXLIVE_PREFIX/lib/libkpathsea.so /usr/lib</userinput></screen>
-
-    <para>
       A suíte de teste assume que uma versão moderna do
 <application>Python</application> tenha sido instalada como
 <command>python</command> simples. Mudar isso para usar o
@@ -155,15 +149,18 @@ make</userinput></screen>
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <command>ln -svf $TEXLIVE_PREFIX/lib/libkpathsea.so /usr/lib</command>: Sem
-isso, o aplicativo não se vinculará corretamente,
-    </para>
 
 
 
     
-    <!-- The autoreconf command is not used above anymore.
+    <!-- This is now done in Texlive
+    <para>
+
+      <command>ln -svf $TEXLIVE_PREFIX/lib/libkpathsea.so /usr/lib</command>:
+      Without this, the program will not link correctly,
+    </para>
+-->
+<!-- The autoreconf command is not used above anymore.
     <para>
 
       <command>autoreconf -fiv</command>: The versions of

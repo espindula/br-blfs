@@ -6,11 +6,11 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "e5e47e53c52574ce89ea200e52819f81">
-  <!ENTITY rust-size          "136 MB">
-  <!ENTITY rust-buildsize     "8,5 GB (501 MB instalado); adicionar 7,5 GB se executar os testes">
-  <!ENTITY rust-time          "13 UPC (incluindo o tempo de transferência; adicionar 16 UPC para os testes,
-ambos usando paralelismo=4)">
+  <!ENTITY rust-md5sum        "b6f9973de878e37a589f0989e4138480">
+  <!ENTITY rust-size          "145 MB">
+  <!ENTITY rust-buildsize     "8.9 GB (292 MB installed); add 6.4 GB if running the tests">
+  <!ENTITY rust-time          "6.7 SBU (including download time; add 6.2 SBU for tests, both using
+parallelism=8)">
 ]>
 
 <sect1 id="rust" xreflabel="rustc-&rust-version;">
@@ -76,17 +76,15 @@ class="directory">/usr</filename>&quot;.
     </note>
 
     <para>
-      O atual sistema de construção
-&quot;<application>rustbuild</application>&quot; usará todos os
-processadores, embora não escale bem e frequentemente retorne a usar apenas
-um núcleo enquanto espera que uma biblioteca compile. No entanto, ele pode
-ser limitado, principalmente a um número especificado de processadores, por
-uma combinação de adicionar a chave &quot;<literal>--jobs
-&lt;N&gt;</literal>&quot; (por exemplo, &quot;--jobs 4&quot; para limitar a
-quatro processadores) em cada invocação de &quot;<command>python3
-./x.py</command>&quot; <emphasis>e</emphasis> usar uma variável de ambiente
-&quot;<envar>CARGO_BUILD_JOBS=&lt;N&gt;</envar>&quot;. No momento, isso não
-é eficaz quando alguns dos testes &quot;rustc&quot; são executados.
+      The current <application>rustbuild</application> build-system will use all
+processors, although it does not scale well and often falls back to just
+using one core while waiting for a library to compile.  However it can be
+mostly limited to a specified number of processors by a combination of
+adding the switch <literal>--jobs &lt;N&gt;</literal> (e.g. '--jobs 4' to
+limit to 4 processors) on each invocation of <command>python3
+./x.py</command> <emphasis>and</emphasis> using an environment variable
+<envar>CARGO_BUILD_JOBS=&lt;N&gt;</envar>. At the moment this is not
+effective when some of the rustc tests are run.
     </para>
 
     <para>
@@ -127,7 +125,7 @@ valores discrepantes muito lentos.
       </para>
     </note>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -179,15 +177,19 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cmake"/>
+      <!-- Required for downloading stage 0 binaries.
+           Otherwise it's recommended (if not installed, a vendored copy
+           will be built). -->
+<xref linkend="cmake"/> and <xref linkend="curl"/>
     </para>
+
+    &build-use-internet;
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="curl"/>, <xref linkend="libssh2"/> e <xref linkend="llvm"/>
-(construído com &quot;-DLLVM_LINK_LLVM_DYLIB=ON&quot; de forma que
-&quot;Rust&quot; consiga vincular ao &quot;LLVM&quot; do sistema em vez de
-construir a versão enviada dele)
+      <xref linkend="libssh2"/> and <xref linkend="llvm"/> (built with
+-DLLVM_LINK_LLVM_DYLIB=ON so that rust can link to system LLVM instead of
+building its shipped version)
     </para>
 
     <note>
@@ -200,12 +202,13 @@ e usada.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      &quot;<xref linkend="gdb"/>&quot; (usado pela suíte de teste se estiver
-presente) e &quot;<ulink url='https://libgit2.org/'>libgit2</ulink>&quot;
+      <xref linkend="gdb"/> (used by the test suite if it is present), <xref
+linkend="git"/> (required by the test suite), and <ulink
+url='https://libgit2.org/'>libgit2</ulink>
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/rust"/>
+      Editor Notes: <ulink url="&blfs-wiki;/rust"/>
     </para>
   </sect2>
 
@@ -214,16 +217,13 @@ presente) e &quot;<ulink url='https://libgit2.org/'>libgit2</ulink>&quot;
 
     <note>
       <para>
-        Atualmente o compilador &quot;Rust&quot; produz instruções &quot;SSE2&quot;
-para &quot;x86&quot; de 32 bits, fazendo com que o código gerado seja
-quebrado em sistemas de 32 bits sem um processador compatível com
-&quot;SSE2&quot;. Todos os modelos de processador &quot;x86&quot; lançados
-após 2004 deveriam ser compatíveis com &quot;SSE2&quot;. Execute
-&quot;<command>lscpu | grep sse2</command>&quot; como teste. Se gerar alguma
-coisa, [então] tua &quot;CPU&quot; é compatível com &quot;SSE2&quot; e está
-OK. Caso contrário, você pode tentar construir esse pacote <emphasis>em um
-sistema compatível com &quot;SSE2&quot;</emphasis> com a seguinte correção
-aplicada:
+        Currently the rust compiler produces SSE2 instructions for 32-bit x86,
+causing the generated code to be broken on 32-bit systems without a
+SSE2-capable processor.  All x86 processor models released after 2004 should
+be SSE2-capable.  Run <command>lscpu | grep sse2</command> as a test.  If it
+outputs anything, your CPU is SSE2-capable and OK.  Otherwise you may try to
+build this package <emphasis>on a SSE2-capable system</emphasis> with the
+following fix applied:
       </para>
 
       
@@ -276,36 +276,36 @@ configurará a construção.
 
 <screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-llvm9_fixes-1.patch</userinput></screen>-->
 <screen><userinput>cat &lt;&lt; EOF &gt; config.toml
-<literal># Veja-se "config.toml.example" para mais opções possíveis
-# Veja-se o livro 8.4 para um exemplo antigo usando "LLVM" enviado
-# por exemplo, se não instalar "clang", ou usar uma versão anterior a 13.0
+<literal># see config.toml.example for more possible options
+# See the 8.4 book for an old example using shipped LLVM
+# e.g. if not installing clang, or using a version before 13.0
 
-# Diz ao "x.py" para não permanecer imprimindo um aviso irritante
+# tell x.py to not keep printing an annoying warning
 changelog-seen = 2
 
 [llvm]
-# por padrão, "rust" construirá para uma miríade de arquiteturas
+# by default, rust will build for a myriad of architectures
 targets = "X86"
 
-# Quando usar o "LLVM" do sistema prefira bibliotecas compartilhadas
+# When using system llvm prefer shared libraries
 link-shared = true
 
 [build]
-# Omita os documentos para economizar tempo e espaço (padrão é para construí-los)
+# omit docs to save time and space (default is to build them)
 docs = false
 
-# Instala ferramentas estendidas: cargo, clippy, etc
+# install extended tools: cargo, clippy, etc
 extended = true
 
-# Não consulte novas versões de dependências online.
+# Do not query new versions of dependencies online.
 locked-deps = true
 
-# Especifique quais ferramentas estendidas (aquelas oriundas da instalação padrão).
-tools = ["cargo", "clippy", "rustfmt"]
+# Specify which extended tools (those from the default install).
+tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 
-# Use o código-fonte enviado no "tarball" para as dependências.
-# A combinação disto e da entrada "locked-deps" evita baixar
-# muitas caixas a partir da Internet, e torna a construção do "Rustc" mais estável.
+# Use the source code shipped in the tarball for the dependencies.
+# The combination of this and the "locked-deps" entry avoids downloading
+# many crates from Internet, and makes the Rustc build more stable.
 vendor = true
 
 [install]
@@ -314,22 +314,22 @@ docdir = "share/doc/rustc-&rust-version;"
 
 [rust]
 channel = "stable"
-description = "para BLFS &version;"
+description = "for BLFS &version;"
 
-# BLFS costumava não instalar o executável "FileCheck" originário do "LLVM",
-# de forma que desabilitava os testes "codegen". Os testes "assembly" dependem de "FileCheck"
-# e não podem ser facilmente desabilitados, de forma que eles falharão de qualquer maneira se
-# "FileCheck" não tiver sido instalado.
+# BLFS used to not install the FileCheck executable from llvm,
+# so disabled codegen tests.  The assembly tests rely on FileCheck
+# and cannot easily be disabled, so those will anyway fail if
+# FileCheck has not been installed.
 #codegen-tests = false
 
 [target.x86_64-unknown-linux-gnu]
-# Observe bem: a saída gerada do "llvm-config" (ou seja, opções de ajuda) pode ser
-# despejada na tela quando "config.toml" é analisado.
+# NB the output of llvm-config (i.e. help options) may be
+# dumped to the screen when config.toml is parsed.
 llvm-config = "/usr/bin/llvm-config"
 
 [target.i686-unknown-linux-gnu]
-# Observe bem: a saída gerada do "llvm-config" (ou seja, opções de ajuda) pode ser
-# despejada na tela quando "config.toml" é analisado.
+# NB the output of llvm-config (i.e. help options) may be
+# dumped to the screen when config.toml is parsed.
 llvm-config = "/usr/bin/llvm-config"
 
 </literal>
@@ -368,7 +368,23 @@ motivo de preocupação, apenas uma maneira do teste ser terminado.
 disponíveis), emita:
     </para>
 
-<screen remap="test"><userinput>python3 ./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
+<!-- https://github.com/rust-lang/rust/issues/112209
+         I only saw 2 failures with 1.71.1, but Rainer saw 6 ones.
+         I don't want to find out the maximum number (by building rustc
+         in somewhere like /a/very/long/long/long/.../long/path) so I'd
+         just omit the exact number of failures here. -->
+<screen remap="test"><userinput>SSL_CERT_DIR=/etc/ssl/certs \
+python3 ./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
+
+    
+    <para>
+      Some <literal>ui</literal> tests may fail (the number of failures depends on
+the length of the absolute path to the <filename
+class='directory'>rustc-&rust-version;-src</filename> directory).  These
+failures can be identified by viewing the <filename>rustc-testlog</filename>
+file and search for the <computeroutput>note: the full type name has been
+written to</computeroutput>... messages and they can be safely ignored.
+    </para>
 
     <para>
       Se o &quot;<command>FileCheck</command>&quot; originário do
@@ -378,12 +394,19 @@ disponíveis), emita:
     </para>
 
     <para>
-      Tal como acontece com todas as grandes suítes de teste, outros testes podem
-falhar em algumas máquinas - se o número de falhas adicionais estiver na
-casa de um dígito, [então] verifique se existem 'failures:' no registro e
-revise as linhas acima, especialmente as linhas 'stderr:'. Qualquer menção
-ao &quot;SIGSEGV&quot; ou ao sinal onze (11) em um teste falho é motivo de
-preocupação.
+      On some systems, scripting the tests may result in the tests hanging on
+<filename>test: combine_install_with_separate_uninstall</filename>. If this
+happens, the problem can be worked around by pressing the Enter key.  The
+test can also be removed with:
+    </para>
+
+<screen role="nodump"><userinput>sed -e '/runtest combine_install_with/s/^/#/g' -i src/tools/rust-installer/test.sh</userinput></screen>
+
+    <para>
+      As with all large test suites, other tests might fail on some machines - if
+the number of additional failures is low, check the log for 'failures:' and
+review lines above that, particularly the 'stderr:' lines. Any mention of
+SIGSEGV or signal 11 in a failing test is a cause for concern.
     </para>
 
     <para>
@@ -423,18 +446,37 @@ sejam zero.
 
     <note>
       <para>
-        Se &quot;<command>sudo</command>&quot; ou &quot;<command>su</command>&quot;
-for invocado para comutar para o usuário &quot;&root;&quot;, garanta que
-&quot;<envar>LIBSSH2_SYS_USE_PKG_CONFIG</envar>&quot; seja passada
-corretamente ou o comando seguinte possivelmente reconstrua completamente
-esse pacote. Para &quot;<command>sudo</command>&quot;, use a opção
-&quot;<option>--preserve-env=LIBSSH2_SYS_USE_PKG_CONFIG</option>&quot;. Para
-&quot;<command>su</command>&quot;, <emphasis>não</emphasis> use o
-&quot;<option>-</option>&quot; ou o &quot;<option>--login</option>&quot;.
+        If <command>sudo</command> or <command>su</command> is invoked for switching
+to the &root; user, ensure <envar>LIBSSH2_SYS_USE_PKG_CONFIG</envar> is
+correctly passed or the following command may completely rebuild this
+package.  For <command>sudo</command>, use the
+<option>--preserve-env=LIBSSH2_SYS_USE_PKG_CONFIG</option> option.  For
+<command>su</command>, do <emphasis>not</emphasis> use the
+<option>-</option> or <option>--login</option>.
       </para>
     </note>
 
+<!-- TODO: Report to upstream if this persists in the next release -->
 <screen role='root'><userinput>python3 ./x.py install</userinput></screen>
+
+    
+    <para>
+      The building system attempts to install some files twice, and during the
+second attempt it renames the old one (installed in the first attempt) with
+the <filename class='extension'>.old</filename> suffix.  As the &root; user,
+remove these files:
+    </para>
+
+    <screen role='root'><userinput>find /opt/rustc-&rust-version; -name "*.old" -delete</userinput></screen>
+
+    <para>
+      Still as the &root; user, symlink a <application>Zsh</application>
+completion file into the correct location:
+    </para>
+
+<screen role='root'><userinput>install -vdm755 /usr/share/zsh/site-functions      &amp;&amp;
+ln -sfv /opt/rustc/share/zsh/site-functions/_cargo \
+        /usr/share/zsh/site-functions</userinput></screen>
 
   </sect2>
 
@@ -450,52 +492,41 @@ exemplo, de <command>ls -l</command>.
     </para>
 
     <para>
-      <command>targets = "X86"</command>: isso evita construir todos os
-compiladores cruzados disponíveis do &quot;Linux&quot; (&quot;AArch64&quot;,
-&quot;MIPS&quot;, &quot;PowerPC&quot;, &quot;SystemZ&quot;,
-etc). Infelizmente, o &quot;Rust&quot; insiste em instalar os arquivos fonte
-para esses abaixo de &quot;<filename
-class="directory">/opt/rustc/lib/src</filename>&quot;.
+      <literal>targets = "X86"</literal>: this avoids building all the available
+linux cross-compilers (AArch64, MIPS, PowerPC, SystemZ, etc). Unfortunately,
+rust insists on installing source files for these below <filename
+class="directory">/opt/rustc/lib/src</filename>.
     </para>
 
     <para>
-      <command>extended = true</command>: isso instala várias ferramentas
-(especificadas pela entrada &quot;<literal>tools</literal>&quot;) juntamente
-com o &quot;<command>rustc</command>&quot;.
+      <literal>extended = true</literal>: this installs several tools (specified
+by the <literal>tools</literal> entry) alongside <command>rustc</command>.
     </para>
 
     <para>
-      <command>tools = ["cargo", "clippy", "rustfmt"]</command>: se as ferramentas
-não forem especificadas, [então] a ausência de
-<application>Miri</application> agora causa falha na instalação. Mas
-<application>Miri</application> não é construído no canal estável. Algumas
-das outras ferramentas são improváveis de serem úteis, a menos que se usem
-analisadores (antigos) de código ou se edite a biblioteca padrão. Esse
-conjunto corresponde àquelas originárias do perfil 'default' no comando
-binário <command>rustup</command> que são recomendadas para a maioria dos
-usuários, exceto que a documentação foi desabilitada no início da seção
-'[build]'.
+      <literal>tools = ["cargo", "clippy", "rustdoc", "rustfmt"]</literal>: only
+build the tools from the 'default' profile in binary command
+<command>rustup</command> which are recommended for most users.  The other
+tools are unlikely to be useful unless using (old) code analyzers or editing
+the standard library.
     </para>
 
     <para>
-      <command>channel = "stable"</command>: isso garante que somente recursos
-estáveis possam ser usados. O padrão no
-&quot;<filename>config.toml</filename>&quot; é o de usar recursos de
-desenvolvimento, o que não é apropriado para uma versão lançada.
+      <literal>channel = "stable"</literal>: this ensures only stable features can
+be used, the default in <filename>config.toml</filename> is to use
+development features, which is not appropriate for a released version.
     </para>
 
     
     <!-- comment while using shipped LLVM -->
 <para>
-      <command>[target.x86_64-unknown-linux-gnu]</command>: a sintaxe do
-&quot;<filename>config.toml</filename>&quot; exige uma entrada
-&quot;<literal>llvm-config</literal>&quot; para cada alvo para o qual o
-&quot;LLVM&quot; do sistema seja para ser usado. Mude o alvo para
-&quot;<literal>[target.i686-unknown-linux-gnu]</literal>&quot; se você
-estiver construindo em &quot;x86&quot; de 32 bits. Essa seção inteira pode
-ser omitida se você desejar construir contra o &quot;LLVM&quot; enviado ou
-não tiver &quot;clang&quot;, mas a construção resultante será maior e
-demorará mais.
+      <literal>[target.x86_64-unknown-linux-gnu]</literal>: the syntax of
+<filename>config.toml</filename> requires an <literal>llvm-config</literal>
+entry for each target for which system-llvm is to be used. Change the target
+to <literal>[target.i686-unknown-linux-gnu]</literal> if you are building on
+32-bit x86. This whole section may be omitted if you wish to build against
+the shipped llvm, or do not have clang, but the resulting build will be
+larger and take longer.
     </para>
 
 
@@ -518,6 +549,7 @@ sistema.
 
 
 
+    
     <!--<para>
 
       <command>export RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi"</command>:
@@ -527,14 +559,21 @@ sistema.
       2023-01-14 : assumed to be no longer needed, but it is some years
       since one person reported needing this, keep it commented for the moment.
     </para>-->
+<!-- https://github.com/alexcrichton/openssl-probe/issues/25 -->
 <para>
-      <command>--verbose</command>: essa chave às vezes pode fornecer mais
-informações relativas a um teste que falhe.
+      <envar>SSL_CERT_DIR=/etc/ssl/certs</envar>: Work around an issue causing
+test failures with the CA certificate store layout used by <xref
+linkend='make-ca'/>.
     </para>
 
     <para>
-      <command>--no-fail-fast</command>: essa chave garante que a suíte de teste
-não parará no primeiro erro.
+      <parameter>--verbose</parameter>: this switch can sometimes provide more
+information about a test which fails.
+    </para>
+
+    <para>
+      <parameter>--no-fail-fast</parameter>: this switch ensures that the test
+suite will not stop at the first error.
     </para>
 
   </sect2>

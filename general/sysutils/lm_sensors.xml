@@ -32,7 +32,7 @@ Linux. Isso é útil para monitorar a temperatura da "CPU" e ajustar o
 desempenho de alguns hardwares (como ventiladores de resfriamento).
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -95,41 +95,29 @@ url="https://www.nongnu.org/dmidecode/">dmidecode</ulink> (tempo de
 execução)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/lm_sensors"/>
-    </para>
   </sect2>
 
   <sect2 role="kernel" id="lm_sensors-kernel">
     <title>Configuração do Núcleo</title>
 
     <para>
-      Acertar a configuração do seu núcleo é um processo iterativo que
-possivelmente exija que você recompile o seu núcleo algumas vezes. A maneira
-mais simples de fazer isso é a de começar habilitando os módulos e depois
-compilar tudo o que possivelmente seja necessário para o "Lm Sensors" como
-um módulo:
+      The following configuration options attempt to cover the most common
+hardware monitoring devices in a typical desktop or laptop system.  View the
+help of each (by pressing the <keycap>H</keycap> button with the option
+focused in the <command>make menuconfig</command>)  to know if you need it.
+There are many platform-specific hardware monitoring devices so it's
+impossible to list the configuration for all of them here.  You may
+investigate the content of <filename
+class='directory'>/sys/class/hwmon</filename> within a
+<quote>mainstream</quote> distro running on the system to know which drivers
+you need.
     </para>
 
-<screen><!--
-Seems to be automatically selected and invisible on linux 3.17:
-    I2C Algorithms  -&45;-&gt;
-      &lt;M&gt; (configure all of them as modules)-->
-<literal>[*] Enable loadable module support  ---&gt;  [CONFIG_MODULES]
-
-Device Drivers  ---&gt;
-  [*] PCI support ---&gt;                   [CONFIG_PCI]
-  I2C support ---&gt;
-    &lt;*/M&gt; I2C device interface            [CONFIG_I2C_CHARDEV]
-    I2C Hardware Bus support  ---&gt;
-      &lt;M&gt; (configure all of them as modules)
-  &lt;*/M&gt; Hardware Monitoring support  ---&gt; [CONFIG_HWMON]
-    &lt;M&gt; (configure all of them as modules)</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="lm_sensors-kernel.xml"/>
 
     <para>
-      Recompile seu núcleo e reinicialize no novo núcleo. Não se esqueça de
-<command>make modules_install</command>. Voltaremos ao núcleo na seção
-"Configurando" abaixo.
+      Recompile your kernel and reboot into the new kernel.
     </para>
 
     <indexterm zone="lm_sensors lm_sensors-kernel">
@@ -207,26 +195,30 @@ contrário, "Lm_sensors" não o encontrará facilmente.
       </indexterm>
 
     </sect3>
-
-    <sect3><title>Informação de Configuração</title>
+    
+  <!-- Completely outdated.  It only sets a list of kernel modules which
+         should be loaded by lm_sensors.  But today udev will load them
+         once the sensor device is detected by the kernel.
+    <sect3>
+<title>Configuration Information</title>
 
       <para>
-        Para descobrir quais sensores de hardware seu sistema tem, emita o seguinte
-comando como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+        To find out what hardware sensors your system has, issue the following
+        command as the <systemitem class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>sensors-detect</userinput></screen>
 
       <para>
-        Os módulos apropriados deveriam ter sido carregados e um resumo ser exibido
-no final. Agora você sabe o que é necessário e pode recompilar seu núcleo
-para habilitar apenas as opções que necessitar (ou seja, não habilite os
-módulos que não consegue usar).
+        The appropriate modules should have been loaded and a summary is
+        displayed at the end. Now you know what is needed and you can recompile
+        your kernel to enable just the options you need (i.e., don't enable the
+        modules you cannot use).
       </para>
 
     </sect3>
-
-  </sect2>
+    -->
+</sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>

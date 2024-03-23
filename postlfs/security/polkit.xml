@@ -6,10 +6,10 @@
 
   <!ENTITY polkit-download-http "https://gitlab.freedesktop.org/polkit/polkit/-/archive/&polkit-version;/polkit-&polkit-version;.tar.gz">
   <!ENTITY polkit-download-ftp  "">
-  <!ENTITY polkit-md5sum        "bbe3e745fc5bc1a41f1b5044f09a0f26">
-  <!ENTITY polkit-size          "728 KB">
-  <!ENTITY polkit-buildsize     "7,0 MB (com os testes)">
-  <!ENTITY polkit-time          "0,3 UPC (com os testes, usando paralelismo=4)">
+  <!ENTITY polkit-md5sum        "36540b837c588e1e77145523bb39f511">
+  <!ENTITY polkit-size          "736 KB">
+  <!ENTITY polkit-buildsize     "6.8 MB (with tests)">
+  <!ENTITY polkit-time          "0.3 SBU (with tests, using parallelism=4)">
 ]>
 
 <sect1 id="polkit" xreflabel="Polkit-&polkit-version;">
@@ -31,7 +31,7 @@ para manusear autorizações. Ele é usado para permitir que processos não
 privilegiados se comuniquem com processos privilegiados.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -91,14 +91,17 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/> e <xref linkend="duktape"/>
+      <xref linkend="glib2"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <xref linkend="libxslt"/>, <xref
-linkend="linux-pam"/> <phrase revision="sysv"> e <xref role="first"
-linkend="elogind"/> </phrase>
+      
+      <!-- For jhalfs just make it required to avoid over-complexity. -->
+<xref role="required" linkend="duktape"/>, <xref
+linkend="gobject-introspection"/>, <xref linkend="libxslt"/>,<phrase
+revision="systemd"> and</phrase> <xref linkend="linux-pam"/><phrase
+revision="sysv">, and <xref linkend="elogind"/> </phrase>
     </para>
 
     <note>
@@ -128,8 +131,8 @@ rastrear sessões <application>Polkit</application>.
     -->
 <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/>, <xref linkend="js102"/> (pode ser usado no lugar
-de duktape) e <xref linkend="python-dbusmock"/> (para os testes)
+      <xref linkend="gtk-doc"/>, <xref linkend="js102"/> (can be used in place of
+duktape), and <xref linkend="python-dbusmock"/> (for tests)
     </para>
 
     <bridgehead renderas="sect4" revision="systemd">Dependências Exigidas em Tempo de Execução</bridgehead>
@@ -141,12 +144,12 @@ de duktape) e <xref linkend="python-dbusmock"/> (para os testes)
       Dependências Opcionais em Tempo de Execução
     </bridgehead>
     <para role="optional">
-      Um agente de autenticação polkit para usar o polkit no ambiente gráfico:
-<application>polkit-kde-agent</application> em <xref role="runtime"
-linkend="plasma5-build"/> para KDE, o agente construído em <xref
-role="runtime" linkend="gnome-shell"/> para GNOME3, <xref role="runtime"
-linkend="polkit-gnome"/> para XFCE e <application>lxpolkit</application> em
-<xref role="runtime" linkend="lxsession"/> para LXDE
+      One polkit authentication agent for using polkit in the graphical
+environment: <application>polkit-kde-agent</application> in <xref
+role="runtime" linkend="plasma5-build"/> for KDE, the agent built in <xref
+role="runtime" linkend="gnome-shell"/> for GNOME3, <xref role="runtime"
+linkend="polkit-gnome"/> for XFCE, and <application>lxpolkit</application>
+in <xref role="runtime" linkend="lxsession"/> for LXDE
     </para>
 
     <note>
@@ -159,8 +162,6 @@ dos pacotes DocBook mencionados, [então] você precisará usar
       </para>
     </note>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/polkit"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -173,19 +174,18 @@ ele for iniciado. Emita os seguintes comandos como o(a) usuário(a)
 <systemitem class="username">root</systemitem>:
     </para>
 
+<screen role="root"><userinput>groupadd -fg 27 polkitd &amp;&amp;
+useradd -c "Dono(a) do Processo de Segundo Plano do PolicyKit" -d /etc/polkit-1 -u 27 \
+        -g polkitd -s /bin/false polkitd</userinput></screen>
+
+    <para>
+      If using <xref linkend="js102"/>, make the following change (see Command
+Explanations below for more information):
+    </para>
+
 <!--
     <para>
 
-      First, fix problems with setting permissions during installation and with
-      meson-0.60.0:
-    </para>
-
-<screen><userinput remap="pre">sed '/0,/s/^/#/' -i meson_post_install.py &amp;&amp;
-sed '/policy,/d' -i actions/meson.build \
-                 -i src/examples/meson.build</userinput>
-</screen>
-
-    <para>
       Apply a patch to fix two security issues:
     </para>
 
@@ -197,9 +197,8 @@ sed '/policy,/d' -i actions/meson.build \
 
 <screen><userinput remap="pre">patch -Np1 -i ../polkit-&polkit-version;-js91-1.patch</userinput></screen>
 -->
-<screen role="root"><userinput>groupadd -fg 27 polkitd &amp;&amp;
-useradd -c "Dono(a) do Processo de Segundo Plano do PolicyKit" -d /etc/polkit-1 -u 27 \
-        -g polkitd -s /bin/false polkitd</userinput></screen>
+<screen><userinput remap="nodump">sed -e 's/JS_Init/JS::DisableJitBackend(); &amp;/' \
+    -i src/polkitbackend/polkitbackendjsauthority.cpp</userinput></screen>
 
 
 
@@ -207,56 +206,54 @@ useradd -c "Dono(a) do Processo de Segundo Plano do PolicyKit" -d /etc/polkit-1 
       Instale <application>Polkit</application> executando os seguintes comandos:
     </para>
 
-<!--
-      "-t3" for raising the timeout to 90s, i. e. 3x the default:
-      https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/107
-    -->
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr                       \
+meson setup ..                            \
+      --prefix=/usr                       \
       --buildtype=release                 \
       -Dman=true                          \
       -Dsession_tracking=libsystemd-login \
-      -Dtests=true                        \
-      -Djs_engine=duktape                 \
-      ..                                  &amp;&amp;
+      -Dtests=true                        &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr                 \
+meson setup ..                      \
+      --prefix=/usr                 \
       --buildtype=release           \
       -Dman=true                    \
       -Dsession_tracking=libelogind \
-      -Dsystemdsystemunitdir=/tmp   \
-      -Dtests=true                  \
-      -Djs_engine=duktape           \
-      ..                            &amp;&amp;
+      -Dtests=true                  &amp;&amp;
 ninja</userinput></screen>
 
-    
     <para>
-      Para testar os resultados, primeiro certifique-se de que o processo de
-segundo plano <application>D-Bus</application> do sistema esteja executando
-e que <xref linkend='dbus-python'/> e <xref linkend='python-dbusmock'/>
-estejam instalados. Em seguida, execute <command>meson test -t3</command>.
+      To test the results, first ensure that the system
+<application>D-Bus</application> daemon is running, and both <xref
+linkend='dbus-python'/> and <xref linkend='python-dbusmock'/> are
+installed.  Then run <command>ninja test</command>.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root" revision="systemd"><userinput>ninja install</userinput></screen>
-
-<screen role="root" revision="sysv"><userinput>ninja install &amp;&amp;
-rm -v /tmp/*.service</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <para>
+      <command>sed -e 's/JS_Init/JS::DisableJitBackend(); &amp;/' ...  </command>:
+The JIT compiling of JS102 needs W+X mapping which is dangerous and is not
+permitted by the <application>systemd</application> unit file shipped within
+the polkit package.  This command is not strictly needed on systems based on
+sysvinit but it still improves security.  It has no effect if building
+polkit with the recommended <xref linkend='duktape'/> Javascript engine.
+    </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
@@ -270,10 +267,9 @@ pacote.
     </para>
 
     <para>
-      <parameter>-Djs_engine=duktape</parameter>: Essa chave permite usar o
-mecanismo do JavaScript <xref linkend="duktape"/>. Substitua por
-<option>-Djs_engine=mozjs</option> para usar o mecanismo do JavaScript <xref
-linkend="js102"/>.
+      <option>-Djs_engine=mozjs</option>: This switch allows using the <xref
+linkend="js102"/> JavaScript engine instead of the <xref linkend='duktape'/>
+JavaScript engine.
     </para>
 
     
@@ -291,6 +287,12 @@ linkend="js102"/>.
       href="../../xincludes/static-libraries.xml"/>
     -->
 <para>
+      <option>-Dos_type=lfs</option>: Use this switch if you did not create the
+<filename>/etc/lfs-release</filename> file or distribution auto detection
+will fail and you will be unable to use <application>Polkit</application>.
+    </para>
+
+    <para>
       <option>-Dauthfw=shadow</option>: Essa chave habilita o pacote a usar o
 <application>Shadow</application> em vez da estrutura de autenticação
 <application>Linux PAM</application>. Use-a se você não tiver instalado
@@ -305,9 +307,9 @@ linkend="js102"/>.
 
     -->
 <para>
-      <option>-Dintrospection=false</option>: Use essa opção se tiver certeza de
-que não precisa dos arquivos gobject-introspection para o polkit ou não
-tiver o gobject-introspection instalado.
+      <option>-Dintrospection=false</option>: Use this option if you are certain
+that you do not need gobject-introspection files for polkit, or do not have
+gobject-introspection installed.
     </para>
 
     <para>
@@ -325,44 +327,6 @@ aplicativos de exemplo.
       <option>-Dgtk_doc=true</option>: Use essa opção para habilitar a construção
 e a instalação da documentação da API.
     </para>
-
-  </sect2>
-
-  <sect2 role="configuration">
-    <title>Configurando Polkit</title>
-
-    <sect3>
-      <title>Configuração PAM</title>
-
-      <note>
-        <para>
-          Se não construiu o <application>Polkit</application> com suporte para
-<application>Linux PAM</application>, [então] você pode pular esta seção.
-        </para>
-      </note>
-
-      <para>
-        Se tiver construído o <application>Polkit</application> com suporte para
-<application>Linux PAM</application>, [então] você precisa modificar o
-arquivo padrão de configuração PAM que foi instalado por padrão para fazer o
-<application>Polkit</application> funcionar corretamente com o BLFS. Emita
-os seguintes comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem> para criar o arquivo de configuração para
-<application>Linux PAM</application>:
-      </para>
-
-<screen role="root"><userinput>cat &gt; /etc/pam.d/polkit-1 &lt;&lt; "EOF"
-<literal># Início /etc/pam.d/polkit-1
-
-auth     include        system-auth
-account  include        system-account
-password include        system-password
-session  include        system-session
-
-# Fim /etc/pam.d/polkit-1</literal>
-EOF</userinput></screen>
-
-    </sect3>
 
   </sect2>
 

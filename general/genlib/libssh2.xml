@@ -6,8 +6,8 @@
 
   <!ENTITY libssh2-download-http "https://www.libssh2.org/download/libssh2-&libssh2-version;.tar.gz">
   <!ENTITY libssh2-download-ftp  "">
-  <!ENTITY libssh2-md5sum        "f604ba083fad23bf715a9ecccc9f57f4">
-  <!ENTITY libssh2-size          "944 KB">
+  <!ENTITY libssh2-md5sum        "a01d543fd891ca48fe47726540d50b17">
+  <!ENTITY libssh2-size          "1.1 MB">
   <!ENTITY libssh2-buildsize     "13 MB (com os testes)">
   <!ENTITY libssh2-time          "0,2 UPC (com os testes)">
 ]>
@@ -30,7 +30,7 @@
 cliente que implementa o protocolo "SSH2".
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -66,44 +66,51 @@ cliente que implementa o protocolo "SSH2".
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/libssh2-&libssh2-version;-upstream_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/libssh2-&libssh2-version;-upstream_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do libssh2</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do libssh2</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gnupg2"/>, <xref linkend="libgcrypt"/> e <xref
-linkend="openssh"/> (todos três são exigidos para a suíte de teste)
+      <xref linkend="cmake"/> (can be used instead of the
+<command>configure</command> script), <xref linkend="libgcrypt"/> (can be
+used instead of OpenSSL), <xref linkend="openssh"/> (for some tests), and
+<ulink url='https://www.docker.com'>Docker</ulink> (for some tests)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/libssh2"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do libssh2</title>
 
     <para>
-      Aplique um remendo para corrigir a incompatibilidade com lançamentos
-recentes do "OpenSSH":
+      If you want to test the package, exclude the tests requiring a static
+library:
     </para>
 
-<screen><userinput>patch -Np1 -i ../libssh2-&libssh2-version;-upstream_fix-1.patch</userinput></screen>
+<screen><userinput>sed -E '/^DOCKER_TEST/,/^SSHD_TEST/s/test_(auth_keyboard_info.* |hostkey |simple)/$(NOTHING)/' \
+    -i tests/Makefile.inc &amp;&amp;
+autoreconf -fi</userinput></screen>
 
     <para>
       Instale <application>libssh2</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
+<screen><userinput>./configure --prefix=/usr          \
+            --disable-docker-tests \
+            --disable-static       &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -119,6 +126,12 @@ make</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>--disable-docker-tests</parameter>: Disable the tests requiring
+Docker, which is beyond the scope of BLFS.  Remove this switch if you've
+installed Docker and you wish to run the test suite.
+    </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>

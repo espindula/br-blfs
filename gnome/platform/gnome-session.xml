@@ -5,13 +5,13 @@
   %general-entities;
 
   <!ENTITY gnome-session-download-http
-           "&gnome-download-http;/gnome-session/&gnome-43;/gnome-session-&gnome-session-version;.tar.xz">
+           "&gnome-download-http;/gnome-session/&gnome-44;/gnome-session-&gnome-session-version;.tar.xz">
   <!ENTITY gnome-session-download-ftp
-           "&gnome-download-ftp;/gnome-session/&gnome-43;/gnome-session-&gnome-session-version;.tar.xz">
-  <!ENTITY gnome-session-md5sum        "02ae90bc41fd06e780169b760fb55670">
+           "&gnome-download-ftp;/gnome-session/&gnome-44;/gnome-session-&gnome-session-version;.tar.xz">
+  <!ENTITY gnome-session-md5sum        "0223353306fb2e5b84bd42e3fde905f0">
   <!ENTITY gnome-session-size          "476 KB">
   <!ENTITY gnome-session-buildsize     "12 MB">
-  <!ENTITY gnome-session-time          "0,1 UPC">
+  <!ENTITY gnome-session-time          "0.1 SBU">
 ]>
 
 <sect1 id="gnome-session" xreflabel="gnome-session-&gnome-session-version;">
@@ -32,7 +32,7 @@
 sessões do <application>GNOME</application>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,10 +72,10 @@ sessões do <application>GNOME</application>.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <phrase revision="sysv"><xref role="runtime" linkend="elogind"/>,</phrase>
-<xref linkend="gnome-desktop"/>, <xref linkend="json-glib"/>, <xref
-linkend="mesa"/> <phrase revision="systemd">, <xref role="runtime"
-linkend="systemd"/></phrase> e <xref linkend="upower"/>
+      <phrase revision="sysv"><xref linkend="elogind"/>,</phrase> <xref
+linkend="gnome-desktop"/>, <xref linkend="json-glib"/>, <xref
+linkend="mesa"/>, <phrase revision="systemd"><xref role="runtime"
+linkend="systemd"/> (runtime),</phrase> and <xref linkend="upower"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -85,8 +85,6 @@ linkend="DocBook"/> e <xref linkend="docbook-xsl"/> (para construir a
 documentação)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gnome-session"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -102,14 +100,16 @@ seguinte comando para fazer com que <command>gnome-session</command> use um
 shell de login:
     </para>
 
-<screen><userinput>sed 's@/bin/sh@/bin/sh -l@' -i gnome-session/gnome-session.in</userinput></screen>
-
-
+<!--
     <para revision="sysv">
-      Adapte meson.build de forma que gnome-session consiga construir sem systemd:
+
+      Adapt meson.build so that gnome-session can build without systemd:
     </para>
 
 <screen revision="sysv"><userinput remap="pre">sed -i "/  systemd_dep/,+3d;/if enable_systemd/a \    systemd_userunitdir = '/tmp\'" meson.build</userinput></screen>
+-->
+<screen><userinput>sed 's@/bin/sh@/bin/sh -l@' -i gnome-session/gnome-session.in</userinput></screen>
+
 
     <para>
       Instale o <application>GNOME Session</application> executando os seguintes
@@ -119,16 +119,17 @@ comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr           \
-      --buildtype=release     \
-      -Dsystemd_journal=false \
-      .. &amp;&amp;
+meson setup --prefix=/usr             \
+            --buildtype=release       \
+            -Dsystemd_journal=false   \
+            -Dsystemduserunitdir=/tmp \
+            ..                        &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -162,17 +163,19 @@ arquivos extras apareçam como opções em um gerenciador de exibição. Como
 o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>rm -v /usr/share/xsessions/gnome.desktop &amp;&amp;
-rm -v /usr/share/wayland-sessions/gnome.desktop</userinput></screen>
-
+<!--
     <para revision="sysv">
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>,
-remova as unidades systemd que são inúteis em sistemas SysV:
+
+      Now, as the <systemitem class="username">root</systemitem> user,
+      remove systemd units that are useless on SysV systems:
     </para>
 
+<screen role="root" revision="sysv"><userinput>rm -rv /tmp/{*.d,*.target,*.service}</userinput></screen>
+-->
 <!-- this part is not needed on systemd, since the dbus session is created
 by systemd-user.-->
-<screen role="root" revision="sysv"><userinput>rm -rv /tmp/{*.d,*.target,*.service}</userinput></screen>
+<screen role="root"><userinput>rm -v /usr/share/xsessions/gnome.desktop &amp;&amp;
+rm -v /usr/share/wayland-sessions/gnome.desktop</userinput></screen>
 
 
     <para revision="sysv">
@@ -192,7 +195,14 @@ systemd. Como o(a) usuário(a) &root;:
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
-   </sect2>
+
+    <para revision="sysv">
+      <parameter>-Dsystemd_journal=false</parameter> and
+<parameter>-Dsystemduserunitdir=/tmp</parameter>: Allow building with
+elogind support on a SysV based system.
+    </para>
+
+  </sect2>
 
   <sect2 role="starting">
     <title>Iniciando o GNOME</title>

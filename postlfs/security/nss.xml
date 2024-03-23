@@ -13,11 +13,11 @@
 <!-- no micro versions -->
   <!ENTITY nss-download-http "https://&nss-url;/NSS_&nss-dir;_RTM/src/nss-&nss-version;.tar.gz">
   <!ENTITY nss-download-ftp  "">
-  <!ENTITY nss-md5sum        "7ca8ff8ed672d82290c3122f38708579">
+  <!ENTITY nss-md5sum        "589167c3be81d09b9e332ff17d46ebca">
   <!ENTITY nss-size          "69 MB">
-  <!ENTITY nss-buildsize     "297 MB (adicionar 129 MB para os testes)">
-  <!ENTITY nss-time          "1,2 UPC (com paralelismo=4; adicione menos que 20 UPC para os testes em
-ryzens AMD ou ao menos 30 UPC em máquinas Intel)">
+  <!ENTITY nss-buildsize     "299 MB (add 261 MB for tests)">
+  <!ENTITY nss-time          "1.2 SBU (with parallelism=4, add 15 SBU for tests on AMD Ryzens or at least
+30 SBU on Intel machines)">
   <!-- On my system, I got 64.2 SBU, but Bruce gets 18 SBU. -renodr -->
   <!-- On my system, I got 63 SBU, but Xi gets ~18 SBU. -pierre (for 3.78) -->
   <!-- On my 3400G for 3.79 I got 16 SBU -ken -->
@@ -27,7 +27,16 @@ ryzens AMD ou ao menos 30 UPC em máquinas Intel)">
    3400G 14 SBU with 6.0.12, but the remeasured SBU has become very slow
    and maybe other people would see a ster SBU on a fresh build;
    i7-4790 35 SBU with 6.0.12, no failures
-   Bruce's 3900X 19.3 SBU, his i7-12700K about 30 SBU, 12 failures -->
+   Bruce's 3900X 19.3 SBU, his i7-12700K about 30 SBU, 12 failures
+
+   3.90:
+     Passed:             68593
+     Failed:             0
+     Failed with core:   0
+     ASan failures:      0
+     Unknown status:     2
+     TinderboxPrint:Unknown: 2
+   -->
 ]>
 
 <sect1 id="nss" xreflabel="nss-&nss-version;">
@@ -53,7 +62,7 @@ padrões de segurança. Isso é útil para implementar SSL e S/MIME ou outros
 padrões de segurança da Internet em um aplicativo.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -97,7 +106,18 @@ padrões de segurança da Internet em um aplicativo.
 url="&patch-root;/nss-&nss-version;-standalone-1.patch"/>
         </para>
       </listitem>
-    </itemizedlist>
+
+    <!--
+      <listitem>
+
+        <para>
+          Required patch for processors lacking the <quote>adx</quote>
+          instruction set:
+          <ulink url="&patch-root;/nss-&nss-version;-illegal_instruction-1.patch"/>
+        </para>
+      </listitem>
+-->
+</itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do NSS</bridgehead>
 
@@ -113,26 +133,30 @@ de execução)
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/nss"/>
+      Editor Notes: <ulink url="&blfs-wiki;/nss"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do NSS</title>
 
-    
 
-
-    <!-- In 3.53.x, parallel build was possible.
-         And with another rebuild of nss-3.54, all is well again, but
-         broken in 3.60. Fixed again in 3.62. -->
-<!--
+    <!--
     <note>
 
       <para>
-        This package does not support parallel build.
+        Some old generations processors lack an assembler instruction that
+        is generated unconditionally by NSS-3.90. It leads to an
+        "illegal instruction" fault when running firefox. The availability
+        of this instruction is asserted by the <quote>adx</quote> flag
+        in <filename>/proc/cpuinfo</filename>. If this flag is not set,
+        apply the following patch:
       </para>
     </note>
+
+<screen><userinput>grep -q adx /proc/cpuinfo || \
+patch -Np1 -i ../nss-&nss-version;-illegal_instruction-1.patch</userinput></screen>
+
 -->
 <para>
       Instale <application>NSS</application> executando os seguintes comandos:
@@ -142,7 +166,7 @@ de execução)
 
 cd nss &amp;&amp;
 
-make BUILD_OPT=1                 \
+make BUILD_OPT=1                  \
   NSPR_INCLUDE_DIR=/usr/include/nspr  \
   USE_SYSTEM_ZLIB=1                   \
   ZLIB_LIBS=-lz                       \
@@ -166,19 +190,18 @@ cd ../</userinput></screen>
       <itemizedlist spacing="compact">
       <listitem>
         <para>
-           HOST=localhost e DOMSUF=localdomain são exigidas. Sem essas variáveis, é
-necessário especificar um FQDN e essa forma genérica deveria funcionar para
-todos(as), desde que <systemitem>localhost.localdomain</systemitem> esteja
-definido em <filename>/etc/hosts</filename>, conforme feito <ulink
-url="&lfs-root;/chapter09/network.html#ch-config-hosts">no livro
-LFS</ulink>.
+           HOST=localhost and DOMSUF=localdomain are required.  Without these
+variables, a FQDN is required to be specified and this generic way should
+work for everyone, provided <systemitem>localhost.localdomain</systemitem>
+is defined in <filename>/etc/hosts</filename>, as done in <ulink
+url="&lfs-root;/chapter09/network.html#ch-config-hosts">the LFS
+book</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
-           Os testes tomam um tempo extremamente longo para executar. Se desejado,
-[então] existe informação no script all.sh relativa à execução de
-subconjuntos da suíte total de teste.
+           The tests take a long time to run. If desired there is information in the
+all.sh script about running subsets of the total test suite.
         </para>
       </listitem>
       <listitem>
@@ -210,12 +233,11 @@ desconhecidas.
 
 <screen role="root"><userinput>cd ../dist                                                          &amp;&amp;
 
-install -v -m755 Linux*/lib/*.so             /usr/lib              &amp;&amp;
+install -v -m755 Linux*/lib/*.so              /usr/lib              &amp;&amp;
 install -v -m644 Linux*/lib/{*.chk,libcrmf.a} /usr/lib              &amp;&amp;
 
 install -v -m755 -d                           /usr/include/nss      &amp;&amp;
 cp -v -RL {public,private}/nss/*              /usr/include/nss      &amp;&amp;
-chmod -v 644                                  /usr/include/nss/*    &amp;&amp;
 
 install -v -m755 Linux*/bin/{certutil,nss-config,pk12util} /usr/bin &amp;&amp;
 
@@ -282,15 +304,15 @@ evitar a compilação dos testes e economizar algum tempo de construção.
     <title>Configurando NSS</title>
 
     <para>
-      Se <xref linkend="p11-kit"/> estiver instalado, [então] o módulo de
-confiança <application>p11-kit</application>
-(<filename>/usr/lib/pkcs11/p11-kit-trust.so</filename>) pode ser usado como
-um substituto imediato para <filename>/usr/lib/libnssckbi.so</filename> para
-transparentemente tornar as ACs do sistema disponíveis para aplicativos
-cientes de <application>NSS</application>, em vez da lista estática
-fornecida por <filename>/usr/lib/libnssckbi.so</filename>. Como o(a)
-usuário(a) <systemitem class="username">root</systemitem>, execute o
-seguinte comando:
+      If <xref linkend="p11-kit"/> is installed, the
+<application>p11-kit</application> trust module
+(<filename>/usr/lib/pkcs11/p11-kit-trust.so</filename>) can be used as a
+drop-in replacement for <filename>/usr/lib/libnssckbi.so</filename> to
+transparently make the system CAs available to
+<application>NSS</application> aware applications, rather than the static
+list provided by <filename>/usr/lib/libnssckbi.so</filename>. As the
+<systemitem class="username">root</systemitem> user, execute the following
+command:
     </para>
 
 <screen role="root"><userinput>ln -sfv ./pkcs11/p11-kit-trust.so /usr/lib/libnssckbi.so</userinput></screen>

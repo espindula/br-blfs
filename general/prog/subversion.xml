@@ -15,10 +15,8 @@
        swig-rb:     0.4      22 MB; 0.4      21 MB; 0.3     21 MB
        docs:        2 secs   26 MB; 2 sec    27 MB; 2 sec   26 MB
        tests       46 min  1104 MB  46:52  1103 MB  47 min   -->
-  <!ENTITY subversion-buildsize     "208 MB (adicionar 228 MB para ligações, 52 MB para documentos e 1,3 GB para
-os testes)">
-  <!ENTITY subversion-time          "0,5 UPC (Usando paralelismo=4; adicionar 1,9 UPC para ligações e 35 UPC para
-os testes)">
+  <!ENTITY subversion-buildsize     "208 MB (add 228 MB for bindings, 52 MB for docs, 1.3 GB for tests)">
+  <!ENTITY subversion-time          "0.5 SBU (Using parallelism=4; add 1.9 SBU for bindings, 35 SBU for tests)">
 ]>
 
 <sect1 id="subversion" xreflabel="Subversion-&subversion-version;">
@@ -47,7 +45,7 @@ logiciário cliente e servidor usado para manipular um repositório
 repositório é abordada em <xref linkend="svnserver"/>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -131,13 +129,12 @@ Additional Downloads</bridgehead>
  (for <ulink url="http://utils.kde.org/projects/kwalletmanager/">KWallet</ulink> support), -->
 <xref linkend="apache"/>, <xref linkend="boost"/>, <xref
 linkend="cyrus-sasl"/>, <xref linkend="dbus"/>, <xref linkend="doxygen"/>
-(para gerar documentação &quot;HTML&quot;), <xref linkend="gnome-keyring"/>,
-<xref linkend="libsecret"/>, <xref linkend="py3c"/> (para as ligações
-&quot;Python&quot; e testes), <xref linkend="python2"/> (com suporte
-&quot;sqlite&quot; para os testes), <xref linkend="ruby"/>, <xref
-linkend="swig"/> (para construir ligações &quot;Perl&quot;,
-&quot;Python&quot; e &quot;Ruby&quot;), <ulink
-url="https://github.com/lz4/lz4/releases">LZ4</ulink> e <ulink
+(for generating HTML documentation), <xref linkend="gnome-keyring"/>, <xref
+linkend="libsecret"/>, <xref linkend="py3c"/> (for the python bindings, and
+tests)  <xref linkend="python2"/> (with sqlite support for the tests), <xref
+linkend="ruby"/>, <xref linkend="swig"/> (for building Perl, Python and Ruby
+bindings), <ulink url="https://github.com/lz4/lz4/releases">LZ4</ulink>, and
+<ulink
 url="https://git.netsurf-browser.org/libutf8proc.git/">UTF8proc</ulink>
     </para>
 
@@ -148,10 +145,6 @@ url="https://www.inet.no/dante/">Dante</ulink> ou <ulink
 url="https://jikes.sourceforge.net/">Jikes</ulink>; <ulink
 url="https://junit.org/junit4/">JUnit 4</ulink> (para testar as ligações
 &quot;Java&quot;) e <xref linkend="apache-ant"/>.
-    </para>
-
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/subversion"/>
     </para>
 
   </sect2>
@@ -179,7 +172,7 @@ url="https://junit.org/junit4/">JUnit 4</ulink> (para testar as ligações
 <screen><userinput remap="pre">grep -rl '^#!.*python$' | xargs sed -i '1s/python/&amp;3/'</userinput></screen>
 
     <para>
-      A seguir, adapte as ligações &quot;Ruby&quot; para &quot;Ruby-3.2&quot;:
+      Next, adapt the Ruby bindings to Ruby-3.2:
     </para>
 
     <screen><userinput remap="pre">sed -e 's/File.exists?/File.exist?/'              \
@@ -191,7 +184,7 @@ url="https://junit.org/junit4/">JUnit 4</ulink> (para testar as ligações
 comandos:
     </para>
 
-<screen><userinput>PYTHON=python3 ./configure --prefix=/usr            \
+<screen><userinput>PYTHON=python3 ./configure --prefix=/usr             \
             --disable-static          \
             --with-apache-libexecdir  \
             --with-lz4=internal       \
@@ -238,12 +231,9 @@ seguintes comandos:
     </para>
 
     <para>
-      Para testar os resultados, emita: &quot;<command>make
-check</command>&quot;. Quatro testes nas suítes
-&quot;<filename>commit_tests.py</filename>&quot;,
-&quot;<filename>prop_tests.py</filename>&quot; e
-&quot;<filename>update_tests.py</filename>&quot; são conhecidos por
-falharem.
+      To test the results, issue: <command>make check</command>. Four tests in the
+<filename>commit_tests.py</filename>, <filename>prop_tests.py</filename>,
+and <filename>update_tests.py</filename> suites are known to fail.
     </para>
 
     <para>
@@ -325,8 +315,8 @@ estiver instalado.
     </para>
 
     <para>
-      <parameter>--with-lz4=internal, --with-utf8proc=internal</parameter>: Remova
-essas chaves se você tiver instalado as dependências opcionais.
+      <parameter>--with-lz4=internal, --with-utf8proc=internal</parameter>: Remove
+these switches if you have installed the optional dependencies.
     </para>
 
     <para>
@@ -403,13 +393,10 @@ sistema configurados em
 svnserve, svnsync e svnversion
         </seg>
         <seg>
-          &quot;libsvn_*-1.so&quot; e, opcionalmente, uma biblioteca &quot;Java&quot;;
-os módulos &quot;DSO&quot; &quot;mod_dav_svn.so&quot; e
-&quot;mod_authz_svn.so&quot; do &quot;<application>Apache
-HTTP</application>&quot; e vários módulos
-&quot;<application>Perl</application>&quot;,
-&quot;<application>Python</application>&quot; e
-&quot;<application>Ruby</application>&quot;.
+          libsvn_*-1.so and optionally, a Java library, the mod_dav_svn.so and and
+mod_authz_svn.so <application>Apache HTTP</application> DSO modules and
+various <application>Perl</application>, <application>Python</application>
+and <application>Ruby</application> modules.
         </seg>
         <seg>
           /usr/include/subversion-1,

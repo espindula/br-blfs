@@ -23,13 +23,12 @@ controladores de núcleo procuram por imagens de firmware.
   </para>
 
   <para>
-    Atualmente, a maioria do "firmware" pode ser encontrada em um repositório
-<userinput>git</userinput>: <ulink
-url="https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/tree/"/>.
-Por conveniência, o Projeto LFS criou um espelho, atualizado diariamente,
-onde esses arquivos de "firmware" podem ser acessados via
-<userinput>wget</userinput> ou via um navegador da "web" em <ulink
-url="&sources-anduin-http;/linux-firmware/"/>.
+    Currently, most firmware can be found at a <userinput>git</userinput>
+repository: <ulink url=
+"https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/tree/"/>.
+For convenience, the LFS Project has created a mirror, updated daily, where
+these firmware files can be accessed via <userinput>wget</userinput> or a
+web browser at <ulink url="&sources-anduin-http;/linux-firmware/"/>.
   </para>
 
   <para>
@@ -100,20 +99,18 @@ que o padrão não são habilitados pelo "firmware" lançado.
     </listitem>
     <listitem>
       <para>
-        Atualizações de firmware para portas cabeadas de rede de comunicação. A
-maioria delas funciona mesmo sem as atualizações, porém provavelmente
-funcionarão melhor com o firmware atualizado. Para alguns laptops modernos,
-o firmware para ambos, ethernet cabeado (por exemplo, rtl_nic), e também
-para dispositivos bluetooth (por exemplo, qca), é
-<emphasis>exigido</emphasis> antes que a rede de comunicação cabeada possa
-ser usada.
+        Firmware updates for wired network ports. Most of them work even without the
+updates, but they will probably work better with the updated firmware. For
+some modern laptops, firmware for both wired ethernet (e.g. rtl_nic) and
+also for bluetooth devices (e.g. qca)  is <emphasis>required</emphasis>
+before the wired network can be used.
       </para>
     </listitem>
     <listitem>
       <para>
-        Firmware para outros dispositivos, tais como wifi. Esses dispositivos não
-são exigidos para o PC inicializar, porém precisam do firmware antes que
-esses dispositivos possam ser usados.
+        Firmware for other devices, such as wireless NICs. These devices are not
+required for the PC to boot, but need the firmware before these devices can
+be used.
       </para>
     </listitem>
   </itemizedlist>
@@ -128,7 +125,6 @@ linkend="wget"/>
     </para>
   </note>
 
-  <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/aboutfirmware"/></para>
 
   <sect2 id="cpu-microcode">
     <title>Atualizações de microcódigo para CPUs</title>
@@ -184,14 +180,13 @@ não existe razão real para usar o carregamento atrasado.
     </para>
 
     <para>
-      Ainda pode ser possível forçar manualmente o carregamento atrasado do
-microcódigo. Mas isso possivelmente cause mau funcionamento do núcleo e você
-mesmo(a) deveria correr o risco. Você precisará reconfigurar seu núcleo para
-qualquer um dos métodos. As instruções aqui te mostrarão como criar um
-"initrd" para carregamento antecipado. Também é possível construir o mesmo
-arquivo binário de microcódigo interno ao núcleo, o que permite o
-carregamento antecipado, mas exige que o núcleo seja recompilado para
-atualizar o microcódigo.
+      It might be still possible to manually force late loading of microcode.  But
+it may cause kernel malfunction and you should take the risk yourself.  You
+will need to reconfigure your kernel for either method. The instructions
+here will show you how to create an initrd for early loading. It is also
+possible to build the same microcode bin file into the kernel, which allows
+early loading but requires the kernel to be recompiled to update the
+microcode.
     </para>
 
     <para>
@@ -225,17 +220,14 @@ comparado a tipicamente vinte e quatro (24) KB para uma máquina.
       <para>
         <!-- at one time, some skylakes had problems with a certain revision
         secure version of the microcode, for those machines which can boot it, -->
-<!-- If you have a Skylake machine, please read the
-        Caution in the 'Early loading of microcode' section below.-->
-O primeiro passo é o de obter a versão mais recente do microcódigo
-"Intel". Isso precisa ser feito navegando-se até <ulink url=
+The first step is to get the most recent version of the Intel microcode.
+This must be done by navigating to <ulink url=
 'https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/>
-e baixando-se o arquivo mais recente lá. Ao tempo da escrita deste texto, a
-versão mais segura do microcódigo era microcode-20230214. Extraia esse
-arquivo da maneira normal; o microcódigo está no diretório
-<filename>intel-ucode</filename>, contendo vários "blobs" com nomes na forma
-"XX-YY-ZZ". Existem também vários outros arquivos e uma observação de
-lançamento.
+and downloading the latest file there.  As of this writing the most secure
+version of the microcode is microcode-20230808.  Extract this file in the
+normal way, the microcode is in the <filename>intel-ucode </filename>
+directory, containing various blobs with names in the form XX-YY-ZZ. There
+are also various other files, and a releasenote.
       </para>
 
       <para>
@@ -258,22 +250,18 @@ online em <ulink url=
       </para>
 
       <para>
-        Para um dispositivo móvel "Icelake" (descrito como "CPU" "Intel(R) Core(TM)
-i7-1065G7"), os valores relevantes são "cpu family 6", "model 126",
-"stepping 5", de modo que, nesse caso, a identificação necessária é
-"06-7e-05". A nota de lançamento diz que o microcódigo mais recente tem a
-versão "0xb8". Se o valor do campo <quote>microcode</quote> em
-<filename>/proc/cpuinfo</filename> for "0xb8" ou superior, [então] indica
-que a atualização do microcódigo já foi aplicada pelo "BIOS". Caso
-contrário, configure o núcleo para suportar o carregamento do microcódigo
-"Intel" e prossiga para <xref linkend='early-microcode'/>:
+        For an Tigerlake mobile (described as Intel(R) Core(TM) i5-11300H CPU) the
+relevant values are cpu family 6, model 140, stepping 1 so in this case the
+required identification is 06-8c-01. The releasenote says the latest
+microcode for it is versioned 0xac.  If the value of the
+<quote>microcode</quote> field in <filename>/proc/cpuinfo</filename> is 0xac
+or greater, it indicates the microcode update is already applied by the
+BIOS.  Otherwise, configure the kernel to support loading Intel microcode,
+and then proceed to <xref linkend='early-microcode'/>:
       </para>
 
-<screen><literal>General Setup ---&gt;
-  [*] Initial RAM filesystem and RAM disk (initramfs/initrd) support [CONFIG_BLK_DEV_INITRD]
-Processor type and features  ---&gt;
-  [*] CPU microcode loading support  [CONFIG_MICROCODE]
-  [*]      Intel microcode loading support [CONFIG_MICROCODE_INTEL]</literal></screen>
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+        href="intel-ucode-kernel.xml"/>
 
     </sect3>
 
@@ -306,18 +294,16 @@ ele:
 <screen><computeroutput>Family=0x10 Model=0x05 Stepping=0x03: Patch=0x010000c8 Length=960 bytes</computeroutput></screen>
 
       <para>
-        Se o valor do campo <quote>microcode</quote> em
-<filename>/proc/cpuinfo</filename> for "0x10000c8" ou superior, [então]
-indica que o "BIOS" já aplicou a atualização do microcódigo. Caso contrário,
-configure o núcleo para suportar o carregamento do microcódigo "AMD" e
-prossiga para <xref linkend='early-microcode'/>:
+        If the value of the <quote>microcode</quote> field in
+<filename>/proc/cpuinfo</filename> is 0x10000c8 or greater, it indicates the
+BIOS has already applied the microcode update.  Otherwise, configure the
+kernel to support loading AMD microcode, and then proceed to <xref
+linkend='early-microcode'/>:
       </para>
 
-<screen><literal>General Setup ---&gt;
-  [*] Initial RAM filesystem and RAM disk (initramfs/initrd) support [CONFIG_BLK_DEV_INITRD]
-Processor type and features  ---&gt;
-  [*] CPU microcode loading support  [CONFIG_MICROCODE]
-  [*]      AMD microcode loading support [CONFIG_MICROCODE_AMD]</literal></screen>
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+        href="amd-ucode-kernel.xml"/>
+
     </sect3>
 
     <sect3 id="early-microcode">
@@ -428,16 +414,15 @@ agora.
       </para>
 
       <para>
-        Os locais e horários onde o carregamento antecipado acontece são muito
-diferentes em máquinas "AMD" e "Intel". Primeiro, um exemplo de uma "Intel"
-(dispositivo móvel "Icelake") com carregamento antecipado:
+        The places and times where early loading happens are very different in AMD
+and Intel machines. First, an example of an Intel (Tigerlake mobile) with
+early loading:
       </para>
 
-<screen><literal>[    0.000000] microcode: microcode updated early to revision 0xb8, date = 2022-08-31
-[    0.000000] Linux version 6.1.11 (xry111@stargazer) (gcc (GCC) 12.2.0, GNU ld (GNU Binutils) 2.40) #2 SMP PREEMPT_DYNAMIC Tue Feb 14 23:23:31 CST 2023
-[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.1.11-lfs-11.3-rc1 root=PARTUUID=<replaceable>&lt;CLASSIFIED&gt;</replaceable> ro
-[    0.452924] microcode: sig=0x706e5, pf=0x80, revision=0xb8
-[    0.453197] microcode: Microcode Update Driver: v2.2.</literal></screen>
+<screen><literal>[    0.000000] microcode: microcode updated early: 0x86 -> 0xac, date = 2023-02-27
+[    0.000000] Linux version 6.4.7 (root@stargazer) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #1 SMP PREEMPT_DYNAMIC Wed Aug  2 19:08:46 CST 2023
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.4.7 root=PARTUUID=<replaceable>&lt;CLASSIFIED&gt;</replaceable> ro
+[    0.424002] microcode: Microcode Update Driver: v2.2.</literal></screen>
 
 
       <para>
@@ -506,30 +491,14 @@ núcleos anteriores. Identifique e baixe os blobs exigidos; então instale-os:
 <screen><userinput>mkdir -pv /lib/firmware/radeon
 cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
 
-      <para>
-        Atualmente existem duas maneiras de instalar esse firmware. No BLFS, na
-seção 'Configuração do Núcleo para firmware adicional', parte da seção <xref
-linkend="xorg-ati-driver"/> dá um exemplo de compilar o firmware no núcleo -
-isso é ligeiramente mais rápido de carregar, porém usa mais memória do
-núcleo. Aqui nós usaremos o método alternativo de tornar o controlador
-Radeon um módulo. No seu config do núcleo, configure o seguinte:
-      </para>
-
-<screen><literal>Device Drivers ---&gt;
-  Graphics support ---&gt;
-      Direct Rendering Manager ---&gt;
-        [*] Direct Rendering Manager (XFree86 ... support)  [CONFIG_DRM]
-      [M] ATI Radeon                                        [CONFIG_DRM_RADEON]</literal></screen>
-
-      <para>
-        O carregamento de vários blobs largos a partir de /lib/firmware toma um
-tempo notável, durante o qual a tela estará sem escrito. Se você não
-habilitar o logotipo pinguim do framebuffer ou mudar o tamanho do console
-usando uma fonte maior, [então] provavelmente isso não importa. Se desejado,
-você pode reduzir ligeiramente o tempo se seguir o método alternativo de
-especificar 'y' para CONFIG_DRM_RADEON coberto no BLFS no link acima &mdash;
-você precisa especificar cada blob Radeon necessário se fizer isso.
-      </para>
+    <para>
+      Building the kernel amdgpu driver as a module is recommended because the
+firmware files need to be accessible at the time it is loaded.  If you are
+building it as a part of the kernel image for any reason, you need to either
+include the firmware files in the initramfs (read <xref
+linkend='initramfs'/> for details), or include them in the kernel image
+itself (read <xref linkend='firmware-in-kernel-image'/> for details).
+    </para>
 
     </sect3>
 
@@ -576,29 +545,13 @@ qual "chipset" está instalado.
     </para>
 
     <para>
-      É recomendado construir o controlador "amdgpu" do núcleo como um módulo. Em
-seu ".config" do núcleo configure pelo menos as seguintes opções e revise as
-outras opções "AMDGPU" de acordo com teu "hardware" alvo, por exemplo
-"Configuração ACP (Coprocessador de Áudio)":
+      Building the kernel amdgpu driver as a module is recommended because the
+firmware files need to be accessible at the time it is loaded.  If you are
+building it as a part of the kernel image for any reason, you need to either
+include the firmware files in the initramfs (read <xref
+linkend='initramfs'/> for details), or include them in the kernel image
+itself (read <xref linkend='firmware-in-kernel-image'/> for details).
     </para>
-
-<screen><literal>Device Drivers ---&gt;
-  Graphics support ---&gt;
-      Direct Rendering Manager ---&gt;
-        [*] Direct Rendering Manager (XFree86 ... support)  [CONFIG_DRM]
-        [M] AMD GPU                                        [CONFIG_DRM_AMDGPU]
-        Display Engine Configuration ---&gt;
-          [*] AMD DC - Enable new display engine (NEW)      [CONFIG_DRM_AMD_DC]</literal></screen>
-
-      <para>
-        Conforme escrito acima no final da seção sobre "Firmware para chips de vídeo
-ATI", carregar grandes "blobs" a partir de "/lib/firmware" pode levar um
-tempo perceptível durante o qual a tela ficará em branco. Em uma máquina
-lenta, você pode desejar consultar a parte "Configuração do Núcleo para
-"firmware" adicional" de <xref linkend="xorg-amdgpu-driver"/> e compilar
-todos os módulos exigidos internos ao núcleo para reduzir esse tempo, ao
-custo de usar mais memória do núcleo.
-      </para>
 
     </sect3>
 
@@ -612,20 +565,9 @@ binários deles foram disponibilizados pela primeira vez. Para outros chips
 tem sido necessário extrair o "firmware" a partir do controlador binário.
       </para>
       <para>
-        Para informações mais exatas relativas a quais chips precisam de "firmware"
-extraído, veja-se <ulink url=
-"https://nouveau.freedesktop.org/wiki/VideoAcceleration/#firmware"/>.
+        For more exact information about which chips need extracted firmware, see
+<ulink url= "https://nouveau.freedesktop.org/VideoAcceleration.html"/>.
       </para>
-
-      <para>
-        Primeiro, o controlador de núcleo Nvidia precisa ser ativado:
-      </para>
-
-<screen><literal>Device Drivers ---&gt;
-  Graphics support ---&gt;
-      Direct Rendering Manager ---&gt;
-        &lt;*&gt; Direct Rendering Manager (XFree86 ... support)  [CONFIG_DRM]
-      &lt;*/M&gt; Nouveau (NVIDIA) cards                          [CONFIG_DRM_NOUVEAU]</literal></screen>
 
       <para>
         Se o "firmware" necessário estiver disponível no diretório <filename
@@ -633,18 +575,14 @@ class="directory">nvidia/</filename> de "linux-firmware", [então] copie-o
 <filename class="directory">/lib/firmware/nouveau</filename>.
       </para>
       <para>
-        Se o "firmware" não tiver sido disponibilizado em "linux-firmware", para os
-chips antigos mencionados no link "nouveau" do "wiki" acima, [então]
-certifique-se de ter instalado <xref linkend="python2"/> e execute os
-seguintes comandos:
+        If the firmware has not been made available in linux-firmware, for the old
+chips mentioned in the nouveau wiki link above run the following commands:
       </para>
 
-      
-<screen><!-- Someone please port this to Python 3.  -->
-<userinput>wget https://raw.github.com/imirkin/re-vp2/master/extract_firmware.py
-wget https://us.download.nvidia.com/XFree86/Linux-x86/325.15/NVIDIA-Linux-x86-325.15.run
-sh NVIDIA-Linux-x86-325.15.run --extract-only
-python2 extract_firmware.py
+<screen><userinput>wget https://anduin.linuxfromscratch.org/BLFS/nvidia-firmware/extract_firmware.py
+wget https://us.download.nvidia.com/XFree86/Linux-x86/340.32/NVIDIA-Linux-x86-340.32.run
+sh NVIDIA-Linux-x86-340.32.run --extract-only
+python3 extract_firmware.py
 mkdir -p /lib/firmware/nouveau
 cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
 
@@ -677,6 +615,74 @@ inicializações posteriores.
 
   </sect2>
 
+  <sect2 id="regulatory-db">
+    <title>Firmware for Regulatory Database of Wireless Devices</title>
+
+    <para>
+      Different countries have different regulations on the radio spectrum usage
+of wireless devices.  You can install a firmware to make the wireless
+devices obey local spectrum regulations, so you won't be inquired by local
+authority or find your wireless NIC jamming the frequencies of other devices
+(for example, remote controllers).  The regulatory database firmware can be
+downloaded from <ulink url =
+'https://kernel.org/pub/software/network/wireless-regdb/'/>.  To install it,
+simply extract <filename>regulatory.db</filename> and
+<filename>regulatory.db.p7s</filename> from the tarball into <filename
+class="directory">/lib/firmware</filename>. Note that either the
+<option>cfg80211</option> driver needs to be selected as a module for the
+<filename>regulatory.*</filename> files to be loaded, or those files need to
+be included as firmware into the kernel, as explained above in <xref
+linkend="video-firmware"/>.
+    </para>
+
+    <para>
+      The access point (AP) would send a country code to your wireless NIC, and
+<xref linkend='wpa_supplicant'/> would tell the kernel to load the
+regulation of this country from <filename>regulatory.db</filename>, and
+enforce it. Note that several AP don't send this country code, so you may be
+locked to a rather restricted usage (specially if you want to use your
+interface as an AP).
+    </para>
+  </sect2>
+
+  <sect2 id="sound-open-firmware">
+    <title>Sound Open Firmware</title>
+
+    <para>
+      Some systems (especially budget laptops) utilizes a DSP shipped with the CPU
+for connection with the audio codec.  The Sound Open Firmware must be loaded
+onto the DSP to make it functional.  These firmware files can be downloaded
+from <ulink url='https://github.com/thesofproject/sof-bin/releases'/>.
+Extract the tarball and changing into the extracted directory, then as the
+&root; user install the firmware:
+    </para>
+
+    <screen role="nodump"><userinput>install -vdm755 /usr/lib/firmware/intel       &amp;&amp;
+cp -av -T --no-preserve=ownership sof-v*      \
+   /usr/lib/firmware/intel/sof                &amp;&amp;
+cp -av -T --no-preserve=ownership sof-tplg-v* \
+   /usr/lib/firmware/intel/sof-tplg</userinput></screen>
+
+    <para>
+      <xref linkend="alsa-lib"/> needs Use Case Manager configuration files for
+the systems using Sound Open Firmware as well.  The ALSA UCM configuration
+files can be downloaded from <ulink
+url='https://github.com/alsa-project/alsa-ucm-conf/tags'/>.  Extract the
+tarball and changing into the extracted directory, then as the &root; user
+install the configuration files:
+    </para>
+
+    <screen role="nodump"><userinput>install -vdm755 /usr/share/alsa &amp;&amp;
+cp -av -T --no-preserve=ownership ucm2 /usr/share/alsa/ucm2</userinput></screen>
+
+    <para>
+      Once the firmware is loaded (you may need a reboot so the kernel will load
+them) and the UCM configuration files are installed, following <xref
+linkend="alsa-utils-config-sect"/> to set up your sound card for ALSA
+properly.
+    </para>
+  </sect2>
+
   <sect2 id="other-firmware">
     <title>Firmware para Outros Dispositivos</title>
 
@@ -689,27 +695,10 @@ todos eles estão no linux-firmware.
     </para>
 
     <para>
-      Se possível, você deveria iniciar usando uma conexão com fios quando
-inicializar pela primeira vez o seu sistema LFS. Para usar uma conexão sem
-fios, você precisará usar ferramentas de rede de comunicação, tais como
-<xref linkend='wireless_tools'/> e <xref linkend='wpa_supplicant'/>.
-    </para>
-
-    <para>
-      Países diferentes tem regulações diferentes acerca do uso do espectro de
-rádio dos dispositivos sem fios. Você pode instalar um firmware para fazer
-com que os dispositivos sem fios obedeçam às regulações locais de espectro,
-de forma que você não seria questionado(a) pela autoridade local ou não
-encontraria sua NIC sem fios atrapalhando as frequências de outros
-dispositivos (por exemplo, controles remotos). O firmware da base de dados
-regulatória pode ser baixado a partir de <ulink url =
-'https://kernel.org/pub/software/network/wireless-regdb/'/>. Para
-instalá-lo, simplesmente extraia o <filename>regulatory.db</filename> e o
-<filename>regulatory.db.p7s</filename> a partir do tarball no <filename
-class="directory">/lib/firmware</filename>. O ponto de acesso enviaria um
-código de país para a sua NIC sem fios e o <xref linkend='wpa_supplicant'/>
-diria ao núcleo para carregar a regulação desse país a partir do
-<filename>regulatory.db</filename>; e impô-la.
+      If possible, you should begin by using a wired connection when you first
+boot your LFS system. To use a wireless connection you will need to use a
+network tools such as <xref linkend="iw"/>, <xref
+linkend='wireless_tools'/>, or <xref linkend='wpa_supplicant'/>.
     </para>
 
     <para>
@@ -717,6 +706,48 @@ diria ao núcleo para carregar a regulação desse país a partir do
 como alguns controladores SCSI; adaptadores bluetooth; ou gravadores de
 TV. Os mesmos princípios se aplicam.
     </para>
+
+  </sect2>
+
+  <sect2 id='firmware-in-kernel-image'>
+    <title>Include Firmware Blobs in the Kernel Image</title>
+
+    <para>
+      Some drivers, notably the drivers for ATI or AMD GPU, requires the firmware
+files accessible at the time it is loaded.  The easiest method to handle
+these drivers is building them as a kernel module.  An alternative method is
+creating an initramfs (read <xref linkend='initramfs'/> for details)
+including the firmware files.  If you don't want to use either methods, you
+may include the firmware files in the kernel image itself.  Install the
+needed firmware files into <filename
+class='directory'>/lib/firmware</filename> first, then set the following
+kernel configuration and rebuild the kernel:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="builtin-fw-kernel.xml"/>
+
+    <para>
+      Replace <replaceable>xx/aa.bin xx/bb.bin</replaceable> with a
+whitespace-separated list of paths to the needed firmware files, relative to
+<filename class='directory'>/lib/firmware</filename>.  A method easier than
+manually typing the list (it may be long) is running the following command:
+    </para>
+
+    <screen><userinput>echo CONFIG_EXTRA_FIRMWARE='"'$({ cd /lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'"' &gt;&gt; .config
+make oldconfig</userinput></screen>
+
+    <para>
+      Replace <replaceable>amdgpu/*</replaceable> with a shell pattern matching
+the needed firmware files.
+    </para>
+
+    <warning>
+      <para>
+        Do not distribute a kernel image containing the firmware to others or you
+may violate the GPL.
+      </para>
+    </warning>
 
   </sect2>
 

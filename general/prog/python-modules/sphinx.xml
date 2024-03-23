@@ -6,10 +6,10 @@
 
   <!ENTITY sphinx-download-http "https://github.com/sphinx-doc/sphinx/archive/v&sphinx-version;/sphinx-&sphinx-version;.tar.gz">
   <!ENTITY sphinx-download-ftp  "">
-  <!ENTITY sphinx-md5sum        "18b07621d19d4b2cffd58d7a6ac5bed3">
-  <!ENTITY sphinx-size          "6,4 MB">
-  <!ENTITY sphinx-buildsize     "43 MB (adicionar 35 MB para os testes)">
-  <!ENTITY sphinx-time          "menos que 0,1 UPC (1,1 UPC para os testes)">
+  <!ENTITY sphinx-md5sum        "ae8427a2035ebd4359c3df8f5436c4b9">
+  <!ENTITY sphinx-size          "6.6 MB">
+  <!ENTITY sphinx-buildsize     "27 MB (add 40 MB for tests)">
+  <!ENTITY sphinx-time          "less than 0.1 SBU (1.0 SBU for tests)">
 ]>
 
   <sect2 id="sphinx" xreflabel="sphinx-&sphinx-version;">
@@ -29,7 +29,7 @@ ferramentas para traduzir alguns formatos de texto estruturado em
 documentação bonita em vários formatos.
       </para>
 
-      &lfs113_checked;
+      &lfs120_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -70,19 +70,19 @@ documentação bonita em vários formatos.
       <bridgehead renderas="sect5">Exigidas</bridgehead>
       <para role="required">
         <xref linkend="alabaster"/>, <xref linkend="babel"/>, <xref
-linkend="docutils"/>, <xref linkend="imagesize"/>, <phrase
-revision="sysv"><xref linkend="Jinja2"/>,</phrase> <xref
+linkend="docutils"/>, <xref linkend="imagesize"/>, <xref
 linkend="packaging"/>, <xref linkend="pygments"/>, <xref
 linkend="requests"/>, <xref linkend="snowballstemmer"/>, <xref
 linkend="sc-applehelp"/>, <xref linkend="sc-devhelp"/>, <xref
 linkend="sc-htmlhelp"/>, <xref linkend="sc-jsmath"/>, <xref
-linkend="sc-qthelp"/> e <xref linkend="sc-serializinghtml"/>
+linkend="sc-qthelp"/>, and <xref linkend="sc-serializinghtml"/>
       </para>
 
       <bridgehead renderas="sect5">Opcionais (para testes)</bridgehead>
       <para role="optional">
         <xref linkend="cython"/>, <xref linkend="pytest"/>, <xref
-linkend="texlive"/> e <ulink
+linkend="texlive"/>, <ulink
+url="https://pypi.org/project/filelock/">filelock</ulink>, and <ulink
 url="https://pypi.org/project/html5lib/">html5lib</ulink>
       </para>
 
@@ -103,23 +103,25 @@ class="username">root</systemitem>&quot;:
 <screen role="root"><userinput>pip3 install --no-index --find-links dist --no-cache-dir --no-user sphinx</userinput></screen>
 
     <para>
-      Supondo que &quot;<xref linkend="cython"/>&quot; e &quot;<xref
-linkend="pytest"/>&quot; estejam instalados, mas a outra dependência
-opcional não esteja, a instalação pode ser testada com os seguintes
-comandos:
+      Assuming <xref linkend="cython"/> and <xref linkend="pytest"/> are
+installed, but the other optional dependency is not, the installation can be
+tested with the following commands:
     </para>
 
+<!-- No failure in 7.0.1 [pierre]
+     7.1.0: 4 failed, 1896 passed, 10 skipped in 108.14s (0:01:48)
+     test_imgmath_png, test_imgmath_svg, test_imgmath_svg_embed, test_imgmath_numfig_html
+-->
 <screen remap="test"><!-- no && because of a possible error -->
 <userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
-source testenv/bin/activate                   &amp;&amp;
-pip3 install html5lib                          &amp;&amp;
+source testenv/bin/activate                    &amp;&amp;
+pip3 install html5lib filelock                 &amp;&amp;
 python3 /usr/bin/pytest
 deactivate</userinput></screen>
 
     <para>
-      Um teste,
-&quot;<command>tests/test_config.py::test_needs_sphinx</command>&quot;, é
-conhecido por falhar.
+      Four subtests in <command>tests/test_ext_math.py</command> are known to
+fail.
     </para>
 
     </sect3>

@@ -6,10 +6,10 @@
 
   <!ENTITY cups-download-http "https://github.com/OpenPrinting/cups/releases/download/v&cups-version;/cups-&cups-version;-source.tar.gz">
   <!ENTITY cups-download-ftp  "">
-  <!ENTITY cups-md5sum        "be5241e2c165eeb83b58aa32de26fb16">
+  <!ENTITY cups-md5sum        "b8ca6027eaeeed6171178cc526879ff5">
   <!ENTITY cups-size          "7,8 MB">
-  <!ENTITY cups-buildsize     "60 MB (Adicionar 37 MB para testes)">
-  <!ENTITY cups-time          "0,5 UPC (Adicionar 1,3 UPC para testes)">
+  <!ENTITY cups-buildsize     "76 MB (Add 60 MB for tests)">
+  <!ENTITY cups-time          "0.5 SBU (Add 1.6 SBU for tests)">
 ]>
 
 <sect1 id="cups" xreflabel="Cups-&cups-version;">
@@ -32,7 +32,7 @@ fila de documentos de impressão e utilitários associados. É baseado no
 das impressoras PostScript e raster.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -101,7 +101,7 @@ url="https://developers.hp.com/hp-linux-imaging-and-printing">hplip</ulink>
 (impressoras HP)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/cups"/>
+    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/cups"/>
     </para>
   </sect2>
 
@@ -124,22 +124,16 @@ linkend="gutenprint"/>), habilite as seguintes opções na configuração do teu
 núcleo e recompile o núcleo:
     </para>
 
-<screen><literal>Device Drivers  ---&gt;
-  [*] USB support  ---&gt;                          [CONFIG_USB_SUPPORT]
-    &lt;*/M&gt;  OHCI HCD (USB 1.1) support            [CONFIG_USB_OHCI_HCD]
-    &lt;*/M&gt;  UHCI HCD (most Intel and VIA) support [CONFIG_USB_UHCI_HCD]
-    &lt;*/M&gt;  USB Printer support                   [CONFIG_USB_PRINTER]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="usb-printer-kernel.xml"/>
 
     <para>
       Se você tiver uma impressora paralela, habilite as seguintes opções na
 configuração do teu núcleo e recompile o núcleo:
     </para>
 
-<screen><literal>Device Drivers  ---&gt;
-  &lt;*/M&gt; Parallel port support  ---&gt;    [CONFIG_PARPORT]
-    &lt;*/M&gt; PC-style hardware            [CONFIG_PARPORT_PC]
-  Character devices  ---&gt;
-    &lt;*/M&gt; Parallel printer support     [CONFIG_PRINTER]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="parallel-printer-kernel.xml"/>
 
     <indexterm zone="cups cups-kernel">
       <primary sortas="d-cups">cups</primary>
@@ -212,22 +206,23 @@ acessar a interface web do <application>Cups</application>:
 <screen revision="sysv"><userinput>./configure --libdir=/usr/lib            \
             --disable-systemd            \
             --with-rcdir=/tmp/cupsinit   \
+            --with-rundir=/run/cups      \
             --with-system-groups=lpadmin \
             --with-docdir=/usr/share/cups/doc-&cups-version; &amp;&amp;
 make</userinput></screen>
 
 <screen revision="systemd"><userinput>./configure --libdir=/usr/lib            \
+            --with-rundir=/run/cups      \
             --with-system-groups=lpadmin \
             --with-docdir=/usr/share/cups/doc-&cups-version; &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C make -k
-check</command>. Uma sessão gráfica já ativa com endereço de barramento é
-necessária para se executar os testes. Certifique-se de que não exista outra
-instância do <application>Cups</application> executando, caso contrário,
-pelo menos quatro (4) testes falharão com "address in use". Um teste,
-<filename>httpAddrGetList</filename>, é conhecido por falhar.
+      To test the results, issue: <command>LC_ALL=C make -k check</command>. An
+already active graphical session with bus address is necessary to run the
+tests.  Make sure that there is not other instance of
+<application>Cups</application> running, otherwise at least 4 tests will
+fail with "address in use".
     </para>
 
     <para>
@@ -264,26 +259,6 @@ usuário(a) <systemitem class="username">root</systemitem>:
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <command>sed ... configure</command>: Esse sed remove uma opção de
-compilador que não mais é suportada. Deixando essa mudança de fora, a
-compilação executará, mas um aviso acerca de uma opção inválida de aviso
-será emitido em cada invocação do compilador.
-    </para>
-
-    <!--
-    <para>
-
-      <command>sed ... tools/ipptool.c</command>: This sed fixes a bug caused
-      by glibc-2.30 changing the userspace API for sockets.
-    </para>
--->
-<para>
-      <envar>CC=gcc CXX=g++</envar>: Configure-as se você preferir usar o
-<command>gcc</command> em vez do <command>clang</command>, que agora é
-preferido pelo(a) desenvolvedor(a).
-    </para>
-
     <para revision="sysv">
       <parameter>--disable-systemd</parameter>: Systemd não é suportado por esta
 versão do BLFS.
@@ -294,6 +269,12 @@ versão do BLFS.
 processo de construção para instalar o conjunto fornecido de comandos
 sequenciais de inicialização em <filename class="directory">/tmp</filename>
 em vez de <filename class="directory">/etc/rc.d</filename>.
+    </para>
+
+    <para>
+      <parameter>--with-rundir=/run/cups</parameter>: This switch prevents the
+package from referring to the deprecated <filename
+class='directory'>/var/run</filename> directory.
     </para>
 
     <para>
@@ -440,12 +421,11 @@ class="username">root</systemitem>:
             <!--accept,-->
 <!--cupsaddsmb,-->
 <!--cupstestdsc,-->
-<!-- ippfind-->
 <!--and reject-->
 cancel, cupsaccept, cups-config, cupsctl, cupsd, cupsdisable, cupsenable,
-cupsfilter, cupsreject, cupstestppd, ippeveprinter, ipptool, lp, lpadmin,
-lpc, lpinfo, lpmove, lpoptions, lpq, lpr, lprm, lpstat, ppdc, ppdhtml, ppdi,
-ppdmerge e ppdpo 
+cupsfilter, cupsreject, cupstestppd, ippeveprinter, ippfind, ipptool, lp,
+lpadmin, lpc, lpinfo, lpmove, lpoptions, lpq, lpr, lprm, lpstat, ppdc,
+ppdhtml, ppdi, ppdmerge, and ppdpo 
         </seg>
         <seg>
            <!--libcupscgi.so,-->
@@ -454,8 +434,8 @@ ppdmerge e ppdpo
 libcupsimage.so e libcups.so
         </seg>
         <seg>
-          /etc/cups, /usr/{include,lib,share}/cups, /usr/share/doc/cups-&cups-version;
-e /var/{cache,log,run,spool}/cups
+          /etc/cups, /usr/{include,lib,share}/cups,
+/usr/share/doc/cups-&cups-version;, and /var/{cache,log,run,spool}/cups
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -648,21 +628,19 @@ formato específico
         </listitem>
       </varlistentry>
 
-      <!--
       <varlistentry id="ippfind">
-
         <term><command>ippfind</command></term>
         <listitem>
           <para>
-            finds internet printing protocol printers
+            finds Internet Printing Protocol printers
           </para>
           <indexterm zone="cups ippfind">
             <primary sortas="b-ippfind">ippfind</primary>
           </indexterm>
         </listitem>
       </varlistentry>
--->
-<varlistentry id="ipptool">
+
+      <varlistentry id="ipptool">
         <term><command>ipptool</command></term>
         <listitem>
           <para>

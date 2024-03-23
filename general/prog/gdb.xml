@@ -6,16 +6,13 @@
 
   <!ENTITY gdb-download-http "&gnu-http;/gdb/gdb-&gdb-version;.tar.xz">
   <!ENTITY gdb-download-ftp  "&gnu-ftp;/gdb/gdb-&gdb-version;.tar.xz">
-  <!ENTITY gdb-md5sum        "4aaad768ff2585464173c091947287ec">
+  <!ENTITY gdb-md5sum        "fbd3cdae16c581e8a742cb766ba35076">
   <!ENTITY gdb-size          "23 MB">
-  <!ENTITY gdb-buildsize     "1,1 GB (adicionar 406 MB para documentos; adicionar 373 MB para os testes)">
-  <!ENTITY gdb-time          "2,1 UPC (Usando paralelismo=4; adicionar 0,5 UPC para documentos; adicionar
-20 UPC para os testes)">
+  <!ENTITY gdb-buildsize     "914 MB (add 805 MB for docs; add 575 MB for tests)">
+  <!ENTITY gdb-time          "2.1 SBU (add 0.4 SBU for docs; add 18 SBU for tests; all using
+parallelism=4)">
 ]>
 
-
-
-<!-- I skipped running the full tests for this 8.3.1 point version.  Bruce -->
 <sect1 id="gdb" xreflabel="GDB-&gdb-version;">
   <?dbhtml filename="gdb.html"?>
 
@@ -38,7 +35,7 @@ eficaz ao rastrear aplicativos e bibliotecas que foram construídos(as) com
 símbolos de depuração e não despojados(as).
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -73,7 +70,7 @@ símbolos de depuração e não despojados(as).
         </para>
       </listitem>
     </itemizedlist>
-
+    
     <!--
     <bridgehead renderas="sect3">
 Additional Downloads</bridgehead>
@@ -85,7 +82,7 @@ Additional Downloads</bridgehead>
         </para>
       </listitem>
     </itemizedlist>
--->
+    -->
 <bridgehead renderas="sect3">Dependências do "GDB"</bridgehead>
 
     <bridgehead renderas="sect4">Dependência de Tempo de Execução Recomendada</bridgehead>
@@ -97,25 +94,30 @@ instalado no LFS)
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      
-      <!-- <xref linkend="dejagnu"/>
- (required for tests), -->
-<xref linkend="doxygen"/>, <xref linkend="gcc"/> ("ada", "gfortran" e "go"
-são usadas para testes), <xref linkend="guile"/>, <xref linkend="python2"/>,
-<xref linkend="rust"/> (usado para alguns testes), <xref
-linkend="valgrind"/> e <ulink
-url="https://sourceware.org/systemtap/">SystemTap</ulink> (tempo de
-execução, usado para testes)
+      <!-- don't advertise python2...
+      <xref linkend="python2"/>,-->
+<xref linkend="doxygen"/>, <xref linkend="gcc"/> (ada, gfortran, and go are
+used for tests), <xref linkend="guile"/>, <xref linkend="rust"/> (used for
+some tests), <xref linkend="valgrind"/>, and <ulink
+url="https://sourceware.org/systemtap/">SystemTap</ulink> (run-time, used
+for tests)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gdb"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do "GDB"</title>
-
+    
+    <!--
     <para>
+
+      First, apply a patch that fixes problems when debugging programs compiled
+      with <xref linkend="rust" role="nodep"/>:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../gdb-&gdb-version;-upstream_fixes-1.patch</userinput></screen>
+-->
+<para>
       Instale <application>GDB</application> executando os seguintes comandos:
     </para>
 
@@ -197,6 +199,7 @@ or this
 -->
 <!-- I don't know if this is true or not.  I tested on a Haswell.
       <listitem>
+
         <para>
           If the test suite is run on a Skylake-based Intel CPU or newer,
           many tests will fail due to the removal of the deprecated/problematic
@@ -209,16 +212,20 @@ or this
 
 
 
+
           <!-- for gdb-11.1, gcc-11.2 - pierre
           A test run of the test suite had about 1700 unexpected failures
           (out of over 80000 tests). Over 1370 of the failures were related
           to FORTRAN tests. -->
-<!-- for gdb-12.1, gcc-11.3.0 - bdubbs 
+<!-- for gdb-12.1, gcc-11.3.0 - bdubbs
           A test run of the test suite had a little over 200 unexpected failures
           out of over 94000 tests.-->
-<!-- for gdb-13.0, gcc-12.2.0 - bdubbs -->
-Uma execução de teste da suíte de teste teve trinta e três (33) falhas
-inesperadas em mais de cento e seis mil (106.000) testes.
+<!-- for gdb-13.0, gcc-12.2.0 - bdubbs
+          A test run of the test suite had 33 unexpected failures
+          out of over 106000 tests. -->
+<!-- for gdb-13.2, gcc-13.1.0 - pierre -->
+A test run of the test suite had 183 unexpected failures out of over 105000
+tests.
         </para>
       </listitem>
 
@@ -242,7 +249,8 @@ camadas nessas "CPUs".
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make -C gdb install</userinput></screen>
+<screen role="root"><userinput>make -C gdb install &amp;&amp;
+make -C gdbserver install</userinput></screen>
 
     <para>
       Se você construiu a documentação da "API", [então] ela agora está em
@@ -267,10 +275,13 @@ cp -Rv gdb/doc/doxy /usr/share/doc/gdb-&gdb-version;</userinput></screen>
     </para>
 
     <para>
-      <parameter>--with-python=/usr/bin/python3</parameter>: Essa chave força o
-<application>GDB</application> a usar o "Python" 3. Remova essa chave se
-você instalou o <xref linkend="python2"/> e deseja usá-lo em vez do "Python"
-3.
+      <!-- We don't advise to use python2 anymore
+      Remove this switch if you have installed
+      <xref linkend="python2"/>
+ and want to use it instead of Python 3.-->
+<parameter>--with-python=/usr/bin/python3</parameter>: This switch forces
+<application>GDB</application> to use Python 3.
+      
     </para>
 
   </sect2>
@@ -285,12 +296,10 @@ você instalou o <xref linkend="python2"/> e deseja usá-lo em vez do "Python"
 
       <seglistitem>
         <seg>
-          gcore, gdb e gdbserver
+          gcore, gdb, gdbserver, and gdb-add-index
         </seg>
         <seg>
-          
-          <!--libinproctrace.so-->
-Nenhum(a)
+          libinproctrace.so
         </seg>
         <seg>
           /usr/{include,share}/gdb e /usr/share/doc/gdb-&gdb-version;
@@ -339,23 +348,32 @@ depurados a partir de uma máquina diferente)
         </listitem>
       </varlistentry>
 
-<!-- Not present with 10.1
-      <varlistentry id="libinproctrace">
+      <varlistentry id="gdb-add-index">
+        <term><command>gdb-add-index</command></term>
+        <listitem>
+          <para>
+            Allows adding index files to ELF binaries. This speeds up
+<command>gdb</command> start on large programs.
+          </para>
+          <indexterm zone="gdb gdb-add-index">
+            <primary sortas="b-gdb-add-index">gdb-add-index</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
 
+      <varlistentry id="libinproctrace">
         <term><filename class="libraryfile">libinproctrace.so</filename></term>
         <listitem>
           <para>
-            contains functions for the in-process tracing agent. The agent
-            allows for installing fast tracepoints, listing static tracepoint
-            markers, probing static tracepoints markers, and starting trace
-            monitoring.
+            contains functions for the in-process tracing agent. The agent allows for
+installing fast tracepoints, listing static tracepoint markers, probing
+static tracepoints markers, and starting trace monitoring.
           </para>
           <indexterm zone="gdb libinproctrace">
             <primary sortas="c-libinproctrace">libinproctrace.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
- -->
 
     </variablelist>
 

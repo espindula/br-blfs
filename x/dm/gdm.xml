@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-43;/gdm-&gdm-version;.tar.xz">
-  <!ENTITY gdm-download-ftp  "&gnome-download-ftp;/gdm/&gnome-43;/gdm-&gdm-version;.tar.xz">
-  <!ENTITY gdm-md5sum        "d9ca2abdf2359d0420dc71a1bd1d7530">
-  <!ENTITY gdm-size          "812 KB">
+  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-44;/gdm-&gdm-version;.tar.xz">
+  <!ENTITY gdm-download-ftp  "&gnome-download-ftp;/gdm/&gnome-44;/gdm-&gdm-version;.tar.xz">
+  <!ENTITY gdm-md5sum        "8b857cf6510cc038538399aaaeaa0dff">
+  <!ENTITY gdm-size          "836 KB">
   <!ENTITY gdm-buildsize     "33 MB">
-  <!ENTITY gdm-time          "0,3 UPC">
+  <!ENTITY gdm-time          "0.2 SBU">
 ]>
 
 <sect1 id="gdm" xreflabel="GDM-&gdm-version;">
@@ -31,7 +31,7 @@ responsável por fornecer &quot;logins&quot; gráficos e gerenciar exibições
 locais e remotas.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -83,10 +83,9 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="accountsservice"/>, <xref linkend="gtk3"/>, <xref
-linkend="iso-codes"/>, <xref linkend="itstool"/>, <xref
-linkend="libcanberra"/>, <xref linkend="libdaemon"/> e <xref
-linkend="linux-pam"/>
+      <xref linkend="accountsservice"/>, <xref linkend="dconf"/>, <xref
+linkend="libcanberra"/> (built after <xref role="nodep" linkend="gtk3"/>),
+and <xref linkend="linux-pam"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -102,8 +101,6 @@ linkend="elogind"/></phrase> <phrase revision="systemd"><xref role="runtime"
 linkend="systemd"/></phrase>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gdm"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -133,29 +130,31 @@ passwd -ql gdm</userinput></screen>
 comandos:
     </para>
 
-<screen revision="sysv"><userinput>sed -e 's@systemd@elogind@'                                 \
+<screen revision="sysv"><userinput>sed -e 's@systemd@elogind@'                                \
     -e '/elogind/isession  required       pam_loginuid.so' \
     -i data/pam-lfs/gdm-launch-environment.pam &amp;&amp;
 
 mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr               \
+meson setup ..                    \
+      --prefix=/usr               \
       --buildtype=release         \
       -Dgdm-xsession=true         \
       -Drun-dir=/run/gdm          \
       -Dsystemd-journal=false     \
       -Dsystemdsystemunitdir=/tmp \
-      -Dsystemduserunitdir=/tmp   .. &amp;&amp;
+      -Dsystemduserunitdir=/tmp   &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr               \
-      --buildtype=release         \
-      -Dgdm-xsession=true         \
-      -Drun-dir=/run/gdm ..
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -Dgdm-xsession=true \
+      -Drun-dir=/run/gdm  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -230,6 +229,17 @@ esquemas possivelmente seja sobrescrito quando o(a) usuário(a) atualizar o
 sistema dele(a) para ter uma versão mais recente do
 &quot;<application>GDM</application>&quot;.
       </para>
+
+      <para>
+        On some systems with NVIDIA GPUs, GDM will hide Wayland sessions by
+default. This is often done to prevent users from encountering problems with
+buggy drivers, which can result in system lockups, application crashes,
+power management problems, and graphics slowdowns. If you have an NVIDIA GPU
+and still want to try running Wayland sessions anyway, execute the following
+command as the &root; user:
+      </para>
+
+ <screen role="nodump"><userinput>ln -s /dev/null /etc/udev/rules.d/61-gdm.rules</userinput></screen>
 
     </sect3>
 

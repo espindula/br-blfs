@@ -6,9 +6,9 @@
 
   <!ENTITY libnotify-download-http "&gnome-download-http;/libnotify/0.8/libnotify-&libnotify-version;.tar.xz">
   <!ENTITY libnotify-download-ftp  "&gnome-download-ftp;/libnotify/0.8/libnotify-&libnotify-version;.tar.xz">
-  <!ENTITY libnotify-md5sum        "1495f279b255b4493ac3588559823158">
+  <!ENTITY libnotify-md5sum        "ee2d2934a9dcfd5b1305188201e1cd50">
   <!ENTITY libnotify-size          "104 KB">
-  <!ENTITY libnotify-buildsize     "2,5 MB">
+  <!ENTITY libnotify-buildsize     "2.3 MB">
   <!ENTITY libnotify-time          "0,1 UPC">
 ]>
 
@@ -34,7 +34,7 @@ usuário(a) a respeito de um evento ou exibir alguma forma de informação sem
 atrapalhar o(a) usuário(a).
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -84,12 +84,12 @@ atrapalhar o(a) usuário(a).
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/> e <xref linkend="xmlto"/>
+      <xref linkend="gi-docgen"/> and <xref linkend="xmlto"/>
     </para>
 
     <bridgehead renderas="sect4">Exigidas (tempo de execução)</bridgehead>
     <para role="required">
-      <xref role="runtime" linkend="notification-daemon"/> ou <xref role="nodep"
+      <xref role="runtime" linkend="notification-daemon"/> or <xref role="nodep"
 linkend="xfce4-notifyd"/>
     </para>
 
@@ -101,8 +101,6 @@ notificação deles.
       </para>
     </note>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libnotify"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -114,17 +112,30 @@ seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr       \
-      --buildtype=release \
-      -Dgtk_doc=false     \
-      -Dman=false .. &amp;&amp;
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dgtk_doc=false     \
+            -Dman=false         \
+            ..                  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
     </para>
+
+    <para>
+      If you have <xref linkend='gi-docgen'/> installed and wish to build the API
+documentation for this package, issue:
+    </para>
+
+    
+<screen remap='doc'><!-- No &libnotify-version; here because we'll mv the doc dir anyway -->
+<userinput>sed "/docs_dir =/s@\$@ / 'libnotify'@" \
+    -i ../docs/reference/meson.build   &amp;&amp;
+meson configure -Dgtk_doc=true         &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -141,13 +152,6 @@ mv -v /usr/share/doc/libnotify{,-&libnotify-version;}</userinput></screen>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
-
-    <para>
-      <parameter>-Dgtk_doc=false</parameter>: Remova esse parâmetro se o
-&quot;<application>GTK-Doc</application>&quot; estiver instalado e você
-desejar reconstruir e instalar a documentação da &quot;API&quot;.
-    </para>
-
   </sect2>
 
   <sect2 role="content">

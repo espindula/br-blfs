@@ -4,13 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY tracker3-miners-download-http "&gnome-download-http;/tracker-miners/3.4/tracker-miners-&tracker3-miners-version;.tar.xz">
-  <!ENTITY tracker3-miners-download-ftp  "&gnome-download-ftp;/tracker-miners/3.4/tracker-miners-&tracker3-miners-version;.tar.xz">
-  <!ENTITY tracker3-miners-md5sum        "12978674553320dc90c283dbd2605b1d">
-  <!ENTITY tracker3-miners-size          "6,9 MB">
-  <!ENTITY tracker3-miners-buildsize     "31 MB (com os testes)">
-  <!ENTITY tracker3-miners-time          "0,4 UPC (com paralelismo=4; adicionar 1,0 UPC para testes, dependente da
-velocidade do disco)">
+  <!ENTITY tracker3-miners-download-http "&gnome-download-http;/tracker-miners/3.5/tracker-miners-&tracker3-miners-version;.tar.xz">
+  <!ENTITY tracker3-miners-download-ftp  "&gnome-download-ftp;/tracker-miners/3.5/tracker-miners-&tracker3-miners-version;.tar.xz">
+  <!ENTITY tracker3-miners-md5sum        "307705e0ebb45c733f42489230ab14f2">
+  <!ENTITY tracker3-miners-size          "7.2 MB">
+  <!ENTITY tracker3-miners-buildsize     "38 MB (with tests)">
+  <!ENTITY tracker3-miners-time          "0.5 SBU (with parallelism=4; add 1.0 SBU for tests, dependent on disk speed)">
 ]>
 
 <sect1 id="tracker3-miners" xreflabel="tracker-miners-&tracker3-miners-version;">
@@ -31,7 +30,7 @@ velocidade do disco)">
 extratores de dados para o Tracker.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,10 +77,10 @@ linkend="exempi"/> e <xref linkend="gexiv2"/>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="giflib"/>, <xref linkend="gst10-plugins-base"/>, <xref
-role='runtime' linkend="gst10-plugins-good"/> (tempo de execução), <xref
-role='runtime' linkend="gst10-libav"/> (tempo de execução), <xref
-linkend="icu"/>, <xref linkend="libexif"/>, <xref linkend="libgrss"/>, <xref
-linkend="libgxps"/>, <xref linkend="libseccomp"/> e <xref
+role='runtime' linkend="gst10-plugins-good"/> (runtime), <xref
+role='runtime' linkend="gst10-libav"/> (runtime), <xref linkend="icu"/>,
+<xref linkend="libexif"/>, <xref linkend="libgrss"/>, <xref
+linkend="libgxps"/>, <xref linkend="libseccomp"/>, and <xref
 linkend="poppler"/>
     </para>
 
@@ -92,18 +91,15 @@ tap.py</ulink>
       (for tests)-->
 <xref linkend="asciidoc"/>, <xref linkend="cmake"/>, <xref
 linkend="dconf"/>, <xref linkend="ffmpeg"/>, <xref linkend="libgsf"/>, <xref
-linkend="taglib"/>, <xref linkend="totem-pl-parser"/>, <xref
-linkend="upower"/>, <ulink
+linkend="NetworkManager"/>, <xref linkend="taglib"/>, <xref
+linkend="totem-pl-parser"/>, <xref linkend="upower"/>, <ulink
 url="https://github.com/lipnitsk/libcue">libcue</ulink>, <ulink
 url="https://libiptcdata.sourceforge.net/">libitpcdata</ulink>, <ulink
-url="https://libosinfo.org">libosinfo</ulink> e <ulink
+url="https://libosinfo.org">libosinfo</ulink>, and <ulink
 url="https://gitlab.gnome.org/GNOME/gupnp">gupnp</ulink>
       
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/tracker-miners"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -147,16 +143,20 @@ comandos:
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release -Dman=false .. &amp;&amp;
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dman=false         \
+            ..                  &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr                 \
-      --buildtype=release           \
-      -Dsystemd_user_services=false \
-      -Dman=false .. &amp;&amp;
+meson setup --prefix=/usr                 \
+            --buildtype=release           \
+            -Dsystemd_user_services=false \
+            -Dman=false                   \
+            ..                            &amp;&amp;
 ninja</userinput></screen>
 
     <para>

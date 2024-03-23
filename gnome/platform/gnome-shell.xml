@@ -5,15 +5,13 @@
   %general-entities;
 
   <!ENTITY gnome-shell-download-http
-           "&gnome-download-http;/gnome-shell/&gnome-43;/gnome-shell-&gnome-shell-version;.tar.xz">
+           "&gnome-download-http;/gnome-shell/&gnome-44;/gnome-shell-&gnome-shell-version;.tar.xz">
   <!ENTITY gnome-shell-download-ftp
-           "&gnome-download-ftp;/gnome-shell/&gnome-43;/gnome-shell-&gnome-shell-version;.tar.xz">
-  <!ENTITY gnome-shell-md5sum        "5d0117627359b93ed27814957d2b146b">
+           "&gnome-download-ftp;/gnome-shell/&gnome-44;/gnome-shell-&gnome-shell-version;.tar.xz">
+  <!ENTITY gnome-shell-md5sum        "a73a7ba82782ad46378127a9a3acdec8">
   <!ENTITY gnome-shell-size          "1,9 MB">
-  <!ENTITY gnome-shell-buildsize     "60 MB">
-  <!ENTITY gnome-shell-time          "0,2 UPC (Usando paralelismo=4)">
-  <!ENTITY gnome-shell-buildsize-systemd "60 MB (com os testes)">
-  <!ENTITY gnome-shell-time-systemd      "0,2 UPC (Usando paralelismo=4; com testes)">
+  <!ENTITY gnome-shell-buildsize     "61 MB (with tests)">
+  <!ENTITY gnome-shell-time          "0.2 SBU (Using parallelism=4; with tests)">
 ]>
 
 <sect1 id="gnome-shell" xreflabel="gnome-shell-&gnome-shell-version;">
@@ -34,7 +32,7 @@
 do ambiente de área de trabalho do <application>GNOME</application>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -58,24 +56,14 @@ do ambiente de área de trabalho do <application>GNOME</application>.
           Tamanho da transferência: &gnome-shell-size;
         </para>
       </listitem>
-      <listitem revision='sysv'>
+      <listitem>
         <para>
           Espaço em disco estimado exigido: &gnome-shell-buildsize;
         </para>
       </listitem>
-      <listitem revision='sysv'>
+      <listitem>
         <para>
           Tempo de construção estimado: &gnome-shell-time;
-        </para>
-      </listitem>
-      <listitem revision='systemd'>
-        <para>
-          Espaço em disco estimado exigido: &gnome-shell-buildsize-systemd;
-        </para>
-      </listitem>
-      <listitem revision='systemd'>
-        <para>
-          Tempo de construção estimado: &gnome-shell-time-systemd;
         </para>
       </listitem>
     </itemizedlist>
@@ -85,25 +73,16 @@ do ambiente de área de trabalho do <application>GNOME</application>.
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="evolution-data-server"/>, <xref linkend="gcr4"/>, <xref
-linkend="gjs"/>, <xref linkend="gnome-autoar"/>, <xref
-linkend="gnome-control-center"/>, <xref linkend="gtk4"/>, <xref
-role="runtime" linkend="libgweather"/> (tempo de execução), <xref
-linkend="mutter"/>, <xref linkend="sassc"/>, <xref
-linkend="startup-notification"/> e <phrase revision="sysv"><xref
-linkend="elogind"/></phrase> <phrase revision="systemd"><xref
-linkend="systemd"/></phrase>
+linkend="gjs"/>, <xref linkend="gnome-desktop"/>, <xref linkend="ibus"/>,
+<xref linkend="mutter"/>, <xref linkend="polkit"/>, <xref linkend="sassc"/>,
+and <xref linkend="startup-notification"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="desktop-file-utils"/>, <xref linkend="gnome-bluetooth"/>,
-<xref linkend="gst10-plugins-base"/> e <xref linkend="NetworkManager"/>
-    </para>
-
-    <bridgehead renderas="sect4"
-                revision="sysv">Recomendadas (tempo de execução)</bridgehead>
-    <para role="recommended" revision="sysv">
-      <xref linkend="blocaled" role="runtime"/>
+      <xref linkend="desktop-file-utils"/>, <xref linkend="gnome-autoar"/>, <xref
+linkend="gnome-bluetooth"/>, <xref linkend="gst10-plugins-base"/>, and <xref
+linkend="NetworkManager"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -112,16 +91,24 @@ linkend="systemd"/></phrase>
 url="https://github.com/scop/bash-completion">bash-completion</ulink>
     </para>
 
-    <bridgehead renderas="sect4">Dependências de Tempo de Execução</bridgehead>
+    <bridgehead renderas="sect4">Required Runtime Dependencies</bridgehead>
     <para role="required">
       <xref role="runtime" linkend="adwaita-icon-theme"/>, <xref role="runtime"
-linkend="dconf"/>, <xref role="runtime" linkend="gdm"/>, <xref
-role="runtime" linkend="gnome-backgrounds"/> e <xref role="runtime"
-linkend="telepathy-mission-control"/>
+linkend="dconf"/>, <phrase revision="sysv"> <xref role='runtime'
+linkend="elogind"/>, </phrase> <xref role="runtime" linkend="gdm"/>, <xref
+role="runtime" linkend="gnome-backgrounds"/>, <xref role="runtime"
+linkend="gnome-control-center"/>, <xref role="runtime"
+linkend="libgweather"/>, <phrase revision="sysv">and</phrase> <phrase
+revision="systemd"> <xref role='runtime' linkend="systemd"/>, and </phrase>
+<xref role="runtime" linkend="telepathy-mission-control"/>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gnome-shell"/>
+    <bridgehead renderas="sect4"
+                revision="sysv">Recommended Runtime Dependency</bridgehead>
+    <para role="recommended" revision="sysv">
+      <xref linkend="blocaled" role="runtime"/>
     </para>
+
   </sect2>
 
   <sect2 role="installation">
@@ -135,30 +122,43 @@ comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr       \
-      --buildtype=release \
-      -Dsystemd=false     \
-      -Dtests=false       \
-      .. &amp;&amp;
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dsystemd=false     \
+            -Dtests=false       \
+            ..                  &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release -Dtests=false .. &amp;&amp;
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dtests=false       \
+            ..                  &amp;&amp;
 ninja</userinput></screen>
 
-    <para revision='sysv'>
-      Esse pacote não vem com uma suíte de teste funcional em um ambiente SystemV.
-    </para>
-
-    <para revision='systemd'>
-      Para testar os resultados, você precisa remover a chave
-<parameter>-Dtests=false</parameter> e ter o <xref linkend="mutter"/>
-compilado e instalado com testes também. Para executar os testes, emita:
-<command>ninja test</command>. Você precisa estar executando uma sessão do X
-para executar os testes. Alguns falharão se o <xref linkend="gdm"/> não
-estiver instalado.
+    <para>
+      <!-- "Failed to read monitors config file
+           '/home/xry111/.config/monitors.xml': Logical monitors not
+           adjacent"
+           The same thing happens in mutter but it's worked around with
+           HOME="".  We cannot use HOME="" here or more tests will fail.
+           We also cannot tell the users to remove monitors.xml because
+           doing so will purge their monitor settings.  Maybe we can
+           use bwrap to run the test with an empty tmpfs mounted on $HOME
+           in a separate namespace, but it's too overkill IMO.
+           DO NOT REMOVE unless you've tested with a "complex multi-monitor
+           configuration" (with mixed scaling settings and "strange"
+           positions of monitors). -->
+To test the results, you need to remove the
+<parameter>-Dtests=false</parameter> switch, and to have <xref
+linkend="mutter"/> compiled and installed with tests also.  To run the
+tests, issue: <command>ninja test</command>. You must be running an X
+session to run the tests. Some will fail if <xref linkend="gdm"/> is not
+installed. <phrase revision="sysv">Several more tests may fail in the Sysv
+environment.</phrase> One test named <filename>CSS styling
+support</filename> is known to fail with some multi-monitor configurations.
     </para>
 
     <para>
@@ -189,6 +189,11 @@ systemd, que não são necessários nesta versão do BLFS.
       <parameter>-Dtests=false</parameter>: Remova essa chave se você quiser
 construir os testes. Mas, então, <command>meson</command> falhará se os
 testes <xref linkend="mutter"/> não estiverem instalados.
+    </para>
+
+    <para>
+      <option>-Dextensions_tool=false</option>: This switch allows building this
+package without <xref linkend='gnome-autoar'/> installed.
     </para>
 
   </sect2>
@@ -226,8 +231,8 @@ gnome-shell-perf-tool
         <term><command>gnome-shell</command></term>
         <listitem>
           <para>
-            fornece as funções centrais da interface de usuário(a) para a área de
-trabalho do <application>GNOME</application> 3
+            provides the core user interface functions for the
+<application>GNOME</application> 3 Desktop
           </para>
           <indexterm zone="gnome-shell gnome-shell-prog">
             <primary sortas="b-gnome-shell">gnome-shell</primary>

@@ -7,11 +7,10 @@
   <!ENTITY gcc-download-http  "&gnu-http;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
   <!ENTITY gcc-download-ftp   "&gnu-ftp;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
   <!-- Update this also on the grub-uefi page -->
-  <!ENTITY gcc-md5sum         "73bafd0af874439dcdb9fc063b6fb069">
-  <!ENTITY gcc-size           "81 MB">
-  <!ENTITY gcc-buildsize      "10,5 GB (2,4 GB instalado com todas as linguagens listadas; adicionar 1,3 GB
-para os testes)">
-  <!ENTITY gcc-time           "32 UPC (adicionar 66 UPC para os testes; ambos com paralelismo=4)">
+  <!ENTITY gcc-md5sum         "e0e48554cc6e4f261d55ddee9ab69075">
+  <!ENTITY gcc-size           "84 MB">
+  <!ENTITY gcc-buildsize      "13 GB (2.9 GB installed with all listed languages; add 1.5 GB for tests)">
+  <!ENTITY gcc-time           "13 SBU (add 29 SBU for tests; both with parallelism=8)">
 ]>
 
 <sect1 id="gcc" xreflabel="GCC-&gcc-version;">
@@ -28,59 +27,39 @@ para os testes)">
     <title>Introdução ao "GCC"</title>
 
     <para>
-      O pacote <application>GCC</application> contém a coleção de compiladores
-"GNU". Esta página descreve a instalação de compiladores para as seguintes
-linguagens: "C", "C++", "Fortran", "Objective C", "Objective C++" e
-"Go". Como "C" e "C++" são instalados no LFS, esta página é tanto para
-atualizar "C" e "C++" quanto para instalar compiladores adicionais.
+      The <application>GCC</application> package contains the GNU Compiler
+Collection. This page describes the installation of compilers for the
+following languages: C, C++, Fortran, Objective C, Objective C++, Go, and
+Modula2.  Since C and C++ are installed in LFS, this page is either for
+upgrading C and C++, or for installing additional compilers.
     </para>
 
     <note>
       <para>
-        Linguagens adicionais, entre as quais "D" e "ADA", estão disponíveis na
-coleção. "D" e "ADA" tem um requisito de instruções iniciais de carregamento
-de binário para a primeira instalação, de modo que a instalação deles não é
-descrita aqui. Para instalá-los, você pode proceder da mesma forma abaixo
-depois de instalar o compilador correspondente a partir de um pacote
-binário, adicionando <option>ada</option> ou <option>d</option> à linha
-<parameter>--enable-languages</parameter>.
+        Additional languages, among which D and Ada, are available in the
+collection. D and Ada have a binary bootstrap requirement for the first
+installation, so their installation is not described here. To install them,
+you can proceed along the same lines as below after installing the
+corresponding compiler from a binary package, adding <option>ada</option> or
+<option>d</option> to the <parameter>--enable-languages</parameter> line.
       </para>
     </note>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <caution>
       <para>
-        Se você estiver atualizando o <application>GCC</application> a partir de
-qualquer outra versão anterior ao &gcc-version;, então você precisa ser
-cuidadoso(a) ao compilar módulos de terceiros do núcleo. Você deveria
-garantir que o núcleo e todos os módulos nativos dele também sejam
-compilados usando a mesma versão do <application>GCC</application> que você
-usa para construir o módulo de terceiros. Esse problema não afeta as
-atualizações do núcleo nativo (e dos módulos do núcleo), pois as instruções
-abaixo são uma reinstalação completa do <application>GCC</application>. Se
-você tiver módulos de terceiros instalados, certifique-se de que eles sejam
-recompilados usando a versão atualizada do
-<application>GCC</application>. Como sempre, nunca atualize os cabeçalhos do
-núcleo a partir daqueles usados quando o <application>Glibc</application>
-foi compilado durante o LFS.
-      </para>
-
-      <para>
-        Alguns cabeçalhos do sistema precisam ser corrigidos para serem usados com o
-"GCC". Isso é feito durante a instalação do "GCC", e os cabeçalhos
-<quote>corrigidos</quote> são instalados em <filename class="directory">
-/usr/lib/gcc/&lt;trio da máquina&gt;/&lt;GCC version&gt;/include-fixed
-</filename>. Isso é inofensivo se o "GCC" for construído durante o estágio
-LFS. Mas se você reinstalar o "GCC" no BLFS, [então] alguns dos pacotes do
-BLFS possivelmente sejam <quote>corrigidos</quote>. Se um desses pacotes for
-reinstalado posteriormente, [então] os cabeçalhos <quote>corrigidos</quote>
-não serão atualizados, o que possivelmente leve a incompatibilidades de
-versões. Caso isso aconteça, os cabeçalhos <quote>corrigidos</quote>
-precisam ser atualizados executando (como <systemitem
-class="username">root</systemitem>): <command> /usr/libexec/gcc/x86_64-pc
--linux-gnu/&gcc-version;/install-tools/mkheaders </command>. O trio da
-máquina possivelmente seja diferente em um sistema de 32 bits.
+        If you are upgrading <application>GCC</application> from any other version
+prior to &gcc-version;, then you must be careful compiling 3rd party kernel
+modules. You should ensure that the kernel and all its native modules are
+also compiled using the same version of <application>GCC</application> that
+you use to build the 3rd party module.  This issue does not affect native
+kernel (and kernel modules) updates, as the instructions below are a
+complete reinstallation of <application>GCC</application>. If you have
+existing 3rd party modules installed, ensure they are recompiled using the
+updated version of <application>GCC</application>. As always, never update
+the kernel headers from the ones used when <application>Glibc</application>
+was compiled during LFS.
       </para>
     </caution>
 
@@ -124,8 +103,8 @@ Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch for building against glibc-2.36:
-          <ulink url="&patch-root;/gcc-&gcc-version;-glibc_2.36-1.patch"/>
+          Optional patch when adding Go to the desired language list:
+          <ulink url="&patch-root;/gcc-&gcc-version;-fix_go_version-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -140,7 +119,7 @@ url="https://repo.or.cz/isl.git">ISL</ulink> (para habilitar a otimização
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/gcc"/>
+      Editor Notes: <ulink url="&blfs-wiki;/gcc"/>
     </para>
 
   </sect2>
@@ -177,15 +156,7 @@ qualquer maneira, adicione <parameter>--disable-bootstrap</parameter> às
 opções <command>./configure</command> abaixo.
     </para>
 
-    <!--
     <para>
-
-      First fix a problem with glibc-2.36:
-    </para>
-
-<screen><userinput>patch -Np1 -i ../gcc-&gcc-version;-glibc_2.36-1.patch</userinput></screen>
--->
-<para>
       Instale <application>GCC</application> executando os seguintes comandos:
     </para>
 
@@ -195,30 +166,29 @@ opções <command>./configure</command> abaixo.
   ;;
 esac
 
-mkdir build                                           &amp;&amp;
-cd    build                                            &amp;&amp;
+mkdir build               &amp;&amp;
+cd    build               &amp;&amp;
 
-../configure                                           \
-    --prefix=/usr                                      \
-    --disable-multilib                                 \
-    --with-system-zlib                                 \
-    --enable-default-pie                               \
-    --enable-default-ssp                               \
-    --enable-languages=c,c++,fortran,go,objc,obj-c++ &amp;&amp;
+../configure              \
+    --prefix=/usr         \
+    --disable-multilib    \
+    --with-system-zlib    \
+    --enable-default-pie  \
+    --enable-default-ssp  \
+    --disable-fixincludes \
+    --enable-languages=c,c++,fortran,go,objc,obj-c++,m2 &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Se você tiver instalado pacotes adicionais, como
-<application>Valgrind</application> e <application>GDB</application>,
-[então] a parte <application>GCC</application> da suíte de teste executará
-mais testes que no LFS. Alguns deles informarão "FAIL" e outros "XPASS"
-(aprovados quando esperado "FAIL"). A partir do "gcc-12.2.0", cerca de
-sessenta (60) "FAIL" ocorrem no conjunto <quote>guality</quote>, bem como
-falhas diversas em todo o resto da suíte de teste, quinze dos quais já estão
-presentes nos testes "GCC" do LFS. Se todos os compiladores acima forem
-construídos, [então] existirão em torno de oitenta (80) falhas inesperadas
-em mais que quatrocentos e oitenta e dois mil (482.000) testes. Para
-executar os testes, emita:
+      If you have installed additional packages such as
+<application>valgrind</application> and <application>gdb</application>, the
+<application>gcc</application> part of the test suite will run more tests
+than in LFS. Some of those will report FAIL and others XPASS (pass when
+expected to FAIL). As of gcc-13.2.0, about 65 FAIL occur in the
+<quote>guality</quote> suite, as well as miscellaneous failures throughout
+the rest of the test suite.  If all the compilers above are built, there
+will be a little over 80 unexpected failures out of over 546,000 tests. To
+run the tests, issue:
     </para>
 
 <!-- The command above may error out, so using && may prevent the summary
@@ -246,20 +216,6 @@ mv -v /usr/lib/*gdb.py /usr/share/gdb/auto-load/usr/lib &amp;&amp;
 
 chown -v -R root:root \
     /usr/lib/gcc/*linux-gnu/&gcc-version;/include{,-fixed}</userinput></screen>
-
-    <para>
-      Alguns pacotes esperam encontrar o pré-processador "C" em <filename
-class="directory">/lib</filename> ou possivelmente se refiram ao compilador
-"C" sob o nome <command>cc</command>. Os seguintes vinculos simbólicos não
-são necessários se você tiver seguido as instruções do LFS, pois eles já
-foram criados. Se você não os tiver em seu sistema, [então] emita como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
-    </para>
-
-<screen role="root"><userinput>ln -v -sf ../usr/bin/cpp /lib          &amp;&amp;
-ln -v -sf gcc /usr/bin/cc             &amp;&amp;
-install -v -dm755 /usr/lib/bfd-plugins &amp;&amp;
-ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so /usr/lib/bfd-plugins/</userinput></screen>
 
   </sect2>
 
@@ -300,17 +256,11 @@ fluxo do programa por corrompimento da pilha de parâmetros.
     </para>
 
     <para>
-      <parameter>--enable-languages=c,c++,fortran,go,objc,obj-c++</parameter>:
-Esse comando identifica quais linguagens construir. Você possivelmente
-modifique esse comando para remover linguagens indesejadas. Outras
-linguagens podem ser adicionadas, incluindo "ADA", "D", "BRIG" (adicionar
-<parameter>brig</parameter> à lista de linguagens habilitadas), um formato
-binário para "Heterogeneous System Architecture Intermediate Language"
-("HSAIL") e "JIT" (adicionar <parameter>jit</parameter> à lista de
-linguagens habilitadas), uma biblioteca que pode ser vinculada a
-interpretadores que desejam gerar código de máquina <quote>em voo</quote> em
-tempo de execução. Eles não foram testados pelos(as) desenvolvedores(as) do
-BLFS.
+      <parameter>--enable-languages=c,c++,fortran,go,objc,obj-c++,m2</parameter>:
+This command identifies which languages to build. You may modify this
+command to remove undesired languages.  GCC also supports Ada and D, but
+building GCC with Ada (or D) support needs an existing Ada (or D) compiler.
+So they are not enabled here.
     </para>
 
     <para>
@@ -348,6 +298,23 @@ incorreta. Esse comando muda a titularidade da propriedade para o(a)
 usuário(a) e grupo <systemitem class="username">root</systemitem>.
     </para>
 
+    <para>
+      <!-- from Arch, not tested -->
+<option>--enable-host-shared --enable-languages=jit</option>: Build
+<systemitem class="library">libgccjit</systemitem>, a library for embedding
+GCC inside programs and libraries for generating machine code.  Despite
+<quote>JIT</quote> (just-in-time) in the name, the library can be used for
+AOT (ahead-of-time) compilation as well.
+<option>--enable-host-shared</option> is needed for building <systemitem
+class="library">libgccjit</systemitem>, but it significantly slows down
+GCC.  So <systemitem class="library">libgccjit</systemitem> should be built
+and installed separately, not as a part of the <quote>main</quote> GCC
+installation.  If you need this library, configure GCC with these two
+options and install the library by running <command>make -C gcc
+jit.install-common jit.install-info</command> as the &root; user.  This
+library is not used by any BLFS package, nor tested by the BLFS developers.
+    </para>
+
   </sect2>
 
   <sect2 role="content">
@@ -368,13 +335,13 @@ LFS.
 
       <seglistitem>
         <seg>
-          gccgo, gfortran, go e gofmt, rigidamente vinculados a nomes específicos de
-arquitetura
+          gccgo, gfortran, gm2, go, and gofmt, hard-linked to architecture specific
+names
         </seg>
         <seg>
-          libgfortran.{so,a}, libgo.{so,a}, libgobegin.a, libgolibbegin.a,
-libobjc.{so,a} e numerosos(as) outros(as) bibliotecas e executáveis de tempo
-de execução
+          libgfortran.{so,a}, libgm2.{so,a} libgo.{so,a}, libgobegin.a,
+libgolibbegin.a, libobjc.{so,a}, and numerous other run-time libraries and
+executables
         </seg>
         <seg>
           /usr/lib/go
@@ -395,6 +362,18 @@ de execução
           </para>
           <indexterm zone="gcc gccgo">
             <primary sortas="b-gccgo">gccgo</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="gm2">
+        <term><command>gm2</command></term>
+        <listitem>
+          <para>
+            is a GCC-based compiler for the <application>Modula-2</application> language
+          </para>
+          <indexterm zone="gcc gm2">
+            <primary sortas="b-gm2">gm2</primary>
           </indexterm>
         </listitem>
       </varlistentry>

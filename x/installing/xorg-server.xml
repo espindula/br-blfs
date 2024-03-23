@@ -6,10 +6,14 @@
 
   <!ENTITY xorg-server-download-http "&xorg-download-http;/xserver/xorg-server-&xorg-server-version;.tar.xz">
   <!ENTITY xorg-server-download-ftp  "&xorg-download-ftp;/xserver/xorg-server-&xorg-server-version;.tar.xz">
-  <!ENTITY xorg-server-md5sum        "277a842f1e223820a31a9bd7887d2aab">
+  <!ENTITY xorg-server-md5sum        "79a6eb04b1b17ad6c7aab46da73944e8">
   <!ENTITY xorg-server-size          "4,8 MB">
-  <!ENTITY xorg-server-buildsize     "187 MB (com os testes)">
-  <!ENTITY xorg-server-time          "0,4 UPC (usando paralelismo = 4; com os testes)">
+  <!ENTITY xorg-server-buildsize     "188 MB (with tests)">
+  <!ENTITY xorg-server-time          "0.6 SBU (using parallelism=4; with tests)">
+  <!ENTITY modesetting_drv
+           "<filename class='libraryfile'>modesetting_drv</filename>">
+  <!ENTITY BLFS113 "https://www.linuxfromscratch.org/blfs/view/11.3/x/x7driver.html">
+  <!ENTITY BLFS76 "https://www.linuxfromscratch.org/blfs/view/7.6/x/x7driver.html">
 ]>
 
 <sect1 id="xorg-server" xreflabel="Xorg-Server-&xorg-server-version;">
@@ -30,7 +34,7 @@
 de Janelas &quot;X&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -66,6 +70,23 @@ de Janelas &quot;X&quot;.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          With the removal of the xf86-video-* drivers, the TearFree option is no
+longer functional. To work around this, upstream has added the TearFree
+option to the default modesetting driver. This patch backports this
+feature. Apply this patch if you are going to use Xorg in an environment
+without a compositor (such as TWM, IceWM, Openbox, Fluxbox, or Sawfish).
+        </para>
+        <para>
+          Optional patch: <ulink
+url="&patch-root;/xorg-server-&xorg-server-version;-tearfree_backport-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do Servidor &quot;Xorg&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -77,12 +98,11 @@ execução, <xref role="runtime" linkend="xkeyboard-config"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <phrase revision="sysv"><xref linkend="elogind"/>,</phrase> <xref
-linkend="libepoxy"/> (necessário para o glamor), <xref linkend="libtirpc"/>,
-<phrase revision="sysv"><xref role="runtime" linkend="polkit"/> (tempo de
-execução)</phrase> <phrase revision="systemd"><xref
-linkend="systemd"/></phrase> e <xref role='runtime'
-linkend='xorg-libinput-driver'/> (tempo de execução)
+      <phrase revision="sysv"><xref role="runtime" linkend="elogind"/>
+(runtime),</phrase> <xref linkend="libepoxy"/> (needed for glamor), <xref
+linkend="libtirpc"/>, <phrase revision="systemd"><xref role="runtime"
+linkend="systemd"/> (runtime),</phrase> and <xref role='runtime'
+linkend='xorg-libinput-driver'/> (runtime)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -101,24 +121,100 @@ url="https://gitlab.freedesktop.org/xorg/test/rendercheck">rendercheck</ulink>
 url="https://www.x.org/archive/individual/doc/">xorg-sgml-doctools</ulink>
 (para construir a documentação)
     </para>
+  </sect2>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url='&blfs-wiki;/Xorg7Server'/>
+  <sect2 role="kernel" id="xorg-server-kernel">
+    <title>Kernel Configuration</title>
+
+    <para>
+      The traditional Device Dependent X (DDX) drivers have been removed from BLFS
+in favor of the &modesetting_drv; driver which will be built as a part of
+this package.  To use the &modesetting_drv; driver, the kernel must provide
+a Direct Rendering Manager (DRM) driver for your GPU.
     </para>
+
+    <para>
+      If your GPU supports 3D acceleration and <xref linkend='mesa'/> provides a
+Gallium3D driver for utilizing its 3D capability, you should have already
+enabled the necessary kernel configuration options in <xref
+linkend='mesa-kernel'/>.  Otherwise, you need to find the kernel
+configuration option of the DRM driver for the GPU and enable it.  Notably,
+the virtual GPUs provided by some virtual machine managers:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="xorg-server-kernel.xml"/>
+
+    <para>
+      If the kernel does not provide a DRM driver for your GPU, on most x86
+systems the <quote>simple frame buffer</quote> DRM driver running on VESA or
+UEFI frame buffer can be used as a fallback.  Enable the following options
+in the kernel configurations if you don't have a dedicated DRM driver for
+the GPU, or you want to keep the simple frame buffer driver as a fallback in
+case the dedicated driver fails:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="xorg-server-simpledrm-kernel.xml"/>
+
+    <para>
+      To allow the kernel to print debug messages at an early boot stage,
+<option>CONFIG_DRM</option> and <option>CONFIG_DRM_SIMPLEDRM</option> should
+not be built as kernel modules unless an initramfs will be used.
+    </para>
+
+    <para>
+      If you want to use the simple frame buffer driver on a system booted via
+BIOS (instead of UEFI), add the following line before the first
+<literal>menuentry</literal> block in the
+<filename>/boot/grub/grub.cfg</filename> file to initialize the VESA frame
+buffer:
+    </para>
+
+<screen><literal>set gfxpayload=<replaceable>1024x768x32</replaceable></literal></screen>
+
+    <para>
+      You may replace <literal>1024</literal>, <literal>768</literal>, and
+<literal>32</literal> with a resolution and color depth setting suitable for
+your monitor.
+    </para>
+
+    <para>
+      If all of these DRM drivers do not work for you and you need to use a DDX
+driver with a non-DRM kernel GPU driver (usually named
+<option>CONFIG_FB_*</option> in the kernel configuration, or existing as
+out-tree kernel modules), or you need an device specific functionality
+requiring a DDX driver, consult <ulink url="&BLFS113;">a prior version of
+BLFS</ulink>, or <ulink url="&BLFS76;">an even prior version</ulink> for
+more DDX drivers.
+    </para>
+
+    <indexterm zone="xorg-server xorg-server-kernel">
+      <primary sortas="d-xorg-server">xorg-server</primary>
+    </indexterm>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do Servidor <quote>Xorg</quote></title>
 
     <para>
+      First, if you need the TearFree option to work around screen tearing, apply
+the backported patch:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../xorg-server-&xorg-server-version;-tearfree_backport-1.patch</userinput></screen>
+
+    <para>
       Instale o servidor executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=$XORG_PREFIX \
+meson setup ..              \
+      --prefix=$XORG_PREFIX \
       --localstatedir=/var  \
-      -Dsuid_wrapper=true   \
+      -Dglamor=true         \
       -Dxkb_output_dir=/var/lib/xkb &amp;&amp;
 ninja</userinput></screen>
 
@@ -137,6 +233,7 @@ class="username">root</systemitem>&quot;:
 
 <screen role="root" revision="sysv"><userinput>ninja install &amp;&amp;
 mkdir -pv /etc/X11/xorg.conf.d &amp;&amp;
+install -v -d -m1777 /tmp/.{ICE,X11}-unix &amp;&amp;
 cat &gt;&gt; /etc/sysconfig/createfiles &lt;&lt; "EOF"
 <literal>/tmp/.ICE-unix dir 1777 root root
 /tmp/.X11-unix dir 1777 root root</literal>
@@ -151,9 +248,14 @@ mkdir -pv /etc/X11/xorg.conf.d</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-Dsuid_wrapper=true</parameter>: Constrói o involucrador
-&quot;suid-root&quot; para suporte de controlador legado em sistemas
-&quot;xserver&quot; sem raiz.
+      <parameter>-Dglamor=true</parameter>: Ensure building the Glamor module.
+It's needed to build the &modesetting_drv; driver which replaces the
+traditional Device Dependent X (DDX) drivers.
+    </para>
+
+    <para>
+      <option>-Dsuid_wrapper=true</option>: Builds the suid-root wrapper for
+legacy DDX driver support on rootless xserver systems.
     </para>
 
     <para>
@@ -193,9 +295,8 @@ conforme exigido pelo servidor.
           gtf, X, Xnest, Xorg, Xvfb e, opcionalmente, Xephyr
         </seg>
         <seg>
-          várias sob &quot;$XORG_PREFIX/lib/xorg/modules/&quot; incluindo o
-controlador &quot;<filename
-class="libraryfile">modesetting_drv.so</filename>&quot;
+          several under $XORG_PREFIX/lib/xorg/modules/ including the &modesetting_drv;
+driver
         </seg>
         <seg>
           /etc/X11/xorg.conf.d, $XORG_PREFIX/include/xorg, $XORG_PREFIX/lib/xorg e

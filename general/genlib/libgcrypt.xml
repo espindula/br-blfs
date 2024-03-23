@@ -7,10 +7,10 @@
   <!ENTITY libgcrypt-download-http "&gnupg-http;/libgcrypt/libgcrypt-&libgcrypt-version;.tar.bz2">
   <!ENTITY libgcrypt-download-ftp  "&gnupg-ftp;/libgcrypt/libgcrypt-&libgcrypt-version;.tar.bz2">
   <!ENTITY libgcrypt-download-ftp  "">
-  <!ENTITY libgcrypt-md5sum        "8fadbe1fddafa341dce5ef3869f70e25">
+  <!ENTITY libgcrypt-md5sum        "663abb395452750522d6797967e2f442">
   <!ENTITY libgcrypt-size          "3,6 MB">
-  <!ENTITY libgcrypt-buildsize     "130 MB (com os testes e a documentação PDF)">
-  <!ENTITY libgcrypt-time          "0,4 UPC (com a documentação; adicionar 0,5 UPC para os testes)">
+  <!ENTITY libgcrypt-buildsize     "130 MB (with tests)">
+  <!ENTITY libgcrypt-time          "0.4 SBU (with documentation; add 0.5 SBU for tests)">
 ]>
 
 <sect1 id="libgcrypt" xreflabel="libgcrypt-&libgcrypt-version;">
@@ -34,7 +34,7 @@ nível para blocos de construção criptográficos usando uma API extensível e
 flexível.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -82,12 +82,10 @@ flexível.
       
       <!-- <xref linkend="libcap-pam"/>
  -->
-<xref linkend="pth"/> e <xref linkend="texlive"/> (ou <xref
+<xref linkend="pth"/> and <xref linkend="texlive"/> (or <xref
 linkend="tl-installer"/>)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libgcrypt"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -98,6 +96,17 @@ linkend="tl-installer"/>)
 comandos:
     </para>
 
+<!--  The commands for building the pdf and ps formats are broken.
+    <para>
+
+      The above commands build the documentation in html and plaintext
+      formats. If you wish to build alternate formats of the documentation, you
+      need <xref linkend="texlive"/> (or <xref linkend="tl-installer"/>). Issue
+      the following command:
+    </para>
+
+<screen remap="doc"><userinput>make -C doc pdf</userinput></screen>
+-->
 <screen><userinput>./configure --prefix=/usr &amp;&amp;
 make                      &amp;&amp;
 
@@ -105,14 +114,6 @@ make -C doc html                                                       &amp;&amp
 makeinfo --html --no-split -o doc/gcrypt_nochunks.html doc/gcrypt.texi &amp;&amp;
 makeinfo --plaintext     -o doc/gcrypt.txt           doc/gcrypt.texi</userinput></screen>
 
-    <para>
-      Os comandos acima constroem a documentação nos formatos HTML e texto
-simples. Se desejar construir formatos alternativos da documentação, [então]
-você precisa do <xref linkend="texlive"/> (ou do <xref
-linkend="tl-installer"/>). Emita o seguinte comando:
-    </para>
-
-<screen remap="doc"><userinput>make -C doc pdf</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>make check</command>.
@@ -122,6 +123,18 @@ linkend="tl-installer"/>). Emita o seguinte comando:
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
+<!--
+    <para>
+
+      If you built alternate formats of the documentation, install them by
+      issuing the following command as the
+      <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"
+        remap="doc"><userinput>install -v -m644 doc/gcrypt.{pdf,ps,dvi} \
+                    /usr/share/doc/libgcrypt-&libgcrypt-version;</userinput></screen>
+-->
 <screen role="root"><userinput>make install &amp;&amp;
 install -v -dm755  /usr/share/doc/libgcrypt-&libgcrypt-version; &amp;&amp;
 install -v -m644    README doc/{README.apichanges,fips*,libgcrypt*} \
@@ -134,16 +147,6 @@ install -v -m644 doc/gcrypt_nochunks.html \
                     /usr/share/doc/libgcrypt-&libgcrypt-version;      &amp;&amp;
 install -v -m644 doc/gcrypt.{txt,texi} \
                     /usr/share/doc/libgcrypt-&libgcrypt-version;</userinput></screen>
-
-    <para>
-      Se você construiu formatos alternativos da documentação, [então] instale-os
-emitindo o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
-    </para>
-
-<screen role="root"
-        remap="doc"><userinput>install -v -m644 doc/gcrypt.{pdf,ps,dvi} \
-                   /usr/share/doc/libgcrypt-&libgcrypt-version;</userinput></screen>
 
   </sect2>
 

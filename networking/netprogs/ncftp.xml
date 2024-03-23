@@ -32,7 +32,7 @@ Internet. Destina-se a substituir ou complementar o aplicativo
 &quot;<command>ftp</command>&quot; padrão.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,6 +68,16 @@ Internet. Destina-se a substituir ou complementar o aplicativo
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch: <ulink
+url="&patch-root;/ncftp-&ncftp-version;-configure_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do &quot;NcFTP&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -75,8 +85,6 @@ Internet. Destina-se a substituir ou complementar o aplicativo
       <xref linkend="llvm"/> (com &quot;Clang&quot;, usado por padrão se
 instalado)
     </para>
-
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/ncftp"/></para>
 
   </sect2>
 
@@ -106,6 +114,13 @@ biblioteca compartilhada está sujeito a uma licença diferente.
     </para>
 
 <screen><userinput remap="pre">sed -i 's/^Bookmark/extern Bookmark/' sh_util/gpshare.c</userinput></screen>
+
+    <para>
+      Next, update the configure script to use modern C standards:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../ncftp-&ncftp-version;-configure_fixes-1.patch &amp;&amp;
+autoreconf -fiv -I autoconf_local</userinput></screen>
 
     <para>
       Para instalar o &quot;<application>NcFTP</application>&quot; usando o

@@ -6,10 +6,10 @@
 
   <!ENTITY libshumate-download-http "&gnome-download-http;/libshumate/1.0/libshumate-&libshumate-version;.tar.xz">
   <!ENTITY libshumate-download-ftp  "&gnome-download-ftp;/libshumate/1.0/libshumate-&libshumate-version;.tar.xz">
-  <!ENTITY libshumate-md5sum        "965866eb1b2d0237d71294c68bf8ae05">
+  <!ENTITY libshumate-md5sum        "2e30b5dae91ee473d47a3a0be54d4fd9">
   <!ENTITY libshumate-size          "112 KB">
-  <!ENTITY libshumate-buildsize     "5,3 MB">
-  <!ENTITY libshumate-time          "0,1 UPC">
+  <!ENTITY libshumate-buildsize     "4.1 MB">
+  <!ENTITY libshumate-time          "0.1 SBU">
 ]>
 
 <sect1 id="libshumate" xreflabel="libshumate-&libshumate-version;">
@@ -29,7 +29,7 @@
 GTK-4 para exibir mapas.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,14 +72,19 @@ GTK-4 para exibir mapas.
       <xref linkend="gtk4"/> e <xref linkend="libsoup3"/>
     </para>
 
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
-    <para role="optional">
-      <xref linkend="gi-docgen"/> e <xref linkend="gtk-doc"/>
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
+      <xref linkend='gobject-introspection'/> (required for gnome-maps)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/libshumate"/>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <!-- and <xref linkend="gtk-doc"/>
+ check but never used -->
+<xref linkend="gi-docgen"/>
+      
     </para>
+
   </sect2>
 
   <sect2 role="installation">
@@ -93,7 +98,19 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release -Dgtk_doc=false .. &amp;&amp;
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dgtk_doc=false     \
+            ..                  &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      If you have <xref linkend='gi-docgen'/> installed and wish to build the API
+documentation for this package, issue:
+    </para>
+
+<screen remap='doc'><userinput>sed 's/lib_version/version/' -i ../docs/meson.build &amp;&amp;
+meson configure -Dgtk_doc=true                      &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -112,12 +129,6 @@ ninja</userinput></screen>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
-
-    <para>
-      <parameter>-Dgtk_doc=false</parameter>: Essa chave desabilita a geração de
-documentação. Remova isso se você tiver <xref linkend="gtk-doc"/> e <xref
-linkend="gi-docgen"/> instalados e desejar gerar a documentação da API.
-    </para>
   </sect2>
 
   <sect2 role="content">
@@ -136,7 +147,8 @@ linkend="gi-docgen"/> instalados e desejar gerar a documentação da API.
           libshumate-1.0.so
         </seg>
         <seg>
-          /usr/include/shumate-1.0
+          /usr/include/shumate-1.0 and /usr/share/doc/libshumate-&libshumate-version;
+(optional)
         </seg>
       </seglistitem>
     </segmentedlist>

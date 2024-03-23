@@ -6,11 +6,11 @@
 
   <!ENTITY xwayland-download-http "&xorg-download-http;/xserver/xwayland-&xwayland-version;.tar.xz">
   <!ENTITY xwayland-download-ftp  "&xorg-download-ftp;/xserver/xwayland-&xwayland-version;.tar.xz">
-  <!ENTITY xwayland-md5sum        "96879f938a91b0441ea784220159d843">
+  <!ENTITY xwayland-md5sum        "a6b4e8814d32c080510104888f752d74">
   <!ENTITY xwayland-size          "1,2 MB">
-  <!ENTITY xwayland-buildsize     "76 MB (adicionar 358 MB para os testes)">
-  <!ENTITY xwayland-time          "0,2 UPC (com paralelismo=4; adicionar 1,0 UPC para os testes, não incluindo
-o tempo de clonagem)">
+  <!ENTITY xwayland-buildsize     "27 MB (add 364 MB for tests)">
+  <!ENTITY xwayland-time          "0.2 SBU (with parallelism=4; add 1.7 SBU for tests, not including clone
+time)">
 ]>
 
 <sect1 id="xwayland" xreflabel="Xwayland-&xwayland-version;">
@@ -33,7 +33,7 @@ separado do pacote principal do servidor &quot;Xorg&quot;. Permite executar
 clientes do &quot;X&quot; dentro de uma sessão &quot;wayland&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,8 +74,8 @@ clientes do &quot;X&quot; dentro de uma sessão &quot;wayland&quot;.
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="libxcvt"/>, <xref linkend="pixman"/>, <xref
-linkend="wayland-protocols"/> e <xref linkend="xorg7-font"/> (somente
-&quot;font-util&quot;)
+linkend="wayland-protocols"/>, <xref role='runtime' linkend="xorg7-app"/>
+(runtime), and <xref linkend="xorg7-font"/> (only font-util)
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -86,19 +86,16 @@ linkend="mesa"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="git"/> (para transferir os pacotes necessários para os
-testes), <xref linkend="libgcrypt"/>, <xref linkend="nettle"/>, <xref
-linkend="xmlto"/>, <xref linkend="xorg7-legacy"/> (somente bdftopcf, para
-construir as fontes exigidas para os testes), <ulink
+      <xref linkend="git"/> (to download packages needed for the tests), <xref
+linkend="libgcrypt"/>, <xref linkend="nettle"/>, <xref linkend="xmlto"/>,
+<xref linkend="xorg7-legacy"/> (only bdftopcf, for building fonts required
+for the tests), <ulink
 url="https://gitlab.freedesktop.org/xorg/test/rendercheck">rendercheck</ulink>
-(para os testes) e <ulink
-url="https://wayland.pages.freedesktop.org/weston/">weston</ulink> (para os
-testes)
+(for tests), and <ulink
+url="https://wayland.pages.freedesktop.org/weston/">weston</ulink> (for
+tests)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/xwayland"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -112,22 +109,26 @@ seguintes comandos:
 <screen><userinput>sed -i '/install_man/,$d' meson.build &amp;&amp;
 
 mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=$XORG_PREFIX         \
-      --buildtype=release           \
-      -Dxkb_output_dir=/var/lib/xkb \
-      ..                            &amp;&amp;
+meson setup --prefix=$XORG_PREFIX         \
+            --buildtype=release           \
+            -Dxkb_output_dir=/var/lib/xkb \
+            ..                            &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Construir a estrutura de teste precisa de algum trabalho. Primeiro, <ulink
+      <!-- keep 22.1 above: they used to build it in gitlab-ci because debian
+     had an obsolete version of weston, but now they take weston from
+     debian so the command to build it has been removed. -->
+Construir a estrutura de teste precisa de algum trabalho. Primeiro, <ulink
 url="https://wayland.pages.freedesktop.org/weston/">weston</ulink> traz
 várias dependências, mas o número pode ser reduzido desabilitando recursos
 desnecessários. O comando <command>meson</command> para uma construção
 simplificada do <application>weston</application> é mostrado em <ulink
 url="https://gitlab.freedesktop.org/xorg/xserver/-/blob/xwayland-22.1/.gitlab-ci/debian-install.sh">
 construção da integração contínua do(a) desenvolvedor(a)</ulink>.
+
     </para>
 
     <!--

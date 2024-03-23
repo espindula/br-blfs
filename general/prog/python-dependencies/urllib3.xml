@@ -7,9 +7,9 @@
   <!ENTITY urllib3-download-http "https://files.pythonhosted.org/packages/source/u/urllib3/urllib3-&urllib3-version;.tar.gz">
   <!ENTITY urllib3-download-ftp  "">
   <!ENTITY urllib3-md5sum        "&urllib3-md5sum;">
-  <!ENTITY urllib3-size          "294 KB">
+  <!ENTITY urllib3-size          "272 KB">
   <!ENTITY urllib3-buildsize     "3,2 MB (adicionar 49 MB para os testes)">
-  <!ENTITY urllib3-time          "menos que 0,1 UPC (0,7 UPC para os testes)">
+  <!ENTITY urllib3-time          "less than 0.1 SBU (1.6 SBU for tests)">
 ]>
 
   <sect2 id="urllib3" xreflabel="urllib3-&urllib3-version;">
@@ -30,7 +30,7 @@
 bibliotecas padrão do &quot;Python&quot;.
       </para>
 
-      &lfs113_checked;
+      &lfs120_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -68,17 +68,22 @@ bibliotecas padrão do &quot;Python&quot;.
 
       <bridgehead renderas="sect4">Dependências do <quote>Urllib3</quote></bridgehead>
 
+      <bridgehead renderas="sect5">Required</bridgehead>
+      <para role="required">
+        <xref linkend="hatchling"/>
+      </para>
+
       <bridgehead renderas="sect5">Opcionais (para testes)</bridgehead>
       <para role="optional">
-        <xref linkend="pytest"/>, <ulink
+        <!-- <ulink url="https://pypi.org/project/pytest-freezegun/">
+pytest-freezegun</ulink>,-->
+<xref linkend="pytest"/>, <ulink
 url="https://pypi.org/project/mock/">mock</ulink>, <ulink
 url="https://pypi.org/project/PySocks/">PySocks</ulink>, <ulink
-url="https://pypi.org/project/pytest-freezegun/">pytest-freezegun</ulink>,
-<ulink
 url="https://pypi.org/project/pytest-timeout/">pytest-timeout</ulink>,
 <ulink
 url="https://pypi.org/project/python-dateutil/">python-dateutil</ulink>,
-<ulink url="https://pypi.org/project/tornado/">tornado</ulink> e <ulink
+<ulink url="https://pypi.org/project/tornado/">tornado</ulink>, and <ulink
 url="https://pypi.org/project/trustme/">trustme</ulink>
       </para>
 
@@ -86,6 +91,13 @@ url="https://pypi.org/project/trustme/">trustme</ulink>
 
     <sect3 role="installation">
       <title>Instalação do <quote>Urllib3</quote></title>
+
+    <para> If you want to run the tests, remove some that may hang: </para>
+
+<screen><userinput>rm -v test/test_retry.py \
+      test/contrib/test_pyopenssl.py \
+      test/contrib/test_securetransport.py \
+      test/with_dummyserver/test_socketlevel.py</userinput></screen>
 
     <para> Construa o módulo: </para>
 
@@ -98,6 +110,13 @@ class="username">root</systemitem>&quot;:
 
 <screen role="root"><userinput>pip3 install --no-index --find-links dist --no-cache-dir --no-user urllib3</userinput></screen>
 
+    <note>
+      <para>
+        Running the tests may result in the procedure below hanging and are not
+recommended.
+      </para>
+    </note>
+
     <para>
       Supondo que &quot;<xref linkend="pytest"/>&quot; esteja instalado, mas as
 outras dependências opcionais não estejam, a instalação pode ser testada com
@@ -106,14 +125,13 @@ os seguintes comandos:
 
 <screen remap="test"><!-- no && because of a possible error -->
 <userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
-source testenv/bin/activate                   &amp;&amp;
+source testenv/bin/activate                    &amp;&amp;
 pip3 install trustme         \
              tornado         \
              python-dateutil \
              mock            \
              pysocks         \
-             pytest-timeout  \
-             pytest-freezegun                  &amp;&amp;
+             pytest-timeout  &amp;&amp;
 python3 /usr/bin/pytest
 deactivate</userinput></screen>
 

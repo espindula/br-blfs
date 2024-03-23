@@ -6,8 +6,8 @@
 
   <!ENTITY libxcb-download-http "https://xorg.freedesktop.org/archive/individual/lib/libxcb-&libxcb-version;.tar.xz">
   <!ENTITY libxcb-download-ftp  "">
-  <!ENTITY libxcb-md5sum        "39c0fc337e738ad6c908e7cce90957d0">
-  <!ENTITY libxcb-size          "440 KB">
+  <!ENTITY libxcb-md5sum        "c769f93c254263077df62404661b710d">
+  <!ENTITY libxcb-size          "444 KB">
   <!ENTITY libxcb-buildsize     "27 MB (com os testes, adicionar 62 MB para os documentos do
 &quot;doxygen&quot;)">
   <!ENTITY libxcb-time          "0,2 UPC (com os testes, adicionar 1,4 UPC para os documentos do
@@ -35,7 +35,7 @@ interface &quot;Xlib&quot; atual. &quot;Xlib&quot; também pode usar
 solicitações e receba respostas com ambos.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -89,8 +89,6 @@ solicitações e receba respostas com ambos.
 <xref linkend="libxslt"/>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/libxcb"/></para>
-
   </sect2>
 
   <sect2 role="installation">
@@ -101,8 +99,7 @@ solicitações e receba respostas com ambos.
 seguintes comandos:
     </para>
 
-<screen><userinput>PYTHON=python3               \
-./configure $XORG_CONFIG      \
+<screen><userinput>./configure $XORG_CONFIG      \
             --without-doxygen \
             --docdir='${datadir}'/doc/libxcb-&libxcb-version; &amp;&amp;
 make</userinput></screen>
@@ -118,19 +115,29 @@ class="username">root</systemitem>&quot;:
 
 <screen role="root"><userinput>make install</userinput></screen>
 
+    <para>
+      If the package was built as a non-&root; user, the installed documentation
+is now owned by this user.  As the &root; user, fix the ownership:
+    </para>
+
+<screen role="root"><userinput>chown -Rv root:root $XORG_PREFIX/share/doc/libxcb-&libxcb-version;</userinput></screen>
+
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <parameter>PYTHON=python3</parameter>: Essa variável força a configuração a
-usar &quot;python3&quot; em vez de &quot;python2&quot;. O conjunto de
-comandos sequenciais de configuração para esse pacote será automaticamente
-padronizado para &quot;python2&quot; se esse estiver presente.
-    </para>
 
+
+    <!-- No longer needed with 1.16, it now requires Python-3.0 or higher.
     <para>
+
+      <parameter>PYTHON=python3</parameter>: This variable forces configure to
+      use python3 instead of python2. The configure script for this package
+      will automatically default to python2 if it is present.
+    </para>
+-->
+<para>
       <parameter>--without-doxygen</parameter>: Não use &quot;doxygen&quot; para
 gerar documentação da &quot;API&quot; (padrão: automático). Sem ele, se o
 &quot;<xref linkend="doxygen"/>&quot; estiver instalado, [então] a

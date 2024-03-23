@@ -5,7 +5,8 @@
   %general-entities;
 
   <!ENTITY iptables-download-http "https://www.netfilter.org/projects/iptables/files/iptables-&iptables-version;.tar.xz">
-  <!ENTITY iptables-download-ftp  "ftp://ftp.netfilter.org/pub/iptables/iptables-&iptables-version;.tar.xz">
+  <!--<!ENTITY iptables-download-ftp  "ftp://ftp.netfilter.org/pub/iptables/iptables-&iptables-version;.tar.xz">-->
+  <!ENTITY iptables-download-ftp  "">
   <!ENTITY iptables-md5sum        "ffa00f68d63e723c21b8a091c5c0271b">
   <!ENTITY iptables-size          "633 KB">
   <!ENTITY iptables-buildsize     "16 MB">
@@ -31,7 +32,7 @@ espaço do(a) usuário(a) usado para configurar o conjunto de regras de
 filtragem de pacote do núcleo Linux 2.4 e posteriores.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,19 +75,16 @@ filtragem de pacote do núcleo Linux 2.4 e posteriores.
 
       <!--      <xref linkend="nftables"/>
 , -->
-<xref linkend="libpcap"/> (exigido para suporte ao nfsynproxy), <ulink
-url="https://github.com/tadamdam/bpf-utils">bpf-utils</ulink> (exigido para
-suporte ao Berkeley Packet Filter), <ulink
+<xref linkend="libpcap"/> (required for BPF compiler or nfsynproxy support),
+<ulink url="https://github.com/tadamdam/bpf-utils">bpf-utils</ulink>
+(required for Berkeley Packet Filter support), <ulink
 url="https://netfilter.org/projects/libnfnetlink/">libnfnetlink</ulink>
-(exigido para suporte ao connlabel), <ulink
+(required for connlabel support), <ulink
 url="https://netfilter.org/projects/libnetfilter_conntrack/">libnetfilter_conntrack</ulink>
-(exigido para suporte ao connlabel) e <ulink
+(required for connlabel support), and <ulink
 url="https://netfilter.org/projects/nftables/">nftables</ulink>
     </para>
 
-
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/iptables"/>
-    </para>
   </sect2>
 
   <sect2 role="kernel" id="iptables-kernel">
@@ -98,16 +96,8 @@ o <application>iptables</application> para configurar a netfilter, os
 seguintes parâmetros de configuração do núcleo são exigidos:
     </para>
 
-<screen><literal>[*] Networking support  ---&gt;                                         [CONFIG_NET]
-      Networking Options  ---&gt;
-        [*] Network packet filtering framework (Netfilter) ---&gt;       [CONFIG_NETFILTER]
-          [*] Advanced netfilter configuration                        [CONFIG_NETFILTER_ADVANCED]
-          Core Netfilter Configuration ---&gt;
-            &lt;*/M&gt; Netfilter connection tracking support               [CONFIG_NF_CONNTRACK]
-            &lt;*/M&gt; Netfilter Xtables support (required for ip_tables)  [CONFIG_NETFILTER_XTABLES]
-            &lt;*/M&gt; LOG target support                                  [CONFIG_NETFILTER_XT_TARGET_LOG]
-          IP: Netfilter Configuration ---&gt;
-            &lt;*/M&gt; IP tables support (required for filtering/masq/NAT) [CONFIG_IP_NF_IPTABLES]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="iptables-kernel.xml"/>
 
     <para>
       Inclua quaisquer protocolos de rastreamento de conexão que serão usados, bem
@@ -229,88 +219,91 @@ seus dados privados.
       </para>
 
       <para>
-        Abaixo está uma versão ligeiramente modificada da recomendação do Rusty
-Russell oriunda do <ulink
-url="https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">Linux
-2.4 Packet Filtering HOWTO</ulink>. Ela ainda é aplicável aos núcleos Linux
-5.x.
+        Below is a slightly modified version of Rusty Russell's recommendation from
+the <ulink
+url="https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">
+Linux 2.4 Packet Filtering HOWTO</ulink>. It is still applicable to the
+Linux 5.x kernels.
       </para>
 
 <screen role="root" revision="sysv"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/rc.d/rc.iptables &lt;&lt; "EOF"
 <literal>#!/bin/sh
 
-# Início do rc.iptables
+# Begin rc.iptables
 
-# Insere módulos de rastreamento de conexão
-# (não necessário se construído internamente ao kernel)
+# Insert connection-tracking modules
+# (not needed if built into the kernel)
 modprobe nf_conntrack
 modprobe xt_LOG
 
-# Habilita difusão echo Protection
+# Enable broadcast echo Protection
 echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
 
-# Desabilita Pacotes Fonte Roteados
+# Disable Source Routed Packets
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_source_route
 
-# Habilita a Proteção SYN Cookie do TCP
+# Enable TCP SYN Cookie Protection
 echo 1 &gt; /proc/sys/net/ipv4/tcp_syncookies
 
-# Desabilita a Aceitação de Redireção de ICMP
+# Disable ICMP Redirect Acceptance
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_redirects
 
-# Não envia Mensagens de Redireção
+# Do not send Redirect Messages
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirects
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Descarta Pacotes Falsificados entrantes em uma interface, onde as 
-# respostas resultariam na resposta indo para uma interface diferente.
+# Drop Spoofed Packets coming in on an interface, where responses
+# would result in the reply going out a different interface.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
-# Registra pacotes com endereços impossíveis.
+# Log packets with impossible addresses.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/log_martians
 
-# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
-# no caso de IP estático)
+# be verbose on dynamic ip-addresses  (not needed in case of static IP)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
-# Desabilita a Notificação Explícita de Congestão
-# roteadores demais ainda são ignorantes
+# disable Explicit Congestion Notification
+# too many routers are still ignorant
 echo 0 &gt; /proc/sys/net/ipv4/tcp_ecn
 
-# Configura um estado conhecido
+# Set a known state
 iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
-# script for mesmo reexecutado em tempo real.  Nós queremos remover 
-# todas as regras e cadeias preexistentes definidas por usuário(a) 
-# antes de implementarmos novas regras.
+# These lines are here in case rules are already in place and the
+# script is ever rerun on the fly. We want to remove all rules and
+# pre-existing user defined chains before we implement new rules.
 iptables -F
 iptables -X
 iptables -Z
 
 iptables -t nat -F
 
-# Permite conexões locais somente
+# Allow local-only connections
 iptables -A INPUT  -i lo -j ACCEPT
 
-# Libera a saída gerada em qualquer interface para qualquer IP para 
-# qualquer serviço (igual a -P ACCEPT)
+# Free output on any interface to any ip for any service
+# (equal to -P ACCEPT)
 iptables -A OUTPUT -j ACCEPT
 
-# Permite respostas em conexões já estabelecidas e permite novas 
-# conexões relacionadas às estabelecidas (por exemplo, modo de porta 
-# ftp)
+# Permit answers on already established connections
+# and permit new connections related to established ones
+# (e.g. port mode ftp)
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Registra tudo o mais.
+# Drop any incoming MULTICAST or BROADCAST packet before logging:
+# The box outputs several of them when using netbios or mDNS, and those
+# appear immediately as incoming, which clutters the log.
+iptables -A INPUT -m addrtype --dst-type BROADCAST,MULTICAST -j DROP
+
+# Log everything else.
 iptables -A INPUT -j LOG --log-prefix "FIREWALL:INPUT "
 
-# Fim do $rc_base/rc.iptables</literal>
+# End $rc_base/rc.iptables</literal>
 EOF
 chmod 700 /etc/rc.d/rc.iptables</userinput></screen>
 

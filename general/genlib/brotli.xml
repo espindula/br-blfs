@@ -8,9 +8,9 @@
   <!ENTITY brotli-download-ftp  "">
   <!ENTITY brotli-md5sum        "c2274f0c7af8470ad514637c35bcee7d">
   <!ENTITY brotli-size          "476 KB">
-  <!ENTITY brotli-buildsize     "24 MB (com vinculações python3)">
+  <!ENTITY brotli-buildsize     "24 MB (with python3 bindings)">
   <!-- The python tests for this package are broken.  The tarball is missing a lot of test files -->
-  <!ENTITY brotli-time          "0,4 UPC (com vinculações python3)">
+  <!ENTITY brotli-time          "0.4 SBU (with python3 bindings)">
 ]>
 
 <sect1 id="brotli" xreflabel="Brotli-&brotli-version;">
@@ -34,7 +34,7 @@ contexto de segunda ordem. As bibliotecas dele são usadas principalmente
 para fontes WOFF2 em páginas da web.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,23 +72,16 @@ para fontes WOFF2 em páginas da web.
 
     <bridgehead renderas="sect3">Dependências de Brotli</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
-    <para role="required">
+    
+    <!-- Not "Required" because we can use
+         "./bootstrap && ./configure ... && make && make install".
+         Doing so can break an optional circular dependency:
+         curl is recommended for cmake, and brotli is optional for curl. -->
+<bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
       <xref linkend="cmake"/>
     </para>
 
-
-    <!-- Brotli doesn't have any lua bindings, at least not with 1.0.7.
-         Do not advertise python2 as python3 should be used instead
-    <bridgehead renderas="sect4">Optional</bridgehead>
-    <para role="optional">
-      <xref linkend="lua"/> (to create Lua bindings) and
-      <xref linkend="python2"/> (to create python2 bindings)
-    </para>
--->
-<para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/brotli"/>
-    </para>
   </sect2>
 
 
@@ -136,8 +129,8 @@ make</userinput></screen>
 cd ..</userinput></screen>
 
     <para>
-      Se desejado, construa e instale as ligações
-<application>Python3</application> como o(a) usuário(a) &root;:
+      If desired, build and install the <application>Python3</application>
+bindings as the &root; user:
     </para>
 
 <screen role="root"><userinput>pip3 wheel -w dist --no-build-isolation --no-deps $PWD &amp;&amp;
@@ -151,19 +144,20 @@ pip3 install --no-index --find-links dist --no-cache-dir --no-user Brotli</useri
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
       <segtitle>Bibliotecas Instaladas</segtitle>
-      <segtitle>Diretório Instalado</segtitle>
+      <segtitle>Installed Directories</segtitle>
 
       <seglistitem>
         <seg>
           brotli
         </seg>
         <seg>
-          libbrotlicommon{-static.a,.so}, libbrotlidec{,-static.a,.so} e
+          libbrotlicommon{-static.a,.so}, libbrotlidec{,-static.a,.so}, and
 libbrotlienc{,-static.a,.so}
         </seg>
         <seg>
-          /usr/include/brotli
+          /usr/include/brotli and
 /usr/lib/python&python3-majorver;/site-packages/Brotli-&brotli-version;.dist-info
+(if you built and installed the Python3 bindings)
         </seg>
       </seglistitem>
     </segmentedlist>

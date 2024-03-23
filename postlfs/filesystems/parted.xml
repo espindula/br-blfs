@@ -6,10 +6,10 @@
 
   <!ENTITY parted-download-http "&gnu-http;/parted/parted-&parted-version;.tar.xz">
   <!ENTITY parted-download-ftp  "&gnu-ftp;/parted/parted-&parted-version;.tar.xz">
-  <!ENTITY parted-md5sum        "336fde60786d5855b3876ee49ef1e6b2">
+  <!ENTITY parted-md5sum        "93d2d8f22baebc5eb65b85da05a79e4e">
   <!ENTITY parted-size          "1,8 MB">
-  <!ENTITY parted-buildsize     "33 MB (adicional 3 MB para os testes e adicional 2 MB para a documentação
-opcional PDF e Postscript)">
+  <!ENTITY parted-buildsize     "29 MB (additional 3 MB for the tests and additional 2 MB for optional PDF
+and Postscript documentation)">
   <!ENTITY parted-time          "0,3 UPC (3,6 UPC adicionais para os testes)">
 ]>
 
@@ -31,7 +31,7 @@ opcional PDF e Postscript)">
 particionamento de disco e de redimensionamento de partição.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -90,13 +90,10 @@ Additional Downloads</bridgehead>
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="dosfstools"/>, <xref linkend="pth"/>, <xref
-linkend="texlive"/> (ou <xref linkend="tl-installer"/>) e <ulink
-url="https://metacpan.org/pod/Digest::CRC">Digest::CRC</ulink> (para testes)
+linkend="texlive"/> (or <xref linkend="tl-installer"/>), and <ulink
+url="https://metacpan.org/pod/Digest::CRC">Digest::CRC</ulink> (for tests)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/parted"/>
-    </para>
   </sect2>
 
   <sect2 role="kernel" id="parted-kernel">
@@ -107,13 +104,11 @@ url="https://metacpan.org/pod/Digest::CRC">Digest::CRC</ulink> (para testes)
 construído:
     </para>
 
-<screen><literal>Device Drivers ---&gt;
-  SCSI device support ---&gt;
-    [*] SCSI low-level drivers ---&gt;                 [CONFIG_SCSI_LOW_LEVEL]
-      &lt;M&gt; SCSI debugging host and device simulator   [CONFIG_SCSI_DEBUG]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="parted-test-kernel.xml"/>
 
     <indexterm zone="parted parted-kernel">
-      <primary sortas="d-parted">parted</primary>
+      <primary sortas="d-parted">parted (testing)</primary>
     </indexterm>
   </sect2>
 
@@ -144,9 +139,10 @@ makeinfo --plaintext -o doc/parted.txt doc/parted.texi</userinput></screen>
 documentação em PDF e Postscript, [então] emita os seguintes comandos:
     </para>
 
-<screen remap="doc"><userinput>texi2pdf            -o doc/parted.pdf doc/parted.texi &amp;&amp;
-texi2dvi             -o doc/parted.dvi doc/parted.texi &amp;&amp;
-dvips                -o doc/parted.ps  doc/parted.dvi</userinput></screen>
+<screen remap="doc"><userinput>cp build-aux/texinfo.tex doc               &amp;&amp;
+texi2pdf -o doc/parted.pdf doc/parted.texi &amp;&amp;
+texi2dvi -o doc/parted.dvi doc/parted.texi &amp;&amp;
+dvips    -o doc/parted.ps  doc/parted.dvi</userinput></screen>
 
     <para>
       Para testar os resultados, emita, como o(a) usuário(a) <systemitem
@@ -157,7 +153,12 @@ class="username">root</systemitem>:
      "FS test with sector size != 512". This is expected since the same tests
      are run with simulated sector of 1024, 2048, and 4096 bytes; only the
      last group of tests is done with simulated sector size of 512, so that
-     less tests are skipped.-->
+     less tests are skipped.
+
+     When I ran these tests over ssh, it really made my xfce environment
+     unusable.  Restarting xfce fixed things, but I don't want to retry
+     right now.  - Bruce
+-->
 <screen role="root"
         remap="test"><userinput>make check</userinput></screen>
 

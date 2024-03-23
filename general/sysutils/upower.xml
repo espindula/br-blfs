@@ -6,9 +6,9 @@
 
   <!ENTITY upower-download-http "https://gitlab.freedesktop.org/upower/upower/-/archive/v&upower-version;/upower-v&upower-version;.tar.bz2">
   <!ENTITY upower-download-ftp  "">
-  <!ENTITY upower-md5sum        "4fba71838a9ba0db6f140418eddbe2b7">
-  <!ENTITY upower-size          "128 KB">
-  <!ENTITY upower-buildsize     "4,9 MB (adicionar 1,3 MB para os testes)">
+  <!ENTITY upower-md5sum        "bfd6e3275e61d7e097b53eb2b216fffa">
+  <!ENTITY upower-size          "136 KB">
+  <!ENTITY upower-buildsize     "6.5 MB (add 1.1 MB for tests)">
   <!ENTITY upower-time          "menos que 0,1 UPC (usando paralelismo=4, adicionar 0,6 UPC para os testes)">
 ]>
 
@@ -33,7 +33,7 @@ sistema pode acessar o serviço org.freedesktop.UPower por meio do barramento
 de mensagens do sistema.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -73,8 +73,7 @@ de mensagens do sistema.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libgudev"/>, <xref linkend="libusb"/> e <xref
-linkend="polkit"/>
+      <xref linkend="libgudev"/> and <xref linkend="libusb"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais (Exigidas se construir GNOME)</bridgehead>
@@ -91,8 +90,6 @@ de teste) e <ulink
 url="https://libimobiledevice.org/">libimobiledevice</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/upower"/>
-    </para>
   </sect2>
 
   <sect2 role="kernel" id="upower-kernel" revision="systemd">
@@ -107,9 +104,8 @@ url="https://libimobiledevice.org/">libimobiledevice</ulink>
 se necessário:
     </para>
 
- <screen><literal>General Setup ---&gt;
-    [*] Namespaces support ---&gt;     [CONFIG_NAMESPACES]
-       [*] User namespace          [CONFIG_USER_NS]</literal></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="upower-systemd-kernel.xml"/>
 
     <indexterm zone="upower upower-kernel">
       <primary sortas="d-upower">upower</primary>
@@ -132,32 +128,38 @@ se necessário:
 <!-- On my system with LANG=zh_CN.UTF-8, one test attempted to compare
          Chinese error message with English references and failed.
          LC_ALL=C fixes the problem.  -->
-<screen revision="sysv"><userinput>mkdir build                        &amp;&amp;
-cd    build                         &amp;&amp;
-meson --prefix=/usr                        \
-      --buildtype=release                  \
-      -Dgtk-doc=false                      \
-      -Dman=false                          \
-      -Dsystemdsystemunitdir=no            \
-      -Dudevrulesdir=/usr/lib/udev/rules.d \
-      ..                            &amp;&amp;
+<!-- Headphone hotplug (bluetooth and AUX) was tested and seems to work
+         okay even with the test faliures. Maybe it's wants headphones plugged
+         in during the test? Regardless, it can be safely ignored. -->
+<screen revision="sysv"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -Dgtk-doc=false           \
+      -Dman=false               \
+      -Dsystemdsystemunitdir=no \
+      -Dudevrulesdir=/usr/lib/udev/rules.d &amp;&amp;
 ninja</userinput></screen>
 
-<screen revision="systemd"><userinput>mkdir build                        &amp;&amp;
+<screen revision="systemd"><userinput>mkdir build                         &amp;&amp;
 cd    build                         &amp;&amp;
-meson --prefix=/usr       \
+meson setup ..            \
+      --prefix=/usr       \
       --buildtype=release \
       -Dgtk-doc=false     \
-      -Dman=false         \
-      ..                            &amp;&amp;
+      -Dman=false         &amp;&amp;
 ninja</userinput></screen>
 
     
+    
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C ninja
-test</command>. Algumas verificações possivelmente não passem devido a
-arquivos ausentes. A suíte de teste deveria ser executada a partir de uma
-sessão "GUI" local iniciada com "dbus-launch".
+      To test the results, issue: <command>LC_ALL=C ninja test</command>. Some
+checks may not pass due to missing files. Test suite should be run from a
+local GUI session started with dbus-launch. 2 tests relating to the
+headphone hotplug feature are known to fail, these can be safely ignored as
+the headphone functionality does still work.
     </para>
 
     <para>

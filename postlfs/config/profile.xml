@@ -82,8 +82,7 @@ executar os comandos como um(a) usuário(a) desprivilegiado(a).
     </para>
   </note>
 
-  <para condition="html" role="usernotes">Observações de Usuário(a): <ulink
-url="&blfs-wiki;/bash-shell-startup-files"/></para>
+  <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/bash-shell-startup-files"/></para>
 
   <sect2 id="etc-profile-profile">
     <title>/etc/profile</title>
@@ -112,20 +111,20 @@ Prompt</emphasis>.
     </para>
 
 <screen role="root"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/profile &lt;&lt; "EOF"
-<literal># Inicia /etc/profile
-# Escrito para o Beyond Linux From Scratch
-# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
-# modificações por Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;
+<literal># Begin /etc/profile
+# Written for Beyond Linux From Scratch
+# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
+# modifications by Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;
 
-# Aplicativos da inicialização e variáveis de ambiente abrangentes ao sistema.
+# System wide environment variables and startup programs.
 
-# Alias e funções abrangentes ao sistema deveriam estar em /etc/bashrc.  Os aplicativos 
-# da inicialização e as variáveis de ambiente pessoais deveriam estar no 
-# ~/.bash_profile.  Alias e funções pessoais deveriam estar no 
+# System wide aliases and functions should go in /etc/bashrc.  Personal
+# environment variables and startup programs should go into
+# ~/.bash_profile.  Personal aliases and functions should go into
 # ~/.bashrc.
 
-# Funções para nos auxiliar a gerenciar "paths". O segundo argumento é o nome da
-# variável "path" a ser modificada (default: PATH)
+# Functions to help us manage paths.  Second argument is the name of the
+# path variable to be modified (default: PATH)
 pathremove () {
         local IFS=':'
         local NEWPATH
@@ -153,10 +152,10 @@ pathappend () {
 
 export -f pathremove pathprepend pathappend
 
-# Configura o caminho inicial
+# Set the initial path
 export PATH=/usr/bin
 
-# Tenta fornecer retrocompatibilidade com o LFS anterior a 11
+# Attempt to provide backward compatibility with LFS earlier than 11
 if [ ! -L /bin ]; then
         pathappend /bin
 fi
@@ -169,16 +168,16 @@ if [ $EUID -eq 0 ] ; then
         unset HISTFILE
 fi
 
-# Configura algumas variáveis de ambiente.
+# Set up some environment variables.
 export HISTSIZE=1000
 export HISTIGNORE="&amp;:[bf]g:exit"
 
-# Configura alguns padrões para os sistemas gráficos
+# Set some defaults for graphical systems
 export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share/}
 export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg/}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}
 
-# Configura um prompt vermelho para o(a) root e um verde para os(as) usuários(as).
+# Set up a red prompt for root and a green one for users.
 NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
 GREEN="\[\e[1;32m\]"
@@ -196,7 +195,7 @@ done
 
 unset script RED GREEN NORMAL
 
-# Termina /etc/profile</literal>
+# End /etc/profile</literal>
 EOF</userinput></screen>
 
     <sect3 id="etc-profile.d">
@@ -441,15 +440,14 @@ EOF</userinput></screen>
     </indexterm>
 
       <para>
-        Este script configura uma variável de ambiente necessária para o suporte ao
-idioma nativo. Uma discussão completa acerca de se determinar esta variável
-pode ser encontrada na página <ulink
-url="&lfs-root;/chapter09/profile.html">Arquivos de Inicialização do Shell
-Bash do LFS</ulink>.
+        This script sets an environment variable necessary for native language
+support. A full discussion on determining this variable can be found on the
+<ulink url="&lfs-root;/chapter09/profile.html">LFS Bash Shell Startup
+Files</ulink> page.
       </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; "EOF"
-<literal># Configura variáveis de internacionalização.
+<literal># Set up i18n variables
 export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable></literal>
 EOF</userinput></screen>
 

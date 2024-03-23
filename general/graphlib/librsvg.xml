@@ -6,10 +6,10 @@
 
   <!ENTITY librsvg-download-http "&gnome-download-http;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
   <!ENTITY librsvg-download-ftp  "&gnome-download-ftp;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
-  <!ENTITY librsvg-md5sum        "eb56ffb37a7db48491177eb9bd135cb5">
-  <!ENTITY librsvg-size          "21 MB">
-  <!ENTITY librsvg-buildsize     "1 GB (24 MB instalado), adicionar 240 MB para os testes">
-  <!ENTITY librsvg-time          "1,7 UPC (Usando paralelismo=4), adicionar 1,1 UPC para os testes">
+  <!ENTITY librsvg-md5sum        "8055142a6c9d0d21d42e40bc08dff814">
+  <!ENTITY librsvg-size          "5.4 MB">
+  <!ENTITY librsvg-buildsize     "747 MB (16 MB installed), add 378 MB for tests">
+  <!ENTITY librsvg-time          "0.7 SBU (Add 0.8 SBU for tests; both using parallelism=4)">
 ]>
 
 <sect1 id="librsvg" xreflabel="librsvg-&librsvg-version;">
@@ -31,7 +31,7 @@ ferramentas usadas para manipular, converter e visualizar imagens "Scalable
 Vector Graphic" ("SVG").
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,9 +75,11 @@ Vector Graphic" ("SVG").
 linkend="pango"/> e <xref linkend="rust"/>
     </para>
 
+    &build-use-internet;
+
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/> e <xref linkend="vala"/>
+      <xref linkend="gobject-introspection"/> and <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -87,8 +89,6 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
 (para testes)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/librsvg"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -105,18 +105,16 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make -k check</command>. Durante
-o teste, alguns binários são reconstruídos com um nível diferente de
-depuração, de forma que você deveria executar <command>make</command>
-novamente depois que os testes estiverem completos para garantir que tudo
-esteja pronto para ser instalado.
+      To test the results, issue:
     </para>
+
+<screen remap='test'><userinput>make check</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>make DOC_INSTALL_DIR='$(docdir)' install</userinput></screen>
 
     <note>
       <para>
@@ -143,6 +141,12 @@ instalado.
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
+
+    <para>
+      <parameter>DOC_INSTALL_DIR='$(docdir)'</parameter>: This override ensures
+installing the API documentation into the expected location if <xref
+linkend='gi-docgen'/> is installed.
+    </para>
 
     <para>
       <option>--disable-introspection</option>: Use essa chave se você não tiver

@@ -42,7 +42,7 @@ usuário(a) &root;:</para>
 <screen role="root"><userinput>TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/')
 
 cat &gt; /etc/profile.d/texlive.sh &lt;&lt; EOF
-<literal># Inicia configuração do texlive
+<literal># Begin texlive setup
 TEXLIVE_PREFIX=/opt/texlive/&texlive-year;
 export TEXLIVE_PREFIX
 
@@ -50,7 +50,7 @@ pathappend \$TEXLIVE_PREFIX/texmf-dist/doc/man  MANPATH
 pathappend \$TEXLIVE_PREFIX/texmf-dist/doc/info INFOPATH
 pathappend \$TEXLIVE_PREFIX/bin/$TEXARCH
 
-# Termina configuração do texlive</literal>
+# End texlive setup</literal>
 EOF
 
 unset TEXARCH</userinput></screen>
@@ -74,9 +74,24 @@ não deveriam aparecer no conjunto de comandos sequenciais atual.
   </note>
 
   <para>
-    Os novos caminhos podem ser ativados imediatamente executando-se
-<command>source /etc/profile</command>.
+    The new paths can be immediately activated by running:
   </para>
+
+<screen><userinput>source /etc/profile</userinput></screen>
+
+  <para>
+    The shared libraries will be installed into a texlive directory.  As the
+<systemitem class="username">root</systemitem> user, add it to your
+<filename>/etc/ld.so.conf</filename>:
+  </para>
+
+<screen role="root"><userinput>cat &gt;&gt; /etc/ld.so.conf &lt;&lt; EOF
+<literal># Begin texlive addition
+
+$TEXLIVE_PREFIX/lib
+
+# End texlive addition</literal>
+EOF</userinput></screen>
 
   <para>
     Agora você deveria prosseguir para <xref linkend="tl-installer"/> para uma

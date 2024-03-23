@@ -7,10 +7,10 @@
   <!ENTITY harfbuzz-download-http
            "https://github.com/harfbuzz/harfbuzz/releases/download/&harfbuzz-version;/harfbuzz-&harfbuzz-version;.tar.xz">
   <!ENTITY harfbuzz-download-ftp  "">
-  <!ENTITY harfbuzz-md5sum        "5c7a6750760e4d6c098436a43542a7d0">
+  <!ENTITY harfbuzz-md5sum        "f0040d0fc02cf94cac9f46a94c44c6de">
   <!ENTITY harfbuzz-size          "18 MB">
-  <!ENTITY harfbuzz-buildsize     "144 MB (com os testes)">
-  <!ENTITY harfbuzz-time          "0,6 UPC (Usando paralelismo=4; com os testes)">
+  <!ENTITY harfbuzz-buildsize     "145 MB (with tests)">
+  <!ENTITY harfbuzz-time          "0.9 SBU (Using parallelism=4; with tests)">
 ]>
 
 <sect1 id="harfbuzz" xreflabel="HarfBuzz-&harfbuzz-version;">
@@ -31,7 +31,7 @@
 modelagem de texto "OpenType".
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -71,24 +71,24 @@ modelagem de texto "OpenType".
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/> (exigido, se construindo o "GNOME"),
-<xref linkend="glib2"/> (exigido para o "Pango"), <xref role="first"
-linkend="graphite2"/> (exigido para construir <xref role="nodep"
-linkend="texlive"/> ou o <xref role="nodep" linkend="libreoffice"/> com
-"harfbuzz" do sistema), <xref linkend="icu"/> e <xref role="first"
-linkend="freetype2"/> (depois de <xref role="nodep" linkend="harfbuzz"/> ser
-instalado, reinstale <xref role="nodep" linkend="freetype2"/>)
+      <xref linkend="gobject-introspection"/> (required if building GNOME), <xref
+linkend="glib2"/> (required for Pango), <xref role="first"
+linkend="graphite2"/> (required for building <xref role="nodep"
+linkend="texlive"/> or <xref role="nodep" linkend="libreoffice"/> with
+system harfbuzz), <xref linkend="icu"/>, and <xref role="first"
+linkend="freetype2"/> (after <xref role="nodep" linkend="harfbuzz"/> is
+installed, reinstall <xref role="nodep" linkend="freetype2"/>)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="cairo"/> (circular: construa "cairo" e todas as dependências
-recomendadas dele, incluindo "harfbuzz", primeiro, então reconstrua
-"harfbuzz" se a infraestrutura de retaguarda "cairo" for necessária), <xref
-linkend="git"/>, <xref linkend="gtk-doc"/>, <ulink
-url="https://pypi.org/project/FontTools/">FontTools</ulink> (módulo Python
-3, para a suíte de teste) e <ulink
-url="https://www.colm.net/open-source/ragel/">ragel</ulink>
+      <xref linkend="cairo"/> (circular: build cairo and all its recommended
+dependencies, including harfbuzz, first, then rebuild harfbuzz if the cairo
+backend is needed), <xref linkend="git"/>, <xref linkend="gtk-doc"/>, <ulink
+url="https://pypi.org/project/FontTools/">FontTools</ulink> (Python 3
+module, for the test suite), <ulink
+url="https://www.colm.net/open-source/ragel/">ragel</ulink>, and <ulink
+url="https://github.com/bytecodealliance/wasm-micro-runtime">wasm-micro-runtime</ulink>
     </para>
 
     <warning>
@@ -101,9 +101,6 @@ recomendadas.
       </para>
     </warning>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/harfbuzz"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -115,11 +112,12 @@ comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr        \
-      --buildtype=release  \
-      -Dgraphite2=enabled  &amp;&amp;
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -Dgraphite2=enabled &amp;&amp;
 ninja</userinput></screen>
 
     <para>

@@ -7,26 +7,26 @@
   <!ENTITY libreoffice-dl "https://download.documentfoundation.org/libreoffice/src/&libreoffice-version;">
 
   <!ENTITY libreoffice-core-download-http "&libreoffice-dl;/libreoffice-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-core-md5sum        "3e7066685b3e786af93ec581ca377496">
-  <!ENTITY libreoffice-core-size          "254 MB">
+  <!ENTITY libreoffice-core-md5sum        "b6994286fa3c274d1beac33aca80c442">
+  <!ENTITY libreoffice-core-size          "267 MB">
 
   <!ENTITY libreoffice-dict-download-http "&libreoffice-dl;/libreoffice-dictionaries-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-dict-md5sum        "92eb0d4314f80097bcc9c42cd209c4b7">
-  <!ENTITY libreoffice-dict-size          "50 MB">
+  <!ENTITY libreoffice-dict-md5sum        "1bada07c06d85ac82587b231a0644676">
+  <!ENTITY libreoffice-dict-size          "51 MB">
 
   <!ENTITY libreoffice-help-download-http "&libreoffice-dl;/libreoffice-help-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-help-md5sum        "0a9ecec80eedd5c01c7b92281f4e4f1a">
-  <!ENTITY libreoffice-help-size          "159 MB">
+  <!ENTITY libreoffice-help-md5sum        "726d9aa6dc1e6041c9b4a936fc62b2bd">
+  <!ENTITY libreoffice-help-size          "160 MB">
 
   <!ENTITY libreoffice-translations-download-http "&libreoffice-dl;/libreoffice-translations-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-translations-md5sum        "52cf1d0f987e4a5dd559dd45ac23fb91">
-  <!ENTITY libreoffice-translations-size          "195 MB">
+  <!ENTITY libreoffice-translations-md5sum        "107f419fe95a42d4698f444397c5e569">
+  <!ENTITY libreoffice-translations-size          "207 MB">
 
   <!-- full size remeasured for 7.0.0.3 -->
 
-  <!ENTITY libreoffice-buildsize  "7,1 GB incluindo os arquivos adicionais se baixados durante a construção
-(748 MB instalados). A instalação de todo o conjunto de idiomas exige mais
-que 25 GB (cerca de 3 GB instalados)">
+  <!ENTITY libreoffice-buildsize  "10 GB including the additional files if downloaded during the build (727 MB
+installed). Installing the whole set of languages requires more than 25 GB
+(around 3 GB installed)">
 
  <!-- Editors: many updates to poppler will break LO using system poppler until
       somebody is able to provide a patch or sed.  In these cases, please mark
@@ -57,8 +57,9 @@ que 25 GB (cerca de 3 GB instalados)">
 
        For 7.2.5.2, It was 58 SBU including DL time.
 
+       For 7.5.4.2, I increased the parallelism to 8.  -bdubbs
   -->
-  <!ENTITY libreoffice-time "48 UPC com paralelismo=4 (com variação devido ao tempo de transferência)">
+  <!ENTITY libreoffice-time "40 SBU with parallelism=8 (will vary due to download time)">
 
 ]>
 
@@ -81,7 +82,7 @@ amplamente compatível com o <application>Microsoft Office</application> e é
 descendente do <application>OpenOffice.org</application>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -116,12 +117,12 @@ descendente do <application>OpenOffice.org</application>.
 
     <note>
       <para>
-        Cerca de 80 pequenos tarballs e arquivos zip serão baixados durante a
-construção. O tempo de transferência variará com a velocidade local da
-Internet e carga do servidor. O tempo de transferência é de cerca de 3
-minutos em uma conexão de fibra, provavelmente não muito mais que 10 minutos
-em uma conexão ADSL. Se você não tiver baixado um ou mais dos itens a
-seguir, eles também serão baixados durante a construção.
+        Around 80 smallish tarballs and zip files will be downloaded during the
+build. The download time will vary with the local internet speed and server
+load.  The download time is about 3 minutes on a fiber connection and
+probably not much more than 10 minutes on an ADSL connection.  If you have
+not downloaded one or more of the following, they will also be downloaded
+during the build.
       </para>
     </note>
 
@@ -183,17 +184,7 @@ seguir, eles também serão baixados durante a construção.
 
 
 
-    <!--
-      <listitem>
-
-        <para>
-          Required patch to fix building with fixed version of <xref
-          linkend="boost"/>:
-          <ulink url="&patch-root;/libreoffice-&libreoffice-dlversion;-boost1810-1.patch"/>
-        </para>
-      </listitem>
--->
-<!-- keep one commented patch, it's sure to again need one or more in a few months:-->
+    <!-- keep one commented patch, it's sure to again need one or more in a few months:-->
 <!--
       <listitem>
 
@@ -212,13 +203,14 @@ seguir, eles também serão baixados durante a construção.
 linkend="wget"/>, <xref linkend="which"/> e <xref linkend="zip"/>
     </para>
 
+    &build-use-internet;
+
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <note>
       <para>
-        A maioria desses pacotes é recomendada porque, se não estiverem instalados,
-o processo de construção compilará e instalará a própria versão dela
-(geralmente mais antiga), com o efeito colateral de aumentar o espaço em
-disco instalado e o tempo de construção.
+        Most of these packages are recommended because if they're not installed, the
+build process will compile and install its own (often older)  version, with
+the side effect of increasing build and installed disk space and build time.
       </para>
     </note>
 
@@ -243,16 +235,16 @@ e <xref linkend="unixodbc"/>
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="avahi"/>, <xref linkend="bluez"/>, <xref linkend="dconf"/>,
-<xref linkend="desktop-file-utils"/>, <xref linkend="doxygen"/> (não
-relevante se usar --disable-odk), <xref linkend="evolution-data-server"/>,
+<xref linkend="desktop-file-utils"/>, <xref linkend="doxygen"/> (not
+relevant if using --disable-odk), <xref linkend="evolution-data-server"/>,
 <xref linkend="gdb"/>, <xref linkend="gnutls"/>, <xref
 linkend="kf5-frameworks"/>, <xref linkend="libpaper"/>, <xref
-linkend="mariadb"/> ou <ulink url="https://www.mysql.com/">MySQL</ulink>,
-<xref linkend="mitkrb"/>, <xref linkend="nasm"/>, <xref linkend="sane"/>,
-<xref linkend="telepathy-glib"/>, <xref linkend="valgrind"/>, <xref
-linkend="vlc"/>, <ulink
-url="https://commons.apache.org/proper/commons-codec/">Codificador Apache
-Commons</ulink>, <ulink
+linkend="mariadb"/> or <ulink url="https://www.mysql.com/">MySQL</ulink>,
+<xref linkend="mitkrb"/>, <xref linkend="nasm"/>, &qt5-deps;, <xref
+linkend="sane"/>, <xref linkend="telepathy-glib"/>, <xref
+linkend="valgrind"/>, <xref linkend="vlc"/>, <ulink
+url="https://commons.apache.org/proper/commons-codec/">Apache Commons
+Codec</ulink>, <ulink
 url="https://hc.apache.org/httpcomponents-client-ga/index.html">Apache
 Commons HttpClient</ulink>, <ulink
 url="https://commons.apache.org/proper/commons-lang/">Apache Commons
@@ -300,7 +292,7 @@ url="https://github.com/nayuki/QR-Code-generator">libqrcodegen</ulink>,
 url="https://wiki.documentfoundation.org/DLP/Libraries/libqxp">libqxp</ulink>,
 <ulink
 url="https://sourceforge.net/projects/libwpd/files/librevenge/">librevenge
-(importador de documentos WordPerfect)</ulink>, <ulink
+(WordPerfect Document importer)</ulink>, <ulink
 url="https://github.com/fosnola/libstaroffice/wiki">libstaroffice</ulink>,
 <ulink
 url="https://wiki.documentfoundation.org/DLP/Libraries/libvisio">libvisio</ulink>,
@@ -318,17 +310,17 @@ url="https://code.google.com/archive/p/officeotron/">officeotron</ulink>,
 <ulink
 url="https://github.com/KhronosGroup/OpenCOLLADA/">OpenCOLLADA</ulink>,
 <ulink url="https://gitlab.com/orcus/orcus">Orcus</ulink>, <ulink
-url="https://sourceware.org/systemtap/">SystemTap</ulink> e <ulink
+url="https://sourceware.org/systemtap/">SystemTap</ulink>, and <ulink
 url="https://ukoethe.github.io/vigra/">VIGRA</ulink>
     </para>
 
     <para>
-      Existem muitas dependências opcionais não listadas aqui. Elas podem ser
-encontrados em <quote>download.lst</quote> (diretório do fonte).
+      There are many optional dependencies not listed here. They can be found in
+<quote>download.lst</quote> (source directory).
     </para>
 
     <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/libreoffice"/>
+      Editor Notes: <ulink url="&blfs-wiki;/libreoffice"/>
     </para>
   </sect2>
 
@@ -353,14 +345,6 @@ class="username">root</systemitem>.
 
 <screen><userinput>patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-poppler_22_09_fixes-1.patch</userinput></screen>
 -->
-<!--
-    <para>
-
-     First, fix a build failure introduced by the latest boost version:
-    </para>
-
-<screen><userinput>patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-boost1810-1.patch</userinput></screen>
--->
 <screen role="nodump"><userinput>tar -xf libreoffice-&libreoffice-dlversion;.tar.xz --no-overwrite-dir &amp;&amp;
 cd libreoffice-&libreoffice-dlversion;</userinput></screen>
 
@@ -379,9 +363,8 @@ ln -sv ../../../libreoffice-help-&libreoffice-dlversion;.tar.xz         external
 ln -sv ../../../libreoffice-translations-&libreoffice-dlversion;.tar.xz external/tarballs/</userinput></screen>
 
    <para>
-      As instruções no pacote desempacotam alguns tarballs em um local que não
-pode ser encontrado posteriormente. Crie alguns links simbólicos para
-ajudar:
+      The instructions in the package unpack some tarballs into a location it
+cannot find later.  Create some symlinks to help the build system out:
    </para>
 
 <screen><userinput>ln -sv src/libreoffice-help-&libreoffice-dlversion;/helpcontent2/ &amp;&amp;
@@ -422,30 +405,23 @@ do Xorg em /opt, você precisará desconfigurá-la para esse pacote.
     </note>
 
     <para>
-      Se construir em uma máquina de 32 bits, <envar>CFLAGS</envar> está
-configurada como <command>-Os</command>, o que quebra a construção. Evite
-isso emitindo:
+      If you are building on a 32 bit machine, <envar>CFLAGS</envar> is set to
+<command>-Os</command>, which breaks the build. Prevent this by issuing:
     </para>
 
-<!-- Not needed anymore with last version (1.10.13) of apache-ant
-    <para>
-
-      <xref linkend="openjdk"/> breaks the build if the following variable is
-      not set:
-    </para>
-
-<screen><userinput>export ANT_OPTS="-Djava.security.manager=allow"</userinput></screen>
--->
+<!-- see the attachment in Ticket #18435 -->
 <screen><userinput>case $(uname -m) in
    i?86) sed /-Os/d -i solenv/gbuild/platform/LINUX_INTEL_GCC.mk ;;
 esac</userinput></screen>
 
+    
     <para>
-      A versão mais recente do GPGME quebra a configuração devido a uma mudança na
-biblioteca. Corrija-o configurando a seguinte variável:
+      If you decide to pass the <option>--disable-java</option> to configure, fix
+an issue that causes the build to fail:
     </para>
 
-<screen><userinput remap="pre">export ac_cv_lib_gpgmepp_progress_callback=yes</userinput></screen>
+<screen><userinput>sed -i '940i #if HAVE_FEATURE_JAVA' cui/source/options/optjava.cxx &amp;&amp;
+sed -i '966i #endif'                cui/source/options/optjava.cxx</userinput></screen>
 
     <para>
       Prepare o <application>LibreOffice</application> para compilação executando
@@ -482,7 +458,6 @@ sed -e "/distro-install-file-lists/d" -i Makefile.in &amp;&amp;
              --enable-release-build=yes  \
              --enable-python=system      \
              --with-jdk-home=/opt/jdk    \
-             --with-system-boost         \
              --with-system-clucene       \
              --with-system-curl          \
              --with-system-epoxy         \
@@ -529,24 +504,24 @@ o(a) usuário(a) <systemitem class="username">root</systemitem>:
 
 <screen role="root"><userinput>if [ "$LO_PREFIX" != "/usr" ]; then
 
-  # Este link simbólico é necessário para as entradas do menu da área de trabalho
+  # This symlink is necessary for the desktop menu entries
   ln -svf $LO_PREFIX/lib/libreoffice/program/soffice /usr/bin/libreoffice &amp;&amp;
 
-  # Configure um local genérico independente do número da versão
+  # Set up a generic location independent of version number
   ln -sfv libreoffice-&libreoffice-dlversion; /opt/libreoffice
 
-  # Ícones
+  # Icons
   mkdir -vp /usr/share/pixmaps
   for i in $LO_PREFIX/share/icons/hicolor/32x32/apps/*; do
     ln -svf $i /usr/share/pixmaps
   done &amp;&amp;
 
-  # Entradas do menu da área de trabalho
+  # Desktop menu entries
   for i in $LO_PREFIX/lib/libreoffice/share/xdg/*; do
     ln -svf $i /usr/share/applications/libreoffice-$(basename $i)
   done &amp;&amp;
 
-  # Páginas de manual
+  # Man pages
   for i in $LO_PREFIX/share/man/man1/*; do
     ln -svf $i /usr/share/man/man1/
   done
@@ -592,29 +567,18 @@ de manual e o segundo impede a instalação de falhar.
       
     </para>
 
-
-    <!--
     <para>
-
-      <command>sed -i "s/TRUE/true/" ...</command>: These three sed commands
-      fix breakage caused by <application>ICU-68.1</application> removing a
-      macro. The third sed is for a file within libreoffice, the first two
-      are for packages downloaded during the build and amend '.mk' files for
-      the external projects (the source tarballs are unpacked during the build).
-    </para>
--->
-<para>
       <parameter>--with-vendor=BLFS</parameter>: Essa chave configura BLFS como o
 fornecedor mencionado quando você clica em "Sobre" a partir do menu Ajuda na
 barra de ferramentas.
     </para>
 
     <para>
-      <parameter>--with-lang='fr en-GB'</parameter>: Essa chave configura quais
-idiomas suportar. Para listar vários idiomas, separe-os com um espaço. Para
-todos os idiomas, use <parameter>--with-lang=ALL</parameter>. Observe que o
-arquivo de tradução não é necessário e não será baixado se usar apenas en-US
-como um idioma.
+      <parameter>--with-lang='fr en-GB'</parameter>: This switch sets what
+languages to support. To list several languages, separate them with a
+space. For all languages, use <parameter>--with-lang=ALL</parameter>. Note
+that the translations file is not needed and won't be downloaded if using
+only en-US as a language.
     </para>
 
     <note>
@@ -640,23 +604,19 @@ ambiente). Omita isso se você desabilitou o java.
       <parameter>--with-myspell-dicts</parameter>: Essa chave adiciona dicionários
 myspell ao conjunto de instalação do <application>LibreOffice</application>.
     </para>
+
     
-    <!-- Unrecognized as of 6.2.0.3
-    <para>
 
-      <parameter>- -with-alloc=system</parameter>: This switch tells
-      <application>LibreOffice</application> to use the system allocator
-      instead of its internal one.
+    <!-- The boost issues have resurfaced with boost-1.83.0... this time it's
+         with the locale library.
+    <para>
+      <parameter>- -with-system-boost</parameter>: This switch enables using
+      system boost. From time to time, recent versions of boost break
+      the build of libreoffice. In this case, it is possible to use the
+      bundled copy of boost by removing this flag.
     </para>
-   -->
+    -->
 <para>
-      <parameter>--with-system-boost</parameter>: Essa chave habilita usar o boost
-do sistema. De tempos em tempos, versões recentes do boost quebram a
-construção do libreoffice. Nesse caso, é possível usar a cópia agrupada do
-boost removendo esse sinalizador.
-    </para>
-
-    <para>
       <parameter>--disable-dconf</parameter>: Essa chave desabilita compilar o
 <application>LibreOffice</application> com o suporte do sistema de
 configuração <application>GNOME DConf</application>.
@@ -754,18 +714,7 @@ habilitada. Adicione essa chave se você não precisar desse recurso.
 instalado o <xref linkend="gst10-plugins-base"/>.
     </para>
 
-
-
-    <!-- only gtk3 is referenced in the configure script for 6.4.0.3
     <para>
-
-      <option>\-\-disable-gtk3</option>: Use this switch if you have not installed
-      <application>GTK+-3</application>, or if you have installed it but wish
-      to use <application>GTK+-2</application> (the menu icons differ).
- <!\-\- Note that a <application>GTK+-3</application> build still
-      requires <application>GTK+-2</application> to build the gtk-plugin.\-\->
-    </para>-->
-<para>
       <option>--disable-postgresql-sdbc</option>: Essa chave desabilita compilar o
 <application>LibreOffice</application> com a habilidade de conectar-se a uma
 base de dados <application>PostgreSQL</application>. Use-a se você não tiver
@@ -798,12 +747,12 @@ processadores ou falta de memória, a compilação pode ser muito mais lenta.
     </para>
 
     <para>
-      <option>--without-java</option>: Essa chave desabilita o suporte a
-<application>Java</application> no
-<application>LibreOffice</application>. Java é necessário para o controlador
-obsoleto HSQLDB, que permite ler bases de dados criadas por outros
-aplicativos ou em versões anteriores do libreoffice
-<application>base</application>.
+      <option>--without-java</option>: This switch disables
+<application>Java</application> support in
+<application>LibreOffice</application>. Java is needed for the deprecated
+HSQLDB driver, which allows reading databases created by other programs or
+in earlier versions of libreoffice <application>base</application>. It is
+also needed for some optional user interface components.
     </para>
 
     <para>
@@ -816,12 +765,12 @@ sistema.
     <para>
       
       <!-- Brings in - -enable-qt5 as well. -->
-<option>--enable-kf5</option>: Constrói com integração KDE/Plasma. Se o
-<xref linkend="qt5"/> e (ou) o <xref linkend="kf5-frameworks"/> não
-estiverem instalados em <filename class="directory">/usr</filename>, os
-diretórios de inclusão e biblioteca precisão ser especificados em
-<envar>QT5INC</envar>, <envar>QT5LIB</envar>, <envar>KF5INC</envar> e
-<envar>KF5LIB</envar>, respectivamente.
+<option>--enable-kf5</option>: Builds with KDE/Plasma integration. If
+&qt5-deps; and/or <xref linkend="kf5-frameworks"/> are not installed in
+<filename class="directory">/usr</filename>, the include and library
+directories must be specified in <envar>QT5INC</envar>,
+<envar>QT5LIB</envar>, <envar>KF5INC</envar>, and <envar>KF5LIB</envar>,
+respectively.
     </para>
 
     <para>
@@ -829,6 +778,14 @@ diretórios de inclusão e biblioteca precisão ser especificados em
 endereços do Evolution por meio do Servidor de Dados do Evolution. Observe
 que o Servidor de Dados do Evolution precisa estar instalado para esse
 recurso funcionar.
+    </para>
+
+    <para>
+      <option>--enable-qt5</option>: This switch enables support for integration
+with Qt5 and the Qt5 theming engine. If &qt5-deps; is not installed in
+<filename class="directory">/usr</filename>, the include and library
+directories must be specified in the <envar>QT5INC</envar> and
+<envar>QT5LIB</envar> environment variables.
     </para>
 
     

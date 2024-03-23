@@ -5,13 +5,13 @@
   %general-entities;
 
   <!ENTITY at-spi2-core-download-http
-           "&gnome-download-http;/at-spi2-core/2.46/at-spi2-core-&at-spi2-core-version;.tar.xz">
+           "&gnome-download-http;/at-spi2-core/2.48/at-spi2-core-&at-spi2-core-version;.tar.xz">
   <!ENTITY at-spi2-core-download-ftp
-           "&gnome-download-ftp;/at-spi2-core/2.46/at-spi2-core-&at-spi2-core-version;.tar.xz">
-  <!ENTITY at-spi2-core-md5sum        "16e85a40442d80be960b4e1e3992fd5b">
-  <!ENTITY at-spi2-core-size          "528 KB">
-  <!ENTITY at-spi2-core-buildsize     "20 MB (com os testes)">
-  <!ENTITY at-spi2-core-time          "0,2 UPC (com os testes)">
+           "&gnome-download-ftp;/at-spi2-core/2.48/at-spi2-core-&at-spi2-core-version;.tar.xz">
+  <!ENTITY at-spi2-core-md5sum        "4ef1875d9e7035f672d494b997c892af">
+  <!ENTITY at-spi2-core-size          "541 KB">
+  <!ENTITY at-spi2-core-buildsize     "20 MB (with tests)">
+  <!ENTITY at-spi2-core-time          "less than 0.1 SBU (with tests, except if there is a timeout)">
 ]>
 
 <sect1 id="at-spi2-core" xreflabel="at-spi2-core-&at-spi2-core-version;">
@@ -35,7 +35,7 @@ inclui um conjunto de interfaces que são implementadas por outros kits de
 ferramentas e aplicativos.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,7 +78,7 @@ ferramentas e aplicativos.
       <!-- Reports "Cannot get the default GSettingsSchemaSource" on
            startup w/o it. -->
 <xref linkend="dbus"/>, <xref linkend="glib2"/>, <xref role="runtime"
-linkend="gsettings-desktop-schemas"/> (tempo de execução) e <xref
+linkend="gsettings-desktop-schemas"/> (Runtime), and <xref
 linkend="xorg7-lib"/>
     </para>
 
@@ -89,11 +89,9 @@ linkend="xorg7-lib"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/>
+      <xref linkend="gi-docgen"/> and <xref linkend='sphinx'/>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/at-spi2-core"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -105,25 +103,25 @@ seguintes comandos:
     </para>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr       \
+meson setup ..            \
+      --prefix=/usr       \
       --buildtype=release \
-      -Dsystemd_user_dir=/tmp .. &amp;&amp;
+      -Dsystemd_user_dir=/tmp &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
-cd     build &amp;&amp;
+cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Um endereço de barramento de sessão, normalmente disponível em um terminal
-do &quot;Xorg&quot;, é necessário para executar os testes. A suíte de teste
-também exige que os esquemas simplistas do pacote já estejam
-instalados. Para testar os resultados, instale o pacote primeiro e, então,
-emita: &quot;<command>ninja test</command>&quot;.
+      The test suite also requires the glib schemas of the package to be installed
+already. To test the results, install the package first, then issue:
+<command>dbus-run-session ninja test</command>.  One test,
+<filename>atk-test</filename>, is known to timeout on some systems.
     </para>
 
     <para>
@@ -137,23 +135,22 @@ rm /tmp/at-spi-dbus-bus.service</userinput></screen>
 
   </sect2>
 
-
-  <sect2 role="commands" revision="sysv">
-    <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>-Dsystemd_user_dir=/tmp</parameter>: Esse sinalizador coloca o
-arquivo da unidade do &quot;systemd&quot; em &quot;/tmp&quot; onde será
-removido. O &quot;SysV&quot; é inapto para usar esse arquivo.
-    </para>
-
-  </sect2>
-
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para revision="sysv">
+      <parameter>-Dsystemd_user_dir=/tmp</parameter>: This flag puts the systemd
+unit file in /tmp where it will be removed. SysV is unable to use this file.
+    </para>
+
+    <para>
+      <option>-Ddocs=true</option>: Use this switch if you want to build the
+documentation. Note that you must have both <xref role="nodep"
+linkend="gi-docgen"/> and <xref linkend='sphinx'/> installed on your system.
+    </para>
 
   </sect2>
 
@@ -180,8 +177,8 @@ removido. O &quot;SysV&quot; é inapto para usar esse arquivo.
         </seg>
         <seg>
           /usr/include/atk-1.0, /usr/include/at-spi-2.0, /usr/include/at-spi2-atk,
-/usr/lib/gnome-settings-daemon-3.0, /usr/share/defaults/at-spi2 e
-/usr/share/gtk-doc/html/libatspi
+/usr/lib/gnome-settings-daemon-3.0, /usr/share/defaults/at-spi2, and
+/usr/share/gtk-doc/html/libatspi (optional)
         </seg>
       </seglistitem>
     </segmentedlist>

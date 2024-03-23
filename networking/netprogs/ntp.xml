@@ -6,10 +6,10 @@
 
   <!ENTITY ntp-download-http "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-&ntp-version;.tar.gz">
   <!ENTITY ntp-download-ftp  "">
-  <!ENTITY ntp-md5sum        "e1e6b23d2fc75cced41801dbcd6c2561">
-  <!ENTITY ntp-size          "6,7 MB">
-  <!ENTITY ntp-buildsize     "108 MB (com os testes)">
-  <!ENTITY ntp-time          "0,4 UPC (Usando paralelismo=4; com os testes)">
+  <!ENTITY ntp-md5sum        "a15558df580bd1b955a105a8b91c078f">
+  <!ENTITY ntp-size          "6.8 MB">
+  <!ENTITY ntp-buildsize     "99 MB (with tests)">
+  <!ENTITY ntp-time          "0.8 SBU (With tests; both using parallelism=4)">
 ]>
 
 <sect1 id="ntp" xreflabel="ntp-&ntp-version;">
@@ -32,7 +32,7 @@ rede de intercomunicação. Esse pacote é a implementação de referência
 oficial do protocolo &quot;NTP&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -95,7 +95,7 @@ url="https://www.gnu.org/software/autogen/">libopts originário do
 AutoGen</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/ntp"/></para>
+    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/ntp"/></para>
 
   </sect2>
 
@@ -138,6 +138,9 @@ comandos:
 
 <!-- https://bugs.ntp.org/show_bug.cgi?id=3688
          It should be fixed in the next ntp release. -->
+<!--<para>
+The test suite of this package is broken with GCC 10 or later.</para>
+         Now works OK-->
 <screen><userinput>./configure --prefix=/usr        \
             --bindir=/usr/sbin    \
             --sysconfdir=/etc     \
@@ -147,18 +150,13 @@ comandos:
 make</userinput></screen>
 
     
-    <para>A suíte de teste desse pacote está quebrada com o &quot;GCC&quot; 10 ou
-posterior.</para>
+    
 
-
-
-    <!--
     <para>
-
       To test the results, issue: <command>make check</command>.
     </para>
--->
-<para>
+
+    <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
     </para>
@@ -220,38 +218,34 @@ contrário, nenhum recurso do &quot;Readline&quot; será compilado.
       <title>Informação de Configuração</title>
 
       <para>
-        O arquivo de configuração a seguir primeiro define vários servidores
-&quot;NTP&quot; com acesso aberto a partir de diferentes
-continentes. Segundo, ele cria um arquivo de mudança gradual onde o
-&quot;<command>ntpd</command>&quot; armazena o deslocamento de frequência e
-um arquivo &quot;PID&quot; para armazenar o &quot;ID&quot; do processo do
-&quot;<command>ntpd</command>&quot;. Terceiro, ele define o local para o
-arquivo de definição do segundo bissexto
-&quot;<filename>/etc/ntp.leapseconds</filename>&quot;, que o conjunto de
-comandos sequenciais &quot;<command>update-leap</command>&quot; verifica e
-atualiza, quando necessário. Esse conjunto de comandos sequenciais pode ser
-executado como uma tarefa do &quot;Cron&quot; e os desenvolvedores do
-&quot;<application>ntp</application>&quot; recomendam uma frequência de
-cerca de três semanas para as atualizações. Como a documentação incluída no
-pacote é escassa, visite o sítio da &quot;web&quot; do &quot;NTP&quot; em
-<ulink url="https://www.ntp.org/"/> e <ulink
-url="https://www.ntppool.org/"/> para mais informações.
+        The following configuration file first defines various ntp servers with open
+access from different continents. Second, it creates a drift file where
+<command>ntpd</command> stores the frequency offset and a pid file to store
+the <command>ntpd</command> process ID. Third, it defines the location for
+the leap-second definition file <filename>/etc/ntp.leapseconds</filename>,
+that the <command>update-leap</command> script checks and updates, when
+necessary. This script can be run as a cron job and the
+<application>ntp</application> developers recommend a frequency of about
+three weeks for the updates. Since the documentation included with the
+package is sparse, visit the ntp website at <ulink
+url="https://www.ntp.org/"/> and <ulink url="https://www.ntppool.org/"/> for
+more information.
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/ntp.conf &lt;&lt; "EOF"
-<literal># Ásia
+<literal># Asia
 server 0.asia.pool.ntp.org
 
-# Austrália
+# Australia
 server 0.oceania.pool.ntp.org
 
-# Europa
+# Europe
 server 0.europe.pool.ntp.org
 
-# América do Norte
+# North America
 server 0.north-america.pool.ntp.org
 
-# América do Sul
+# South America
 server 2.south-america.pool.ntp.org
 
 driftfile /var/lib/ntp/ntp.drift
@@ -345,7 +339,7 @@ ln -v -sf ../init.d/setclock /etc/rc.d/rc6.d/K46setclock</userinput></screen>
 
       <seglistitem>
         <seg>calc_tickadj, ntp-keygen, ntp-wait, ntpd, ntpdate, ntpdc, ntpq, ntptime,
-ntptrace, sntp, tickadj e update-leap</seg>
+ntptrace, sntp, tickadj and update-leap</seg>
         <seg>Nenhum(a)</seg>
         <seg>/usr/share/ntp, /usr/share/doc/ntp-4.2.8 e /var/lib/ntp</seg>
       </seglistitem>
@@ -501,8 +495,8 @@ em núcleos mais antigos que não tem suporte para cronometragem de precisão
         <term><command>update-leap</command></term>
         <listitem>
           <para>
-            é um conjunto de comandos sequenciais para verificar e, se necessário,
-atualizar o arquivo de definição de segundos bissextos
+            is a script to verify and, if necessary, update the leap-second definition
+file
           </para>
           <indexterm zone="ntp update-leap">
             <primary sortas="b-update-leap">update-leap</primary>

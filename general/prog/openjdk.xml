@@ -5,22 +5,21 @@
   %general-entities;
 
   <!ENTITY ojdk-tarball              "jdk-&openjdk-version;-ga.tar.gz">
-  <!ENTITY ojdk-repo                 "https://github.com/openjdk/jdk19u">
+  <!ENTITY ojdk-repo                 "https://github.com/openjdk/jdk20u">
   <!ENTITY ojdk-download             "&ojdk-repo;/archive/&ojdk-tarball;">
 
   <!ENTITY anduin-download           "&sources-anduin-http;/OpenJDK/OpenJDK-&openjdk-version;">
 
-  <!ENTITY ojdk-md5sum               "2c5489f4830bce40240dc4f76f890156">
-  <!ENTITY ojdk-size                 "103 MB">
+  <!ENTITY ojdk-md5sum               "0a6c990bd0a4eee6eee06e89b74cde19">
+  <!ENTITY ojdk-size                 "105 MB">
 
-  <!ENTITY jtreg-version             "6.1+1">
+  <!ENTITY jtreg-version             "7.2+1">
   <!ENTITY jtreg-download            "&anduin-download;/jtreg-&jtreg-version;.tar.gz">
-  <!ENTITY jtreg-md5sum              "49e6bfa2506e96f461a01f9421a0961c">
-  <!ENTITY jtreg-size                "8,0 MB">
+  <!ENTITY jtreg-md5sum              "530eb67155e0a399d1a68b2f8584613a">
+  <!ENTITY jtreg-size                "8.9 MB">
 
-  <!ENTITY ojdk-bdsize               "5,1 GB (adicionar 595 MB para os testes)">
-  <!ENTITY ojdk-time                 "3,8 UPC com quatro (04) tarefas (adicionar 41 UPC para os testes com quatro
-(04) tarefas)">
+  <!ENTITY ojdk-bdsize               "3.6 GB (add 800 MB for tests)">
+  <!ENTITY ojdk-time                 "4.8 SBU with 4 jobs (add 36 SBU for tests with 4 jobs)">
 ]>
 
 <sect1 id="openjdk" xreflabel="OpenJDK-&openjdk-version;">
@@ -45,7 +44,7 @@ fornece um ambiente de tempo de execução completo para executar aplicativos
 &quot;<application>Java</application>&quot;.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <para>
       &quot;OpenJDK&quot; é código &quot;GPL&quot;, com uma exceção especial feita
@@ -76,23 +75,24 @@ por uma suíte de teste aprovada.
       </para>
 
       <para>
-        A &quot;Oracle&quot; fornece acesso gratuito à comunidade, caso a caso, a um
-kit de ferramentas fechado para garantir 100% de compatibilidade com o
-&quot;JDK&quot; proprietário dela. Nem a versão binária fornecida na página
-<xref linkend="java"/> nem a &quot;JVM&quot; construída com as instruções
-abaixo foram testadas contra o <ulink
-url="https://openjdk.java.net/groups/conformance/JckAccess/jck-access.html">TCK</ulink>.
-Qualquer versão que seja construída usando as instruções fornecidas não pode
-alegar ser compatível com o &quot;JDK&quot; proprietário, sem que o(a)
-próprio(a) usuário(a) solicite e complete os testes de compatibilidade.
+        Oracle does provide free community access, on a case by case basis, to a
+closed toolkit to ensure 100% compatibility with its proprietary JDK.
+Neither the binary version provided on the <xref linkend="java"/> page nor
+the JVM built with the instructions below have been tested against the
+<ulink
+url="https://openjdk.java.net/groups/conformance/JckAccess/jck-access.html">
+TCK</ulink>. Any version that is built using the instructions given, cannot
+claim to be compatible with the proprietary JDK, without the user applying
+for, and completing the compatibility tests themselves.
       </para>
 
       <para>
-        Com isso em mente, os binários produzidos usando este método de construção
-são testados regularmente em relação ao &quot;TCK&quot; pelos membros
-listados no sítio acima. Além da licença comunitária acima, uma licença
-educacional e não comercial para o &quot;TCK&quot; pode ser obtida <ulink
-url="https://www.oracle.com/technetwork/java/index-137188.html">aqui</ulink>.
+        With that in mind, the binaries produced using this build method are
+regularly tested against the TCK by the members listed on the site above. In
+addition to the community license above, an educational, non-commercial
+license for the TCK can be obtained <ulink
+url="https://www.oracle.com/technetwork/java/index-137188.html">
+here</ulink>.
       </para>
     </note>
 
@@ -180,8 +180,8 @@ linkend="which"/>, <xref linkend="xorg7-lib"/> e <xref linkend="zip"/>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="make-ca"/>, <xref linkend="giflib"/>, <xref
-linkend="lcms2"/>, <xref linkend="libjpeg"/>, <xref linkend="libpng"/> e
-<xref linkend="wget"/>
+linkend="harfbuzz"/>, <xref linkend="lcms2"/>, <xref linkend="libjpeg"/>,
+<xref linkend="libpng"/>, and <xref linkend="wget"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -191,11 +191,11 @@ linkend="lcms2"/>, <xref linkend="libjpeg"/>, <xref linkend="libpng"/> e
  (for the tests), and
 -->
 <xref linkend="git"/>, <xref linkend="graphviz"/>, <xref
-linkend="mercurial"/>, <ulink url="https://pandoc.org/">pandoc</ulink> e
-<ulink url="https://zlib.net/pigz">pigz</ulink>
+linkend="mercurial"/>, <ulink url="https://ccache.dev/">ccache</ulink>,
+<ulink url="https://pandoc.org/">pandoc</ulink>, and <ulink
+url="https://zlib.net/pigz">pigz</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/openjdk"/></para>
 
   </sect2>
 
@@ -248,11 +248,12 @@ relativas a personalizar a paralelização.
       Configure e construa o pacote com os seguintes comandos:
     </para>
 
-<screen><userinput>unset JAVA_HOME                            &amp;&amp;
+<screen><userinput>unset JAVA_HOME                             &amp;&amp;
 bash configure --enable-unlimited-crypto    \
                --disable-warnings-as-errors \
                --with-stdc++lib=dynamic     \
                --with-giflib=system         \
+               --with-harfbuzz=system       \
                --with-jtreg=$PWD/jtreg      \
                --with-lcms=system           \
                --with-libjpeg=system        \
@@ -309,6 +310,12 @@ Você deveria esperar ver cerca de sessenta (60) falhas e dez (10) erros.
          19.0.2+7:
          for x86_64: passed: 6,426; failed: 61; error: 14
          for i686:   passed: 6,377; failed: 34; error: 11
+         20.0.1+9:
+         for x86_64: passed: 6,515; failed: 65; error: 13
+         for i686:   passed: 6,520; failed: 60; error: 13
+         20.0.2+9:
+         for x86_64: passed: 6,515; failed: 65; error: 14
+         for i686:   passed: 6,446; failed: 33; error: 12
     -->
 <para>
       Instale o pacote com os seguintes comandos como o(a) usuário(a)
@@ -430,9 +437,9 @@ baixou a suíte opcional de teste.
     </para>
 
     <para>
-      <parameter>--with-{giflib,lcms,libjpeg,libpng,zlib}=system</parameter>:
-Essas chaves forçam o sistema de construção a usar as bibliotecas do sistema
-em vez das versões incluídas.
+      <parameter>--with-{giflib,harfbuzz,lcms,libjpeg,libpng,zlib}=system</parameter>:
+These switches force the build system to use the system libraries instead of
+the bundled versions.
     </para>
 
     <para>
@@ -487,9 +494,9 @@ necessário se &quot;<command>java</command>&quot; for encontrado no
       <title>Informação de Configuração</title>
 
       <para>
-        Normalmente, o ambiente &quot;JAVA&quot; é configurado depois de instalar a
-versão binária e também pode ser usado com o pacote recém-construído. Revise
-<xref linkend="ojdk-conf"/> caso você queira modificar alguma coisa.
+        Normally, the JAVA environment has been configured after installing the
+binary version, and can be used with the just built package as well.  Review
+<xref linkend="ojdk-conf"/> in case you want to modify something.
       </para>
 
       <para>

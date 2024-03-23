@@ -7,10 +7,10 @@
 <!-- gexiv2 -->
   <!ENTITY gexiv2-download-http "&gnome-download-http;/gexiv2/&gexiv2-minor;/gexiv2-&gexiv2-version;.tar.xz">
   <!ENTITY gexiv2-download-ftp  "&gnome-download-ftp;/gexiv2/&gexiv2-minor;/gexiv2-&gexiv2-version;.tar.xz">
-  <!ENTITY gexiv2-md5sum        "b4b1ac55bf9d32fb36a35eb346e1728e">
-  <!ENTITY gexiv2-size          "380 KB">
-  <!ENTITY gexiv2-buildsize     "3,4 MB">
-  <!ENTITY gexiv2-time          "0,1 UPC">
+  <!ENTITY gexiv2-md5sum        "1e65556fad5d24a4c365696544d8c945">
+  <!ENTITY gexiv2-size          "384 KB">
+  <!ENTITY gexiv2-buildsize     "4.0 MB (with tests)">
+  <!ENTITY gexiv2-time          "0.1 SBU (with parallelism=4 and tests)">
 ]>
 
 <sect1 id="gexiv2" xreflabel="gexiv2-&gexiv2-version;">
@@ -30,7 +30,7 @@
       gexiv2 é um envolucrador baseado em GObject em torno da biblioteca Exiv2.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -66,7 +66,25 @@
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do gexiv2</bridgehead>
+
+
+    <!-- applied in 0.14.2
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch to build against exiv2-0.28 and above:
+          <ulink url="&patch-root;/gexiv2-&gexiv2-version;-exiv_0_28-1.patch"/>
+        </para>
+        <para>
+          Required patch to build on i686 systems:
+          <ulink url="&patch-root;/gexiv2-&gexiv2-version;-buildfixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do gexiv2</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -80,20 +98,33 @@
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--  <xref linkend="python2"/>
- (for the Python2 module) -->
-<xref linkend="gtk-doc"/> (para documentação)
-
+      <xref linkend="gtk-doc"/> (para documentação)
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/gexiv2"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do gexiv2</title>
 
+
+
+    <!-- applied in 0.14.2
     <para>
+
+      First apply some fixes allowing to build against exiv2-0.28 and above:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../gexiv2-&gexiv2-version;-exiv_0_28-1.patch</userinput></screen>
+
+    <para>
+      Next, if you are on an i686 system, fix the build by adjusting types:
+    </para>
+
+<screen><userinput remap="pre">case $(uname -m) in
+    i?86) patch -Np1 -i ../gexiv2-&gexiv2-version;-buildfixes-1.patch ;;
+esac</userinput></screen>
+-->
+<para>
       Instale o <application>gexiv2</application> executando os seguintes
 comandos:
     </para>
@@ -101,12 +132,15 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, execute <command>ninja test</command>.
+      To test the results, run:
     </para>
+
+<screen remap="test"><userinput>meson configure -Dtests=true &amp;&amp;
+ninja test</userinput></screen>
 
     <para>
       Como o(a) usuário(a) <systemitem class="username">root</systemitem>:

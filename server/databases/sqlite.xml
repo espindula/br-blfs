@@ -10,15 +10,15 @@
 
 When updating, do not forget the above entities... They are anyway -->
 
-  <!ENTITY sqlite-download-http "https://sqlite.org/2022/sqlite-autoconf-&sqlite-dl-version;.tar.gz">
+  <!ENTITY sqlite-download-http "https://sqlite.org/&sqlite-year;/sqlite-autoconf-&sqlite-dl-version;.tar.gz">
   <!ENTITY sqlite-download-ftp  "">
-  <!ENTITY sqlite-md5sum        "42175b1a1d23529cb133bbd2b5900afd">
-  <!ENTITY sqlite-size          "3,0 MB">
-  <!ENTITY sqlite-buildsize     "78 MB">
-  <!ENTITY sqlite-time          "0,3 UPC (Usando paralelismo=4)">
+  <!ENTITY sqlite-md5sum        "0c5a92bc51cf07cae45b4a1e94653dea">
+  <!ENTITY sqlite-size          "3.1 MB">
+  <!ENTITY sqlite-buildsize     "76 MB">
+  <!ENTITY sqlite-time          "0.3 SBU (Using parallelism=4)">
 
-  <!ENTITY sqlite-docs-download "https://sqlite.org/2022/sqlite-doc-&sqlite-doc-version;.zip">
-  <!ENTITY sqlite-docs-md5sum   "f4cc9073ea45b01f62b9652e5e28a383">
+  <!ENTITY sqlite-docs-download "https://sqlite.org/&sqlite-year;/sqlite-doc-&sqlite-doc-version;.zip">
+  <!ENTITY sqlite-docs-md5sum   "f3cb6b67a82bc586a096459085616e4f">
   <!ENTITY sqlite-docs-size     "11 MB">
 ]>
 
@@ -41,7 +41,7 @@ logiciário que implementa um mecanismo de base de dados &quot;SQL&quot;
 transacional independente, sem servidor e com configuração zero.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -105,9 +105,6 @@ transacional independente, sem servidor e com configuração zero.
 linkend="unzip"/> (exigido para deszipar a documentação)
     </para>
 
-    <para condition="html" role="usernotes">
-      Observações de Usuário(a): <ulink url="&blfs-wiki;/sqlite"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -125,12 +122,10 @@ para instalar a documentação na árvore do fonte:
 seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr    \
+<screen><userinput>./configure --prefix=/usr     \
             --disable-static  \
-            --enable-fts5     \
-            CPPFLAGS="-DSQLITE_ENABLE_FTS3=1            \
-                      -DSQLITE_ENABLE_FTS4=1            \
-                      -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+            --enable-fts{4,5} \
+            CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 \
                       -DSQLITE_ENABLE_UNLOCK_NOTIFY=1   \
                       -DSQLITE_ENABLE_DBSTAT_VTAB=1     \
                       -DSQLITE_SECURE_DELETE=1          \
@@ -166,22 +161,21 @@ cp -v -R sqlite-doc-&sqlite-doc-version;/* /usr/share/doc/sqlite-&sqlite-version
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>--enable-fts5</parameter>: Essa chave habilita o suporte para a
-versão cinco da extensão completa de pesquisa de texto.
+      <parameter>--enable-fts{4,5}</parameter>: These switches enable support for
+version 3, 4 and 5 of the full text search (FTS)  extension.  Note that the
+<option>--enable-fts4</option> switch enables support for both FTS version 4
+and FTS version 3.
     </para>
 
     <para>
-      <parameter>CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1
--DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1
--DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1
--DSQLITE_ENABLE_DBSTAT_VTAB=1"</parameter>: Aplicativos como o
-&quot;<application>SeaMonkey</application>&quot; exigem que essas opções
-estejam ativadas. A única maneira de fazer isso é a de incluí-las na
-&quot;<envar>CFLAGS</envar>&quot; ou na
-&quot;<envar>CPPFLAGS</envar>&quot;. Nós usamos a última, de forma que o
-valor padrão (ou qualquer valor configurado pelo(a) usuário(a)) de
-<envar>CFLAGS</envar> não seja afetado. Para mais informações relativas ao
-que pode ser especificado, veja-se <ulink
+      <parameter>CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1
+-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1
+-DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"</parameter>:
+Applications such as <application>SeaMonkey</application> require these
+options to be turned on.  The only way to do this is to include them in the
+<envar>CFLAGS</envar> or <envar>CPPFLAGS</envar>.  We use the latter so the
+default value (or any value set by the user)  of <envar>CFLAGS</envar> won't
+be affected.  For further information on what can be specified see <ulink
 url="https://www.sqlite.org/compile.html"/>.
     </para>
 

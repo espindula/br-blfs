@@ -8,25 +8,29 @@
 
   <!ENTITY llvm-download-http "&llvm-url;/llvm-&llvm-version;.src.tar.xz">
   <!ENTITY llvm-download-ftp  "">
-  <!ENTITY llvm-md5sum        "c77db4c71e1eb267358204dffe2c6e10">
-  <!ENTITY llvm-size          "50 MB">
-  <!ENTITY llvm-buildsize     "2,7 GB (848 MB instalado; adicionar 18,3 GB para os testes e 308 MB para a
-documentação)">
-  <!ENTITY llvm-time          "24 UPC (Usando paralelismo=4; adicionar 22 UPC para os testes)">
+  <!ENTITY llvm-md5sum        "d9185fc007c32aea27a6de3c7c1eb90d">
+  <!ENTITY llvm-size          "54 MB">
+  <!ENTITY llvm-buildsize     "3.1 GB (938 MB installed; add 20 GB for tests and 308 MB for documentation)">
+  <!ENTITY llvm-time          "13 SBU (Add 8 SBU for tests; both using parallelism=8)">
 
   <!ENTITY clang-download-http "&llvm-url;/clang-&llvm-version;.src.tar.xz">
-  <!ENTITY clang-md5sum        "a6d0141e50b48f5e60c682277dac83b4">
-  <!ENTITY clang-size          "18 MB">
+  <!ENTITY clang-md5sum        "cb3e79db62c4c3b78cfcdebe66b00268">
+  <!ENTITY clang-size          "20 MB">
 
   <!ENTITY compiler-rt-download-http "&llvm-url;/compiler-rt-&llvm-version;.src.tar.xz">
-  <!ENTITY compiler-rt-md5sum        "12e6777354f0121cbe73ef13342a9302">
+  <!ENTITY compiler-rt-md5sum        "3061b4cb0b2428a32b4fb5db540fe66c">
   <!ENTITY compiler-rt-size          "2,3 MB">
 
-  <!ENTITY cmake-llvm-download-http "&sources-anduin-http;/llvm/llvm-cmake-&llvm-version;.src.tar.xz">
-<!--  <!ENTITY cmake-llvm-download-http "&llvm-url;/cmake-&llvm-version;.src.tar.xz">
-      Renamed cmake-15.0.1.src.tar.xz and placed on anduin.-->
-  <!ENTITY cmake-llvm-md5sum         "c3647d253f67ce255e1aba014e528f5b">
-  <!ENTITY cmake-llvm-size           "6,8 KB">
+  <!-- CMake modules and third party dependencies renamed and uploaded
+       onto anduin to avoid stupid file names.  -->
+
+  <!ENTITY cmake-llvm-download-http "&sources-anduin-http;/llvm/llvm-cmake.src.tar.xz">
+  <!ENTITY cmake-llvm-md5sum         "356a1aff675d281d7c76165269d33bd5">
+  <!ENTITY cmake-llvm-size           "9 KB">
+
+  <!ENTITY llvm-3rdparty-download-http "&sources-anduin-http;/llvm/llvm-third-party.src.tar.xz">
+  <!ENTITY llvm-3rdparty-md5sum        "8b506e49e5fa4c41186ba8ba7da5af82">
+  <!ENTITY llvm-3rdparty-size          "376 KB">
 ]>
 
 <sect1 id="llvm" xreflabel="LLVM-&llvm-version;">
@@ -68,7 +72,7 @@ tempo de execução e bibliotecas de perfilamento para desenvolvedores(as) que
 usam <application>Clang</application> e <application>LLVM</application>.
     </para>
 
-    &lfs113_checked;
+    &lfs120_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -125,6 +129,29 @@ usam <application>Clang</application> e <application>LLVM</application>.
         </para>
       </listitem>
     </itemizedlist>
+
+    <para>
+      <emphasis role="strong">Third-party dependencies for LLVM build
+system</emphasis>
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download: <ulink url="&llvm-3rdparty-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &llvm-3rdparty-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &llvm-3rdparty-size;
+        </para>
+      </listitem>
+    </itemizedlist>
+
 
     <bridgehead renderas="sect3">Transferência Recomendada</bridgehead>
     <para>
@@ -198,27 +225,29 @@ url="https://pypi.org/project/psutil/">psutil</ulink> (para testes) e <ulink
 url="https://github.com/Z3Prover/z3">Z3</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Usuário(a): <ulink url="&blfs-wiki;/llvm"/>
-    </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do "LLVM"</title>
 
     <para>
-      A partir da versão 15.0.0, um "tarball" adicional
-<filename>llvm-cmake-&llvm-version;.src.tar.xz</filename> é necessário. O(A)
-desenvolvedor(a) espera que ele seja extraído no mesmo nível do "tarball"
-<filename>llvm-&llvm-version;.src.tar.xz</filename> e que o diretório
-extraído seja renomeado para <filename
-class="directory">cmake</filename>. Extraia-o e modifique o sistema de
-construção para evitar criar um diretório fora da hierarquia
-<filename>llvm-&llvm-version;.src</filename>:
+      Two additional tarballs <filename>llvm-cmake.src.tar.xz</filename> and
+<filename>llvm-third-party.src.tar.xz</filename> are needed by LLVM building
+system.  The upstream expects them extracted at the same level as the
+<filename>llvm-&llvm-version;.src.tar.xz</filename> tarball, and the
+extracted directories renamed to <filename
+class="directory">cmake</filename> and <filename
+class="directory">third-party</filename>.  Extract them and modify the build
+system to avoid creating ambiguously-named directories outside the
+<filename>llvm-&llvm-version;.src</filename> hierarchy:
     </para>
 
-<screen><userinput>tar -xf ../llvm-cmake-&llvm-version;.src.tar.xz &amp;&amp;
-sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@cmake-&llvm-version;.src@' \
-   -i CMakeLists.txt</userinput></screen>
+<screen><userinput>tar -xf ../llvm-cmake.src.tar.xz                                   &amp;&amp;
+tar -xf ../llvm-third-party.src.tar.xz                             &amp;&amp;
+sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@llvm-cmake.src@'          \
+    -i CMakeLists.txt                                              &amp;&amp;
+sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@llvm-third-party.src@' \
+    -i cmake/modules/HandleLLVMOptions.cmake</userinput></screen>
 
     <para>
       Instale o <application>clang</application> na árvore do fonte executando os
@@ -256,11 +285,19 @@ aplicativos compilados.
 <userinput remap="pre">patch -Np2 -d tools/clang &lt;../clang-&llvm-version;-enable_default_ssp-1.patch</userinput></screen>
 
     <para>
+      If you have downloaded <application>compiler-rt</application>, fix a test
+case broken by default SSP in <application>clang</application>:
+    </para>
+
+<screen><userinput remap="pre">sed 's/clang_dfsan/&amp; -fno-stack-protector/' \
+    -i projects/compiler-rt/test/dfsan/origin_unaligned_memtrans.c</userinput></screen>
+
+    <para>
       Instale <application>LLVM</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir -v build &amp;&amp;
-cd      build &amp;&amp;
+cd       build &amp;&amp;
 
 CC=gcc CXX=g++                                  \
 cmake -DCMAKE_INSTALL_PREFIX=/usr               \
@@ -292,36 +329,99 @@ ninja docs-llvm-html  docs-llvm-man</userinput></screen>
       A documentação do "clang" pode ser construída também:
     </para>
 
+<!-- The excessive core dump made my system irresponsive.  -->
 <screen remap="doc"><userinput>ninja docs-clang-html docs-clang-man</userinput></screen>
+
+    
+    <para>
+      LLVM test suite can produce many core dump files.  They will occupy a large
+amount of disk space, and the core dump process can significantly slow down
+the testing.  To test the results with core dump disabled, <phrase
+revision='systemd'>ensure <xref linkend='systemd'/> is rebuilt with <xref
+linkend='linux-pam'/> support and the current login session is started after
+updating the <filename>/etc/pam.d/system-session</filename> file to include
+<filename class='libraryfile'>pam_systemd.so</filename>, then
+</phrase>issue:
+    </para>
+
+    <screen remap="test" revision="sysv"><userinput>sh -c 'ulimit -c 0 &amp;&amp; ninja check-all'</userinput></screen>
+
+    
+
+<screen remap="test" revision="systemd"><!-- From core(5): "RLIMIT_CORE will be ignored if the system is
+         configured to pipe core dumps to a program".  Here "the program"
+         is systemd-coredumpd.  So we need some fancy systemd setting.
+         -&ndash;user: Run it under per-user systemd manager, avoiding
+                       the necessity of root priviledge.
+         -&nash;pty: Run it in a pseudo-terminal, so we can monitor the
+                     process or interrupt it with Ctrl-C if we want.
+         -d: Run it with $PWD as the working directory.
+         -G: Delete the transient service unit even if the command fails,
+             to prevent "systemctl -&ndash;user status" from reporting
+             "degraded".
+         -p LimitCORE=0: Disable core dump.
+    -->
+<userinput>systemctl   --user start dbus &amp;&amp;
+systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></screen>
 
     <para>
       
       <!-- EDITORS - if you have more than 4 cores, take some offline to measure
       the elapsed time for the tests.  Also, libstdc++.a and perhaps libstdc++fs.a
       are used by a couple of the link-static tests. -->
-<!--Note that 2 of more than 62090 tests (llvm-libtool-darwin/L-and-l.test
-      and ThreadSanitizer-x86_64) are known to fail.-->
-<!--Note that three tests, <filename>
-extendhfsf2_test.c</filename>,
-      <filename>truncdfhf2_test.c</filename>, and
-      <filename>truncsfhf2_test.c</filename> are known to fail.-->
-<!-- 15.0.1: -->
-Para testar os resultados, emita: <command>ninja check-all</command>. Os
-testes são construídos com todos os núcleos
-<emphasis>disponíveis</emphasis>, porém executados ussndo o número de
-processadores <emphasis>online</emphasis>. (A diferença é a de que os
-núcleos disponíveis podem ser limitados usando o <command>taskset</command>;
-mas, colocá-los "offline" exige ecoar zero (0) para <filename
-class="directory">/sys/devices/system/cpu/cpu&lt;N&gt;/online</filename>
-pelo(a) usuário(a) <systemitem class="username">root</systemitem> e
-torná-los temporáriamente inutilizáveis por todas as tarefas na
-máquina). Observe que quatro testes de mais que sessenta e quatro mil e
-setecentos (64.700) são conhecidos por falharem:
-<filename>DataFlowSanitizer-x86_64 :: custom.cpp</filename>,
-<filename>DataFlowSanitizer-x86_64 ::
-origin_unaligned_memtrans.c</filename>, <filename>DataFlowSanitizer-x86_64
-:: release_shadow_space.c</filename>, <filename>LLVM ::
-tools/llvm-libtool-darwin/L-and-l.test</filename>,
+<!-- https://github.com/llvm/llvm-project/issues/64388 -->
+<!-- 16.0.3: 67327 Passed, 23510 Unsupported, 85 Skipped,
+                   124 Expectedly Failed
+           16.0.4  67327 Passed, 23507 Unsupported, 85 Skipped,
+                   124 Expectedly Failed, 6 Failed
+           Failed Tests (6):
+           AddressSanitizer-x86_64-linux         :: TestCases/log-path_test.cpp
+           AddressSanitizer-x86_64-linux-dynamic :: TestCases/log-path_test.cpp
+           MemProfiler-x86_64-linux              :: TestCases/log_path_test.cpp
+           MemProfiler-x86_64-linux-dynamic      :: TestCases/log_path_test.cpp
+           LLVM                   :: tools/llvm-libtool-darwin/L-and-l.test
+           ThreadSanitizer-x86_64 :: Linux/clone_setns.cpp
+
+           16.0.5 had the same test failures as 16.0.4.  - bdubbs
+
+           16.0.5 in LFS r11.3-141 with a minimal kernel configuration:
+           67330 Passed, 23512 Unsupported, 85 Skipped,
+           124 Expectedly Failed, 1 Failed
+           FAIL: ThreadSanitizer-x86_64 :: Linux/clone_setns.cpp - xry111
+
+           16.0.5 with Glibc-2.38:
+           63716 Passed, 23512 Unsupported, 85 Skipped,
+           124 Expectedly Failed, 15 Failed
+
+           - AtoiAndFriendsOOBTest, StrtolOOBTest, StrtollOOBTest
+             (repeated 4 times with different configurations)
+           - interception_malloc_test.cpp (repeated 2 times)
+           - scanf-allocate.cpp
+      -->
+<!-- To editors: it seems there is a more thorough test suite named
+           "test-suite-16.0.0.src.tar.xz" on the GitHub release download
+           page.  The usage of it is on
+           https://llvm.org/docs/TestSuiteGuide.html.  It looks like we've
+           never mentioned it in BLFS.
+
+           Let's let it go.  llvm is complex enough as it is.  Adding
+           the additional testsuite is IMO overkill.  - bdubbs -->
+Tests are built with all <emphasis>available</emphasis> cores, but run using
+the number of <emphasis>online</emphasis> processors. (The difference is
+that available cores can be limited using <command>taskset</command>, but
+taking them offline requires echoing 0 to <filename
+class="directory">/sys/devices/system/cpu/cpu&lt;N&gt;/online</filename> by
+the <systemitem class="username">root</systemitem> user and makes them
+temporarily unusable by all jobs on the machine.)  One test named
+<filename>Linux/clone_setns.cpp</filename> will fail if
+<option>CONFIG_USER_NS</option> is not enabled in kernel configuration.  The
+tests named <filename>AtoiAndFriendsOOBTest</filename>,
+<filename>StrtolOOBTest</filename>, <filename>StrtollOOBTest</filename>,
+<filename>interception_malloc_test.cpp</filename>, and
+<filename>scanf-allocate.cpp</filename> are known to fail with Glibc-2.38.
+      
+
+      
     </para>
 
     <para>
@@ -383,14 +483,13 @@ são necessárias em um sistema de produção.
     </para>
 
     <para>
-      <parameter>-DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF"</parameter>: Essa chave
-habilita construir para o mesmo alvo que o anfitrião e também para a "GPU"
-"r600" da "AMD" usada pelos controladores "r600" e "radeonsi" do "Mesa". O
-alvo "BPF" é necessário para construir <xref linkend="v4l-utils"/>. O padrão
-é todos os alvos. Você consegue usar uma lista separada por ponto e
-vírgula. Os alvos válidos são: "host", "X86", "Sparc", "PowerPC", "ARM",
-"AArch64", "Mips", "Hexagon", "Xcore", "M68K", "MSP430", "NVPTX", "SystemZ",
-"AMDGPU", "BPF", "CppBackend" ou "all".
+      <parameter>-DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF"</parameter>: This
+switch enables building for the same target as the host, and also for the
+r600 AMD GPU used by the Mesa r600 and radeonsi drivers. The BPF target is
+required to build <xref linkend="v4l-utils"/>. The Default is all of the
+targets. You can use a semicolon separated list. Valid targets are: host,
+X86, Sparc, PowerPC, ARM, AArch64, Mips, Hexagon, Xcore, M68K, MSP430,
+NVPTX, SystemZ, AMDGPU, BPF, CppBackend, or all.
     </para>
 
     <para>
@@ -457,43 +556,40 @@ documentação gerada manualmente.
 
       <seglistitem>
         <seg>
-          analyze-build, bugpoint, c-index-test, clang, clang++ (vínculos simbólicos
-para clang-&llvm-maj-version;), clang-&llvm-maj-version;, clang-check,
-clang-cl, clang-cpp (últimos dois vínculos simbólicos para "clang"),
-clang-extdef-mapping, clang-format, clang-linker-wrapper,
-clang-nvlink-wrapper, clang-offload-bundler, clang-offload-packager,
-clang-offload-wrapper, clang-refactor, clang-rename, clang-repl,
+          amdgpu-arch, analyze-build, bugpoint, c-index-test, clang, clang++ (symlinks
+to clang-&llvm-maj-version;), clang-&llvm-maj-version;, clang-check,
+clang-cl, clang-cpp (last two symlinks to clang), clang-extdef-mapping,
+clang-format, clang-linker-wrapper, clang-offload-bundler,
+clang-offload-packager, clang-refactor, clang-rename, clang-repl,
 clang-scan-deps, diagtool, dsymutil, FileCheck, git-clang-format, hmaptool,
-intercept-build, llc, lli, llvm-addr2line (vínculo simbólico para
-llvm-symbolizer), llvm-ar, llvm-as, llvm-bcanalyzer, llvm-bitcode-strip
-(vínculo simbólico para llvm-objcopy), llvm-cat, llvm-cfi-verify,
-llvm-config, llvm-cov, llvm-c-test, llvm-cvtres, llvm-cxxdump, llvm-cxxfilt,
-llvm-cxxmap, llvm-debuginfod, llvm-debuginfod-find, llvm-diff, llvm-dis,
-llvm-dlltool (vínculo simbólico para llvm-ar), llvm-dwarfdump,
-llvm-dwarfutil, llvm-dwp, llvm-exegesis, llvm-extract, llvm-gsymutil,
-llvm-ifs, llvm-install-name-tool (vínculo simbólico para llvm-objcopy),
-llvm-jitlink, llvm-lib (vínculo simbólico para llvm-ar),
-llvm-libtool-darwin, llvm-link, llvm-lipo, llvm-lto, llvm-lto2, llvm-mc,
-llvm-mca, llvm-ml, llvm-modextract, llvm-mt, llvm-nm, llvm-objcopy,
-llvm-objdump, llvm-opt-report, llvm-otool (vínculo simbólico para
+intercept-build, llc, lli, llvm-addr2line (symlink to llvm-symbolizer),
+llvm-ar, llvm-as, llvm-bcanalyzer, llvm-bitcode-strip (symlink to
+llvm-objcopy), llvm-cat, llvm-cfi-verify, llvm-config, llvm-cov,
+llvm-c-test, llvm-cvtres, llvm-cxxdump, llvm-cxxfilt, llvm-cxxmap,
+llvm-debuginfo-analyzer, llvm-debuginfod, llvm-debuginfod-find, llvm-diff,
+llvm-dis, llvm-dlltool (symlink to llvm-ar), llvm-dwarfdump, llvm-dwarfutil,
+llvm-dwp, llvm-exegesis, llvm-extract, llvm-gsymutil, llvm-ifs,
+llvm-install-name-tool (symlink to llvm-objcopy), llvm-jitlink, llvm-lib
+(symlink to llvm-ar), llvm-libtool-darwin, llvm-link, llvm-lipo, llvm-lto,
+llvm-lto2, llvm-mc, llvm-mca, llvm-ml, llvm-modextract, llvm-mt, llvm-nm,
+llvm-objcopy, llvm-objdump, llvm-opt-report, llvm-otool (symlink to
 llv-objdump), llvm-pdbutil, llvm-profdata, llvm-profgen, llvm-ranlib
-(vínculo simbólico para llvm-ar), llvm-rc, llvm-readelf (vínculo simbólico
-para llvm-readobj), llvm-readobj, llvm-reduce, llvm-remark-size-diff,
+(symlink to llvm-ar), llvm-rc, llvm-readelf (symlink to llvm-readobj),
+llvm-readobj, llvm-reduce, llvm-remark-size-diff, llvm-remarkutil,
 llvm-rtdyld, llvm-sim, llvm-size, llvm-split, llvm-stress, llvm-strings,
-llvm-strip (vínculo simbólico para llvm-objcopy), llvm-symbolizer,
-llvm-tapi-diff, llvm-tblgen, llvm-tli-checker, llvm-undname, llvm-windres
-(vínculo simbólico para llvm-rc), llvm-xray, opt, sancov, sanstats,
-scan-build, scan-build-py, scan-view, split-file e verify-uselistorder
+llvm-strip (symlink to llvm-objcopy), llvm-symbolizer, llvm-tapi-diff,
+llvm-tblgen, llvm-tli-checker, llvm-undname, llvm-windres (symlink to
+llvm-rc), llvm-xray, nvptx-arch, opt, sancov, sanstats, scan-build,
+scan-build-py, scan-view, split-file, and verify-uselistorder
         </seg>
         <seg>
-          libLLVM.so, libLLVM*.a (noventa e cinco (95) bibliotecas), libLTO.so,
-libRemarks.so, libclang.so, libclang-cpp.so, libclang*.a (quarenta e uma
-(41) bibliotecas) e LLVMgold.so
+          libLLVM.so, libLLVM*.a (100 libraries), libLTO.so, libRemarks.so,
+libclang.so, libclang-cpp.so, libclang*.a (42 libraries), and LLVMgold.so
         </seg>
         <seg>
           /usr/include/{clang,clang-c,llvm,llvm-c},
 /usr/lib/{clang,cmake/{clang,llvm},libear,libscanbuild},
-/usr/share/{clang,opt-viewer,scan-build,scan-view} e
+/usr/share/{clang,opt-viewer,scan-build,scan-view}, and
 /usr/share/doc/llvm-&llvm-version;
         </seg>
       </seglistitem>
@@ -502,6 +598,20 @@ libRemarks.so, libclang.so, libclang-cpp.so, libclang*.a (quarenta e uma
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="amdgpu-arch">
+        <term><command>amdgpu-arch</command></term>
+        <listitem>
+          <para>
+            lists AMD GPUs installed; at runtime it needs <filename
+class='libraryfile'>libhsa-runtime64.so</filename> which is not a part of
+BLFS
+          </para>
+          <indexterm zone="llvm amdgpu-arch">
+            <primary sortas="b-amdgpu-arch">amdgpu-arch</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
 
       <varlistentry id="analyze-build">
         <term><command>analyze-build</command></term>
@@ -603,18 +713,6 @@ externas em um arquivo de fonte
         </listitem>
       </varlistentry>
 
-      <varlistentry id="clang-nvlink-wrapper">
-        <term><command>clang-nvlink-wrapper</command></term>
-        <listitem>
-          <para>
-            é uma ferramenta de envólucro sobre o aplicativo "nvlink"
-          </para>
-          <indexterm zone="llvm clang-nvlink-wrapper">
-            <primary sortas="b-clang-nvlink-wrapper">clang-nvlink-wrapper</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
       <varlistentry id="clang-offload-bundler">
         <term><command>clang-offload-bundler</command></term>
         <listitem>
@@ -638,19 +736,6 @@ várias arquiteturas de processador contendo código de descarregamento
           </para>
           <indexterm zone="llvm clang-offload-packager">
             <primary sortas="b-clang-offload-packager">clang-offload-packager</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="clang-offload-wrapper">
-        <term><command>clang-offload-wrapper</command></term>
-        <listitem>
-          <para>
-            é uma ferramenta para criar "bitcode" de envólucro para binários de
-descarregamento alvo
-          </para>
-          <indexterm zone="llvm clang-offload-wrapper">
-            <primary sortas="b-clang-offload-wrapper">clang-offload-wrapper</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -752,6 +837,18 @@ linkend="git"/>)
           </para>
           <indexterm zone="llvm hmaptool">
             <primary sortas="b-hmaptool">hmaptool</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="intercept-build">
+        <term><command>intercept-build</command></term>
+        <listitem>
+          <para>
+            gera uma base de dados de comandos de construção para um projeto
+          </para>
+          <indexterm zone="llvm intercept-build">
+            <primary sortas="b-intercept-build">intercept-build</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -947,6 +1044,18 @@ fluxo de controle indireto no arquivo de objeto fornecido, "DSO" ou binário
           </para>
           <indexterm zone="llvm llvm-cxxmap">
             <primary sortas="b-llvm-cxxmap">llvm-cxxmap</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="llvm-debuginfo-analyzer">
+        <term><command>llvm-debuginfo-analyzer</command></term>
+        <listitem>
+          <para>
+            prints a logical representation of low-level debug information
+          </para>
+          <indexterm zone="llvm llvm-debuginfo-analyzer">
+            <primary sortas="b-llvm-debuginfo-analyzer">llvm-debuginfo-analyzer</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -1419,6 +1528,19 @@ da pilha entre dois arquivos de observações
         </listitem>
       </varlistentry>
 
+      <varlistentry id="llvm-remarkutil">
+        <term><command>llvm-remarkutil</command></term>
+        <listitem>
+          <para>
+            converts remark files between bitstream and YAML; or prints function
+instruction count information in remark files
+          </para>
+          <indexterm zone="llvm llvm-remark-size-diff">
+            <primary sortas="b-llvm-remark-size-diff">llvm-remark-size-diff</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="llvm-rtdyld">
         <term><command>llvm-rtdyld</command></term>
         <listitem>
@@ -1544,18 +1666,18 @@ do Google
         </listitem>
       </varlistentry>
 
-      <varlistentry id="intercept-build">
-        <term><command>intercept-build</command></term>
+      <varlistentry id="nvptx-arch">
+        <term><command>nvptx-arch</command></term>
         <listitem>
           <para>
-            gera uma base de dados de comandos de construção para um projeto
+            lists NVIDIA GPUs installed; at runtime it needs <filename
+class='libraryfile'>libcuda.so</filename> which is not a part of BLFS
           </para>
-          <indexterm zone="llvm intercept-build">
-            <primary sortas="b-intercept-build">intercept-build</primary>
+          <indexterm zone="llvm nvptx-arch">
+            <primary sortas="b-nvptx-arch">nvptx-arch</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
 
       <varlistentry id="opt">
         <term><command>opt</command></term>
