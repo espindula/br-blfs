@@ -9,7 +9,7 @@
   <!ENTITY dbus-md5sum        "da42f55aeec51b355587bc3062fc2d41">
   <!ENTITY dbus-size          "1,3 MB">
   <!ENTITY dbus-buildsize     "23 MB (adicionar 20 MB para os testes)">
-  <!ENTITY dbus-time          "0.2 SBU (add 1.6 SBU for tests)">
+  <!ENTITY dbus-time          "0,2 UPC (adicionar 1,6 UPC para testes)">
   <!-- The former value was 0.8 SBU, which was far more sensible. -->
   <!-- I got 'real  0m14.355s' for make check at -j1; bdubbs dbus-1.14.2 -->
   <!-- Now 'real 2m51.642ss' for make check at -j1; bdubbs dbus-1.14.6
@@ -99,22 +99,23 @@ precisam, mas as dependências deles não cabem no LFS.
 and <xref linkend="elogind"/> (These are
       circular dependencies. First build without them, and then again after
       both packages are installed.)</phrase>-->
-<xref linkend="xorg7-lib"/> (for <command>dbus-launch</command> program)
+<xref linkend="xorg7-lib"/> (para aplicativo <command>dbus-launch</command>)
       
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <phrase revision="systemd"><xref role="runtime" linkend="systemd"/> (for
-registering services launched by D-Bus session daemon as systemd user
-services);</phrase> For the tests: <xref linkend="dbus-python"/>, <xref
-linkend="pygobject3"/>, and <xref linkend="valgrind"/>; for documentation:
-<xref linkend="doxygen"/>, <xref linkend="xmlto"/>, <ulink
-url="https://pypi.python.org/pypi/mallard-ducktype">Ducktype</ulink>, and
+      <phrase revision="systemd"><xref role="runtime" linkend="systemd"/> (para
+registrar serviços iniciados pelo processo de segundo plano de sessão D-Bus
+como serviços de usuário(a) systemd);</phrase> Para os testes: <xref
+linkend="dbus-python"/>, <xref linkend="pygobject3"/> e <xref
+linkend="valgrind"/>; para documentação: <xref linkend="doxygen"/>, <xref
+linkend="xmlto"/>, <ulink
+url="https://pypi.python.org/pypi/mallard-ducktype">Ducktype</ulink> e
 <ulink url="&gnome-download-http;/yelp-tools/">Yelp Tools</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/dbus"/>
+    <para condition="html" role="usernotes">Observações de Editor(a): <ulink url="&blfs-wiki;/dbus"/>
     </para>
   </sect2>
 
@@ -262,10 +263,11 @@ systemctl start multi-user.target</userinput></screen>
     
 
     <para>
-      Many tests are disabled unless both <xref linkend="dbus-python"/> and <xref
-linkend="pygobject3"/> have been installed.  They must be run as an
-unprivileged user from a local session with bus address.  To run the
-standard tests issue <command>make check</command>.
+      Muitos testes são desabilitados, a menos que <xref linkend="dbus-python"/> e
+<xref linkend="pygobject3"/> tenham sido instalados. Eles precisam ser
+executados como um(a) usuário(a) sem privilégios a partir de uma sessão
+local com endereço de barramento. Para executar os testes padrão, emita
+<command>make check</command>.
     </para>
 
     
@@ -322,8 +324,8 @@ construí-la, [então] remova esse parâmetro.
       href="../../xincludes/static-libraries.xml"/>
 
     <para revision="systemd">
-      <parameter>--enable-user-session</parameter>: This parameter enables
-per-user DBus sessions with <application>systemd</application>.
+      <parameter>--enable-user-session</parameter>: Esse parâmetro habilita
+sessões do DBus por usuário(a) com <application>systemd</application>.
     </para>
 
     <para revision="sysv">
@@ -402,14 +404,13 @@ mudanças desejadas nesses arquivos.
      </para>
 
       <para>
-        Se algum pacote instalar um arquivo <filename>.service</filename> do
+        Se quaisquer pacotes instalarem um arquivo <filename>.service</filename> do
 <application>D-Bus</application> fora do diretório padrão <filename
-class="directory">/usr/share/dbus-1/services</filename>, [então] esse
-diretório deveria ser adicionado à configuração local da sessão. Por
-exemplo, <filename
-class="directory">/usr/local/share/dbus-1/services</filename> pode ser
-adicionado realizando os seguintes comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+class="directory">/usr/share/dbus-1/services</filename>, esse diretório
+deveria ser adicionado à configuração local da sessão. Por exemplo,
+<filename class="directory">/usr/local/share/dbus-1/services</filename> pode
+ser adicionado realizando-se os seguintes comandos como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/dbus-1/session-local.conf &lt;&lt; "EOF"
@@ -443,10 +444,9 @@ linkend="bootscripts"/>.
 <screen role="root" revision="sysv"><userinput>make install-dbus</userinput></screen>
 
       <para revision="sysv">
-        If this is the first time to install <application>D-Bus</application> on the
-system and you are not operating in a chroot environment, you can
-immediately start <command>dbus-daemon</command> without rebooting the
-system:
+        Se essa for a primeira vez que instala o <application>D-Bus</application> no
+sistema e não estiver operando em um ambiente chroot, você consegue iniciar
+imediatamente o <command>dbus-daemon</command> sem reinicializar o sistema:
       </para>
 
       

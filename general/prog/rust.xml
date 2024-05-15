@@ -8,9 +8,9 @@
   <!ENTITY rust-download-ftp  "">
   <!ENTITY rust-md5sum        "b6f9973de878e37a589f0989e4138480">
   <!ENTITY rust-size          "145 MB">
-  <!ENTITY rust-buildsize     "8.9 GB (292 MB installed); add 6.4 GB if running the tests">
-  <!ENTITY rust-time          "6.7 SBU (including download time; add 6.2 SBU for tests, both using
-parallelism=8)">
+  <!ENTITY rust-buildsize     "8,9 GB (292 MB instalado); adicionar 6,4 GB se executar os testes">
+  <!ENTITY rust-time          "6,7 UPC (incluindo o tempo de transferência; adicionar 6,2 UPC para os
+testes, ambos usando paralelismo=8)">
 ]>
 
 <sect1 id="rust" xreflabel="rustc-&rust-version;">
@@ -24,20 +24,20 @@ parallelism=8)">
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução ao <quote>Rust</quote></title>
+    <title>Introdução ao Rust</title>
     <para>
-      A linguagem de programação &quot;<application>Rust</application>&quot; foi
-projetada para ser uma linguagem segura, simultânea e prática.
+      A linguagem de programação <application>Rust</application> foi projetada
+para ser uma linguagem segura, simultânea e prática.
     </para>
 
     <para>
       Esse pacote é atualizado em um ciclo de lançamento de seis semanas. Por ser
 um pacote tão grande e lento de construir, no momento exigido somente por
 uns poucos pacotes neste livro, e particularmente porque as versões mais
-recentes tendem a quebrar pacotes &quot;Mozilla&quot; mais antigos, os(as)
-editores(as) do BLFS consideram que ele somente deveria ser atualizado
-quando isso for necessário (seja para corrigir problemas ou para permitir a
-construção de uma nova versão de um pacote).
+recentes tendem a quebrar pacotes Mozilla mais antigos, os(as) editores(as)
+do BLFS consideram que ele somente deveria ser atualizado quando isso for
+necessário (seja para corrigir problemas ou para permitir a construção de
+uma nova versão de um pacote).
     </para>
 
     <para>
@@ -175,23 +175,23 @@ Additional Downloads</bridgehead>
         </para>
       </listitem>
     </itemizedlist>-->
-<bridgehead renderas="sect3">Dependências do <quote>Rust</quote></bridgehead>
+<bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <!-- Required for downloading stage 0 binaries.
            Otherwise it's recommended (if not installed, a vendored copy
            will be built). -->
-<xref linkend="cmake"/> and <xref linkend="curl"/>
+<xref linkend="cmake"/> e <xref linkend="curl"/>
     </para>
 
     &build-use-internet;
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="libssh2"/> and <xref linkend="llvm"/> (built with
--DLLVM_LINK_LLVM_DYLIB=ON so that rust can link to system LLVM instead of
-building its shipped version)
+      <xref linkend="libssh2"/> e <xref linkend="llvm"/> (construído com
+-DLLVM_LINK_LLVM_DYLIB=ON, de forma que Rust consiga vincular ao LLVM do
+sistema em vez de construir a versão enviada dele)
     </para>
 
     <note>
@@ -204,28 +204,29 @@ e usada.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gdb"/> (used by the test suite if it is present), <xref
-linkend="git"/> (required by the test suite), and <ulink
+      <xref linkend="gdb"/> (usado pela suíte de teste se estiver presente), <xref
+linkend="git"/> (exigido pela suíte de teste) e <ulink
 url='https://libgit2.org/'>libgit2</ulink>
     </para>
 
     <para condition="html" role="usernotes">
-      Editor Notes: <ulink url="&blfs-wiki;/rust"/>
+      Observações de Editor(a): <ulink url="&blfs-wiki;/rust"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do <quote>Rust</quote></title>
+    <title>Instalação do Rust</title>
 
     <note>
       <para>
-        Currently the rust compiler produces SSE2 instructions for 32-bit x86,
-causing the generated code to be broken on 32-bit systems without a
-SSE2-capable processor.  All x86 processor models released after 2004 should
-be SSE2-capable.  Run <command>lscpu | grep sse2</command> as a test.  If it
-outputs anything, your CPU is SSE2-capable and OK.  Otherwise you may try to
-build this package <emphasis>on a SSE2-capable system</emphasis> with the
-following fix applied:
+        Atualmente o compilador Rust produz instruções SSE2 para x86 de 32 bits,
+fazendo com que o código gerado seja quebrado em sistemas de 32 bits sem um
+processador compatível com SSE2. Todos os modelos de processador x86
+lançados após 2004 deveriam ser compatíveis com SSE2. Execute <command>lscpu
+| grep sse2</command> como teste. Se gerar alguma coisa, tua CPU é
+compatível com SSE2 e está OK. Caso contrário, você pode tentar construir
+esse pacote <emphasis>em um sistema compatível com SSE2</emphasis> com a
+seguinte correção aplicada:
       </para>
 
       
@@ -278,36 +279,36 @@ configurará a construção.
 
 <screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-llvm9_fixes-1.patch</userinput></screen>-->
 <screen><userinput>cat &lt;&lt; EOF &gt; config.toml
-<literal># see config.toml.example for more possible options
-# See the 8.4 book for an old example using shipped LLVM
-# e.g. if not installing clang, or using a version before 13.0
+<literal># Veja-se "config.toml.example" para mais opções possíveis
+# Veja-se o livro 8.4 para um exemplo antigo usando "LLVM" enviado
+# por exemplo, se não instalar "clang", ou usar uma versão anterior a 13.0
 
-# tell x.py to not keep printing an annoying warning
+# Diz ao "x.py" para não permanecer imprimindo um aviso irritante
 changelog-seen = 2
 
 [llvm]
-# by default, rust will build for a myriad of architectures
+# por padrão, "rust" construirá para uma miríade de arquiteturas
 targets = "X86"
 
-# When using system llvm prefer shared libraries
+# Quando usar o "LLVM" do sistema prefira bibliotecas compartilhadas
 link-shared = true
 
 [build]
-# omit docs to save time and space (default is to build them)
+# Omita os documentos para economizar tempo e espaço (padrão é para construí-los)
 docs = false
 
-# install extended tools: cargo, clippy, etc
+# Instala ferramentas estendidas: cargo, clippy, etc
 extended = true
 
-# Do not query new versions of dependencies online.
+# Não consulte novas versões de dependências online.
 locked-deps = true
 
-# Specify which extended tools (those from the default install).
+# Especifique quais ferramentas estendidas (aquelas oriundas da instalação padrão).
 tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 
-# Use the source code shipped in the tarball for the dependencies.
-# The combination of this and the "locked-deps" entry avoids downloading
-# many crates from Internet, and makes the Rustc build more stable.
+# Use o código-fonte enviado no "tarball" para as dependências.
+# A combinação disto e da entrada "locked-deps" evita baixar
+# muitas caixas a partir da Internet, e torna a construção do "Rustc" mais estável.
 vendor = true
 
 [install]
@@ -316,22 +317,22 @@ docdir = "share/doc/rustc-&rust-version;"
 
 [rust]
 channel = "stable"
-description = "for BLFS &version;"
+description = "para BLFS &version;"
 
-# BLFS used to not install the FileCheck executable from llvm,
-# so disabled codegen tests.  The assembly tests rely on FileCheck
-# and cannot easily be disabled, so those will anyway fail if
-# FileCheck has not been installed.
+# BLFS costumava não instalar o executável "FileCheck" originário do "LLVM",
+# de forma que desabilitava os testes "codegen". Os testes "assembly" dependem de "FileCheck"
+# e não podem ser facilmente desabilitados, de forma que eles falharão de qualquer maneira se
+# "FileCheck" não tiver sido instalado.
 #codegen-tests = false
 
 [target.x86_64-unknown-linux-gnu]
-# NB the output of llvm-config (i.e. help options) may be
-# dumped to the screen when config.toml is parsed.
+# Observe bem: a saída gerada do "llvm-config" (ou seja, opções de ajuda) pode ser
+# despejada na tela quando "config.toml" é analisado.
 llvm-config = "/usr/bin/llvm-config"
 
 [target.i686-unknown-linux-gnu]
-# NB the output of llvm-config (i.e. help options) may be
-# dumped to the screen when config.toml is parsed.
+# Observe bem: a saída gerada do "llvm-config" (ou seja, opções de ajuda) pode ser
+# despejada na tela quando "config.toml" é analisado.
 llvm-config = "/usr/bin/llvm-config"
 
 </literal>
@@ -380,12 +381,13 @@ python3 ./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></sc
 
     
     <para>
-      Some <literal>ui</literal> tests may fail (the number of failures depends on
-the length of the absolute path to the <filename
-class='directory'>rustc-&rust-version;-src</filename> directory).  These
-failures can be identified by viewing the <filename>rustc-testlog</filename>
-file and search for the <computeroutput>note: the full type name has been
-written to</computeroutput>... messages and they can be safely ignored.
+      Alguns testes <literal>ui</literal> possivelmente falhem (o número de falhas
+depende do comprimento do caminho absoluto para o diretório <filename
+class='directory'>rustc-&rust-version;-src</filename>). Essas falhas podem
+ser identificadas visualizando-se o arquivo
+<filename>rustc-testlog</filename> e pesquisando as mensagens
+<computeroutput>note: the full type name has been written
+to</computeroutput>... e elas podem ser seguramente ignoradas.
     </para>
 
     <para>
@@ -396,19 +398,21 @@ written to</computeroutput>... messages and they can be safely ignored.
     </para>
 
     <para>
-      On some systems, scripting the tests may result in the tests hanging on
-<filename>test: combine_install_with_separate_uninstall</filename>. If this
-happens, the problem can be worked around by pressing the Enter key.  The
-test can also be removed with:
+      Em alguns sistemas, automatizar os testes possivelmente resulte nos testes
+suspendendo em <filename>test:
+combine_install_with_separate_uninstall</filename>. Se isso acontecer, o
+problema pode ser contornado pressionando-se a tecla Enter. O teste também
+pode ser removido com:
     </para>
 
 <screen role="nodump"><userinput>sed -e '/runtest combine_install_with/s/^/#/g' -i src/tools/rust-installer/test.sh</userinput></screen>
 
     <para>
-      As with all large test suites, other tests might fail on some machines - if
-the number of additional failures is low, check the log for 'failures:' and
-review lines above that, particularly the 'stderr:' lines. Any mention of
-SIGSEGV or signal 11 in a failing test is a cause for concern.
+      Tal como acontece com todas as grandes suítes de teste, outros testes podem
+falhar em algumas máquinas - se o número de falhas adicionais for baixo,
+verifique se existem 'failures:' no registro e revise as linhas acima,
+especialmente as linhas 'stderr:'. Qualquer menção ao SIGSEGV ou ao sinal
+onze (11) em um teste falho é motivo de preocupação.
     </para>
 
     <para>
@@ -464,17 +468,17 @@ esse pacote. Para &quot;<command>sudo</command>&quot;, use a opção
 
     
     <para>
-      The building system attempts to install some files twice, and during the
-second attempt it renames the old one (installed in the first attempt) with
-the <filename class='extension'>.old</filename> suffix.  As the &root; user,
-remove these files:
+      O sistema de construção tenta instalar alguns arquivos duas vezes e, durante
+a segunda tentativa, renomeia o antigo (instalado na primeira tentativa) com
+o sufixo <filename class='extension'>.old</filename>. Como o(a) usuário(a)
+&root;, remova esses arquivos:
     </para>
 
     <screen role='root'><userinput>find /opt/rustc-&rust-version; -name "*.old" -delete</userinput></screen>
 
     <para>
-      Still as the &root; user, symlink a <application>Zsh</application>
-completion file into the correct location:
+      Ainda como o(a) usuário(a) &root;, crie um link simbólico de um arquivo de
+completação do <application>Zsh</application> para o local correto:
     </para>
 
 <screen role='root'><userinput>install -vdm755 /usr/share/zsh/site-functions      &amp;&amp;
@@ -495,41 +499,44 @@ exemplo, de <command>ls -l</command>.
     </para>
 
     <para>
-      <literal>targets = "X86"</literal>: this avoids building all the available
-linux cross-compilers (AArch64, MIPS, PowerPC, SystemZ, etc). Unfortunately,
-rust insists on installing source files for these below <filename
-class="directory">/opt/rustc/lib/src</filename>.
+      <literal>targets = "X86"</literal>: isso evita construir todos os
+compiladores cruzados disponíveis do Linux (AArch64, MIPS, PowerPC, SystemZ,
+etc). Infelizmente, o Rust insiste em instalar os arquivos fonte para esses
+abaixo de <filename class="directory">/opt/rustc/lib/src</filename>.
     </para>
 
     <para>
-      <literal>extended = true</literal>: this installs several tools (specified
-by the <literal>tools</literal> entry) alongside <command>rustc</command>.
+      <literal>extended = true</literal>: isso instala várias ferramentas
+(especificadas pela entrada <literal>tools</literal>) juntamente com o
+<command>rustc</command>.
     </para>
 
     <para>
-      <literal>tools = ["cargo", "clippy", "rustdoc", "rustfmt"]</literal>: only
-build the tools from the 'default' profile in binary command
-<command>rustup</command> which are recommended for most users.  The other
-tools are unlikely to be useful unless using (old) code analyzers or editing
-the standard library.
+      <literal>tools = ["cargo", "clippy", "rustdoc", "rustfmt"]</literal>:
+construa somente as ferramentas a partir do perfil 'padrão' no comando
+binário <command>rustup</command> que é recomendado para a maioria dos(as)
+usuários(as). As outras ferramentas são improváveis que sejam úteis, a menos
+que se use analisadores (antigos) de código ou se edite a biblioteca padrão.
     </para>
 
     <para>
-      <literal>channel = "stable"</literal>: this ensures only stable features can
-be used, the default in <filename>config.toml</filename> is to use
-development features, which is not appropriate for a released version.
+      <literal>channel = "stable"</literal>: isso garante que somente recursos
+estáveis possam ser usados. O padrão no <filename>config.toml</filename> é o
+de usar recursos de desenvolvimento, o que não é apropriado para uma versão
+lançada.
     </para>
 
     
     <!-- comment while using shipped LLVM -->
 <para>
-      <literal>[target.x86_64-unknown-linux-gnu]</literal>: the syntax of
-<filename>config.toml</filename> requires an <literal>llvm-config</literal>
-entry for each target for which system-llvm is to be used. Change the target
-to <literal>[target.i686-unknown-linux-gnu]</literal> if you are building on
-32-bit x86. This whole section may be omitted if you wish to build against
-the shipped llvm, or do not have clang, but the resulting build will be
-larger and take longer.
+      <literal>[target.x86_64-unknown-linux-gnu]</literal>: a sintaxe do
+<filename>config.toml</filename> exige uma entrada
+<literal>llvm-config</literal> para cada alvo para o qual o LLVM do sistema
+esteja para ser usado. Mude o alvo para
+<literal>[target.i686-unknown-linux-gnu]</literal> se você estiver
+construindo em x86 de 32 bits. Essa seção inteira pode ser omitida se você
+desejar construir contra o LLVM enviado ou não tiver clang, mas a construção
+resultante será maior e demorará mais.
     </para>
 
 
@@ -564,25 +571,25 @@ sistema.
     </para>-->
 <!-- https://github.com/alexcrichton/openssl-probe/issues/25 -->
 <para>
-      <envar>SSL_CERT_DIR=/etc/ssl/certs</envar>: Work around an issue causing
-test failures with the CA certificate store layout used by <xref
-linkend='make-ca'/>.
+      <envar>SSL_CERT_DIR=/etc/ssl/certs</envar>: Contorne um problema que causa
+falhas de teste com o esquema de armazenamento de certificados de AC usado
+pelo <xref linkend='make-ca'/>.
     </para>
 
     <para>
-      <parameter>--verbose</parameter>: this switch can sometimes provide more
-information about a test which fails.
+      <parameter>--verbose</parameter>: essa chave às vezes pode fornecer mais
+informações relativas a um teste que falhe.
     </para>
 
     <para>
-      <parameter>--no-fail-fast</parameter>: this switch ensures that the test
-suite will not stop at the first error.
+      <parameter>--no-fail-fast</parameter>: essa chave garante que a suíte de
+teste não parará no primeiro erro.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
-    <title>Configurando <quote>Rust</quote></title>
+    <title>Configurando o Rust</title>
 
     <sect3 id="rustc-config">
       <title>Informação de Configuração</title>

@@ -10,8 +10,9 @@
   <!ENTITY llvm-download-ftp  "">
   <!ENTITY llvm-md5sum        "d9185fc007c32aea27a6de3c7c1eb90d">
   <!ENTITY llvm-size          "54 MB">
-  <!ENTITY llvm-buildsize     "3.1 GB (938 MB installed; add 20 GB for tests and 308 MB for documentation)">
-  <!ENTITY llvm-time          "13 SBU (Add 8 SBU for tests; both using parallelism=8)">
+  <!ENTITY llvm-buildsize     "3,1 GB (938 MB instalado; adicionar 20 GB para testes e 308 MB para
+documentação)">
+  <!ENTITY llvm-time          "13 UPC (Adicionar 8 UPC para testes; ambos usando paralelismo=8)">
 
   <!ENTITY clang-download-http "&llvm-url;/clang-&llvm-version;.src.tar.xz">
   <!ENTITY clang-md5sum        "cb3e79db62c4c3b78cfcdebe66b00268">
@@ -53,8 +54,8 @@ bibliotecas centrais "Low Level Virtual Machine" (LLVM) fornecem um
 otimizador moderno independente de origem e destino, junto com suporte à
 geração de código para muitas "CPUs" populares (bem como algumas menos
 comuns!). Essas bibliotecas são construídas em torno de uma representação de
-código bem especificada, conhecida como a representação intermediária LLVM
-("LLVM IR").
+código bem especificada, conhecida como a representação intermediária do
+LLVM ("LLVM IR").
     </para>
 
     <para>
@@ -131,23 +132,23 @@ usam <application>Clang</application> e <application>LLVM</application>.
     </itemizedlist>
 
     <para>
-      <emphasis role="strong">Third-party dependencies for LLVM build
-system</emphasis>
+      <emphasis role="strong">Dependências de terceiros(as) para sistema de
+construção LLVM</emphasis>
     </para>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download: <ulink url="&llvm-3rdparty-download-http;"/>
+          Transferência: <ulink url="&llvm-3rdparty-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &llvm-3rdparty-md5sum;
+          Soma de verificação MD5 da transferência: &llvm-3rdparty-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &llvm-3rdparty-size;
+          Tamanho da transferência: &llvm-3rdparty-size;
         </para>
       </listitem>
     </itemizedlist>
@@ -185,7 +186,7 @@ url="&patch-root;/clang-&llvm-version;-enable_default_ssp-1.patch"/>
 
     <bridgehead renderas="sect3">Transferência Opcional</bridgehead>
     <para>
-      <emphasis role="strong">Compiler RT</emphasis>
+      <emphasis role="strong">Compilador RT</emphasis>
     </para>
     <itemizedlist spacing="compact">
       <listitem>
@@ -231,15 +232,15 @@ url="https://github.com/Z3Prover/z3">Z3</ulink>
     <title>Instalação do "LLVM"</title>
 
     <para>
-      Two additional tarballs <filename>llvm-cmake.src.tar.xz</filename> and
-<filename>llvm-third-party.src.tar.xz</filename> are needed by LLVM building
-system.  The upstream expects them extracted at the same level as the
-<filename>llvm-&llvm-version;.src.tar.xz</filename> tarball, and the
-extracted directories renamed to <filename
-class="directory">cmake</filename> and <filename
-class="directory">third-party</filename>.  Extract them and modify the build
-system to avoid creating ambiguously-named directories outside the
-<filename>llvm-&llvm-version;.src</filename> hierarchy:
+      Dois tarballs adicionais <filename>llvm-cmake.src.tar.xz</filename> e
+<filename>llvm-third-party.src.tar.xz</filename> são necessários para o
+sistema de construção do LLVM. O(A) desenvolvedor(a) espera eles extraídos
+no mesmo nível, como o tarball
+<filename>llvm-&llvm-version;.src.tar.xz</filename>, e os diretórios
+extraídos renomeados para <filename class="directory">cmake</filename> e
+<filename class="directory">third-party</filename>. Extraia-os e modifique o
+sistema de construção para evitar criar diretórios ambiguamente nomeados
+fora da hierarquia <filename>llvm-&llvm-version;.src</filename>:
     </para>
 
 <screen><userinput>tar -xf ../llvm-cmake.src.tar.xz                                   &amp;&amp;
@@ -266,9 +267,10 @@ instale-o na árvore do fonte executando os seguintes comandos:
 mv projects/compiler-rt-&llvm-version;.src projects/compiler-rt</userinput></screen>
 
     <para>
-     Existem muitos scripts "Python" nesse pacote que usam <command>/usr/bin/env
-python</command> para acessar o "Python" do sistema, que no LFS é <xref
-linkend="python3"/>. Use o seguinte comando para corrigir esses scripts:
+     Existem muitos conjuntos de comandos sequenciais "Python" nesse pacote que
+usam <command>/usr/bin/env python</command> para acessar o "Python" do
+sistema, que no LFS é <xref linkend="python3"/>. Use o seguinte comando para
+corrigir esses conjuntos de comandos sequenciais:
     </para>
 
 <screen><userinput>grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'</userinput></screen>
@@ -285,15 +287,15 @@ aplicativos compilados.
 <userinput remap="pre">patch -Np2 -d tools/clang &lt;../clang-&llvm-version;-enable_default_ssp-1.patch</userinput></screen>
 
     <para>
-      If you have downloaded <application>compiler-rt</application>, fix a test
-case broken by default SSP in <application>clang</application>:
+      Se você tiver baixado o <application>compiler-rt</application>, corrija um
+caso de teste quebrado pelo SSP padrão em <application>clang</application>:
     </para>
 
 <screen><userinput remap="pre">sed 's/clang_dfsan/&amp; -fno-stack-protector/' \
     -i projects/compiler-rt/test/dfsan/origin_unaligned_memtrans.c</userinput></screen>
 
     <para>
-      Instale <application>LLVM</application> executando os seguintes comandos:
+      Instale o <application>LLVM</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir -v build &amp;&amp;
@@ -334,14 +336,15 @@ ninja docs-llvm-html  docs-llvm-man</userinput></screen>
 
     
     <para>
-      LLVM test suite can produce many core dump files.  They will occupy a large
-amount of disk space, and the core dump process can significantly slow down
-the testing.  To test the results with core dump disabled, <phrase
-revision='systemd'>ensure <xref linkend='systemd'/> is rebuilt with <xref
-linkend='linux-pam'/> support and the current login session is started after
-updating the <filename>/etc/pam.d/system-session</filename> file to include
-<filename class='libraryfile'>pam_systemd.so</filename>, then
-</phrase>issue:
+      A suíte de teste do LLVM pode produzir muitos arquivos de despejo
+central. Eles ocuparão uma grande quantidade de espaço em disco e o processo
+de despejo central pode retardar significativamente a testagem. Para testar
+os resultados com o despejo central desabilitado, <phrase
+revision='systemd'>certifique-se de que o <xref linkend='systemd'/> seja
+reconstruído com suporte a <xref linkend='linux-pam'/> e que a sessão atual
+de login seja iniciada depois de atualizar o arquivo
+<filename>/etc/pam.d/system-session</filename> para incluir <filename
+class='libraryfile'>pam_systemd.so</filename>, então </phrase>emita:
     </para>
 
     <screen remap="test" revision="sysv"><userinput>sh -c 'ulimit -c 0 &amp;&amp; ninja check-all'</userinput></screen>
@@ -406,19 +409,22 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
 
            Let's let it go.  llvm is complex enough as it is.  Adding
            the additional testsuite is IMO overkill.  - bdubbs -->
-Tests are built with all <emphasis>available</emphasis> cores, but run using
-the number of <emphasis>online</emphasis> processors. (The difference is
-that available cores can be limited using <command>taskset</command>, but
-taking them offline requires echoing 0 to <filename
-class="directory">/sys/devices/system/cpu/cpu&lt;N&gt;/online</filename> by
-the <systemitem class="username">root</systemitem> user and makes them
-temporarily unusable by all jobs on the machine.)  One test named
-<filename>Linux/clone_setns.cpp</filename> will fail if
-<option>CONFIG_USER_NS</option> is not enabled in kernel configuration.  The
-tests named <filename>AtoiAndFriendsOOBTest</filename>,
+Os testes são construídos com todos os elementos de processamento
+<emphasis>disponíveis</emphasis>, mas executados usando o número de
+processadores <emphasis>online</emphasis>. (A diferença é que os elementos
+de processamento disponíveis podem ser limitados usando-se
+<command>taskset</command>, mas colocá-los offline exige ecoar 0 para
+<filename
+class="directory">/sys/devices/system/cpu/cpu&lt;N&gt;/online</filename>
+pelo(a) usuário(a) <systemitem class="username">root</systemitem> e os torna
+temporariamente inusáveis por todos os trabalhos na máquina). Um teste
+chamado <filename>Linux/clone_setns.cpp</filename> falhará se
+<option>CONFIG_USER_NS</option> não estiver habilitada na configuração do
+núcleo. Os testes chamados <filename>AtoiAndFriendsOOBTest</filename>,
 <filename>StrtolOOBTest</filename>, <filename>StrtollOOBTest</filename>,
-<filename>interception_malloc_test.cpp</filename>, and
-<filename>scanf-allocate.cpp</filename> are known to fail with Glibc-2.38.
+<filename>interception_malloc_test.cpp</filename> e
+<filename>scanf-allocate.cpp</filename> são conhecidos por falharem com a
+Glibc-2.38.
       
 
       
@@ -557,35 +563,37 @@ documentação gerada manualmente.
 
       <seglistitem>
         <seg>
-          amdgpu-arch, analyze-build, bugpoint, c-index-test, clang, clang++ (symlinks
-to clang-&llvm-maj-version;), clang-&llvm-maj-version;, clang-check,
-clang-cl, clang-cpp (last two symlinks to clang), clang-extdef-mapping,
-clang-format, clang-linker-wrapper, clang-offload-bundler,
-clang-offload-packager, clang-refactor, clang-rename, clang-repl,
-clang-scan-deps, diagtool, dsymutil, FileCheck, git-clang-format, hmaptool,
-intercept-build, llc, lli, llvm-addr2line (symlink to llvm-symbolizer),
-llvm-ar, llvm-as, llvm-bcanalyzer, llvm-bitcode-strip (symlink to
-llvm-objcopy), llvm-cat, llvm-cfi-verify, llvm-config, llvm-cov,
-llvm-c-test, llvm-cvtres, llvm-cxxdump, llvm-cxxfilt, llvm-cxxmap,
-llvm-debuginfo-analyzer, llvm-debuginfod, llvm-debuginfod-find, llvm-diff,
-llvm-dis, llvm-dlltool (symlink to llvm-ar), llvm-dwarfdump, llvm-dwarfutil,
-llvm-dwp, llvm-exegesis, llvm-extract, llvm-gsymutil, llvm-ifs,
-llvm-install-name-tool (symlink to llvm-objcopy), llvm-jitlink, llvm-lib
-(symlink to llvm-ar), llvm-libtool-darwin, llvm-link, llvm-lipo, llvm-lto,
+          amdgpu-arch, analyze-build, bugpoint, c-index-test, clang, clang++ (links
+simbólicos para clang-&llvm-maj-version;), clang-&llvm-maj-version;,
+clang-check, clang-cl, clang-cpp (os últimos dois links simbólicos para
+clang), clang-extdef-mapping, clang-format, clang-linker-wrapper,
+clang-offload-bundler, clang-offload-packager, clang-refactor, clang-rename,
+clang-repl, clang-scan-deps, diagtool, dsymutil, FileCheck,
+git-clang-format, hmaptool, intercept-build, llc, lli, llvm-addr2line (link
+simbólico para llvm-symbolizer), llvm-ar, llvm-as, llvm-bcanalyzer,
+llvm-bitcode-strip (link simbólico para llvm-objcopy), llvm-cat,
+llvm-cfi-verify, llvm-config, llvm-cov, llvm-c-test, llvm-cvtres,
+llvm-cxxdump, llvm-cxxfilt, llvm-cxxmap, llvm-debuginfo-analyzer,
+llvm-debuginfod, llvm-debuginfod-find, llvm-diff, llvm-dis, llvm-dlltool
+(link simbólico para llvm-ar), llvm-dwarfdump, llvm-dwarfutil, llvm-dwp,
+llvm-exegesis, llvm-extract, llvm-gsymutil, llvm-ifs, llvm-install-name-tool
+(link simbólico para llvm-objcopy), llvm-jitlink, llvm-lib (link simbólico
+para llvm-ar), llvm-libtool-darwin, llvm-link, llvm-lipo, llvm-lto,
 llvm-lto2, llvm-mc, llvm-mca, llvm-ml, llvm-modextract, llvm-mt, llvm-nm,
-llvm-objcopy, llvm-objdump, llvm-opt-report, llvm-otool (symlink to
-llv-objdump), llvm-pdbutil, llvm-profdata, llvm-profgen, llvm-ranlib
-(symlink to llvm-ar), llvm-rc, llvm-readelf (symlink to llvm-readobj),
-llvm-readobj, llvm-reduce, llvm-remark-size-diff, llvm-remarkutil,
-llvm-rtdyld, llvm-sim, llvm-size, llvm-split, llvm-stress, llvm-strings,
-llvm-strip (symlink to llvm-objcopy), llvm-symbolizer, llvm-tapi-diff,
-llvm-tblgen, llvm-tli-checker, llvm-undname, llvm-windres (symlink to
-llvm-rc), llvm-xray, nvptx-arch, opt, sancov, sanstats, scan-build,
-scan-build-py, scan-view, split-file, and verify-uselistorder
+llvm-objcopy, llvm-objdump, llvm-opt-report, llvm-otool (link simbólico para
+llv-objdump), llvm-pdbutil, llvm-profdata, llvm-profgen, llvm-ranlib (link
+simbólico para llvm-ar), llvm-rc, llvm-readelf (link simbólico para
+llvm-readobj), llvm-readobj, llvm-reduce, llvm-remark-size-diff,
+llvm-remarkutil, llvm-rtdyld, llvm-sim, llvm-size, llvm-split, llvm-stress,
+llvm-strings, llvm-strip (link simbólico para llvm-objcopy),
+llvm-symbolizer, llvm-tapi-diff, llvm-tblgen, llvm-tli-checker,
+llvm-undname, llvm-windres (link simbólico para llvm-rc), llvm-xray,
+nvptx-arch, opt, sancov, sanstats, scan-build, scan-build-py, scan-view,
+split-file e verify-uselistorder
         </seg>
         <seg>
-          libLLVM.so, libLLVM*.a (100 libraries), libLTO.so, libRemarks.so,
-libclang.so, libclang-cpp.so, libclang*.a (42 libraries), and LLVMgold.so
+          libLLVM.so, libLLVM*.a (100 bibliotecas), libLTO.so, libRemarks.so,
+libclang.so, libclang-cpp.so, libclang*.a (42 bibliotecas) e LLVMgold.so
         </seg>
         <seg>
           /usr/include/{clang,clang-c,llvm,llvm-c},
@@ -604,9 +612,8 @@ libclang.so, libclang-cpp.so, libclang*.a (42 libraries), and LLVMgold.so
         <term><command>amdgpu-arch</command></term>
         <listitem>
           <para>
-            lists AMD GPUs installed; at runtime it needs <filename
-class='libraryfile'>libhsa-runtime64.so</filename> which is not a part of
-BLFS
+            lista as GPUs AMD instaladas; em tempo de execução ele precisa de <filename
+class='libraryfile'>libhsa-runtime64.so</filename> que não é parte do BLFS
           </para>
           <indexterm zone="llvm amdgpu-arch">
             <primary sortas="b-amdgpu-arch">amdgpu-arch</primary>
@@ -1053,7 +1060,7 @@ fluxo de controle indireto no arquivo de objeto fornecido, "DSO" ou binário
         <term><command>llvm-debuginfo-analyzer</command></term>
         <listitem>
           <para>
-            prints a logical representation of low-level debug information
+            imprime uma representação lógica de informações de depuração de baixo nível
           </para>
           <indexterm zone="llvm llvm-debuginfo-analyzer">
             <primary sortas="b-llvm-debuginfo-analyzer">llvm-debuginfo-analyzer</primary>
@@ -1533,8 +1540,8 @@ da pilha entre dois arquivos de observações
         <term><command>llvm-remarkutil</command></term>
         <listitem>
           <para>
-            converts remark files between bitstream and YAML; or prints function
-instruction count information in remark files
+            converte arquivos de observação entre bitstream e YAML; ou imprime
+informações de contagem de instruções de função em arquivos de observação
           </para>
           <indexterm zone="llvm llvm-remark-size-diff">
             <primary sortas="b-llvm-remark-size-diff">llvm-remark-size-diff</primary>
@@ -1671,8 +1678,8 @@ do Google
         <term><command>nvptx-arch</command></term>
         <listitem>
           <para>
-            lists NVIDIA GPUs installed; at runtime it needs <filename
-class='libraryfile'>libcuda.so</filename> which is not a part of BLFS
+            lista as GPUs NVIDIA instaladas; em tempo de execução ele precisa de
+<filename class='libraryfile'>libcuda.so</filename> que não é parte do BLFS
           </para>
           <indexterm zone="llvm nvptx-arch">
             <primary sortas="b-nvptx-arch">nvptx-arch</primary>
@@ -1720,8 +1727,8 @@ class='libraryfile'>libcuda.so</filename> which is not a part of BLFS
         <term><command>scan-build</command></term>
         <listitem>
           <para>
-            é um script <application>Perl</application> que invoca o analisador estático
-<application>Clang</application>
+            é um conjunto de comandos sequenciais <application>Perl</application> que
+invoca o analisador estático <application>Clang</application>
           </para>
           <indexterm zone="llvm scan-build">
             <primary sortas="b-scan-build">scan-build</primary>
@@ -1733,8 +1740,8 @@ class='libraryfile'>libcuda.so</filename> which is not a part of BLFS
         <term><command>scan-build-py</command></term>
         <listitem>
           <para>
-            é um script <application>Python</application> que invoca o analisador
-estático <application>Clang</application>
+            é um conjuntos de comandos sequenciais <application>Python</application> que
+invoca o analisador estático <application>Clang</application>
           </para>
           <indexterm zone="llvm scan-build-py">
             <primary sortas="b-scan-build-py">scan-build-py</primary>

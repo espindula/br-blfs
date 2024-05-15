@@ -11,7 +11,7 @@
   <title>Testagem e Configuração do Xorg-&xorg-version;</title>
 
   <indexterm zone="xorg-config">
-    <primary sortas="g-configuring-xorg">Configurando o <quote>Xorg</quote></primary>
+    <primary sortas="g-configuring-xorg">Configurando o Xorg</primary>
   </indexterm>
 
   <sect2 id='X11-testing' xreflabel="Testando o Xorg">
@@ -19,18 +19,20 @@
 
     <note>
       <para>
-        Before starting Xorg for the first time, is useful to rebuild the library
-cache by running <userinput>ldconfig</userinput> as the <systemitem
-class="username">root</systemitem> user.
+        Antes de iniciar o Xorg pela primeira vez, é útil reconstruir o cache da
+biblioteca executando-se o <userinput>ldconfig</userinput> como o(a)
+usuário(a) <systemitem class="username">root</systemitem>.
       </para>
     </note>
 
     <note>
       <para>
-        Before starting Xorg for the first time, is often needed to reboot the
-system to ensure all appropriate daemons are started and appropriate
-security issues are properly set.  As an alternative, logging out and
-logging back in may work, but as of this writing has not been tested.
+        Antes de iniciar o Xorg pela primeira vez, muitas vezes é necessário
+reinicializar o sistema para garantir que todos os processos de segundo
+plano apropriados sejam iniciados e que os problemas de segurança
+apropriados estejam configurados adequadamente. Como alternativa, sair e
+logar-se novamente possivelmente funcione, mas ao tempo deste texto, não foi
+testado.
       </para>
     </note>
 
@@ -92,9 +94,9 @@ instalando-se o &quot;<xref linkend="xorg7-legacy"/>&quot;.
     <note>
       <para>
         <!--https://gitlab.freedesktop.org/drm/nouveau/-/issues/257-->
-On systems with NVIDIA GPUs which are using the Nouveau kernel driver, you
-may encounter occasional GPU crashes and hangs. If this problem occurs,
-downgrade to the latest version of the Linux 6.1 kernel.
+Em sistemas com GPUs NVIDIA que estão usado o controlador de núcleo Nouveau,
+você pode encontrar congelamentos e travamentos ocasionais da GPU. Se esse
+problema ocorrer, rebaixe para a versão mais recente do núcleo Linux 6.1.
         
       </para>
     </note>
@@ -108,9 +110,8 @@ abaixo.
 
   </sect2>
 
-  <sect2 role="configuration" id="checking-dri" xreflabel="Verificando a instalação do &quot;DRI&quot;">
-    <title>Verificando a Instalação da <quote>Direct Rendering Infrastructure</quote>
-(<quote>DRI</quote>)</title>
+  <sect2 role="configuration" id="checking-dri" xreflabel="Verificando a instalação da DRI">
+    <title>Verificando a Instalação da Direct Rendering Infrastructure (DRI)</title>
 
     <para>
       &quot;DRI&quot; é uma estrutura que permite que logiciário acesse
@@ -135,9 +136,10 @@ construído o &quot;<xref linkend="xorg-server"/>&quot; com o &quot;bit&quot;
 
     <note>
       <para>
-        DRI configuration may differ if you are using alternate drivers, such as
-traditional DDX drivers, or the proprietary drivers from <ulink
-url="https://www.nvidia.com/page/home.html">NVIDIA</ulink> or <ulink
+        A configuração da DRI possivelmente difira se você estiver usando
+controladores alternativos, como tradicionais controladores DDX ou os
+controladores proprietários oriundos da <ulink
+url="https://www.nvidia.com/page/home.html">NVIDIA</ulink> ou da <ulink
 url="https://www.amd.com/">AMD</ulink>.
       </para>
     </note>
@@ -174,8 +176,8 @@ linkend="mesa"/>&quot;. A partir de um terminal do &quot;X&quot;, execute
 &quot;<command>glxinfo</command>&quot; e procure pela frase:
     </para>
 
-<screen><computeroutput>nome da tela: :0
-display: :0   screen: 0
+<screen><computeroutput>name of display: :0
+display: :0  screen: 0
 direct rendering: Yes</computeroutput></screen>
 
     <para>
@@ -247,17 +249,18 @@ quiser apenas verificar, {então} consulte <filename>Xorg.0.log</filename>.
     </para>
 
     <para>
-      The location of <filename>Xorg.0.log</filename> depends on how Xorg is
-installed.  If the instructions in the book are followed closely and Xorg is
-started from the command line, it will be located in the <filename
-class="directory">$HOME/.local/share/xorg/</filename> directory.  If Xorg is
-started by a display manager (e.g. <xref linkend='lightdm'/>, <xref
-linkend='sddm'/>, or <xref linkend='gdm'/>) or if
-<filename>$XORG_PREFIX/bin/Xorg</filename> has the suid bit set, it will be
-located in the <filename class="directory">/var/log/</filename> directory.
+      O local do <filename>Xorg.0.log</filename> depende de como o Xorg está
+instalado. Se as instruções no livro forem seguidas à risca e o Xorg for
+iniciado a partir da linha de comando, ele estará localizado no diretório
+<filename class="directory">$HOME/.local/share/xorg/</filename>. Se o Xorg
+for iniciado por um gerenciador de telas (por exemplo, <xref
+linkend='lightdm'/>, <xref linkend='sddm'/> ou <xref linkend='gdm'/>) ou se
+<filename>$XORG_PREFIX/bin/Xorg</filename> tiver o bit suid configurado, ele
+estará localizado no diretório <filename
+class="directory">/var/log/</filename>.
     </para>
 
-    <bridgehead renderas="sect3">Problemas do &quot;Xorg.0.log&quot;</bridgehead>
+    <bridgehead renderas="sect3">Problemas do Xorg.0.log</bridgehead>
 
     <para>
       Ao olhar para o &quot;Xorg.0.log&quot;, verifique entradas como
@@ -277,13 +280,13 @@ está fechada.
     <bridgehead renderas="sect5">(WW) VGA arbiter: cannot open kernel arbiter, no multi-card support</bridgehead>
 
     <para>
-      This warning is displayed when a regular user starts Xorg.  The library
-<filename>libpciaccess.so</filename> issues this warning when it tries to
-open <filename>/dev/vga_arbiter</filename>.  If there is no more than one
-legacy PCI (not PCIe) graphic cards on the system, it can safely be
-ignored.  If really necessary, the permissions of this device can be changed
-by adding a udev rule and adding the local user to the video group. As the
-&root; user:
+      Esse aviso é exibido quando um(a) usuário(a) normal inicia o Xorg. A
+biblioteca <filename>libpciaccess.so</filename> emite esse aviso quando ela
+tenta abrir o <filename>/dev/vga_arbiter</filename>. Se existir não mais que
+uma placa gráfica PCI legada (não PCIe) no sistema, ele pode ser seguramente
+ignorado. Se realmente necessário, as permissões desse dispositivo podem ser
+mudadas adicionando-se uma regra do Udev e adicionando-se o(a) usuário(a)
+local ao grupo de vídeo. Como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>cat > /etc/udev/rules.d/99-vga-arbiter.rules &lt;&lt; EOF
@@ -336,18 +339,19 @@ Provider 1: id: 0x56 cap: 0xf, Source Output, Sink Output, Source Offload, Sink 
 
     
     <para>
-      In order to be able to run a GLX application on a discrete GPU, you will
-need to run the following command, where &lt;provider&gt; is the id of the
-more powerful discrete card, and &lt;sink&gt; is the id of card which has a
-display connected:
+      Para a finalidade de poder executar um aplicativo GLX em uma GPU discreta,
+você precisará executar o seguinte comando, onde &lt;provider&gt; é o ID da
+placa discreta mais poderosa e &lt;sink&gt; é o ID da placa que tiver uma
+tela conectada:
     </para>
 
 <screen><userinput>xrandr --setprovideroffloadsink <replaceable>&lt;provider&gt; &lt;sink&gt;</replaceable></userinput></screen>
 
     <note>
       <para>
-        With the <application>Xorg</application> modesetting driver, which is DRI3
-capable, the above command is no longer necessary. It does no harm however.
+        Com o controlador de configuração de modo do
+<application>Xorg</application>, que é compatível com DRI3, o comando acima
+não mais é necessário. No entanto, ele não danifica.
       </para>
     </note>
 
@@ -368,7 +372,7 @@ a tua instalação.
   </sect2>
 
   <sect2 role="configuration" id='xconfig'>
-    <title>Configurando Dispositivos do <quote>Xorg</quote></title>
+    <title>Configurando Dispositivos do Xorg</title>
 
     <para>
       Para a maioria das configurações de &quot;hardware&quot;, o &quot;Xorg&quot;
@@ -379,7 +383,7 @@ configuração manual de exemplo que possivelmente sejam de uso nesses casos.
     </para>
 
     <sect3 id="xinput">
-      <title>Configurando Dispositivos de Entrada do <quote>X</quote></title>
+      <title>Configurando Dispositivos de Entrada do X</title>
       <para>
         Para a maioria dos dispositivos de entrada, nenhuma configuração adicional
 será necessária. Esta seção é fornecida somente para fins informativos.
@@ -411,10 +415,10 @@ necessária para um teclado &quot;QWERTY&quot; (&quot;EUA&quot;).
       <title>Configurações de Ajuste Fino de Exibição</title>
 
       <para>
-        If you want to set the monitor resolution for Xorg, first run
-<command>xrandr</command> in a X terminal to list the supported resolutions
-and the corresponding refresh rates.  For example, it outputs the following
-for one monitor:
+        Se você deseja configurar a resolução do monitor para o Xorg, primeiro
+execute <command>xrandr</command> em um terminal do X para listar as
+resoluções suportadas e as correspondentes taxas de atualização. Por
+exemplo, ele gera o seguinte para um monitor:
       </para>
 
 <screen><computeroutput>Screen 0: minimum 16 x 16, current 5760 x 2160, maximum 32767 x 32767
@@ -433,10 +437,10 @@ DP-1 connected primary 3840x2160+0+0 (normal left inverted right x axis y axis) 
    640x480       59.38</computeroutput></screen>
 
       <para>
-        From the output we can see the monitor is identified
-<literal>DP-1</literal>.  Select a suitable resolution from the output list,
-for example <literal>1920x1440</literal>.  Then as the &root; user, create a
-configuration file for the Xorg server:
+        A partir da saída gerada podemos ver que o monitor está identificado como
+<literal>DP-1</literal>. Selecione uma resolução adequada a partir da lista
+da saída gerada, por exemplo <literal>1920x1440</literal>. Então, como o(a)
+usuário(a) &root;, crie um arquivo de configuração para o servidor Xorg:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/X11/xorg.conf.d/monitor-DP-1.conf &lt;&lt; "EOF"
@@ -447,14 +451,15 @@ EndSection</literal>
 EOF</userinput></screen>
 
       <para>
-        Sometimes <command>xrandr</command> may fail to detect some resolution
-settings supported by the monitor.  It usually happens with virtual monitors
-of virtual machine managers like <xref linkend='qemu'/> or VMWare: a virtual
-monitor actually supports all pairs of integers in a range as the
-resolution, but <command>xrandr</command> will only list a few.  To use a
-resolution not listed by <command>xrandr</command>, first run
-<command>cvt</command> to get the mode line for the resolution.  For
-example:
+        Às vezes, o <command>xrandr</command> pode falhar para detectar algumas
+configurações de resolução suportadas pelo monitor. Isso geralmente acontece
+com monitores virtuais de gerenciadores de máquinas virtuais, como <xref
+linkend='qemu'/> ou VMWare: um monitor virtual na verdade suporta todos os
+pares de números inteiros em um intervalo conforme a resolução, mas
+<command>xrandr</command> só listará alguns. Para usar uma resolução não
+listada por <command>xrandr</command>, primeiro execute
+<command>cvt</command> para obter a linha de modo para a resolução. Por
+exemplo:
       </para>
 
       <screen><userinput>cvt 1600 900</userinput>
@@ -462,8 +467,8 @@ example:
 Modeline "1600x900_60.00"  118.25  1600 1696 1856 2112  900 903 908 934 -hsync +vsync</literal></computeroutput></screen>
 
       <para>
-        As the &root; user, create a Xorg server configuration file containing this
-mode line, and specify the mode as preferred mode:
+        Como o(a) usuário(a) &root;, crie um arquivo de configuração do servidor
+Xorg contendo essa linha de modo e especifique o modo como modo preferido:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/X11/xorg.conf.d/monitor-DP-1.conf &lt;&lt; "EOF"
@@ -475,12 +480,13 @@ EndSection</literal>
 EOF</userinput></screen>
 
       <para>
-        Some high-end LCD monitors support a refresh rate higher than 100 Hz but
-<command>xrandr</command> may fail to recognize the supported refresh rate
-and use 60 Hz instead.  This issue would prevent you from utilizing the full
-capability of the monitor, and may cause the screen to flicker or show
-<quote>artifacts</quote> like meshes or grids.  To resolve the issue, again
-use <command>cvt</command> to get the mode line with a custom refresh rate:
+        Alguns monitores LCD de última geração suportam uma taxa de atualização
+superior a 100 Hz, mas <command>xrandr</command> pode falhar para reconhecer
+a taxa de atualização suportada e usar 60 Hz. Esse problema impediria você
+de utilizar a capacidade completa do monitor e poderia fazer com que a tela
+piscasse ou mostrasse <quote>artefatos</quote> como malhas ou grades. Para
+resolver o problema, use novamente <command>cvt</command> para obter a linha
+de modo com uma taxa de atualização personalizada:
       </para>
 
       <screen><userinput>cvt 3840 2160 144</userinput>
@@ -488,8 +494,8 @@ use <command>cvt</command> to get the mode line with a custom refresh rate:
 Modeline "3840x2160_144.00"  1829.25  3840 4200 4624 5408  2160 2163 2168 2350 -hsync +vsync</literal></computeroutput></screen>
 
       <para>
-        Then paste it into the Xorg server configuration file and set it as the
-preferred mode.
+        Em seguida, cole-a no arquivo de configuração do servidor Xorg e configure-a
+como modo preferido.
       </para>
 
       <para>
@@ -508,14 +514,15 @@ EndSection</literal>
 EOF</userinput></screen>
 
       <para>
-        When you drag a window in twm (or any non-compositing window manager)
-horizontally, you may observe that the vertical borders of the window are
-broken into multiple segments.  This is an example of the visual artifacts
-called <emphasis>screen tearing</emphasis>.  To resolve the screen tearing
-problems, create a configuration file that enables the TearFree option. Note
-that you must have the Tearfree patch applied from <xref role="nodep"
-linkend="xorg-server"/> for this to function properly, and it may increase
-memory allocation and reduce performance.
+        Quando você arrasta uma janela no TWM (ou em qualquer gerenciador de janelas
+não de composição) horizontalmente, você poderá observar que as bordas
+verticais da janela são quebradas em vários segmentos. Esse é um exemplo dos
+artefatos visuais chamados <emphasis>rasgamento de tela</emphasis>. Para
+resolver os problemas de rasgamento de tela, crie um arquivo de configuração
+que habilite a opção TearFree. Observe que você precisa ter o remendo
+Tearfree aplicado a partir de <xref role="nodep" linkend="xorg-server"/>
+para isso funcionar corretamente e isso pode aumentar a alocação de memória
+e reduzir o desempenho.
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/X11/xorg.conf.d/20-tearfree.conf &lt;&lt; "EOF"
@@ -527,11 +534,11 @@ EndSection</literal>
 EOF</userinput></screen>
 
       <para>
-        With modern Xorg, little or no additional graphic card configuration is
-necessary. If you should need extra options passed to your video driver, add
-them into the <literal>Device</literal> section as well.  The options
-supported by the modesetting driver are documented in the man page
-<filename>modesetting(4)</filename>.
+        Com o moderno Xorg, pouca ou nenhuma configuração adicional de placa gráfica
+é necessária. Se você devesse precisar de opções extras passadas para o teu
+controlador de vídeo, adicione-as na seção <literal>Device</literal>
+também. As opções suportadas pelo controlador de configuração de modo estão
+documentadas na página de manual <filename>modesetting(4)</filename>.
       </para>
 
     </sect3>

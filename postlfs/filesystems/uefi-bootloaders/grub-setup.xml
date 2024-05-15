@@ -40,9 +40,10 @@ se necessário:
       <varlistentry>
         <term><parameter>CONFIG_PARTITION_ADVANCED</parameter></term>
         <listitem>
-          <para>If it's not enabled, <parameter>CONFIG_EFI_PARTITION</parameter> will be
-enabled automatically.  But when it's enabled, you must set
-<parameter>CONFIG_EFI_PARTITION</parameter> to enabled as well.</para>
+          <para>Se não estiver habilitado, <parameter>CONFIG_EFI_PARTITION</parameter> será
+habilitado automaticamente. Mas quando estiver habilitado, você precisa
+configurar <parameter>CONFIG_EFI_PARTITION</parameter> como habilitado
+também.</para>
         </listitem>
       </varlistentry>
 
@@ -58,7 +59,7 @@ enabled automatically.  But when it's enabled, you must set
           <para>A combinação dessas opções fornece suporte ao console Linux no topo do
 framebuffer UEFI. Para permitir que o núcleo imprima mensagens de depuração
 em um estágio inicial da inicialização, elas não deveriam ser construídas
-como módulos do kernel, a menos que um initramfs seja usado.</para>
+como módulos do núcleo, a menos que um initramfs seja usado.</para>
         </listitem>
       </varlistentry>
 
@@ -175,12 +176,13 @@ System</literal>.
     </para>
 
     <para>
-      If the system or the hard drive is new, or it's the first installation of a
-UEFI-booted OS on the system, the ESP may not exist.  In that case, install
-<xref linkend='dosfstools'/> first.  Then create a new partition, make a
-<systemitem class="filesystem">vfat</systemitem> file system on it, and set
-the partition type to <quote>EFI system</quote>.  See the instructions for
-the emergency boot device above as a reference.
+      Se o sistema ou a unidade rígida for novo(a) ou essa for a primeira
+instalação de um Sistema Operacional inicializado por UEFI no sistema, a ESP
+possivelmente não exista. Nesse caso, instale <xref linkend='dosfstools'/>
+primeiro. Em seguida, crie uma nova partição, produza um sistema de arquivos
+<systemitem class="filesystem">vfat</systemitem> nela e configure o tipo de
+partição como <quote>EFI system</quote>. Vejam-se as instruções para o
+dispositivo de inicialização de emergência acima como uma referência.
     </para>
 
     <warning>
@@ -200,8 +202,9 @@ crie o ponto de montagem para a ESP e monte-a (substitua
       /boot/efi</userinput></screen>
 
     <para>
-      If you want to mount the ESP automatically during system boot, as the &root;
-user, add an entry for the ESP into <filename>/etc/fstab</filename>:
+      Se você quiser montar a ESP automaticamente durante a inicialização do
+sistema, como o(a) usuário(a) &root;, adicione uma entrada para a ESP em
+<filename>/etc/fstab</filename>:
     </para>
 
 <screen role="nodump"><userinput>cat &gt;&gt; /etc/fstab &lt;&lt; EOF</userinput>
@@ -432,7 +435,7 @@ inicialização do GRUB:
     </para>
 
 <screen role="nodump"><userinput>cat &gt; /boot/grub/grub.cfg &lt;&lt; EOF</userinput>
-<literal># Begin /boot/grub/grub.cfg
+<literal># Inicia /boot/grub/grub.cfg
 set default=0
 set timeout=5
 
@@ -455,23 +458,26 @@ menuentry "Firmware Setup" {
 <userinput>EOF</userinput></screen>
 
     <para>
-      Refer to <ulink url='&lfs-root;/chapter10/grub.html'>the LFS book</ulink>
-for the basic knowledge about the <filename>grub.cfg</filename> file.
-<literal>(hd0,2)</literal>, <literal>sda2</literal>, and
-<literal>6.4.10-lfs-12.0</literal> must match your configuration.
+      Consulte-se <ulink url='&lfs-root;/chapter10/grub.html'>o livro LFS</ulink>
+para o conhecimento básico acerca do arquivo
+<filename>grub.cfg</filename>. <literal>(hd0,2)</literal>,
+<literal>sda2</literal> e <literal>6.4.10-lfs-12.0</literal> precisam
+corresponderem à tua configuração.
     </para>
 
     <para>
-      The <command>insmod all_video</command> directive loads various modules for
-video support.  It's needed to initialize the EFI framebuffer for the kernel
-to print messages correctly before the kernel GPU driver initialization.
+      A diretiva <command>insmod all_video</command> carrega vários módulos para
+suporte de vídeo. Ela é necessária para inicializar o framebuffer EFI para o
+núcleo imprimir mensagens corretamente antes da inicialização do controlador
+GPU de núcleo.
     </para>
 
     <para>
-      The <command>terminal_output gfxterm</command> directive changes the display
-resolution of the GRUB menu to match your display device.  It will break the
-rendering if the <filename>unicode.pf2</filename> font data file is not
-loaded, so it's guarded by a <command>if</command> directive.
+      A diretiva <command>terminal_output gfxterm</command> muda a resolução da
+tela do menu do GRUB para corresponder ao teu dispositivo de exibição. Isso
+quebrará a renderização se o arquivo de dados da fonte
+<filename>unicode.pf2</filename> não estiver carregado, de forma que ele é
+protegido por uma diretiva <command>if</command>.
     </para>
 
     <note>

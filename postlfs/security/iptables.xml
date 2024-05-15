@@ -229,81 +229,81 @@ url="https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">
 <screen role="root" revision="sysv"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/rc.d/rc.iptables &lt;&lt; "EOF"
 <literal>#!/bin/sh
 
-# Begin rc.iptables
+# Início do rc.iptables
 
-# Insert connection-tracking modules
-# (not needed if built into the kernel)
+# Insere módulos de rastreamento de conexão
+# (não necessário se construído internamente ao kernel)
 modprobe nf_conntrack
 modprobe xt_LOG
 
-# Enable broadcast echo Protection
+# Habilita difusão echo Protection
 echo 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
 
-# Disable Source Routed Packets
+# Desabilita Pacotes Fonte Roteados
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_source_route
 
-# Enable TCP SYN Cookie Protection
+# Habilita a Proteção SYN Cookie do TCP
 echo 1 &gt; /proc/sys/net/ipv4/tcp_syncookies
 
-# Disable ICMP Redirect Acceptance
+# Desabilita a Aceitação de Redireção de ICMP
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/accept_redirects
 
-# Do not send Redirect Messages
+# Não envia Mensagens de Redireção
 echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirects
 echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects
 
-# Drop Spoofed Packets coming in on an interface, where responses
-# would result in the reply going out a different interface.
+# Descarta Pacotes Falsificados entrantes em uma interface, onde as 
+# respostas resultariam na resposta indo para uma interface diferente.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 
-# Log packets with impossible addresses.
+# Registra pacotes com endereços impossíveis.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/log_martians
 
-# be verbose on dynamic ip-addresses  (not needed in case of static IP)
+# Seja detalhado acerca de endereços de IP dinâmicos (não necessário no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
-# disable Explicit Congestion Notification
-# too many routers are still ignorant
+# Desabilita a Notificação Explícita de Congestão
+# roteadores demais ainda são ignorantes
 echo 0 &gt; /proc/sys/net/ipv4/tcp_ecn
 
-# Set a known state
+# Configura um estado conhecido
 iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# These lines are here in case rules are already in place and the
-# script is ever rerun on the fly. We want to remove all rules and
-# pre-existing user defined chains before we implement new rules.
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o conjunto de comandos sequenciais for até mesmo
+# reexecutado em tempo real. Nós queremos remover todas as regras e cadeias preexistentes definidas por usuário(a)
+# antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z
 
 iptables -t nat -F
 
-# Allow local-only connections
+# Permite conexões locais somente
 iptables -A INPUT  -i lo -j ACCEPT
 
-# Free output on any interface to any ip for any service
-# (equal to -P ACCEPT)
+# Libera a saída gerada em qualquer interface para qualquer IP para 
+# qualquer serviço (igual a -P ACCEPT)
 iptables -A OUTPUT -j ACCEPT
 
-# Permit answers on already established connections
-# and permit new connections related to established ones
-# (e.g. port mode ftp)
+# Permite respostas em conexões já estabelecidas e permite novas 
+# conexões relacionadas às estabelecidas (por exemplo, modo de porta 
+# ftp)
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Drop any incoming MULTICAST or BROADCAST packet before logging:
-# The box outputs several of them when using netbios or mDNS, and those
-# appear immediately as incoming, which clutters the log.
+# Descarte qualquer pacote MULTICAST ou BROADCAST entrante antes de registrar:
+# A caixa gera vários deles ao usar netbios ou mDNS e aqueles aparecem imediatamente
+# como entrantes, o que sobrecarrega o log.
 iptables -A INPUT -m addrtype --dst-type BROADCAST,MULTICAST -j DROP
 
-# Log everything else.
+# Registra tudo o mais.
 iptables -A INPUT -j LOG --log-prefix "FIREWALL:INPUT "
 
-# End $rc_base/rc.iptables</literal>
+# Fim do $rc_base/rc.iptables</literal>
 EOF
 chmod 700 /etc/rc.d/rc.iptables</userinput></screen>
 

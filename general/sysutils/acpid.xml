@@ -37,18 +37,20 @@ podem ser inseridos por pacotes ou pelo(a) usuário(a).
 
     <note>
       <para>
-        Some other packages may handle some ACPI events as well and they may
-conflict with this package.  For example, &logind; (read the documentation
-for <option>Handle*=</option> in <filename>logind.conf(5)</filename> for
-details) and <xref linkend='upower'/> (used by many desktop environments
-such as GNOME, KDE, and XFCE for handling ACPI events).  If you've installed
-such a package and it's enough for your use case, this package is probably
-not needed.  If you really need this package, you must be careful
-configuring it and the other packages handling ACPI events to avoid
-conflicts.  Notably, &logind; handles some ACPI events by default, so the
-handling of these events by &logind; should be disabled first if handling
-these events with acpid (again, read <filename>logind.conf(5)</filename> for
-details).
+        Alguns outros pacotes também podem lidar com alguns eventos ACPI e
+possivelmente conflitem com esse pacote. Por exemplo, &logind; (leia-se a
+documentação para <option>Handle*=</option> em
+<filename>logind.conf(5)</filename> para detalhes) e <xref
+linkend='upower'/> (usado por muitos ambientes de área de trabalho como
+GNOME, KDE e XFCE para lidar com eventos ACPI). Se você tiver instalado tal
+pacote e ele for suficiente para o teu caso de uso, esse pacote
+provavelmente não é necessário. Se você realmente precisa desse pacote, você
+precisa ser cuidadoso(a) ao configurá-lo e aos outros pacotes que manuseiam
+eventos ACPI para evitar conflitos. Notavelmente, &logind; lida com alguns
+eventos ACPI por padrão, de forma que o tratamento desses eventos pelo
+&logind; deveria ser desabilitado primeiro se manusear esses eventos com
+acpid (novamente, leia-se <filename>logind.conf(5)</filename> para
+detalhes).
       </para>
     </note>
 
@@ -128,11 +130,12 @@ corresponder, [então] a ação é executada.
     </para>
 
     <para>
-      The following brief example will suspend the system when the laptop lid is
-closed<phrase revision='sysv'> (it requires <xref
-linkend="pm-utils"/>)</phrase>.  The example also disables the default
-handling of the lid close event by &logind; when the system is on battery
-and not connected to any external monitor, in order to avoid a conflict:
+      O breve exemplo a seguir suspenderá o sistema quando a tampa do laptop for
+fechada<phrase revision='sysv'> (exige <xref
+linkend="pm-utils"/>)</phrase>. O exemplo também desabilita o tratamento
+padrão do evento de fechamento da tampa pelo &logind; quando o sistema
+estiver funcionando com bateria e não conectado a nenhum monitor externo,
+para a finalidade de evitar um conflito:
     </para>
 
 <screen revision='sysv' role="nodump"><userinput>cat &gt; /etc/acpi/events/lid &lt;&lt; "EOF"
@@ -166,13 +169,14 @@ mkdir -pv /etc/systemd/logind.conf.d
 echo <literal>HandleLidSwitch=ignore</literal> &gt; /etc/systemd/logind.conf.d/acpi.conf</userinput></screen>
 
     <para>
-      Unfortunately, not every computer labels ACPI events in the same way (for
-example, the lid may be recognized as <filename>LID0</filename> instead of
-<filename>LID</filename>).  To determine how your buttons are recognized,
-use the <command>acpi_listen</command> tool. Also, look in the <filename
-class="directory">samples</filename> directory under <filename
-class="directory">/usr/share/doc/acpid-&acpid-version;</filename> for more
-examples.
+      Infelizmente, nem todos os computadores rotulam os eventos ACPI da mesma
+maneira (por exemplo, a tampa possivelmente seja reconhecida como
+<filename>LID0</filename> em vez de <filename>LID</filename>). Para
+determinar como teus botões são reconhecidos, use a ferramenta
+<command>acpi_listen</command>. Além disso, procure no diretório <filename
+class="directory">samples</filename> sob <filename
+class="directory">/usr/share/doc/acpid-&acpid-version;</filename> para mais
+exemplos.
     </para>
 
     <sect3  id="acpid-init">
