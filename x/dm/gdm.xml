@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-44;/gdm-&gdm-version;.tar.xz">
-  <!ENTITY gdm-download-ftp  "&gnome-download-ftp;/gdm/&gnome-44;/gdm-&gdm-version;.tar.xz">
-  <!ENTITY gdm-md5sum        "8b857cf6510cc038538399aaaeaa0dff">
+  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-45;/gdm-&gdm-version;.tar.xz">
+  <!ENTITY gdm-download-ftp  "">
+  <!ENTITY gdm-md5sum        "4912429c0231a95fedd086d1ac8f54ea">
   <!ENTITY gdm-size          "836 KB">
-  <!ENTITY gdm-buildsize     "33 MB">
-  <!ENTITY gdm-time          "0,2 UPC">
+  <!ENTITY gdm-buildsize     "34 MB">
+  <!ENTITY gdm-time          "0.3 SBU">
 ]>
 
 <sect1 id="gdm" xreflabel="GDM-&gdm-version;">
@@ -31,7 +31,7 @@ responsável por fornecer &quot;logins&quot; gráficos e gerenciar exibições
 locais e remotas.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -113,17 +113,20 @@ depois de ele ser iniciado. Emita os seguintes comandos como o(a) usuário(a)
 &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
+<!--
+    <para revision="sysv">
+
+      First, adapt GDM to build without systemd present:
+    </para>
+
+<screen revision="sysv"><userinput remap="pre">sed -i -r '/(^| )systemd_dep/d' meson.build</userinput></screen>
+-->
 <screen role="root"><userinput>groupadd -g 21 gdm &amp;&amp;
 useradd -c "Proprietário(a) do Processo de Segundo Plano GDM" -d /var/lib/gdm -u 21 \
         -g gdm -s /bin/false gdm &amp;&amp;
 passwd -ql gdm</userinput></screen>
 
-    <para revision="sysv">
-      Primeiro, adapte o &quot;GDM&quot; para construir sem a presença do
-&quot;systemd&quot;:
-    </para>
 
-<screen revision="sysv"><userinput remap="pre">sed -i -r '/(^| )systemd_dep/d' meson.build</userinput></screen>
 
     <para>
       Instale o &quot;<application>GDM</application>&quot; executando os seguintes
@@ -137,14 +140,15 @@ comandos:
 mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                    \
-      --prefix=/usr               \
-      --buildtype=release         \
-      -Dgdm-xsession=true         \
-      -Drun-dir=/run/gdm          \
-      -Dsystemd-journal=false     \
-      -Dsystemdsystemunitdir=/tmp \
-      -Dsystemduserunitdir=/tmp   &amp;&amp;
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -Dgdm-xsession=true       \
+      -Drun-dir=/run/gdm        \
+      -Dlogind-provider=elogind \
+      -Dsystemd-journal=false   \
+      -Dsystemdsystemunitdir=no \
+      -Dsystemduserunitdir=no   &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
@@ -166,10 +170,7 @@ ninja</userinput></screen>
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root" revision="sysv"><userinput>ninja install &amp;&amp;
-rm -rv /tmp/*.{service,target.d}</userinput></screen>
-
-<screen role="root" revision="systemd"><userinput>ninja install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
@@ -298,6 +299,23 @@ EOF</userinput></screen>
 
 
 
+    </sect3>
+
+    <sect3 id="gdm-auto-suspend">
+      <title>Configuring GDM Auto-Suspend</title>
+
+      <para>
+        GDM will suspend the system when the greeter screen has been running for a
+while without any interactive input.  If you want to disable auto-suspending
+for any reason (for example if the system is hosting some services besides
+functioning as a desktop system), as the &root; user, issue:
+      </para>
+
+      <screen role='nodump'><userinput>su gdm -s /bin/bash                                                \
+       -c "dbus-run-session                                        \
+             gsettings set org.gnome.settings-daemon.plugins.power \
+                           sleep-inactive-ac-type                  \
+                           nothing"</userinput></screen>
     </sect3>
 
   </sect2>

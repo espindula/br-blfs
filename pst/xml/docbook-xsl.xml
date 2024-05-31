@@ -38,7 +38,7 @@ estilo XSL. Elas são úteis para realizar transformações em arquivos XML do
 DocBook.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -112,18 +112,16 @@ DocBook.
 
     <bridgehead renderas="sect4">Opcionais (todas usadas em tempo de execução)</bridgehead>
     <para role="optional">
-      <xref role="runtime" linkend="apache-ant"/> (para produzir documentos do
-<quote>webhelp</quote>), <xref role="runtime" linkend="libxslt"/> (ou
-qualquer outro processador de XSLT), para processar documentos do Docbook -
-os módulos do <application>Python2</application> libxml2 e libxslt podem ser
-usados; <xref role="runtime" linkend="python2"/> (em tempo de execução),
-<xref role="runtime" linkend="ruby"/> (para utilizar as folhas de estilo de
-<quote>epub</quote>), <xref role="runtime" linkend="zip"/> (para produzir
-documentos <quote>epub3</quote>) e <ulink
+      <xref role="runtime" linkend="apache-ant"/> (to produce
+<quote>webhelp</quote> documents), <xref role="runtime" linkend="libxslt"/>
+(or any other XSLT processor), to process Docbook documents, <xref
+role="runtime" linkend="ruby"/> (to utilize the <quote>epub</quote>
+stylesheets), <xref role="runtime" linkend="zip"/> (to produce
+<quote>epub3</quote> documents), and <ulink
 url="https://sourceforge.net/projects/saxon/files/saxon6/"> Saxon6 </ulink>
-e <ulink url="http://xerces.apache.org/xerces2-j/">Xerces2 Java</ulink>
-(usado com o <xref role="runtime" linkend="apache-ant"/> para produzir
-documentos do <quote>webhelp</quote>)
+and <ulink url="http://xerces.apache.org/xerces2-j/">Xerces2 Java</ulink>
+(used with <xref role="runtime" linkend="apache-ant"/> to produce
+<quote>webhelp</quote> documents)
     </para>
 
 
@@ -212,9 +210,10 @@ class="username">root</systemitem>:
       </note>
 
       <para>
-        Crie (ou anexe) e povoe o arquivo de catálogo XML usando os seguintes
-comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        Create (or append) and populate the XML catalog file using the following
+commands as the <systemitem class="username">root</systemitem> user (both
+<emphasis>http</emphasis> and <emphasis>https</emphasis> forms are used
+because upstream have had both in their documentation):
       </para>
 
 <screen role="root"><userinput>if [ ! -d /etc/xml ]; then install -v -m755 -d /etc/xml; fi &amp;&amp;
@@ -223,7 +222,17 @@ if [ ! -f /etc/xml/catalog ]; then
 fi &amp;&amp;
 
 xmlcatalog --noout --add "rewriteSystem" \
+           "http://cdn.docbook.org/release/xsl-nons/&docbook-xsl-version;" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;" \
+    /etc/xml/catalog &amp;&amp;
+
+xmlcatalog --noout --add "rewriteSystem" \
            "https://cdn.docbook.org/release/xsl-nons/&docbook-xsl-version;" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;" \
+    /etc/xml/catalog &amp;&amp;
+
+xmlcatalog --noout --add "rewriteURI" \
+           "http://cdn.docbook.org/release/xsl-nons/&docbook-xsl-version;" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;" \
     /etc/xml/catalog &amp;&amp;
 
@@ -233,7 +242,17 @@ xmlcatalog --noout --add "rewriteURI" \
     /etc/xml/catalog &amp;&amp;
 
 xmlcatalog --noout --add "rewriteSystem" \
+           "http://cdn.docbook.org/release/xsl-nons/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;" \
+    /etc/xml/catalog &amp;&amp;
+
+xmlcatalog --noout --add "rewriteSystem" \
            "https://cdn.docbook.org/release/xsl-nons/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;" \
+    /etc/xml/catalog &amp;&amp;
+
+xmlcatalog --noout --add "rewriteURI" \
+           "http://cdn.docbook.org/release/xsl-nons/current" \
            "/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;" \
     /etc/xml/catalog &amp;&amp;
 

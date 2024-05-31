@@ -6,17 +6,19 @@
 
   <!ENTITY sane-be-download-http "&sources-anduin-http;/sane/sane-backends-&sane-version;.tar.gz">
   <!ENTITY sane-be-download-ftp  "">
-  <!ENTITY sane-be-md5sum        "51ff581b911fc9b7b6b5ae6959f9089b">
-  <!ENTITY sane-be-size          "7,0 MB">
-  <!ENTITY sane-be-buildsize     "246 MB (com os testes)">
+  <!ENTITY sane-be-md5sum        "302159419ed1ee216c6e1edbe97c2a8c">
+  <!ENTITY sane-be-size          "6.9 MB">
+  <!ENTITY sane-be-buildsize     "311 MB (with tests)">
   <!ENTITY sane-be-time          "0,7 UPC (Usando paralelismo=4; com testes)">
 
+<!--
   <!ENTITY sane-fe-download-http "&sources-anduin-http;/sane/sane-frontends-&sane-fe-version;.tar.gz">
   <!ENTITY sane-fe-download-ftp  "">
   <!ENTITY sane-fe-md5sum        "c63bf7b0bb5f530cf3c08715db721cd3">
   <!ENTITY sane-fe-size          "231 KB">
   <!ENTITY sane-fe-buildsize     "3,0 MB">
   <!ENTITY sane-fe-time          "menos que 0,1 UPC">
+-->
 ]>
 
 <sect1 id="sane" xreflabel="SANE-&sane-version;">
@@ -50,7 +52,7 @@ suportadas. As estruturas de interação direta com o(a) usuário(a) são
 interfaces de usuário(a) para acessar as estruturas de retaguarda.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informações do Pacote de Estruturas de Retaguarda</bridgehead>
     <itemizedlist spacing='compact'>
@@ -86,47 +88,49 @@ interfaces de usuário(a) para acessar as estruturas de retaguarda.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais (Estruturas de Interação Direta com o(a)
-Usuário(a))</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads (Front Ends)</bridgehead>
     <itemizedlist spacing='compact'>
       <listitem>
         <para>
-          Transferência (HTTP): <ulink url="&sane-fe-download-http;"/>
+          Download (HTTP): <ulink url="&sane-fe-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Transferência (FTP): <ulink url="&sane-fe-download-ftp;"/>
+          Download (FTP): <ulink url="&sane-fe-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5 da transferência: &sane-fe-md5sum;
+          Download MD5 sum: &sane-fe-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Tamanho da transferência: &sane-fe-size;
+          Download size: &sane-fe-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Espaço em disco estimado exigido: &sane-fe-buildsize;
+          Estimated disk space required: &sane-fe-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Tempo de construção estimado: &sane-fe-time;
+          Estimated build time: &sane-fe-time;
         </para>
       </listitem>
     </itemizedlist>
-
-    <note>
+-->
+<note>
       <para>
-        O local de desenvolvedor(a) para esses arquivos está em <ulink
-url="https://gitlab.com/sane-project"/>, mas os URLs dos arquivos usam
-md5sums incorporados. Por conveniência, os pacotes foram copiados para o
-local acima.
+        The upstream location for this file is at <ulink
+url="https://gitlab.com/sane-project"/> but the file URL uses an embedded
+md5sum.  For convenience, the package has been copied to the location above.
       </para>
     </note>
 
@@ -143,13 +147,18 @@ url="http://www.gphoto.org/">libgphoto2</ulink> e <xref linkend="texlive"/>
 (ou <xref linkend="tl-installer"/>)
     </para>
 
-    <bridgehead renderas="sect4">Opcionais (Estruturas de Interação Direta com o(a) Usuário(a))</bridgehead>
-    <para role="optional">
-      <xref linkend="x-window-system"/>, <xref linkend="gtk2"/> e <xref
-linkend="gimp"/>
-    </para>
 
-  </sect2>
+
+  <!--
+    <bridgehead renderas="sect4">
+Optional (Front Ends)</bridgehead>
+    <para role="optional">
+      <xref linkend="x-window-system"/>,
+      <xref linkend="gtk2"/>, and
+      <xref linkend="gimp"/>
+    </para>
+-->
+</sect2>
 
   <sect2 role="kernel" id='sane-kernel'>
     <title>Configuração do Núcleo, Controladores e Pacotes Adicionais</title>
@@ -181,23 +190,21 @@ para acessar os dispositivos.
       <title>Instalação das Estrutura de Retaguarda do SANE</title>
 
       <para>
-        O processo de segundo plano do <application>SANE</application> deveria
-executar com o próprio grupo dele. Crie esse grupo emitindo os seguintes
-comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        The <application>SANE</application> daemon should run with its own group.
+Create this group by issuing the following command as the &root; user:
       </para>
 
 <screen role="root"><userinput>groupadd -g 70 scanner</userinput></screen>
 
       <note>
         <para>
-          O <command>configure</command> assume que o(a) usuário(a) construindo
-estruturas de retaguarda do <application>SANE</application> é um(a)
-membro(a) do grupo <systemitem class="groupname">scanner</systemitem> para
-testar a existência desse grupo. Portanto, o(a) usuário(a) construindo o
-pacote deveria ser adicionado(a) ao grupo <systemitem
-class="groupname">scanner</systemitem>. Como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+          <command>configure</command> assumes that the user building
+<application>SANE</application>-backends is a member of the <systemitem
+class="groupname">scanner</systemitem> group for testing the existence of
+this group. As a result, the user building the package needs to be added to
+the <systemitem class="groupname">scanner</systemitem> group. Add the user
+to the <systemitem class="groupname">scanner</systemitem> group by issuing
+the following command as the &root; user:
         </para>
 
 <screen role="root"><userinput>usermod -G scanner -a <replaceable>nome_usuário(a)</replaceable></userinput></screen>
@@ -217,13 +224,12 @@ linkend="libusb"/>, inclua a chave de configuração
 <application>SANE</application> executando os seguintes comandos:
       </para>
 
-<screen><userinput>sg scanner -c "                  \
-./configure --prefix=/usr        \
-            --sysconfdir=/etc    \
-            --localstatedir=/var \
-            --with-group=scanner \
-            --with-lockdir=/run/lock \
-            --docdir=/usr/share/doc/sane-backends-&sane-version;" &amp;&amp;
+<screen><userinput>sg scanner -c "                                 \
+PYTHON=python3 ./configure --prefix=/usr        \
+                           --sysconfdir=/etc    \
+                           --localstatedir=/var \
+                           --with-lockdir=/run/lock \
+                           --docdir=/usr/share/doc/sane-backends-&sane-version;" &amp;&amp;
 make</userinput></screen>
 
       <para>
@@ -249,39 +255,41 @@ teste.
 
     </sect3>
 
+
+
+  <!--
     <sect3>
-      <title>Instalação das Estruturas do SANE de Interação Direta com o(a) Usuário(a)</title>
+
+      <title>Installation of SANE Front Ends</title>
 
       <para>
-        O pacote de estruturas do <application>SANE</application> de interação
-direta com o(a) usuário(a) inclui as estruturas gráficas de interação direta
-com o(a) usuário(a) <command>xscanimage</command> e <command>xcam</command>,
-e uma estrutura de linha de comando de interação direta com o(a) usuário(a)
-<command>scanadf</command>. Você não precisa desse pacote se pretende usar
-uma das estruturas gráficas de interação direta com o(a) usuário(a) mais
-avançadas, como <xref linkend="xsane"/>. Para uma lista de pacotes de
-estruturas de interação direta com o(a) usuário(a), veja-se <ulink
-url="http://www.sane-project.org/sane-frontends.html"/>.
+        The <application>SANE</application>-frontends package
+        includes the graphical frontends <command>xscanimage</command> and
+        <command>xcam</command>, and a command-line frontend
+        <command>scanadf</command>. You don't need this package if you intend
+        to use one of the more advanced graphical frontends like
+        <xref linkend="xsane"/>. For a list of frontend packages, see
+        <ulink url="http://www.sane-project.org/sane-frontends.html"/>.
       </para>
 
       <para>
-        Para instalar as estruturas do <application>SANE</application> de interação
-direta com o(a) usuário(a), use os seguintes comandos:
+        To install <application>SANE</application>-frontends,
+        use the following commands:
       </para>
 
 <screen><userinput>tar -xf ../sane-frontends-&sane-fe-version;.tar.gz &amp;&amp;
 cd sane-frontends-&sane-fe-version;                &amp;&amp;
 
 sed -i -e "/SANE_CAP_ALWAYS_SETTABLE/d" src/gtkglue.c &amp;&amp;
-./configure --prefix=/usr --mandir=/usr/share/man &amp;&amp;
+./configure - -prefix=/usr - -mandir=/usr/share/man &amp;&amp;
 make</userinput></screen>
 
       <para>
-        Esse pacote não vem com uma suíte de teste.
+        This package does not come with a test suite.
       </para>
 
       <para>
-        Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+        Now, as the <systemitem class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -289,27 +297,26 @@ install -v -m644 doc/sane.png xscanimage-icon-48x48-2.png \
     /usr/share/sane</userinput></screen>
 
       <para>
-        Se o <application>GIMP</application> foi vinculado na construção e você
-desejar que o <application>GIMP</application> use o
-<command>xscanimage</command> como um plugin de digitalização, emita o
-seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        If <application>GIMP</application> was linked into the build and
+        you wish <application>GIMP</application> to use
+        <command>xscanimage</command> as a scanning plugin, issue the following
+        command as the <systemitem class="username">root</systemitem> user:
       </para>
 
 <screen role="root"><userinput>ln -v -s ../../../../bin/xscanimage /usr/lib/gimp/2.0/plug-ins</userinput></screen>
 
       <note>
         <para>
-          Se o plugin <command>xscanimage</command> estiver desabilitado no menu do
-<application>GIMP</application>, para a finalidade de habilitá-lo, "crie"
-uma imagem em branco usando o menu ou Ctrl-N. Depois disso, ele estará
-habilitado.
+          If the plugin <command>xscanimage</command> is disabled in
+          <application>GIMP</application>'s menu, in order to enable it,
+          "create" a blank image using the menu or Ctrl-N. After that, it is
+          enabled.
         </para>
       </note>
 
     </sect3>
-
-  </sect2>
+-->
+</sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
@@ -323,24 +330,29 @@ não tiver feito logout e login.
     </para>
 
     <para>
+      <parameter>PYTHON=python3</parameter>: This switch forces the build system
+to use Python 3 instead of Python 2.
+    </para>
+
+    <para>
       <parameter>--sysconfdir=/etc</parameter>: Essa chave instala os arquivos de
 configuração em <filename class="directory">/etc/sane.d</filename> em vez de
 <filename class="directory">/usr/etc/sane.d</filename>.
     </para>
 
-    <para>
-      <parameter>--with-group=scanner</parameter>: Esse parâmetro faz com que o
-diretório criado para os arquivos de travagem seja de titularidade de
-propriedade de grupo pelo grupo <systemitem
-class="groupname">scanner</systemitem>, em vez do grupo padrão <systemitem
-class="groupname">uucp</systemitem>.
-    </para>
 
+
+  <!-- This option doesn't exist anymore as of 1.2.1, and the udev rule
+     references the usage of 'scanner' everywhere.
     <para>
-      <command>exit</command>: Esse comando é usado para sair do shell criado pelo
-comando <command>su</command>.
+
+      <parameter>- -with-group=scanner</parameter>: This parameter causes
+      the directory created for the locking files to be group owned by the
+      <systemitem class="groupname">scanner</systemitem> group instead of the
+      default <systemitem class="groupname">uucp</systemitem> group.
     </para>
-  </sect2>
+-->
+</sect2>
 
   <sect2 role="configuration">
     <title>Configurando o SANE</title>
@@ -375,15 +387,14 @@ retaguarda desejada.
         </para>
 
         <para>
-          Adicione quaisquer usuários(as) desejados(as) ao grupo <systemitem
-class="groupname">scanner</systemitem>.
+          Add any users that will use a scanner to the <systemitem
+class="groupname">scanner</systemitem> group.
         </para>
 
         <para>
-          Se você quiser acessar uma digitalizadora na rede de intercomunicação,
-inclua duas linhas em <filename>net.conf</filename>, como usuário(a)
-<systemitem class="username">root</systemitem> (certifique-se de substituir
-&lt;ip_servidor&gt; pelo valor atual, abaixo):
+          If you want to access a network scanner, include two lines in
+<filename>net.conf</filename>, as the &root; user (make sure to replace
+&lt;server_ip&gt; by the actual value):
         </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/sane.d/net.conf &lt;&lt; "EOF"
@@ -400,15 +411,17 @@ está aberto ao cliente.
 
       </sect4>
 
+
+      <!--
       <sect4>
-        <title>Configuração da Estrutura de Interação Direta com o(a) Usuário(a)</title>
+
+        <title>Frontend Configuration</title>
         <para>
-          Se você usa um ambiente de área de trabalho, como
-<application>Gnome</application> ou <application>KDE</application>, você
-possivelmente deseje criar um arquivo
-<filename>xscanimage.desktop</filename>, de forma que o
-<application>xscanimage</application> apareça nos menus do painel. Como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+          If you use a desktop environment like <application>GNOME</application>
+          or <application>KDE</application> you may wish to create a
+          <filename>xscanimage.desktop</filename> file so that
+          <application>xscanimage</application> appears in the panel's menus.
+          Create the desktop file using the following commands as the &root; user:
         </para>
 
 <screen role="root"><userinput>mkdir -pv /usr/share/{applications,pixmaps}               &amp;&amp;
@@ -416,8 +429,8 @@ usuário(a) <systemitem class="username">root</systemitem>:
 cat &gt; /usr/share/applications/xscanimage.desktop &lt;&lt; "EOF" &amp;&amp;
 <literal>[Desktop Entry]
 Encoding=UTF-8
-Name=Digitalização - XScanImage
-Comment=Adquirir imagens a partir de uma digitalizadora
+Name=XScanImage - Scanning
+Comment=Acquire images from a scanner
 Exec=xscanimage
 Icon=xscanimage
 Terminal=false
@@ -428,8 +441,8 @@ EOF
 ln -svf ../sane/xscanimage-icon-48x48-2.png /usr/share/pixmaps/xscanimage.png</userinput></screen>
 
       </sect4>
-
-      <sect4>
+-->
+<sect4>
         <title>Informação Geral</title>
 
         <para>
@@ -467,36 +480,42 @@ url="https://penguin-breeder.org/sane/saned/"/>.
   <sect2 role="content">
     <title>Conteúdo</title>
 
-    <bridgehead renderas="sect4">Estruturas de Retaguarda:</bridgehead>
     <segmentedlist>
       <segtitle>Aplicativos Instalados</segtitle>
       <segtitle>Bibliotecas Instaladas</segtitle>
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>gamma4scanimage, sane-config, saned, sane-find-scanner e scanimage</seg>
+        <seg>gamma4scanimage, sane-config, saned, sane-find-scanner, scanimage, and
+umax_pp</seg>
         <seg>libsane.so e numerosos módulos de estrutura de retaguarda da digitalizadora</seg>
         <seg>/etc/sane.d, /usr/{include,lib,share}/sane e
 /usr/share/doc/sane-&sane-version;</seg>
       </seglistitem>
     </segmentedlist>
 
-    <bridgehead renderas="sect4">Estruturas de Interação Direta com o(a) Usuário(a):</bridgehead>
-    <segmentedlist>
-      <segtitle>Aplicativos Instalados</segtitle>
-      <segtitle>Biblioteca Instalada</segtitle>
-      <segtitle>Diretórios Instalados</segtitle>
 
-      <seglistitem>
-        <seg>scanadf, xcam e xscanimage</seg>
-        <seg>Plugin do <application>GIMP</application> incorporado ao
-<command>xscanimage</command></seg>
-        <seg>Nenhum(a)</seg>
-      </seglistitem>
-    </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <!--
+    <bridgehead renderas="sect4">
+Front Ends:</bridgehead>
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Library</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>scanadf,
+        xcam, and
+        xscanimage</seg>
+        <seg><application>GIMP</application> plugin embedded in
+        <command>xscanimage</command></seg>
+        <seg>None</seg>
+      </seglistitem>
+    </segmentedlist>
+-->
+<bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="gamma4scanimage">
@@ -554,20 +573,24 @@ estruturas de retaguarda do <application>SANE</application>
         </listitem>
       </varlistentry>
 
+
+
+      <!--
       <varlistentry id="scanadf">
+
         <term><command>scanadf</command></term>
         <listitem>
           <para>
-            é uma interface de linha de comando para controlar dispositivos de aquisição
-de imagens equipados com um alimentador automático de documentos (ADF)
+            is a command-line interface to control image acquisition
+            devices which are equipped with an automatic document feeder (ADF)
           </para>
           <indexterm zone="sane scanadf">
             <primary sortas="b-scanadf">scanadf</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="scanimage">
+-->
+<varlistentry id="scanimage">
         <term><command>scanimage</command></term>
         <listitem>
           <para>
@@ -582,12 +605,28 @@ retaguarda disponíveis
         </listitem>
       </varlistentry>
 
+      <varlistentry id="umax_pp">
+        <term><command>umax_pp</command></term>
+        <listitem>
+          <para>
+            is a tool used to read information from UMAX parallel port scanners. It can
+also be used for performing diagnostics on these scanners
+          </para>
+          <indexterm zone="sane umax_pp">
+            <primary sortas="b-umax_pp">umax_pp</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+
+      <!--
       <varlistentry id="xcam">
+
         <term><command>xcam</command></term>
         <listitem>
           <para>
-            é uma interface de câmera gráfica para interação direta com o(a) usuário(a)
-para <application>SANE</application>
+            is a graphical camera front end for
+            <application>SANE</application>
           </para>
           <indexterm zone="sane xcam">
             <primary sortas="b-xcam">xcam</primary>
@@ -599,15 +638,15 @@ para <application>SANE</application>
         <term><command>xscanimage</command></term>
         <listitem>
           <para>
-            é uma interface gráfica de usuário(a) para digitalização
+            is a graphical user interface for scanning
           </para>
           <indexterm zone="sane xscanimage">
             <primary sortas="b-xscanimage">xscanimage</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="libsane">
+-->
+<varlistentry id="libsane">
         <term><filename class="libraryfile">libsane.so</filename></term>
         <listitem>
           <para>

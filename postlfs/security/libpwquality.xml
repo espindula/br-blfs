@@ -32,7 +32,7 @@ aleatoriedade dela. A biblioteca também fornece uma função para gerar senhas
 aleatórias com boa pronúncia.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -79,15 +79,7 @@ aleatórias com boa pronúncia.
     <para role="recommended">
       <xref linkend="linux-pam"/>
     </para>
-
-  <!-- Do not advertise python 2 since python 3 can be used
-    <bridgehead renderas="sect4">
-Optional</bridgehead>
-    <para role="optional">
-      <xref linkend="python2"/>
-    </para>
--->
-</sect2>
+  </sect2>
 
   <sect2 role="installation">
     <title>Instalação do libpwquality</title>
@@ -97,11 +89,12 @@ Optional</bridgehead>
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr                     \
+<screen><userinput>./configure --prefix=/usr                      \
             --disable-static                   \
             --with-securedir=/usr/lib/security \
-            --with-python-binary=python3       &amp;&amp;
-make</userinput></screen>
+            --disable-python-bindings          &amp;&amp;
+make &amp;&amp;
+&build-wheel-cmd; $PWD/python</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -111,7 +104,8 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>make install &amp;&amp;
+&install-wheel; pwquality</userinput></screen>
 
   </sect2>
 
@@ -119,9 +113,10 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--with-python-binary=python3</parameter>: Esse parâmetro dá o
-local do binário <application>Python</application>. O padrão é
-<parameter>python</parameter> e exige <xref linkend="python2"/>.
+      <parameter>--disable-python-bindings</parameter>: This parameter disables
+building Python bindings with the deprecated <command>python3 setup.py
+build</command> command.  The explicit instruction to build the Python 3
+binding with the <command>pip3 wheel</command> command is provided.
     </para>
 
   </sect2>
@@ -139,9 +134,9 @@ como o(a) usuário(a) <systemitem class="username">root</systemitem>:
 
 <screen role="root"><userinput>mv /etc/pam.d/system-password{,.orig} &amp;&amp;
 cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
-<literal># Begin /etc/pam.d/system-password
+<literal># Inicia /etc/pam.d/system-password
 
-# check new passwords for strength (man pam_pwquality)
+# verifique a força das novas senhas (man pam_pwquality)
 password  required    pam_pwquality.so   authtok_type=UNIX retry=1 difok=1 \
                                          minlen=8 dcredit=0 ucredit=0 \
                                          lcredit=0 ocredit=0 minclass=1 \
@@ -151,12 +146,12 @@ password  required    pam_pwquality.so   authtok_type=UNIX retry=1 difok=1 \
                                          enforcing=1 badwords="" \
                                          dictpath=/usr/lib/cracklib/pw_dict
 
-# use yescrypt hash for encryption, use shadow, and try to use any
-# previously defined authentication token (chosen password) set by any
-# prior module.
+# use resumo yescrypt para encriptação; use sombra e tente usar algum
+# token de autenticação previamente definido (senha escolhida) configurado
+# por algum módulo anterior.
 password  required    pam_unix.so        yescrypt shadow try_first_pass
 
-# End /etc/pam.d/system-password</literal>
+# Termina /etc/pam.d/system-password</literal>
 EOF
 </userinput></screen>
 
@@ -179,7 +174,7 @@ EOF
         </seg>
         <seg>
           <!-- /etc/security was installed by Linux-PAM -->
-Nenhum
+/usr/lib/python3.11/site-packages/pwquality-&libpwquality-version;.dist-info
           
         </seg>
       </seglistitem>

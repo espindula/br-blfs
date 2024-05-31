@@ -8,13 +8,13 @@
   <!ENTITY AbiWord-docs-version "3.0.2">
 
   <!ENTITY AbiWord-download-http
-           "https://www.abisource.com/downloads/abiword/&AbiWord-version;/source/abiword-&AbiWord-version;.tar.gz">
+           "&sources-anduin-http;/abiword/abiword-&AbiWord-version;.tar.gz">
   <!ENTITY AbiWord-download-ftp  "">
   <!ENTITY AbiWord-md5sum        "a8f218b711450e4ccae43a0522e0e806">
   <!ENTITY AbiWord-size          "11 MB">
 
   <!ENTITY AbiWordDocs-download-http
-           "https://www.abisource.com/downloads/abiword/&AbiWord-docs-version;/source/abiword-docs-&AbiWord-docs-version;.tar.gz">
+           "&sources-anduin-http;/abiword/abiword-docs-&AbiWord-docs-version;.tar.gz">
   <!ENTITY AbiWordDocs-md5sum        "c92c0e1e2081db20757231a53d80c338">
   <!ENTITY AbiWordDocs-size          "1,5 MB">
 
@@ -40,7 +40,7 @@
 escrever informes, cartas e outros documentos formatados.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -122,20 +122,20 @@ escrever informes, cartas e outros documentos formatados.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="dbus-glib"/>, <xref linkend="evolution-data-server"/>, <xref
-linkend="gobject-introspection"/>, <xref linkend="libchamplain"/>, <xref
-linkend="libgcrypt"/>, <xref linkend="libical"/>, <xref linkend="libsoup"/>,
-<xref linkend="redland"/>, <xref linkend="telepathy-glib"/>, <xref
-linkend="valgrind"/>, <ulink
+linkend="gobject-introspection"/>, <xref linkend="libgcrypt"/>, <xref
+linkend="libical"/>, <xref linkend="libsoup"/>, <xref linkend="redland"/>,
+<xref linkend="telepathy-glib"/>, <xref linkend="valgrind"/>.  <ulink
 url="https://aiksaurus.sourceforge.net/">Aiksaurus</ulink>, <ulink
 url="https://github.com/AbiWord/gtkmathview">GtkMathView</ulink>, <ulink
-url="https://sourceforge.net/projects/wvware">libwmf</ulink>, <ulink
+url="https://gitlab.gnome.org/GNOME/libchamplain/">libchamplain</ulink>,
+<ulink url="https://sourceforge.net/projects/wvware">libwmf</ulink>, <ulink
 url="https://sourceforge.net/projects/libwpd/">libwpd</ulink>, <ulink
 url="https://sourceforge.net/projects/libwpg/">libwpg</ulink>, <ulink
 url="https://sourceforge.net/projects/libwps/">libwps</ulink>, <ulink
-url="https://www.abisource.com/projects/link-grammar/">Analisador Link
-Grammar</ulink>, <ulink
+url="https://www.abisource.com/projects/link-grammar/"> Link Grammar
+Parser</ulink>, <ulink
 url="&gnome-download-http;/loudmouth">Loudmouth</ulink>, <ulink
-url="https://sourceforge.net/projects/otslibrary/">OTS</ulink> e <ulink
+url="https://packages.ubuntu.com/focal/libots-dev">OTS</ulink>, and <ulink
 url="https://software.frodo.looijaard.name/psiconv/">Psiconv</ulink>
     </para>
 
@@ -150,24 +150,21 @@ necessárias que você precisa passar para o conjunto de comandos sequenciais
 
 
     <para condition="html" role="usernotes">
-      Editor Notes: <ulink url="&blfs-wiki;/abiword"/>
+      Observações de Editor(a): <ulink url="&blfs-wiki;/abiword"/>
     </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do AbiWord</title>
 
-
-
-    <!--
     <para>
-
-      First, fix a build failure when using GCC-11:
+      First, fix a build failure when using libxml-2.12.x:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../abiword-&AbiWord-version;-gcc11_fixes-1.patch</userinput></screen>
--->
-<para>
+<screen><userinput>sed -e '/libxml/a #include &lt;libxml/xmlmemory.h&gt;' \
+    -i src/af/util/xp/ut_stringbuf.cpp</userinput></screen>
+
+    <para>
       Instale o <application>AbiWord</application> executando os seguintes
 comandos:
     </para>

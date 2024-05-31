@@ -6,11 +6,11 @@
 
   <!ENTITY curl-download-http "https://curl.se/download/curl-&curl-version;.tar.xz">
   <!ENTITY curl-download-ftp  "">
-  <!ENTITY curl-md5sum        "556576a795bdd2c7d10de6886480065f">
+  <!ENTITY curl-md5sum        "8f28f7e08c91cc679a45fccf66184fbc">
   <!ENTITY curl-size          "2,5 MB">
-  <!ENTITY curl-buildsize     "42 MB (adicionar 23 MB para testes)">
-  <!ENTITY curl-time          "0,1 UPC (com paralelismo=4; adicionar 15 UPC para testes (sem valgrind,
-adicionar 36 UPC com valgrind)">
+  <!ENTITY curl-buildsize     "42 MB (add 18 MB for tests)">
+  <!ENTITY curl-time          "0.2 SBU (with parallelism=4; add 4.1 SBU for tests (without valgrind, add 36
+SBU with valgrind))">
 ]>
 
 <sect1 id="curl" xreflabel="cURL-&curl-version;">
@@ -40,7 +40,7 @@ ser incorporada a outros aplicativos para suportar funções como mídia em
 transmissão.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -93,7 +93,20 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref role="runtime" linkend="make-ca"/> (tempo de execução)
+      <xref linkend="libpsl"/>
+    </para>
+
+    <note>
+      <para>
+        While there is an option to build the package without libpsl, both the
+upstream developers and the BLFS editors alike highly recommend not
+disabling support for libpsl due to severe security implications.
+      </para>
+    </note>
+
+    <bridgehead renderas="sect4">Recommended at runtime</bridgehead>
+    <para role="recommended">
+      <xref role="runtime" linkend="make-ca"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -106,16 +119,16 @@ mbed TLS</ulink> (formerly known as
       PolarSSL), and -->
 <!-- mbedTLS/PolarSSL support was removed in 7.65.1 -->
 <xref linkend="brotli"/>, <xref linkend="c-ares"/>, <xref
-linkend="gnutls"/>, <xref linkend="libidn2"/>, <xref linkend="libpsl"/>,
-<xref linkend="libssh2"/>, <xref linkend="mitkrb"/>, <xref
-linkend="nghttp2"/>, <xref linkend="openldap"/>, <xref role='runtime'
-linkend="samba"/> (tempo de execução, para autenticação NTLM), <ulink
+linkend="gnutls"/>, <xref linkend="libidn2"/>, <xref linkend="libssh2"/>,
+<xref linkend="mitkrb"/>, <xref linkend="nghttp2"/>, <xref
+linkend="openldap"/>, <xref role='runtime' linkend="samba"/> (runtime, for
+NTLM authentication), <ulink
 url="https://www.gnu.org/software/gsasl/">gsasl</ulink>, <ulink
 url="https://www.secureauth.com/labs/open-source-tools/impacket/">impacket</ulink>,
 <ulink url="https://launchpad.net/libmetalink/">libmetalink</ulink>, <ulink
 url="https://rtmpdump.mplayerhq.hu/">librtmp</ulink>, <ulink
 url="https://github.com/ngtcp2/ngtcp2/">ngtcp2</ulink>, <ulink
-url="https://github.com/cloudflare/quiche">quiche</ulink> e <ulink
+url="https://github.com/cloudflare/quiche">quiche</ulink>, and <ulink
 url="https://spnego.sourceforge.net/">SPNEGO</ulink>
     </para>
 
@@ -125,9 +138,9 @@ url="https://spnego.sourceforge.net/">SPNEGO</ulink>
       <!-- stunnel is still listed in the docs as required, but 7.58.0
        tests completed happily without it, although the test for unit1323
        reported that the tool set in the test case does not exist - ken -->
-<xref linkend="apache"/> e <xref linkend="stunnel"/> (para os testes HTTPS e
-FTPS) e <xref linkend="valgrind"/> (isso atrasará os testes e possivelmente
-cause falhas).
+<xref linkend="apache"/> and <xref linkend="stunnel"/> (for the HTTPS and
+FTPS tests), <xref linkend="openssh"/>, and <xref linkend="valgrind"/> (this
+will slow the tests down and may cause failures.)
     </para>
 
   </sect2>
@@ -178,16 +191,17 @@ make</userinput></screen>
 
 
     <para>
-       <!--Four tests, 1139, 1140, 1173, and 1177, are known to fail due to
-       missing executables from the optional dependencies.-->
-<!-- If libssh2 is installed
-       and the optional <option>
-- -enable-ssh2</option> is used, test 1459
-       will fail.-->
-Para executar a suíte de teste, emita: <command>make test</command>. Os
-testes relacionados ao protocolo SMB produzirão uma mensagem duplicada
-muitas vezes reclamando que o módulo Python impacket (não é parte do BLFS)
-está ausente e será ignorado.
+       <!--One test, <filename>
+1477</filename>, is known to fail due to 
+       a missing file in the curl tarball.-->
+To run the test suite, issue: <command>make test</command>.  Some tests are
+flaky, so if some tests have failed it's possible to run a test again with:
+<command>(cd tests; ./runtests.pl <replaceable>&lt;test
+ID&gt;</replaceable>)</command> (the ID of failed tests are shown in the
+<quote><computeroutput>These test cases failed:</computeroutput></quote>
+message). If you run the tests after the package has been installed, some
+tests may fail because the man pages were deleted by the 'find' command in
+the installation instructions below.
     </para>
 
 
@@ -383,6 +397,30 @@ It appears that every test is now run under valgrind.
 TESTDONE: 1611 tests were considered during 2129 seconds.
 TESTDONE: 1369 tests out of 1369 reported OK: 100%
 All BLFS dependencies installed, and run under valgrind.
+
+[renodr] - Test results for 8.3.0 (2023-09-14)
+TESTDONE: 1635 tests were considered during 4068 seconds.
+TESTDONE: 1386 tests out of 1387 reported OK: 99%
+TESTFAIL: These test cases failed: 1474
+All BLFS dependencies installed, and run under valgrind. Test 1474 is flaky.
+
+[renodr] - Test results for 8.4.0 (2023-10-11)
+TESTDONE: 1646 tests were considered during 2290 seconds.
+TESTDONE: 1449 tests out of 1452 reported OK: 99%
+TESTFAIL: These test cases failed: 1474 3021 3022
+All BLFS dependencies are installed, and the tests were run with Valgrind
+installed as well. Test 3021 and 3022 fails due to incompatibilities with
+our version of SSH. See https://github.com/curl/curl/issues/12096
+Test 1474 is still flaky.
+
+[bdubbs] - Test results for 8.6.0 (2024-02-01)
+TESTDONE: 1673 tests were considered during 395 seconds.
+TESTDONE: 1355 tests out of 1360 reported OK: 99%
+TESTFAIL: These test cases failed: 1139 1140 1173 1177 1477
+Run without valgrind.
+Tests seem to looking for man pages that are missing.
+- renodr: this is because tests were run after the man pages were deleted by
+  the find command after 'make install'
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -442,10 +480,9 @@ class="libraryfile">libcurl</filename>&quot;.
     </para>
 
     <para>
-      <option>--without-ssl --with-gnutls</option>: Use para construir com suporte
-&quot;<application>GnuTLS</application>&quot; em vez de
-&quot;<application>OpenSSL</application>&quot; para
-&quot;SSL&quot;/&quot;TLS&quot;.
+      <option>--without-ssl --with-gnutls</option>: Use this switch to build with
+<application>GnuTLS</application> support instead of
+<application>OpenSSL</application> for SSL/TLS.
     </para>
 
     <para>

@@ -9,10 +9,10 @@
 
   <!ENTITY qt5-download-http "&qt5-url;/qt-everywhere-opensource-src-&qt5-version;.tar.xz">
   <!ENTITY qt5-download-ftp  "">
-  <!ENTITY qt5-md5sum        "fb41d86bea6bc4886030a5092c910b09">
-  <!ENTITY qt5-size          "629 MB">
-  <!ENTITY qt5-buildsize     "8,7 GB (153 MB instalado)">
-  <!ENTITY qt5-time          "5,7 UPC (usando paralelismo=8)">
+  <!ENTITY qt5-md5sum        "3fb1cd4f763f5d50d491508b7b99fb77">
+  <!ENTITY qt5-size          "630 MB">
+  <!ENTITY qt5-buildsize     "8.5 GB (154 MB installed)">
+  <!ENTITY qt5-time          "7.4 SBU (using parallelism=4)">
 ]>
 
 <sect1 id="qt5-alternate" xreflabel="qt-alternate-&qt5-version;">
@@ -20,8 +20,8 @@
 
   <title>qt-alternate-&qt5-version;</title>
 
-  <indexterm zone="qt5">
-    <primary sortas="a-Qt">Qt</primary>
+  <indexterm zone="qt5-alternate">
+    <primary sortas="a-Qt5-alternate">Qt Alternate</primary>
   </indexterm>
 
   <sect2 role="package">
@@ -52,7 +52,7 @@ ambiente de área de trabalho <xref linkend="plasma5-build"/> baseado em
       </para>
     </important>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -108,6 +108,12 @@ url="https://dot.kde.org/2021/04/06/announcing-kdes-qt-5-patch-collection"/>
 e <ulink url="https://community.kde.org/Qt5PatchCollection"/>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Required patch: <ulink
+url="&patch-root;/qt-everywhere-opensource-src-&qt5-version;-security_fix-1.patch"/>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do qt5</bridgehead>
@@ -119,17 +125,17 @@ e <ulink url="https://community.kde.org/Qt5PatchCollection"/>.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="alsa-lib"/>, <xref linkend="cups"/>, <phrase
-revision='sysv'><xref linkend="dbus"/>,</phrase> <xref
-linkend="double-conversion"/>, <xref linkend="glib2"/>, <xref
+      <xref linkend="alsa-lib"/>, <xref linkend="at-spi2-core"/>, <xref
+linkend="cups"/>, <phrase revision='sysv'><xref linkend="dbus"/>,</phrase>
+<xref linkend="double-conversion"/>, <xref linkend="glib2"/>, <xref
 linkend="harfbuzz"/>, <xref linkend="icu"/>, <xref
 linkend="hicolor-icon-theme"/>, <xref linkend="mesa"/>, <xref
 linkend="libjpeg"/>, <xref linkend="libxkbcommon"/>, <xref
 linkend="sqlite"/>, <xref linkend="wayland"/>
-(<application>Mesa</application> precisa ser construído com a estrutura de
-retaguarda EGL do <application>Wayland</application>), <xref
+(<application>Mesa</application> must be built with
+<application>Wayland</application> EGL backend), <xref
 linkend="xcb-util-image"/>, <xref linkend="xcb-util-keysyms"/>, <xref
-linkend="xcb-util-renderutil"/> e <xref linkend="xcb-util-wm"/>
+linkend="xcb-util-renderutil"/>, and <xref linkend="xcb-util-wm"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -138,10 +144,6 @@ linkend="xcb-util-renderutil"/> e <xref linkend="xcb-util-wm"/>
 ou <ulink url="https://www.mysql.com/">MySQL</ulink>, <xref
 linkend="mitkrb"/>, <xref linkend="mtdev"/> <xref linkend="postgresql"/> e
 <xref linkend="unixodbc"/>
-    </para>
-
-    <para condition="html" role="usernotes">
-       Observações de Editor(a): <ulink url="&blfs-wiki;/qt5"/>
     </para>
 
   </sect2>
@@ -211,12 +213,13 @@ desabilitá-las ou usar versões internas incluídas no tarball do fonte.
 
     <note>
       <para>
-        Os(As) editores(as) do BLFS não recomendam instalar o
-<application>qt5</application> na hierarquia /usr porque fica difícil
-encontrar componentes e atualizar para uma nova versão. Se você deseja
-instalar o <application>qt5</application> em /usr, os diretórios precisam
-ser especificados explicitamente. Nesse caso, configure QT5PREFIX=/usr e
-adicione o seguinte aos argumentos de configuração abaixo:
+        The BLFS editors do not recommend installing <application>qt5</application>
+into the <filename class="directory">/usr</filename> hierarchy because it
+becomes difficult to find components and to update to a new version.  If you
+do want to install <application>qt5</application> in <filename
+class="directory">/usr</filename>, the directories need to be specified
+explicitly.  In this case, set <envar>QT5PREFIX=/usr</envar> and add the
+following to the configure arguments below:
       </para>
 
 <screen role="nodump"><userinput>            -archdatadir    /usr/lib/qt5                \
@@ -231,21 +234,28 @@ adicione o seguinte aos argumentos de configuração abaixo:
     </note>
 
     <para>
-      Primeiro, aplique um remendo para obter as correções selecionadas pelo KDE
-para aqueles módulos que são exigidos pelos pacotes mencionados neste livro:
+      Now apply a patch to pull in the fixes curated by kde for those modules
+which are required by packages mentioned in this book:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../qt-everywhere-opensource-src-&qt5-version;-kf5-1.patch</userinput></screen>
 
     <para>
-      O remendo é presumido para ser usado em um repositório git, porque o
-comportamento do comando <command>configure</command> abaixo é mudado nesse
-caso. Basta criar um diretório <filename class="directory">.git</filename>
-no diretório <filename class="directory">qmake</filename>, onde o conjunto
-de comandos sequenciais <command>configure</command> for executado:
+      The patch is supposed to be used in a git repository. Otherwise some files
+that should be modified by <command>configure</command> after applying the
+patch are not touched. Fortunately, it is enough to create a <filename
+class="directory">.git</filename> directory in the <filename
+class="directory">qmake</filename> directory where the
+<command>configure</command> script is run:
     </para>
 
     <screen><userinput remap="pre">mkdir -pv qtbase/.git</userinput></screen>
+
+    <para>
+      Fix a security vulnerability in qtbase:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../qt-everywhere-opensource-src-&qt5-version;-security_fix-1.patch</userinput></screen>
 
     <para>
       Neste ponto, queremos configurar o salto da maioria dos componentes. Faça
@@ -305,10 +315,9 @@ make</userinput></screen>
     
 
     <para>
-      <!--and profile include (pri)-->
-Remova referências ao diretório de construção dos arquivos instalados de
-dependência de biblioteca (prl) executando o seguinte comando como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+      Remove references to the build directory from installed library dependency
+(prl) files by running the following command as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
 <screen role="root"><userinput>find $QT5PREFIX/ -name \*.prl \
@@ -401,7 +410,7 @@ links simbólicos necessários:
     </para>
 
 <screen role="root"><userinput>for file in moc uic rcc qmake lconvert lrelease lupdate; do
-  ln -sfrvn $QT5BINDIR/$file /usr/bin/$file-qt5
+  ln -sfvn $QT5BINDIR/$file /usr/bin/$file-qt5
 done</userinput></screen>
 
   </sect2>
@@ -436,10 +445,11 @@ do sistema do <application>Harfbuzz</application>.
     </para>
 
     <para>
-      <parameter>-dbus-linked -openssl-linked</parameter>: Essas chaves habilitam
-a vinculação explícita das bibliotecas do <application>D-Bus</application> e
-<application>OpenSSL</application> no <application>qt5</application> em vez
-de abri-las com <command>dlopen()</command>.
+      <parameter>-dbus-linked</parameter> <parameter>-openssl-linked</parameter>:
+These switches enable explicit linking of the
+<application>D-Bus</application> and <application>OpenSSL</application>
+libraries into <application>qt5</application> libraries instead of
+<command>dlopen()</command>-ing them.
     </para>
 
     <para revision="sysv">
@@ -566,15 +576,25 @@ qmltyperegistrar, qtattributionscanner, qtdiag, qtpaths, qtplugininfo,
 qtwaylandscanner, qvkgen, rcc, syncqt.pl, tracegen e uic
         </seg>
         <seg>
-          libQt5Concurrent.so, libQt5Core.so, libQt5DBus.so, libQt5Designer.so,
-libQt5DesignerComponents.so, libQt5EglFSDeviceIntegration.so,
-libQt5EglFsKmsSupport.so, libQt5Gui.so, libQt5Help.so, libQt5Network.so,
-libQt5OpenGL.so, libQt5PrintSupport.so, libQt5Qml.so, libQt5QmlModels.so,
+          libQt5AccessibilitySupport.a, libQt5Bootstrap.a, libQt5Concurrent.so,
+libQt5Core.so, libQt5DBus.so, libQt5Designer.so,
+libQt5DesignerComponents.so, libQt5DeviceDiscoverySupport.a,
+libQt5EdidSupport.a, libQt5EglFSDeviceIntegration.so,
+libQt5EglFsKmsSupport.so, libQt5EglSupport.a,
+libQt5EventDispatcherSupport.a, libQt5FbSupport.a,
+libQt5FontDatabaseSupport.a, libQt5GlxSupport.a, libQt5Gui.so,
+libQt5Help.so, libQt5InputSupport.a, libQt5KmsSupport.a,
+libQt5LinuxAccessibilitySupport.a, libQt5Network.so, libQt5OpenGL.so,
+libQt5OpenGLExtensions.a, libQt5PacketProtocol.a,
+libQt5PlatformCompositorSupport.a, libQt5PrintSupport.so, libQt5Qml.so,
+libQt5QmlDebug.a, libQt5QmlDevTools.a, libQt5QmlModels.so,
 libQt5QmlWorkerScript.so, libQt5Quick.so, libQt5QuickParticles.so,
-libQt5QuickShapes.so, libQt5QuickTest.so, libQt5WaylandClient.so,
+libQt5QuickShapes.so, libQt5QuickTest.so, libQt5QuickWidgets.so,
+libQt5ServiceSupport.a, libQt5Sql.so, libQt5Svg.so, libQt5Test.so,
+libQt5ThemeSupport.a, libQt5UiTools.a, libQt5WaylandClient.so,
 libQt5WaylandCompositor.so, libQt5Widgets.so, libQt5X11Extras.so,
-libQt5XcbQpa.so, libQt5Xml.so, várias bibliotecas estáticas e vários plugins
-sob /opt/qt5/{plugins,qml}
+libQt5XcbQpa.so, libQt5XkbCommonSupport.a, libQt5Xml.so, and several plugins
+under /opt/qt5/{plugins,qml}
         </seg>
         <seg>
           /usr/include/qt5, /usr/lib/qt5, /usr/share/doc/qt5 e /usr/share/qt5 OU

@@ -5,13 +5,12 @@
   %general-entities;
 
   <!ENTITY adwaita-icon-theme-download-http
-   "&gnome-download-http;/adwaita-icon-theme/&gnome-44;/adwaita-icon-theme-&adwaita-icon-theme-version;.tar.xz">
-  <!ENTITY adwaita-icon-theme-download-ftp
-   "&gnome-download-ftp;/adwaita-icon-theme/&gnome-44;/adwaita-icon-theme-&adwaita-icon-theme-version;.tar.xz">
-  <!ENTITY adwaita-icon-theme-md5sum        "1abae78e6cd50d4055b5c88ffe8b56a5">
-  <!ENTITY adwaita-icon-theme-size          "2,4 MB">
-  <!ENTITY adwaita-icon-theme-buildsize     "31 MB">
-  <!ENTITY adwaita-icon-theme-time          "0,1 UPC (Usando paralelismo=4)">
+   "&gnome-download-http;/adwaita-icon-theme/&gnome-45;/adwaita-icon-theme-&adwaita-icon-theme-version;.tar.xz">
+  <!ENTITY adwaita-icon-theme-download-ftp  "">
+  <!ENTITY adwaita-icon-theme-md5sum        "5407d7921f717e837341bca9bb1bc50b">
+  <!ENTITY adwaita-icon-theme-size          "4.1 MB">
+  <!ENTITY adwaita-icon-theme-buildsize     "72 MB">
+  <!ENTITY adwaita-icon-theme-time          "0.1 SBU">
 ]>
 
 <sect1 id="adwaita-icon-theme" xreflabel="adwaita-icon-theme-&adwaita-icon-theme-version;">
@@ -27,12 +26,12 @@
     <title>Introdução ao <quote>Tema de Ícone Adwaita</quote></title>
 
     <para>
-      O pacote &quot;<application>Tema de Ícone Adwaita</application>&quot; contém
-um tema de ícone para aplicativos &quot;<application>GTK+
-3</application>&quot; e &quot;<application>GTK 4</application>&quot;.
+      The <application>Adwaita Icon Theme</application> package contains an icon
+theme for <application>GTK+ 3</application> and <application>GTK
+4</application> applications.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -70,14 +69,28 @@ um tema de ícone para aplicativos &quot;<application>GTK+
 
     <bridgehead renderas="sect3">Dependências do &quot;Tema de Ícone Adwaita&quot;</bridgehead>
 
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <!-- Meson now unconditionally runs gtk-update-icon-cache and
+           gtk-encode-symbolic-svg after installing. See
+           https://lists.linuxfromscratch.org/sympa/arc/blfs-dev/2023-09/msg00128.html -->
+<xref linkend="gtk3"/> or <xref role="nodep" linkend="gtk4"/>, and <xref
+linkend="librsvg"/>
+      
+    </para>
+
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="git"/>, <xref linkend="gtk2"/> ou <xref linkend="gtk3"/> (se
-presente, [então] o &quot;<xref linkend="librsvg"/>&quot; também é exigido;
-e &quot;<command>gtk-update-icon-cache</command>&quot; e
-&quot;<command>gtk-encode-symbolic-svg</command>&quot; são executados depois
-da instalação), <xref linkend="inkscape"/> e <ulink
-url="https://launchpad.net/icontool/">Ferramentas de Ícone</ulink>
+      <!--
+      <xref linkend="gtk4"/>
+ or <xref linkend="gtk3"/>
+      (if present, <xref linkend="librsvg"/> is also
+      required, and <command>gtk-update-icon-cache
+      </command> and <command>gtk-encode-symbolic-svg</command> are run
+      after installing),
+-->
+<xref linkend="git"/>, <xref linkend="inkscape"/>, and <ulink
+url="https://launchpad.net/icontool/">Icon Tools</ulink>
     </para>
 
   </sect2>
@@ -90,8 +103,11 @@ url="https://launchpad.net/icontool/">Ferramentas de Ícone</ulink>
 executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -102,7 +118,7 @@ make</userinput></screen>
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 

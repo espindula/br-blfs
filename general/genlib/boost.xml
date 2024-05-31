@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY boost-download-http "https://boostorg.jfrog.io/artifactory/main/release/&boost-version;/source/boost_&boost-dl-version;.tar.bz2">
+  <!ENTITY boost-download-http "https://github.com/boostorg/boost/releases/download/boost-&boost-version;/boost-&boost-version;.tar.xz">
   <!ENTITY boost-download-ftp  "">
-  <!ENTITY boost-md5sum        "406f0b870182b4eb17a23a9d8fce967d">
-  <!ENTITY boost-size          "117 MB">
+  <!ENTITY boost-md5sum        "893b5203b862eb9bbd08553e24ff146a">
+  <!ENTITY boost-size          "90 MB">
   <!ENTITY boost-buildsize     "1,1 GB (199 MB instalado)">
-  <!ENTITY boost-time          "2,8 UPC (Usando paralelismo=4; adicionar 0,7 UPC para testes)">
+  <!ENTITY boost-time          "1.7 SBU (Using parallelism=4; add 0.1 SBU for tests)">
 ]>
 
 <sect1 id="boost" xreflabel="Boost-&boost-version;">
@@ -33,7 +33,7 @@ encadeamento, processamento de imagens, expressões regulares e testes de
 unidade.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -102,17 +102,20 @@ MPI</ulink>
   <sect2 role="installation">
     <title>Instalação de Boost</title>
 
+    <!--
     <para>
-      Uma mudança nesta versão do <application>boost</application> quebra os
-poucos pacotes que usam o módulo <application>phoenix</application> quando
-compilados com o <application>GCC</application> atual. No BLFS, isso afeta
-<xref linkend="libreoffice"/>. Corrija isso com o seguinte comando:
+
+      A change in this version of <application>boost</application> breaks
+      the few packages which use the <application>phoenix</application>
+      module when compiled with current <application>GCC</application>. In BLFS,
+      that affects <xref linkend="libreoffice"/>. Fix this with the following
+      command:
     </para>
 
 <screen><userinput>sed -i '/#include.*phoenix.*tuple.hpp.*/d' \
   boost/phoenix/stl.hpp</userinput></screen>
-
-    <para>
+-->
+<para>
       Esse pacote pode ser construído com vários trabalhos executando em
 paralelo. Nas instruções abaixo, <parameter>&lt;N&gt;</parameter> representa
 o número de trabalhos. Instale o <application>Boost</application> executando
@@ -124,13 +127,11 @@ os seguintes comandos:
 ./b2 stage -j<replaceable>&lt;N&gt;</replaceable> threading=multi link=shared</userinput></screen>
 
     <para>
-      <!--With python-3.10.x all 168 tests should pass.  With
-      <xref linkend='python3'/>
-, 20 tests fail for undetermined reasons.-->
-<!-- This was fixed in 1.83.0 -->
-Para executar os testes de regressão do Boost.Build, emita <command>pushd
-tools/build/test; python3 test_all.py; popd</command>.
-      
+      <!-- This was fixed in 1.83.0 and broken for python-3.12 and 1.84.0 -->
+To run Boost.Build's regression tests, issue <command>pushd
+tools/build/test; python3 test_all.py; popd</command>.  With python-3.11.x
+all 169 tests should pass.  With <xref linkend='python3'/>, 7 tests fail for
+undetermined reasons.
       
     </para>
 
@@ -173,18 +174,15 @@ explicitamente removidos. Para fazer isso, execute como o(a) usuário(a)
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+    <!--
     <para>
-      <!-- FIXME: remove before 11.3 is we still use 1.81.0 and LO-7.4,
-      this alternative is only for people working through the development book.-->
-<parameter>sed -i '/#include ...</parameter>: Isso remove a inclusão de
-<filename>boost/phoenix/stl/tuple.hpp</filename> dessa biblioteca somente de
-cabeçalho, permitindo que aplicativos que a usam se vincularem usando C++
-recente. Uma alternativa é a de editar
-<filename>/usr/include/boost/phoenix/stl.hpp</filename> se essa versão do
-"boost" já tiver sido instalada sem esse <command>sed</command>.
-    </para>
 
-    <para>
+      <command>sed -i '/#include ...</command>: This removes the inclusion
+      of <filename>boost/phoenix/stl/tuple.hpp</filename> from this header-only
+      library, allowing applications which use it to link using recent C++.
+    </para>
+-->
+<para>
       <parameter>threading=multi</parameter>: Esse parâmetro garante que
 <application>Boost</application> seja construído com suporte a multi
 encadeamento.

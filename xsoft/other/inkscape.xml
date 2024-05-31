@@ -3,15 +3,15 @@
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
-  <!ENTITY inkscape-download-http "https://inkscape.org/gallery/item/42328/inkscape-&inkscape-minor-version;.tar.xz">
+  <!ENTITY inkscape-download-http "https://inkscape.org/gallery/item/44615/inkscape-&inkscape-minor-version;.tar.xz">
 
   <!-- When updating, remember to change the numeric part of the URL -->
 
   <!ENTITY inkscape-download-ftp  "">
-  <!ENTITY inkscape-md5sum        "3b16db43ffdae2156c4f318a44c32bbd">
-  <!ENTITY inkscape-size          "82 MB">
-  <!ENTITY inkscape-buildsize     "870 MB (190 MB instalado)">
-  <!ENTITY inkscape-time          "3,5 UPC (com paralelismo=8)">
+  <!ENTITY inkscape-md5sum        "76ed1f4b13065e80de8b2d77b6427b83">
+  <!ENTITY inkscape-size          "43 MB">
+  <!ENTITY inkscape-buildsize     "817 MB (189 MB installed)">
+  <!ENTITY inkscape-time          "4.6 SBU (with parallelism=8)">
 
   <!-- To find newer tarballs, look here:
        https://inkscape.org/release/all/source/archive/?pre=0
@@ -37,7 +37,7 @@ obtém de gráficos vetoriais escaláveis. É útil para criar, visualizar e
 mudar imagens SVG.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -117,15 +117,14 @@ de teste)
            "convert" is needed and this is only a runtime dependency.  -->
 <!-- there might be others, or other needed dependencies:
        needs someone who knows how to use *all" the core extensions -->
-<xref role="runtime" linkend="imagemagick"/> (tempo de execução), <xref
-linkend="lcms2"/> ou <xref role="nodep" linkend="lcms"/>, <xref
-linkend="libcanberra"/> (para eliminar avisos de plugin), <xref
-linkend="potrace"/> (para a ferramenta bucket-fill), também vários módulos
-Python em tempo de execução para as extensões centrais: <xref role="runtime"
-linkend="cachecontrol"/>, <xref role="runtime" linkend="cssselect"/>, <xref
-role="runtime" linkend="lxml"/>, <xref role="runtime" linkend="numpy"/>,
-<xref role="runtime" linkend="pyserial"/> e <xref role="runtime"
-linkend="scour"/>
+<xref role="runtime" linkend="imagemagick"/> (runtime), <xref
+linkend="lcms2"/>, <xref linkend="libcanberra"/> (to eliminate plugin
+warnings), <xref linkend="potrace"/> (for the bucket-fill tool), also
+various Python modules at runtime for the core extensions: <xref
+role="runtime" linkend="cachecontrol"/>, <xref role="runtime"
+linkend="cssselect"/>, <xref role="runtime" linkend="lxml"/>, <xref
+role="runtime" linkend="numpy"/>, <xref role="runtime" linkend="pyserial"/>,
+and <xref role="runtime" linkend="scour"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -165,8 +164,6 @@ Optional Runtime Dependencies
     <title>Instalação do Inkscape</title>
 
 
-
-
     <!--
     <para>
 
@@ -175,19 +172,13 @@ Optional Runtime Dependencies
 
 <screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-version;-poppler_22_09_fixes-1.patch</userinput></screen>
 -->
-<!-- If there is no test suite, then this is not needed.
-     There is none if the command below is not run.
-     With 1.0, this support is broken, so let's comment it out for now to
-     prevent confusion.
-    <para>
-      If you wish to run the test suite, download the required versions of
-      <application>googletest</application> and
-      <application>googlemock</application> by running:
+<para>
+      First, fix a build failure caused by libxml2-2.12.0:
     </para>
 
-<screen remap="test"><userinput>./download-gtest.sh</userinput></screen>
--->
-<para>
+<screen><userinput remap="pre">sed -i '/uri.h/a #include &lt;libxml/xmlmemory.h&gt;' src/object/uri.h</userinput></screen>
+
+    <para>
       Instale o <application>Inkscape</application> executando os seguintes
 comandos:
     </para>
@@ -269,11 +260,14 @@ que manipulam imagens.
           inkscape e inkview
         </seg>
         <seg>
-          lib2geom.so e libinkscape_base.so (em /usr/lib/inkscape)
+          
+          <!--lib2geom.so and-->
+libinkscape_base.so (in /usr/lib/inkscape)
         </seg>
         <seg>
-          /usr/include/2geom-&lib2geom-version;, /usr/lib/inkscape e
-/usr/share/inkscape
+          
+          <!--/usr/include/2geom-&lib2geom-version;,-->
+/usr/lib/inkscape, and /usr/share/inkscape
         </seg>
       </seglistitem>
     </segmentedlist>

@@ -6,9 +6,9 @@
 
   <!ENTITY shadow-download-http "https://github.com/shadow-maint/shadow/releases/download/&shadow-version;/shadow-&shadow-version;.tar.xz">
   <!ENTITY shadow-download-ftp  "">
-  <!ENTITY shadow-md5sum        "b1ab01b5462ddcf43588374d57bec123">
+  <!ENTITY shadow-md5sum        "452b0e59f08bf618482228ba3732d0ae">
   <!ENTITY shadow-size          "1,7 MB">
-  <!ENTITY shadow-buildsize     "45 MB">
+  <!ENTITY shadow-buildsize     "38 MB">
   <!ENTITY shadow-time          "0,2 UPC">
 ]>
 
@@ -38,7 +38,7 @@ habilitará o suporte a senha forte. Se você tiver instalado o
 <command>login</command> e <command>su</command> utilizem o PAM.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -93,6 +93,12 @@ Additional Downloads</bridgehead>
       <xref linkend="linux-pam"/> ou <xref role="nodep" linkend="cracklib"/>
     </para>
 
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <ulink url="https://libbsd.freedesktop.org/wiki/">libbsd</ulink> and <ulink
+url="https://www.openwall.com/tcb/">tcb</ulink>
+    </para>
+
   </sect2>
 
   <sect2 role="installation">
@@ -118,6 +124,14 @@ parâmetro <parameter>--with-libcrack</parameter> ao script
 <screen role="nodump"><userinput>sed -i 's@DICTPATH.*@DICTPATH\t/lib/cracklib/pw_dict@' etc/login.defs</userinput></screen>
     </important>
 
+    <warning>
+      <para>
+        If reinstalling shadow for a version update, be sure to reaccomplish the
+Linux-PAM configuration below.  The installation of shadow overwrites many
+of the files in <filename class="directory">/etc/pam.d/</filename>.
+      </para>
+    </warning>
+
     <para>
       Reinstale <application>Shadow</application> executando os seguintes
 comandos:
@@ -126,9 +140,9 @@ comandos:
 <screen><!--
 <screen>
 <userinput>patch -Np1 -i ../shadow-4.10-useradd_segfault-1.patch &amp;&amp;
-
-sed -i "224s/rounds/min_rounds/" libmisc/salt.c        &amp;&amp;
 -->
+<!--
+This is the default:            - -with-group-name-max-length=32 &amp;&amp;-->
 <userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in          &amp;&amp;
 
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \; &amp;&amp;
@@ -140,10 +154,10 @@ sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
     -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
     -i etc/login.defs                                   &amp;&amp;
 
-./configure --sysconfdir=/etc               \
-            --disable-static                \
-            --with-{b,yes}crypt             \
-            --with-group-name-max-length=32 &amp;&amp;
+./configure --sysconfdir=/etc   \
+            --disable-static    \
+            --without-libbsd    \
+            --with-{b,yes}crypt &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -154,7 +168,7 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make exec_prefix=/usr install</userinput></screen>
+<screen role="root"><userinput>make exec_prefix=/usr pamddir= install</userinput></screen>
 
     <para>
       As páginas de manual foram instaladas no LFS, mas se a reinstalação for
@@ -188,31 +202,42 @@ instaladas pelo <application>Man-pages</application> no LFS.
     <para>
       <command>sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' -e
 's@/var/spool/mail@/var/mail@' -e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i
-etc/login.defs</command>: Instead of using the default 'DES' method, this
-command modifies the installation to use the much more secure 'YESCRYPT'
-method of hashing passwords, which also allows passwords longer than eight
-characters.  The command also changes the obsolete <filename
-class="directory">/var/spool/mail</filename> location for user mailboxes
-that <application>Shadow</application> uses by default to the <filename
-class="directory">/var/mail</filename> location. It also changes the default
-path to be consistent with that set in LFS.
+etc/login.defs</command>: Em vez de usar o método padrão 'DES ', esse
+comando modifica a instalação para usar o método muito mais seguro
+'YESCRYPT' de resumo de senhas, que também permite senhas maiores que oito
+caracteres. O comando também muda o local obsoleto <filename
+class="directory">/var/spool/mail</filename> para caixas de correio de
+usuário(a) que <application>Shadow</application> usa por padrão para o local
+<filename class="directory">/var/mail</filename>. Ele também muda o caminho
+padrão para estar consistente com aquele configurado no LFS.
     </para>
 
-    <!--
+    <para>
+      <parameter>--without-libbsd</parameter>: Prevents looking for the
+<command>readpassphrase</command> function, which can be found only in
+<filename class="libraryfile">libbsd</filename>, which we do not have in
+BLFS. An internal implementation of <command>readpassphrase</command> is
+used instead.
+    </para>
+
+    <para>
+      <parameter>pamddir=</parameter>: Prevents installation of the shipped PAM
+configuration files into <filename
+class='directory'>/etc/pam.d</filename>. The shipped configuration does not
+work with the BLFS PAM configuration and we will create these configuration
+files explicitly.
+    </para>
+
+
+
+  <!-- This is the default
     <para>
 
-      <command>sed ... libmisc/salt.c</command> and
-      <command>sed ... libsubid/Makefile.am</command>: Fix a couple of errors
-      that were found after the package was released.
+      <parameter>-\-with-group-name-max-length=32</parameter>: The maximum
+      user name is 32 characters. Make the maximum group name the same.
     </para>
--->
-<para>
-      <parameter>--with-group-name-max-length=32</parameter>: O nome máximo de
-usuário(a) é de trinta e dois (32) caracteres. Torne o nome máximo do grupo
-o mesmo.
-    </para>
-
-  <!--
+    -->
+<!--
     <para>
 
       <parameter>-\-without-su</parameter>: Don't reinstall

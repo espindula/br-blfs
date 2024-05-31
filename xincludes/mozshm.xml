@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE note PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" >
+<!DOCTYPE para PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../general.ent">
+  %general-entities;]>
 
 
     
@@ -8,17 +10,16 @@
     <!-- to go inside a NOTE on mozilla packages which need shm
          mounted when configured or similar in chroot.
          Unfortunately, the DTD says an xinclude can only include
-         one paragraph. -->
+         one paragraph.
+
+         We now have exactly one paragraph, git blame this line for
+         details.                                             -->
 <para>
-      Se você estiver compilando esse pacote em chroot, você precisa fazer duas
-coisas. Primeiro, como o(a) usuário(a) <systemitem
-class="username">root</systemitem>, certifique-se de que
-<filename>/dev/shm</filename> esteja montado. Se você não fizer isso, a
-configuração do <application>Python</application> falhará com um informe de
-rastreamento referenciando
-<filename>/usr/lib/pythonN.N/multiprocessing/synchronize.py</filename>.
-Execute: <screen role="nodump"><userinput>mountpoint -q /dev/shm || mount -t tmpfs devshm /dev/shm</userinput></screen>
+      If you are compiling this package in chroot you must ensure that
+<filename>/dev/shm</filename> is mounted. If you do not do this, the
+<application>Python</application> configuration will fail with a traceback
+report referencing
+<filename>/usr/lib/pythonN.N/multiprocessing/synchronize.py</filename>.  As
+the &root; user, run: <screen role="nodump"><userinput>mountpoint -q /dev/shm || mount -t tmpfs devshm /dev/shm</userinput></screen>
 
     </para>
-    
-<!-- follow with appropriate text about exporting SHELL -->

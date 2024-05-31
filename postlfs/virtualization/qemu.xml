@@ -6,10 +6,10 @@
 
   <!ENTITY qemu-download-http "https://download.qemu.org/qemu-&qemu-version;.tar.xz">
   <!ENTITY qemu-download-ftp  "">
-  <!ENTITY qemu-md5sum        "7dd9ff5a92cf81cfce6cda1f6e271f3a">
-  <!ENTITY qemu-size          "118 MB">
-  <!ENTITY qemu-buildsize     "2,1 GB (366 MB instalado)">
-  <!ENTITY qemu-time          "1,2 UPC (adicionar 0,8 UPC para testes, ambos usando paralelismo=4)">
+  <!ENTITY qemu-md5sum        "bda54248d773be2599df66f8995f10e1">
+  <!ENTITY qemu-size          "124 MB">
+  <!ENTITY qemu-buildsize     "2.2 GB (373 MB installed)">
+  <!ENTITY qemu-time          "1.3 SBU (add 0.8 SBU for tests, both using parallelism=4)">
 ]>
 
 <sect1 id="qemu" xreflabel="qemu-&qemu-version;">
@@ -31,7 +31,7 @@ Linux em hardware x86 contendo extensões de virtualização (Intel VT ou
 AMD-V).
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -71,7 +71,7 @@ AMD-V).
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/>
+      <xref linkend="glib2"/> and <xref linkend="pixman"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -83,15 +83,40 @@ linkend="sdl2"/>
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <!-- libcacard has been a standalone project since qemu-2.5.-->
-Dependendo do sistema de som, vários pacotes em <xref linkend="alsa"/>,
-<xref linkend="python3"/>, <xref linkend="pulseaudio"/>, <xref
-linkend="bluez"/>, <xref linkend="curl"/>, <xref linkend="cyrus-sasl"/>,
-<xref linkend="gnutls"/>, <xref linkend="gtk2"/>, <xref linkend="gtk3"/>,
-<xref linkend="libusb"/>, <xref linkend="libgcrypt"/>, <xref
-linkend="libssh2"/>, <xref linkend="lzo"/>, <xref linkend="nettle"/>, <xref
-linkend="mesa"/>, <xref role="nodep" linkend="vte"/> ou <xref
-linkend="vte2"/> e <ulink
-url="https://gitlab.freedesktop.org/spice/libcacard">libcacard</ulink>
+<xref linkend="pipewire"/> or <xref linkend="pulseaudio"/> (can be used
+instead of alsa-lib), <xref linkend="bluez"/>, <xref linkend="curl"/>, <xref
+linkend="cyrus-sasl"/>, <xref linkend="fuse3"/>, <xref linkend="gnutls"/>,
+<xref linkend="gtk3"/>, <xref linkend="keyutils"/>, <xref
+linkend="libaio"/>, <xref linkend="libusb"/>, <xref linkend="libgcrypt"/>,
+<xref linkend="libjpeg"/>, <xref linkend="libseccomp"/>, <xref
+linkend="libssh2"/>, <xref linkend="libpng"/>, <xref linkend="libtasn1"/>,
+<xref linkend="linux-pam"/>, <xref linkend="lzo"/>, <xref
+linkend="nettle"/>, <xref linkend="mesa"/>, <xref role="nodep"
+linkend="vte"/>, <ulink
+url="https://www.capstone-engine.org/">capstone</ulink>, <ulink
+url="https://github.com/ceph/ceph/">ceph</ulink>, <ulink
+url="https://pmem.io/daxctl/">daxctl</ulink>, <ulink
+url="https://jackaudio.org/">JACK</ulink>, <ulink
+url="https://github.com/gluster/glusterfs">glusterfs</ulink>, <ulink
+url="https://github.com/libbpf/libbpf">libbpf</ulink>, <ulink
+url="https://gitlab.freedesktop.org/spice/libcacard">libcacard</ulink>,
+<ulink url="https://people.redhat.com/sgrubb/libcap-ng/">libcap-ng</ulink>,
+<ulink url="https://sourceware.org/elfutils/">libdw</ulink>, <ulink
+url="https://github.com/dgibson/dtc">libfdt</ulink>, <ulink
+url="https://github.com/sahlberg/libiscsi">libiscsi</ulink>, <ulink
+url="https://github.com/sahlberg/libnfs">libnfs</ulink>, <ulink
+url="https://pmem.io/pmdk/libpmem/">libpmem</ulink>, <ulink
+url="https://www.libssh.org/">libssh</ulink>, <ulink
+url="https://github.com/Agnoctopus/libu2f-emu">libu2f-emu</ulink>, <ulink
+url="https://github.com/lzfse/lzfse">lzfse</ulink>, <ulink
+url="https://github.com/luigirizzo/netmap">netmap</ulink>, <ulink
+url="https://github.com/numactl/numactl">numactl</ulink>, <ulink
+url="https://github.com/linux-rdma/rdma-core">rdma-core</ulink>, <ulink
+url="https://selinuxproject.org/">SELinux</ulink>, <ulink
+url="https://google.github.io/snappy/">snappy</ulink>, <ulink
+url="https://gitlab.freedesktop.org/spice/spice">spice</ulink>, <ulink
+url="https://gitlab.freedesktop.org/spice/usbredir">usbredir</ulink>, and
+<ulink url="https://github.com/virtualsquare/vde-2">VDE</ulink>
     </para>
 
     <bridgehead renderas="sect4">Opcionais (tempo de execução)</bridgehead>
@@ -234,9 +259,10 @@ unset QEMU_ARCH &amp;&amp;
 make</userinput></screen>
 
     <para>
-      <application>qemu</application> usa <command>ninja</command> como um
-subprocesso ao construir. Para executar os testes, emita: <command>ninja
-test</command>. Um teste, bios-tables-test, é conhecido por falhar.
+      <application>qemu</application> uses <command>ninja</command> as a
+subprocess when building.  To run the tests, issue: <command>ninja
+test</command>. Two tests, bios-tables-test and migration-test, are known to
+fail.
     </para>
 
     <para>
@@ -277,9 +303,14 @@ executar o aplicativo instalado. Por exemplo (como o(a) usuário(a) &root;):
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--audio-drv-list=alsa --disable-pa</parameter>: Essa chave
-configura o controlador de áudio para o ALSA. Veja-se abaixo para habilitar
-outros controladores de áudio.
+      <parameter>--audio-drv-list=alsa</parameter>: This switch sets the audio
+driver to ALSA. See below for enabling other audio drivers.
+    </para>
+
+    <para>
+      <parameter>--disable-pa</parameter>: even if <emphasis>pa</emphasis> is not
+in <parameter>--audio-drv-list</parameter> list, the pulseaudio driver is
+built, unless disabled by this parameter.
     </para>
 
     <para>

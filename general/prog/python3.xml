@@ -7,16 +7,16 @@
   <!ENTITY python3-download-http
            "https://www.python.org/ftp/python/&python3-version;/Python-&python3-version;.tar.xz">
   <!ENTITY python3-download-ftp  "">
-  <!ENTITY python3-md5sum        "fb7f7eae520285788449d569e45b6718">
-  <!ENTITY python3-size          "19 MB">
-  <!ENTITY python3-buildsize     "282 MB (adicionar 63 MB para testes)">
-  <!ENTITY python3-time          "1,9 UPC (adicionar 2,8 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY python3-md5sum        "e7c178b97bf8f7ccd677b94d614f7b3c">
+  <!ENTITY python3-size          "20 MB">
+  <!ENTITY python3-buildsize     "337 MB (add 57 MB for tests)">
+  <!ENTITY python3-time          "2.5 SBU (add 0.7 SBU for tests; both using parallelism=4)">
   <!--
-  Note: Size does not reflect docs that were install in LFS.
+  Note: Size does not reflect docs that were installed in LFS.
   -->
   <!ENTITY python3htmldoc-download-http
   "https://www.python.org/ftp/python/doc/&python3-version;/python-&python3-version;-docs-html.tar.bz2">
-  <!ENTITY python3-docs-md5sum "cdce7b1189bcf52947f3b434ab04d7e2" >
+  <!ENTITY python3-docs-md5sum "8a6310f6288e7f60c3565277ec3b5279" >
 ]>
 
 <sect1 id="python3" xreflabel="Python-&python3-version;">
@@ -48,18 +48,16 @@ atualizar esse pacote.
       </para>
     </note>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <important>
       <para>
-         Se atualizar para uma nova versão menor do &quot;Python&quot; 3 (por
-exemplo, de &quot;Python-3.10.x&quot; para &quot;Python-3.11.0&quot;),
-[então] você precisará reinstalar quaisquer módulos &quot;Python3&quot; que
-tiver instalado. Você também deveria reinstalar pacotes que gerem módulos
-&quot;Python3&quot;, incluindo &quot;<xref
-linkend="gobject-introspection"/>&quot;, &quot;<xref
-linkend="opencv"/>&quot;, &quot;<xref linkend="graphviz"/>&quot; (se o
-&quot;swig&quot; estiver instalado).
+         If upgrading to a new Python-3 minor version (for example, from
+Python-3.11.x to Python-3.12.0), you will need to reinstall any Python3
+modules you have installed.  You should also reinstall packages that
+generate Python3 modules including <xref linkend="gobject-introspection"/>,
+<xref linkend="libxml2"/>, <xref linkend="opencv"/>, <xref
+linkend="graphviz"/> (if swig is installed).
       </para>
 
       <para>Antes de atualizar, você pode obter uma lista de módulos instalados com
@@ -72,11 +70,12 @@ para uma lista abrangente.
       </para>
 
       <para>
-         Os módulos Python originários do LFS também terão que ser reinstalados:
-<ulink url="&lfs-root;/chapter08/flit-core.html">flit-core</ulink>, <ulink
+         The Python modules from LFS will also have to be reinstalled: <ulink
+url="&lfs-root;/chapter08/flit-core.html">flit-core</ulink>, <ulink
 url="&lfs-root;/chapter08/wheel.html">wheel</ulink>, <ulink
+url="&lfs-root;/chapter08/setuptools.html">setuptools</ulink>, <ulink
 url="&lfs-root;/chapter08/meson.html">meson</ulink>, <ulink
-url="&lfs-root;/chapter08/markupsafe.html">MarkupSafe</ulink> e <ulink
+url="&lfs-root;/chapter08/markupsafe.html">MarkupSafe</ulink>, and <ulink
 url="&lfs-root;/chapter08/jinja2.html">Jinja2</ulink>.
       </para>
     </important>
@@ -146,7 +145,7 @@ url="https://www.bytereef.org/mpdecimal/">libmpdec</ulink>
 
     <bridgehead renderas="sect4">Opcionais (Para Módulos Adicionais)</bridgehead>
     <para role="optional">
-      <xref linkend="db"/>, <xref linkend="libnsl"/> e <xref linkend="tk"/>
+      <xref linkend="libnsl"/>, <xref linkend="tk"/>, and &berkeley-db;
     </para>
 
     <para condition="html" role="usernotes">Observações de Editor(a): <ulink url="&blfs-wiki;/Python3"/>
@@ -161,19 +160,37 @@ url="https://www.bytereef.org/mpdecimal/">libmpdec</ulink>
 seguintes comandos:
     </para>
 
-<screen><userinput>CXX="/usr/bin/g++"              \
+<screen><userinput>CXX="/usr/bin/g++"               \
 ./configure --prefix=/usr        \
             --enable-shared      \
             --with-system-expat  \
-            --with-system-ffi    \
             --enable-optimizations &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para testar o resultado, emita &quot;<command>make
-test</command>&quot;. Alguns testes possivelmente precisem de uma conexão
-com a Internet. Dois testes, &quot;test_distutils&quot; e
-&quot;test_embed&quot;, são conhecidos por falharem.
+      
+      <!-- I'm getting a test failure with empty $LANG:
+           "test test_curses failed"
+           "_curses.error: inswstr() returned ERR"
+           not sure why, but let's just work around it with LC_ALL.  
+  
+           For Python-3.12.0 all tests pass with only LANG=en_US.utf8.
+           Total tests: run=41,505 skipped=1,199
+           Total test files: run=477/483 skipped=12 resource_denied=6
+
+           For Python-3.12.1 all tests pass
+           Total tests: run=40,624 skipped=1,136
+           Total test files: run=486/489 skipped=24 resource_denied=3
+
+           For Python-3.12.2 all tests pass
+           Total tests: run=41,580 skipped=1,144
+           Total test files: run=485/488 skipped=23 resource_denied=3
+      -->
+To test the result, issue <command>LC_ALL=en_US.UTF-8 make test</command>.
+Some tests may need an Internet connection.  Two tests named
+<filename>test_xml_etree</filename> and
+<filename>test_xml_etree_c</filename> are known to fail with expat-2.6.0 or
+newer.
     </para>
 
     <para>
@@ -211,10 +228,6 @@ irritante durante a configuração.
 versão do sistema do &quot;<application>Expat</application>&quot;.
     </para>
 
-    <para>
-      <parameter>--with-system-ffi</parameter>: Essa chave habilita vincular à
-versão do sistema da &quot;<application>libffi</application>&quot;.
-    </para>
 
     <!--
     <para>
@@ -282,11 +295,10 @@ usuário(a) ou ao do sistema:
           <!--
           easy_install-&python3-majorver;,
           -->
-2to3 (link simbólico) e 2to3-&python3-majorver;, idle3 (link simbólico) e
-idle&python3-majorver;, pip3 (link simbólico) e pip&python3-majorver;,
-pydoc3 e pydoc&python3-majorver;, python3 (link simbólico);
-python&python3-majorver; e python3-config (link simbólico) e
-python&python3-majorver;-config
+2to3 (symlink) and 2to3-&python3-majorver;, idle3 (symlink) and
+idle&python3-majorver;, pip3 and pip&python3-majorver;, pydoc3 (symlink) and
+pydoc&python3-majorver;, python3 (symlink) and python&python3-majorver;, and
+python3-config (symlink) and python&python3-majorver;-config
         </seg>
         <seg>
           libpython&python3-majorver;.so e libpython3.so

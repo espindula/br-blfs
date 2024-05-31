@@ -6,16 +6,16 @@
 
   <!ENTITY libnl-download-http "https://github.com/thom311/libnl/releases/download/libnl&libnl-dl-version;/libnl-&libnl-version;.tar.gz">
   <!ENTITY libnl-download-ftp  "">
-  <!ENTITY libnl-md5sum        "b381405afd14e466e35d29a112480333">
-  <!ENTITY libnl-size          "980 KB">
-  <!ENTITY libnl-buildsize     "31 MB (com a documentação da API)">
-  <!ENTITY libnl-time          "0,4 UPC (com a documentação da API)">
+  <!ENTITY libnl-md5sum        "27bffaccbb22ab9d8cff377b320f6014">
+  <!ENTITY libnl-size          "1.1 MB">
+  <!ENTITY libnl-buildsize     "74 MB (with API documentation)">
+  <!ENTITY libnl-time          "0.6 SBU (with API documentation)">
 
 
   <!ENTITY libnl-doc-download-http "https://github.com/thom311/libnl/releases/download/libnl&libnl-dl-version;/libnl-doc-&libnl-version;.tar.gz">
   <!ENTITY libnl-doc-download-ftp  "">
-  <!ENTITY libnl-doc-md5sum        "15f55a421a16ff4084c4a1af085c19b8">
-  <!ENTITY libnl-doc-size          "13 MB">
+  <!ENTITY libnl-doc-md5sum        "3259c70458712f34a40b8345f405f5ac">
+  <!ENTITY libnl-doc-size          "3.8 MB">
 ]>
 
 <sect1 id="libnl" xreflabel="libnl-&libnl-version;">
@@ -36,7 +36,7 @@ bibliotecas que fornecem &quot;APIs&quot; para interfaces do núcleo Linux
 baseadas no protocolo &quot;netlink&quot;.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -127,21 +127,39 @@ autoreconf -fi</userinput></screen>
 seguintes comandos:
     </para>
 
+<!-- "keyboard inputs not displayed at all" highly reproducible in
+         a QEMU VM with -j8 under Linux console.  In xterm I've seen "all
+         texts blinking".  I'd considered this caused by my CFLAGS, but
+         this time I've not deviated from the book at all.  -->
 <screen><userinput>./configure --prefix=/usr    \
             --sysconfdir=/etc \
             --disable-static  &amp;&amp;
 make</userinput></screen>
 
+    
+    <note>
+      <para>
+        If the <command>make</command> command was executed with multiple parallel
+jobs enabled, it might disrupt the terminal mode and cause some
+<quote>amusing</quote> visual effects.  In the worst case, this issue may
+cause keyboard inputs not displayed on the screen at all (but you can still
+run any command if you can type it correctly).  Run the
+<command>reset</command> to fix such an issue.
+      </para>
+    </note>
+
     <para>
-      <!--To test the results, issue: <command>
-make check</command>.
-      One subtest is known to fail.-->
-<!-- If the kernel does not have CONFIG_IPC_NS=y, one subtest tests/check-all
-      fails.  If it does have it, the subtest still fails in a different place
-      for unknown reasons. Version 3.6.0. -->
-Esse pacote não vem com uma suíte de teste funcional.
-      
-      
+      If you wish to run the tests, check that the following options are enabled
+in the kernel configuration and recompile the kernel if necessary.  Some of
+them may not be strictly needed, but they should support a complete test
+coverage.
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="libnl-test-kernel.xml"/>
+
+    <para>
+      To test the results, issue: <command>make check</command>.
     </para>
 
     <para>

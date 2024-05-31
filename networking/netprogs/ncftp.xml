@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY ncftp-download-http "">
-  <!ENTITY ncftp-download-ftp  "ftp://ftp.ncftp.com/ncftp/ncftp-&ncftp-version;-src.tar.xz">
-  <!ENTITY ncftp-md5sum        "42d0f896d69a4d603ec097546444245f">
-  <!ENTITY ncftp-size          "412 KB">
-  <!ENTITY ncftp-buildsize     "6,6 MB">
+  <!ENTITY ncftp-download-http "https://www.ncftp.com/downloads/ncftp/ncftp-&ncftp-version;-src.tar.xz">
+  <!ENTITY ncftp-download-ftp  "">
+  <!ENTITY ncftp-md5sum        "bbcb048d2412f4d62bc798818e703680">
+  <!ENTITY ncftp-size          "416 KB">
+  <!ENTITY ncftp-buildsize     "6.9 MB">
   <!ENTITY ncftp-time          "0,2 UPC">
 ]>
 
@@ -32,7 +32,7 @@ Internet. Destina-se a substituir ou complementar o aplicativo
 &quot;<command>ftp</command>&quot; padrão.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,25 +68,26 @@ Internet. Destina-se a substituir ou complementar o aplicativo
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+  <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/ncftp-&ncftp-version;-configure_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/ncftp-&ncftp-version;-configure_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do &quot;NcFTP&quot;</bridgehead>
+    <bridgehead renderas="sect3">NcFTP Dependencies</bridgehead>
 
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <bridgehead renderas="sect4">Optional</bridgehead>
     <para role="optional">
-      <xref linkend="llvm"/> (com &quot;Clang&quot;, usado por padrão se
-instalado)
+      <xref linkend="llvm"/> (with Clang, used by default if installed)
     </para>
-
-  </sect2>
+-->
+</sect2>
 
   <sect2 role="installation">
     <title>Instalação do <quote>NcFTP</quote></title>
@@ -108,27 +109,28 @@ Esclarecida; entretanto, o desenvolvimento de aplicativos que utilizam a
 biblioteca compartilhada está sujeito a uma licença diferente.
     </para>
 
+    <!--
     <para>
-      Primeiro, corrija um problema causado por uma mudança de comportamento no
-&quot;GCC-10&quot;:
+
+      First, fix an issue caused by a change in behavior in GCC-10:
     </para>
 
 <screen><userinput remap="pre">sed -i 's/^Bookmark/extern Bookmark/' sh_util/gpshare.c</userinput></screen>
 
     <para>
-      Em seguida, atualize o conjunto de comandos sequenciais configure para usar
-os padrões modernos C:
+      Next, update the configure script to use modern C standards:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../ncftp-&ncftp-version;-configure_fixes-1.patch &amp;&amp;
 autoreconf -fiv -I autoconf_local</userinput></screen>
-
-    <para>
+-->
+<para>
       Para instalar o &quot;<application>NcFTP</application>&quot; usando o
 primeiro (e ideal) método, execute os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --sysconfdir=/etc &amp;&amp;
+<screen><userinput>CC=/usr/bin/gcc \
+./configure --prefix=/usr --sysconfdir=/etc &amp;&amp;
 make -C libncftp shared &amp;&amp;
 make</userinput></screen>
 
@@ -169,6 +171,12 @@ class="username">root</systemitem>&quot;:
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <para>
+      <envar>CC=/usr/bin/gcc</envar>. This environment variable ensures that
+<command>gcc</command> is used if <xref linkend="llvm"/> is installed.  The
+build procedure is broken if <command>gcc</command> is not used.
+    </para>
 
     <para>
       <command>make -C ... &amp;&amp; make -C ...</command>: Esses comandos criam

@@ -5,10 +5,9 @@
   %general-entities;
 
   <!ENTITY iptables-download-http "https://www.netfilter.org/projects/iptables/files/iptables-&iptables-version;.tar.xz">
-  <!--<!ENTITY iptables-download-ftp  "ftp://ftp.netfilter.org/pub/iptables/iptables-&iptables-version;.tar.xz">-->
   <!ENTITY iptables-download-ftp  "">
-  <!ENTITY iptables-md5sum        "ffa00f68d63e723c21b8a091c5c0271b">
-  <!ENTITY iptables-size          "633 KB">
+  <!ENTITY iptables-md5sum        "5eaa3bb424dd3a13c98c0cb026314029">
+  <!ENTITY iptables-size          "628 KB">
   <!ENTITY iptables-buildsize     "16 MB">
   <!ENTITY iptables-time          "0,1 UPC">
 ]>
@@ -32,7 +31,7 @@ espaço do(a) usuário(a) usado para configurar o conjunto de regras de
 filtragem de pacote do núcleo Linux 2.4 e posteriores.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,13 +74,14 @@ filtragem de pacote do núcleo Linux 2.4 e posteriores.
 
       <!--      <xref linkend="nftables"/>
 , -->
-<xref linkend="libpcap"/> (required for BPF compiler or nfsynproxy support),
-<ulink url="https://github.com/tadamdam/bpf-utils">bpf-utils</ulink>
-(required for Berkeley Packet Filter support), <ulink
+<xref linkend="libpcap"/> (exigido para suporte ao compilador BPF ou
+nfsynproxy), <ulink
+url="https://github.com/tadamdam/bpf-utils">bpf-utils</ulink> (exigido para
+suporte ao Berkeley Packet Filter), <ulink
 url="https://netfilter.org/projects/libnfnetlink/">libnfnetlink</ulink>
-(required for connlabel support), <ulink
+(exigido para suporte ao connlabel), <ulink
 url="https://netfilter.org/projects/libnetfilter_conntrack/">libnetfilter_conntrack</ulink>
-(required for connlabel support), and <ulink
+(exigido para suporte ao connlabel) e <ulink
 url="https://netfilter.org/projects/nftables/">nftables</ulink>
     </para>
 
@@ -219,11 +219,11 @@ seus dados privados.
       </para>
 
       <para>
-        Abaixo está uma versão ligeiramente modificada da recomendação do Rusty
-Russell oriunda do <ulink
-url="https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">Linux
-2.4 Packet Filtering HOWTO</ulink>. Ela ainda é aplicável aos núcleos Linux
-5.x.
+        Below is a slightly modified version of Rusty Russell's recommendation from
+the <ulink
+url="https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html">
+Linux 2.4 Packet Filtering HOWTO</ulink>. It is still applicable to the
+Linux 6.x kernels.
       </para>
 
 <screen role="root" revision="sysv"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/rc.d/rc.iptables &lt;&lt; "EOF"
@@ -345,8 +345,7 @@ echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 echo 1 &gt; /proc/sys/net/ipv4/conf/default/log_martians
 
-# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
-# no caso de IP estático)
+# Seja verboso acerca de endereços dinâmicos de IP (não necessário no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
 # Desabilita a Notificação Explícita de Congestão
@@ -358,10 +357,9 @@ iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
-# script for mesmo reexecutado em tempo real.  Nós queremos remover 
-# todas as regras e cadeias preexistentes definidas por usuário(a) 
-# antes de implementarmos novas regras.
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o script for mesmo
+# reexecutado em tempo real.  Nós queremos remover todas as regras e cadeias preexistentes
+# definidas por usuário(a) antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z
@@ -443,8 +441,7 @@ echo "acerca de firewalls no Capítulo 4 do livro BLFS."
 echo "https://www.&lfs-domainname;/blfs"
 echo
 
-# Insere módulos do iptables (não necessário se construído internamente 
-# ao kernel).
+# Insere módulos do iptables (não necessário se construído internamente ao kernel).
 
 modprobe nf_conntrack
 modprobe nf_conntrack_ftp
@@ -474,8 +471,7 @@ echo 1 &gt; /proc/sys/net/ipv4/conf/default/rp_filter
 # Registra pacotes com endereços impossíveis.
 echo 1 &gt; /proc/sys/net/ipv4/conf/all/log_martians
 
-# Seja verboso a respeito de endereços de IP dinâmicos (não necessário 
-# no caso de IP estático)
+# Seja verboso a respeito de endereços dinâmicos de IP (não necessário no caso de IP estático)
 echo 2 &gt; /proc/sys/net/ipv4/ip_dynaddr
 
 # Desabilita a Notificação Explícita de Congestão
@@ -487,10 +483,9 @@ iptables -P INPUT   DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT  DROP
 
-# Estas linhas estão aqui no caso das regras já estiverem no lugar e o 
-# script for mesmo reexecutado em tempo real.  Nós queremos remover 
-# todas as regras e cadeias preexistentes definidas por usuário(a) 
-# antes de implementarmos novas regras.
+# Estas linhas estão aqui no caso das regras já estiverem no lugar e o script for mesmo
+# reexecutado em tempo real.  Nós queremos remover todas as regras e cadeias preexistentes
+# definidas por usuário(a) antes de implementarmos novas regras.
 iptables -F
 iptables -X
 iptables -Z

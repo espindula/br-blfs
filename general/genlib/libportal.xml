@@ -6,10 +6,10 @@
 
   <!ENTITY libportal-download-http "https://github.com/flatpak/libportal/releases/download/&libportal-version;/libportal-&libportal-version;.tar.xz">
   <!ENTITY libportal-download-ftp  "">
-  <!ENTITY libportal-md5sum        "e16c8ca2621aff64774a1d2ad6a2a346">
-  <!ENTITY libportal-size          "64 KB">
-  <!ENTITY libportal-buildsize     "2,9 MB">
-  <!ENTITY libportal-time          "0,1 UPC">
+  <!ENTITY libportal-md5sum        "f94be41e8495ae7d6aaed046481daa61">
+  <!ENTITY libportal-size          "76 KB">
+  <!ENTITY libportal-buildsize     "3.0 MB (with tests)">
+  <!ENTITY libportal-time          "0.1 SBU (add 0.3 SBU for tests)">
 ]>
 
 <sect1 id="libportal" xreflabel="libportal-&libportal-version;">
@@ -30,7 +30,7 @@
 contém APIs assíncronas estilo GIO para a maioria dos portais Flatpak.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -66,6 +66,16 @@ contém APIs assíncronas estilo GIO para a maioria dos portais Flatpak.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Optional patch (required for running the test suite): <ulink
+url="&patch-root;/libportal-&libportal-version;-testsuite_fix-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do libportal</bridgehead>
 
     <bridgehead renderas="sect4">Exigida</bridgehead>
@@ -75,12 +85,25 @@ contém APIs assíncronas estilo GIO para a maioria dos portais Flatpak.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gtk3"/>, <xref linkend="gtk4"/> e &qt5-deps;
+      <xref linkend="gtk3"/> and <xref linkend="gtk4"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recommended (Runtime)</bridgehead>
+    <para role="runtime">
+      To make this package really useful, install <xref
+linkend="xdg-desktop-portal"/>, <xref linkend="xdg-desktop-portal-gtk"/>,
+<xref role="nodep" linkend="xdg-desktop-portal-gnome"/> (if running a GNOME
+desktop environment), and <xref role="nodep"
+linkend="xdg-desktop-portal-lxqt"/> (if running a LXQt desktop
+environment).  They are not needed if only using this package to satisfy a
+build dependency.
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gi-docgen"/> e <xref linkend="vala"/>
+      <xref linkend="gi-docgen"/> (for documentation), <xref
+linkend="python-dbusmock"/> and <xref linkend="pytest"/> (for testing),
+&qt5-deps; (for the Qt5 version of libportal), and <xref linkend="vala"/>
     </para>
 
   </sect2>
@@ -100,6 +123,13 @@ role="username">root</systemitem>):
    mv -vf /usr/include/libportal{,.old}
 fi</userinput></screen>
     </warning>
+
+    <para>
+      If running the test suite, apply a patch to fix a dozen of test failures
+with python-dbusmock 0.30.0 or later:
+    </para>
+
+    <screen><userinput>patch -Np1 -i ../libportal-&libportal-version;-testsuite_fix-1.patch</userinput></screen>
 
     <para>
       Instale <application>libportal</application> executando os seguintes
@@ -122,7 +152,9 @@ meson configure -Ddocs=true                   &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Esse pacote não vem com uma suíte de teste.
+      To test the results, issue: <command>ninja test</command>. Note that
+additional <filename>dbus-daemon</filename> processes may need to be killed
+after the tests are run.
     </para>
 
     <para>
@@ -143,15 +175,18 @@ ninja</userinput></screen>
       <parameter>-Ddocs=false</parameter>: &gi-doc-disable;
     </para>
 
-    <para>
-      <option>-Dbackends=gtk3,gtk4,qt5</option>: Essa chave permite que você
-configure as estruturas disponíveis de retaguarda. Você consegue usá-la para
-desabilitar a dependência de gtk-3, gtk-4 ou qt-5. A maioria dos aplicativos
-que usam libportal usará ou gtk-4 ou gtk-3. O padrão é o de construir todas
-as três estruturas de retaguarda.
-    </para>
 
-  </sect2>
+
+  <!-- These options are now automatically detected, so it doesn't make sense to
+     explicitly set which ones are used (as of version 0.7)
+    <para>
+      <option>-Dbackends=gtk3,gtk4,qt5</option>: This switch allows you to set
+      the available backends. You can use it to disable the dependency on gtk-3,
+      gtk-4, or qt-5. Most applications that use libportal will use either
+      gtk-4 or gtk-3. The default is to build all three backends.
+    </para>
+-->
+</sect2>
   <sect2 role="content">
     <title>Conteúdo</title>
 
@@ -193,7 +228,7 @@ as três estruturas de retaguarda.
         <term><filename class="libraryfile">libportal-gtk3.so</filename></term>
         <listitem>
           <para>
-            fornece funções específicas do GTK+-3 para interagir com os portais Flatpak.
+            provides GTK+-3 specific functions for interacting with Flatpak portals
           </para>
           <indexterm zone="libportal libportal-gtk3">
             <primary sortas="c-libportal-gtk3">libportal-gtk3.so</primary>
@@ -205,7 +240,7 @@ as três estruturas de retaguarda.
         <term><filename class="libraryfile">libportal-gtk4.so</filename></term>
         <listitem>
           <para>
-            fornece funções específicas do GTK-4 para interagir com portais Flatpak.
+            provides GTK-4 specific functions for interacting with Flatpak portals
           </para>
           <indexterm zone="libportal libportal-gtk4">
             <primary sortas="c-libportal-gtk4">libportal-gtk4.so</primary>
@@ -217,7 +252,7 @@ as três estruturas de retaguarda.
         <term><filename class="libraryfile">libportal-qt5.so</filename></term>
         <listitem>
           <para>
-            fornece funções específicas do Qt5 para interagir com portais Flatpak.
+            provides Qt5 specific functions for interacting with Flatpak portals
           </para>
           <indexterm zone="libportal libportal-qt5">
             <primary sortas="c-libportal-qt5">libportal-qt5.so</primary>

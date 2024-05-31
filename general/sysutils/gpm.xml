@@ -5,7 +5,7 @@
   %general-entities;
 
   <!ENTITY gpm-download-http "&sources-anduin-http;/gpm/gpm-&gpm-version;.tar.bz2">
-  <!ENTITY gpm-download-ftp  "&sources-anduin-ftp;/gpm/gpm-&gpm-version;.tar.bz2">
+  <!ENTITY gpm-download-ftp  "">
   <!ENTITY gpm-md5sum        "bf84143905a6a903dbd4d4b911a2a2b8">
   <!ENTITY gpm-size          "820 KB">
   <!ENTITY gpm-buildsize     "7,4 MB">
@@ -37,7 +37,7 @@ mais fácil (e menos sujeito a erros) recortar e colar entre duas janelas do
 console que digitar tudo manualmente!
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -83,8 +83,12 @@ url="&patch-root;/gpm-&gpm-version;-consolidated-1.patch"/>
       </listitem>
     </itemizedlist>
 
-    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/GPM"/></para>
+    <bridgehead renderas="sect3">GPM Dependencies</bridgehead>
 
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="texlive"/> (for documentation)
+    </para>
   </sect2>
 
   <sect2 role="kernel" id='gpm-kernel'>
@@ -111,10 +115,18 @@ necessário:
       Instale <application>GPM</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>patch -Np1 -i ../gpm-&gpm-version;-consolidated-1.patch &amp;&amp;
-./autogen.sh                                    &amp;&amp;
-./configure --prefix=/usr --sysconfdir=/etc      &amp;&amp;
+<screen><userinput>patch -Np1 -i ../gpm-&gpm-version;-consolidated-1.patch                &amp;&amp;
+./autogen.sh                                                    &amp;&amp;
+./configure --prefix=/usr --sysconfdir=/etc ac_cv_path_emacs=no &amp;&amp;
 make</userinput></screen>
+
+    <para>
+      If <xref linkend='texlive'/> is installed, build the GPM manual as dvi, ps,
+and pdf formats:
+    </para>
+
+<screen remap='doc'><userinput>make -C doc gpm.{dvi,ps} &amp;&amp;
+dvipdfm doc/gpm.dvi -o doc/gpm.pdf</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -139,6 +151,13 @@ install -v -m644    doc/support/*                     \
 install -v -m644    doc/{FAQ,HACK_GPM,README*}        \
                     /usr/share/doc/gpm-&gpm-version;</userinput></screen>
 
+    <para>
+      If <xref linkend='texlive'/> is installed and you've built GPM manual as
+dvi, ps, and pdf formats, install them as the &root; user:
+    </para>
+
+<screen role='root' remap='doc'><userinput>install -vm644 doc/gpm.{dvi,ps,pdf} /usr/share/doc/gpm-&gpm-version;</userinput></screen>
+
   </sect2>
 
   <sect2 role="commands">
@@ -147,6 +166,17 @@ install -v -m644    doc/{FAQ,HACK_GPM,README*}        \
     <para>
       <command>./autogen.sh</command>: Esse comando cria o ausente script
 <command>configure</command>.
+    </para>
+
+    <para>
+      <parameter>ac_cv_path_emacs=no</parameter>: This variable works around an
+issue causing the package fail to build with <xref linkend='emacs'/>
+installed.  It also suppresses the installations of some <quote>Emacs
+support files</quote> shipped with GPM.  These files are quite outdated and
+they should be superseded with <xref linkend='emacs'/> built-in GPM
+support.  If you need to use <xref linkend='emacs'/> in Linux console with
+mouse support, you should install (or reinstall) <xref linkend='emacs'/>
+<emphasis role='bold'>after</emphasis> GPM.
     </para>
 
     <para>

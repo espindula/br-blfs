@@ -8,10 +8,10 @@
 
   <!ENTITY intel-media-download-http "https://github.com/intel/media-driver/archive/refs/tags/intel-media-&intel-media-version;.tar.gz">
   <!ENTITY intel-media-download-ftp  "">
-  <!ENTITY intel-media-md5sum        "a6f48933bcb3d55dea8ec2e66c4f99e1">
-  <!ENTITY intel-media-size          "27 MB">
-  <!ENTITY intel-media-buildsize     "2,5 GB (359 MB instalado)">
-  <!ENTITY intel-media-time          "5,9 UPC (com paralelismo=4)">
+  <!ENTITY intel-media-md5sum        "5e2fffaf1c1972b8791c3cfd59cd6a9e">
+  <!ENTITY intel-media-size          "25 MB">
+  <!ENTITY intel-media-buildsize     "2.1 GB (359 MB installed)">
+  <!ENTITY intel-media-time          "6.3 SBU (with parallelism=4)">
 
 ]>
 
@@ -36,7 +36,7 @@ API para GPUs da Intel fornecidas com CPUs Broadwell e superiores. Isso
 inclui suporte para uma variedade de codificadores.
       </para>
 
-      &lfs120_checked;
+      &lfs121_checked;
 
       <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -134,19 +134,42 @@ codificadores de mídia.
         </para>
 
         
+        
+        
         <!-- This reduce the size of iHD_drv_video.so from 319M to 157M
              for me.  -->
+<!-- It seems ARL depends on MTL.  We need to review once an Arrow
+             Lake CPU is launched.  -->
+<!-- Support for ARL is completely broken, needs to be turned off to 
+             complete the build -->
 <para>
-          Se conhecer o modelo da tua GPU Intel, você pode passar a opção
-<option>-D{GEN{8,9,10,11,12},MTL}=OFF</option> para o comando
-<command>cmake</command>, mas deixando a opção para tua GPU de fora. Observe
-que o número <quote>GEN</quote> aqui é a geração da GPU, não da CPU. Por
-exemplo, com uma CPU Intel Core i7-1065G7 que envia uma GPU Intel de 11ª
-geração, a opção <option>-D{GEN{8,9,10,12},MTL}=OFF</option> pode ser usada,
-de forma que o código específico para as outras gerações de GPUs Intel não
-será construído.
+          If you know the model of your Intel GPU, you can pass the
+<option>-D{GEN{8,9,11,12},MTL,ARL}=OFF</option> option to the
+<command>cmake</command> command but leaving the option for your GPU out.
+Note that the <quote>GEN</quote> number here is the generation of the GPU,
+not the CPU.  For example, with an Intel Core i7-1065G7 CPU shipping a
+11th-generation Intel GPU, the <option>-D{GEN{8,9,12},MTL,ARL}=OFF</option>
+option can be used so the code specific to the other generations of Intel
+GPUs won't be built.
         </para>
-      </note>
+
+        <para>
+          To determine the model of the Intel GPU, install <xref linkend='pciutils'/>
+and run <command>lspci -nn | grep -Ei 'VGA|DISPLAY'</command> first.  It
+will output some information about the GPU.  If the output contains
+<literal>Meteor Lake</literal>, the GPU model is <literal>MTL</literal>.
+Otherwise, follow <ulink
+url='https://dgpu-docs.intel.com/devices/hardware-table.html'/> to find the
+entry for your GPU and the model of the GPU should be in the
+<quote>Architecture</quote> column.  The Xe and XeHPG architectures are
+covered by the <literal>GEN12</literal> model.
+        </para>
+        
+      <!-- TODO: The info about MTL is my best guess, the referred Intel
+        page does not contain Meteor Lake GPU PCI devicd ID as at Feb 2024.
+        XeHPC is not enabled by default but they are some data center GPUs.
+        Not sure if anyone will run LFS in a data center. -->
+</note>
 
 
 
@@ -169,8 +192,10 @@ cd    build &amp;&amp;
 cmake -DCMAKE_INSTALL_PREFIX=$XORG_PREFIX \
       -DINSTALL_DRIVER_SYSCONF=OFF        \
       -DBUILD_TYPE=Release                \
+      -G Ninja                            \
       -Wno-dev ..                   &amp;&amp;
-make</userinput></screen>
+ninja</userinput></screen>
+
 
       <para>
         Esse pacote não vem com uma suíte de teste.
@@ -180,11 +205,33 @@ make</userinput></screen>
         Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
       </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
     </sect2>
 
-    <sect2 role="content">
+    
+    
+
+    <!-- As of Oct 1 2023, the build is broken if MTL and ARL are turned on
+         hopefully this is fixed by the time they launch, in which 
+         case we can remove the option and this section [rahul] -->
+<!-- As of October 31st, 2023, the build seems to be functional again! This
+         is with version 23.4.0. [renodr]
+    <sect2 role="commands">
+
+      <title>Command Explanations</title>
+       
+      <para>
+        <parameter>-D{MTL,ARL}=OFF</parameter>: As of October 2023,
+        Meteor Lake and Arrow Lake iGPU support is broken but still
+        in intel-media. The build fails if support for either iGPU
+        is turned on. Since both of these have not been officially
+        released yet, it is safe to turn support for them off.
+      </para>
+
+     </sect2> 
+    -->
+<sect2 role="content">
       <title>Conteúdo</title>
 
       <segmentedlist>

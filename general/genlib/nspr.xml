@@ -31,7 +31,7 @@ API neutra de plataforma para funções semelhantes às de nível de sistema e
 "libc".
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -76,22 +76,23 @@ API neutra de plataforma para funções semelhantes às de nível de sistema e
       Instale <application>NSPR</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>cd nspr                                                    &amp;&amp;
-sed -ri '/^RELEASE/s/^/#/' pr/src/misc/Makefile.in &amp;&amp;
-sed -i 's#$(LIBRARY) ##'   config/rules.mk         &amp;&amp;
+<screen><userinput>cd nspr &amp;&amp;
 
-./configure --prefix=/usr \
-            --with-mozilla \
+sed -i '/^RELEASE/s|^|#|' pr/src/misc/Makefile.in &amp;&amp;
+sed -i 's|$(LIBRARY) ||'  config/rules.mk         &amp;&amp;
+
+./configure --prefix=/usr   \
+            --with-mozilla  \
             --with-pthreads \
             $([ $(uname -m) = x86_64 ] &amp;&amp; echo --enable-64bit) &amp;&amp;
 make</userinput></screen>
 
     <para>
-      The test suite is designed for testing changes to nss or nspr and is not
-particularly useful for checking a released version (e.g. it needs to be run
-on a non-optimized build with both nss and nspr directories existing
-alongside each other). For further details, see the Editor Notes for nss at
-<ulink url="&blfs-wiki;/nss"/>
+      A suíte de teste está projetada para testar mudanças no nss ou nspr e não é
+particularmente útil para verificar uma versão lançada (por exemplo, ela
+precisa ser executada sobre uma construção não otimizada com ambos os
+diretórios nss e nspr existentes lado a lado). Para maiores detalhes,
+vejam-se as Notas de Editor(a) para nss em <ulink url="&blfs-wiki;/nss"/>
     </para>
 
     <para>
@@ -126,12 +127,11 @@ biblioteca "pthread" do sistema.
     </para>
 
     <para>
-      <parameter>$([ $(uname -m) = x86_64 ] &amp;&amp; echo
---enable-64bit)</parameter>: O parâmetro "--enable-64bit" é
-<emphasis>exigido</emphasis> em um sistema "x86_64" para evitar uma falha do
-<command>configure</command> com uma alegação de que este é um sistema sem
-suporte a "pthread". O teste "[ $(uname -m) = x86_64 ]" assegura que ele não
-tenha efeito em um sistema de 32 de bits.
+      <parameter>--enable-64bit</parameter>: The --enable-64bit parameter is
+<emphasis>required</emphasis> on an x86_64 system to prevent
+<command>configure</command> failing with a claim that this is a system
+without pthread support. The [ $(uname -m) = x86_64 ] test ensures it has no
+effect on a 32 bit system.
     </para>
 
   </sect2>

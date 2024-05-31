@@ -6,11 +6,10 @@
 
   <!ENTITY transmission-download-http "https://github.com/transmission/transmission/releases/download/&transmission-version;/transmission-&transmission-version;.tar.xz">
   <!ENTITY transmission-download-ftp  "">
-  <!ENTITY transmission-md5sum        "1d92edb61c82422211dbc751f4657489">
-  <!ENTITY transmission-size          "9,6 MB">
-  <!ENTITY transmission-buildsize     "347 MB (com interfaces GUI GTK e QT5)">
-  <!ENTITY transmission-time          "1,4 UPC (com interfaces GUI GTK; usando paralelismo=4) 5 UPC com ambos GTK e
-QT5">
+  <!ENTITY transmission-md5sum        "d3cda868215246644c429b18a30f7e47">
+  <!ENTITY transmission-size          "9.2 MB">
+  <!ENTITY transmission-buildsize     "229 MB (with both GUI interfaces)">
+  <!ENTITY transmission-time          "2.3 SBU (with both GUI interfaces; using parallelism=4)">
 ]>
 
 <sect1 id="transmission" xreflabel="Transmission-&transmission-version;">
@@ -33,7 +32,7 @@ multiplataforma e de fonte aberto. Isso é útil para baixar arquivos grandes
 fornecerem largura de banda de servidor.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -85,7 +84,7 @@ do sistema, em vez das agrupadas)
 
     <bridgehead renderas="sect4">Recomendadas (para construir uma GUI)</bridgehead>
     <para role="recommended">
-      <xref linkend="gtkmm3"/> ou &qt5-deps;
+      <xref linkend="gtkmm3"/> or &qt5-deps; or <xref linkend="qt6" role="nodep"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -132,7 +131,7 @@ make</userinput></screen>
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      Como o transmission.png parece estar ausente, crie-o a partir do svg::
+      Next, create transmission.png from the SVG file:
     </para>
 
 <screen role="root"><userinput>rsvg-convert                                               \
@@ -145,15 +144,15 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <option>-DENABLE_QT=OFF</option>: Essa chave desabilita a construção do
-cliente <application>Qt5</application>. O padrão é o de construí-lo se
-&qt5-deps; estiver instalado.
+      <option>-DENABLE_QT=OFF</option>: This switch disables building the
+<application>Qt</application> interface. The default is to build it if
+&qt5-deps; or <xref linkend="qt6"/> is installed.
     </para>
 
     <para>
-      <option>-DENABLE_GTK=OFF</option>: Essa chave desabilita a construção do
-cliente GTK+-3 de CLI. O padrão é o de construí-lo se o <xref
-linkend="gtkmm3"/> estiver instalado.
+      <option>-DENABLE_GTK=OFF</option>: This switch disables building the GTK+-3
+interface. The default is to build it if <xref linkend="gtkmm3"/> is
+installed.
     </para>
 
     <para>
@@ -163,9 +162,9 @@ estiver instalado.
     </para>
 
     <para>
-      <option>-DREBUILD_WEB=ON</option>: Essa chave força a reconstrução do
-cliente web. Precisa de <xref linkend="nodejs"/> e de uma conexão de rede de
-intercomunicação. O padrão é o de não reconstruir.
+      <option>-DREBUILD_WEB=ON</option>: This switch forces rebuilding the web
+client. This option needs <xref linkend="nodejs"/> to be installed as well
+as an internet connection. The default is to not rebuild the client.
     </para>
   </sect2>
 
@@ -179,15 +178,17 @@ intercomunicação. O padrão é o de não reconstruir.
 
       <seglistitem>
         <seg>
-          transmission-cli, transmission-create, transmission-daemon,
-transmission-edit, transmission-gtk ou transmission-qt, transmission-remote
-e transmission-show
+          
+          <!--transmission-cli,-->
+transmission-create, transmission-daemon, transmission-edit,
+transmission-gtk, transmission-qt, transmission-remote, and
+transmission-show
         </seg>
         <seg>
           Nenhum(a)
         </seg>
         <seg>
-          /usr/share/transmission (contém o cliente web, opcional) e
+          /usr/share/transmission (contains the web client) and
 /usr/share/doc/transmission-&transmission-version;
         </seg>
       </seglistitem>
@@ -195,20 +196,24 @@ e transmission-show
 
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
-      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
-
+      <!-- Not seen in 4.0.4 or 4.0.5
       <varlistentry id="transmission-cli">
+
         <term><command>transmission-cli</command></term>
         <listitem>
           <para>
-            é um cliente BitTorrent leve de linha de comando com recursos de conjunto de
-comandos sequenciais
+            is a lightweight, command line BitTorrent client with scripting
+            capabilities
           </para>
           <indexterm zone="transmission transmission-cli">
             <primary sortas="b-transmission-cli">transmission-cli</primary>
           </indexterm>
         </listitem>
       </varlistentry>
+-->
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+
 
       <varlistentry id="transmission-create">
         <term><command>transmission-create</command></term>
@@ -226,9 +231,9 @@ comandos sequenciais
         <term><command>transmission-daemon</command></term>
         <listitem>
           <para>
-            é uma sessão do Transmission baseada em processo de segundo plano que pode
-ser controlada por meio de comandos RPC a partir da interface web do
-Transmission ou do <command>transmission-remote</command>
+            is a daemon-based Transmission session that can be controlled via RPC
+commands from Transmission's web interface or
+<command>transmission-remote</command>
           </para>
           <indexterm zone="transmission transmission-daemon">
             <primary sortas="b-transmission-daemon">transmission-daemon</primary>
@@ -240,8 +245,7 @@ Transmission ou do <command>transmission-remote</command>
         <term><command>transmission-edit</command></term>
         <listitem>
           <para>
-            é um utilitário de linha de comando para modificar URLs de anúncio de
-arquivos .torrent
+            is a command line tool to modify .torrent files' announce URLs
           </para>
           <indexterm zone="transmission transmission-edit">
             <primary sortas="b-transmission-edit">transmission-edit</primary>
@@ -265,7 +269,7 @@ arquivos .torrent
         <term><command>transmission-qt</command></term>
         <listitem>
           <para>
-            é um cliente bittorrent Qt
+            is a Qt-based bittorrent client
           </para>
           <indexterm zone="transmission transmission-qt">
             <primary sortas="b-transmission-qt">transmission-qt</primary>

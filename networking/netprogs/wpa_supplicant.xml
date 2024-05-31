@@ -38,7 +38,7 @@ autenticação/associação &quot;IEEE 802.11&quot; do controlador de
 sem fio protegido por senha.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -70,6 +70,16 @@ sem fio protegido por senha.
       <listitem>
         <para>
           Tempo de construção estimado: &wpa_supplicant-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch: <ulink
+url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -167,6 +177,15 @@ CONFIG_CTRL_IFACE_DBUS_INTRO=y</literal>
 EOF</userinput></screen>
 
     <para>
+      <!-- CVE-2023-52160, see Ticket #19304. -->
+Next, patch a security vulnerability that occurs when connecting to some
+networks:
+      
+    </para>
+
+<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch</userinput></screen>
+
+    <para>
       Instale o <application>WPA Supplicant</application> executando os seguintes
 comandos:
     </para>
@@ -229,18 +248,6 @@ install -v -d -m755 /etc/dbus-1/system.d &amp;&amp;
 install -v -m644 dbus/dbus-wpa_supplicant.conf \
                  /etc/dbus-1/system.d/wpa_supplicant.conf</userinput></screen>
 
-    <para revision="systemd">
-      Além disso, habilite o
-&quot;<filename>wpa_supplicant.service</filename>&quot;, de forma que o
-&quot;<application>systemd</application>&quot; consiga ativar corretamente o
-serviço &quot;<application>D-Bus</application>&quot;. Observe que o serviço
-por conexão e o serviço &quot;D-Bus&quot; não podem ser habilitados ao mesmo
-tempo. Execute o seguinte comando como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
-    </para>
-
-<screen role="root" revision="systemd"><userinput>systemctl enable wpa_supplicant</userinput></screen>
-
     <para>
       Se você tiver construído o aplicativo &quot;GUI&quot; do
 &quot;<application>WPA Supplicant</application>&quot;, [então] instale-o
@@ -269,6 +276,16 @@ a interface &quot;<application>WPA Supplicant</application>&quot; do
 
   <sect2 role="configuration">
     <title>Configurando o <quote>wpa_supplicant</quote></title>
+
+    <important>
+      <para>
+        If you are using WPA Supplicant with <xref linkend='NetworkManager'/> (or
+anything communicating with WPA Supplicant via D-Bus), this section should
+be skipped.  Running a D-Bus connected WPA Supplicant instance and another
+WPA supplicant instance configured following this section simultaneously can
+cause subtle issues.
+      </para>
+    </important>
 
     <sect3 id="wpa_supplicant-config">
       <title>Arquivo de Configuração</title>

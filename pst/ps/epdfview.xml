@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY epdfview-download-http "&sources-anduin-http;/epdfview/epdfview-&epdfview-version;.tar.bz2">
+  <!ENTITY epdfview-download-http "&sources-anduin-http;/epdfview-gtk3/epdfview-&epdfview-version;.tar.xz">
   <!ENTITY epdfview-download-ftp  "">
-  <!ENTITY epdfview-md5sum        "e50285b01612169b2594fea375f53ae4">
-  <!ENTITY epdfview-size          "456 KB">
-  <!ENTITY epdfview-buildsize     "6 MB">
-  <!ENTITY epdfview-time          "menos que 0,1 UPC">
+  <!ENTITY epdfview-md5sum        "d222a3dc26c2faf6f862018bb478fb36">
+  <!ENTITY epdfview-size          "184 KB">
+  <!ENTITY epdfview-buildsize     "3.5 MB">
+  <!ENTITY epdfview-time          "less than 0.1 SBU (using parallelism=4)">
 ]>
 
 <sect1 id="epdfview" xreflabel="epdfview-&epdfview-version;">
@@ -23,17 +23,19 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução ao ePDFView</title>
+    <title>Introduction to ePDFView-gtk3</title>
 
     <para>
-      <application>ePDFView</application> é um visualizador de documentos PDF leve
-e independente que usa as bibliotecas <application>Poppler</application> e
-<application>GTK+</application>. É um bom substituto para o
-<application>Evince</application>, pois não depende das bibliotecas do
-<application>GNOME</application>.
+      <application>ePDFView-gtk3</application> is a fork of the old
+<application>ePDFView</application> program. Although the github repository
+<ulink url="https://github.com/Flow-It/epdfview_old.git"/> names it as
+'old', it is the gtk3 fork. It is a lightweight replacement for
+<application>Evince</application> as it does not rely upon
+<application>GNOME</application> libraries and is more capable than
+<application>MuPDF</application>.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,95 +71,101 @@ e independente que usa as bibliotecas <application>Poppler</application> e
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <itemizedlist spacing='compact'>
-      <listitem>
-        <para>
-          Remendo exigido: <ulink url=
-"&patch-root;/epdfview-&epdfview-version;-fixes-2.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
-
     <bridgehead renderas="sect3">Dependências do ePDFView</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="gtk2"/> e <xref linkend="poppler"/>
+      <xref linkend="gtk3"/> and <xref linkend="poppler"/>
     </para>
 
-    <bridgehead renderas="sect4">Recomendadas (principalmente para ambientes de área de trabalho)</bridgehead>
+    <bridgehead renderas="sect4">Recommended</bridgehead>
     <para role="Recommended">
-      <xref linkend="desktop-file-utils"/> e <xref linkend="hicolor-icon-theme"/>
+      <xref linkend="cups"/> (to access print queues), <xref
+linkend="desktop-file-utils"/>, and <xref linkend="hicolor-icon-theme"/>
+(both for the icons this installs)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="cups"/>
+      The home page of the project's repository mentions that there are optional
+dependencies, which are enabled by switches. These are for building the
+documentation and running the test suite, <xref linkend="doxygen"/> and
+<ulink
+url='https://freedesktop.org/wiki/Software/cppunit/'>Cppunit</ulink>.  Note
+that <application>doxygen</application> only installs a skeletal page about
+itself, which contains no package documentation, and the test code does not
+compile with recent versions of C++.
     </para>
-
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do ePDFView</title>
+    <title>Installation of ePDFView-gtk3</title>
 
     <para>
-      Instale o <application>ePDFView</application> executando os seguintes
-comandos:
+      Install <application>ePDFView-gtk3</application> by running the following
+commands:
     </para>
 
-<screen><userinput>patch -Np1 -i ../epdfview-&epdfview-version;-fixes-2.patch &amp;&amp;
-./configure --prefix=/usr &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr          \
+            --buildtype=release    \
+            -Denable-printing=true \
+            ..                     &amp;&amp;
+ninja</userinput></screen>
 
     <para>
-      Esse pacote não vem com uma suíte de teste.
+      This package does not come with a buildable test suite.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
-    <para>
-      Para usuários(as) de Ambiente de Área de Trabalho, instruções adicionais
-(opcionais) são necessárias para exibir corretamente
-<filename>epdfview.desktop</filename> no menu. Como usuário(a) <systemitem
-class="username">root</systemitem>:
-    </para>
-
-<screen role="root"><userinput>for size in 24 32 48; do
-  ln -svf ../../../../epdfview/pixmaps/icon_epdfview-$size.png \
-          /usr/share/icons/hicolor/${size}x${size}/apps
-done &amp;&amp;
-unset size &amp;&amp;
-
-update-desktop-database &amp;&amp;
-gtk-update-icon-cache -t -f --include-image-data /usr/share/icons/hicolor</userinput></screen>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/update-icons-and-desktop.xml"/>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-
-
-    <!-- keep this in case the patch breaks builds without cups
     <para>
-
-      <command>sed -i 's#/gmacros##' src/gtk/StockIcons.h</command>: This sed
-      fixes compiling with <application>glib-2.32</application> or greater.
-    </para> -->
-<para>
-      <command>patch -Np1 -i
-../epdfview-&epdfview-version;-fixes-2.patch</command> O remendo faz quatro
-coisas: corrige a compilação com <application>glib-2.32</application> ou
-superior; corrige o vermelho aparecendo como azul com versões recentes do
-<application>poppler</application>; permite que o aplicativo compile quando
-<xref linkend="cups"/> tenha sido instalado; e corrige a exibição de imagens
-png incorporadas.
+      <command>-Denable-printing=true</command>: builds the code to link to the
+<application>cups</application> print queue(s). Omit this if you have not
+installed <application>cups</application>.
     </para>
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configuring ePDFView-gtk3</title>
+
+      <para>
+        ePDFView-gtk3 has several keyboard hotkeys for optional features. Most of
+them are 'off' by default, including the toolbar, and if it has been closed
+with the menu disabled, the program can start with all options not being
+visible until the relevant function keys are pressed.
+        <itemizedlist>
+          <listitem>
+            <para>[F6] - toggle toolbar</para>
+          </listitem>
+          <listitem>
+            <para>[F7] - toggle menu</para>
+          </listitem>
+          <listitem>
+            <para>[F8] - toggle invert-colors</para>
+          </listitem>
+          <listitem>
+            <para>[F9] - toggle show-index</para>
+          </listitem>
+          <listitem>
+            <para>[F11] - toggle fullscreen</para>
+          </listitem>
+        </itemizedlist>
+      </para>
+
   </sect2>
 
   <sect2 role="content">
@@ -183,8 +191,7 @@ png incorporadas.
         <term><command>epdfview</command></term>
         <listitem>
           <para>
-            é um aplicativo <application>Gtk+-2</application> para visualizar documentos
-PDF
+            is a <application>Gtk+-3</application> program for viewing PDF documents
           </para>
           <indexterm zone="epdfview epdfview-prog">
             <primary sortas="b-epdfview">epdfview</primary>

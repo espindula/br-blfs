@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY keyutils-download-http "https://people.redhat.com/~dhowells/keyutils/keyutils-&keyutils-version;.tar.bz2">
+  <!ENTITY keyutils-download-http "https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/keyutils-&keyutils-version;.tar.gz">
   <!ENTITY keyutils-download-ftp  "">
-  <!ENTITY keyutils-md5sum        "919af7f33576816b423d537f8a8692e8">
-  <!ENTITY keyutils-size          "96 KB">
-  <!ENTITY keyutils-buildsize     "1,9 MB (com os testes)">
-  <!ENTITY keyutils-time          "menos que 0,1 UPC (adicionar 0,6 UPC para os testes)">
+  <!ENTITY keyutils-md5sum        "6b70b2b381c1b6d9adfaf66d5d3e7c00">
+  <!ENTITY keyutils-size          "136 KB">
+  <!ENTITY keyutils-buildsize     "2.6 MB (with tests)">
+  <!ENTITY keyutils-time          "less than 0.1 SBU (add 0.4 SBU for tests)">
 ]>
 
 <sect1 id="keyutils" xreflabel="keyutils-&keyutils-version;">
@@ -33,7 +33,7 @@ as chaves de autorização e de encriptação exigidas para realizar operações
 seguras.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,19 +69,29 @@ seguras.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do keyutils</bridgehead>
+    <bridgehead renderas="sect3">Keyutils Dependencies</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
-    <para role="required">
-      <!-- Without krb5 installed, a FTBFS occurs while trying to compile dns.afsdb.c.
-      It looks for profile.h, which is installed by krb5. -->
-<xref linkend="mitkrb"/>
-      
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="lsb-tools"/> (referred by the test suite)
     </para>
-
-
   </sect2>
 
+  <sect2 role="kernel" id="keyutils-test-kernel">
+    <title>Kernel Configuration</title>
+
+    <para>
+      If running the test suite, some tests needs the following kernel features
+enabled:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="keyutils-test-kernel.xml"/>
+
+    <indexterm zone="keyutils keyutils-test-kernel">
+      <primary sortas="d-keyutils">keyutils (testing)</primary>
+    </indexterm>
+  </sect2>
   <sect2 role="installation">
     <title>Instalação do keyutils</title>
 
@@ -90,21 +100,7 @@ seguras.
 comandos:
     </para>
 
-<screen><userinput>sed -i 's:$(LIBDIR)/$(PKGCONFIG_DIR):/usr/lib/pkgconfig:' Makefile &amp;&amp;
-make</userinput></screen>
-
-    <para>
-      Para testar os resultados, emita, como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
-    </para>
-
-<screen role="root" remap="test"><userinput>make -k test</userinput></screen>
-
-    <para>
-      Observe que vários testes falharão se certas opções incomuns do núcleo não
-forem usadas quando o núcleo foi construído. Isso inclui CONFIG_BIG_KEYS,
-CONFIG_KEY_DH_OPERATIONS e CONFIG_CRYPTO_DH.
-    </para>
+<screen><userinput>make</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -112,17 +108,46 @@ CONFIG_KEY_DH_OPERATIONS e CONFIG_CRYPTO_DH.
 
 <screen role="root"><userinput>make NO_ARLIB=1 LIBDIR=/usr/lib BINDIR=/usr/bin SBINDIR=/usr/sbin install</userinput></screen>
 
+    <para>
+      The test suite can only run after installing this package.  To test the
+results, issue, as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root" remap="test"><userinput>make -k test</userinput></screen>
+
+    <para>
+      <!-- commit 16ab7cb5825f -->
+If <xref linkend='lsb-tools'/> is not installed, the test suite will output
+some lines complaining the <command>lsb_release</command> command not
+available but it won't affect the test result.  One test named <literal>TRY
+ADDING ASYMMETRIC KEYS</literal> is known to fail due to the removal of the
+support for SHA1 with RSA signature algorithm from Linux kernel version 6.7
+or newer.
+    </para>
+
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+
+
+    <!--
     <para>
-      <command>sed ... Makefile</command>: Esse comando garante que o arquivo
-"pkgconfig" seja colocado no diretório correto.
+
+      <command>sed ... Makefile</command>: This command ensures the pkgconfig
+      file is placed in the correct directory.
     </para>
 
     <para>
+      <command>sed ... tests/toolbox.inc.sh</command>: In LFS, GCC has been
+      configured with <option>- -enable-default-pie</option> so
+      <command>/usr/bin/bash</command> is a PIE, but the test script does
+      not anticipate it.  Fix this oversight so the test can run on a LFS
+      system.
+    </para>
+-->
+<para>
       <parameter>NO_ARLIB=1</parameter>: Esse sinalizador do "make" desabilita a
 instalação da biblioteca estática.
     </para>
@@ -163,7 +188,7 @@ instalação da biblioteca estática.
       <seglistitem>
         <seg>keyctl, key.dns_resolver e request-key</seg>
         <seg>libkeyutils.so</seg>
-        <seg>/etc/request-key.d e /usr/share/keyutils</seg>
+        <seg>/etc/keyutils, /etc/request-key.d, and /usr/share/keyutils</seg>
       </seglistitem>
     </segmentedlist>
 

@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../../general.ent">
   %general-entities;
 
-  <!ENTITY efivar-download-http "https://github.com/rhboot/efivar/releases/download/&efivar-version;/efivar-&efivar-version;.tar.bz2">
+  <!ENTITY efivar-download-http "https://github.com/rhboot/efivar/archive/&efivar-version;/efivar-&efivar-version;.tar.gz">
   <!ENTITY efivar-download-ftp  "">
-  <!ENTITY efivar-md5sum        "243fdbc48440212695cb9c6e6fd0f44f">
-  <!ENTITY efivar-size          "316 KB">
-  <!ENTITY efivar-buildsize     "18 MB">
+  <!ENTITY efivar-md5sum        "a8fc3e79336cd6e738ab44f9bc96a5aa">
+  <!ENTITY efivar-size          "456 KB">
+  <!ENTITY efivar-buildsize     "21 MB">
   <!ENTITY efivar-time          "menos que 0,1 UPC">
 ]>
 
@@ -30,7 +30,7 @@
 para manipular variáveis EFI.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -66,35 +66,29 @@ para manipular variáveis EFI.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo opcional (exigido para sistemas de 32 bits): <ulink
-url="&patch-root;/efivar-&efivar-version;-i686-1.patch"/>
+          Optional patch (Required for 32-bit systems):
+          <ulink url="&patch-root;/efivar-&efivar-version;-i686-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do efivar</bridgehead>
 
-    <bridgehead renderas="sect3">Dependências do efivar</bridgehead>
-
-    <bridgehead renderas="sect4">Exigidas</bridgehead>
-    <para role="required">
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
       <xref linkend="mandoc"/>
     </para>
-
 
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do efivar</title>
-
-    <para>
-      Primeiro, corrija um problema no Makefile que faz com que o pacote seja
-reconstruído durante a instalação:
-    </para>
-
-<screen><userinput>sed '/prep :/a\\ttouch prep' -i src/Makefile</userinput></screen>
 
     <note>
       <para>
@@ -106,17 +100,10 @@ que tem uma implementação UEFI de 32 bits, o que é muito raro na prática.
     </note>
 
     <para>
-      Se construir esse pacote em um sistema de 32 bits, [então] aplique um
-remendo:
-    </para>
-
-<screen><userinput>[ $(getconf LONG_BIT) = 64 ] || patch -Np1 -i ../efivar-&efivar-version;-i686-1.patch</userinput></screen>
-
-    <para>
       Construa o <application>efivar</application> com os seguintes comandos:
     </para>
 
-<screen><userinput>make ERRORS=</userinput></screen>
+<screen><userinput>make</userinput></screen>
 
     <para>
       A suíte de teste desse pacote é perigosa. Executá-la pode deflagrar erros de
@@ -136,16 +123,16 @@ para reprogramar o firmware.
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>ERRORS=</parameter>: This option overrides the
-<option>-Werror</option> passed to GCC by default, so the package won't fail
-to build with the <option>-Wenum-int-mismatch</option> warning introduced in
-GCC 13.
+      <parameter>LIBDIR=/usr/lib</parameter>: This option overrides the default
+library directory of the package (<filename
+class="directory">/usr/lib64</filename>, which is not used by LFS).
     </para>
 
     <para>
-      <parameter>LIBDIR=/usr/lib</parameter>: Essa opção substitui o diretório
-padrão da biblioteca do pacote (<filename
-class="directory">/usr/lib64</filename>, que não é usado pelo LFS).
+      <option>ENABLE_DOCS=0</option>: Disable the generation of man pages.  Append
+this option after the <command>make</command> and <command>make
+install</command> commands if you don't need the man pages to allow building
+this package without <xref linkend='mandoc'/> installed.
     </para>
 
   </sect2>
@@ -229,8 +216,8 @@ class="directory">/usr/lib64</filename>, que não é usado pelo LFS).
           <para>
             é uma biblioteca para a manipulação de variáveis EFI
           </para>
-          <indexterm zone="efivar libefiboot">
-            <primary sortas="c-libefiboot">libefiboot.so</primary>
+          <indexterm zone="efivar libefivar">
+            <primary sortas="c-libefivar">libefivar.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

@@ -6,11 +6,10 @@
 
   <!ENTITY ruby-download-http "https://cache.ruby-lang.org/pub/ruby/&ruby-minor-version;/ruby-&ruby-version;.tar.xz">
   <!ENTITY ruby-download-ftp  "">
-  <!ENTITY ruby-md5sum        "377853f31d10bfe37c58b8537fc3e05d">
-  <!ENTITY ruby-size          "14 MB">
-  <!ENTITY ruby-buildsize     "694 MB (adicionar 1,0 GB para documentos da API C)">
-  <!ENTITY ruby-time          "1,2 UPC (usando paralelismo=4; adicionar 4,6 UPC para testes; adicionar 0,6
-UPC para documentos da API C)">
+  <!ENTITY ruby-md5sum        "b5e59d56faf25b1ec6445abdf203affa">
+  <!ENTITY ruby-size          "16 MB">
+  <!ENTITY ruby-buildsize     "774 MB (with tests and C API docs)">
+  <!ENTITY ruby-time          "3.4 SBU (using parallelism=4; with tests and C API docs)">
 ]>
 
 <sect1 id="ruby" xreflabel="Ruby-&ruby-version;">
@@ -32,7 +31,7 @@ desenvolvimento &quot;<application>Ruby</application>&quot;. Isso é útil
 para &quot;scripts&quot; orientados a objetos.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -77,9 +76,9 @@ para &quot;scripts&quot; orientados a objetos.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="db"/>, <xref linkend="doxygen"/>, <xref linkend="graphviz"/>,
-<xref linkend="rust"/>, <xref linkend="tk"/>, <xref linkend="valgrind"/> e
-<ulink url="http://dtrace.org/blogs/about/">DTrace</ulink>
+      <xref linkend="doxygen"/>, <xref linkend="graphviz"/>, <xref
+linkend="rust"/>, <xref linkend="tk"/>, <xref linkend="valgrind"/>,
+&berkeley-db; and <ulink url="http://dtrace.org/blogs/about/">DTrace</ulink>
     </para>
 
   </sect2>
@@ -87,25 +86,17 @@ para &quot;scripts&quot; orientados a objetos.
   <sect2 role="installation">
     <title>Instalação do <quote>Ruby</quote></title>
 
-    <!--
     <para>
-
-      If you wish to run the tests after installing this package, fix a problem
-      that results in a crash during the test suite, due to an undefined
-      variable:
-    </para>
-
-<screen><userinput>sed -i '283d' tool/lib/leakchecker.rb</userinput></screen>
--->
-<para>
       Instale &quot;<application>Ruby</application>&quot; executando o seguinte
 comando:
     </para>
 
-<screen><userinput>./configure --prefix=/usr      \
-            --enable-shared    \
-            --without-valgrind \
-            --without-baseruby \
+<screen><userinput>./configure --prefix=/usr         \
+            --disable-rpath       \
+            --enable-shared       \
+            --without-valgrind    \
+            --without-baseruby    \
+            ac_cv_func_qsort_r=no \
             --docdir=/usr/share/doc/ruby-&ruby-version; &amp;&amp;
 make</userinput></screen>
 
@@ -117,10 +108,20 @@ executando os seguintes comandos:
 <screen><userinput>make capi</userinput></screen>
 
     <para>
-      <!-- Ticket #17887 -->
-Os testes exigem que a nova versão do Ruby já esteja instalada para
-funcionar corretamente. Se quiser executar os testes, execute-os depois de
-instalar o pacote. 
+      <!-- https://bugs.ruby-lang.org/issues/20106 -->
+To test the results, issue: <command>make -j1 -k check</command>.  Note that
+running the test suite with parallel jobs may cause test failures outputted
+as cryptic <computeroutput>unknown object</computeroutput> messages,
+resulting a summary falsely claiming <quote>all tests passed</quote>.  If
+the environment has variables related to proxy settings
+(<envar>all_proxy</envar>, <envar>ALL_PROXY</envar>,
+<envar>http_proxy</envar>, and etc.) set, the test suite will bail out early
+with messages like <computeroutput>net/ftp is not found</computeroutput>.
+So make sure unsetting them for the test suite.  There are over 26,000
+tests.  12 tests are known to fail because of expired certificates in the
+test data.  Some tests related to ipv6 may indicate errors.  If the tests
+are run in a directory that has a world writable component (e.g.  /tmp) then
+several additional tests may fail.
     </para>
 
     <para>
@@ -130,29 +131,7 @@ class="username">root</systemitem>&quot;:
 
 <screen role="root"><userinput>make install</userinput></screen>
 
-    <para>
-      Para testar os resultados, emita: <command>make -k check</command>. Existem
-mais de vinte e cinco mil (25.000) testes. Alguns testes relacionados ao
-IPv6 possivelmente indiquem erros. Se os testes forem executados em um
-diretório que tenha um componente escrevível mundialmente (por exemplo,
-/tmp), então vários testes adicionais possivelmente falhem. Alguns testes
-possivelmente falhem devido às expectativas de configuração do sistema.
-    </para>
-
-
-
-    <!-- With 3.0.2:
-Finished tests in 443.541527s, 47.5739 tests/s, 6031.9921 assertions/s.
-21101 tests, 2675439 assertions, 4 failures, 1 errors, 45 skips
-
-with 3.2.0 there are several summaries:
-* PASS all 1789 tests
-* Finished tests in 6.815561s, 45.6309 tests/s, 264.2482 assertions/s.
-  311 tests, 1801 assertions, 0 failures, 0 errors, 12 skips
-* Finished tests in 462.613063s, 50.5649 tests/s, 12069.0885 assertions/s.
-  23392 tests, 5583318 assertions, 3 failures, 0 errors, 79 skips
--->
-<note>
+    <note>
       <para>
         Se você tem aplicativos &quot;Ruby-On-Rails&quot; instalados e fez uma
 atualização do &quot;<application>Ruby</application>&quot; instalando esse
@@ -175,6 +154,16 @@ bundle update rake</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
+      <parameter>--disable-rpath</parameter>: This switch disables embedding
+<filename class='directory'>/usr/lib</filename> as a library search path
+into the <command>ruby</command> program.  Doing so is not needed (because
+<filename class='directory'>/usr/lib</filename> is a system library path)
+and it may cause the test suite running with the system <filename
+class='libraryfile'>libruby.so</filename> instead of the just built one when
+Ruby has been installed.
+    </para>
+
+    <para>
       <parameter>--enable-shared</parameter>: Essa chave habilita construir a
 biblioteca compartilhada &quot;<filename
 class="libraryfile">libruby</filename>&quot;.
@@ -184,6 +173,14 @@ class="libraryfile">libruby</filename>&quot;.
       <parameter>--without-baseruby</parameter>: Essa chave impede usar o
 <command>ruby</command> do sistema se ele já estiver instalado. O sistema de
 construção usará a versão recém-construída.
+    </para>
+
+    <para>
+      <parameter>ac_cv_func_qsort_r=no</parameter>: This switch prevents using the
+<function>qsort_r</function> function from Glibc.  Ruby makes some
+aggressive optimization assuming some implementation details of the sorting
+algorithm, but the assumption is not true with the Glibc implementation.
+With this switch Ruby will use its own sort implementation instead.
     </para>
 
     <para>

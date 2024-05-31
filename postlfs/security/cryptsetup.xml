@@ -6,10 +6,10 @@
 
   <!ENTITY cryptsetup-download-http "&kernel-dl;/linux/utils/cryptsetup/v&cryptsetup-minor;/cryptsetup-&cryptsetup-version;.tar.xz">
   <!ENTITY cryptsetup-download-ftp  "">
-  <!ENTITY cryptsetup-md5sum        "2303d57e78d4977344188a46e125095c">
+  <!ENTITY cryptsetup-md5sum        "7210d45a19703bca547e8ba190278cb0">
   <!ENTITY cryptsetup-size          "11 MB">
-  <!ENTITY cryptsetup-buildsize     "29 MB (adicionar 5 MB para os testes)">
-  <!ENTITY cryptsetup-time          "0,2 UPC (adicionar 19 UPC para os testes)">
+  <!ENTITY cryptsetup-buildsize     "33 MB (add 5 MB for tests)">
+  <!ENTITY cryptsetup-time          "0.2 SBU (add 8.9 SBU for tests)">
 ]>
 
 <sect1 id="cryptsetup" xreflabel="cryptsetup-&cryptsetup-version;">
@@ -30,7 +30,7 @@
 dispositivos de bloco usando a API criptográfica do núcleo.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -89,9 +89,9 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="libpwquality"/>, <ulink
+      <xref linkend="asciidoctor"/>, <xref linkend="libpwquality"/>, <ulink
 url="https://github.com/P-H-C/phc-winner-argon2">argon2</ulink>, <ulink
-url="https://www.libssh.org/">libssh</ulink> e <ulink
+url="https://www.libssh.org/">libssh</ulink>, and <ulink
 url="https://www.openwall.com/passwdqc/">passwdqc</ulink>
     </para>
 
@@ -119,23 +119,14 @@ configurados:
     <sect2 role="installation">
       <title>Instalação do cryptsetup</title>
 
-
-
-    <!-- No longer needed with 2.3.2
     <para>
-
-      First, apply a patch to fix a build problem caused by API changes in
-      <xref role="nodep" linkend="json-c"/>:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../cryptsetup-&cryptsetup-version;-upstream_fixes-1.patch</userinput></screen>
--->
-<para>
       Instale <application>cryptsetup</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-ssh-token &amp;&amp;
+<screen><userinput>./configure --prefix=/usr       \
+            --disable-ssh-token \
+            --disable-asciidoc  &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -143,18 +134,39 @@ make</userinput></screen>
       kernel.  Eight tests were not run.  Version 2.4.3.
       Failed test  was tcrypt-compat-test
       tcrypt-images/tc_1-ripemd160-cbc-aes [FAILED]
-      bdubbs -->
-Para testar o resultado, emita como o(a) usuário(a) <systemitem
-class="username">root</systemitem>: <command>make check</command>. Alguns
-testes falharão se as opções apropriadas de configuração do núcleo não forem
-configuradas. Algumas opções adicionais que possivelmente sejam necessárias
-para os testes são: CONFIG_SCSI_LOWLEVEL, CONFIG_SCSI_DEBUG,
-CONFIG_BLK_DEV_DM_BUILTIN, CONFIG_CRYPTO_USER, CONFIG_CRYPTO_CRYPTD,
-CONFIG_CRYPTO_LRW, CONFIG_CRYPTO_XTS, CONFIG_CRYPTO_ESSIV,
-CONFIG_CRYPTO_CRCT 10DIF, CONFIG_CRYPTO_AES_TI, CONFIG_CRYPTO_AES_NI_INTEL,
-CONFIG_CRYPTO_BLOWFISH, CONFIG_CRYPTO_CAST5, CONFIG_CRYPTO_SERPENT,
-CONFIG_CRYPTO_SERPENT_SSE2_X86_64, CONFIG_CRYPTO_SERPENT_AVX_X86_64,
-CONFIG_CRYPTO_SERPENT_AVX2_X86_64 e CONFIG_CRYPTO_TWOFISH_X86_64.
+      bdubbs 
+
+      Version 2.6.1 12/03/2023 -bdubbs
+      2 of 26 tests failed (6 tests were not run)
+      FAIL: keyring-compat-test
+      FAIL: tcrypt-compat-test
+
+      Version 2.7.0 01/25/2024 -bdubbs
+      2 of 25 tests failed (8 tests were not run)
+      FAIL: keyring-compat-test
+      FAIL: tcrypt-compat-test
+      -->
+To test the result, issue as the <systemitem
+class="username">root</systemitem> user: <command>make check</command>.
+Some tests will fail if appropriate kernel configuration options are not
+set. Some additional options that may be needed for tests are: <screen><literal>CONFIG_SCSI_LOWLEVEL,
+CONFIG_SCSI_DEBUG,
+CONFIG_BLK_DEV_DM_BUILTIN,
+CONFIG_CRYPTO_USER,
+CONFIG_CRYPTO_CRYPTD,
+CONFIG_CRYPTO_LRW,
+CONFIG_CRYPTO_XTS,
+CONFIG_CRYPTO_ESSIV,
+CONFIG_CRYPTO_CRCT10DIF,
+CONFIG_CRYPTO_AES_TI,
+CONFIG_CRYPTO_AES_NI_INTEL,
+CONFIG_CRYPTO_BLOWFISH,
+CONFIG_CRYPTO_CAST5,
+CONFIG_CRYPTO_SERPENT,
+CONFIG_CRYPTO_SERPENT_SSE2_X86_64,
+CONFIG_CRYPTO_SERPENT_AVX_X86_64,
+CONFIG_CRYPTO_SERPENT_AVX2_X86_64, and
+CONFIG_CRYPTO_TWOFISH_X86_64</literal></screen>
       
     </para>
 
@@ -168,9 +180,18 @@ CONFIG_CRYPTO_SERPENT_AVX2_X86_64 e CONFIG_CRYPTO_TWOFISH_X86_64.
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
     <para>
-      <option>--disable-ssh-token</option>: Essa opção é exigida se a dependência
-opcional libssh não estiver instalada.
+      <parameter>--disable-ssh-token</parameter>: This switch is required if the
+optional libssh dependency is not installed.
+    </para>
+    
+    <para>
+      <parameter>--disable-asciidoc</parameter>: This switch disables regeneration
+of the man pages. Remove this switch if you have <xref linkend="asciidoctor"
+role="nodep"/> installed and wish to regenerate the man pages.  Note that
+even if this switch is used, the pre-generated man pages are shipped in the
+tarball and they'll still be installed.
     </para>
   </sect2>
 
@@ -216,7 +237,7 @@ Perguntas Frequentes</ulink> do cryptsetup.
         <term><command>cryptsetup</command></term>
         <listitem>
           <para>
-             é usado para configurar mapeamentos de mapeadores de dispositivos
+            é usado para configurar mapeamentos de mapeadores de dispositivos
 gerenciados pelo dm-crypt
           </para>
           <indexterm zone="cryptsetup cryptsetup-prog">
@@ -229,7 +250,7 @@ gerenciados pelo dm-crypt
         <term><command>cryptsetup-reencrypt</command></term>
         <listitem>
           <para>
-             é uma ferramenta para re-encriptação offline de dispositivo LUKS
+            é uma ferramenta para re-encriptação offline de dispositivo LUKS
           </para>
           <indexterm zone="cryptsetup cryptsetup-reencrypt">
             <primary sortas="b-cryptsetup-reencrypt">cryptsetup-reencrypt</primary>
@@ -241,7 +262,7 @@ gerenciados pelo dm-crypt
         <term><command>integritysetup</command></term>
         <listitem>
           <para>
-             é uma ferramenta para gerenciar volumes dm-integrity (integridade em nível
+            é uma ferramenta para gerenciar volumes dm-integrity (integridade em nível
 de bloco)
           </para>
           <indexterm zone="cryptsetup integritysetup">
@@ -254,10 +275,9 @@ de bloco)
         <term><command>veritysetup</command></term>
         <listitem>
           <para>
-             é usado para configurar mapeamentos de mapeadores de dispositivos
-gerenciados dm-verity. O destino de veracidade do mapeador de dispositivos
-fornece verificação de integridade transparente somente leitura de
-dispositivos de bloco usando a API criptográfica do núcleo
+            is used to configure dm-verity managed device-mapper mappings.  The
+Device-mapper verity target provides read-only transparent integrity
+checking of block devices using the kernel crypto API
           </para>
           <indexterm zone="cryptsetup veritysetup">
             <primary sortas="b-veritysetup">veritysetup</primary>

@@ -32,7 +32,7 @@ rede de intercomunicação. Esse pacote é a implementação de referência
 oficial do protocolo &quot;NTP&quot;.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -110,37 +110,31 @@ usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
 <!-- At least one of the issues has been reported upstream. The next para
-     is valid for 4.8.2p10 -->
+     is valid for 4.8.2p10.
+
+     Leap secongs have been deprecated as of November 2022.
+     https://en.wikipedia.org/wiki/Leap_second
+
+    <para>
+
+      The <command>update-leap</command> command needs to be fixed in order
+      to run properly:
+    </para>
+
+<screen><userinput>sed -e 's/"(\\S+)"/"?([^\\s"]+)"?/' \
+    -i scripts/update-leap/update-leap.in</userinput></screen>
+-->
 <screen role="root"><userinput>groupadd -g 87 ntp &amp;&amp;
 useradd -c "Protocolo de horário da rede de intercomunicação" -d /var/lib/ntp -u 87 \
         -g ntp -s /bin/false ntp</userinput></screen>
 
 
-    <para>
-      O comando &quot;<command>update-leap</command>&quot; precisa ser corrigido
-para a finalidade de funcionar corretamente:
-    </para>
-
-<screen><userinput>sed -e 's/"(\\S+)"/"?([^\\s"]+)"?/' \
-   -i scripts/update-leap/update-leap.in</userinput></screen>
-
-    <para>
-      Agora corrija um problema introduzido com a &quot;glibc-2.34&quot;:
-    </para>
-
-<screen><userinput>sed -e 's/#ifndef __sun/#if !defined(__sun) \&amp;\&amp; !defined(__GLIBC__)/' \
-   -i libntp/work_thread.c</userinput></screen>
 
     <para>
       Instale o &quot;<application>ntp</application>&quot; executando os seguintes
 comandos:
     </para>
 
-<!-- https://bugs.ntp.org/show_bug.cgi?id=3688
-         It should be fixed in the next ntp release. -->
-<!--<para>
-The test suite of this package is broken with GCC 10 or later.</para>
-         Now works OK-->
 <screen><userinput>./configure --prefix=/usr        \
             --bindir=/usr/sbin    \
             --sysconfdir=/etc     \
@@ -148,9 +142,6 @@ The test suite of this package is broken with GCC 10 or later.</para>
             --with-lineeditlibs=readline \
             --docdir=/usr/share/doc/ntp-&ntp-version; &amp;&amp;
 make</userinput></screen>
-
-    
-    
 
     <para>
       Para testar os resultados, emita: <command>make check</command>.
@@ -168,12 +159,6 @@ install -v -o ntp -g ntp -d /var/lib/ntp</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-    <para>
-      <envar>CFLAGS="-O2 -g -fPIC"</envar>: Essa variável de ambiente é necessária
-para gerar Código Independente de Posição necessário para uso nas
-bibliotecas de pacotes.
-    </para>
 
     <para>
       <parameter>--bindir=/usr/sbin</parameter>: Esse parâmetro coloca os
@@ -218,44 +203,41 @@ contrário, nenhum recurso do &quot;Readline&quot; será compilado.
       <title>Informação de Configuração</title>
 
       <para>
-        O arquivo de configuração a seguir primeiro define vários servidores
-&quot;NTP&quot; com acesso aberto a partir de diferentes
-continentes. Segundo, ele cria um arquivo de mudança gradual onde o
-&quot;<command>ntpd</command>&quot; armazena o deslocamento de frequência e
-um arquivo &quot;PID&quot; para armazenar o &quot;ID&quot; do processo do
-&quot;<command>ntpd</command>&quot;. Terceiro, ele define o local para o
-arquivo de definição do segundo bissexto
-&quot;<filename>/etc/ntp.leapseconds</filename>&quot;, que o conjunto de
-comandos sequenciais &quot;<command>update-leap</command>&quot; verifica e
-atualiza, quando necessário. Esse conjunto de comandos sequenciais pode ser
-executado como uma tarefa do &quot;Cron&quot; e os desenvolvedores do
-&quot;<application>ntp</application>&quot; recomendam uma frequência de
-cerca de três semanas para as atualizações. Como a documentação incluída no
-pacote é escassa, visite o sítio da &quot;web&quot; do &quot;NTP&quot; em
-<ulink url="https://www.ntp.org/"/> e <ulink
-url="https://www.ntppool.org/"/> para mais informações.
+        <!--Third, it defines the location
+        for the leap-second definition file
+        <filename>
+/etc/ntp.leapseconds</filename>, that the
+        <command>update-leap</command> script checks and updates, when
+        necessary. This script can be run as a cron job and the
+        <application>ntp</application> developers recommend a frequency of
+        about three weeks for the updates.-->
+The following configuration file first defines various ntp servers with open
+access from different continents. Second, it creates a drift file where
+<command>ntpd</command> stores the frequency offset and a pid file to store
+the <command>ntpd</command> process ID.  Since the documentation included
+with the package is sparse, visit the ntp website at <ulink
+url="https://www.ntp.org/"/> and <ulink url="https://www.ntppool.org/"/> for
+more information.
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/ntp.conf &lt;&lt; "EOF"
-<literal># Ásia
+<literal># Asia
 server 0.asia.pool.ntp.org
 
-# Austrália
+# Australia
 server 0.oceania.pool.ntp.org
 
-# Europa
+# Europe
 server 0.europe.pool.ntp.org
 
-# América do Norte
+# North America
 server 0.north-america.pool.ntp.org
 
-# América do Sul
+# South America
 server 2.south-america.pool.ntp.org
 
 driftfile /var/lib/ntp/ntp.drift
-pidfile   /run/ntpd.pid
-
-leapfile  /var/lib/ntp/ntp.leapseconds</literal>
+pidfile   /run/ntpd.pid</literal>
 EOF</userinput></screen>
 
       <para>
@@ -342,7 +324,7 @@ ln -v -sf ../init.d/setclock /etc/rc.d/rc6.d/K46setclock</userinput></screen>
 
       <seglistitem>
         <seg>calc_tickadj, ntp-keygen, ntp-wait, ntpd, ntpdate, ntpdc, ntpq, ntptime,
-ntptrace, sntp, tickadj e update-leap</seg>
+ntptrace, sntp, tickadj, and update-leap</seg>
         <seg>Nenhum(a)</seg>
         <seg>/usr/share/ntp, /usr/share/doc/ntp-4.2.8 e /var/lib/ntp</seg>
       </seglistitem>
@@ -498,8 +480,16 @@ em núcleos mais antigos que não tem suporte para cronometragem de precisão
         <term><command>update-leap</command></term>
         <listitem>
           <para>
-            é um conjunto de comandos sequenciais para verificar e, se necessário,
-atualizar o arquivo de definição de segundos bissextos
+            is a script to verify and, if necessary, update the leap-second definition
+file.  <note>
+              <para>
+                 In November 2022, at the 27th General Conference on Weights and Measures, it
+was decided to abandon the leap second.  In addition this script hardcodes a
+URL for an update file that no longer exists.  The last time a leap second
+was declared was January 2017.  This script will probably be removed in a
+future release.
+              </para>
+            </note>
           </para>
           <indexterm zone="ntp update-leap">
             <primary sortas="b-update-leap">update-leap</primary>

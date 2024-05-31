@@ -6,11 +6,11 @@
 
   <!ENTITY brotli-download-http "https://github.com/google/brotli/archive/v&brotli-version;/brotli-&brotli-version;.tar.gz">
   <!ENTITY brotli-download-ftp  "">
-  <!ENTITY brotli-md5sum        "c2274f0c7af8470ad514637c35bcee7d">
-  <!ENTITY brotli-size          "476 KB">
-  <!ENTITY brotli-buildsize     "24 MB (com vinculações python3)">
+  <!ENTITY brotli-md5sum        "3a6a3dba82a3604792d3cb0bd41bca60">
+  <!ENTITY brotli-size          "500 KB">
+  <!ENTITY brotli-buildsize     "33 MB (with python3 bindings)">
   <!-- The python tests for this package are broken.  The tarball is missing a lot of test files -->
-  <!ENTITY brotli-time          "0,4 UPC (com ligações python3)">
+  <!ENTITY brotli-time          "0.3 SBU (with python3 bindings; parallelism=4)">
 ]>
 
 <sect1 id="brotli" xreflabel="Brotli-&brotli-version;">
@@ -34,7 +34,7 @@ contexto de segunda ordem. As bibliotecas dele são usadas principalmente
 para fontes WOFF2 em páginas da web.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,41 +72,38 @@ para fontes WOFF2 em páginas da web.
 
     <bridgehead renderas="sect3">Dependências do Brotli</bridgehead>
 
-    
-    <!-- Not "Required" because we can use
-         "./bootstrap && ./configure ... && make && make install".
-         Doing so can break an optional circular dependency:
-         curl is recommended for cmake, and brotli is optional for curl. -->
-<bridgehead renderas="sect4">Recomendadas</bridgehead>
-    <para role="recommended">
+    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <para role="required">
       <xref linkend="cmake"/>
+    </para>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      
+      
+      <!--<xref linkend="pluggy"/>
+ and-->
+<!-- Pluggy is a required dependency of pytest -->
+<xref linkend="pytest"/> (for testing Python3 bindings)
     </para>
 
   </sect2>
 
-
   <sect2 role="installation">
     <title>Instalação do Brotli</title>
-
-    <para>
-      Primeiro, corrija um problema nos arquivos pkg-config:
-    </para>
-
-<screen><userinput>sed -i 's@-R..libdir.@@' scripts/*.pc.in</userinput></screen>
 
     <para>
       Instale o <application>brotli</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>mkdir out &amp;&amp;
-cd    out &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
 cmake -DCMAKE_INSTALL_PREFIX=/usr \
       -DCMAKE_BUILD_TYPE=Release  \
       ..  &amp;&amp;
 make</userinput></screen>
-
 
     <para>
       Para testar os resultados, emita: <command>make test</command>.
@@ -126,16 +123,43 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install &amp;&amp;
-cd ..</userinput></screen>
+<screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      Se desejado, construa e instale as ligações
-<application>Python3</application> como o(a) usuário(a) &root;:
+      If desired, build the <application>Python3</application> bindings:
     </para>
 
-<screen role="root"><userinput>pip3 wheel -w dist --no-build-isolation --no-deps $PWD &amp;&amp;
-pip3 install --no-index --find-links dist --no-cache-dir --no-user Brotli</userinput></screen>
+<screen><userinput>cd .. &amp;&amp;
+sed "/c\/.*\.[ch]'/d;\
+     /include_dirs=\[/\
+     i libraries=['brotlicommon','brotlidec','brotlienc']," \
+    -i setup.py &amp;&amp;
+&build-wheel-cmd; $PWD</userinput></screen>
+
+    <para>
+      Install the <application>Python3</application> bindings as the &root; user:
+    </para>
+
+<!-- "131 passed in 2.76s" for me with 1.1.0 -->
+<screen role="root"><userinput>&install-wheel; Brotli</userinput></screen>
+
+    
+    <para>
+      To test the <application>Python3</application> binding, issue:
+<command>pytest</command>.
+    </para>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    
+    <!-- https://github.com/google/brotli/issues/933 -->
+<para>
+      <command>sed ... -i setup.py</command>: Stop <filename>setup.py</filename>
+from rebuilding the entire package all over again, use the already installed
+libraries for the <application>Python3</application> binding instead.
+    </para>
 
   </sect2>
 
@@ -152,8 +176,7 @@ pip3 install --no-index --find-links dist --no-cache-dir --no-user Brotli</useri
           brotli
         </seg>
         <seg>
-          libbrotlicommon{-static.a,.so}, libbrotlidec{,-static.a,.so} e
-libbrotlienc{,-static.a,.so}
+          libbrotlicommon.so, libbrotlidec.so, and libbrotlienc.so
         </seg>
         <seg>
           /usr/include/brotli e

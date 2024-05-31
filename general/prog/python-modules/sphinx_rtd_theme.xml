@@ -8,8 +8,8 @@
   <!ENTITY sphinx_rtd_theme-download-ftp  "">
   <!ENTITY sphinx_rtd_theme-md5sum        "&sphinx_rtd_theme-md5sum;">
   <!ENTITY sphinx_rtd_theme-size          "2,7 MB">
-  <!ENTITY sphinx_rtd_theme-buildsize     "35 MB (com testes)">
-  <!ENTITY sphinx_rtd_theme-time          "menos que 0,1 UPC (com os testes)">
+  <!ENTITY sphinx_rtd_theme-buildsize     "36 MB (with tests)">
+  <!ENTITY sphinx_rtd_theme-time          "0.1 SBU (with tests)">
 ]>
 
   <sect2 id="sphinx_rtd_theme" xreflabel="sphinx_rtd_theme-&sphinx_rtd_theme-version;">
@@ -31,7 +31,7 @@ móveis. Esse tema é usado principalmente no &quot;Read the Docs&quot;, mas
 pode funcionar com qualquer projeto &quot;Sphinx&quot;.
       </para>
 
-      &lfs120_checked;
+      &lfs121_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -87,27 +87,28 @@ readthedocs-sphinx-ext </ulink>
       <title>Instalação do <quote>Sphinx_rtd_theme</quote></title>
 
       <!-- Upstream tentative fix: not completely tested, it seems
-     but otherwise we fall into dependency hell -->
-<para>
-        Corrija versões erradas para dependências:
+     but otherwise we fall into dependency hell
+     Fixed in 2.0.0 -renodr
+      <para>
+
+        Fix wrong versions for dependencies:
       </para>
 
 <screen><userinput>sed -e s/0.19/0.21/ \
-    -e '/sphinx.*7/s/7/8/' \
     -i setup.cfg</userinput></screen>
-
-      <para>
+-->
+<para>
         Construa o módulo:
       </para>
 
-<screen><userinput>pip3 wheel -w dist --no-build-isolation --no-deps $PWD</userinput></screen>
+&build-wheel;
 
     <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>pip3 install --no-index --find-links dist --no-cache-dir --no-user sphinx_rtd_theme</userinput></screen>
+<screen role="root"><userinput>&install-wheel; sphinx_rtd_theme</userinput></screen>
 
     <para>
       Supondo que &quot;<xref linkend="pytest"/>&quot; esteja instalado, mas a
@@ -123,8 +124,7 @@ python3 /usr/bin/pytest
 deactivate</userinput></screen>
 
     <para>
-      Vários testes retornam um aviso porque usam uma &quot;API&quot; obsoleta do
-&quot;Sphinx&quot;.
+      Several tests return warnings because they use a deprecated sphinx API.
     </para>
 
     </sect3>

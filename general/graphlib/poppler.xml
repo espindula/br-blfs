@@ -6,10 +6,10 @@
 
   <!ENTITY poppler-download-http "https://poppler.freedesktop.org/poppler-&poppler-version;.tar.xz">
   <!ENTITY poppler-download-ftp  "">
-  <!ENTITY poppler-md5sum        "b369afc9511198de5a604ca3baea1ddd">
+  <!ENTITY poppler-md5sum        "a02d3b32e956bef66a5108fcaabe1c63">
   <!ENTITY poppler-size          "1,8 MB">
-  <!ENTITY poppler-buildsize     "91 MB (com biblioteca Qt5 e testes)">
-  <!ENTITY poppler-time          "0,6 UPC (com paralelismo=4, biblioteca <quote>Qt5</quote> e os testes)">
+  <!ENTITY poppler-buildsize     "79 MB (with Qt5 library; add 13 MB for tests)">
+  <!ENTITY poppler-time          "0.9 SBU (with parallelism=4 and Qt5 library; add 2.7 SBU for tests)">
   <!-- Time increase might be due to git.freedesktop.org -->
 
   <!ENTITY poppler-data-version       "0.4.12">
@@ -41,7 +41,7 @@ arquivos PDF. Isso é útil para fornecer funcionalidade de renderização de
 PDF como uma biblioteca compartilhada.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -127,20 +127,20 @@ linkend="gobject-introspection"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="boost"/>, <xref linkend="cairo"/>, <xref linkend="lcms2"/>,
-<xref linkend="libjpeg"/>, <xref linkend="libpng"/>, <xref linkend="nss"/> e
-<xref linkend="openjpeg2"/>
+      <xref linkend="boost"/>, <xref linkend="cairo"/>, <xref linkend="gpgme"/>,
+<xref linkend="lcms2"/>, <xref linkend="libjpeg"/>, <xref
+linkend="libpng"/>, <xref linkend="libtiff"/>, <xref linkend="nss"/>, <xref
+linkend="openjpeg2"/>, and &qt5-deps; (required for PDF support in <xref
+role="nodep" linkend="okular5"/>)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="curl"/>, <xref linkend="gdk-pixbuf"/>, <xref linkend="git"/>
-(para baixar arquivos de teste), <xref linkend="gpgme"/>, <xref
-linkend="gtk-doc"/>, <xref linkend="gtk3"/>, <xref linkend="libtiff"/>,
-&qt5-deps; (exigido para suporte PDF em <xref role="nodep"
-linkend="okular5"/>) e <ulink
-url="https://download.qt.io/archive/qt/">Qt-6.1 ou posterior</ulink>.
-
+      <!-- Nothing really uses this yet, but it will be used in KDE 6 -->
+<xref linkend="curl"/>, <xref linkend="gdk-pixbuf"/>, <xref linkend="git"/>
+(for downloading test files), <xref linkend="gtk-doc"/>, <xref
+linkend="gtk3"/>, and <xref linkend="qt6"/>
+      
     </para>
 
   </sect2>
@@ -152,38 +152,29 @@ url="https://download.qt.io/archive/qt/">Qt-6.1 ou posterior</ulink>.
       Instale <application>Poppler</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>mkdir build                        &amp;&amp;
+<screen><userinput>mkdir build                         &amp;&amp;
 cd    build                         &amp;&amp;
 
 cmake  -DCMAKE_BUILD_TYPE=Release   \
        -DCMAKE_INSTALL_PREFIX=/usr  \
        -DTESTDATADIR=$PWD/testfiles \
+       -DENABLE_QT6=OFF             \
        -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
        ..                           &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para a finalidade de executar a suíte de teste, alguns casos de teste são
-necessários e podem ser obtidos somente a partir de um repositório "git". O
-comando para baixá-los é: <command>git clone --depth 1
-https://gitlab.freedesktop.org/poppler/test.git testfiles</command>. Em
-seguida, emita: <command>LC_ALL=en_US.UTF-8 make test</command>.
+      In order to run the test suite, some testcases are needed and can be
+obtained only from a git repository. The command to download them is:
+<command>git clone --depth 1 https://gitlab.freedesktop.org/poppler/test.git
+testfiles</command>.  Then issue: <command>LC_ALL=en_US.UTF-8 make
+test</command>.  One test, check_qt5_signature_basics, is known to fail.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<!-- Seems makeinstall does the job now:
-    <para>
-
-      If you have Qt installed, again as the
-      <systemitem class="username">root</systemitem> user:
-    </para>
-
-<screen role="root"><userinput>make -C qt5 install &amp;&amp;
-install -m644 poppler-qt5.pc /usr/lib/pkgconfig</userinput></screen>
--->
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
@@ -228,6 +219,12 @@ de teste onde os arquivos auxiliares estão localizados.
     </para>
 
     <para>
+      <parameter>-DENABLE_QT6=OFF</parameter>: This switch is needed to prevent an
+error when Qt6 is not installed. Remove it if you have installed <xref
+linkend="qt6" role="nodep"/>.
+    </para>
+
+    <para>
       <!--(e.g. <application>
 Inkscape</application>).-->
 <parameter>-DENABLE_UNSTABLE_API_ABI_HEADERS=ON</parameter>: Instala alguns
@@ -236,15 +233,7 @@ aplicativos.
       
     </para>
 
-
-    <!--  This was broken for me - Bruce
-      Still broken with 0.69.0 - Doug
-      Seems to work with 0.73.0 - Pierre
-      Works with 20.09.0 but without the
-         sed -i '1s/python/&3/' make-glib-api-docs
-         and pygments is required - Thomas
--->
-<para>
+    <para>
       <!--and Pygments-->
 <option>-DENABLE_GTK_DOC=ON</option>: Use esse parâmetro se o "GTK-Doc"
 estiver instalado e você desejar reconstruir e instalar a documentação da
@@ -252,9 +241,29 @@ API.
     </para>
 
     <para>
+      <option>-DENABLE_QT5=OFF</option>: Use this parameter if &qt5-deps; is not
+installed. 
+    </para>
+
+    <para>
       <option>-DENABLE_BOOST=OFF</option>: Use esse parâmetro se você não tiver
 instalado o <application>boost</application> (a estrutura de retaguarda
 "Splash" para "Qt5" recomenda o "boost").
+    </para>
+
+    <para>
+      <option>-DENABLE_NSS3=OFF</option>: Use this parameter if you have not
+installed <application>nss</application>.
+    </para>
+
+    <para>
+      <option>-DENABLE_GPGME=OFF</option>: Use this parameter if you have not
+installed <application>gpgme</application>.
+    </para>
+
+    <para>
+      <option>-DENABLE_LIBTIFF=OFF</option>: Use this parameter if you have not
+installed <application>libtiff</application>.
     </para>
 
     <para>
@@ -279,7 +288,8 @@ padrão não incluir "UTF-8".
 pdftocairo, pdftohtml, pdftoppm, pdftops, pdftotext e pdfunite
         </seg>
         <seg>
-          libpoppler.so, libpoppler-cpp.so, libpoppler-glib.so e libpoppler-qt5.so
+          libpoppler.so, libpoppler-cpp.so, libpoppler-glib.so, libpoppler-qt5.so, and
+(optionally) libpoppler-qt6.so
         </seg>
         <seg>
           /usr/include/poppler, /usr/share/poppler e
@@ -500,6 +510,19 @@ de "PDF" com <application>Qt</application>5
           </para>
           <indexterm zone="poppler libpoppler-qt5">
             <primary sortas="c-libpoppler-qt5">libpoppler-qt5.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libpoppler-qt6">
+        <term><filename class="libraryfile">libpoppler-qt6.so</filename></term>
+        <listitem>
+          <para>
+            is a wrapper library used to interface the PDF rendering functions with
+<application>Qt</application>6
+          </para>
+          <indexterm zone="poppler libpoppler-qt6">
+            <primary sortas="c-libpoppler-qt6">libpoppler-qt6.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

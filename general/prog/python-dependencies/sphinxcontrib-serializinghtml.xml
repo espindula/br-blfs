@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../../general.ent">
   %general-entities;
 
-  <!ENTITY sc-serializinghtml-download-http "https://files.pythonhosted.org/packages/source/s/sphinxcontrib-serializinghtml/sphinxcontrib-serializinghtml-&sc-serializinghtml-version;.tar.gz">
+  <!ENTITY sc-serializinghtml-download-http "https://files.pythonhosted.org/packages/source/s/sphinxcontrib_serializinghtml/sphinxcontrib_serializinghtml-&sc-serializinghtml-version;.tar.gz">
   <!ENTITY sc-serializinghtml-download-ftp  "">
   <!ENTITY sc-serializinghtml-md5sum        "&sc-serializinghtml-md5sum;">
-  <!ENTITY sc-serializinghtml-size          "21 KB">
-  <!ENTITY sc-serializinghtml-buildsize     "3,0 MB (com os testes)">
+  <!ENTITY sc-serializinghtml-size          "15 KB">
+  <!ENTITY sc-serializinghtml-buildsize     "2.0 MB (with tests)">
   <!ENTITY sc-serializinghtml-time          "menos que 0,1 UPC (com os testes)">
 ]>
 
@@ -31,7 +31,7 @@ extensão &quot;<application>Sphinx</application>&quot; que produz arquivos
 &quot;pickle&quot;).
       </para>
 
-      &lfs120_checked;
+      &lfs121_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -79,19 +79,26 @@ extensão &quot;<application>Sphinx</application>&quot; que produz arquivos
     <sect3 role="installation">
       <title>Instalação do <quote>Sphinxcontrib-serializinghtml</quote></title>
 
-    <para> Construa o módulo: </para>
+      <para>
+        First remove a spurious circular dependency:
+      </para>
 
-<screen><userinput>pip3 wheel -w dist --no-build-isolation --no-deps $PWD</userinput></screen>
+<screen><userinput>sed /^dependencies/,+2d -i pyproject.toml</userinput></screen>
 
-    <para>
-      Agora, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
-    </para>
+      <para> Construa o módulo: </para>
 
-<screen role="root"><userinput>pip3 install --no-index --find-links dist --no-cache-dir --no-user sphinxcontrib-serializinghtml</userinput></screen>
+&build-wheel;
 
       <para>
-        Para testar a instalação, execute &quot;<command>pytest</command>&quot;.
+        Agora, como o(a) usuário(a) &quot;<systemitem
+class="username">root</systemitem>&quot;:
+      </para>
+
+<screen role="root"><userinput>&install-wheel; sphinxcontrib-serializinghtml</userinput></screen>
+
+      <para>
+        To test the installation, first install <xref linkend="sphinx"/>, then run
+<command>pytest</command>.
       </para>
 
     </sect3>

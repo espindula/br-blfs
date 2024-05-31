@@ -6,9 +6,9 @@
 
   <!ENTITY dhcpcd-download-http "https://github.com/NetworkConfiguration/dhcpcd/releases/download/v&dhcpcd-version;/dhcpcd-&dhcpcd-version;.tar.xz">
   <!ENTITY dhcpcd-download-ftp  "">
-  <!ENTITY dhcpcd-md5sum        "1f266e2c32567bc778ea22c599fb06d9">
-  <!ENTITY dhcpcd-size          "260 KB">
-  <!ENTITY dhcpcd-buildsize     "3,1 MB (com testes)">
+  <!ENTITY dhcpcd-md5sum        "ef8356d711b17701928ead7206d15234">
+  <!ENTITY dhcpcd-size          "264 KB">
+  <!ENTITY dhcpcd-buildsize     "3.0 MB (with tests)">
   <!ENTITY dhcpcd-time          "menos que 0,1 UPC (com os testes)">
 ]>
 
@@ -34,7 +34,7 @@ intercomunicação. O &quot;dhcpcd&quot; se esforça para ser um cliente
 &quot;DHCP&quot; completo, mas muito leve.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -70,7 +70,22 @@ intercomunicação. O &quot;dhcpcd&quot; se esforça para ser um cliente
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do dhcpcd</bridgehead>
+
+    <!--
+
+
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/dhcpcd-&dhcpcd-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do dhcpcd</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -113,12 +128,15 @@ chown    -v dhcpcd:dhcpcd /var/lib/dhcpcd </userinput></screen>
   <sect2 role="installation">
     <title>Instalação do dhcpcd</title>
 
-    <!--  Now in the code
-    <para>
-Fix a runtime error caused by a change in glibc-2.36:</para>
 
-<screen><userinput>sed '/Deny everything else/i SECCOMP_ALLOW(__NR_getrandom),' \
-    -i src/privsep-linux.c</userinput></screen>
+    <!--
+    <para>
+
+      First, fix an issue that occurs when running dhcpcd with the '-b' switch:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../dhcpcd-&dhcpcd-version;-upstream_fixes-1.patch</userinput></screen>
+
 -->
 <para>
       Construa o &quot;<application>dhcpcd</application>&quot; sem separação de
@@ -279,8 +297,8 @@ seguintes comandos. Ajuste adequadamente para interfaces adicionais:
 <literal>ONBOOT="yes"
 IFACE="eth0"
 SERVICE="dhcpcd"
-DHCP_START="-b -q -h ''<replaceable>&lt;insira opções apropriadas de início aqui&gt;</replaceable>"
-DHCP_STOP="-k <replaceable>&lt;insira opções apropriadas de término aqui&gt;</replaceable>"</literal>
+DHCP_START="-b -q -h $HOSTNAME <replaceable>&lt;insert appropriate start options here&gt;</replaceable>"
+DHCP_STOP="-k <replaceable>&lt;insert additional stop options here&gt;</replaceable>"</literal>
 EOF</userinput></screen>
 
       <para>

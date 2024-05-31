@@ -6,12 +6,11 @@
 
   <!ENTITY libgweather-download-http
            "&gnome-download-http;/libgweather/&libgweather-minor;/libgweather-&libgweather-version;.tar.xz">
-  <!ENTITY libgweather-download-ftp
-           "&gnome-download-ftp;/libgweather/&libgweather-minor;/libgweather-&libgweather-version;.tar.xz">
-  <!ENTITY libgweather-md5sum        "4c0c46102dcb5e813ff698e5f713e4bb">
-  <!ENTITY libgweather-size          "2,6 MB">
-  <!ENTITY libgweather-buildsize     "95 MB (com os testes)">
-  <!ENTITY libgweather-time          "0,2 UPC (com os testes)">
+  <!ENTITY libgweather-download-ftp  "">
+  <!ENTITY libgweather-md5sum        "bba9065a75a7482be21d0427a12233c0">
+  <!ENTITY libgweather-size          "2.7 MB">
+  <!ENTITY libgweather-buildsize     "96 MB (with tests)">
+  <!ENTITY libgweather-time          "0.3 SBU (with tests)">
 ]>
 
 <sect1 id="libgweather" xreflabel="libgweather-&libgweather-version;">
@@ -33,7 +32,7 @@ acessar informações meteorológicas a partir de serviços online para
 numerosos locais.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -91,6 +90,8 @@ para <command>meson</command>), <xref linkend="llvm"/> (para formato clang)
 e <ulink url="https://pypi.org/project/pylint/">pylint</ulink>
     </para>
 
+    &test-use-internet;
+
   </sect2>
 
   <sect2 role="installation">
@@ -133,8 +134,16 @@ pacote.
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C ninja test</command>. Um
-teste, o metar, é conhecido por falhar.
+      <!--
+        https://gitlab.gnome.org/GNOME/libgweather/-/commit/3c60094ffdc5
+        It's not a simple URL change, so just document it instead of
+	patching the test suite...
+      -->
+To test the results, issue: <command>LC_ALL=C ninja test</command>. One
+test, <filename>style / style-format</filename>, is known to fail due to
+differences between LLVM-16 and LLVM-17's version of clang-format.  One test
+named <filename>libgweather / metar</filename> is known to fail because it
+requires some online resources which have been moved away.
     </para>
 
   </sect2>
@@ -182,7 +191,7 @@ teste, o metar, é conhecido por falhar.
         <term><filename class="libraryfile">libgweather-4.so</filename></term>
         <listitem>
           <para>
-            contém funções que permitem a recuperação de informações meteorológicas
+            contains functions that allow for the retrieval of weather information
           </para>
           <indexterm zone="libgweather libgweather-4">
             <primary sortas="c-libgweather-4">libgweather-4.so</primary>

@@ -5,10 +5,10 @@
   %general-entities;
 
   <!ENTITY sendmail-download-http "https://ftp.sendmail.org/sendmail.&sendmail-version;.tar.gz">
-  <!ENTITY sendmail-download-ftp  "ftp://ftp.sendmail.org/pub/sendmail/sendmail.&sendmail-version;.tar.gz">
-  <!ENTITY sendmail-md5sum        "eb21e7c8a1d2a69a4597e9ce6b1cb3d5">
-  <!ENTITY sendmail-size          "2,2 MB">
-  <!ENTITY sendmail-buildsize     "18 MB">
+  <!ENTITY sendmail-download-ftp  "">
+  <!ENTITY sendmail-md5sum        "b6b332295b5779036d4c9246f96f673c">
+  <!ENTITY sendmail-size          "2.3 MB">
+  <!ENTITY sendmail-buildsize     "21 MB">
   <!ENTITY sendmail-time          "0,1 UPC">
 ]>
 
@@ -30,7 +30,7 @@
 &quot;Mail Transport Agent&quot; (&quot;MTA&quot;).
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -99,8 +99,6 @@ linkend="procmail"/> (a configuração proposta abaixo exige que o
 execução) e <ulink url="https://github.com/chaos/nph">nph</ulink>
     </para>
 
-    <para condition="html" role="usernotes">Observações de Editor(a): <ulink url="&blfs-wiki;/sendmail"/></para>
-
   </sect2>
 
   <sect2 role="installation">
@@ -133,7 +131,7 @@ partida. Claro, modifique-o para atender às tuas necessidades específicas.
 
 <screen><userinput>cat &gt;&gt; devtools/Site/site.config.m4 &lt;&lt; "EOF"
 <literal>APPENDDEF(`confENVDEF',`-DSTARTTLS -DSASL -DLDAPMAP -DHASFLOCK')
-APPENDDEF(`confLIBS', `-lssl -lcrypto -lsasl2 -lldap -llber -ldb')
+APPENDDEF(`confLIBS', `-lssl -lcrypto -lsasl2 -lldap -llber')
 APPENDDEF(`confINCDIRS', `-I/usr/include/sasl')</literal>
 EOF</userinput></screen>
 
@@ -315,7 +313,8 @@ cat &gt; /etc/mail/aliases &lt;&lt; "EOF"
 MAILER-DAEMON: root</literal>
 
 EOF
-newaliases</userinput></screen>
+# Does not work if there is no database backend compiled in:
+#newaliases</userinput></screen>
 
       <para>
         O arquivo de configuração principal do

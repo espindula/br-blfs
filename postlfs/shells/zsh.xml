@@ -10,9 +10,6 @@
   <!ENTITY zsh-size          "3,2 MB">
   <!ENTITY zsh-buildsize     "48 MB (inclui documentação e testes)">
   <!ENTITY zsh-time          "1,6 UPC (Usando paralelismo=4; inclui documentação e testes)">
-
-  <!ENTITY zsh-doc-md5sum    "8db53446f613521fb4f9b0bd9f6adda1">
-  <!ENTITY zsh-doc-size      "3,0 MB">
 ]>
 
 <sect1 id="zsh" xreflabel="zsh-&zsh-version;">
@@ -36,7 +33,7 @@ de comando de script de shell. Dos shells padrão, o
 <application>ksh</application>, mas inclui muitos aprimoramentos.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,26 +69,6 @@ de comando de script de shell. Dos shells padrão, o
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Documentação Opcional: <ulink
-url="https://www.zsh.org/pub/zsh-&zsh-version;-doc.tar.xz"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Soma de verificação MD5 da documentação: &zsh-doc-md5sum;
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Tamanho da transferência da documentação: &zsh-doc-size;
-        </para>
-      </listitem>
-    </itemizedlist>
-
     <note>
       <para>
         Quando existe um lançamento novo do <application>zsh</application>, os
@@ -104,7 +81,8 @@ servidor: <ulink url="https://www.zsh.org/pub/old/"/> .
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="pcre"/> e <xref linkend="valgrind"/>
+      <xref linkend="pcre"/>, <xref linkend="valgrind"/>, and <ulink
+url='https://fbb-git.gitlab.io/yodl/'>yodl</ulink>
     </para>
 
   </sect2>
@@ -113,8 +91,19 @@ servidor: <ulink url="https://www.zsh.org/pub/old/"/> .
     <title>Instalação do zsh</title>
 
     <para>
-      Se você baixou a documentação opcional, desempacote-a com o seguinte
-comando:
+      Adapt the documentation build system for texinfo-7.0 or later:
+    </para>
+
+<screen><userinput>sed -e 's/set_from_init_file/texinfo_&amp;/' \
+    -i Doc/Makefile.in</userinput></screen>
+
+    <para>
+      The documentation files contain references to zsh configuration files in
+<filename class='directory'>/etc</filename>, but we'll use <filename
+class='directory'>/etc/zsh</filename> to hold these configuration files
+instead.  The building system will fix up those references if the
+<application>yodl</application> package is available, but it's out of the
+scope of BLFS.  So we need to fix up the references manually:
     </para>
 
 <!--    <note>
@@ -126,7 +115,7 @@ comando:
       </para>
     </note>
 -->
-<screen><userinput>tar --strip-components=1 -xvf ../zsh-&zsh-version;-doc.tar.xz</userinput></screen>
+<screen><userinput>sed 's|/etc/z|/etc/zsh/z|g' -i Doc/*.*</userinput></screen>
 
 
     <para>
@@ -137,12 +126,12 @@ comando:
             --sysconfdir=/etc/zsh    \
             --enable-etcdir=/etc/zsh \
             --enable-cap             \
-            --enable-gdbm                             &amp;&amp;
-make                                                  &amp;&amp;
+            --enable-gdbm                      &amp;&amp;
+make                                           &amp;&amp;
 
-makeinfo  Doc/zsh.texi --plaintext -o Doc/zsh.txt     &amp;&amp;
-makeinfo  Doc/zsh.texi --html      -o Doc/html        &amp;&amp;
-makeinfo  Doc/zsh.texi --html --no-split --no-headers -o Doc/zsh.html</userinput></screen>
+makeinfo  Doc/zsh.texi --html      -o Doc/html &amp;&amp;
+makeinfo  Doc/zsh.texi --plaintext -o zsh.txt  &amp;&amp;
+makeinfo  Doc/zsh.texi --html --no-split --no-headers -o zsh.html</userinput></screen>
 
     <para>
       Se você tiver <xref linkend="texlive"/> instalado, [então] poderá construir
@@ -159,21 +148,10 @@ o formato PDF da documentação emitindo o seguinte comando:
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install                              &amp;&amp;
-make infodir=/usr/share/info install.info &amp;&amp;
-
-install -v -m755 -d                 /usr/share/doc/zsh-&zsh-version;/html &amp;&amp;
-install -v -m644 Doc/html/*         /usr/share/doc/zsh-&zsh-version;/html &amp;&amp;
-install -v -m644 Doc/zsh.{html,txt} /usr/share/doc/zsh-&zsh-version;</userinput></screen>
-
-    <para>
-      Se você baixou a documentação opcional, instale-a emitindo os seguintes
-comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
-    </para>
-
-<screen role="root"><userinput>make htmldir=/usr/share/doc/zsh-&zsh-version;/html install.html &amp;&amp;
-install -v -m644 Doc/zsh.dvi /usr/share/doc/zsh-&zsh-version;</userinput></screen>
+<screen role="root"><userinput>make install                                                    &amp;&amp;
+make infodir=/usr/share/info install.info                       &amp;&amp;
+make htmldir=/usr/share/doc/zsh-&zsh-version;/html install.html           &amp;&amp;
+install -v -m644 zsh.{html,txt} Etc/FAQ /usr/share/doc/zsh-&zsh-version;</userinput></screen>
 
     <para>
       Se você construiu o formato PDF da documentação, [então] instale-o emitindo
@@ -222,14 +200,14 @@ biblioteca de expressões regulares <application>PCRE</application> em
       <title>Arquivos de Configuração</title>
 
       <para>
-        Existe toda uma série de arquivos de configuração para o
-<application>zsh</application>, incluindo
+        There are a whole host of configuration files for
+<application>zsh</application> including
 <filename>/etc/zsh/zshenv</filename>,
 <filename>/etc/zsh/zprofile</filename>, <filename>/etc/zsh/zshrc</filename>,
-<filename>/etc/zsh/zlogin</filename> e
-<filename>/etc/zsh/zlogout</filename>. Você consegue encontrar mais
-informação a respeito deles nas páginas de manual
-<filename>zsh(1)</filename> e relacionadas.
+<filename>/etc/zsh/zlogin</filename> and
+<filename>/etc/zsh/zlogout</filename>.  You can find more information on
+these in the <ulink role='man' url='&man;zsh.1'>zsh(1)</ulink> and related
+manual pages.
       </para>
 
       <para>

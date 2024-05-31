@@ -38,7 +38,7 @@ usando o esquema padrão <filename class="directory">/run/systemd</filename>
 do "systemd".
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -97,6 +97,10 @@ kexec</ulink> e <ulink url="https://selinuxproject.org/page/Main_Page">
 SELinux</ulink>
     </para>
 
+    <para condition="html" role="usernotes">
+      Editor Notes: <ulink url="&blfs-wiki;/Logind"/>
+    </para>
+
   </sect2>
 
   <sect2 role="kernel" id="elogind-kernel">
@@ -150,6 +154,7 @@ meson setup ..                              \
       -Dman=auto                            \
       -Ddocdir=/usr/share/doc/elogind-&elogind-version; \
       -Dcgroup-controller=elogind           \
+      -Ddev-kvm-mode=0660                   \
       -Ddbuspolicydir=/etc/dbus-1/system.d &amp;&amp;
 ninja</userinput></screen>
 
@@ -209,6 +214,12 @@ chave permitirá construir o pacote primeiro.
       <parameter>-Ddbuspolicydir=/etc/dbus-1/system.d</parameter>: Essa chave
 configura o local do diretório de políticas do
 <application>D-Bus</application>.
+    </para>
+
+    <para>
+      <parameter>-Ddev-kvm-mode=0660</parameter>: The LFS udev rule sets the mode
+of <filename class='devicefile'>/dev/kvm</filename> to 0660.  This option
+ensures the elogind udev rules consistent with the LFS configuration.
     </para>
 
     <para>
@@ -305,6 +316,15 @@ password required    pam_deny.so
 
 # Fim /etc/pam.d/elogind-user</literal>
 EOF</userinput></screen>
+
+    <note>
+      <para>After completion of <application>elogind</application>, you should check
+that it functions properly.  First ensure that
+<application>dbus</application> is running.  It may be easiest to do this by
+rebooting the system.  After logging in again, run the command
+<command>loginctl</command>.  The result should indicate that a SESSION and
+a SEAT have been created.</para>
+    </note>
 
     </sect3>
   </sect2>

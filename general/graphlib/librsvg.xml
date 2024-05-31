@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY librsvg-download-http "&gnome-download-http;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
-  <!ENTITY librsvg-download-ftp  "&gnome-download-ftp;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
-  <!ENTITY librsvg-md5sum        "8055142a6c9d0d21d42e40bc08dff814">
+  <!ENTITY librsvg-download-ftp  "">
+  <!ENTITY librsvg-md5sum        "0a9d809a4bdd371c894792e4c2eb94e9">
   <!ENTITY librsvg-size          "5,4 MB">
-  <!ENTITY librsvg-buildsize     "747 MB (16 MB instalado), adicionar 378 MB para testes">
-  <!ENTITY librsvg-time          "0,7 UPC (Adicionar 0,8 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY librsvg-buildsize     "998 MB (16 MB installed), add 589 MB for tests">
+  <!ENTITY librsvg-time          "1.2 SBU (add 0.5 SBU for tests; both using parallelism=4)">
 ]>
 
 <sect1 id="librsvg" xreflabel="librsvg-&librsvg-version;">
@@ -31,7 +31,7 @@ ferramentas usadas para manipular, converter e visualizar imagens "Scalable
 Vector Graphic" ("SVG").
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -98,17 +98,19 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
       Instale <application>librsvg</application> executando os seguintes comandos:
     </para>
 
+<!-- With some locales (zh_CN.UTF-8) 31 tests fail.  With LC_ALL=C only
+         one failure.
+         https://gitlab.gnome.org/GNOME/librsvg/-/issues/1021 -->
 <screen><userinput>./configure --prefix=/usr   \
             --enable-vala    \
             --disable-static \
             --docdir=/usr/share/doc/librsvg-&librsvg-version; &amp;&amp;
 make</userinput></screen>
 
+    
     <para>
-      Para testar os resultados, emita:
+      To test the results, issue: <command>LC_ALL=C make -k check</command>.
     </para>
-
-<screen remap='test'><userinput>make check</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -174,7 +176,8 @@ opção) estiver disponível.
           rsvg-convert
         </seg>
         <seg>
-          librsvg-2.so
+          librsvg-2.so and libpixbufloader-svg.so (installed in
+/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders)
         </seg>
         <seg>
           <!--      /usr/share/gtk-doc/html/rsvg-2.0 not built with

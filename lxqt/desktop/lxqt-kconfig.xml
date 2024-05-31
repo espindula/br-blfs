@@ -6,13 +6,13 @@
 
   <!ENTITY kconfig-download-http "&kf5-download-http;/kconfig-&kf5-version;.tar.xz">
   <!ENTITY kconfig-download-ftp  "">
-  <!ENTITY kconfig-md5sum        "fe2b1c516c2f9caadd6c8e3bf35ffd96">
+  <!ENTITY kconfig-md5sum        "fcb77cb2d9349b33e9e085ca4d2ebe7f">
   <!ENTITY kconfig-size          "288 KB">
   <!ENTITY kconfig-buildsize     "20 MB">
   <!ENTITY kconfig-time          "0,1 UPC (Usando paralelismo=4)">
 ]>
 
-<sect1 id="lxqt-kconfig" xreflabel="kconfig-&plasma5-version; para lxqt">
+<sect1 id="lxqt-kconfig" xreflabel="kconfig-&kf5-version; para lxqt">
   <?dbhtml filename="lxqt-kconfig.html"?>
 
 
@@ -30,7 +30,7 @@
 configuração.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <important>
       <para>
@@ -94,11 +94,12 @@ comandos:
 <screen><userinput>mkdir -v build &amp;&amp;
 cd       build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_LIBDIR=lib  \
-      -DBUILD_TESTING=OFF         \
-      -Wno-dev ..                 &amp;&amp;
+cmake -DCMAKE_INSTALL_PREFIX=/usr        \
+      -DCMAKE_BUILD_TYPE=Release         \
+      -DCMAKE_INSTALL_LIBEXECDIR=libexec \
+      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON  \
+      -DBUILD_TESTING=OFF                \
+      -Wno-dev ..                        &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -111,13 +112,23 @@ make</userinput></screen>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
     <para>
-      Finalmente, remova alguns arquivos desnecessários, como o(a) usuário(a)
-&root;:
+      <parameter>-DCMAKE_INSTALL_LIBEXECDIR=libexec</parameter>: This overrides
+the default in extra-cmake-modules, which is <filename
+class="directory">/usr/lib/libexec</filename> and is not FHS compliant.
     </para>
 
-<screen role="root"><userinput>rm -rf /usr/mkspecs &amp;&amp;
-rm -rf /usr/lib/libexec</userinput></screen>
+    <para>
+      <parameter>-DKDE_INSTALL_USE_QT_SYS_PATHS=ON</parameter>: This forces
+installation of Qt plugins in the same directory as <xref linkend="qt5"/>
+itself. Otherwise they get installed into <filename
+class="directory">/usr/mkspecs</filename>, which is not FHS compliant.
+    </para>
 
   </sect2>
 

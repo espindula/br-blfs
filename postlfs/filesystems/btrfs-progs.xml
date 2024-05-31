@@ -6,11 +6,12 @@
 
   <!ENTITY btrfs-progs-download-http "&kernel-dl;/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v&btrfs-progs-version;.tar.xz">
   <!ENTITY btrfs-progs-download-ftp  "">
-  <!ENTITY btrfs-progs-md5sum        "1b5705b3e9503f09a9598dad1e7bfbc8">
-  <!ENTITY btrfs-progs-size          "3,0 MB">
+  <!ENTITY btrfs-progs-md5sum        "3898c68efdc0fe4e3a6a1bd90b3b4fa4">
+  <!ENTITY btrfs-progs-size          "2.4 MB">
   <!ENTITY btrfs-progs-buildsize     "62 MB (arquivos temporários criados durante os testes precisam de até 10 GB)">
-  <!ENTITY btrfs-progs-time          "0,2 UPC (adicionar 3,8 UPC para testes, até 80 UPC em discos lentos se
-reiserfsprogs estiver instalado)">
+  <!ENTITY btrfs-progs-time          "0.3 SBU (with parallelism=4; add 4.6 SBU for tests, up to 14 SBU on slow
+disks)">
+  <!-- tests run with reiserfs disabled in kernel -->
 ]>
 
 <sect1 id="btrfs-progs" xreflabel="btrfs-progs-&btrfs-progs-version;">
@@ -31,7 +32,7 @@ reiserfsprogs estiver instalado)">
 administração e de depuração para o sistema de arquivos B-tree (btrfs).
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -97,9 +98,11 @@ Recommended</bridgehead>
     -->
 <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="lvm2"/> (<command>dmsetup</command> é usado em testes), <xref
-linkend="reiserfs"/> (para os testes) e <xref linkend="sphinx"/> (exigido
-para construir a documentação)
+      <xref linkend="lvm2"/> (<command>dmsetup</command> is used in tests), <xref
+linkend="sphinx"/> and <xref linkend="sphinx_rtd_theme"/> (required to build
+documentation), and <ulink
+url='https://mirrors.edge.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/'>
+reiserfsprogs</ulink> (for tests).
 
     </para>
 
@@ -117,9 +120,8 @@ para construir a documentação)
       href="btrfs-progs-kernel.xml"/>
 
     <para>
-      Além do acima e das opções exigidas para <xref linkend="lvm2"/> e <xref
-linkend="reiserfs"/>, as seguintes opções precisam ser habilitadas para
-execução de testes:
+      In addition to the above and to the options required for <xref
+linkend="lvm2"/>, the following options must be enabled for running tests:
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -184,10 +186,7 @@ Substitute your test failure with the one above.
    ./fsck-tests.sh
    ./mkfs-tests.sh
    ./cli-tests.sh
-   sed 's/,orphan_file//' /etc/mke2fs.conf >./custom_mke2fs.conf &amp;&amp;
-   export MKE2FS_CONFIG=$PWD/custom_mke2fs.conf                  &amp;&amp;
    ./convert-tests.sh
-   unset MKE2FS_CONFIG &amp;&amp; rm custom_mke2fs.conf
    ./misc-tests.sh
    ./fuzz-tests.sh
 popd</userinput></screen>
@@ -236,17 +235,21 @@ done</userinput></screen>
 reconstruir as páginas de manual, porque isso exige <xref
 linkend="sphinx"/>.
     </para>
-    <para>
-      <command>sed 's/,orphan_file//" ...</command>: Nessa versão do
-<application>btrfs-progs</application>, o aplicativo
-<command>btrfs-convert</command> produz um sistema de arquivos btrfs
-contendo erros, se converter a partir de um sistema de arquivos ext4 criado
-com o recurso <quote>orphan_file</quote>. Esse comando cria um arquivo de
-configuração personalizado que impede criar um sistema de arquivos com esse
-recurso.
-    </para>
+
     
   <!--
+    <para>
+
+      <command>sed 's/,orphan_file//" ...</command>: In this version of
+      <application>btrfs-progs</application>, the
+      <command>btrfs-convert</command> program produces a btrfs filesystem
+      containing errors if converting from an ext4 filesystem created
+      with the <quote>orphan_file</quote> feature. This command creates
+      a custom configuration file that prevents creating a filesystem
+      with this feature.
+    </para>
+-->
+<!--
     <para>
 
       <command>ln -s ... /usr/lib/libbtrfs.so</command>: Creates a
@@ -260,25 +263,28 @@ recurso.
 -->
 </sect2>
 
+
+  <!--
   <sect2 role="using" id="using-btrfs-convert">
-    <title>Usando o Aplicativo btrfs-convert</title>
+
+    <title>Using the btrfs-convert Program</title>
 
     <para>
-      Essa versão do <application>btrfs-progs</application> não converte
-corretamente sistemas de arquivos ext4 para btrfs, se o recurso
-<option>orphan_file</option> do ext4 estiver ativado. Se acontecer de você
-converter esse sistema de arquivos, você precisa primeiro executar:
+      This version of <application>btrfs-progs</application> does not convert
+      correctly ext4 filesystems to btrfs if the ext4
+      <option>orphan_file</option> feature is turned on. If you happen to
+      convert such a filesystem, you need to first run:
     </para>
 
 <screen role="nodump"><userinput>tune2fs -O ^orphan_file <replaceable>/dev/sdxx</replaceable></userinput></screen>
 
     <para>
-      onde <filename>/dev/sdxx</filename> é a partição do sistema de arquivos que
-você quer converter.
+      where <filename>/dev/sdxx</filename> is the partition of the filesystem
+      you want to convert.
     </para>
   </sect2>
-
-  <sect2 role="content">
+-->
+<sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>
@@ -321,8 +327,10 @@ mkfs.btrfs
         <term><command>btrfs-convert</command></term>
         <listitem>
           <para>
-            converte a partir de um sistema de arquivos ext2/3/4 ou reiserfs para btrfs
-(veja-se <xref linkend="using-btrfs-convert"/> acima)
+            <!--(see
+            <xref linkend="using-btrfs-convert"/>
+ above)-->
+converts from an ext2/3/4 or reiserfs filesystem to btrfs 
           </para>
           <indexterm zone="btrfs-progs btrfs-convert">
             <primary sortas="b-btrfs-convert">btrfs-convert</primary>

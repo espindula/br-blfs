@@ -6,10 +6,10 @@
 
   <!ENTITY polkit-download-http "https://gitlab.freedesktop.org/polkit/polkit/-/archive/&polkit-version;/polkit-&polkit-version;.tar.gz">
   <!ENTITY polkit-download-ftp  "">
-  <!ENTITY polkit-md5sum        "36540b837c588e1e77145523bb39f511">
-  <!ENTITY polkit-size          "736 KB">
-  <!ENTITY polkit-buildsize     "6,8 MB (com testes)">
-  <!ENTITY polkit-time          "0,3 UPC (com os testes, usando paralelismo=4)">
+  <!ENTITY polkit-md5sum        "97db655618e1483706fbc764787c7d6e">
+  <!ENTITY polkit-size          "744 KB">
+  <!ENTITY polkit-buildsize     "7.2 MB (with tests)">
+  <!ENTITY polkit-time          "0.3 SBU (with tests; using parallelism=4)">
 ]>
 
 <sect1 id="polkit" xreflabel="Polkit-&polkit-version;">
@@ -31,7 +31,7 @@ para manusear autorizações. Ele é usado para permitir que processos não
 privilegiados se comuniquem com processos privilegiados.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -131,8 +131,8 @@ rastrear sessões <application>Polkit</application>.
     -->
 <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/>, <xref linkend="js102"/> (pode ser usado no lugar
-de duktape) e <xref linkend="python-dbusmock"/> (para os testes)
+      <xref linkend="gtk-doc"/>, <xref linkend="python-dbusmock"/>, and <xref
+linkend="spidermonkey"/> (can be used in place of duktape)
     </para>
 
     <bridgehead renderas="sect4" revision="systemd">Dependências Exigidas em Tempo de Execução</bridgehead>
@@ -144,12 +144,12 @@ de duktape) e <xref linkend="python-dbusmock"/> (para os testes)
       Dependências Opcionais em Tempo de Execução
     </bridgehead>
     <para role="optional">
-      Um agente de autenticação polkit para usar o polkit no ambiente gráfico:
-<application>polkit-kde-agent</application> em <xref role="runtime"
-linkend="plasma5-build"/> para KDE, o agente construído em <xref
-role="runtime" linkend="gnome-shell"/> para GNOME3, <xref role="runtime"
-linkend="polkit-gnome"/> para XFCE e <application>lxpolkit</application> em
-<xref role="runtime" linkend="lxsession"/> para LXDE
+      One polkit authentication agent for using polkit in the graphical
+environment: <application>polkit-kde-agent</application> in <xref
+role="runtime" linkend="plasma5-build"/> for KDE, the agent built in <xref
+role="runtime" linkend="gnome-shell"/> for GNOME3, <xref role="runtime"
+linkend="polkit-gnome"/> for XFCE, and <xref role="runtime"
+linkend="lxqt-policykit"/> for LXQt
     </para>
 
     <note>
@@ -178,29 +178,11 @@ ele for iniciado. Emita os seguintes comandos como o(a) usuário(a)
 useradd -c "Dono(a) do Processo de Segundo Plano do PolicyKit" -d /etc/polkit-1 -u 27 \
         -g polkitd -s /bin/false polkitd</userinput></screen>
 
-    <para>
-      Se usar <xref linkend="js102"/>, faça a seguinte mudança (veja-se as
-Explicações dos Comandos abaixo para mais informações):
+    <para revision='sysv'>
+      First fix a build problem for sysV based systems:
     </para>
 
-<!--
-    <para>
-
-      Apply a patch to fix two security issues:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../polkit-&polkit-version;-security_fixes-1.patch</userinput></screen>
-
-    <para>
-      Port this package to use JS-91:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../polkit-&polkit-version;-js91-1.patch</userinput></screen>
--->
-<screen><userinput remap="nodump">sed -e 's/JS_Init/JS::DisableJitBackend(); &amp;/' \
-    -i src/polkitbackend/polkitbackendjsauthority.cpp</userinput></screen>
-
-
+<screen revision="sysv"><userinput>sed -i '/systemd_sysusers_dir/s/^/#/' meson.build</userinput></screen>
 
     <para>
       Instale o <application>Polkit</application> executando os seguintes
@@ -247,16 +229,6 @@ estejam instalados. Em seguida, execute <command>ninja test</command>.
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <command>sed -e 's/JS_Init/JS::DisableJitBackend(); &amp;/' ... </command>:
-A compilação JIT do JS102 precisa do mapeamento W+X, o que é perigoso e não
-é permitido pelo arquivo de unidade do <application>systemd</application>
-fornecido com o pacote polkit. Esse comando não é estritamente necessário em
-sistemas baseados em sysvinit, mas ainda melhora a segurança. Ele não tem
-efeito se construir-se o polkit com o mecanismo Javascript <xref
-linkend='duktape'/> recomendado.
-    </para>
-
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
@@ -269,9 +241,9 @@ pacote.
     </para>
 
     <para>
-      <option>-Djs_engine=mozjs</option>: Essa chave permite usar o mecanismo
-JavaScript <xref linkend="js102"/> em vez do mecanismo JavaScript <xref
-linkend='duktape'/>.
+      <option>-Djs_engine=mozjs</option>: This switch allows using the <xref
+linkend="spidermonkey"/> JavaScript engine instead of the <xref
+linkend='duktape'/> JavaScript engine.
     </para>
 
     

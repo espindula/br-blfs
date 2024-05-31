@@ -27,13 +27,15 @@
     <title>Introdução ao AccountsService</title>
 
     <para>
-      O pacote <application>AccountsService</application> fornece um conjunto de
-interfaces <application>D-Bus</application> para consulta e manipulação de
-informações da conta do(a) usuário(a) e uma implementação dessas interfaces
-baseada nos comandos usermod(8), useradd(8) e userdel(8).
+      The <application>AccountsService</application> package provides a set of
+<application>D-Bus</application> interfaces for querying and manipulating
+user account information and an implementation of those interfaces based on
+the <ulink role='man' url='&man;usermod.8'>usermod(8)</ulink>, <ulink
+role='man' url='&man;useradd.8'>useradd(8)</ulink>, and <ulink role='man'
+url='&man;userdel.8'>userdel(8)</ulink> commands.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -111,10 +113,12 @@ de executar se <xref linkend="python-dbusmock"/> não estiver instalado:
 <screen><userinput>mv tests/dbusmock{,-tests}</userinput></screen>
 
     <para>
-      Em seguida, corrija os testes de forma que o novo diretório seja encontrado:
+      Then fix a test script so that the new directory is found, and adapt it for
+Python 3.12.0 or later:
     </para>
 
 <screen><userinput>sed -e '/accounts_service\.py/s/dbusmock/dbusmock-tests/' \
+    -e 's/assertEquals/assertEqual/'                      \
     -i tests/test-libaccountsservice.py</userinput></screen>
 
     <para>
@@ -205,41 +209,6 @@ Administradores(as), execute os seguintes comandos como o(a) usuário(a)
   return ["unix-group:adm"];
   });</literal>
 EOF</userinput></screen>
-
-    <sect3 id="accountsservice-init" revision="systemd">
-
-      <!--      <title>
-<phrase revision="sysv">Boot Script</phrase>
-             <phrase revision="systemd">Systemd Units</phrase></title> -->
-<title>Unidade do systemd</title>
-
-      <!-- Automatically started by D-Bus when needed
-      <para revision="sysv">
-
-        To start the <command>accounts-daemon</command> daemon at boot,
-        install the
-        <filename>/etc/rc.d/init.d/accounts-daemon</filename> init script from
-        the <xref linkend="bootscripts"/> package
-        by running the following command as the
-        <systemitem class="username">root</systemitem> user:
-      </para>
-
-<screen role="root" revision="sysv"><userinput>make install-accounts-daemon</userinput></screen>
--->
-<para>
-        Para iniciar o processo de segundo plano <command>accounts-daemon</command>
-na inicialização, habilite a unidade do systemd instalada anteriormente
-executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
-      </para>
-
-      <indexterm zone="accountsservice accountsservice-init">
-        <primary sortas="f-accounts-daemon">accounts-daemon</primary>
-      </indexterm>
-
-<screen role="root"><userinput>systemctl enable accounts-daemon</userinput></screen>
-
-    </sect3>
 
   </sect2>
 

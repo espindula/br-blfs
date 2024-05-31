@@ -5,17 +5,15 @@
   %general-entities;
 
   <!ENTITY mesa-download-http "https://mesa.freedesktop.org/archive/mesa-&mesa-version;.tar.xz">
-  <!ENTITY mesa-download-ftp  "ftp://ftp.freedesktop.org/pub/mesa/mesa-&mesa-version;.tar.xz">
-  <!ENTITY mesa-md5sum        "5dd176e3f283143cc193b5a8264a206e">
-  <!ENTITY mesa-size          "18 MB">
-  <!ENTITY mesa-buildsize     "462 MB (com os documentos; adicionar 221 MB para os testes)">
-  <!ENTITY mesa-time          "2,6 UPC (com documentos; adicionar 0,6 UPC para testes; ambos com
-paralelismo=4)">
+  <!ENTITY mesa-download-ftp  "">
+  <!ENTITY mesa-md5sum        "9e7fa53b68fa6b60dba0bbfa8da7d0a9">
+  <!ENTITY mesa-size          "20 MB">
+  <!ENTITY mesa-buildsize     "618 MB (with docs, add 220 MB for tests)">
+  <!ENTITY mesa-time          "3.1 SBU (with docs; add 0.6 SBU for tests; both with parallelism=4)">
 ]>
 
 <sect1 id="mesa" xreflabel="Mesa-&mesa-version;">
   <?dbhtml filename="mesa.html"?>
-
 
   <title>Mesa-&mesa-version;</title>
 
@@ -39,7 +37,7 @@ do &quot;Mesa&quot; mais recente disponível.
       </para>
     </note>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -100,39 +98,40 @@ linkend="Mako"/>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
 
-      <xref role="first" linkend="libva"/> (para fornecer suporte
-&quot;VA-API&quot; para alguns controladores &quot;gallium&quot;; observe
-que existe uma dependência circular. Você precisa construir a
-&quot;<application>libva</application>&quot; primeiro sem suporte
-&quot;EGL&quot; e &quot;GLX&quot;, instalar esse pacote, e reconstruir a
-&quot;<application>libva</application>&quot;), <xref linkend="libvdpau"/>
-(para construir os controladores &quot;VDPAU&quot;), <xref linkend="llvm"/>
-(exigido para os controladores &quot;Gallium3D&quot;, &quot;nouveau&quot; e
-&quot;radeonsi&quot;; e para o &quot;swrast&quot;, o rasterizador de
-logiciário que às vezes é chamado de &quot;llvmpipe&quot;. Veja-se <ulink
-role="nodep" url="https://docs.mesa3d.org/systems.html"/> para mais
-informações) e <xref linkend="wayland-protocols"/> (exigido para o
-&quot;<xref role="nodep" linkend='plasma5-build'/>&quot;, &quot;GNOME&quot;,
-e recomendado para o &quot;<xref role="nodep" linkend='gtk3'/>&quot;)
+      <xref linkend="glslang"/> (required for Vulkan support), <xref role="first"
+linkend="libva"/> (to provide VA-API support for some gallium drivers, note
+that there is a circular dependency. You must build
+<application>libva</application> first without EGL and GLX support, install
+this package, and rebuild <application>libva</application>), <xref
+linkend="libvdpau"/> (to build VDPAU drivers), <xref linkend="llvm"/>
+(required for Gallium3D, nouveau, and radeonsi drivers and for swrast, the
+software rasterizer which is sometimes referred to as llvmpipe. See <ulink
+role="nodep" url="https://docs.mesa3d.org/systems.html"/> for more
+information), <xref linkend="wayland-protocols"/> (required for <xref
+role="nodep" linkend='plasma5-build'/>, GNOME, and recommended for <xref
+role="nodep" linkend='gtk3'/>), and <xref linkend="vulkan-loader"/>
+(required for Vulkan support)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <!-- for libsensors according to Meson -->
+<!--<ulink url="https://github.com/KhronosGroup/glslang">
+glslang</ulink>
+      (for vulkan drivers),-->
+<!-- <ulink url="https://github.com/KhronosGroup/Vulkan-Loader">
+Vulkan-Loader</ulink> -->
 <xref linkend="libgcrypt"/>, <xref linkend="libunwind"/>, <xref
 linkend="lm_sensors"/> , <xref linkend="nettle"/>, <xref
 linkend="valgrind"/>, <ulink
-url="https://archive.mesa3d.org/demos/">mesa-demos</ulink> (fornece mais que
-trezentos (300) demonstrativos extra para testar
-<application>Mesa</application>; isso inclui os mesmos aplicativos
-adicionados pelo remendo acima), <ulink
-url="https://omxil.sourceforge.net/">Camada de Integração Bellagio
-OpenMAX</ulink> (para plataformas móveis), <ulink
-url="https://github.com/KhronosGroup/glslang">glslang</ulink> (para os
-controladores &quot;vulkan&quot;), <ulink
-url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">libtizonia</ulink>
-e <ulink
-url="https://github.com/KhronosGroup/Vulkan-Loader">Vulkan-Loader</ulink>
+url="https://archive.mesa3d.org/demos/">mesa-demos</ulink> (provides more
+than 300 extra demos to test <application>Mesa</application>; this includes
+the same programs added by the patch above), <ulink
+url="https://omxil.sourceforge.net/">Bellagio OpenMAX Integration
+Layer</ulink> (for mobile platforms), and <ulink
+url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">
+libtizonia</ulink>,
+      
     </para>
 
   <!--
@@ -205,7 +204,6 @@ estritamente necessária, mas recomendada como uma otimização.
 
   <sect2 role="installation">
     <title>Instalação do Mesa</title>
-
     <para>
       Se você baixou o remendo &quot;xdemos&quot; (necessário se testar a
 instalação do &quot;Xorg&quot; de acordo com as instruções do BLFS), [então]
@@ -268,6 +266,18 @@ aplique-o executando o seguinte comando:
 <screen><userinput>GALLIUM_DRV="crocus,i915,iris,nouveau,r600,radeonsi,svga,swrast,virgl"
 DRI_DRIVERS="i965,nouveau"</userinput></screen>
 -->
+<!-- https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/22021 -->
+<!-- No longer needed
+    <para>
+
+      Remove two unneeded references to LLVM headers to avoid a build
+      failure with LLVM 17 or later:
+    </para>
+
+<screen><userinput>sed '/Scalar.h/d;/Utils.h/d' \
+    -i src/gallium/auxiliary/gallivm/lp_bld_init.c</userinput>
+</screen>
+-->
 <screen><!--<screen>
 <userinput>patch -Np1 -i ../mesa-&mesa-version;-add_xdemos-1.patch</userinput></screen>-->
 <userinput>patch -Np1 -i ../mesa-add_xdemos-2.patch</userinput></screen>
@@ -278,19 +288,21 @@ DRI_DRIVERS="i965,nouveau"</userinput></screen>
       
 
 
+    
+
     <para>
       Instale o <application>Mesa</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
 meson setup                   \
       --prefix=$XORG_PREFIX   \
       --buildtype=release     \
       -Dplatforms=x11,wayland \
       -Dgallium-drivers=auto  \
-      -Dvulkan-drivers=""     \
+      -Dvulkan-drivers=auto   \
       -Dvalgrind=disabled     \
       -Dlibunwind=disabled    \
       ..                      &amp;&amp;
@@ -298,14 +310,15 @@ meson setup                   \
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>meson configure
--Dbuild-tests=true &amp;&amp; ninja test</command>. Três testes relacionados
-a mesa:intel são conhecidos por falharem.
+      To test the results, issue: <command>meson configure -Dbuild-tests=true
+&amp;&amp; ninja test</command>.
     </para>
 
 
     <!-- All 88 tests passed for me for 22.3.3 [pierre]
      All 90 tests passed for me for 23.1.0 [bdubbs]
+     89 Tests passed for me, 1 timeout on 23.1.8 [rahul]
+     All 98 tests passed for me for 23.3.1 [bdubbs]
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -321,8 +334,7 @@ class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"
-        remap="doc"><userinput>install -v -dm755 /usr/share/doc/mesa-&mesa-version; &amp;&amp;
-cp -rfv ../docs/* /usr/share/doc/mesa-&mesa-version;</userinput></screen>
+        remap="doc"><userinput>cp -rv ../docs -T /usr/share/doc/mesa-&mesa-version;</userinput></screen>
 
   </sect2>
 
@@ -377,19 +389,17 @@ precisamente quais controladores precisa, por exemplo
     </para>
 -->
 <para>
-      <parameter>-Dplatforms="..."</parameter>: Esse parâmetro controla quais
-sistemas de janelas serão suportados. As plataformas Linux disponíveis são
-&quot;x11&quot; e &quot;wayland&quot;.
+      <parameter>-Dplatforms=...</parameter>: This parameter controls which
+windowing systems will be supported. Available linux platforms are x11 and
+wayland.
     </para>
 
     <para>
-      <parameter>-Dvulkan-drivers=""</parameter>: Essa chave permite escolher
-quais controladores Vulkan serão construídos. O padrão é auto, mas isso
-exige as dependências opcionais <application>glslang</application> e
-<application>Vulkan-Loader</application>. Vulkan é uma API mais recente
-projetada para utilizar as GPUs com um desempenho melhor que OpenGL, mas
-nada no BLFS se beneficia disso por enquanto. Portanto, nós passamos uma
-lista vazia para a finalidade de remover a necessidade dessas dependências.
+      <parameter>-Dvulkan-drivers=auto</parameter>: This switch enables support
+for the Vulkan graphics API. It automatically builds all graphics drivers
+that are available for Vulkan. If you wish to build specific drivers, valid
+options include 'amd', 'intel', 'intel_hasvk', and 'swrast'. If you do not
+want Vulkan support, change 'auto' to "".
     </para>
 
     <para>
@@ -429,9 +439,12 @@ Linux disponíveis são &quot;auto&quot; (padrão), &quot;x11&quot;,
       <segtitle>Aplicativos Instalados</segtitle>
       <segtitle>Bibliotecas Instaladas</segtitle>
       <!-- in /usr/lib -->
-<segtitle>Controladores Instalados</segtitle>
-      <!-- in /usr/lib/<subdir>
- -->
+<segtitle>Installed DRI Drivers</segtitle>
+      <!-- in /usr/lib/dri -->
+<segtitle>Installed VDPAU Drivers</segtitle>
+      <!-- in /usr/lib/vdpau -->
+<segtitle>Installed Vulkan Drivers</segtitle>
+      <!-- in /usr/lib -->
 <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
@@ -452,23 +465,31 @@ libxatracker.so
 <!-- Begin gallium DRI drivers (*_dri.so) and VA-API drivers
                (*_drv_video.so): this is the full set -->
 <!-- End DRI Drivers -->
-<!-- Begin VDPAU drivers -->
-<!-- End VDPAU drivers -->
 crocus_dri.so, i915_dri.so, iris_dri.so, kms_swrast_dri.so, nouveau_dri.so,
 nouveau_drv_video.so, r300_dri.so, r600_dri.so, r600_drv_video.so,
 radeonsi_dri.so, radeonsi_drv_video.so, swrast_dri.so, virtio_gpu_dri.so,
-virtio_gpu_drv_video.so, vmwgfx_dri.so, libvdpau_nouveau.so,
-libvdpau_r300.so libvdpau_r600.so e libvdpau_radeonsi.so
-libvdpau_virtio_gpu.so (Muitos desses controladores são rigidamente
-lincados).
+virtio_gpu_drv_video.so, and vmwgfx_dri.so
+          
+        </seg>
+        <seg>
+          
+          <!-- Begin VDPAU drivers -->
+<!-- End VDPAU drivers -->
+libvdpau_nouveau.so, libvdpau_r300.so libvdpau_r600.so, and
+libvdpau_radeonsi.so libvdpau_virtio_gpu.so (Many of these drivers are
+hard-linked).
+        </seg>
+        <seg>
+          libvulkan_intel_hasvk.so, libvulkan_intel.so, libvulkan_lvp.so, and
+libvulkan_radeon.so
         </seg>
         <seg>
           
           <!-- $XORG_PREFIX/include/GL is installed by xorg-protos -->
 $XORG_PREFIX/{include/{EGL,GLES,GLES2,GLES3,KHR},
-$XORG_PREFIX/lib/{dri,vdpau}}, $XORG_PREFIX/share/drirc.d (contém soluções
-alternativas para vários aplicativos, principalmente navegadores e jogos) e
-/usr/share/doc/mesa-&mesa-version;
+$XORG_PREFIX/lib/{dri,vdpau}}, $XORG_PREFIX/share/drirc.d (contains
+workarounds for various applications, particularly browsers and games),
+$XORG_PREFIX/share/vulkan, and /usr/share/doc/mesa-&mesa-version;
         </seg>
       </seglistitem>
     </segmentedlist>

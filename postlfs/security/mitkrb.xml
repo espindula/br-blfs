@@ -34,7 +34,7 @@ suportem Kerberos, permitindo logins únicos e comunicação criptografada em
 redes internas de comunicação ou na Internet.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -173,8 +173,21 @@ falhar.
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
+<!-- libsoup3 FTBFS with these flags if -Dgssapi=enabled (not used by
+         the book) -->
 <screen role="root"><userinput>make install &amp;&amp;
 cp -vfr ../doc -T /usr/share/doc/krb5-&mitkrb-version;</userinput></screen>
+
+    
+    <para>
+      Still as the &root; user, remove linker flags setting RPATH from the
+<command>krb5-config</command> script.  These flags are unneeded for an
+installation in the standard prefix (<filename
+class='directory'>/usr</filename>) and they may cause some packages fail to
+build:
+    </para>
+
+    <screen role='root'><userinput>sed '/PROG_RPATH_FLAGS/d' -i /usr/bin/krb5-config</userinput></screen>
 
   </sect2>
 

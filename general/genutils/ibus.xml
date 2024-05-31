@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY ibus-download-http "https://github.com/ibus/ibus/releases/download/&ibus-version;/ibus-&ibus-version;.tar.gz">
+  <!ENTITY ibus-download-http "https://github.com/ibus/ibus/archive/refs/tags/&ibus-version;/ibus-&ibus-version;.tar.gz">
   <!ENTITY ibus-download-ftp  "">
-  <!ENTITY ibus-md5sum        "e788203d60e2b9cf56d95f1ee73a6898">
-  <!ENTITY ibus-size          "3,7 MB">
-  <!ENTITY ibus-buildsize     "66 MB (adicionar 5 MB para testes)">
-  <!ENTITY ibus-time          "0,2 UPC (Usando paralelismo=4; adicionar 0,6 UPC para os testes)">
+  <!ENTITY ibus-md5sum        "2e29a7fb0f8c5ffcf42462fda45348fd">
+  <!ENTITY ibus-size          "1.4 MB">
+  <!ENTITY ibus-buildsize     "54 MB (add 3 MB for tests)">
+  <!ENTITY ibus-time          "0.3 SBU (Using parallelism=4; add 0.6 SBU for tests)">
 <!-- Since UCD.zip can be used by gucharmap too, let's use the same version:
      This prevents version mismatches, since UCD.zip filename is not versioned.
 -->
@@ -36,7 +36,7 @@ operacional Linux. Ele fornece uma interface de usuário de método de entrada
 amigável e com todos os recursos.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,7 +72,7 @@ amigável e com todos os recursos.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferência Opcional</bridgehead>
+    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
 
     <itemizedlist spacing="compact">
       <listitem>
@@ -87,13 +87,14 @@ amigável e com todos os recursos.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="dconf"/>, <xref linkend="iso-codes"/> e <xref
+      <!-- needed since we're using autogen.sh -->
+<xref linkend="dconf"/>, <xref linkend="iso-codes"/> e <xref
 linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <xref linkend="gtk2"/> e <xref
+      <xref linkend="gobject-introspection"/>, <xref linkend="gtk3"/>, and <xref
 linkend="libnotify"/>
     </para>
 
@@ -103,13 +104,13 @@ linkend="libnotify"/>
 
       (runtime, for the <command>ibus-setup</command>), and
       NOTE: The reference to the 'xdg' python module is commented out in the source -->
-<xref linkend="gtk3"/> (para construir o módulo "IM" para "it"), <xref
-linkend="gtk4"/> (para construir o módulo "IM" para "it"), <xref
-linkend="dbus-python"/> e <xref linkend="pygobject3"/> (ambos para construir
-a biblioteca de suporte a "Python"), <xref linkend="gtk-doc"/> e <xref
-linkend="libxkbcommon"/>, <xref linkend="wayland"/> (ambos para construir os
-aplicativos de suporte a "Wayland") e <ulink
-url="https://www.joypixels.com/">EmojiOne</ulink>
+<xref linkend="gtk4"/> (to build IM module for it), <xref
+linkend="gtk-doc"/> (for generating API documentation), <xref
+linkend="dbus-python"/> and <xref linkend="pygobject3"/> (both to build the
+Python support library), <xref linkend="libxkbcommon"/>, <xref
+linkend="wayland"/> (both to build the Wayland support programs), <ulink
+url="https://www.joypixels.com/">EmojiOne</ulink>, and <ulink
+url="https://github.com/AyatanaIndicators/libdbusmenu">libdbusmenu</ulink>
     </para>
 
   </sect2>
@@ -117,66 +118,88 @@ url="https://www.joypixels.com/">EmojiOne</ulink>
   <sect2 role="installation">
     <title>Instalação do ibus</title>
 
+
+
+    <!--
     <para>
-      Se a base de dados opcional de caracteres "Unicode" foi baixada, [então]
-instale-a agora como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+
+      If the optional Unicode Character Database was downloaded, install it
+      now as the <systemitem class="username">root</systemitem> user:
+    </para>
+-->
+<para>
+      First, install the Unicode Character Database as the &root; user:
     </para>
 
-<screen role="root"><userinput>mkdir -p               /usr/share/unicode/ucd &amp;&amp;
-unzip -uo ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
-
+<!--
     <note>
+
       <para>
-        Certifique-se de remover também o "--disable-unicode-dict" na etapa
-"configure" abaixo.
+        Be sure to also remove the - -disable-unicode-dict in
+        the configure step below.
       </para>
     </note>
+-->
+<screen role="root"><userinput>mkdir -p               /usr/share/unicode/ucd &amp;&amp;
+unzip -o ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
+
 
     <para>
-      Corrija um problema com entradas de esquema obsoletas:</para>
+      Corrija um problema com entradas de esquema obsoletas:
+    </para>
 
-<screen><userinput>sed -i 's@/desktop/ibus@/org/freedesktop/ibus@g' \
-   data/dconf/org.freedesktop.ibus.gschema.xml</userinput></screen>
+<screen><userinput>sed -e 's@/desktop/ibus@/org/freedesktop/ibus@g' \
+    -i data/dconf/org.freedesktop.ibus.gschema.xml</userinput></screen>
+
+    <para>
+      If <xref linkend='gtk-doc'/> is not installed, remove the references to it:
+    </para>
+
+<screen><userinput>if ! [ -e /usr/bin/gtkdocize ]; then
+  sed '/docs/d;/GTK_DOC/d' -i Makefile.am configure.ac
+fi</userinput></screen>
 
     <para>
       Instale <application>ibus</application> executando os seguintes comandos:
     </para>
 
-<screen revision='sysv'><userinput>./configure --prefix=/usr             \
-            --sysconfdir=/etc          \
-            --disable-python2          \
-            --disable-emoji-dict       \
-            --disable-unicode-dict     \
-            --disable-systemd-services &amp;&amp;
-rm -f tools/main.c                     &amp;&amp;
-make</userinput></screen>
+<screen revision='sysv'><userinput>SAVE_DIST_FILES=1 NOCONFIGURE=1 ./autogen.sh &amp;&amp;
 
-<screen revision='systemd'><userinput>./configure --prefix=/usr         \
+PYTHON=python3                     \
+./configure --prefix=/usr          \
             --sysconfdir=/etc      \
             --disable-python2      \
+            --disable-appindicator \
             --disable-emoji-dict   \
-            --disable-unicode-dict &amp;&amp;
-rm -f tools/main.c                 &amp;&amp;
+            --disable-gtk2         \
+            --disable-systemd-services &amp;&amp;
+make</userinput></screen>
+
+<screen revision='systemd'><userinput>SAVE_DIST_FILES=1 NOCONFIGURE=1 ./autogen.sh &amp;&amp;
+
+PYTHON=python3                     \
+./configure --prefix=/usr          \
+            --sysconfdir=/etc      \
+            --disable-python2      \
+            --disable-appindicator \
+            --disable-gtk2         \
+            --disable-emoji-dict   &amp;&amp;
 make</userinput></screen>
 
     <para>
       <!-- The log says "No idea to simulate key events in Wayland"
-           in a Mutter wayland session.  -->
-<!-- https://github.com/ibus/ibus/issues/2542 -->
-Para testar os resultados, emita: <command>make -k check</command>. O teste
-chamado ibus-compose falha porque usa alguns "locales" não instalados no
-LFS. O teste chamado ibus-keypress é conhecido por falhar em um ambiente
-gráfico baseado em Wayland. O teste chamado xkb-latin-layouts é conhecido
-por falhar com um lançamento recente do xkeyboard-config.
+           in a Mutter wayland session.  DO NOT REMOVE UNLESS TESTED
+           IN WAYLAND.  -->
+To test the results, issue: <command>make -k check</command>.  The test
+named ibus-compose fails because it uses some locales not installed in LFS.
+The test named ibus-keypress will fail if running in a Wayland session.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Now, as the &root; user:
     </para>
 
-<screen role="root"><userinput>make install &amp;&amp;
-gzip -dfv /usr/share/man/man{{1,5}/ibus*.gz,5/00-upstream-settings.5.gz}</userinput></screen>
+<screen role="root"><userinput>make install</userinput></screen>
 
   </sect2>
 
@@ -184,25 +207,18 @@ gzip -dfv /usr/share/man/man{{1,5}/ibus*.gz,5/00-upstream-settings.5.gz}</userin
     <title>Explicações do Comando</title>
 
     <para>
+      <parameter>--disable-appindicator</parameter>: This switch disables use of
+libdbusmenu. Omit if you installed the optional dependency.
+    </para>
+
+    <para>
       <parameter>--disable-emoji-dict</parameter>: Essa chave desabilita o uso de
 dicionários de emoticons. Omita se você instalou o pacote opcional.
     </para>
 
     <para>
-      <parameter>--disable-unicode-dict</parameter>: Essa chave desabilita o uso
-de dicionários "Unicode". Omita se você instalou a base de dados opcional de
-caracteres "Unicode".
-    </para>
-
-    <para>
-      <command>rm -f tools/main.c</command>: Esse comando remove um arquivo gerado
-que não foi removido quando do empacotamento.
-    </para>
-
-    <para>
-      <option>--disable-gtk2</option>: Essa chave desabilita a construção do
-módulo "IM" <application>GTK+ 2</application>. Use-a se você não tiver
-instalado o <application>GTK+ 2</application>.
+      <parameter>--disable-gtk2</parameter>: This switch removes the dependency on
+<application>GTK+-2</application>.
     </para>
 
     <para>
@@ -212,34 +228,61 @@ instalado o <application>GTK+ 2</application>.
     </para>
 
     <para>
-      <option>--enable-python-library</option>: Essa chave habilita construir a
-biblioteca de suporte <application>Python</application>. Use-a se tiver
-instalado as dependências opcionais.
+      <option>--enable-python-library</option>: This switch enables building the
+<application>Python</application> support library. Use it if you have
+installed the optional Python modules.
     </para>
 
     <para>
-      <option>--enable-wayland</option>: Essa chave habilita construir os
-aplicativos de suporte <application>Wayland</application>. Use-a se você
-tiver instalado as dependências opcionais.
+      <option>--enable-wayland</option>: This switch enables building the
+<application>Wayland</application> support programs.  It's automatically
+enabled if both <xref linkend='libxkbcommon'/> and <xref linkend='wayland'/>
+are installed.
     </para>
 
     <para>
-      <option>--with-python=python3</option>: Essa chave induz o script
-<command>configure</command> a procurar por <application>Python
-3</application>. Use-a se você quiser construir a biblioteca de suporte do
-<application>Python 3</application> juntamente com a do <application>Python
-2</application>.
+      <!-- GCC security policy: "Libraries like libvtv and the sanitizers
+           are intended to be used in diagnostic cases and not intended for
+           use in sensitive environments."  In my build it also causes
+           "compose/sequences-little-endian" bail out with a sanitizer
+           warning and the package to FTBFS.  -->
+<envar>NOCONFIGURE=1</envar>: Prevent <command>autogen.sh</command> from
+running the generated <command>configure</command> script.  We'll run the
+script manually instead of relying on <command>autogen.sh</command> to run
+it, because <command>autogen.sh</command> would set
+<option>-fsanitize=address -fsanitize=leak</option> in <envar>CFLAGS</envar>
+running <command>configure</command>, but those compiler options are not
+suitable for productive use and they may also cause a build failure.
+      
+    </para>
+
+    <para>
+      <envar>PYTHON=python3</envar>: This environment variable makes the
+<command>configure</command> script look for <application>Python
+3</application>. Use it if you want to build the <application>Python
+3</application> support library.
+    </para>
+
+    <para>
+      <!-- This is needed because we do not have the Emoji dictionary.-->
+<envar>SAVE_DIST_FILES=1</envar>: This environment variable makes the
+<command>autogen.sh</command> script save some pre-generated header files
+instead of overwriting them when it is run. This prevents build failures
+when generating <filename>ibusemojigen.h</filename>.
+      
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/gtk-doc-rebuild.xml"/>
 
+  <!--
     <para>
-      <command>gzip -dfv ...</command>: Descomprima as páginas de manual
-instaladas de acordo com outras páginas de manual.
-    </para>
 
-  </sect2>
+      <command>gzip -dfv ...</command>: Decompress installed man pages
+      in accordance with other man pages.
+    </para>
+-->
+</sect2>
 
   <sect2 role="configuration">
     <title>Configurando Ibus</title>

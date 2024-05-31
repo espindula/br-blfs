@@ -42,7 +42,7 @@ usuário(a) &root;:</para>
 <screen role="root"><userinput>TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/')
 
 cat &gt; /etc/profile.d/texlive.sh &lt;&lt; EOF
-<literal># Inicia configuração do texlive
+<literal># Begin texlive setup
 TEXLIVE_PREFIX=/opt/texlive/&texlive-year;
 export TEXLIVE_PREFIX
 
@@ -50,7 +50,10 @@ pathappend \$TEXLIVE_PREFIX/texmf-dist/doc/man  MANPATH
 pathappend \$TEXLIVE_PREFIX/texmf-dist/doc/info INFOPATH
 pathappend \$TEXLIVE_PREFIX/bin/$TEXARCH
 
-# Termina configuração do texlive</literal>
+TEXMFCNF=\$TEXLIVE_PREFIX/texmf-dist/web2c
+export TEXMFCNF
+
+# End texlive setup</literal>
 EOF
 
 unset TEXARCH</userinput></screen>
@@ -78,21 +81,6 @@ não deveriam aparecer no conjunto de comandos sequenciais atual.
   </para>
 
 <screen><userinput>source /etc/profile</userinput></screen>
-
-  <para>
-    As bibliotecas compartilhadas serão instaladas em um diretório do
-texlive. Como o(a) usuário(a) <systemitem
-class="username">root</systemitem>, adicione-o ao teu
-<filename>/etc/ld.so.conf</filename>:
-  </para>
-
-<screen role="root"><userinput>cat &gt;&gt; /etc/ld.so.conf &lt;&lt; EOF
-<literal># Inicia adição do texlive
-
-$TEXLIVE_PREFIX/lib
-
-# Termina adição do texlive</literal>
-EOF</userinput></screen>
 
   <para>
     Agora você deveria prosseguir para <xref linkend="tl-installer"/> para uma

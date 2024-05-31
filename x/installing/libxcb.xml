@@ -35,7 +35,7 @@ interface &quot;Xlib&quot; atual. &quot;Xlib&quot; também pode usar
 solicitações e receba respostas com ambos.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -102,7 +102,7 @@ seguintes comandos:
 <screen><userinput>./configure $XORG_CONFIG      \
             --without-doxygen \
             --docdir='${datadir}'/doc/libxcb-&libxcb-version; &amp;&amp;
-make</userinput></screen>
+LC_ALL=en_US.UTF-8 make</userinput></screen>
 
     <para>
       Para testar os resultados, emita: &quot;<command>make check</command>&quot;.
@@ -128,17 +128,15 @@ instalada agora é titularizada por esse usuário(a). Como o(a) usuário(a)
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-
-
-    <!-- No longer needed with 1.16, it now requires Python-3.0 or higher.
-    <para>
-
-      <parameter>PYTHON=python3</parameter>: This variable forces configure to
-      use python3 instead of python2. The configure script for this package
-      will automatically default to python2 if it is present.
-    </para>
--->
+    
+    <!-- https://gitlab.freedesktop.org/xorg/lib/libxcb/-/issues/72 -->
 <para>
+      <envar>LC_ALL=en_US.UTF-8</envar>: Some Python 3 script in the building
+system of this package may fail with certain system locale settings.  This
+environment variable forces a locale setting known to work.
+    </para>
+
+    <para>
       <parameter>--without-doxygen</parameter>: Não use &quot;doxygen&quot; para
 gerar documentação da &quot;API&quot; (padrão: automático). Sem ele, se o
 &quot;<xref linkend="doxygen"/>&quot; estiver instalado, [então] a

@@ -6,13 +6,13 @@
 
   <!ENTITY exim-download-http   "https://ftp.exim.org/pub/exim/exim4/exim-&exim-version;.tar.xz">
 
-  <!ENTITY exim-download-ftp    "ftp://ftp.exim.org/pub/exim/exim4/exim-&exim-version;.tar.xz">
+  <!ENTITY exim-download-ftp    "">
   <!-- if above don't work, please use one of the official mirrors at
        http://www.exim.org/mirmon/ftp_mirrors.html -->
-  <!ENTITY exim-md5sum          "0d10d5b10f2af77ec8c2c2fe5be6c1ad">
-  <!ENTITY exim-size            "1,8 MB">
-  <!ENTITY exim-buildsize       "20 MB">
-  <!ENTITY exim-time            "0,3 UPC">
+  <!ENTITY exim-md5sum          "3fd68ae37720767619dd305b047fe8f9">
+  <!ENTITY exim-size            "1.9 MB">
+  <!ENTITY exim-buildsize       "18 MB">
+  <!ENTITY exim-time            "0.1 SBU">
 
   <!ENTITY exim-daemon-version  "&exim-version;-2">
 ]>
@@ -36,7 +36,7 @@ Transport Agent&quot; escrito pela Universidade de Cambridge, lançado sob a
 Licença Pública &quot;GNU&quot;.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -103,19 +103,21 @@ enviados com os fontes) podem ser baixados seguindo-se os links mostrados em
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libnsl"/> and <xref linkend="pcre2"/>
+      <xref linkend="libnsl"/>, <xref linkend="perl-file-fcntllock"/> and <xref
+linkend="pcre2"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <ulink url="https://sourceforge.net/projects/tdb">TDB</ulink> (alternativa
-ao GDBM, construído no LFS), <xref linkend="cyrus-sasl"/>, <xref
+      <ulink url="https://sourceforge.net/projects/tdb">TDB</ulink> (alternative
+to GDBM, built in LFS), <xref linkend="cyrus-sasl"/>, <xref
 linkend="libidn"/>, <xref linkend="linux-pam"/>, <xref linkend="mariadb"/>
-ou <ulink url="https://www.mysql.com/">MySQL</ulink>, <xref
+or <ulink url="https://www.mysql.com/">MySQL</ulink>, <xref
 linkend="openldap"/>, <xref linkend="gnutls"/>, <xref
 linkend="postgresql"/>, <xref linkend="sqlite"/>, <xref
 linkend="x-window-system"/>, <ulink
-url="https://github.com/heimdal/heimdal">Heimdal GSSAPI</ulink> e <ulink
+url="https://github.com/heimdal/heimdal">Heimdal GSSAPI</ulink>, <ulink
+url="https://github.com/shevek/libspf2/">libspf2</ulink>, and <ulink
 url="http://www.trusteddomain.org/opendmarc/">OpenDMARC</ulink>
     </para>
 
@@ -132,24 +134,8 @@ class="username">exim</systemitem>&quot; os quais executarão o processo de
 segundo plano &quot;<command>exim</command>&quot;:
     </para>
 
-<!-- Applied in 4.96
-    <para>
-
-      If you want to build with <application>PAM</application> support, apply the following patch:
-    </para>
-
-<screen><userinput>patch -Np2 -i ../exim-&exim-version;-call_pam-1.patch</userinput></screen>
-
-    <para>
-      Apply a patch required for building against openssl version 3:
-    </para>
-
-<screen><userinput>patch -Np2 -i ../exim-&exim-version;-openssl3_fix-1.patch</userinput></screen>
--->
 <screen role="root"><userinput>groupadd -g 31 exim &amp;&amp;
 useradd -d /dev/null -c "Processo de Segundo Plano Exim" -g exim -s /bin/false -u 31 exim</userinput></screen>
-
-
 
     <para>
       Configure o &quot;<application>Exim</application>&quot; com os seguintes
@@ -159,9 +145,7 @@ comandos:
 <screen><userinput>sed -e 's,^BIN_DIR.*$,BIN_DIRECTORY=/usr/sbin,'    \
     -e 's,^CONF.*$,CONFIGURE_FILE=/etc/exim.conf,' \
     -e 's,^EXIM_USER.*$,EXIM_USER=exim,'           \
-    -e '/# SUPPORT_TLS=yes/s,^#,,'                   \
-    -e '/# USE_OPENSSL/s,^#,,'                       \
-    -e 's,^EXIM_MONITOR,#EXIM_MONITOR,' src/EDITME > Local/Makefile &amp;&amp;
+    -e '/# USE_OPENSSL/s,^#,,' src/EDITME > Local/Makefile &amp;&amp;
 
 printf "USE_GDBM = yes\nDBMLIB = -lgdbm\n" >> Local/Makefile
 </userinput></screen>
@@ -196,11 +180,11 @@ class="username">root</systemitem>&quot;:
 
 <screen role="root"><!-- dev note: make INSTALL_ARG=-no_chown DESTDIR=<DESTDIR>
  install -->
-<userinput>make install                                   &amp;&amp;
+<userinput>make install                                    &amp;&amp;
 install -v -m644 doc/exim.8 /usr/share/man/man8 &amp;&amp;
 
-install -v -d -m755    /usr/share/doc/exim-&exim-version; &amp;&amp;
-install -v -m644 doc/* /usr/share/doc/exim-&exim-version; &amp;&amp;
+install -vdm 755    /usr/share/doc/exim-&exim-version; &amp;&amp;
+cp      -Rv doc/*   /usr/share/doc/exim-&exim-version; &amp;&amp;
 
 ln -sfv exim /usr/sbin/sendmail                 &amp;&amp;
 install -v -d -m750 -o exim -g exim /var/spool/exim</userinput></screen>
@@ -219,10 +203,9 @@ o conjunto mínimo de opções. As descrições das opções estão listadas aba
     </para>
 
     <para>
-      <command>printf ... > Local/Makefile</command>: Configurar essas variáveis
-permite usar o &quot;GDBM&quot; em vez do padrão &quot;Berkeley
-DB&quot;. Remova esse comando se você tiver instalado &quot;<xref
-linkend="db"/>&quot;.
+      <command>printf ... > Local/Makefile</command>: Setting those variables
+allows to use GDBM instead of the default Berkeley DB. Remove this command
+if you have installed &berkeley-db;.
     </para>
 
     <para>
@@ -247,33 +230,29 @@ class="username">root</systemitem>&quot;, o processo precisa transferir o
 processo de segundo plano para o(a) usuário(a) &quot;<systemitem
 class="username">exim</systemitem>&quot;.
     </para>
-
+    
+    <!-- obsolete: now default 
     <para>
-      <parameter>SUPPORT_TLS=yes</parameter>: Isso permite suportar conexões
-&quot;STARTTLS&quot;. Se usar essa opção, [então] você precisa selecionar se
-o &quot;<application>OpenSSL</application>&quot; ou o
-&quot;<application>GnuTLS</application>&quot; será usado (veja-se
-&quot;<filename>src/EDITME</filename>&quot;).
+
+      <option>SUPPORT_TLS=yes</option>: This allows to support
+      STARTTLS connections. If you use this option, you need to select
+      whether <application>OpenSSL</application> or
+      <application>GnuTLS</application> is used (see
+      <filename>src/EDITME</filename>).
+    </para>
+    -->
+<para>
+      <parameter>USE_OPENSSL</parameter>: uncommenting
+<option>USE_OPENSSL=yes</option> and <option>USE_OPNSSL_PC=yes</option>
+tells the build system to use <application>OpenSSL</application>, and to
+find the needed libraries with <application>pkg-config</application>.
     </para>
 
     <para>
-      <parameter>USE_OPENSSL_PC=openssl</parameter>: Isso informa ao sistema de
-construção para usar o &quot;<application>OpenSSL</application>&quot; e
-encontrar as bibliotecas necessárias com o
-&quot;<application>pkg-config</application>&quot;.
-    </para>
-
-    <para>
-      <parameter>#EXIM_MONITOR</parameter>: Isso adia a construção do aplicativo
-monitor do &quot;<application>Exim</application>&quot;, pois ele exige
-suporte ao &quot;<application>X Window System</application>&quot;,
-comentando-se a linha &quot;<parameter>EXIM_MONITOR</parameter>&quot; no
-&quot;<filename>Makefile</filename>&quot;. Se você deseja construir o
-aplicativo monitor, [então] omita esse comando
-&quot;<command>sed</command>&quot; e emita o seguinte comando antes de
-construir o pacote (modifique
-&quot;<filename>Local/eximon.conf</filename>&quot;, se necessário):
-&quot;<command>cp exim_monitor/EDITME Local/eximon.conf</command>&quot;.
+      Uncomment <option>EXIM_MONITOR</option>: This allows building the
+<application>Exim</application> monitor program, which requires
+<application>X Window System</application> support, and is commented out by
+default.
     </para>
 
     <para>
@@ -493,7 +472,7 @@ EOF</userinput></screen>
     <sect3  id="exim-init">
       <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
 Inicialização</phrase> <phrase revision="systemd">Unidade do
-<quote>systemd</quote></phrase></title>
+systemd</phrase></title>
 
       <para>
         Para iniciar automaticamente o &quot;<command>exim</command>&quot; na

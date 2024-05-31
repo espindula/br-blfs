@@ -31,7 +31,7 @@ arquivos "AsciiDoc" podem ser traduzidos para muitos formatos, incluindo
 "HTML", "PDF", "EPUB" e página de manual.
       </para>
 
-      &lfs120_checked;
+      &lfs121_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -82,11 +82,21 @@ url="&w3m-url;">W3m</ulink>
     <sect3 role="installation">
       <title>Instalação do <quote>Asciidoc</quote></title>
 
+      
+      <!-- https://github.com/asciidoc-py/asciidoc-py/pull/267 -->
+<para>
+        Fix an issue causing thousands of lines of <quote><computeroutput>invalid
+escape sequence</computeroutput></quote> warnings outputted when generating
+the documentation of some packages with Asciidoc and Python 3.12 or later:
+      </para>
+
+<screen><userinput>sed '/self.separator =/s/"/r"/' -i asciidoc/asciidoc.py</userinput></screen>
+
       <para>
         Construa o módulo:
       </para>
 
-<screen><userinput>pip3 wheel -w dist --no-build-isolation --no-deps $PWD</userinput></screen>
+&build-wheel;
 
       <para>
         Esse pacote não vem com uma suíte de teste.
@@ -96,7 +106,7 @@ url="&w3m-url;">W3m</ulink>
         Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
       </para>
 
-<screen role="root"><userinput>pip3 install --no-index --find-links dist --no-cache-dir --no-user asciidoc</userinput></screen>
+<screen role="root"><userinput>&install-wheel; asciidoc</userinput></screen>
 
     </sect3>
 

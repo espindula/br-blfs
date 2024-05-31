@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY bind-download-http "https://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
-  <!ENTITY bind-download-ftp  "ftp://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
+  <!ENTITY bind-download-ftp  "">
   <!ENTITY bind-md5sum        "&bind-md5;">
-  <!ENTITY bind-size          "5,2 MB">
-  <!ENTITY bind-buildsize     "122 MB (21 MB instalado)">
-  <!ENTITY bind-time          "0,4 UPC (com paralelismo=4; cerca de 40 minutos, um tanto independente do
-processador, para executar a suíte completa de teste)">
+  <!ENTITY bind-size          "5.3 MB">
+  <!ENTITY bind-buildsize     "126 MB (21 MB installed)">
+  <!ENTITY bind-time          "0.5 SBU (with parallelism=4; about 40 minutes somewhat processor
+independent, to run the complete test suite)">
 ]>
 
 <sect1 id="bind" xreflabel="BIND-&bind-version;">
@@ -32,7 +32,7 @@ utilitários clientes. Se você estiver interessado(a) somente nos
 utilitários, [então] consulte <xref linkend="bind-utils"/>.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -106,14 +106,18 @@ url="&w3m-url;">w3m</ulink>
 
     <bridgehead renderas="sect4">Estruturas de retaguarda opcionais de base de dados</bridgehead>
     <para role="optional">
-      <xref linkend="db"/>, <xref linkend="mariadb"/> ou <ulink
+      <xref linkend="mariadb"/> or <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
-<xref linkend="postgresql"/> e <xref linkend="unixodbc"/>
+<xref linkend="postgresql"/>, <xref linkend="unixodbc"/>, and &berkeley-db;
     </para>
 
     <bridgehead renderas="sect4">Opcional (para executar a suíte de teste)</bridgehead>
     <para role="optional">
       <xref linkend="perl-net-dns"/>
+    </para>
+
+    <para condition="html" role="usernotes">
+      Editor Notes: <ulink url="&blfs-wiki;/bind"/>
     </para>
 
   </sect2>
@@ -133,7 +137,14 @@ url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
 
 <screen role="root"><userinput>pip3 install ply</userinput></screen>
 -->
-<para>
+<note>
+      <para>
+         Starting with bind-9.18.20, the IP addresses for B.ROOT-SERVERS.NET have
+changed.
+      </para>
+    </note>
+
+    <para>
       Instale o &quot;<application>BIND</application>&quot; executando os
 seguintes comandos:
     </para>
@@ -431,7 +442,7 @@ arquivo.
       </note>
 
 <screen role="root"><userinput>cat &gt; /srv/named/etc/named/root.hints &lt;&lt; "EOF"
-<literal>.                      6D  IN      NS      A.ROOT-SERVERS.NET.
+<literal>.                       6D  IN      NS      A.ROOT-SERVERS.NET.
 .                       6D  IN      NS      B.ROOT-SERVERS.NET.
 .                       6D  IN      NS      C.ROOT-SERVERS.NET.
 .                       6D  IN      NS      D.ROOT-SERVERS.NET.
@@ -446,8 +457,8 @@ arquivo.
 .                       6D  IN      NS      M.ROOT-SERVERS.NET.
 A.ROOT-SERVERS.NET.     6D  IN      A       198.41.0.4
 A.ROOT-SERVERS.NET.     6D  IN      AAAA    2001:503:ba3e::2:30
-B.ROOT-SERVERS.NET.     6D  IN      A       199.9.14.201
-B.ROOT-SERVERS.NET.     6D  IN      AAAA    2001:500:200::b
+B.ROOT-SERVERS.NET.     6D  IN      A       170.247.170.2
+B.ROOT-SERVERS.NET.     6D  IN      AAAA    2801:1b8:10::b
 C.ROOT-SERVERS.NET.     6D  IN      A       192.33.4.12
 C.ROOT-SERVERS.NET.     6D  IN      AAAA    2001:500:2::c
 D.ROOT-SERVERS.NET.     6D  IN      A       199.7.91.13

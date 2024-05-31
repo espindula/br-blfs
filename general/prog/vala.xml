@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY vala-download-http "&gnome-download-http;/vala/&vala-major-version;/vala-&vala-version;.tar.xz">
-  <!ENTITY vala-download-ftp  "&gnome-download-ftp;/vala/&vala-major-version;/vala-&vala-version;.tar.xz">
-  <!ENTITY vala-md5sum        "7b4481fb52bbf73fcfedacbdab616eeb">
+  <!ENTITY vala-download-ftp  "">
+  <!ENTITY vala-md5sum        "30dea3532368e3357d642b64c8a1f473">
   <!ENTITY vala-size          "3,8 MB">
-  <!ENTITY vala-buildsize     "143 MB (adicionar 19 MB para testes)">
-  <!ENTITY vala-time          "0,4 UPC (adicionar 0,7 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY vala-buildsize     "160 MB (add 18 MB for tests)">
+  <!ENTITY vala-time          "0.5 SBU (add 1.0 SBU for tests; both using parallelism=4)">
 ]>
 
 <sect1 id="vala" xreflabel="Vala-&vala-version;">
@@ -33,7 +33,7 @@ impor quaisquer requisitos adicionais de tempo de execução e sem usar uma
 escritos em &quot;C&quot;.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -83,10 +83,11 @@ escritos em &quot;C&quot;.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="dbus"/> (exigido para os testes), <xref linkend="libxslt"/>
-(exigido para gerar a documentação), <ulink
+      <xref linkend="dbus"/> (Required for the tests), <xref
+linkend="gobject-introspection"/> (Required for the tests), <xref
+linkend="libxslt"/> (Required for generating the documentation), <ulink
 url="https://ftpmirror.gnu.org/gnu/help2man/">help2man</ulink>, <ulink
-url="https://github.com/relaxng/jing-trang">jing</ulink> e <ulink
+url="https://github.com/relaxng/jing-trang">jing</ulink>, and <ulink
 url="https://weasyprint.org/">weasyprint</ulink>
     </para>
 
@@ -94,6 +95,33 @@ url="https://weasyprint.org/">weasyprint</ulink>
 
   <sect2 role="installation">
     <title>Instalação do <quote>Vala</quote></title>
+
+    
+    
+
+    
+    <!-- https://gitlab.gnome.org/GNOME/vala/-/issues/1485 -->
+<!-- Fixed in vala-0.56.14 
+    <para>
+
+      At first, fix an issue causing <command>vapigen</command> to crash
+      building some packages (for example NetworkManager):
+    </para>
+
+<screen><userinput>sed -e "/next_pos =/s/$/ \
+        char buf[16]; \
+        Memory.copy (buf, next_pos, \
+        (end - next_pos >= buf.length ? buf.length - 1 : end - next_pos));/" \
+    -e 's/(string) next_pos/(string) buf/' \
+    -i vala/valamarkupreader.vala</userinput></screen>
+    -->
+<!-- See Ticket #19283 and
+    https://gitlab.gnome.org/GNOME/vala/-/issues/1524 -->
+<para>
+      First, fix a build failure that occurs with graphviz-10.x:
+    </para>
+
+<screen><userinput>sed -i '/gvc.h/a#define TRUE 1' libvaladoc/gvc-compat.c</userinput></screen>
 
     <para>
       Instale <application>Vala</application> executando os seguintes comandos:
@@ -119,10 +147,20 @@ class="username">root</systemitem>&quot;:
     <title>Explicações do Comando</title>
 
     <para>
+      <option>bootstrap</option>: This <command>make</command> target forces the
+building system to build the package twice and use the
+<command>vala</command> executable produced in the first build to regenerate
+the <filename class="extension">.c</filename> files from the <filename
+class="extension">.vala</filename> files if needed.  If a
+<command>vala</command> executable is not installed yet and you've modified
+any <filename class="extension">.vala</filename> files in the source tree,
+run <command>make bootstrap</command> instead of <command>make</command>.
+    </para>
+
+    <para>
       <option>--disable-valadoc</option>: Essa opção é exigida se &quot;<xref
 linkend="graphviz"/>&quot; não estiver instalado.
     </para>
-
   </sect2>
 
   <sect2 role="content">

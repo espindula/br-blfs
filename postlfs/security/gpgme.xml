@@ -5,12 +5,11 @@
   %general-entities;
 
   <!ENTITY gpgme-download-http "&gnupg-http;/gpgme/gpgme-&gpgme-version;.tar.bz2">
-  <!ENTITY gpgme-download-ftp  "&gnupg-ftp;/gpgme/gpgme-&gpgme-version;.tar.bz2">
   <!ENTITY gpgme-download-ftp  "">
-  <!ENTITY gpgme-md5sum        "3a83288e753a7da53a5626d29e4416fd">
+  <!ENTITY gpgme-md5sum        "01a8c05b409847e87daf0543e91f8c37">
   <!ENTITY gpgme-size          "1,8 MB">
-  <!ENTITY gpgme-buildsize     "305 MB (com testes)">
-  <!ENTITY gpgme-time          "1,7 UPC (com todas as vinculações e testes; com paralelismo=4)">
+  <!ENTITY gpgme-buildsize     "260 MB (with tests)">
+  <!ENTITY gpgme-time          "1.0 SBU (with all bindings and tests; with parallelism=4)">
 ]>
 
 <sect1 id="gpgme" xreflabel="GPGME-&gpgme-version;">
@@ -36,7 +35,7 @@ criptográfica de alto nível para encriptação, desencriptação, assinatura,
 verificação de assinatura e gerenciamento de chaves.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -93,15 +92,10 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--
-gpgme can still use python 2.7, but can use python3 as well,
-so do not advertise python2
-      <xref linkend="python2"/>
-,-->
-<xref linkend="doxygen"/> e <xref linkend="graphviz"/> (para documentação da
-API), <xref linkend="gnupg2"/> (exigido se Qt ou SWIG estiverem instalados;
-usado durante a suíte de teste), <xref linkend="clisp"/>, &qt5-deps; e (ou)
-<xref linkend="swig"/> (para vinculações de idioma)
+      <xref linkend="doxygen"/> and <xref linkend="graphviz"/> (for API
+documentation), <xref linkend="gnupg2"/> (required if Qt or SWIG are
+installed; used during the test suite), <xref linkend="clisp"/>, &qt5-deps;,
+and <xref linkend="swig"/> (for language bindings)
     </para>
 
   </sect2>
@@ -113,21 +107,58 @@ usado durante a suíte de teste), <xref linkend="clisp"/>, &qt5-deps; e (ou)
       Instale <application>GPGME</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-gpg-test &amp;&amp;
-make</userinput></screen>
+<screen><!--gpgme 1.22 FTBFS when building in tree. Upstream thinks building
+    should be done out of tree, but this is not in the doc yet
+    https://github.com/gpg/gpgme/commit/24a8c279da98fe7e586a9fc3cd91175c9e60ffef
+    -->
+<userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+../configure --prefix=/usr --disable-gpg-test &amp;&amp;
+make PYTHONS=</userinput></screen>
 
     <para>
-      Para testar os resultados, você deveria ter <xref linkend="gnupg2"/>
-instalado e remover o <command>--disable-gpg-test</command> acima. Emita:
-<command>make -k check</command>. Um teste, TestRemarks, é conhecido por
-falhar.
+      If <xref linkend='swig'/> is installed, build the Python 3 binding as a
+wheel:
     </para>
+
+<screen><userinput>if swig -version > /dev/null; then
+  srcdir=$PWD/../lang/python \
+  top_builddir=$PWD          \
+  &build-wheel-cmd; $PWD/lang/python
+fi</userinput></screen>
+
+    <para>
+      To test the results, you should have <xref linkend="gnupg2"/> installed and
+remove the <option>--disable-gpg-test</option> above. If <xref
+linkend='swig'/> is installed, it's necessary to adapt the test suite to use
+the Python 3 binding just built as a wheel as well.  Issue:
+    </para>
+
+<screen remap='test'><userinput>if swig -version > /dev/null; then
+  python3 -m venv testenv                                              &amp;&amp;
+  testenv/bin/pip3 install --no-index --find-links=dist --no-cache-dir \
+                           gpg                                         &amp;&amp;
+  sed '/PYTHON/s#run-tests.py#&amp; --python-libdir=/dev/null#'            \
+      -i lang/python/tests/Makefile
+fi &amp;&amp;
+
+make -k check PYTHONS= PYTHON=$PWD/testenv/bin/python3</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>make install PYTHONS=</userinput></screen>
+
+    <para>
+      If <xref linkend='swig'/> is installed, still as the &root; user, install
+the Python 3 binding:
+    </para>
+
+<screen role="root"><userinput>if swig -version > /dev/null; then
+  &install-wheel; gpg
+fi</userinput></screen>
 
   </sect2>
 
@@ -139,6 +170,13 @@ falhar.
 para configurar, [então] os aplicativos de teste são construídos durante o
 estágio <command>make</command>, que exige <xref linkend="gnupg2"/>. Esse
 parâmetro não é necessário se <xref linkend="gnupg2"/> estiver instalado.
+    </para>
+
+    <para>
+      <parameter>PYTHONS=</parameter>: Disable building Python binding using the
+deprecated <command>python3 setup.py build</command> command.  The explicit
+instruction to build the Python 3 binding with the <command>pip3
+wheel</command> command is provided.
     </para>
 
   </sect2>
@@ -156,14 +194,12 @@ parâmetro não é necessário se <xref linkend="gnupg2"/> estiver instalado.
           gpgme-json e gpgme-tool
         </seg>
         <seg>
-          libgpgme, libgpgmepp.so e libqgpgme.so
+          libgpgme.so, libgpgmepp.so, and libqgpgme.so
         </seg>
         <seg>
-          /usr/include/{gpgme++,qgpgme,QGpgME},
-/usr/lib/cmake/{Gpgmepp,QGpgme}.
-/usr/lib/python&python2-majorver;/site-packages/gpg,
-/usr/lib/python&python3-majorver;/site-packages/gpg-&gpgme-version;-py&python3-majorver;-linux-&lt;arch&gt;.egg
-e /usr/share/common-lisp/source/gpgme
+          /usr/include/{gpgme++,qgpgme,QGpgME}, /usr/lib/cmake/{Gpgmepp,QGpgme}.
+/usr/lib/python&python3-majorver;/site-packages/gpg{,-&gpgme-version;.dist-info},
+and /usr/share/common-lisp/source/gpgme
         </seg>
       </seglistitem>
     </segmentedlist>

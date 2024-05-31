@@ -6,16 +6,17 @@
 
   <!ENTITY wireshark-download-http "https://www.wireshark.org/download/src/all-versions/wireshark-&wireshark-version;.tar.xz">
   <!ENTITY wireshark-download-ftp  "">
-  <!ENTITY wireshark-md5sum        "8c23f20130bb1a346ca3da1ff43a16b4">
-  <!ENTITY wireshark-size          "41 MB">
-  <!ENTITY wireshark-buildsize     "692 MB (com todas as dependências opcionais disponíveis no livro BLFS)">
-  <!ENTITY wireshark-time          "2,1 UPC (com paralelismo=4 e todas as dependências opcionais disponíveis no
-livro BLFS)">
+  <!ENTITY wireshark-md5sum        "6c773f66b127ea1928d43b96d0e28098">
+  <!ENTITY wireshark-size          "43 MB">
+  <!ENTITY wireshark-buildsize     "915 MB (with all optional dependencies available in the BLFS book; 170 MB
+installed)">
+  <!ENTITY wireshark-time          "2.9 SBU (with parallelism=4 and all optional dependencies available in the
+BLFS book)">
 ]>
 
 
 
-<!-- Gentler reminder: many Wireshark releases contain vulnerability fixes,
+<!-- Gentle reminder: many Wireshark releases contain vulnerability fixes,
  we have not always been aware of these. At https://www.wireshark.org/security/
  there is a list of advisories and the version in which they were fixed.
 
@@ -53,7 +54,7 @@ captura a partir de muitos outros analisadores populares de rede de
 intercomunicação.
     </para>
 
-    &lfs120_checked;
+    &lfs121_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -91,7 +92,17 @@ intercomunicação.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
+    
+      <!--
       <listitem>
+
+        <para>
+          Required patch to build with Python-3.12:
+          <ulink url="&patch-root;/wireshark-&wireshark-version;-py_3.12_fix-1.patch"/>
+        </para>
+      </listitem>
+    -->
+<listitem>
         <para>
           Documentação Adicional: <ulink
 url="https://www.wireshark.org/download/docs/"/> (contém links para vários
@@ -104,10 +115,17 @@ documentos em uma variedade de formatos)
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cmake"/>, <xref linkend="glib2"/>, <xref
-linkend="libgcrypt"/> e (<xref linkend="qt5"/> ou <xref role="nodep"
-linkend="qt5-components"/> com qtmultimedia)
+      <xref linkend="cmake"/>, <xref linkend="c-ares"/>, <xref linkend="glib2"/>,
+<xref linkend="libgcrypt"/>, and <xref linkend="qt6"/>
     </para>
+
+    <note>
+      <para>
+        <xref linkend="qt6"/> is not strictly required, since it can be replaced
+with <application>Qt5</application>. See <quote>Command explanations</quote>
+below.
+      </para>
+    </note>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
@@ -116,13 +134,13 @@ linkend="qt5-components"/> com qtmultimedia)
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--<ulink url="https://asciidoctor.org/">
-Asciidoctor</ulink>,-->
-<xref linkend="asciidoctor"/>, <xref linkend="brotli"/>, <xref
-linkend="c-ares"/>, <xref linkend="doxygen"/>, <xref linkend="git"/>, <xref
-linkend="gnutls"/>, <xref linkend="libnl"/>, <xref linkend="libxslt"/>,
-<xref linkend="libxml2"/>, <xref linkend="lua52"/>, <xref
-linkend="mitkrb"/>, <xref linkend="nghttp2"/>, <xref linkend="sbc"/>, <xref
+      <xref linkend="asciidoctor"/>, <xref linkend="brotli"/>, <xref
+linkend="doxygen"/>, <xref linkend="git"/>, <xref linkend="gnutls"/>, <xref
+linkend="libnl"/>, <xref linkend="libxslt"/>, <xref linkend="libxml2"/>,
+<xref linkend="lua52"/>, <xref linkend="mitkrb"/>, <xref
+linkend="nghttp2"/>, (<xref linkend="qt5"/> or <xref role="nodep"
+linkend="qt5-components"/> with qtmultimedia)  (required if <xref
+role="nodep" linkend="qt6"/> is not installed), <xref linkend="sbc"/>, <xref
 linkend="speex"/>, <ulink
 url="https://www.linphone.org/technical-corner/bcg729">BCG729</ulink>,
 <ulink url="https://github.com/TimothyGu/libilbc">libilbc</ulink>, <ulink
@@ -131,7 +149,7 @@ url="https://lz4.github.io/lz4/">lz4</ulink>, <ulink
 url="https://www.libssh.org/">libssh</ulink>, <ulink
 url="https://github.com/maxmind/libmaxminddb">MaxMindDB</ulink>, <ulink
 url="https://www.winimage.com/zLibDll/minizip.html">Minizip</ulink>, <ulink
-url="https://google.github.io/snappy/">Snappy</ulink> e <ulink
+url="https://google.github.io/snappy/">Snappy</ulink>, and <ulink
 url="https://github.com/freeswitch/spandsp">Spandsp</ulink>
     </para>
 
@@ -251,20 +269,26 @@ o &quot;Wireshark&quot; em teus grupos, pois, caso contrário, o
 
   </sect2>
 
-
-  <!--
   <sect2 role="commands">
-
     <title>Command Explanations</title>
 
+      <para>
+        <option>-DUSE_qt6=OFF</option>: Use this switch if <xref linkend="qt6"/> is
+not available. You'll need <xref linkend="qt5"/> or at least <xref
+linkend="qt5-components"/> with qtmultimedia in this case.
+      </para>
+
+  <!--
     <para>
+
       <option>- -disable-wireshark</option>: Use this switch if you
       have <application>Qt</application> installed but do not want to build
       any of the GUIs.
     </para>
-  </sect2>
 -->
-<sect2 role="configuration">
+</sect2>
+
+  <sect2 role="configuration">
     <title>Configurando o <quote>Wireshark</quote></title>
 
     <sect3 id="wireshark-config">
@@ -331,8 +355,7 @@ reordercap, sharkd, text2pcap, tshark e wireshark
 /usr/lib/wireshark/plugins
         </seg>
         <seg>
-          /usr/{include,lib,share}/wireshark e
-/usr/share/doc/wireshark-&wireshark-version;
+          /usr/{lib,share}/wireshark and /usr/share/doc/wireshark-&wireshark-version;
          </seg>
       </seglistitem>
     </segmentedlist>
