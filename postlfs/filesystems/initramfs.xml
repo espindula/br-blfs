@@ -22,9 +22,9 @@ cpio e comprimido com um dos vários algoritmos de compressão.
     Ao tempo da inicialização, o carregador de inicialização carrega o núcleo e
 a imagem initramfs na memória e inicia o núcleo. O núcleo verifica a
 presença do initramfs e, se encontrado, o monta como / e executa /init. O
-aplicativo init é tipicamente um script de shell. Observe que o processo de
-inicialização leva mais tempo, possivelmente significativamente mais, se um
-initramfs for usado.
+aplicativo init é tipicamente um conjunto de comandos sequenciais de
+shell. Observe que o processo de inicialização leva mais tempo,
+possivelmente significativamente mais, se um initramfs for usado.
   </para>
 
   <para>
@@ -38,9 +38,10 @@ initramfs raramente é necessário.
 
   <para>
     Existem somente quatro razões principais para se ter um initramfs no
-ambiente LFS: carregar o rootfs a partir de uma rede; carregá-lo a partir de
-um volume lógico LVM; ter um rootfs encriptado onde uma senha seja exigida;
-ou para a conveniência de se especificar o rootfs como um RÓTULO ou como um
+ambiente LFS: carregar o sistema de arquivos raiz a partir de uma rede;
+carregá-lo a partir de um volume lógico LVM; ter um sistema de arquivos raiz
+encriptado onde uma senha seja exigida; ou para a conveniência de se
+especificar o sistema de arquivos raiz como um RÓTULO ou como um
 UUID. Qualquer outra coisa geralmente significa que o núcleo não foi
 configurado adequadamente.
   </para>
@@ -49,20 +50,22 @@ configurado adequadamente.
     <title>Construindo um initramfs</title>
 
     <para>
-      Se você decidir construir um initramfs, [então] os scripts a seguir
-fornecerão uma base para isso. Os scripts permitirão especificar um rootfs
-via partição UUID ou partição RÓTULO ou um rootfs em um volume lógico
-LVM. Eles não suportam um sistema de arquivos raiz encriptado ou montar o
-rootfs passando por uma placa de rede de comunicação. Para uma capacidade
-mais completa, vejam-se <ulink
+      Se você decidir construir um initramfs, os conjuntos de comandos sequenciais
+a seguir fornecerão uma base para isso. Os conjuntos de comandos sequenciais
+permitirão especificar um sistema de arquivos raiz via partição UUID ou
+partição RÓTULO ou um sistema de arquivos raiz em um volume lógico LVM. Eles
+não suportam um sistema de arquivos raiz encriptado ou montar o sistema de
+arquivos raiz passando por uma placa de rede de comunicação. Para uma
+capacidade mais completa, vejam-se <ulink
 url="https://www.linuxfromscratch.org/hints/read.html">as Dicas do
 LFS</ulink> ou <ulink
 url="https://fedoraproject.org/wiki/Dracut">dracut</ulink>.
     </para>
 
     <para>
-      Para instalar estes scripts, execute os seguintes comandos como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+      Para instalar estes conjuntos de comandos sequenciais, execute os seguintes
+comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
     <screen role="root"><userinput>cat &gt; /usr/sbin/mkinitramfs &lt;&lt; "EOF"
@@ -462,7 +465,7 @@ estão localizados. Esse precisa ser um subdiretório de <filename
 class='directory'>/lib/modules</filename>. Se nenhum módulo for
 especificado, então o initramfs é nomeado
 <emphasis>initrd.img-no-kmods</emphasis>. Se uma versão do núcleo for
-especificada, [então] o initrd é nomeado de
+especificada, o initrd é nomeado de
 <emphasis>initrd.img-$VERSÃO_DO_NÚCLEO</emphasis> e é apropriado somente
 para o núcleo específico especificado. O arquivo de saída gerada será
 colocado no diretório atual.
@@ -470,7 +473,7 @@ colocado no diretório atual.
 
     <para>
       Se for necessário o carregamento antecipado do microcódigo (veja-se <xref
-linkend="cpu-microcode"/>), [então] você pode instalar o blob ou contêiner
+linkend="cpu-microcode"/>), você pode instalar o blob ou contêiner
 apropriado em <filename class="directory">/lib/firmware</filename>. Ele será
 adicionado automaticamente ao initrd ao executar
 <command>mkinitramfs</command>.

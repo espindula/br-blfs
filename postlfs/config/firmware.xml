@@ -24,21 +24,21 @@ controladores de núcleo procuram por imagens de firmware.
   </para>
 
   <para>
-    Currently, most firmware can be found at a <userinput>git</userinput>
-repository which can be viewed in the browser with the URL <ulink
-url="&linux-firmware-git;/plain"/>.  For convenience, the LFS Project has
-created a mirror, updated daily, where these firmware files can be accessed
-via <userinput>wget</userinput> or a web browser at <ulink
-url="&sources-anduin-http;/linux-firmware/"/>.
+    Atualmente, a maioria do firmware pode ser encontrada em um repositório
+<userinput>git</userinput>, o qual pode ser visualizado no navegador com a
+URL <ulink url="&linux-firmware-git;/plain"/>. Por conveniência, o Projeto
+LFS criou um espelho, atualizado diariamente, onde esses arquivos de
+firmware podem ser acessados via <userinput>wget</userinput> ou via um
+navegador da web em <ulink url="&sources-anduin-http;/linux-firmware/"/>.
   </para>
 
   <para>
-    To get the firmware, either point a browser to one of the above repositories
-and then download the item(s) which you need.  If you want all these
-firmware files (for example you are distributing the system onto multiple
-hardware systems), install <xref linkend="git"/> and clone <ulink
-url='&linux-firmware-git;'/>, or open this URL in a browser and download the
-latest snapshot listed in the <literal>Tag</literal> table.
+    Para obter o firmware, aponte um navegador para um dos repositórios acima e,
+então, baixe o(s) item(s) que você precisar. Se você quiser todos esses
+arquivos de firmware (por exemplo, você estiver distribuindo o sistema em
+vários sistemas de hardware), instale <xref linkend="git"/> e clone <ulink
+url='&linux-firmware-git;'/>, ou abra essa URL em um navegador e baixe o
+instantâneo mais recente listado na tabela <literal>Tag</literal>.
   </para>
 
   <para>
@@ -186,14 +186,15 @@ não existe razão real para usar o carregamento atrasado.
     </para>
 
     <para>
-      It might be still possible to manually force late loading of microcode.  But
-it may cause kernel malfunction and you should take the risk yourself.  You
-will need to reconfigure your kernel for late loading, but early loading is
-always supported by Linux kernel version 6.6 or later on a x86 (no matter
-32-bit or 64-bit) system.  The instructions here will show you how to create
-an initrd for early loading. It is also possible to build the same microcode
-bin file into the kernel, which allows early loading but requires the kernel
-to be recompiled to update the microcode.
+      Ainda pode ser possível forçar manualmente o carregamento atrasado do
+microcódigo. Mas isso possivelmente cause mau funcionamento do núcleo e você
+mesmo(a) deveria correr o risco. Você precisará reconfigurar teu núcleo para
+carregamento atrasado, mas carregamento antecipado sempre é suportado pelo
+núcleo Linux versão 6.6 ou posterior em um sistema x86 (não importa se 32
+bits ou 64 bits). As instruções aqui te mostrarão como criar um initrd para
+carregamento antecipado. Também é possível construir o mesmo arquivo binário
+de microcódigo interno ao núcleo, o que permite carregamento antecipado, mas
+exige que o núcleo seja recompilado para atualizar o microcódigo.
     </para>
 
     <para>
@@ -227,14 +228,15 @@ comparado a tipicamente vinte e quatro (24) KB para uma máquina.
       <para>
         <!-- at one time, some skylakes had problems with a certain revision
         secure version of the microcode, for those machines which can boot it, -->
-The first step is to get the most recent version of the Intel microcode.
-This must be done by navigating to <ulink url=
+O primeiro passo é o de obter a versão mais recente do microcódigo da
+Intel. Isso precisa ser feito navegando-se até <ulink url=
 'https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/>
-and downloading the latest file there.  As of this writing the most secure
-version of the microcode is microcode-20231114.  Extract this file in the
-normal way, the microcode is in the <filename>intel-ucode </filename>
-directory, containing various blobs with names in the form XX-YY-ZZ. There
-are also various other files, and a releasenote.
+e baixando-se o arquivo mais recente lá. Ao tempo da escrita deste texto, a
+versão mais segura do microcódigo era microcode-20231114. Extraia esse
+arquivo da maneira normal; o microcódigo estará no diretório
+<filename>intel-ucode</filename>, contendo vários blobs com nomes na forma
+XX-YY-ZZ. Também existem vários outros arquivos e uma observação de
+lançamento.
       </para>
 
       <para>
@@ -257,13 +259,14 @@ online em <ulink url=
       </para>
 
       <para>
-        For an Tigerlake mobile (described as Intel(R) Core(TM) i5-11300H CPU) the
-relevant values are cpu family 6, model 140, stepping 1 so in this case the
-required identification is 06-8c-01. The releasenote says the latest
-microcode for it is versioned 0xb4.  If the value of the
-<quote>microcode</quote> field in <filename>/proc/cpuinfo</filename> is 0xb4
-or greater, it indicates the microcode update is already applied by the
-BIOS.  Otherwise, proceed to <xref linkend='early-microcode'/>.
+        Para um dispositivo móvel Tigerlake (descrito como CPU Intel(R) Core(TM)
+i5-11300H), os valores relevantes são cpu family 6, model 140, stepping 1,
+de modo que, nesse caso, a identificação exigida é 06-8c-01. A observação de
+lançamento diz que o microcódigo mais recente para ele está versionado
+0xb4. Se o valor do campo <quote>microcode</quote> em
+<filename>/proc/cpuinfo</filename> for 0xb4 ou superior, isso indica que a
+atualização do microcódigo já foi aplicada pelo BIOS. Caso contrário,
+prossiga para <xref linkend='early-microcode'/>.
       </para>
     </sect3>
 
@@ -296,10 +299,10 @@ ele:
 <screen><computeroutput>Family=0x10 Model=0x05 Stepping=0x03: Patch=0x010000c8 Length=960 bytes</computeroutput></screen>
 
       <para>
-        If the value of the <quote>microcode</quote> field in
-<filename>/proc/cpuinfo</filename> is 0x10000c8 or greater, it indicates the
-BIOS has already applied the microcode update.  Otherwise, proceed to <xref
-linkend='early-microcode'/>.
+        Se o valor do campo <quote>microcode</quote> em
+<filename>/proc/cpuinfo</filename> for 0x10000c8 ou superior, isso indica
+que o BIOS já aplicou a atualização do microcódigo. Caso contrário, prossiga
+para <xref linkend='early-microcode'/>.
       </para>
     </sect3>
 
@@ -651,12 +654,13 @@ que você possivelmente fique bloqueado(a) para um uso bastante restrito
     <title>Firmware Aberto de Som</title>
 
     <para>
-      Some systems (especially budget laptops) utilize a DSP shipped with the CPU
-for connection with the audio codec.  The Sound Open Firmware must be loaded
-onto the DSP to make it functional.  These firmware files can be downloaded
-from <ulink url='https://github.com/thesofproject/sof-bin/releases'/>.
-Extract the tarball and changing into the extracted directory, then as the
-&root; user install the firmware:
+      Alguns sistemas (especialmente laptops econômicos) utilizam um DSP fornecido
+com a CPU para conexão com o codificador de áudio. O Firmware Aberto de Som
+precisa ser carregado no DSP para torná-lo funcional. Esses arquivos de
+firmware podem ser baixados a partir de <ulink
+url='https://github.com/thesofproject/sof-bin/releases'/>. Extraia o tarball
+e mude para o diretório extraído e, em seguida, como o(a) usuário(a) &root;
+instale o firmware:
     </para>
 
     <screen role="nodump"><userinput>install -vdm755 /usr/lib/firmware/intel    &amp;&amp;
@@ -666,12 +670,12 @@ cp -av -T --no-preserve=ownership sof-tplg \
    /usr/lib/firmware/intel/sof-tplg</userinput></screen>
 
     <para>
-      <xref linkend="alsa-lib"/> needs Use Case Manager configuration files for
-the systems using Sound Open Firmware as well.  The ALSA UCM configuration
-files can be downloaded from <ulink
+      <xref linkend="alsa-lib"/> também precisa de arquivos de configuração do Use
+Case Manager para os sistemas que usam Firmware Aberto de Som. Os arquivos
+de configuração UCM do ALSA podem ser baixados a partir de <ulink
 url='https://www.alsa-project.org/files/pub/lib/alsa-ucm-conf-&alsa-lib-version;.tar.bz2'/>.
-Extract the tarball and changing into the extracted directory, then as the
-&root; user install the configuration files:
+Extraia o tarball e mude para o diretório extraído e, em seguida, como o(a)
+usuário(a) &root; instale os arquivos de configuração:
     </para>
 
     <screen role="nodump"><userinput>install -vdm755 /usr/share/alsa &amp;&amp;
