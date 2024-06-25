@@ -10,7 +10,8 @@
   <!ENTITY llvm-download-ftp  "">
   <!ENTITY llvm-md5sum        "fd7fc891907e14f8e0ff7e3f87cc89a4">
   <!ENTITY llvm-size          "57 MB">
-  <!ENTITY llvm-buildsize     "4.2 GB (964 MB installed; add 20 GB for tests and 308 MB for documentation)">
+  <!ENTITY llvm-buildsize     "4,2 GB (964 MB instalado; adicionar 20 GB para testes e 308 MB para
+documentação)">
   <!ENTITY llvm-time          "13 UPC (Adicionar 8 UPC para testes; ambos usando paralelismo=8)">
 
   <!ENTITY clang-download-http "&llvm-url;/clang-&llvm-version;.src.tar.xz">
@@ -48,13 +49,12 @@
 
     <para>
       O pacote <application>LLVM</application> contém uma coleção de compiladores
-modulares e reutilizáveis e tecnologias de conjunto de ferramentas. As
-bibliotecas centrais "Low Level Virtual Machine" (LLVM) fornecem um
-otimizador moderno independente de origem e destino, junto com suporte à
-geração de código para muitas "CPUs" populares (bem como algumas menos
-comuns!). Essas bibliotecas são construídas em torno de uma representação de
-código bem especificada, conhecida como a representação intermediária do
-LLVM ("LLVM IR").
+modulares e reusáveis e tecnologias de conjunto de ferramentas. As
+bibliotecas centrais Low Level Virtual Machine (LLVM) fornecem um otimizador
+moderno independente de origem e destino, junto com suporte para geração de
+código para muitas CPUs populares (bem como algumas menos comuns!). Essas
+bibliotecas são construídas em torno de uma representação de código bem
+especificada, conhecida como a LLVM Intermediate Representation ("LLVM IR").
     </para>
 
     <para>
@@ -177,7 +177,7 @@ construção LLVM</emphasis>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Patch enabling <xref linkend="gSSP"/> by default in clang: <ulink
+          Remendo habilitando <xref linkend="gSSP"/> por padrão no clang: <ulink
 url="&patch-root;/clang-&llvm-maj-version;-enable_default_ssp-1.patch"/>
         </para>
       </listitem>
@@ -231,16 +231,16 @@ url="https://github.com/Z3Prover/z3">Z3</ulink>
     <title>Instalação do "LLVM"</title>
 
     <para>
-      Two additional tarballs
-<filename>llvm-cmake-&llvm-maj-version;.src.tar.xz</filename> and
-<filename>llvm-third-party-&llvm-maj-version;.src.tar.xz</filename> are
-needed by LLVM building system.  The upstream expects them extracted at the
-same level as the <filename>llvm-&llvm-version;.src.tar.xz</filename>
-tarball, and the extracted directories renamed to <filename
-class="directory">cmake</filename> and <filename
-class="directory">third-party</filename>.  Extract them and modify the build
-system to avoid creating ambiguously-named directories outside the
-<filename>llvm-&llvm-version;.src</filename> hierarchy:
+      Dois tarballs adicionais
+<filename>llvm-cmake-&llvm-maj-version;.src.tar.xz</filename> e
+<filename>llvm-third-party-&llvm-maj-version;.src.tar.xz</filename> são
+necessários para o sistema de construção do LLVM. O(A) fluxo de
+desenvolvimento espera eles extraídos no mesmo nível, como o tarball
+<filename>llvm-&llvm-version;.src.tar.xz</filename>, e os diretórios
+extraídos renomeados para <filename class="directory">cmake</filename> e
+<filename class="directory">third-party</filename>. Extraia-os e modifique o
+sistema de construção para evitar criar diretórios ambiguamente nomeados
+fora da hierarquia <filename>llvm-&llvm-version;.src</filename>:
     </para>
 
 <screen><userinput>tar -xf ../llvm-cmake-&llvm-maj-version;.src.tar.xz                                   &amp;&amp;
@@ -260,10 +260,10 @@ mv tools/clang-&llvm-version;.src tools/clang</userinput></screen>
 
     <para>
       <!-- https://github.com/llvm/llvm-project/pull/66761 -->
-If you have downloaded <application>compiler-rt</application>, install it
-into the source tree by running the following commands, and modify the
-building system so it will find the <filename class='directory'>
-llvm-cmake-&llvm-maj-version;.src</filename> directory correctly:
+Se você tiver baixado <application>compiler-rt</application>, instale-o na
+árvore do fonte executando os seguintes comandos e modifique o sistema de
+construção, de forma que ele encontre o <filename
+class='directory'>llvm-cmake-&llvm-maj-version;.src</filename> corretamente:
     </para>
 
 <screen><userinput>tar -xf ../compiler-rt-&llvm-version;.src.tar.xz -C projects    &amp;&amp;
@@ -341,8 +341,8 @@ ninja docs-llvm-html  docs-llvm-man</userinput></screen>
 
     
     <para>
-      If you wish to run the tests, remove a test case known to hang indefinitely
-on some systems:
+      Se você desejar executar os testes, remova um caso de teste conhecido por
+travar indefinidamente em alguns sistemas:
     </para>
 
     <!-- The excessive core dump made my system irresponsive.  -->
@@ -350,17 +350,19 @@ on some systems:
 
     
     <para>
-      LLVM test suite can produce many core dump files.  They will occupy a large
-amount of disk space, and the core dump process can significantly slow down
-the testing.  To test the results with core dump disabled, <phrase
-revision='systemd'>ensure <xref linkend='systemd'/> and <xref
-linkend='shadow'/> have been rebuilt with <xref linkend='linux-pam'/>
-support (if you are interacting via a SSH or graphical session, also ensure
-the <xref linkend='openssh'/> server or the desktop manager has been built
-with <xref linkend='linux-pam'/>) and the current login session is started
-after updating the <filename>/etc/pam.d/system-session</filename> file to
-include <filename class='libraryfile'>pam_systemd.so</filename>, then
-</phrase>issue:
+      A suíte de testes do LLVM pode produzir muitos arquivos de despejo de
+core. Eles ocuparão uma grande quantidade de espaço em disco e o processo de
+despejo de core pode retardar significativamente a testagem. Para testar os
+resultados com o despejo de core desabilitado, <phrase
+revision='systemd'>certifique-se de que <xref linkend='systemd'/> e <xref
+linkend='shadow'/> tenham sido reconstruídos com suporte a <xref
+linkend='linux-pam'/> (se você estiver interagindo por meio de uma sessão
+SSH ou gráfica, certifique-se também de que o servidor <xref
+linkend='openssh'/> ou o gerenciador de área de trabalho tenha sido
+construído com <xref linkend='linux-pam'/>) e a sessão de login atual seja
+iniciada depois de atualizar o arquivo
+<filename>/etc/pam.d/system-session</filename> para incluir <filename
+class='libraryfile'>pam_systemd.so</filename> e, em seguida, </phrase>emita:
     </para>
 
     <screen remap="test" revision="sysv"><userinput>sh -c 'ulimit -c 0 &amp;&amp; ninja check-all'</userinput></screen>
@@ -398,15 +400,17 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
 
            Let's let it go.  llvm is complex enough as it is.  Adding
            the additional testsuite is IMO overkill.  - bdubbs -->
-If <option>-jN</option> (N replaced with a number) is passed to
-<command>ninja</command>, the tests will be built with N logical cores, but
-run using all available logical cores.  Run the test command in a cgroup
-(<phrase revision='systemd'>pass the <option>-p AllowedCPUs=...</option>
-option to the <command>systemd-run</command> command, </phrase> read <xref
-linkend='build-in-cgroup'/> for details) to limit the number of logical
-cores for running the tests.  One test named
-<filename>Linux/clone_setns.cpp</filename> will fail if
-<option>CONFIG_USER_NS</option> is not enabled in kernel configuration.
+Se <option>-jN</option> (N substituído por um número) for passado para
+<command>ninja</command>, os testes serão construídos com N núcleos lógicos,
+mas executados usando todos os núcleos lógicos disponíveis. Execute o
+comando de teste em um cgroup (<phrase revision='systemd'>passe a opção
+<option>-p AllowedCPUs=...</option> para o comando
+<command>systemd-run</command>, </phrase> leia <xref
+linkend='build-in-cgroup'/> para detalhes) para limitar o número de núcleos
+lógicos para executar os testes. Um teste chamado
+<filename>Linux/clone_setns.cpp</filename> falhará se
+<option>CONFIG_USER_NS</option> não estiver habilitada na configuração do
+núcleo.
       
 
       
@@ -471,12 +475,12 @@ são necessárias em um sistema de produção.
     </para>
 
     <para>
-      <parameter>-DLLVM_TARGETS_TO_BUILD="host;AMDGPU"</parameter>: This switch
-enables building for the same target as the host, and also for the r600 AMD
-GPU used by the Mesa r600 and radeonsi drivers.  The default is all of the
-targets. You can use a semicolon separated list. Valid targets are: host,
-X86, Sparc, PowerPC, ARM, AArch64, Mips, Hexagon, Xcore, M68K, MSP430,
-NVPTX, SystemZ, AMDGPU, BPF, CppBackend, or all.
+      <parameter>-DLLVM_TARGETS_TO_BUILD="host;AMDGPU"</parameter>: Essa chave
+habilita construir para o mesmo alvo que o anfitrião e também para a GPU
+r600 da AMD usada pelos controladores r600 e radeonsi do Mesa. O padrão é
+todos os alvos. Você pode usar uma lista separada por ponto e vírgula. Alvos
+válidos são: host, X86, Sparc, PowerPC, ARM, AArch64, Mips, Hexagon, Xcore,
+M68K, MSP430, NVPTX, SystemZ, AMDGPU, BPF, CppBackend ou todos.
     </para>
 
     <para>

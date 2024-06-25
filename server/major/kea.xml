@@ -8,8 +8,8 @@
   <!ENTITY kea-download-ftp  "">
   <!ENTITY kea-md5sum        "ad23d02b3ce0475eb077da05b0ae2429">
   <!ENTITY kea-size          "10 MB">
-  <!ENTITY kea-buildsize     "1.5 GB (332 MB installed; add 4 GB for tests)">
-  <!ENTITY kea-time          "4.1 SBU (with parallelism=4; add 12 SBU for tests)">
+  <!ENTITY kea-buildsize     "1,5 GB (332 MB instalado; adicionar 4 GB para testes)">
+  <!ENTITY kea-time          "4,1 UPC (com paralelismo=4; adicionar 12 UPC para testes)">
   <!ENTITY kea-arm-vers      "&kea-dhcp-version;">
 ]>
 
@@ -76,9 +76,9 @@ fim de vida desde dezembro de 2022.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="mitkrb"/>, <xref linkend="valgrind"/>; for documentation:
-<xref linkend="doxygen"/>, <xref linkend="graphviz"/>, and <xref
-linkend="sphinx_rtd_theme"/>; for tests: <ulink
+      <xref linkend="mitkrb"/>, <xref linkend="valgrind"/>; para documentação:
+<xref linkend="doxygen"/>, <xref linkend="graphviz"/> e <xref
+linkend="sphinx_rtd_theme"/>; para testes: <ulink
 url="https://google.github.io/googletest/">GoogleTest</ulink>
     </para>
 
@@ -116,14 +116,14 @@ Editor Notes:
     <title>Instalação do Servidor DHCP Kea do ISC</title>
 
     <para>
-      First fix detection of Python-3.12 by the build system:
+      Primeiro, corrija a detecção do Python-3.12 pelo sistema de construção:
     </para>
 
 <screen><userinput>sed -e 's/:3/:4/' \
     -i configure</userinput></screen>
 
     <para>
-      Remove one installation step that uses an obsolete python module:
+      Remova uma etapa de instalação que usa um módulo obsoleto do Python:
     </para>
 
 <screen><userinput>sed -e '/dlist="/d' \
@@ -144,11 +144,11 @@ seguintes comandos:
 make</userinput></screen>
 
     <para>
-      To test the results, you must have installed GoogleTest and kept its
-source. You should also have passed
-<option>--with-gtest-source=/path/to/googletest/sourcedir</option> to
-<command>configure</command> above. Run the tests with <command>make
-check</command>. Three tests in the TLSTest suite are known to fail.
+      Para testar os resultados, você precisa ter instalado o GoogleTest e mantido
+o fonte dele. Você também deveria ter passado
+<option>--with-gtest-source=/caminho/para/diretório_fonte/googletest</option>
+para <command>configure</command> acima. Execute os testes com <command>make
+check</command>. Três testes na suíte TLSTest são conhecidos por falharem.
     </para>
 
     <para>
@@ -165,36 +165,37 @@ class="username">root</systemitem>:
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--enable-shell</parameter>: Allows building
-<command>kea-shell</command>, a command line interface for the control
-agent.
+      <parameter>--enable-shell</parameter>: Permite construir
+<command>kea-shell</command>, uma interface de linha de comando para o
+agente de controle.
     </para>
 
     <para>
-      <parameter>--with-openssl</parameter>: Allows using OpenSSL for
-communicating with the control-agent and for DNS updates.
+      <parameter>--with-openssl</parameter>: Permite usar OpenSSL para comunicação
+com o agente de controle e para atualizações de DNS.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <option>--with-pgsql</option> or <option>--with-mysql</option>:
-<application>ISC Kea</application> can store the leases on a database. This
-might be useful in large environments running a cluster of DHCP
-servers. Using the <emphasis>memfile</emphasis> backend (which is a CSV file
-stored locally) is possible anyhow.
+      <option>--with-pgsql</option> ou <option>--with-mysql</option>:
+<application>Kea do ISC</application> consegue armazenar as concessões em
+uma base de dados. Isso pode ser útil em ambientes grandes executando um
+cluster de servidores DHCP. Usar a estrutura de retaguarda
+<emphasis>memfile</emphasis> (que é um arquivo CSV armazenado localmente) é
+possível de qualquer maneira.
     </para>
 
     <para>
-      <option>--enable-generate-docs</option>: If documentation is to be rebuilt,
-add that option. Several dependencies must be installed for generating the
-documentation.
+      <option>--enable-generate-docs</option>: Se a documentação for para ser
+reconstruída, adicione essa opção. Diversas dependências precisam estar
+instaladas para gerar a documentação.
     </para>
 
     <para>
-      <command>make -j1 install</command>: ISC does not recommend any form of
-parallel or job server options when doing the install.
+      <command>make -j1 install</command>: O ISC não recomenda nenhuma forma de
+paralelismo ou opções de tarefa de servidor ao fazer a instalação.
     </para>
 
   </sect2>
@@ -203,26 +204,28 @@ parallel or job server options when doing the install.
     <title>Configurando o Servidor DHCP Kea do ISC</title>
 
     <para>
-      The support of IPv4, IPv6 and DDNS has been split into separate servers
-which runs independently from each other. Each of them has its own
-configuration file.<phrase revision="sysv"> Additional configuration files
-come from the keactrl agent which is used to control the servers in an easy
-way.</phrase>
+      O suporte de IPv4, IPv6 e DDNS foi dividido em servidores separados que
+executam independentemente um do outro. Cada um deles tem o próprio arquivo
+dele de configuração.<phrase revision="sysv"> Arquivos adicionais de
+configuração vem oriundos do agente keactrl, que é usado para controlar os
+servidores de maneira fácil.</phrase>
     </para>
 
     <para>
-      Consult the <ulink url="https://kea.readthedocs.io/en/kea-&kea-arm-vers;/">
-Kea Administrator Reference Manual</ulink> for detailed information about
-the configuration of <application>ISC Kea</application> as it is a quite
-capable system.  The configuration shown below is a bare minimum to get a
-DHCP server running but it already includes configuration for DDNS (Dynamic
-DNS).  That setup might be working for small networks with a few clients and
-low traffic. For greater installations with thousands of clients,
-<application>ISC Kea</application> can be configured to use databases
-(mariadb or postgresql) to store the leases and build a cluster with
-multiple nodes. It can be integrated to <ulink
-url="https://www.isc.org/categories/stork/">ISC Stork</ulink> which is a
-management dashboard to <application>ISC Kea</application>.
+      Consulte-se o <ulink
+url="https://kea.readthedocs.io/en/kea-&kea-arm-vers;/">Manual de Referência
+do(a) Administrador(a) do Kea</ulink> para informações detalhadas acerca da
+configuração do <application>Kea do ISC</application>, pois ele é um sistema
+bastante capaz. A configuração mostrada abaixo é o mínimo para colocar um
+servidor DHCP em execução, mas já inclui configuração para DDNS (Dynamic
+DNS). Essa configuração poderia estar funcionando para redes de
+intercomunicação pequenas com poucos clientes e baixo tráfego. Para
+instalações maiores com milhares de clientes, o <application>Kea do
+ISC</application> pode ser configurado para usar bases de dados (mariadb ou
+postgresql) para armazenar as concessões e construir um cluster com
+múltiplos nós. Ele pode ser integrado ao <ulink
+url="https://www.isc.org/categories/stork/">Stork do ISC</ulink>, que é um
+painel de gerenciamento para o <application>Kea do ISC</application>.
     </para>
 
     <para>
@@ -243,7 +246,7 @@ incluída</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
         <phrase revision="sysv"> <filename>/etc/kea/keactrl.conf</filename>,
 </phrase> <filename>/etc/kea/kea-ctrl-agent.conf</filename>,
 <filename>/etc/kea/kea-dhcp4.conf</filename>,
-<filename>/etc/kea/kea-dhcp6.conf</filename>, and
+<filename>/etc/kea/kea-dhcp6.conf</filename> e
 <filename>/etc/kea/kea-dhcp-ddns.conf</filename>
       </para>
 
@@ -310,14 +313,15 @@ sejam desejadas.</para>
       </itemizedlist>
 
       <para>
-        The Netconf service is not installed because required dependencies are not
-covered by the current BLFS book.  .    </para>
+        O serviço Netconf não é instalado porque as dependências exigidas não são
+abrangidas pelo atual livro do BLFS.  .    </para>
 
       <para>
-        With the following command, Kea will be configured to start the dhcp service
-for IPv4 and the dynamic DNS update, while the control agent and the dhcp
-service for IPv6 remain down. Tweak the command to match your needs on
-started services and execute as the &root; user:
+        Com o seguinte comando, o Kea será configurado para iniciar o serviço DHCP
+para IPv4 e a atualização dinâmica do DNS, enquanto o agente de controle e o
+serviço DHCP para IPv6 permanecerão inativos. Ajuste o comando para atender
+às tuas necessidades nos serviços iniciados e execute como o(a) usuário(a)
+&root;:
       </para>
 
 <screen role="root"><userinput>sed -e "s/^dhcp4=.*/dhcp4=yes/" \
@@ -330,41 +334,46 @@ started services and execute as the &root; user:
     </sect3>
 
     <sect3 id="kea-sysd-config" revision="systemd">
-      <title>Kea Configuration Using Systemd Units</title>
+      <title>Configuração do Kea Usando Unidades do Systemd</title>
 
       <para>
-        Four service units are used to start various daemons provided by Kea:
+        Quatro unidades de serviço são usadas para iniciar vários processos de
+segundo plano fornecidos pelo Kea:
       </para>
 
       <itemizedlist>
         <listitem>
           <para>Agente de Controle</para>
           <para>
-            The Control Agent is a daemon which allows the (re)configuration of the Kea
-DHCP service via REST API.  Run <command>systemctl enable
-kea-ctrl-agent</command> if this daemon is needed.
+            O Agente de Controle é um processo de segundo plano que permite
+(re)configuração do serviço DHCP do Kea via API do REST. Execute
+<command>systemctl enable kea-ctrl-agent</command> se esse processo de
+segundo plano for necessário.
           </para>
         </listitem>
         <listitem>
           <para>Servidor DHCP de IPv4</para>
           <para>
-            This daemon handles requests for IPv4 addresses.  Run <command>systemctl
-enable kea-dhcp4-server</command> to have it started by systemd.
+            Esse processo de segundo plano lida com solicitações de endereços
+IPv4. Execute <command>systemctl enable kea-dhcp4-server</command> para
+tê-lo iniciado pelo systemd.
           </para>
         </listitem>
         <listitem>
           <para>Servidor DHCP de IPv6</para>
           <para>
-            This daemon handles requests for IPv6 addresses.  Run <command>systemctl
-enable kea-dhcp6-server</command> to have it started by systemd.
+            Esse processo de segundo plano lida com solicitações de endereços
+IPv6. Execute <command>systemctl enable kea-dhcp6-server</command> para
+tê-lo iniciado pelo systemd.
           </para>
         </listitem>
         <listitem>
           <para>DNS Dinâmico</para>
           <para>
-            This daemon is used to update a DNS server dynamically when Kea assigns an
-IP address to a device.  Run <command>systemctl enable
-kea-ddns-server</command> to have it started by systemd.
+            Esse processo de segundo plano é usado para atualizar um servidor DNS
+dinamicamente quando Kea atribui um endereço IP para um dispositivo. Execute
+<command>systemctl enable kea-ddns-server</command> para tê-lo iniciado pelo
+systemd.
           </para>
         </listitem>
       </itemizedlist>
@@ -378,17 +387,17 @@ cobertas pelo atual livro do BLFS.</para>
       <title>Configuração do Agente de Controle</title>
 
       <para>
-        The provided configuration could be used without changes but in BLFS,
-objects like sockets are stored in <filename
-class="directory">/run</filename> rather than in <filename
+        A configuração fornecida poderia ser usada sem mudanças, mas, no BLFS,
+objetos como soquetes são armazenados em <filename
+class="directory">/run</filename> em vez de em <filename
 class="directory">/tmp</filename>.
       </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/kea/kea-ctrl-agent.conf &lt;&lt; "EOF"
-<literal>// Begin /etc/kea/kea-ctrl-agent.conf
+<literal>// Inicia /etc/kea/kea-ctrl-agent.conf
 {
-  // This is a basic configuration for the Kea Control Agent.
-  // RESTful interface to be available at http://127.0.0.1:8000/
+  // Esta é uma configuração básica para o Agente de Controle do Kea.
+  // Interface RESTful para estar disponível em http://127.0.0.1:8000/
   "Control-agent": {
     "http-host": "127.0.0.1",
     "http-port": 8000,
@@ -422,7 +431,7 @@ class="directory">/tmp</filename>.
     ]
   }
 }
-// End /etc/kea/kea-ctrl-agent.conf</literal>
+// Termina /etc/kea/kea-ctrl-agent.conf</literal>
 EOF</userinput></screen>
 
     </sect3>
@@ -431,13 +440,13 @@ EOF</userinput></screen>
       <title>Configuração do Servidor DHCP de IPv4</title>
 
       <para>
-        A sample configuration file is created in
-<filename>/etc/kea/kea-dhcp4.conf</filename>.  Adjust the file to suit your
-needs or overwrite it by running the following command as the &root; user
-(you'll need to edit this file anyway: at least the
-<emphasis>interfaces</emphasis> field, the
-<emphasis>ddns-qualifying-suffix</emphasis> field, and almost all the fields
-in <emphasis>Subnet4</emphasis>:
+        Um arquivo de configuração de amostra é criado em
+<filename>/etc/kea/kea-dhcp4.conf</filename>. Ajuste o arquivo para atender
+às tuas necessidades ou sobrescreva-o executando o seguinte comando como
+o(a) usuário(a) &root; (você precisará editar esse arquivo de qualquer
+maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
+<emphasis>ddns-qualifying-suffix</emphasis> e quase todos os campos em
+<emphasis>Subnet4</emphasis>:
       </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/kea/kea-dhcp4.conf &lt;&lt; "EOF"
@@ -525,7 +534,7 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3 id="kea-dhcp6-config">
-      <title>IPv6 DHCP Server Configuration</title>
+      <title>Configuração do Servidor DHCP de IPv6</title>
 
       <para>
         A configuração para IPv6 é semelhante à configuração do IPv4. O arquivo de
@@ -538,12 +547,12 @@ configuração é <filename>/etc/kea/kea-dhcp6.conf</filename>.
       <title>Configuração do DNS Dinâmico</title>
 
       <para>
-        If there is a <xref linkend="bind"/> server running, <application>ISC
-Kea</application> can update the DNS when it gives an IP address to a
-client. A sample configuration file is created in
-<filename>/etc/kea/kea-dhcp-ddns.conf</filename>.  Adjust the file to suit
-your needs or overwrite it by running the following command as the &root;
-user:
+        Se existir um servidor <xref linkend="bind"/> executando, o <application>Kea
+do ISC</application> poderá atualizar o DNS quando fornecer um endereço IP
+para um cliente. Um arquivo de configuração de amostra é criado em
+<filename>/etc/kea/kea-dhcp-ddns.conf</filename>. Ajuste o arquivo para
+atender às tuas necessidades ou sobrescreva-o executando o seguinte comando
+como o(a) usuário(a) &root;:
       </para>
 
 <screen role="nodump" ><userinput>cat &gt; /etc/kea/kea-dhcp-ddns.conf &lt;&lt; "EOF"
@@ -621,9 +630,9 @@ comando <command>tsig-keygen</command>, ambos fornecidos por <xref
 linkend="bind"/>.
         </para>
         <para>
-          In this example configuration, it is assumed that the DNS server runs on the
-same machine as Kea does (accessible via <literal>127.0.0.1</literal>) and
-that this machine has the IP <literal>192.168.56.2</literal>.
+          Nessa configuração de exemplo, é presumido que o servidor DNS executa na
+mesma máquina que o Kea (acessível via <literal>127.0.0.1</literal>) e que
+essa máquina tenha o IP <literal>192.168.56.2</literal>.
         </para>
       </note>
 
@@ -650,12 +659,12 @@ libkea-cryptolink.so, libkea-d2srv.so, libkea-database.so,
 libkea-dhcp_ddns.so, libkea-dhcp++.so, libkea-dhcpsrv.so, libkea-dns++.so,
 libkea-eval.so, libkea-exceptions.so, libkea-hooks.so, libkea-http.so,
 libkea-log.so, libkea-process.so, libkea-stats.so, libkea-tcp.so,
-libkea-util.so, and libkea-util-io.so
+libkea-util.so e libkea-util-io.so
         </seg>
         <seg>
           /etc/kea, /usr/include/kea, /usr/lib/kea,
 /usr/lib/python&python3-majorver;/site-packages/kea, /usr/share/kea,
-/usr/share/doc/kea-&kea-dhcp-version;, and /var/lib/kea
+/usr/share/doc/kea-&kea-dhcp-version; e /var/lib/kea
         </seg>
       </seglistitem>
     </segmentedlist>

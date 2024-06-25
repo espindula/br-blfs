@@ -11,11 +11,11 @@
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "6.1 GB (199 MB installed) without tests">
+  <!ENTITY firefox-buildsize     "6,1 GB (199 MB instalado) sem testes">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "12 SBU using -j8, without tests">
+  <!ENTITY firefox-time          "12 UPC usando -j8, sem testes">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -103,7 +103,7 @@ Additional Downloads</bridgehead>
       <para>
         Extrair o tarball reconfigurará as permissões do diretório atual para 0755,
 se você tiver permissão para fazer isso. Se você fizer isso em um diretório
-onde o bit sticky esteja configurado, como o <filename
+onde o bit sticky estiver configurado, como <filename
 class="directory">/tmp</filename>, ela terminará com mensagens de erro:
       </para>
 
@@ -113,10 +113,10 @@ tar: Exiting with failure status due to previous errors
 </literallayout>
 
       <para>
-        Isso termina com situação diferente de zero, mas <emphasis>NÃO</emphasis>
+        Isso finaliza com situação diferente de zero, mas <emphasis>NÃO</emphasis>
 significa que existe um problema real. Não desempacote como o(a) usuário(a)
 <systemitem class="username">root</systemitem> em um diretório onde o bit
-sticky esteja configurado - isso irá desconfigurá-lo.
+sticky estiver configurado - isso irá desconfigurá-lo.
       </para>
 
       <para>
@@ -141,19 +141,19 @@ precisem de configuração de tempo de execução para que o som funcione.
       <!--<xref linkend="six"/>
 ,-->
 <xref linkend="cbindgen"/>, <xref linkend="dbus-glib"/>, <xref
-linkend="gtk3"/>, <xref linkend="libnotify"/>, <xref linkend="llvm"/> (with
-clang, used for bindgen even if using gcc), <xref linkend="nodejs"/>, <xref
-linkend="pulseaudio"/> (or <xref linkend="alsa-lib"/> if you edit the
-mozconfig; now deprecated by mozilla), in either case please read the
-Configuration Information, <xref linkend="python311"/> (built after
-installing <xref linkend="sqlite"/>), <xref
-linkend="startup-notification"/>, and <xref linkend="unzip"/>
+linkend="gtk3"/>, <xref linkend="libnotify"/>, <xref linkend="llvm"/> (com
+clang, usado para bindgen mesmo se usar gcc), <xref linkend="nodejs"/>,
+<xref linkend="pulseaudio"/> (ou <xref linkend="alsa-lib"/> se você editar o
+mozconfig; agora obsoleto pela Mozilla), em qualquer caso, por favor,
+leiam-se as Informações de Configuração, <xref linkend="python311"/>
+(construído depois de instalar <xref linkend="sqlite"/>), <xref
+linkend="startup-notification"/> e <xref linkend="unzip"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="icu"/>, <xref linkend="libevent"/>, <xref linkend="libvpx"/>,
-<xref linkend="libwebp"/>, <xref linkend="nasm"/>, and <xref linkend="nss"/>
+<xref linkend="libwebp"/>, <xref linkend="nasm"/> e <xref linkend="nss"/>
     </para>
 
     <note>
@@ -167,10 +167,10 @@ mas podem estar desatualizadas ou conter falhas de segurança.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="curl"/>, <xref linkend="doxygen"/>, <xref role="runtime"
-linkend="ffmpeg"/> (runtime, to play mov, mp3 or mp4 files), <xref
-linkend="liboauth"/>, <xref role="runtime" linkend="pciutils"/> (runtime),
-<xref linkend="valgrind"/>, <xref linkend="wget"/>, <xref
-linkend="wireless_tools"/>, <xref linkend="yasm"/>, <ulink
+linkend="ffmpeg"/> (tempo de execução, para reproduzir arquivos mov, mp3 ou
+mp4), <xref linkend="liboauth"/>, <xref role="runtime" linkend="pciutils"/>
+(tempo de execução), <xref linkend="valgrind"/>, <xref linkend="wget"/>,
+<xref linkend="wireless_tools"/>, <xref linkend="yasm"/>, <ulink
 url="https://github.com/libproxy/libproxy">libproxy</ulink>
     </para>
 
@@ -198,28 +198,28 @@ seguinte comando:
 <screen><!-- With Firefox ESR 128 we'd replace the following part with
 "- -enable-elf-hack=relr", or remove it if relr becomes the default. -->
 <userinput>cat &gt; mozconfig &lt;&lt; "EOF"
-<literal># If you have a multicore machine, all cores will be used by default.
+<literal># Se você tiver uma máquina multi cores, todos os cores serão usados por padrão.
 
-# If you have installed (or will install) wireless-tools, and you wish
-# to use geolocation web services, comment out this line
+# Se você tiver instalado (ou instalará) o "wireless-tools" e desejar
+# usar serviços de geolocalização da web, comente esta linha
 ac_add_options --disable-necko-wifi
 
-# API Keys for geolocation APIs - necko-wifi (above) is required for MLS
-# Uncomment the following line if you wish to use Mozilla Location Service
+# Chaves de API para APIs de geolocalização - necko-wifi (acima) é exigido para MLS.
+# Descomente a linha seguinte se desejar usar o Serviço de Localização do Mozilla
 #ac_add_options --with-mozilla-api-keyfile=$PWD/mozilla-key
 
-# Uncomment the following line if you wish to use Google's geolocation API
-# (needed for use with saved maps with Google Maps)
+# Descomente a linha seguinte se desejar usar a API de geolocalização do Google
+# (necessária para uso com mapas salvos com o Google Maps)
 #ac_add_options --with-google-location-service-api-keyfile=$PWD/google-key
 
-# startup-notification is required since firefox-78
+# notificação de inicialização é necessária desde o Firefox-78
 
-# Uncomment the following option if you have not installed PulseAudio and
-# want to use alsa instead
+# Descomente a seguinte opção se você não tiver instalado o PulseAudio
+# e quiser usar o alsa
 #ac_add_options --enable-audio-backends=alsa
 
-# Comment out following options if you have not installed
-# recommended dependencies:
+# Comente as seguintes opções se você não tiver instalado
+# as dependências recomendadas:
 ac_add_options --with-system-icu
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
@@ -227,47 +227,47 @@ ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-webp
 
-# Unlike with thunderbird, although using the gold linker can
-# save four megabytes in the installed file it does not make
-# the build faster.
+# Ao contrário do Thunderbird, embora usar o vinculador Gold possa
+# economizar quatro megabytes no arquivo instalado, isso não torna
+# a construção mais rápida.
 
-# The libdav1d library (av1 decoder) requires nasm. Uncomment this
-# if nasm has not been installed. Do not uncomment this if you have
-# ffmpeg installed.
+# A biblioteca libdavid (decodificador av1) exige nasm. Descomente isto
+# se o nasm não tiver sido instalado. Não descomente se você tiver o
+# ffmpeg instalado.
 #ac_add_options --disable-av1
 
-# You cannot distribute the binary if you do this.
+# Você não pode distribuir o binário se fizer isto
 ac_add_options --enable-official-branding
 
-# Stripping is now enabled by default.
-# Uncomment these lines if you need to run a debugger:
+# A remoção agora está habilitada por padrão. Descomente estas linhas
+# se você precisar executar um depurador:
 #ac_add_options --disable-strip
 #ac_add_options --disable-install-strip
 
-# Disabling debug symbols makes the build much smaller and a little
-# faster. Comment this if you need to run a debugger. Note: This is
-# required for compilation on i686.
+# Desabilitar os símbolos de depuração torna a construção muito menor e um pouco
+# mais rápida. Comente isto se você precisar executar um depurador. Observação: Isto é
+# exigido para compilação em i686.
 ac_add_options --disable-debug-symbols
 
-# The elf-hack is reported to cause failed installs (after successful builds)
-# on some machines. It is supposed to improve startup time and it shrinks
-# libxul.so by a few MB.  With recent Binutils releases the linker already
-# supports a much safer and generic way for this.
+# Foi informado que elf-hack causa instalações falhas (depois de construções bem-sucedidas)
+# em algumas máquinas. Supõe-se que melhore o tempo de inicialização e reduza a libxul.so em
+# alguns MB. Com lançamentos recentes do Binutils, o vinculador já suporta
+# uma maneira muito mais segura e genérica para isso.
 ac_add_options --disable-elf-hack
 export LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
 
-# The BLFS editors recommend not changing anything below this line:
+# Os(As) editores(as) do BLFS recomendam não mudar nada abaixo desta linha:
 ac_add_options --prefix=/usr
 ac_add_options --enable-application=browser
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 
-# Enabling the tests will use a lot more space and significantly
-# increase the build time, for no obvious benefit.
+# Habilitar os testes usará muito mais espaço e aumentará significativamente
+# o tempo de construção, sem nenhum benefício óbvio.
 ac_add_options --disable-tests
 
-# This enables SIMD optimization in the shipped encoding_rs crate.
-ac_add_options --enable-rust-simd
+# O nível padrão de otimização novamente produz uma construção funcional com o gcc.
+ac_add_options --enable-optimize
 
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
@@ -276,22 +276,22 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
 
-# Sandboxing works well on x86_64 but might cause issues on other
-# platforms. If not on x86_64, e.g. i686, it is recommended to
-# uncomment the following switch.
+# O sandboxing funciona bem em x86_64, mas pode causar problemas em outras
+# plataformas. Se não estiver em x86_64, por exemplo, i686, é recomendado
+# descomentar a seguinte chave.
 #ac_add_options --disable-sandbox
 
-# Using sandboxed wasm libraries has been moved to all builds instead
-# of only mozilla automation builds. It requires extra llvm packages
-# and was reported to seriously slow the build. Disable it.
+# Usar bibliotecas wasm em sandbox foi movido para todas as construções, em vez de
+# apenas construções de automação do Mozilla. Exige pacotes extras llvm e foi
+# informado que retarda seriamente a construção. Desative-o.
 ac_add_options --without-wasm-sandboxed-libraries
 
-# The following option unsets Telemetry Reporting. With the Addons Fiasco,
-# Mozilla was found to be collecting user's data, including saved passwords and
-# web form data, without users consent. Mozilla was also found shipping updates
-# to systems without the user's knowledge or permission.
-# As a result of this, use the following command to permanently disable
-# telemetry reporting in Firefox.
+# A opção seguinte desabilita o Informe de Telemetria. Com o Add-on Fiasco,
+# constatou-se que a Mozilla estava coletando dados de usuário(a), incluindo senhas salvas
+# e dados de formulários da web, sem o consentimento dos(as) usuários(as). Constatou-se, também,
+# que a Mozilla estava enviando atualizações para sistemas sem o conhecimento ou permissão do(a)
+# usuário(a). Como resultado disso, use o seguinte comando para desabilitar permanentemente
+# os informes de telemetria no Firefox.
 unset MOZ_TELEMETRY_REPORTING
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir</literal>
@@ -299,8 +299,9 @@ EOF</userinput></screen>
 
     
     <para>
-      If building with system ICU, adapt the line break mapping for ICU 74 or
-later.  This construct adds five entries to a c++ array.
+      Se construir com o ICU do sistema, adapte o mapeamento de quebra de linha
+para ICU 74 ou posterior. Esta construção adiciona cinco entradas para um
+vetor c++.
     </para>
 
 <screen><userinput>for i in {43..47}; do
@@ -415,26 +416,27 @@ unset PYTHON311</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>export MOZBUILD_STATE_PATH=${PWD}/mozbuild</command>: The build
-tells you that it intends to create <filename
-class="directory">~/.mozbuild</filename>, and offer you an option to press
-&lt;ENTER&gt; to accept this, or Ctrl-C to cancel and restart the build
-after specifying the directory. In practice, the message may not appear
-until after &lt;ENTER&gt; is keyed, i.e. the build stalls.
+      <command>export MOZBUILD_STATE_PATH=${PWD}/mozbuild</command>: A construção
+te informa que pretende criar <filename
+class="directory">~/.mozbuild</filename> e te oferece uma opção para
+pressionar &lt;ENTER&gt; para aceitar isso ou Ctrl-C para cancelar e
+reiniciar a construção depois de especificar o diretório. Na prática, a
+mensagem possivelmente não apareça até depois do &lt;ENTER&gt; ser
+pressionado, ou seja, a construção para.
     </para>
 
     <para>
-      That directory is used for a (probably random) telemetry identifier.
-Creating this directory within the build directory and deleting it after the
-installation prevents it being used.
+      Esse diretório é usado para um (provavelmente aleatório) identificador de
+telemetria. Criar esse diretório dentro do construção da construção e
+deletá-lo depois da instalação evita que seja usado.
     </para>
 
     <para>
-      <command>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none</command>: Use the
-system python to create a virtual environment for <command>mach</command>
-without downloading any python wheels and without using the system python
-modules.  This prevents version mismatches between system modules and
-bundled ones.
+      <command>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none</command>: Use o
+Python do sistema para criar um ambiente virtual para o
+<command>mach</command> sem baixar nenhuma roda Python e sem usar os módulos
+Python do sistema. Isso evita incompatibilidades de versão entre módulos do
+sistema e os incluídos.
     </para>
 
 

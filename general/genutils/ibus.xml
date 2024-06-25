@@ -8,8 +8,8 @@
   <!ENTITY ibus-download-ftp  "">
   <!ENTITY ibus-md5sum        "2e29a7fb0f8c5ffcf42462fda45348fd">
   <!ENTITY ibus-size          "1,4 MB">
-  <!ENTITY ibus-buildsize     "54 MB (add 3 MB for tests)">
-  <!ENTITY ibus-time          "0.3 SBU (Using parallelism=4; add 0.6 SBU for tests)">
+  <!ENTITY ibus-buildsize     "54 MB (adicionar 3 MB para testes)">
+  <!ENTITY ibus-time          "0,3 UPC (Usando paralelismo=4; adicionar 0,6 UPC para testes)">
 <!-- Since UCD.zip can be used by gucharmap too, let's use the same version:
      This prevents version mismatches, since UCD.zip filename is not versioned.
 -->
@@ -94,7 +94,7 @@ linkend="vala"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <xref linkend="gtk3"/>, and <xref
+      <xref linkend="gobject-introspection"/>, <xref linkend="gtk3"/> e <xref
 linkend="libnotify"/>
     </para>
 
@@ -104,12 +104,12 @@ linkend="libnotify"/>
 
       (runtime, for the <command>ibus-setup</command>), and
       NOTE: The reference to the 'xdg' python module is commented out in the source -->
-<xref linkend="gtk4"/> (to build IM module for it), <xref
-linkend="gtk-doc"/> (for generating API documentation), <xref
-linkend="dbus-python"/> and <xref linkend="pygobject3"/> (both to build the
-Python support library), <xref linkend="libxkbcommon"/>, <xref
-linkend="wayland"/> (both to build the Wayland support programs), <ulink
-url="https://www.joypixels.com/">EmojiOne</ulink>, and <ulink
+<xref linkend="gtk4"/> (para construir módulo IM para ele), <xref
+linkend="gtk-doc"/> (para gerar documentação da API), <xref
+linkend="dbus-python"/> e <xref linkend="pygobject3"/> (ambos para construir
+a biblioteca de suporte do Python), <xref linkend="libxkbcommon"/>, <xref
+linkend="wayland"/> (ambos para construir os programas de suporte do
+Wayland), <ulink url="https://www.joypixels.com/">EmojiOne</ulink> e <ulink
 url="https://github.com/AyatanaIndicators/libdbusmenu">libdbusmenu</ulink>
     </para>
 
@@ -128,7 +128,8 @@ url="https://github.com/AyatanaIndicators/libdbusmenu">libdbusmenu</ulink>
     </para>
 -->
 <para>
-      First, install the Unicode Character Database as the &root; user:
+      Primeiro, instale a base de dados de caracteres Unicode como o(a) usuário(a)
+&root;:
     </para>
 
 <!--
@@ -152,7 +153,8 @@ unzip -o ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
     -i data/dconf/org.freedesktop.ibus.gschema.xml</userinput></screen>
 
     <para>
-      If <xref linkend='gtk-doc'/> is not installed, remove the references to it:
+      Se <xref linkend='gtk-doc'/> não estiver instalado, remova as referências a
+ele:
     </para>
 
 <screen><userinput>if ! [ -e /usr/bin/gtkdocize ]; then
@@ -190,9 +192,10 @@ make</userinput></screen>
       <!-- The log says "No idea to simulate key events in Wayland"
            in a Mutter wayland session.  DO NOT REMOVE UNLESS TESTED
            IN WAYLAND.  -->
-To test the results, issue: <command>make -k check</command>.  The test
-named ibus-compose fails because it uses some locales not installed in LFS.
-The test named ibus-keypress will fail if running in a Wayland session.
+Para testar os resultados, emita: <command>make -k check</command>. O teste
+chamado ibus-compose falha porque usa algumas localidades não instaladas no
+LFS. O teste chamado ibus-keypress falhará se executar em uma sessão do
+Wayland.
     </para>
 
     <para>
@@ -207,8 +210,8 @@ The test named ibus-keypress will fail if running in a Wayland session.
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--disable-appindicator</parameter>: This switch disables use of
-libdbusmenu. Omit if you installed the optional dependency.
+      <parameter>--disable-appindicator</parameter>: Essa chave desabilita usar a
+libdbusmenu. Omita se você instalou a dependência opcional.
     </para>
 
     <para>
@@ -217,7 +220,7 @@ dicionários de emoticons. Omita se você instalou o pacote opcional.
     </para>
 
     <para>
-      <parameter>--disable-gtk2</parameter>: This switch removes the dependency on
+      <parameter>--disable-gtk2</parameter>: Essa chave remove a dependência do
 <application>GTK+-2</application>.
     </para>
 
@@ -228,16 +231,16 @@ dicionários de emoticons. Omita se você instalou o pacote opcional.
     </para>
 
     <para>
-      <option>--enable-python-library</option>: This switch enables building the
-<application>Python</application> support library. Use it if you have
-installed the optional Python modules.
+      <option>--enable-python-library</option>: Essa chave habilita construir a
+biblioteca de suporte do <application>Python</application>. Use-a se você
+tiver instalado os módulos opcionais do Python.
     </para>
 
     <para>
-      <option>--enable-wayland</option>: This switch enables building the
-<application>Wayland</application> support programs.  It's automatically
-enabled if both <xref linkend='libxkbcommon'/> and <xref linkend='wayland'/>
-are installed.
+      <option>--enable-wayland</option>: Essa chave habilita construir os
+programas de suporte do <application>Wayland</application>. Ela é habilitada
+automaticamente se <xref linkend='libxkbcommon'/> e <xref
+linkend='wayland'/> estiverem instalados.
     </para>
 
     <para>
@@ -246,29 +249,31 @@ are installed.
            use in sensitive environments."  In my build it also causes
            "compose/sequences-little-endian" bail out with a sanitizer
            warning and the package to FTBFS.  -->
-<envar>NOCONFIGURE=1</envar>: Prevent <command>autogen.sh</command> from
-running the generated <command>configure</command> script.  We'll run the
-script manually instead of relying on <command>autogen.sh</command> to run
-it, because <command>autogen.sh</command> would set
-<option>-fsanitize=address -fsanitize=leak</option> in <envar>CFLAGS</envar>
-running <command>configure</command>, but those compiler options are not
-suitable for productive use and they may also cause a build failure.
+<envar>NOCONFIGURE=1</envar>: Impede que <command>autogen.sh</command>
+execute o conjunto de comandos sequenciais <command>configure</command>
+gerado. Nós executaremos o conjunto de comandos sequenciais manualmente em
+vez de depender do <command>autogen.sh</command> para executá-lo, porque
+<command>autogen.sh</command> configuraria <option>-fsanitize=address
+-fsanitize=leak</option> em <envar>CFLAGS</envar> executando
+<command>configure</command>, mas essas opções do compilador não são
+adequadas para uso produtivo e também podem causar uma falha da construção.
       
     </para>
 
     <para>
-      <envar>PYTHON=python3</envar>: This environment variable makes the
-<command>configure</command> script look for <application>Python
-3</application>. Use it if you want to build the <application>Python
-3</application> support library.
+      <envar>PYTHON=python3</envar>: Essa variável de ambiente faz com que o
+conjunto de comandos sequenciais <command>configure</command> procure por
+<application>Python 3</application>. Use-o se quiser construir a biblioteca
+de suporte do <application>Python 3</application>.
     </para>
 
     <para>
       <!-- This is needed because we do not have the Emoji dictionary.-->
-<envar>SAVE_DIST_FILES=1</envar>: This environment variable makes the
-<command>autogen.sh</command> script save some pre-generated header files
-instead of overwriting them when it is run. This prevents build failures
-when generating <filename>ibusemojigen.h</filename>.
+<envar>SAVE_DIST_FILES=1</envar>: Essa variável de ambiente faz com que o
+conjunto de comandos sequenciais <command>autogen.sh</command> salve alguns
+arquivos de cabeçalho pré gerados em vez de sobrescrevê-los quando for
+executado. Isso evita falhas de construção ao gerar
+<filename>ibusemojigen.h</filename>.
       
     </para>
 

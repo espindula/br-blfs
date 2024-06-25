@@ -9,7 +9,7 @@
   <!ENTITY cups-browsed-download-ftp  "">
   <!ENTITY cups-browsed-md5sum        "1f8dc0c5a08d8a410df0713c5adbaee9">
   <!ENTITY cups-browsed-size          "416 KB">
-  <!ENTITY cups-browsed-buildsize     "6.3 MB">
+  <!ENTITY cups-browsed-buildsize     "6,3 MB">
   <!ENTITY cups-browsed-time          "menos que 0,1 UPC (Usando paralelismo=4)">
 ]>
 
@@ -24,55 +24,56 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introduction to cups-browsed</title>
+    <title>Introdução ao cups-browsed</title>
 
     <para>
-      The <application>cups-browsed</application> daemon is used to browse the
-network for remote CUPS queues and IPP network printers and automatically
-create local queues pointing to them.
+      O processo de segundo plano <application>cups-browsed</application> é usado
+para navegar na rede de intercomunicação em busca de filas remotas do CUPS e
+impressoras IPP de rede de intercomunicação e criar automaticamente filas
+locais apontando para elas.
     </para>
 
     &lfs121_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&cups-browsed-download-http;"/>
+          Transferência (HTTP): <ulink url="&cups-browsed-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download (FTP): <ulink url="&cups-browsed-download-ftp;"/>
+          Transferência (FTP): <ulink url="&cups-browsed-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &cups-browsed-md5sum;
+          Soma de verificação MD5 da transferência: &cups-browsed-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &cups-browsed-size;
+          Tamanho da transferência: &cups-browsed-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &cups-browsed-buildsize;
+          Espaço em disco estimado exigido: &cups-browsed-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &cups-browsed-time;
+          Tempo de construção estimado: &cups-browsed-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">cups-browsed Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências do cups-browsed</bridgehead>
 
-    <bridgehead renderas="sect4">Required</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="avahi"/>, <xref linkend="libcupsfilters"/> and <xref
+      <xref linkend="avahi"/>, <xref linkend="libcupsfilters"/> e <xref
 linkend="libppd"/>
     </para>
 
@@ -93,11 +94,11 @@ Recommended</bridgehead>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of cups-browsed</title>
+    <title>Instalação do cups-browsed</title>
 
     <para>
-      Install <application>cups-browsed</application> by running the following
-commands:
+      Instale <application>cups-browsed</application> executando os seguintes
+comandos:
     </para>
 
 <!-- Tests seem to hang, not sure why
@@ -118,14 +119,14 @@ make</userinput></screen>
     </para>
 
     <para>
-      Now, as the <systemitem class="username">root</systemitem> user:
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para revision="systemd">
-      Install the systemd unit by running the following command as the <systemitem
-class="username">root</systemitem> user:
+      Instale a unidade do systemd executando o seguinte comando como o(a)
+usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root" revision="systemd"><userinput>install -v -m644 daemon/cups-browsed.service /lib/systemd/system/cups-browsed.service</userinput></screen>
@@ -133,20 +134,21 @@ class="username">root</systemitem> user:
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>--with-cups-rundir=/run/cups</parameter>: Defines the directory
-containing transient printing data. The default <filename
-class="directory">/var/run/cups</filename> is obsolete.
+      <parameter>--with-cups-rundir=/run/cups</parameter>: Define o diretório que
+contém dados transitórios de impressão. O padrão <filename
+class="directory">/var/run/cups</filename> está obsoleto.
     </para>
 
     <para>
-      <parameter>--without-rcdir</parameter>: This switch disables installation of
-the bundled bootscript which is not compatible with BLFS.
+      <parameter>--without-rcdir</parameter>: Essa chave desabilita instalação do
+conjunto incluído de comandos sequenciais de inicialização que não é
+compatível com o BLFS.
     </para>
 
   </sect2>
@@ -155,15 +157,16 @@ the bundled bootscript which is not compatible with BLFS.
 
   <!-- TODO: Write a bootscript for cups-browsed -->
 <sect2 role="configuration" revision="systemd">
-    <title>Configuring cups-browsed</title>
+    <title>Configurando cups-browsed</title>
 
     <sect3 id="cups-browsed-init">
-      <title>Systemd Unit</title>
+      <title>Unidade do Systemd</title>
 
       <para>
-        To start the <command>cups-browsed</command> daemon at boot, enable the
-previously installed systemd unit by running the following command as the
-<systemitem class="username">root</systemitem> user:
+        Para iniciar o processo de segundo plano <command>cups-browsed</command> na
+inicialização, habilite a unidade do systemd instalada anteriormente
+executando o seguinte comando como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
       </para>
 
       <indexterm zone="cups-browsed cups-browsed-init">
@@ -205,8 +208,8 @@ previously installed systemd unit by running the following command as the
         <term><command>cups-browsed</command></term>
         <listitem>
           <para>
-            is a daemon for browsing the Bonjour and CUPS broadcasts of shared, remote
-CUPS printers
+            é um processo de segundo plano para navegar nas difusões do Bonjour e do
+CUPS de impressoras remotas e compartilhadas do CUPS
           </para>
           <indexterm zone="cups-browsed cups-browsed-prog">
             <primary sortas="b-cups-browsed">cups-browsed</primary>

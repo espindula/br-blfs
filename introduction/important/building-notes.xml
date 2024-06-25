@@ -213,14 +213,15 @@ tempo de compilação para um pacote pode ser reduzido realizando-se um "make
 paralelo", ou configurando-se uma variável de ambiente, ou dizendo-se ao
 aplicativo make para simultaneamente executar múltiplas tarefas.</para>
 
-    <para>For instance, an Intel Core i9-13900K CPU contains 8 performance (P) cores
-and 16 efficiency (E) cores, and the P cores support SMT (Simultaneous
-MultiThreading, also known as <quote>Hyper-Threading</quote>) so each P core
-can run two threads simultaneously and the Linux kernel will treat each P
-core as two logical cores.  As the result, there are 32 logical cores in
-total.  To utilize all these logical cores running <command>make</command>,
-we can set an environment variable to tell <command>make</command> to run 32
-jobs simultaneously:</para>
+    <para>Por exemplo, uma CPU Intel Core i9-13900K contém 8 núcleos de desempenho (P)
+e 16 núcleos de eficiência (E), e os núcleos P suportam SMT (Simultaneous
+MultiThreading, também conhecido como <quote>Hyper-Threading</quote>),
+portanto cada núcleo P pode executar duas camadas simultaneamente e o núcleo
+Linux tratará cada núcleo P como dois núcleos lógicos. Como resultado,
+existem 32 núcleos lógicos no total. Para utilizar todos esses núcleos
+lógicos executando <command>make</command>, nós podemos configurar uma
+variável de ambiente para dizer ao <command>make</command> para executar 32
+tarefas simultaneamente:</para>
 
     <screen><userinput>export MAKEFLAGS='-j32'</userinput></screen>
 
@@ -243,30 +244,31 @@ usar:
     <screen><userinput>ninja -j32</userinput></screen>
 
     <para>
-      If you are not sure about the number of logical cores, run the
-<command>nproc</command> command.
+      Se você não tiver certeza acerca do número de núcleos lógicos, execute o
+comando <command>nproc</command>.
     </para>
 
     <para>
-      For <command>make</command>, the default number of jobs is 1.  But for
-<command>ninja</command>, the default number of jobs is N + 2 if the number
-of logical cores N is greater than 2; or N + 1 if N is 1 or 2.  The reason
-to use a number of jobs slightly greater than the number of logical cores is
-keeping all logical processors busy even if some jobs are performing I/O
-operations.
+      Para <command>make</command>, o número padrão de tarefas é 1. Mas para
+<command>ninja</command>, o número padrão de tarefas é N + 2, se o número de
+núcleos lógicos N for maior que 2; ou N + 1 se N for 1 ou 2. A razão para
+usar um número de tarefas ligeiramente maior que o número de núcleos lógicos
+é a de manter todos os processadores lógicos ocupados, mesmo se algumas
+tarefas estiverem realizando operações de E/S.
     </para>
 
     <para>
-      Note that the <option>-j</option> switches only limits the parallel jobs
-started by <command>make</command> or <command>ninja</command>, but each job
-may still spawn its own processes or threads.  For example,
-<command>ld.gold</command> will use multiple threads for linking, and some
-tests of packages can spawn multiple threads for testing thread safety
-properties.  There is no generic way for the building system to know the
-number of processes or threads spawned by a job. So generally we should not
-consider the value passed with <option>-j</option> a hard limit of the
-number of logical cores to use.  Read <xref linkend='build-in-cgroup'/> if
-you want to set such a hard limit.
+      Observe que as chaves <option>-j</option> somente limitam as tarefas
+paralelas iniciadas por <command>make</command> ou <command>ninja</command>,
+mas cada tarefa ainda pode gerar os próprios processos ou camadas dela. Por
+exemplo, <command>ld.gold</command> usará várias camadas para vinculação, e
+alguns testes de pacotes podem gerar várias camadas para testar propriedades
+de segurança de camadas. Não existe uma maneira genérica de o sistema de
+construção saber o número de processos ou camadas gerados por uma
+tarefa. Portanto, geralmente nós não deveríamos considerar o valor passado
+com <option>-j</option> como um limite rígido do número de núcleos lógicos a
+serem usados. Leia-se <xref linkend='build-in-cgroup'/> se quiser configurar
+tal limite tão rígido.
     </para>
 
     <para>Geralmente o número de processos não deveria exceder muito o número de
@@ -308,19 +310,19 @@ Libreoffice.
   </sect2>
 
   <sect2 id="build-in-cgroup">
-    <title>Use Linux Control Group to Limit the Resource Usage</title>
+    <title>Use o Grupo de Controle do Linux para Limitar o Uso de Recursos</title>
 
     <para>
-      Sometimes we want to limit the resource usage when we build a package.  For
-example, when we have 8 logical cores, we may want to use only 6 cores for
-building the package and reserve another 2 cores for playing a movie.  The
-Linux kernel provides a feature called control groups (cgroup) for such a
-need.
+      Às vezes queremos limitar o uso de recursos quando construímos um
+pacote. Por exemplo, quando temos 8 núcleos lógicos, podemos querer usar
+somente 6 núcleos para construir o pacote e reservar outros 2 núcleos para
+reproduzir um filme. O núcleo Linux fornece um recurso chamado grupos de
+controle (cgroup) para tal necessidade.
     </para>
 
     <para>
-      Enable control group in the kernel configuration, then rebuild the kernel
-and reboot if necessary:
+      Habilite o grupo de controle na configuração do núcleo, em seguida
+reconstrua o núcleo e reinicialize se necessário:
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -331,13 +333,14 @@ and reboot if necessary:
     <!-- We need cgroup2 mounted at /sys/fs/cgroup.  It's done by
          systemd itself in LFS systemd, mountvirtfs script in LFS sysv. -->
 <para revision='systemd'>
-      Ensure <xref linkend='systemd'/> and <xref linkend='shadow'/> have been
-rebuilt with <xref linkend='linux-pam'/> support (if you are interacting via
-a SSH or graphical session, also ensure the <xref linkend='openssh'/> server
-or the desktop manager has been built with <xref linkend='linux-pam'/>).  As
-the &root; user, create a configuration file to allow resource control
-without &root; privilege, and instruct <command>systemd</command> to reload
-the configuration:
+      Certifique-se de que <xref linkend='systemd'/> e <xref linkend='shadow'/>
+tenham sido reconstruídos com suporte <xref linkend='linux-pam'/> (se você
+estiver interagindo por meio de SSH ou sessão gráfica, certifique-se também
+de que o servidor <xref linkend='openssh'/> ou o gerenciador de área de
+trabalho tenha sido construído com <xref linkend='linux-pam'/>). Como o(a)
+usuário(a) &root;, crie um arquivo de configuração para permitir o controle
+de recursos sem o privilégio de &root; e instrua <command>systemd</command>
+a recarregar a configuração:
     </para>
 
     <screen revision="systemd" role="nodump"><userinput>mkdir -pv /etc/systemd/system/user@.service.d &amp;&amp;
@@ -347,8 +350,9 @@ Delegate=memory cpuset</literal>
 systemctl daemon-reload</userinput></screen>
 
     <para revision='systemd'>
-      Then logout and login again.  Now to run <command>make -j5</command> with
-the first 4 logical cores and 8 GB of system memory, issue:
+      Em seguida, deslogue-se e logue-se novamente. Agora, para executar
+<command>make -j5</command> com os primeiros 4 núcleos lógicos e 8 GB de
+memória do sistema, emita:
     </para>
 
     <screen revision="systemd" role="nodump"><userinput>systemctl   --user start dbus                &amp;&amp;
@@ -358,9 +362,9 @@ systemd-run --user --pty --pipe --wait -G -d \
             make -j5</userinput></screen>
 
     <para revision='sysv'>
-      Ensure <xref linkend='sudo'/> is installed.  To run <command>make
--j5</command> with the first 4 logical cores and 8 GB of system memory,
-issue:
+      Certifique-se de que <xref linkend='sudo'/> esteja instalado. Para executar
+<command>make -j5</command> com os primeiros 4 núcleos lógicos e 8 GB de
+memória do sistema, emita:
     </para>
 
     
@@ -385,66 +389,67 @@ issue:
 EOF</userinput></screen>
 
     <para>
-      With <phrase revision='systemd'> <parameter>MemoryHigh=8G</parameter>
-</phrase> <phrase revision='sysv'> <literal>8589934592</literal> (the output
-of <userinput>bc -e '8*2^30'</userinput>, 2^30 represents
-2<superscript>30</superscript>, i.e. a Gigabyte) in the
-<filename>memory.high</filename> entry </phrase>, a soft limit of memory
-usage is set.  If the processes in the cgroup (<command>make</command> and
-all the descendants of it) uses more than 8 GB of system memory in total,
-the kernel will throttle down the processes and try to reclaim the system
-memory from them.  But they can still use more than 8 GB of system memory.
-If you want to make a hard limit instead, replace <phrase
-revision='systemd'> <parameter>MemoryHigh</parameter> with
-<parameter>MemoryMax</parameter>.  </phrase> <phrase revision='sysv'>
-<filename>memory.high</filename> with <filename>memory.max</filename>.
-</phrase> But doing so will cause the processes killed if 8 GB is not enough
-for them.
+      Com <phrase revision='systemd'> <parameter>MemoryHigh=8G</parameter>
+</phrase> <phrase revision='sysv'> <literal>8589934592</literal> (a saída
+gerada de <userinput>bc -e '8*2^30'</userinput>, 2^30 representa
+2<superscript>30</superscript>, ou seja, um Gigabyte) na entrada
+<filename>memory.high</filename> </phrase>, um limite flexível de uso de
+memória está configurado. Se os processos no cgroup (<command>make</command>
+e todos os descendentes dele) usarem mais de 8 GB de memória do sistema no
+total, o núcleo irá desacelerar os processos e tentará recuperar a memória
+do sistema proveniente deles. Mas eles ainda podem usar mais de 8 GB de
+memória do sistema. Se você quiser definir um limite rígido, substitua
+<phrase revision='systemd'> <parameter>MemoryHigh</parameter> por
+<parameter>MemoryMax</parameter>. </phrase> <phrase revision='sysv'>
+<filename>memory.high</filename> com
+<filename>memory.max</filename>. </phrase> Mas fazer isso causará a
+interrupção dos processos se 8 GB não forem suficientes para eles.
     </para>
 
     <para>
       <phrase revision='systemd'> <parameter>AllowedCPUs=0-3</parameter> </phrase>
-<phrase revision='sysv'> <literal>0-3</literal> in the
-<filename>cpuset.cpus</filename> entry </phrase> makes the kernel only run
-the processes in the cgroup on the logical cores with numbers 0, 1, 2, or
-3.  You may need to adjust this setting based the mapping between the
-logical cores and the physical cores.  For example, with an Intel Core
-i9-13900K CPU, the logical cores 0, 2, 4, ..., 14 are mapped to the first
-threads of the eight physical P cores, the logical cores 1, 3, 5, ..., 15
-are mapped to the second threads of the physical P cores, and the logical
-cores 16, 17, ..., 31 are mapped to the 16 physical E cores.  So if we want
-to use four threads from four different P cores, we need to specify
-<literal>0,2,4,6</literal> instead of <literal>0-3</literal>.  Note that the
-other CPU models may use a different mapping scheme.  If you are not sure
-about the mapping between the logical cores and the physical cores, run
-<command>grep -E '^processor|^core' /proc/cpuinfo</command> which will
-output logical core IDs in the <computeroutput>processor</computeroutput>
-lines, and physical core IDs in the <computeroutput>core id</computeroutput>
-lines.
+<phrase revision='sysv'> <literal>0-3</literal> na entrada
+<filename>cpuset.cpus</filename> </phrase> faz com que o núcleo execute
+somente os processos no cgroup nos núcleos lógicos com números 0, 1, 2 ou
+3. Você possivelmente precise ajustar essa configuração baseada no
+mapeamento entre os núcleos lógicos e os núcleos físicos. Por exemplo, com
+uma CPU Intel Core i9-13900K, os núcleos lógicos 0, 2, 4, ..., 14 são
+mapeados para as primeiras camadas dos oito núcleos P físicos; os núcleos
+lógicos 1, 3, 5, ..., 15 são mapeados para as segundas camadas dos núcleos P
+físicos; e os núcleos lógicos 16, 17, ..., 31 são mapeados para os 16
+núcleos E físicos. Portanto, se quisermos usar quatro camadas de quatro
+núcleos P, precisamos especificar <literal>0,2,4,6</literal> em vez de
+<literal>0-3</literal>. Observe que os outros modelos de CPU podem usar um
+esquema de mapeamento diferente. Se você não tiver certeza acerca do
+mapeamento entre os núcleos lógicos e os núcleos físicos, execute
+<command>grep -E '^processor|^core' /proc/cpuinfo</command> que gerará IDs
+de núcleo lógico nas linhas <computeroutput>processor</computeroutput> e IDs
+de núcleo físico nas linhas <computeroutput>core id</computeroutput>.
     </para>
 
     <para>
-      When the <command>nproc</command> or <command>ninja</command> command runs
-in a cgroup, it will use the number of logical cores assigned to the cgroup
-as the <quote>system logical core count</quote>.  For example, in a cgroup
-with logical cores 0-3 assigned, <command>nproc</command> will print
-<computeroutput>4</computeroutput>, and <command>ninja</command> will run 6
-(4 + 2) jobs simultaneously if no <option>-j</option> setting is explicitly
-given.
+      Quando o comando <command>nproc</command> ou <command>ninja</command>
+executa em um cgroup, ele usará o número de núcleos lógicos atribuídos para
+o cgroup como a <quote>contagem de núcleos lógicos do sistema</quote>. Por
+exemplo, em um cgroup com núcleos lógicos 0-3 atribuídos,
+<command>nproc</command> imprimirá <computeroutput>4</computeroutput> e
+<command>ninja</command> executará 6 (4 + 2) tarefas simultaneamente se
+nenhuma configuração <option>-j</option> for fornecida explicitamente.
     </para>
 
     <para revision="systemd">
-      Read the man pages <ulink role='man'
-url='&man;systemd-run.1'>systemd-run(1)</ulink> and <ulink role='man'
+      Leiam-se as páginas de manual <ulink role='man'
+url='&man;systemd-run.1'>systemd-run(1)</ulink> e <ulink role='man'
 url='&man;systemd.resource-control.5'>systemd.resource-control(5)</ulink>
-for the detailed explanation of parameters in the command.
+para a explicação detalhada dos parâmetros no comando.
     </para>
 
     <para revision="sysv">
-      Read the <filename>Documentation/admin-guide/cgroup-v2.rst</filename> file
-in the Linux kernel source tree for the detailed explanation of <systemitem
-class="filesystem">cgroup2</systemitem> pseudo file system entries referred
-in the command.
+      Leia-se o arquivo
+<filename>Documentation/admin-guide/cgroup-v2.rst</filename> na árvore do
+fonte do núcleo Linux para a explicação detalhada das entradas do pseudo
+sistema de arquivos <systemitem class="filesystem">cgroup2</systemitem>
+referidas no comando.
     </para>
 
   </sect2>
@@ -1141,17 +1146,19 @@ para produzir um aplicativo não otimizado com informações de depuração.
       </para>
 
       <para>
-        Like <command>ninja</command>, by default <command>cargo</command> uses all
-logical cores.  This can often be worked around, either by exporting
-<envar>CARGO_BUILD_JOBS=<replaceable>&lt;N&gt;</replaceable></envar> or
-passing <option>--jobs <replaceable>&lt;N&gt;</replaceable></option> to
-<command>cargo</command>.  For compiling rustc itself, specifying
-<option>--jobs <replaceable>&lt;N&gt;</replaceable></option> for invocations
-of <command>x.py</command> (together with the
-<envar>CARGO_BUILD_JOBS</envar> environment variable, which looks like a
-<quote>belt and braces</quote> approach but seems to be necessary) mostly
-works. The exception is running the tests when building rustc, some of them
-will nevertheless use all online CPUs, at least as of rustc-1.42.0.
+        Semelhante ao <command>ninja</command>, por padrão <command>cargo</command>
+usa todos os núcleos lógicos. Isso frequentemente pode ser contornado, seja
+exportando-se
+<envar>CARGO_BUILD_JOBS=<replaceable>&lt;N&gt;</replaceable></envar> seja
+passando-se <option>--jobs <replaceable>&lt;N&gt;</replaceable></option>
+para <command>cargo</command>. Para compilar o próprio rustc, especificar-se
+<option>--jobs <replaceable>&lt;N&gt;</replaceable></option> para invocações
+do <command>x.py</command> (juntamente com a variável de ambiente
+<envar>CARGO_BUILD_JOBS=</envar>, que se parece com uma abordagem
+<quote>cinto e suspensórios</quote>, porém parece ser necessária) funciona
+na maioria. A exceção é a de executar-se os testes quando construir-se o
+rustc; alguns deles, ainda assim, usarão todas as CPUs online, pelo menos
+desde o rustc-1.42.0.
       </para>
 
   </sect2>
@@ -1308,15 +1315,15 @@ sinalizadores adicionados e não os substituindo.
       </para>
 
       <para>
-        For hardening options which are reasonably cheap, there is some discussion
-in the 'tuning' link above (occasionally, one or more of these options might
-be inappropriate for a package). These options are
-<option>-D_FORTIFY_SOURCE=2</option> (or
-<option>-D_FORTIFY_SOURCE=3</option> which is more secure but with a larger
-performance overhead) and (for C++)
-<option>-D_GLIBCXX_ASSERTIONS</option>. On modern machines these should only
-have a little impact on how fast things run, and often they will not be
-noticeable.
+        Para opções de reforço que são razoavelmente baratas, existe alguma
+discussão no link "ajuste" acima (ocasionalmente, uma ou mais dessas opções
+podem ser inadequadas para um pacote). Essas opções são
+<option>-D_FORTIFY_SOURCE=2</option> (ou
+<option>-D_FORTIFY_SOURCE=3</option> que é mais seguro, mas com maior
+sobrecarga de desempenho) e (para C++)
+<option>-D_GLIBCXX_ASSERTIONS</option>. Nas máquinas modernas, isso deveria
+ter somente um pequeno impacto na rapidez com que as coisas executam e,
+muitas vezes, não serão perceptíveis.
       </para>
 
       <para>
