@@ -1,0 +1,570 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2024-05-18 09:06+0000\n"
+"PO-Revision-Date: 2024-06-09 07:48+0000\n"
+"Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail."
+"com>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/"
+"projects/beyond-linux-from-scratch-12-1/server_databases_upgradedb/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.5.5\n"
+
+#. type: Attribute 'xreflabel' of: <sect1>
+#: blfs-en/server/databases/upgradedb.xml:8
+#, xml-text
+msgid "Upgrade Database"
+msgstr "Atualização de Base de Dados"
+
+#. type: Content of: <sect1><title>
+#: blfs-en/server/databases/upgradedb.xml:12
+#, xml-text
+msgid "Important Notes About Upgrading Database Server Software"
+msgstr ""
+"Observações Importantes Relativas a Atualização do Logiciário do Servidor de"
+" Base de Dados"
+
+#. type: Content of: <sect1><note><para>
+#: blfs-en/server/databases/upgradedb.xml:14
+#, xml-text
+msgid ""
+"This section is about reinstalling database software when an existing "
+"database is in use.  It is not applicable for initial installations or if "
+"there is no existing database for the package being updated, but users "
+"should read through it to become aware of issues that can arise in the "
+"future."
+msgstr ""
+"Esta seção é sobre reinstalar logiciário de base de dados quando uma base de"
+" dados existente estiver em uso. Ela não é aplicável para instalações "
+"iniciais ou se não existir base de dados para o pacote sendo atualizado, mas"
+" os(as) usuários(as) deveriam lê-la para ficarem cientes dos problemas que "
+"podem surgir no futuro."
+
+#. type: Content of: <sect1><para>
+#: blfs-en/server/databases/upgradedb.xml:20
+#, xml-text
+msgid ""
+"Let's start this chapter with a dramatic screenshot of an error that really "
+"happened.  This error will not occur if you are installing database software"
+" for the first time:"
+msgstr ""
+"Vamos começar este capítulo com uma captura de tela dramática de um erro que"
+" realmente aconteceu. Este erro não ocorrerá se você estiver instalando o "
+"logiciário de base de dados pela primeira vez:"
+
+#. type: Content of: <sect1><screen>
+#: blfs-en/server/databases/upgradedb.xml:24
+#, no-wrap, xml-text
+msgid ""
+"$ sudo systemctl status postgresql\n"
+"-- postgresql.service - PostgreSQL database server\n"
+"     Loaded: loaded (/usr/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)\n"
+"     Active: failed (Result: exit-code) since Tue 2021-10-26 17:11:53 CDT; 2min 49s ago\n"
+"    Process: 17336 ExecStart=/usr/bin/pg_ctl -s -D ${PGROOT}/data start -w -t 120 (code=exited, status=1/FAILURE)\n"
+"        CPU: 7ms\n"
+"\n"
+"Oct 26 17:11:53 SVRNAME systemd[1]: Starting PostgreSQL database server...\n"
+"Oct 26 17:11:53 SRVNAME postgres[17338]: 2021-10-26 17:11:53.420 CDT [17338] FATAL:\n"
+"                database files are incompatible with server\n"
+"Oct 26 17:11:53 SRVNAME postgres[17338]: 2021-10-26 17:11:53.420 CDT [17338] DETAIL:\n"
+"                The data directory was initialized by PostgreSQL version 13,\n"
+"                which is not compatible with this version 14.0.\n"
+"Oct 26 17:11:53 SRVNAME postgres[17336]: pg_ctl: could not start server\n"
+"Oct 26 17:11:53 SRVNAME postgres[17336]: Examine the log output.\n"
+"Oct 26 17:11:53 SRVNAME systemd[1]: postgresql.service: Control process exited, code=exited, status=1/FAILURE\n"
+"Oct 26 17:11:53 SRVNAME systemd[1]: postgresql.service: Failed with result 'exit-code'.\n"
+"Oct 26 17:11:53 SRVNAME systemd[1]: Failed to start PostgreSQL database server."
+msgstr ""
+"$ sudo systemctl status postgresql\n"
+"-- postgresql.service - PostgreSQL database server\n"
+"     Loaded: loaded (/usr/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)\n"
+"     Active: failed (Result: exit-code) since Tue 2021-10-26 17:11:53 CDT; 2min 49s ago\n"
+"    Process: 17336 ExecStart=/usr/bin/pg_ctl -s -D ${PGROOT}/data start -w -t 120 (code=exited, status=1/FAILURE)\n"
+"         CPU: 7ms\n"
+"\n"
+"Oct 26 17:11:53 SVRNAME systemd[1]: Starting PostgreSQL database server...\n"
+"Oct 26 17:11:53 SRVNAME postgres[17338]: 2021-10-26 17:11:53.420 CDT [17338] FATAL:\n"
+"                database files are incompatible with server\n"
+"Oct 26 17:11:53 SRVNAME postgres[17338]: 2021-10-26 17:11:53.420 CDT [17338] DETAIL:\n"
+"                The data directory was initialized by PostgreSQL version 13,\n"
+"                which is not compatible with this version 14.0.\n"
+"Oct 26 17:11:53 SRVNAME postgres[17336]: pg_ctl: could not start server\n"
+"Oct 26 17:11:53 SRVNAME postgres[17336]: Examine the log output.\n"
+"Oct 26 17:11:53 SRVNAME systemd[1]: postgresql.service: Control process exited, code=exited, status=1/FAILURE\n"
+"Oct 26 17:11:53 SRVNAME systemd[1]: postgresql.service: Failed with result 'exit-code'.\n"
+"Oct 26 17:11:53 SRVNAME systemd[1]: Failed to start PostgreSQL database server."
+
+#. type: Content of: <sect1><para>
+#: blfs-en/server/databases/upgradedb.xml:44
+#, xml-text
+msgid ""
+"To avoid situations like this (i.e., your database server software refuses "
+"to start), read the following discussion of the best way to upgrade a DBMS "
+"(Database Management System)."
+msgstr ""
+"Para evitar situações como essa (ou seja, o teu logiciário do servidor de "
+"base de dados se recusa a iniciar), leia a discussão a seguir relativa a "
+"melhor maneira de atualizar um Sistema de Gerenciamento de Base de Dados "
+"(SGBD)."
+
+#. type: Content of: <sect1><para>
+#: blfs-en/server/databases/upgradedb.xml:50
+#, xml-text
+msgid ""
+"The root cause of the error shown above was an upgrade of the server "
+"software to a newer major version which left the data files untouched. In "
+"this case, the administrator was able to recover the DBMS without any loss "
+"of data."
+msgstr ""
+"A causa raiz do erro mostrado acima foi uma atualização do logiciário do "
+"servidor para uma versão principal mais recente que deixou os arquivos de "
+"dados intactos. Nesse caso, o(a) administrador(a) conseguiu recuperar o SGBD"
+" sem qualquer perda de dados."
+
+#. type: Content of: <sect1><para>
+#: blfs-en/server/databases/upgradedb.xml:57
+#, xml-text
+msgid ""
+"Even if you are doing an initial DBMS install, read through this section. It"
+" provides information about implementing backup and restore procedures (or "
+"at least a strategy for creating them) which will satisfy your needs and "
+"guarantee the safety of your data."
+msgstr ""
+"Mesmo se você estiver fazendo uma instalação inicial do SGBD, leia esta "
+"seção. Ela fornece informações relativas a implementação de procedimentos de"
+" cópia de segurança e restauração (ou pelo menos uma estratégia para criá-"
+"las) que irão satisfazer as tuas necessidades e garantir a segurança dos "
+"teus dados."
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/server/databases/upgradedb.xml:65
+#, xml-text
+msgid "Upgrade Database Server Packages"
+msgstr "Atualização de Pacotes do Servidor de Base de Dados"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/server/databases/upgradedb.xml:68
+#, xml-text
+msgid ""
+"Database systems work on files which hold the database metadata and the data"
+" itself. The internal structure of these files is optimized for use by the "
+"server software. When such server software is upgraded, the new software may"
+" utilize a different file format than had previously been used. Sometimes "
+"the new software can work with the old format as well as the new "
+"one&mdash;but without the performance improvements the new format provides."
+"  Other times, the new server software will reformat the data files "
+"automatically after the upgrade."
+msgstr ""
+"Os sistemas de base de dados funcionam em arquivos que contém os metadados "
+"da base de dados e os próprios dados. A estrutura interna desses arquivos é "
+"otimizada para uso pelo logiciário do servidor. Quando esse logiciário de "
+"servidor for atualizado, o novo logiciário poderá utilizar um formato de "
+"arquivo diferente do usado anteriormente. Às vezes, o novo logiciário pode "
+"funcionar tanto com o formato antigo quanto com o novo&dash;mas sem as "
+"melhorias de desempenho que o novo formato oferece. Outras vezes, o novo "
+"logiciário de servidor reformatará os arquivos de dados automaticamente após"
+" a atualização."
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/server/databases/upgradedb.xml:80
+#, xml-text
+msgid ""
+"Unfortunately, the most likely case is that the new server software "
+"complains about out of date file formats and exits.  When this happens, and "
+"you have overwritten the old server software, you may end up with a broken "
+"system and lost data."
+msgstr ""
+"Infelizmente, o caso mais provável é o de que o novo logiciário de servidor "
+"reclame dos formatos desatualizados de arquivos e saia. Quando isso acontece"
+" e você sobrescreveu o antigo logiciário do servidor, você possivelmente "
+"acabe com um sistema quebrado e perda de dados."
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/server/databases/upgradedb.xml:87
+#, xml-text
+msgid ""
+"Changes in data file formats usually happen at major version changes, but "
+"they can also occur at other times.  Before upgrading any DBMS software, "
+"check the documentation to see if this upgrade makes changes which require "
+"reformatting the database."
+msgstr ""
+"As mudanças nos formatos dos arquivos de dados geralmente ocorrem em "
+"mudanças da versão principal, mas também podem ocorrer em outros momentos. "
+"Antes de atualizar qualquer logiciário de SGBD, verifique a documentação "
+"para ver se essa atualização faz mudanças que exigem reformatar a base de "
+"dados."
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/server/databases/upgradedb.xml:94
+#, xml-text
+msgid ""
+"Of course, if you have databases with content that is not easily rebuilt, it"
+" is always a good idea to create backups of the database from time to time. "
+"Before upgrading the server software, you should run another backup."
+msgstr ""
+"Claro, se você tiver bases de dados com conteúdo que não seja reconstruível "
+"facilmente, [então] é sempre uma boa ideia criar cópias de segurança da base"
+" de dados de tempos em tempos. Antes de atualizar o logiciário do servidor, "
+"você deveria executar outra cópia de segurança."
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/server/databases/upgradedb.xml:101
+#, xml-text
+msgid "Upgrade by Backup and Restore"
+msgstr "Atualização por Cópia de Segurança e Restauração"
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/server/databases/upgradedb.xml:105
+#, xml-text
+msgid ""
+"A backup is useless if there is no verified process to restore the data from"
+" this backup. When running a database server, you should not only create "
+"backups; you should also verify that the restore process really works. The "
+"time to test the restore procedure is <emphasis>before</emphasis> you "
+"urgently need to recover lost data."
+msgstr ""
+"Uma cópia de segurança é inútil se não existir um processo verificado para "
+"restaurar os dados a partir dessa cópia de segurança. Ao executar um "
+"servidor de base de dados, você não deveria somente criar cópias de "
+"segurança; você também deveria verificar se o processo de restauração "
+"realmente funciona. O momento de testar o procedimento de restauração é "
+"<emphasis>antes</emphasis> de você precisar recuperar urgentemente os dados "
+"perdidos."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:116
+#, xml-text
+msgid ""
+"Most database server software provides some basic tools to create backups of"
+" your data. Usually the backups created with those tools can be read by "
+"newer versions of the software (via a restore tool). Using older restore "
+"tools with newer backup data is a bad idea; you should "
+"<emphasis>never</emphasis> blindly assume that it will work. It might, but "
+"usually it doesn't."
+msgstr ""
+"A maioria dos logiciários de servidor de base de dados fornece algumas "
+"ferramentas básicas para criar cópias de segurança dos dados deles. "
+"Normalmente, as cópias de segurança criadas com essas ferramentas conseguem "
+"ser lidas por versões mais recentes do logiciário (por meio de uma "
+"ferramenta de restauração). Usar ferramentas mais antigas de restauração com"
+" dados de cópia de segurança mais recentes é uma má ideia; você "
+"<emphasis>nunca</emphasis> deveria assumir cegamente que isso funcionará. "
+"Pode ser, mas geralmente não."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:125
+#, xml-text
+msgid "The easiest way to upgrade your database files is to"
+msgstr ""
+"A maneira mais fácil de atualizar teus arquivos de base de dados é a de"
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:130
+#, xml-text
+msgid "Create a full database backup using the old tools."
+msgstr ""
+"Criar uma cópia completa de segurança da base de dados usando as ferramentas"
+" antigas."
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:132
+#, xml-text
+msgid ""
+"This step creates an offline copy of the database files&mdash;for long term "
+"archiving, for disaster recovery, or as preparation for an upgrade. This "
+"offline backup consists of either (1) a full one-to-one copy of the current "
+"database files, or (2) a full backup of the database files from a certain "
+"point in time, plus all the journal data (that is Oracle&reg; terminology, "
+"it is called \"Continuous Archiving\" or \"write ahead log (WAL)\" in "
+"Postgresql) describing the changes made after that point in time. This "
+"second form takes less time to create (if the DB software provides this type"
+" of journaling) because you only have to save the data that have changed "
+"since the last full backup was created."
+msgstr ""
+"Essa etapa cria uma cópia fora de linha dos arquivos da base de "
+"dados&mdash;para arquivamento de longo prazo, para recuperação de desastres "
+"ou como preparação para uma atualização. Essa cópia de segurança fora de "
+"linha consiste ou em (1) uma cópia completa um-para-um dos arquivos atuais "
+"da base de dados ou (2) uma cópia completa de segurança dos arquivos da base"
+" de dados a partir de um determinado ponto no tempo, além de todos os dados "
+"do diário (ou seja, na terminologia da &quot;Oracle&reg;&quot;, é chamado de"
+" &quot;Arquivamento Contínuo&quot; ou &quot;write ahead log&quot; "
+"(&quot;WAL&quot;) no &quot;Postgresql&quot;) descrevendo as mudanças feitas "
+"depois desse ponto no tempo. Essa segunda forma leva menos tempo para ser "
+"criada (se o logiciário da Base de Dados fornecer esse tipo de registro em "
+"diário) porque você tem de salvar somente os dados que foram mudados desde "
+"quando a cópia completa de segurança mais recente foi criada."
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:143
+#, xml-text
+msgid ""
+"When upgrading database server software, a full backup (which can be used "
+"for subsequent incremental backups) should be created; but if there is a lot"
+" of data, an incremental backup will suffice. The best strategy for you "
+"depends on the amount of data stored in your database (is it a few hundred "
+"table rows, or is it hundreds of terabytes?). A full backup in the latter "
+"case can't be done quickly.  To fully protect your data, create a backup of "
+"the old programs (and/or their sources) and save it, along with the data "
+"files, to be certain there is a fallback solution if the new software cannot"
+" read the old data."
+msgstr ""
+"Ao atualizar o logiciário do servidor de base de dados, uma cópia completa "
+"de segurança (que pode ser usada para cópias incrementais de segurança "
+"subsequentes) deveria ser criada; mas se existirem muitos dados, [então] uma"
+" cópia incremental de segurança será suficiente. A melhor estratégia para "
+"você depende da quantidade de dados armazenados em tua base de dados (são "
+"algumas centenas de linhas da tabela ou centenas de terabytes?). Uma cópia "
+"completa de segurança nesse último caso não pode ser feita rapidamente. Para"
+" proteger totalmente teus dados, crie uma cópia de segurança dos aplicativos"
+" antigos (e(ou) dos fontes deles) e salve-a, junto com os arquivos de dados,"
+" para ter certeza de que existe uma solução alternativa caso o novo "
+"logiciário não consiga ler os dados antigos."
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:157
+#, xml-text
+msgid "Upgrade the server software"
+msgstr "Atualizar o logiciário do servidor"
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:159
+#, xml-text
+msgid ""
+"In this step, instructions to build the database server software are "
+"executed just as they are shown in subsequent sections talking about the "
+"DBMs like MariaDB or Postgresql. That is, build the software as usual using "
+"BLFS instructions."
+msgstr ""
+"Nessa etapa, as instruções para construir o logiciário do servidor de base "
+"de dados são executadas exatamente como são mostradas nas seções "
+"subsequentes falando sobre &quot;GBDs&quot; como &quot;MariaDB&quot; ou "
+"&quot;Postgresql&quot;. Ou seja, construa o logiciário normalmente usando as"
+" instruções do BLFS."
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:166
+#, xml-text
+msgid "Restore the database by using the new tools."
+msgstr "Restaurar a base de dados usando as novas ferramentas."
+
+#. type: Content of: <sect1><sect2><sect3><itemizedlist><listitem><para>
+#: blfs-en/server/databases/upgradedb.xml:168
+#, xml-text
+msgid ""
+"To restore the data, the tools of the newly installed server software should"
+" be used. During the restoration process, the new tools will create and/or "
+"upgrade the data files in the format the new software requires. It is "
+"assumed that newer software is capable of reading old data."
+msgstr ""
+"Para restaurar os dados, as ferramentas do logiciário de servidor recém-"
+"instalado deveriam ser usadas. Durante o processo de restauração, as novas "
+"ferramentas criarão e (ou) atualizarão os arquivos de dados no formato que o"
+" novo logiciário exige. Supõe-se que o logiciário mais recente seja capaz de"
+" ler os dados antigos."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:177
+#, xml-text
+msgid ""
+"Since you already have a backup procedure in place (and you have tested your"
+" restore procedure, right?), this might be the easiest way to upgrade as you"
+" can use your well known processes to upgrade just as you always do&mdash;at"
+" least in terms of the backup and restore."
+msgstr ""
+"Como você já tem um procedimento de cópia de segurança em vigor (e testou "
+"teu procedimento de restauração, certo?), essa pode ser a maneira mais fácil"
+" de atualizar, pois você pode usar teus processos bem conhecidos para "
+"atualizar como sempre faz&mdash;pelo menos em termos de cópia de segurança e"
+" de restauração."
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/server/databases/upgradedb.xml:187
+#, xml-text
+msgid "Upgrade the Database Files by Using System Tools"
+msgstr ""
+"Atualização dos Arquivos da Base de Dados Usando Ferramentas do Sistema"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:190
+#, xml-text
+msgid ""
+"Some database systems (for instance Postgresql) provide a tool which can "
+"reformat (upgrade) the existing database files to the new format.  If you "
+"need to restore from a backup (for example, running the upgrade tool failed)"
+" you will have to reinstall the old software to recover your data."
+msgstr ""
+"Alguns sistemas de base de dados (por exemplo, o &quot;Postgresql&quot;) "
+"fornecem uma ferramenta que pode reformatar (atualizar) os arquivos "
+"existentes de base de dados para o novo formato. Se precisar restaurar a "
+"partir de uma cópia de segurança (por exemplo, executar a ferramenta de "
+"atualização falhou), [então] você terá que reinstalar o logiciário antigo "
+"para recuperar os teus dados."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:199
+#, xml-text
+msgid ""
+"Even though the reformatting tools might work as advertised, you should "
+"create a full backup before running them. A failure could cause serious "
+"damage to the database."
+msgstr ""
+"Mesmo que as ferramentas de reformatação funcionem conforme anunciado, você "
+"deveria criar uma cópia completa de segurança antes de executá-las. Uma "
+"falha poderia causar sérios danos à base de dados."
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/server/databases/upgradedb.xml:209
+#, xml-text
+msgid "Notes for Specific DBMS"
+msgstr "Observações para SGBDs Específicos"
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/server/databases/upgradedb.xml:212
+#, xml-text
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:216
+#, xml-text
+msgid ""
+"Upstream documentation for Backup/Restore: <ulink "
+"url=\"https://www.postgresql.org/docs/current/backup.html\"/>"
+msgstr ""
+"Documentação do(a) desenvolvedor(a) para Cópia de Segurança/Restauração: "
+"<ulink url=\"https://www.postgresql.org/docs/current/backup.html\"/>"
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/server/databases/upgradedb.xml:223
+#, xml-text
+msgid "MariaDB"
+msgstr "MariaDB"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:227
+#, xml-text
+msgid ""
+"Upstream documentation for Backup/Restore: <ulink "
+"url=\"https://mariadb.com/kb/en/backup-and-restore-overview/\"/>"
+msgstr ""
+"Documentação do(a) desenvolvedor(a) para Cópia de Segurança/Restauração: "
+"<ulink url=\"https://mariadb.com/kb/en/backup-and-restore-overview/\"/>"
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/server/databases/upgradedb.xml:234
+#, xml-text
+msgid "Sqlite"
+msgstr "Sqlite"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:238
+#, xml-text
+msgid ""
+"Do not underestimate <application>Sqlite</application>. It is a feature-rich"
+" DBMS. The main difference from the two big players above is that Sqlite "
+"does not provide access via a network API. Sqlite databases are always "
+"stored on the machine running the program which uses the database. The "
+"manipulation of data content is done via API calls to library functions "
+"directly within the program."
+msgstr ""
+"Não subestime o &quot;<application>Sqlite</application>&quot;. Ele é um SGBD"
+" rico em recursos. A principal diferença para os dois grandes concorrentes "
+"acima é a de que o &quot;SQLite&quot; não fornece acesso por meio de uma "
+"&quot;API&quot; de rede de intercomunicação. As bases de dados "
+"&quot;SQLite&quot; são sempre armazenadas na máquina que executa o "
+"aplicativo que usa a base de dados. A manipulação do conteúdo dos dados é "
+"feita por meio de chamadas de &quot;API&quot; para funções de biblioteca "
+"diretamente no aplicativo."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:245
+#, xml-text
+msgid "In the upstream documentation you may find the following useful:"
+msgstr ""
+"Na documentação do(a) desenvolvedor(a) você possivelmente ache o seguinte "
+"útil:"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:248
+#, xml-text
+msgid ""
+"Documentation of the sqlite3 command line tool: <ulink "
+"url=\"https://www.sqlite.org/cli.html\"/>"
+msgstr ""
+"Documentação da ferramenta de linha de comando &quot;sqlite3&quot;: <ulink "
+"url=\"https://www.sqlite.org/cli.html\"/>"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:252
+#, xml-text
+msgid ""
+"Documentation of backup API calls: <ulink "
+"url=\"https://www.sqlite.org/backup.html\"/>"
+msgstr ""
+"Documentação de chamadas da &quot;API&quot; de cópia de segurança: <ulink "
+"url=\"https://www.sqlite.org/backup.html\"/>"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:256
+#, xml-text
+msgid ""
+"Unfortunately, there is no dedicated chapter in the upstream documentation "
+"talking about backup/restore, but there are several articles about it on the"
+" Internet. Here is an example."
+msgstr ""
+"Infelizmente, não existe nenhum capítulo dedicado na documentação do(a) "
+"desenvolvedor(a) falando a respeito de cópia de segurança/restauração, mas "
+"existem vários artigos referentes a isso na Internet. Aqui está um exemplo."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:261
+#, xml-text
+msgid ""
+"Documentation for Backup/Restore: <ulink "
+"url=\"https://database.guide/backup-sqlite-database/\"/>"
+msgstr ""
+"Documentação para Cópia de Segurança/Restauração: <ulink "
+"url=\"https://database.guide/backup-sqlite-database/\"/>"
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/server/databases/upgradedb.xml:268
+#, xml-text
+msgid "LMDB"
+msgstr "LMDB"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:272
+#, xml-text
+msgid ""
+"Like <application>Sqlite</application>, this software acts on local database"
+" files; there is no network interface."
+msgstr ""
+"Assim como o <application>Sqlite</application>, esse logiciário atua em "
+"arquivos locais de base de dados; não existe interface de rede de "
+"intercomunicação."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/server/databases/upgradedb.xml:276
+#, xml-text
+msgid ""
+"The relevant resources to back up/restore a LMDB database are the man pages "
+"for <filename>mdb_dump</filename> and its counterpart "
+"<filename>mdb_load</filename>."
+msgstr ""
+"Os recursos relevantes para produzir cópia de segurança/restaurar uma base "
+"de dados LMDB são as páginas de manual para <filename>mdb_dump</filename> e "
+"a contraparte dele <filename>mdb_load</filename>."
+
+#, xml-text
+#~ msgid "Berkeley DB"
+#~ msgstr "Base de Dados Berkeley"

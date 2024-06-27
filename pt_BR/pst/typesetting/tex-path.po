@@ -1,0 +1,191 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2024-05-18 09:06+0000\n"
+"PO-Revision-Date: 2024-06-09 07:48+0000\n"
+"Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail."
+"com>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/"
+"projects/beyond-linux-from-scratch-12-1/pst_typesetting_tex-path/pt_BR/>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.5.5\n"
+
+#. type: Content of: <sect1><title>
+#: blfs-en/pst/typesetting/tex-path.xml:8
+#: blfs-en/pst/typesetting/tex-path.xml:12
+#, xml-text
+msgid "Setting the PATH for TeX Live"
+msgstr "Configurando o PATH para TeX Live"
+
+#. type: Content of: <sect1><para>
+#: blfs-en/pst/typesetting/tex-path.xml:15
+#, xml-text
+msgid ""
+"Before starting to build TeX Live, set up your PATH so that the system can "
+"properly find the files.  If you set up your login scripts as recommended in"
+" <xref linkend='postlfs-config-profile'/>, update the needed paths by "
+"creating the <filename>texlive.sh</filename> script. The programs are always"
+" installed in an &lt;ARCH&gt;-linux subdirectory and on 32-bit x86 this is "
+"always i386-linux. For x86_64 and i?86 we can generate this as $TEXARCH:"
+msgstr ""
+"Antes de começar a construir o TeX Live, configure teu PATH, de forma que o "
+"sistema consiga encontrar os arquivos corretamente. Se você configurou teus "
+"conjuntos de comandos sequenciais de login conforme recomendado em <xref "
+"linkend='postlfs-config-profile'/>, atualize os caminhos necessários criando"
+" o conjunto de comandos sequenciais <filename>texlive.sh</filename>. Os "
+"aplicativos são sempre instalados em um subdiretório "
+"&lt;ARQUITETURA&gt;-linux e no x86 de 32 bits isso é sempre i386-linux. Para"
+" x86_64 e i?86, podemos gerar isso como $TEXARCH:"
+
+#. type: Content of: <sect1><note><para>
+#: blfs-en/pst/typesetting/tex-path.xml:26
+#, xml-text
+msgid ""
+"If upgrading from a previous year's version, you should manually edit "
+"<filename>texlive.sh</filename> to ensure that the version for the year you "
+"wish to use is the only TeX present (some people need to keep multiple years"
+" available to ensure there are no regressions in their documents)."
+msgstr ""
+"Se atualizar a partir de uma versão do ano anterior, você deveria editar "
+"manualmente o <filename>texlive.sh</filename> para garantir que a versão "
+"para o ano que você deseja usar seja a única TeX presente (algumas pessoas "
+"precisam manter vários anos disponíveis para garantir que não existam "
+"regressões nos documentos delas)."
+
+#. type: Content of: <sect1><para>
+#: blfs-en/pst/typesetting/tex-path.xml:36
+#, xml-text
+msgid "Now, create the texlive.sh script as the &root; user:"
+msgstr ""
+"Agora, crie o conjunto de comandos sequenciais texlive.sh como o(a) "
+"usuário(a) &root;:"
+
+#. type: Content of: <sect1><screen>
+#: blfs-en/pst/typesetting/tex-path.xml:38
+#, no-wrap, xml-text
+msgid ""
+"<userinput>TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/')\n"
+"\n"
+"cat &gt; /etc/profile.d/texlive.sh &lt;&lt; EOF\n"
+"<literal># Begin texlive setup\n"
+"TEXLIVE_PREFIX=/opt/texlive/&texlive-year;\n"
+"export TEXLIVE_PREFIX\n"
+"\n"
+"pathappend \\$TEXLIVE_PREFIX/texmf-dist/doc/man  MANPATH\n"
+"pathappend \\$TEXLIVE_PREFIX/texmf-dist/doc/info INFOPATH\n"
+"pathappend \\$TEXLIVE_PREFIX/bin/$TEXARCH\n"
+"\n"
+"TEXMFCNF=\\$TEXLIVE_PREFIX/texmf-dist/web2c\n"
+"export TEXMFCNF\n"
+"\n"
+"# End texlive setup</literal>\n"
+"EOF\n"
+"\n"
+"unset TEXARCH</userinput>"
+msgstr ""
+"<userinput>TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/')\n"
+"\n"
+"cat &gt; /etc/profile.d/texlive.sh &lt;&lt; EOF\n"
+"<literal># Begin texlive setup\n"
+"TEXLIVE_PREFIX=/opt/texlive/&texlive-year;\n"
+"export TEXLIVE_PREFIX\n"
+"\n"
+"pathappend \\$TEXLIVE_PREFIX/texmf-dist/doc/man  MANPATH\n"
+"pathappend \\$TEXLIVE_PREFIX/texmf-dist/doc/info INFOPATH\n"
+"pathappend \\$TEXLIVE_PREFIX/bin/$TEXARCH\n"
+"\n"
+"TEXMFCNF=\\$TEXLIVE_PREFIX/texmf-dist/web2c\n"
+"export TEXMFCNF\n"
+"\n"
+"# End texlive setup</literal>\n"
+"EOF\n"
+"\n"
+"unset TEXARCH</userinput>"
+
+#. type: Content of: <sect1><note><para>
+#: blfs-en/pst/typesetting/tex-path.xml:59
+#, xml-text
+msgid ""
+"The standard MANPATH and INFOPATH path are specified above to ensure they "
+"are included.  If they are already set in the boot script procedure, the "
+"pathappend function will ensure duplicates are removed, so including them "
+"here will do no harm."
+msgstr ""
+"Os caminhos padrão de MANPATH e INFOPATH são especificados acima para "
+"garantir que sejam incluídos. Se eles já estiverem configurados no "
+"procedimento do conjunto de comandos sequenciais de inicialização, a função "
+"pathappend garantirá que as duplicatas sejam removidas, de forma que incluí-"
+"las aqui não causará danos."
+
+#. type: Content of: <sect1><note><para>
+#: blfs-en/pst/typesetting/tex-path.xml:68
+#, xml-text
+msgid ""
+"The backslashes before the dollar signs in the script above are to "
+"facilitate a copy/paste operation. The backslashes should not appear in the "
+"actual script."
+msgstr ""
+"As barras invertidas antes dos cifrões no conjunto de comandos sequenciais "
+"acima são para facilitar a operação de copiar/colar. As barras invertidas "
+"não deveriam aparecer no conjunto de comandos sequenciais atual."
+
+#. type: Content of: <sect1><para>
+#: blfs-en/pst/typesetting/tex-path.xml:75
+#, xml-text
+msgid "The new paths can be immediately activated by running:"
+msgstr "Os novos caminhos podem ser ativados imediatamente executando-se:"
+
+#. type: Content of: <sect1><screen>
+#: blfs-en/pst/typesetting/tex-path.xml:78
+#, no-wrap, xml-text
+msgid "<userinput>source /etc/profile</userinput>"
+msgstr "<userinput>source /etc/profile</userinput>"
+
+#. type: Content of: <sect1><para>
+#: blfs-en/pst/typesetting/tex-path.xml:81
+#, xml-text
+msgid ""
+"You should now proceed either to <xref linkend=\"tl-installer\"/> for a "
+"binary installation of texlive, or to <xref linkend=\"texlive\"/> to begin "
+"installing from source."
+msgstr ""
+"Agora você deveria prosseguir para <xref linkend=\"tl-installer\"/> para uma"
+" instalação binária do texlive ou para <xref linkend=\"texlive\"/> para "
+"começar a instalação a partir do fonte."
+
+#, xml-text
+#~ msgid ""
+#~ "The shared libraries will be installed into a texlive directory.  As the "
+#~ "<systemitem class=\"username\">root</systemitem> user, add it to your "
+#~ "<filename>/etc/ld.so.conf</filename>:"
+#~ msgstr ""
+#~ "As bibliotecas compartilhadas serão instaladas em um diretório do texlive. "
+#~ "Como o(a) usuário(a) <systemitem class=\"username\">root</systemitem>, "
+#~ "adicione-o ao teu <filename>/etc/ld.so.conf</filename>:"
+
+#, no-wrap, xml-text
+#~ msgid ""
+#~ "<userinput>cat &gt;&gt; /etc/ld.so.conf &lt;&lt; EOF\n"
+#~ "<literal># Begin texlive addition\n"
+#~ "\n"
+#~ "$TEXLIVE_PREFIX/lib\n"
+#~ "\n"
+#~ "# End texlive addition</literal>\n"
+#~ "EOF</userinput>"
+#~ msgstr ""
+#~ "<userinput>cat &gt;&gt; /etc/ld.so.conf &lt;&lt; EOF\n"
+#~ "<literal># Inicia adição do texlive\n"
+#~ "\n"
+#~ "$TEXLIVE_PREFIX/lib\n"
+#~ "\n"
+#~ "# Termina adição do texlive</literal>\n"
+#~ "EOF</userinput>"

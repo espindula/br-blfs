@@ -1,0 +1,89 @@
+#!/bin/sh
+sed -e 's|xreflabel="Foreword|xreflabel="Introdução|g' \
+    -e 's|xreflabel="Organization|xreflabel="Organização|g' \
+    -e 's|xreflabel="Who Would Want to Read this Book|xreflabel="Quem Gostaria de Ler Este Livro|g' \
+    -e 's|xreflabel="Preface|xreflabel="Prefácio|g' \
+    -e 's|xreflabel="Errata|&|g' \
+    -e 's|xreflabel="Introduction|&|g' \
+    -e 's|xreflabel="wiki|&|g' \
+    -e 's|xreflabel="Configuring the JAVA environment|xreflabel="Configurando o ambiente JAVA|g' \
+    -e 's|xreflabel="Running a Subversion Server|xreflabel="Executando um Servidor Subversion|g' \
+    -e 's|xreflabel="Perl modules|xreflabel="Módulos Perl|g' \
+    -e 's|xreflabel="build and installation instructions|xreflabel="instruções de construção e instalação|g' \
+    -e 's|xreflabel="instructions for packages using Build.PL|xreflabel="Instruções para pacotes usando Build.PL |g' \
+    -e 's|xreflabel="alternate auto installation instructions|xreflabel="instruções alternativas de instalação automática|g' \
+    -e 's|xreflabel="Java Binary|xreflabel="Binário Java|g' \
+    -e 's|xreflabel="Configuring OpenJDK|xreflabel="Configurando o OpenJDK|g' \
+    -e 's|xreflabel='"'"'JRE Certificate Authorithy Certificates|xreflabel='"'"'Certificados da Autoridade Certificadora JRE|g' \
+    -e 's|xreflabel="Other Programming Tools|xreflabel="Outras Ferramentas de Programação|g' \
+    -e 's|xreflabel="Python Modules|xreflabel="Módulos Python|g' \
+    -e 's|xreflabel="General Libraries and Utilities|xreflabel="Bibliotecas e Utilitários Gerais|g' \
+    -e 's|xreflabel="D-Bus custom services directory|xreflabel="Diretório dos serviços personalizados do D-Bus|g' \
+    -e 's|xreflabel="Locale Related Issues|xreflabel="Problemas Relacionados a Locales|g' \
+    -e 's|xreflabel="Needed Encoding Not a Valid Option|xreflabel="A Codificação Necessária Não é uma Opção Válida|g' \
+    -e 's|xreflabel="Program Assumes Encoding|xreflabel="O Aplicativo Assume Codificação|g' \
+    -e 's|xreflabel="Wrong Filename Encoding|xreflabel="Codificação Incorreta do Nome do Arquivo|g' \
+    -e 's|xreflabel="Breaks Multibyte Characters|xreflabel="Quebra Caracteres Multibyte|g' \
+    -e 's|xreflabel="Incorrect Manual Page Encoding|xreflabel="Codificação Incorreta da Página de Manual|g' \
+    -e 's|xreflabel="Going Beyond BLFS|xreflabel="Indo Além do BLFS|g' \
+    -e 's|xreflabel="libraries|xreflabel="bibliotecas|g' \
+    -e 's|xreflabel="Using Multiple Processors|xreflabel="Usando Múltiplos Processadores|g' \
+    -e 's|xreflabel="Automated Building Procedures|xreflabel="Procedimentos Automatizados de Construção|g' \
+    -e 's|xreflabel="Mirrors|xreflabel="Espelhos|g' \
+    -e 's|xreflabel="Getting the Source Packages|xreflabel="Obtendo os Pacotes Fonte|g' \
+    -e 's|xreflabel="Book Version|xreflabel="Versão do Livro|g' \
+    -e 's|xreflabel="Change Log|xreflabel="Registro das Mudanças|g' \
+    -e 's|xreflabel="Mailing lists|xreflabel="Listas de discussão|g' \
+    -e 's|xreflabel="Which sections of the book\?|xreflabel="Quais seções do livro?|g' \
+    -e 's|xreflabel="Credits|xreflabel="Créditos|g' \
+    -e 's|xreflabel="Introduction to|xreflabel="Introdução a|g' \
+    -e 's|xreflabel="Further KDE4 packages|xreflabel="Outros pacotes do KDE4|g' \
+    -e 's|xreflabel="Starting KDE4|xreflabel="Iniciando o KDE4|g' \
+    -e 's|xreflabel="LXQt Pre-Install|xreflabel="Pré-instalação do LXQt|g' \
+    -e 's|xreflabel="LXQt-Post-Install|xreflabel="Pós-instalação do LXQt|g' \
+    -e 's|xreflabel="Multimedia|xreflabel="Multimídia|g' \
+    -e 's|xreflabel='"'"'NFS Utilities Installation|xreflabel='"'"'Instalação de Utilitários NFS|g' \
+    -e 's|xreflabel="Configuring for Network Filesystems|xreflabel="Configurando para Sistemas de Arquivos de Rede de Comunicação|g' \
+    -e 's|xreflabel="Networking|xreflabel="Rede de Comunicação|g' \
+    -e 's|xreflabel="Firewalling|xreflabel="Firewall|g' \
+    -e 's|xreflabel="Firewalling Introduction|xreflabel="Introdução ao Firewall|g' \
+    -e 's|xreflabel="writing the firewalling-setup-scripts|xreflabel="escrevendo os scripts de configuração do firewall|g' \
+    -e 's|xreflabel="Personal Firewall|xreflabel="Firewall Pessoal|g' \
+    -e 's|xreflabel="Masquerading Router|xreflabel="Roteador de Mascaramento|g' \
+    -e 's|xreflabel="BusyBox example number 4|xreflabel="Exemplo do BusyBox número 4|g' \
+    -e 's|xreflabel="Conclusion|&|g' \
+    -e 's|xreflabel="Extra Information|xreflabel="Informação Extra|g' \
+    -e 's|xreflabel="links for further reading|xreflabel="links para leitura adicional|g' \
+    -e 's|xreflabel="Certificate Authority Certificates|xreflabel="Certificados da Autoridade Certificadora|g' \
+    -e 's|xreflabel="vulnerabilities|xreflabel="vulnerabilidades|g' \
+    -e 's|xreflabel="The Bash Shell Startup Files|xreflabel="Os Arquivos de Inicialização do Shell Bash|g' \
+    -e 's|xreflabel="Creating a Custom Boot Device|xreflabel="Criando um Dispositivo Personalizado de Inicialização|g' \
+    -e 's|xreflabel="About Firmware|xreflabel="A Respeito de Firmware|g' \
+    -e 's|xreflabel="About System Users and Groups|xreflabel="A Respeito de Usuários(as) e Grupos do Sistema|g' \
+    -e 's|xreflabel="Configuring for Adding Users|xreflabel="Configurando para Adicionar Usuários(as)|g' \
+    -e 's|xreflabel="The vimrc Files|xreflabel="Os Arquivos do vimrc|g' \
+    -e 's|xreflabel="Random number generation|xreflabel="Geração de números aleatórios|g' \
+    -e 's|xreflabel="After LFS Configuration Issues|xreflabel="Problemas do Pós-Configuração do LFS|g' \
+    -e 's|xreflabel="About Devices|xreflabel="A Respeito de Dispositivos|g' \
+    -e 's|xreflabel="Customizing your Logon with /etc/issue|xreflabel="Personalizando seu Logon com /etc/issue|g' \
+    -e 's|xreflabel="Post LFS Configuration and Extra Software|xreflabel="Configuração Pós LFS e Software Extra|g' \
+    -e 's|xreflabel="Printing, Scanning and Typesetting|xreflabel="Impressão, Digitalização e Composição|g' \
+    -e 's|xreflabel="Setting the PATH for TeX Live|xreflabel="Configurando a PATH para TeX Live|g' \
+    -e 's|xreflabel="MTA|&|g' \
+    -e 's|xreflabel="Servers|xreflabel="Servidores|g' \
+    -e 's|xreflabel="Xorg Fonts|xreflabel="Fontes Xorg|g' \
+    -e 's|xreflabel="Xorg build environment|xreflabel="Ambiente de construção do Xorg|g' \
+    -e 's|xreflabel="Xorg Libraries|xreflabel="Bibliotecas do Xorg|g' \
+    -e 's|xreflabel="Xorg Protocol Headers|xreflabel="Cabeçalhos do Protocolo do Xorg|g' \
+    -e 's|xreflabel="X Window System|xreflabel="Sistema X Window|g' \
+    -e 's|xreflabel="Xorg Applications|xreflabel="Aplicativos do Xorg|g' \
+    -e 's|xreflabel="Xorg Drivers|xreflabel="Controladores do Xorg|g' \
+    -e 's|xreflabel="Testing Xorg|xreflabel="Testando o Xorg|g' \
+    -e 's|xreflabel="Checking the DRI installation|xreflabel="Verificando a instalação da DRI|g' \
+    -e 's|xreflabel="Hybrid Graphics|xreflabel="Gráficos Híbridos|g' \
+    -e 's|xreflabel="Xft Font Protocol|xreflabel="Protocolo da Fonte Xft|g' \
+    -e 's|xreflabel="X plus Window and Display Managers|xreflabel="X mais Gerenciadores de Janelas e de Telas|g' \
+    -e 's|xreflabel="Other Window Managers|xreflabel="Outros Gerenciadores de Janelas|g' \
+    -e 's|xreflabel="X Software|xreflabel="Software do X|g' \
+    -e 's|<book>|<book lang="pt_br">|g' \
+    -i $1
