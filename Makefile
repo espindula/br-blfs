@@ -1,384 +1,277 @@
-#!/usr/bin/make -f
+# vim:ts=3
+# Makefile for BLFS Book generation.
+# By Tushar Teredesai <tushar@linuxfromscratch.org>
+# 2004-01-31
 
-# Use make L=... to build only a subset of the languages.
+# Adjust these to suit your installation
+RENDERTMP   ?= $(HOME)/tmp
+CHUNK_QUIET  = 1
+ROOT_ID      =
+SHELL        = /bin/bash
 
-LANGUAGES := fr pt_BR
-LANG_fr := fr_FR.UTF-8
-LANG_pt_BR := pt_BR.UTF-8
-L = all
+ALLXML := $(filter-out $(RENDERTMP)/%, \
+	$(wildcard *.xml */*.xml */*/*.xml */*/*/*.xml */*/*/*/*.xml))
+ALLXSL := $(filter-out $(RENDERTMP)/%, \
+	$(wildcard *.xsl */*.xsl */*/*.xsl */*/*/*.xsl */*/*/*/*.xsl))
 
-# Use config.mk to configure username and password for download and upload
-include config.mk
-
-ORIGDIR := blfs-en
-
-FR_REPO:=git@git.linuxfromscratch.org:fr-lfs.git
-EN_REPO:=git://git.linuxfromscratch.org/blfs.git
-
-RENDERTMP=/tmp
-
-WEBLATE_API:=https://bright.lepiller.eu/api
-WEBLATE_SHARED_COMPONENT=linux-from-scratch-12-1/index
-CURL=curl -H "Authorization: Token $(WEBLATE_KEY)"
-
-
-# Note for releasing a new stable version:
-# ----------------------------------------
-#
-# When a new stable version is released upstream, this Makefile will automatically
-# track it, so translate it as usual. Once the stable version is translated,
-# create a new branch that keeps tracking this release:
-#
-#   git branch blfs-$(MILESTONE)
-#   git p -u origin blfs-$(MILESTONE)
-#
-# Once this is done, you can publish the new version by running:
-#
-#   make release
-#
-# Then, update the MILESTONE to the next (unreleased) version of LFS in the
-# development branch and commit.
-
-# What we follow from upstream.
-MILESTONE := 12.1
-
-# Select the current version we are tracking from master
-REVISION := $(shell (cd $(ORIGDIR); git rev-parse HEAD))
-
-# If the version we are tracking is released, there should be a tag named $(MILESTONE).
-# If this tag doesn't exist, it means the version is not released yet. Try to
-# list files in this tag. If it succeeds, it exists, if it fails it doesn't
-# exist. From that, choose what tag to follow: $(MILESTONE) or trunk.
-BRANCH := $(shell (cd $(ORIGDIR); git ls-remote --exit-code . $(MILESTONE) >/dev/null 2>&1 && printf $(MILESTONE) || printf trunk))
-
-# Files that are needed for the build process once translations are generated.
-filestocopy := INSTALL obfuscate.sh README git-version.sh
-# Additional files that may require some changes.
-filestoget := $(filestocopy) general.ent gnome.ent packages.ent tidy.conf Makefile .git
-
-# Use REV=sysv or REV=systemd to only build that version.
-REV=all
-
-ifeq ($(REV), all)
-SYSV=1
-SYSD=1
-REVS=sysv systemd
+ifdef V
+  Q =
 else
-ifeq ($(REV), systemd)
-SYSV=
-SYSD=1
-REVS=systemd
+  Q = @
+endif
+
+ifndef REV
+  REV = sysv
+endif
+
+ifneq ($(REV), sysv)
+  ifneq ($(REV), systemd)
+    $(error REV must be 'sysv' (default) or 'systemd'.)
+  endif
+endif
+
+ifeq ($(REV), sysv)
+  BASEDIR         ?= $(HOME)/public_html/blfs-book
+  NOCHUNKS_OUTPUT ?= blfs-book.html
+  DUMPDIR         ?= ~/blfs-commands
+  BLFSHTML        ?= blfs-html.xml
+  BLFSHTML2       ?= blfs-html2.xml
+  BLFSFULL        ?= blfs-full.xml
 else
-SYSV=1
-SYSD=
-REVS=sysv
-endif
-endif
+  BASEDIR         ?= $(HOME)/public_html/blfs-systemd
+  NOCHUNKS_OUTPUT ?= blfs-sysd-book.html
+  DUMPDIR         ?= ~/blfs-sysd-commands
+  BLFSHTML        ?= blfs-systemd-html.xml
+  BLFSHTML2       ?= blfs-systemd-html2.xml
+  BLFSFULL        ?= blfs-systemd-full.xml
 
-# The complete upstream URI we follow.
-SVN_en := "$(EN_REPO)/$(EN_VER)"
-
-
-IMAGES := $(shell find images -type f)
-STYLESHEETS := $(shell find stylesheets -type f)
-CSS := $(shell ls stylesheets/lfs-xsl/*.css)
-
-CHUNK_QUIET = 1
-
-.PHONY: gitup
-
-# Don't delete intermediates (.po files).
-.SECONDARY:
-
-default:
-	@echo 'Hi!'
-	@echo 'To build the HTML documentation, please run `make genhtml`. For'
-	@echo 'the PDF version, run `make genpdf`. For both run `make all`.'
-	@echo 'Restrict to a subset of the available language with L=... and'
-	@echo 'to a subset of the versions with REV=<sysv or systemd>.'
-	@echo 'Good luck!'
-
-all: genhtml genpdf
-	@echo DONE
-
-include include.mk
-
-config.mk:
-	@echo 'Hi!'
-	@echo 'To use this Makefile, you will need a config.mk file, with your username'
-	@echo 'and password in it. That is required for uploading to the lfs website.'
-	@echo 'An example config.mk is simply:'
-	@echo ''
-	@echo 'USER:=my-user'
-	@echo 'PRIVKEY:=~/.ssh/id_rsa'
-	@echo 'USE_SSH_AGENT:=yes'
-	@echo 'DOCBOOK_LOCATION:=/usr/share/xml/xsl/docbook-xsl-1.79.1'
-	@echo 'WEBLATE_KEY:=abcdefgh'
-	@false
-
-# So, if USE_SSH_AGENT = yes ...
-ifeq ($(USE_SSH_AGENT), yes)
-SSH_AGENT:=ssh-agent
-else
-SSH_AGENT:=
 endif
 
-init: $(ORIGDIR)
+blfs: html wget-list
 
-$(ORIGDIR):
-	[ -d $@ ] || git clone $(EN_REPO) $(ORIGDIR)
+help:
+	@echo ""
+	@echo "make <parameters> <targets>"
+	@echo ""
+	@echo "Parameters:"
+	@echo "  REV=<rev>            Build variation of book"
+	@echo "                       Valid values for REV are:"
+	@echo "                       * sysv    - Build book for SysV"
+	@echo "                       * systemd - Build book for systemd"
+	@echo "                       Defaults to 'sysv'"
+	@echo ""
+	@echo "  BASEDIR=<dir>        Put the output in directory <dir>."
+	@echo "                       Defaults to"
+	@echo "                       'HOME/public_html/blfs-book' if REV=sysv (or unset)"
+	@echo "                       or to"
+	@echo "                       'HOME/public_html/blfs-book-systemd' if REV=systemd"
+	@echo ""
+	@echo "  V=<val>              If <val> is a non-empty value, all"
+	@echo "                       steps to produce the output is shown."
+	@echo "                       Default is unset."
+	@echo ""
+	@echo "Targets:"
+	@echo "  help                 Show this help text."
+	@echo ""
+	@echo "  blfs                 Builds targets 'html' and 'wget-list'."
+	@echo ""
+	@echo "  html                 Builds the HTML pages of the book."
+	@echo ""
+	@echo "  wget-list            Produces a list of all packages to download."
+	@echo "                       Output is BASEDIR/wget-list"
+	@echo ""
+	@echo "  nochunks             Builds the book as a one-pager. The output"
+	@echo "                       is a large single HTML page containing the"
+	@echo "                       whole book."
+	@echo ""
+	@echo "                       Parameter NOCHUNKS_OUTPUT=<filename> controls"
+	@echo "                       the name of the HTML file."
+	@echo ""
+	@echo "  validate             Runs validation checks on the XML files."
+	@echo ""
+	@echo "  test-links           Runs validation checks on URLs in the book."
+	@echo "                       Produces a file named BASEDIR/bad_urls containing"
+	@echo "                       URLS which are invalid and a BASEDIR/good_urls"
+	@echo "                       containing all valid URLs."
+	@echo ""
 
-# When updating, check that we still want to follow the checked-out branch.
-# If not, remove it and check out the new branch.
-gitup: init
-	(cd $(ORIGDIR); git fetch)
-	v=$$(cd $(ORIGDIR); git branch | grep '^\*' | cut -c3-); \
-	if [ "$$v" != "$(BRANCH)" ]; then \
-		echo $$v; \
-		(cd $(ORIGDIR); git checkout $(BRANCH)); \
-	fi
-	(cd $(ORIGDIR); git pull --ff-only)
+all: blfs nochunks
+world: all blfs-patch-list dump-commands test-links
 
-clean: clean-gen clean-product
-	rm -rf $(ORIGDIR) include.mk
+include epub.mk
+include pdf.mk
+html: $(BASEDIR)/index.html
+$(BASEDIR)/index.html: $(RENDERTMP)/$(BLFSHTML) version
+	@echo "Generating chunked XHTML files..."
+	$(Q)xsltproc --nonet                                    \
+                --stringparam chunk.quietly $(CHUNK_QUIET) \
+                --stringparam rootid "$(ROOT_ID)"          \
+                --stringparam base.dir $(BASEDIR)/         \
+                stylesheets/blfs-chunked.xsl               \
+                $(RENDERTMP)/$(BLFSHTML)
 
-# include.mk contains most of the logic of the Makefile.
-# We generate lists of XML files to translated, PO files that contain translations,
-# images and stylesheet files, and the list of files to copy from the english repo.
-#
-# It also contains targets to build different html versions, to refresh the PO
-# files and to generate the translated XML files. We need to use this target
-# because the language in the name of the target and the file name are both
-# wildcards, which cannot be used.
-include.mk: include.in init Makefile
-	echo '# This file is generated by Makefile, please do not modify it directly.' > $@.tmp
-	echo 'PO :=' >> $@.tmp
-	for lang in $(LANGUAGES); do \
-		sed -e "s|MLANG|$$lang|g" include.in >> $@.tmp;\
-	done
-	mv $@.tmp $@
+	@echo "Copying CSS code and images..."
+	$(Q)if [ ! -e $(BASEDIR)/stylesheets ]; then \
+      mkdir -p $(BASEDIR)/stylesheets;          \
+   fi;
 
-clean-gen: $(addprefix clean-gen-,$(LANGUAGES))
-clean-product: $(addprefix clean-product-,$(LANGUAGES))
+	$(Q)cp stylesheets/lfs-xsl/*.css $(BASEDIR)/stylesheets
+	$(Q)sed -i 's|../stylesheet|stylesheet|' $(BASEDIR)/index.html
 
-ifeq ($(L),all)
-L=$(LANGUAGES)
-endif
+	$(Q)if [ ! -e $(BASEDIR)/images ]; then \
+      mkdir -p $(BASEDIR)/images;          \
+   fi;
+	$(Q)cp images/*.png $(BASEDIR)/images
 
-HTMLDEPS=
-ifeq ($(SYSV),1)
-HTMLDEPS+=$(addsuffix -sysv,$(addprefix genhtml-,$(L)))
-endif
-ifeq ($(SYSD),1)
-HTMLDEPS+=$(addsuffix -sysd,$(addprefix genhtml-,$(L)))
-endif
+	$(Q)cd $(BASEDIR)/; sed -e "s@../images@images@g"           \
+                           -i *.html
 
-PDFDEPS=
-ifeq ($(SYSV),1)
-PDFDEPS+=$(addsuffix -sysv,$(addprefix genpdf-,$(L)))
-endif
-ifeq ($(SYSD),1)
-PDFDEPS+=$(addsuffix -sysd,$(addprefix genpdf-,$(L)))
-endif
+	@echo "Running Tidy and obfuscate.sh on chunked XHTML..."
+	$(Q)for filename in `find $(BASEDIR) -name "*.html"`; do       \
+      tidy -config tidy.conf $$filename;                          \
+      true;                                                       \
+      bash obfuscate.sh $$filename;                               \
+      sed -i -e "1,20s@text/html@application/xhtml+xml@g" $$filename; \
+   done;
 
-TARDEPS=
-ifeq ($(SYSV),1)
-TARDEPS+=$(addsuffix -sysv,$(addprefix gentar-,$(L)))
-endif
-ifeq ($(SYSD),1)
-TARDEPS+=$(addsuffix -sysd,$(addprefix gentar-,$(L)))
-endif
+nochunks: $(BASEDIR)/$(NOCHUNKS_OUTPUT)
+$(BASEDIR)/$(NOCHUNKS_OUTPUT): $(RENDERTMP)/$(BLFSHTML) version
+	@echo "Generating non-chunked XHTML file..."
+	$(Q)xsltproc --nonet                                \
+                --stringparam rootid "$(ROOT_ID)"      \
+                --output $(BASEDIR)/$(NOCHUNKS_OUTPUT) \
+                stylesheets/blfs-nochunks.xsl          \
+                $(RENDERTMP)/$(BLFSHTML)
 
-EPUBDEPS=
-ifeq ($(SYSV),1)
-EPUBDEPS+=$(addsuffix -sysv,$(addprefix genepub-,$(L)))
-endif
-ifeq ($(SYSD),1)
-EPUBDEPS+=$(addsuffix -sysd,$(addprefix genepub-,$(L)))
-endif
+	@echo "Running Tidy and obfuscate.sh on non-chunked XHTML..."
+	$(Q)tidy -config tidy.conf $(BASEDIR)/$(NOCHUNKS_OUTPUT) || true
+	$(Q)bash obfuscate.sh $(BASEDIR)/$(NOCHUNKS_OUTPUT)
+	$(Q)sed -i -e "1,20s@text/html@application/xhtml+xml@g" $(BASEDIR)/$(NOCHUNKS_OUTPUT)
 
-UPDEPS=
-ifeq ($(SYSV),1)
-UPDEPS+=$(addsuffix -sysv,$(addprefix upload-,$(L)))
-endif
-ifeq ($(SYSD),1)
-UPDEPS+=$(addsuffix -sysd,$(addprefix upload-,$(L)))
-endif
+tmpdir: $(RENDERTMP)
+$(RENDERTMP):
+	@echo "Creating $(RENDERTMP)"
+	$(Q)[ -d $(RENDERTMP) ] || mkdir -p $(RENDERTMP)
 
-genhtml: $(HTMLDEPS)
-genpdf: $(PDFDEPS)
-genepub: $(EPUBDEPS)
-gentar: $(TARDEPS)
+clean:
+	@echo "Cleaning $(RENDERTMP)"
+	$(Q)rm -f $(RENDERTMP)/blfs*
 
-update: $(PO)
-	printf 'Done updating for $(BRANCH) \n'
+validate: $(RENDERTMP)/$(BLFSFULL)
+$(RENDERTMP)/$(BLFSFULL): general.ent packages.ent $(ALLXML) $(ALLXSL) version
+	$(Q)[ -d $(RENDERTMP) ] || mkdir -p $(RENDERTMP)
 
-define createcomponent
-{ \
-	"file_format": "po", \
-	"repo": "weblate://$(WEBLATE_SHARED_COMPONENT)", \
-	"filemask": "blfs/*/$(patsubst fr/%,%,$<)", \
-	"name": "$(subst /,_,$(patsubst weblate/%,%,$@))", \
-	"slug": "$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))", \
-	"new_lang": "contact" \
-}
-endef
+	@echo "Adjusting for revision $(REV)..."
+	$(Q)xsltproc --nonet                               \
+                --xinclude                            \
+                --output $(RENDERTMP)/$(BLFSHTML2)    \
+                --stringparam profile.revision $(REV) \
+                stylesheets/lfs-xsl/profile.xsl       \
+                index.xml
 
-weblate/%: fr/%.po
-	@if $(CURL) $(WEBLATE_API)/components/beyond-linux-from-scratch-12-1/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))/ 2>/dev/null | grep '"detail":"Not found."' 1>/dev/null; then \
-		echo $(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@)))); \
-		$(CURL) -H "Content-Type: application/json" \
-			--data-binary "$(subst ",\",${createcomponent})" \
-			$(WEBLATE_API)/projects/beyond-linux-from-scratch-12-1/components/; \
-		echo "";\
-	fi
+	@echo "Validating the book..."
+	$(Q)xmllint --nonet                             \
+               --noent                             \
+               --postvalid                         \
+               --output $(RENDERTMP)/$(BLFSFULL)   \
+               $(RENDERTMP)/$(BLFSHTML2)
 
-weblate-up:
-	wlc commit $(WEBLATE_SHARED_COMPONENT)
-	wlc push $(WEBLATE_SHARED_COMPONENT)
-	wlc lock $(WEBLATE_SHARED_COMPONENT)
-	git pull --ff-only
-	$(MAKE) gitup
-	$(MAKE) update
-	python3 changelogtranslator.py fr/introduction/welcome/changelog.po
-	for lang in $(LANGUAGES); do \
-		python3 potranslator.py $$lang `find $$lang -name '*.po' | cut -f2- -d'/'` ;\
-	done
+profile-html: $(RENDERTMP)/$(BLFSHTML)
+$(RENDERTMP)/$(BLFSHTML): $(RENDERTMP)/$(BLFSFULL) version
+	@echo "Generating profiled XML for XHTML..."
+	$(Q)xsltproc --nonet                              \
+                --stringparam profile.condition html \
+                --output $(RENDERTMP)/$(BLFSHTML)    \
+                stylesheets/lfs-xsl/profile.xsl      \
+                $(RENDERTMP)/$(BLFSFULL)
 
-weblate: $(addprefix weblate/,$(patsubst %.po,%,$(patsubst fr/%,%,$(PO_fr))))
+blfs-patch-list: blfs-patches.sh
+	@echo "Generating blfs patch list..."
+	$(Q)awk '{if ($$1 == "copy") {sub(/.*\//, "", $$2); print $$2}}' \
+	  blfs-patches.sh > blfs-patch-list
 
-ssh-agent:
-	(ssh-add -l | grep $(PRIVKEY)) || \
-	ssh-add $(PRIVKEY)
+blfs-patches.sh: $(RENDERTMP)/$(BLFSFULL) version
+	@echo "Generating blfs patch script..."
+	$(Q)xsltproc --nonet                     \
+                --output blfs-patches.sh    \
+                stylesheets/patcheslist.xsl \
+                $(RENDERTMP)/$(BLFSFULL)
 
-upload: $(UPDEPS)
+wget-list: $(BASEDIR)/wget-list
+$(BASEDIR)/wget-list: $(RENDERTMP)/$(BLFSFULL) version
+	@echo "Generating wget list for $(REV) at $(BASEDIR)/wget-list ..."
+	$(Q)mkdir -p $(BASEDIR)
+	$(Q)xsltproc --nonet                       \
+                --output $(BASEDIR)/wget-list \
+                stylesheets/wget-list.xsl     \
+                $(RENDERTMP)/$(BLFSFULL)
 
-release: $(SSH_AGENT) genhtml genpdf gentar genepub
-	for lang in $(L); do \
-		cd html-$$lang-systemd ;\
-		rsync --progress --recursive * $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/view/blfs-$(MILESTONE)-systemd-$$lang/ ;\
-		cd ../html-$$lang-sysv ;\
-		rsync --progress --recursive * $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/view/blfs-$(MILESTONE)-$$lang/ ;\
-		cd .. ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang.pdf $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang-systemd.pdf $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang-HTML.tar.bz2 $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
-		rsync --progress BLFS-$(MILESTONE)-systemd-$$lang-HTML.tar.bz2 $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang.epub $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
-		rsync --progress BLFS-$(MILESTONE)-systemd-$$lang.epub $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
-	done
+test-links: $(BASEDIR)/test-links
+$(BASEDIR)/test-links: $(RENDERTMP)/$(BLFSFULL) version
+	@echo "Generating test-links file..."
+	$(Q)mkdir -p $(BASEDIR)
+	$(Q)xsltproc --nonet                        \
+                --stringparam list_mode full   \
+                --output $(BASEDIR)/test-links \
+                stylesheets/wget-list.xsl      \
+                $(RENDERTMP)/$(BLFSFULL)
 
-commit: weblate-up
-	git add .
-	git commit -m 'Automatic BLFS commit based on $(REVISION)'
-	git push
-	wlc pull $(WEBLATE_SHARED_COMPONENT)
-	wlc unlock $(WEBLATE_SHARED_COMPONENT)
-	#$(MAKE) weblate # too much memory needed
+	@echo "Checking URLs, first pass..."
+	$(Q)rm -f $(BASEDIR)/{good,bad,true_bad}_urls
+	$(Q)for URL in `cat $(BASEDIR)/test-links`; do                     \
+         wget --spider --tries=2 --timeout=60 $$URL >>/dev/null 2>&1; \
+         if test $$? -ne 0 ; then                                     \
+            echo $$URL >> $(BASEDIR)/bad_urls ;                       \
+         else                                                         \
+            echo $$URL >> $(BASEDIR)/good_urls 2>&1;                  \
+         fi;                                                          \
+   done
 
-blfsgen-%/pdf.mk: pdf.mk
-	mkdir -p $$(dirname $@)
-	cp $< $@
+	@echo "Checking URLs, second pass..."
+	$(Q)for URL2 in `cat $(BASEDIR)/bad_urls`; do                       \
+         wget --spider --tries=2 --timeout=60 $$URL2 >>/dev/null 2>&1; \
+         if test $$? -ne 0 ; then                                      \
+           echo $$URL2 >> $(BASEDIR)/true_bad_urls ;                   \
+         else                                                          \
+           echo $$URL2 >> $(BASEDIR)/good_urls 2>&1;                   \
+         fi; \
+   done
 
-blfsgen-%/epub.mk: epub.mk
-	mkdir -p $$(dirname $@)
-	sed -e 's|DOCBOOK_LOCATION|$(DOCBOOK_LOCATION)|g' $< > $@
+bootscripts:
+	@VERSION=`grep "bootscripts-version " general.ent | cut -d\" -f2`; \
+   BOOTSCRIPTS="blfs-bootscripts-$$VERSION";                          \
+   if [ ! -e $$BOOTSCRIPTS.tar.xz ]; then                             \
+     rm -rf $(RENDERTMP)/$$BOOTSCRIPTS;                               \
+     mkdir $(RENDERTMP)/$$BOOTSCRIPTS;                                \
+     cp -a ../bootscripts/* $(RENDERTMP)/$$BOOTSCRIPTS;               \
+     rm -rf ../bootscripts/archive;                                   \
+     tar  -cJhf $$BOOTSCRIPTS.tar.xz -C $(RENDERTMP) $$BOOTSCRIPTS;   \
+   fi
 
-###############################################################################
-# These files are not translated using po files. We use sed to modify them    #
-# directly.                                                                   #
-###############################################################################
+systemd-units:
+	@VERSION=`grep "systemd-units-version " general.ent | cut -d\" -f2`; \
+   UNITS="blfs-systemd-units-$$VERSION";                                \
+   if [ ! -e $$UNITS.tar.xz ]; then                                     \
+     rm -rf $(RENDERTMP)/$$UNITS;                                       \
+     mkdir $(RENDERTMP)/$$UNITS;                                        \
+     cp -a ../systemd-units/* $(RENDERTMP)/$$UNITS;                     \
+     tar -cJhf $$UNITS.tar.xz -C $(RENDERTMP) $$UNITS;                  \
+   fi
 
-##
-## French translation of non po files
-##
+test-options:
+	$(Q)xsltproc --xinclude --nonet stylesheets/test-options.xsl index.xml
 
-#blfsgen-fr/index.xml: $(ORIGDIR)/index.xml fr/index.po
-#	./sed_fr.sh $@.tmp
-#	LANG=$(LANG_fr) po4a-translate -k 0 -f docbook -m $< -l $@.tmp -p $(word 2,$^)
-#	sed -i -e 's|<book>|<book lang="fr">|g' \
-#	       -e 's|encoding="ISO-8859-1"|encoding="UTF-8"|g' $@.tmp > $@
-#	rm $@.tmp
+dump-commands: $(DUMPDIR)
+$(DUMPDIR): $(RENDERTMP)/$(BLFSFULL) version
+	@echo "Dumping book commands..."
+	$(Q)xsltproc --output $(DUMPDIR)/          \
+                stylesheets/dump-commands.xsl \
+                $(RENDERTMP)/$(BLFSFULL)
+	$(Q)touch $(DUMPDIR)
 
-blfsgen-fr/general.ent: $(ORIGDIR)/general.ent
-	mkdir -p $$(dirname $@)
-	cat $< | tr '\n' '\r' | \
-	sed -e "s|The BLFS Team|L'équipe de BLFS|g" \
-	    -e "s|The BLFS Development Team|L'équipe de développement de BLFS|g" \
-	    -e "s|Unknown|Inconnu|g" \
-	    -e "s|<!ENTITY lfs\([0-9]+\)\([0-9]\)_checked [^\r]*\r[^\r]*\">|<!ENTITY lfs\1\2_checked \"<para>Ce paquet est connu pour se construire correctement sur une plateforme LFS-\1.\2.</para>\">|g" \
-	    -e "s|<!ENTITY lfs\([0-9]\)\([0-9]\)_built [^\r]*\r[^\r]*\">|<!ENTITY lfs\1\2_built \"<para>Ce paquet est connu pour se construire correctement sur une plateforme LFS-\1.\2 mais n'a pas été testé.</para>\">|g" \
-            -e "s|<!ENTITY gcc7_checked [^\r]*\r[^\r]*\">|<!ENTITY gcc7_checked \"<para>Ce paquet est connu pour se construire correctement avec gcc-7.1.</para>\">|g" \
-	    -e "s|<!ENTITY lfssvn_checked [^\r]*\r[^\r]*\">|<!ENTITY lfssvn_checked \"Ce paquet est connu pour se construire correctement sur une plateforme LFS-SVN-\">|g" \
-	    -e "s|<!ENTITY lfssvn_built [^\r]*\">|<!ENTITY lfssvn_checked \"Ce paquet est connu pour se construire correctement sur une plateforme LFS-SVN-\">|g" \
-	    -e "s|<!ENTITY lfssvn_checked2 [^\r]*\">|<!ENTITY lfssvn_checked2 \" .\">|g" \
-	    -e "s|<!ENTITY lfssvn_built2 [^\r]*\">|<!ENTITY lfssvn_built2 \" mais n'a pas été testé.\">|g" \
-	    -e "s|<!ENTITY as_root *\"[^\"]*\">||g" \
-	    -e "s|<!ENTITY gi-doc-disable *\"[^\"]*\">|<!ENTITY gi-doc-disable \"permet de construire ce paquet sans installer <xref linkend='gi-docgen'/>. Si vous avez installé <xref linkend='gi-docgen'/> et souhaitez reconstruire et installer la documentation de l'API, une commande <command>meson configure</command> enlèvera cette option.\">|g" \
-	    -e "s|<!ENTITY gi-doc-disable *\"[^\"]*\">|<!ENTITY gi-doc-disable \"permet de construire ce paquet sans installer <xref linkend='gi-docgen'/>. Si vous avez installé <xref linkend='gi-docgen'/> et souhaitez reconstruire et installer la documentation de l'API, une commande <command>meson configure</command> enlèvera cette option.\">|g" \
-	    -e "s|<!ENTITY not-katamari *\"[^\"]*\">|<!ENTITY not-katamari \"<para>Ce paquet ne fait pas partie de Xorg Katamari et est seulement fourni comme dépendance d'autres paquets ou pour tester l'installation complète de Xorg.</para>\">|g" \
-	    -e "s|<!ENTITY parallel_issues *\"[^\"]*\">|<!ENTITY parallel_issues \"<note><para>Ce paquet peut parfois échouer quand il est construit avec plusieurs processeurs. Voir <xref linkend='parallel-builds'/> pour plus d'information.</para></note>\">|g" \
-	    | tr '\r' '\n' > $@
-		cat general.ent.as_root >> $@
+.PHONY: blfs all world html nochunks tmpdir clean             \
+   validate profile-html blfs-patch-list wget-list test-links \
+   dump-commands  bootscripts systemd-units version test-options
 
-blfsgen-fr/packages.ent: $(ORIGDIR)/packages.ent
-	mkdir -p $$(dirname $@)
-	cp $< $@
-
-blfsgen-fr/gnome.ent: $(ORIGDIR)/gnome.ent
-	mkdir -p $$(dirname $@)
-	cp $< $@
-
-blfsgen-fr/tidy.conf: $(ORIGDIR)/tidy.conf
-	mkdir -p $$(dirname $@)
-	sed -e "s/latin1/UTF8/g" $< > $@
-
-blfsgen-fr/Makefile: $(ORIGDIR)/Makefile blfsgen-fr/epub.mk blfsgen-fr/pdf.mk
-	mkdir -p $$(dirname $@)
-	sed -e 's|^html:|include epub.mk\ninclude pdf.mk\nhtml:|' $< > $@
-
-blfsgen-fr/.git: $(ORIGDIR)/.git
-	mkdir -p blfsgen-fr
-	cp -r $< blfsgen-fr
-	chmod +w -R $@
-
-blfsgen-pt_BR/general.ent: $(ORIGDIR)/general.ent
-	mkdir -p $$(dirname $@)
-	cat $< | tr '\n' '\r' | \
-	sed -e "s|The BLFS Team|A Equipe do BLFS|g" \
-	    -e "s|The BLFS Development Team|A Equipe de Desenvolvimento do BLFS|g" \
-	    -e "s|Unknown|Desconhecido|g" \
-	    -e "s|<!ENTITY lfs\([0-9]+\)\([0-9]\)_checked [^\r]*\r[^\r]*\">|<!ENTITY lfs\1\2_checked \"<para>Este pacote é conhecido por construir e funcionar corretamente usando uma plataforma LFS-\1.\2.</para>\">|g" \
-	    -e "s|<!ENTITY lfs\([0-9]\)\([0-9]\)_built [^\r]*\r[^\r]*\">|<!ENTITY lfs\1\2_built \"<para>Este pacote é conhecido por construir e funcionar corretamente usando uma plataforma LFS-\1.\2, porém não foi testado.</para>\">|g" \
-	    -e "s|<!ENTITY gcc7_checked [^\r]*\r[^\r]*\">|<!ENTITY gcc7_checked \"<para>Este pacote é conhecido por construir corretamente com gcc-7.1.</para>\">|g" \
-	    -e "s|<!ENTITY lfssvn_checked [^\r]*\r[^\r]*\">|<!ENTITY lfssvn_checked \"Este pacote é conhecido por construir corretamente em uma plataforma LFS-SVN-\">|g" \
-	    -e "s|<!ENTITY lfssvn_built [^\r]*\">|<!ENTITY lfssvn_checked \"Este pacote é conhecido por construir corretamente em uma plataforma LFS-SVN-\">|g" \
-	    -e "s|<!ENTITY lfssvn_checked2 [^\r]*\">|<!ENTITY lfssvn_checked2 \" .\">|g" \
-	    -e "s|<!ENTITY lfssvn_built2 [^\r]*\">|!ENTITY lfssvn_built2 \", porém não foi testado.\">|g" \
-	    -e "s|<!ENTITY as_root *\"[^\"]*\">||g" \
-	    -e "s|<!ENTITY gi-doc-disable *\"[^\"]*\">|<!ENTITY gi-doc-disable \"vamos compilar este pacote sem instalar <xref linkend='gi-docgen'/>. Se você instalou <xref linkend='gi-docgen'/> e deseja reconstruir e instalar a documentação da API, um comando <command>meson configure</command> removerá essa opção.\">|g" \
-	    -e "s|<!ENTITY not-katamari *\"[^\"]*\">|<!ENTITY not-katamari \"<para>Este pacote não faz parte do Xorg Katamari e é fornecido apenas como uma dependência de outros pacotes ou para testar a instalação completa do Xorg.</para>\">|g" \
-	    -e "s|<!ENTITY parallel_issues *\"[^\"]*\">|<!ENTITY parallel_issues \"<note><para>Às vezes, esse pacote pode falhar quando construído com vários processadores. Consulte <xref linkend='parallel-builds'/> para obter mais informações.</para></note>\">|g" \
-	    | tr '\r' '\n' > $@
-	        cat general.ent.as_root >> $@
-
-blfsgen-pt_BR/packages.ent: $(ORIGDIR)/packages.ent
-	mkdir -p $$(dirname $@)
-	cp $< $@
-
-blfsgen-pt_BR/gnome.ent: $(ORIGDIR)/gnome.ent
-	mkdir -p $$(dirname $@)
-	cp $< $@
-
-blfsgen-pt_BR/tidy.conf: $(ORIGDIR)/tidy.conf
-	mkdir -p $$(dirname $@)
-	sed -e "s/latin1/UTF8/g" $< > $@
-
-blfsgen-pt_BR/Makefile: $(ORIGDIR)/Makefile blfsgen-pt_BR/epub.mk blfsgen-pt_BR/pdf.mk
-	mkdir -p $$(dirname $@)
-	sed -e 's|^html:|include epub.mk\ninclude pdf.mk\nhtml:|' $< > $@
-
-blfsgen-pt_BR/.git: $(ORIGDIR)/.git
-	mkdir -p blfsgen-pt_BR
-	cp -r $< blfsgen-pt_BR
-	chmod +w -R $@
+version:
+	$(Q)./git-version.sh $(REV)
