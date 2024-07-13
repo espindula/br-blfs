@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:59+0000\n"
-"PO-Revision-Date: 2024-06-11 15:48+0000\n"
+"PO-Revision-Date: 2024-07-11 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch-12-1/general_graphlib_aalib/pt_BR/>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/general_graphlib_aalib/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. type: Content of the aalib-download-http entity
 #: blfs-en/general/graphlib/aalib.xml:7
@@ -182,12 +182,73 @@ msgstr ""
 #: blfs-en/general/graphlib/aalib.xml:99
 #, xml-text
 msgid ""
+"Fix an overuse of some ncurses internal data structure to allow building "
+"this package with ncurses-6.5 or later:"
+msgstr ""
+"Corrija o uso excessivo de algumas estruturas internas de dados do ncurses "
+"para permitir construir esse pacote com ncurses-6.5 ou posterior:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/general/graphlib/aalib.xml:103
+#, no-wrap, xml-text
+msgid ""
+"<userinput>sed 's/stdscr->_max\\([xy]\\) + 1/getmax\\1(stdscr)/' \\\n"
+"    -i src/aacurses.c</userinput>"
+msgstr ""
+"<userinput>sed 's/stdscr->_max\\([xy]\\) + 1/getmax\\1(stdscr)/' \\\n"
+"    -i src/aacurses.c</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/general/graphlib/aalib.xml:107
+#, xml-text
+msgid ""
+"To allow building this package with GCC-14 or later, add some missing "
+"<literal>#include</literal> directives and fix a bad "
+"<literal>return</literal> statement to make the code C99-compatible.  Then "
+"regenerate the <command>configure</command> script to ensure the C code for "
+"probing system features C99-compatible as well:"
+msgstr ""
+"Para permitir construir esse pacote com GCC-14 ou posterior, adicione "
+"algumas diretivas <literal>#include</literal> ausentes e corrija uma "
+"instrução <literal>return</literal> incorreta para tornar o código "
+"compatível com C99. Em seguida, gere novamente o conjunto de comandos "
+"sequenciais <command>configure</command> para garantir que o código C para "
+"avaliar o sistema também seja compatível com C99:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/general/graphlib/aalib.xml:114
+#, no-wrap, xml-text
+msgid ""
+"<userinput>sed -i '1i#include &lt;stdlib.h&gt;'                            \\\n"
+"    src/aa{fire,info,lib,linuxkbd,savefont,test,regist}.c &amp;&amp;\n"
+"sed -i '1i#include &lt;string.h&gt;'                            \\\n"
+"    src/aa{kbdreg,moureg,test,regist}.c                   &amp;&amp;\n"
+"sed -i '/X11_KBDDRIVER/a#include &lt;X11/Xutil.h&gt;'           \\\n"
+"    src/aaxkbd.c                                          &amp;&amp;\n"
+"sed -i '/rawmode_init/,/^}/s/return;/return 0;/'          \\\n"
+"    src/aalinuxkbd.c                                      &amp;&amp;\n"
+"autoconf</userinput>"
+msgstr ""
+"<userinput>sed -i '1i#include &lt;stdlib.h&gt;'                            \\\n"
+"    src/aa{fire,info,lib,linuxkbd,savefont,test,regist}.c &amp;&amp;\n"
+"sed -i '1i#include &lt;string.h&gt;'                            \\\n"
+"    src/aa{kbdreg,moureg,test,regist}.c                   &amp;&amp;\n"
+"sed -i '/X11_KBDDRIVER/a#include &lt;X11/Xutil.h&gt;'           \\\n"
+"    src/aaxkbd.c                                          &amp;&amp;\n"
+"sed -i '/rawmode_init/,/^}/s/return;/return 0;/'          \\\n"
+"    src/aalinuxkbd.c                                      &amp;&amp;\n"
+"autoconf</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/general/graphlib/aalib.xml:125
+#, xml-text
+msgid ""
 "Install <application>AAlib</application> by running the following commands:"
 msgstr ""
 "Instale <application>AAlib</application> executando os seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/general/graphlib/aalib.xml:103
+#: blfs-en/general/graphlib/aalib.xml:129
 #, no-wrap, xml-text
 msgid ""
 "<userinput>./configure --prefix=/usr             \\\n"
@@ -205,13 +266,13 @@ msgstr ""
 "make</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/graphlib/aalib.xml:111
+#: blfs-en/general/graphlib/aalib.xml:137
 #, xml-text
 msgid "This package does not come with a test suite."
 msgstr "Esse pacote não vem com uma suíte de teste."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/graphlib/aalib.xml:115
+#: blfs-en/general/graphlib/aalib.xml:141
 #, xml-text
 msgid "Now, as the <systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
@@ -219,76 +280,76 @@ msgstr ""
 "class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/general/graphlib/aalib.xml:118
+#: blfs-en/general/graphlib/aalib.xml:144
 #, no-wrap, xml-text
 msgid "<userinput>make install</userinput>"
 msgstr "<userinput>make install</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/general/graphlib/aalib.xml:123
+#: blfs-en/general/graphlib/aalib.xml:149
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/graphlib/aalib.xml:126
+#: blfs-en/general/graphlib/aalib.xml:152
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/graphlib/aalib.xml:127
+#: blfs-en/general/graphlib/aalib.xml:153
 #, xml-text
 msgid "Installed Library"
 msgstr "Biblioteca Instalada"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/graphlib/aalib.xml:128
+#: blfs-en/general/graphlib/aalib.xml:154
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/graphlib/aalib.xml:131
+#: blfs-en/general/graphlib/aalib.xml:157
 #, xml-text
 msgid "aafire, aainfo, aalib-config, aasavefont, and aatest"
 msgstr "aafire, aainfo, aalib-config, aasavefont e aatest"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/graphlib/aalib.xml:132
-#: blfs-en/general/graphlib/aalib.xml:215
+#: blfs-en/general/graphlib/aalib.xml:158
+#: blfs-en/general/graphlib/aalib.xml:241
 #, xml-text
 msgid "libaa.so"
 msgstr "libaa.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/graphlib/aalib.xml:133
+#: blfs-en/general/graphlib/aalib.xml:159
 #, xml-text
 msgid "None"
-msgstr "Nenhum"
+msgstr "Nenhum(a)"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/general/graphlib/aalib.xml:138
+#: blfs-en/general/graphlib/aalib.xml:164
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/general/graphlib/aalib.xml:139
+#: blfs-en/general/graphlib/aalib.xml:165
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/graphlib/aalib.xml:143
+#: blfs-en/general/graphlib/aalib.xml:169
 #, xml-text
 msgid "<command>aafire</command>"
 msgstr "<command>aafire</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/graphlib/aalib.xml:146
+#: blfs-en/general/graphlib/aalib.xml:172
 #, xml-text
 msgid ""
 "is a demo of <application>AAlib</application>, rendering an animated fire in"
@@ -299,20 +360,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/graphlib/aalib.xml:150
+#: blfs-en/general/graphlib/aalib.xml:176
 #, xml-text
 msgid "aafire"
 msgstr "aafire"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/graphlib/aalib.xml:156
+#: blfs-en/general/graphlib/aalib.xml:182
 #, xml-text
 msgid "<command>aainfo</command>"
 msgstr "<command>aainfo</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/graphlib/aalib.xml:159
+#: blfs-en/general/graphlib/aalib.xml:185
 #, xml-text
 msgid ""
 "provides information for your current settings related to "
@@ -323,20 +384,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/graphlib/aalib.xml:163
+#: blfs-en/general/graphlib/aalib.xml:189
 #, xml-text
 msgid "aainfo"
 msgstr "aainfo"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/graphlib/aalib.xml:169
+#: blfs-en/general/graphlib/aalib.xml:195
 #, xml-text
 msgid "<command>aalib-config</command>"
 msgstr "<command>aalib-config</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/graphlib/aalib.xml:172
+#: blfs-en/general/graphlib/aalib.xml:198
 #, xml-text
 msgid "provides configuration info for <application>AAlib</application>"
 msgstr ""
@@ -344,40 +405,40 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/graphlib/aalib.xml:175
+#: blfs-en/general/graphlib/aalib.xml:201
 #, xml-text
 msgid "aalib-config"
 msgstr "aalib-config"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/graphlib/aalib.xml:181
+#: blfs-en/general/graphlib/aalib.xml:207
 #, xml-text
 msgid "<command>aasavefont</command>"
 msgstr "<command>aasavefont</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/graphlib/aalib.xml:184
+#: blfs-en/general/graphlib/aalib.xml:210
 #, xml-text
 msgid "saves a font to a file"
 msgstr "salva uma fonte em um arquivo"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/graphlib/aalib.xml:187
+#: blfs-en/general/graphlib/aalib.xml:213
 #, xml-text
 msgid "aasavefont"
 msgstr "aasavefont"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/graphlib/aalib.xml:193
+#: blfs-en/general/graphlib/aalib.xml:219
 #, xml-text
 msgid "<command>aatest</command>"
 msgstr "<command>aatest</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/graphlib/aalib.xml:196
+#: blfs-en/general/graphlib/aalib.xml:222
 #, xml-text
 msgid ""
 "shows the abilities of <application>AAlib</application> in a little test"
@@ -387,20 +448,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/graphlib/aalib.xml:200
+#: blfs-en/general/graphlib/aalib.xml:226
 #, xml-text
 msgid "aatest"
 msgstr "aatest"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/graphlib/aalib.xml:206
+#: blfs-en/general/graphlib/aalib.xml:232
 #, xml-text
 msgid "<filename class=\"libraryfile\">libaa.so</filename>"
 msgstr "<filename class=\"libraryfile\">libaa.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/graphlib/aalib.xml:209
+#: blfs-en/general/graphlib/aalib.xml:235
 #, xml-text
 msgid ""
 "is a collection of routines to render any graphical input in portable format"

@@ -18,7 +18,7 @@ EN_REPO:=git://git.linuxfromscratch.org/blfs.git
 RENDERTMP=/tmp
 
 WEBLATE_API:=https://bright.lepiller.eu/api
-WEBLATE_SHARED_COMPONENT=linux-from-scratch-12-1/index
+WEBLATE_SHARED_COMPONENT=faq/faq
 CURL=curl -H "Authorization: Token $(WEBLATE_KEY)"
 
 
@@ -40,7 +40,7 @@ CURL=curl -H "Authorization: Token $(WEBLATE_KEY)"
 # development branch and commit.
 
 # What we follow from upstream.
-MILESTONE := 12.1
+MILESTONE := 12.2
 
 # Select the current version we are tracking from master
 REVISION := $(shell (cd $(ORIGDIR); git rev-parse HEAD))
@@ -217,6 +217,7 @@ define createcomponent
 { \
 	"file_format": "po", \
 	"repo": "weblate://$(WEBLATE_SHARED_COMPONENT)", \
+	"allow_translation_propagation": false, \
 	"filemask": "blfs/*/$(patsubst fr/%,%,$<)", \
 	"name": "$(subst /,_,$(patsubst weblate/%,%,$@))", \
 	"slug": "$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))", \
@@ -224,12 +225,16 @@ define createcomponent
 }
 endef
 
+weblate-patch/%: fr/%.po
+	@echo [PATCH] $(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate-patch/%,%,$@))))
+	@$(CURL) -H "Content-Type: application/json" --data-binary '{"allow_translation_propagation": false}' -X PATCH https://bright.lepiller.eu/api/components/beyond-linux-from-scratch/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate-patch/%,%,$@))))/ 2>/dev/null >/dev/null
+
 weblate/%: fr/%.po
-	@if $(CURL) $(WEBLATE_API)/components/beyond-linux-from-scratch-12-1/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))/ 2>/dev/null | grep '"detail":"Not found."' 1>/dev/null; then \
+	@if $(CURL) $(WEBLATE_API)/components/beyond-linux-from-scratch/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))/ 2>/dev/null | grep '"detail":"Not found."' 1>/dev/null; then \
 		echo $(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@)))); \
 		$(CURL) -H "Content-Type: application/json" \
 			--data-binary "$(subst ",\",${createcomponent})" \
-			$(WEBLATE_API)/projects/beyond-linux-from-scratch-12-1/components/; \
+			$(WEBLATE_API)/projects/beyond-linux-from-scratch/components/; \
 		echo "";\
 	fi
 
@@ -240,12 +245,13 @@ weblate-up:
 	git pull --ff-only
 	$(MAKE) gitup
 	$(MAKE) update
-	python3 changelogtranslator.py fr/introduction/welcome/changelog.po
+	python3 changelogtranslator.py $(LANGUAGES)
 	for lang in $(LANGUAGES); do \
 		python3 potranslator.py $$lang `find $$lang -name '*.po' | cut -f2- -d'/'` ;\
 	done
 
 weblate: $(addprefix weblate/,$(patsubst %.po,%,$(patsubst fr/%,%,$(PO_fr))))
+weblate-patch: $(addprefix weblate-patch/,$(patsubst %.po,%,$(patsubst fr/%,%,$(PO_fr))))
 
 ssh-agent:
 	(ssh-add -l | grep $(PRIVKEY)) || \

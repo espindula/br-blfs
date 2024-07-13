@@ -4,17 +4,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:59+0000\n"
-"PO-Revision-Date: 2024-06-11 15:48+0000\n"
-"Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail."
-"com>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/"
-"projects/beyond-linux-from-scratch-12-1/networking_netlibs_geoclue2/pt_BR/>\n"
+"PO-Revision-Date: 2024-07-10 16:18+0000\n"
+"Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/networking_netlibs_geoclue2/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. type: Content of the geoclue2-md5sum entity
 #: blfs-en/networking/netlibs/geoclue2.xml:10
@@ -147,8 +145,8 @@ msgid ""
 "<xref linkend=\"avahi\"/>, <xref linkend=\"libnotify\"/>, <xref "
 "linkend=\"ModemManager\"/>, and <xref linkend=\"vala\"/>"
 msgstr ""
-"<xref linkend=\"avahi\"/>, <xref linkend=\"libnotify\"/>, <xref linkend="
-"\"ModemManager\"/> e <xref linkend=\"vala\"/>"
+"<xref linkend=\"avahi\"/>, <xref linkend=\"libnotify\"/>, <xref "
+"linkend=\"ModemManager\"/> e <xref linkend=\"vala\"/>"
 
 #. type: Content of: <sect1><sect2><bridgehead>
 #: blfs-en/networking/netlibs/geoclue2.xml:88
@@ -288,41 +286,156 @@ msgstr ""
 #. type: Content of: <sect1><sect2><title>
 #: blfs-en/networking/netlibs/geoclue2.xml:163
 #, xml-text
+msgid "Configuring GeoClue"
+msgstr "Configurando GeoClue"
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/networking/netlibs/geoclue2.xml:166
+#, xml-text
+msgid "Config Files"
+msgstr "Arquivos de Configuração"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/networking/netlibs/geoclue2.xml:168
+#, xml-text
+msgid "<filename>/etc/geoclue/conf.d/90-lfs-google.conf</filename>"
+msgstr "<filename>/etc/geoclue/conf.d/90-lfs-google.conf</filename>"
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/networking/netlibs/geoclue2.xml:172
+#, xml-text
+msgid "/etc/geoclue/conf.d/90-lfs-google.conf"
+msgstr "/etc/geoclue/conf.d/90-lfs-google.conf"
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/networking/netlibs/geoclue2.xml:176
+#, xml-text
+msgid "Configuration Information"
+msgstr "Informação de Configuração"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/networking/netlibs/geoclue2.xml:179
+#, xml-text
+msgid ""
+"In March of 2024, Mozilla announced the shutdown of the Mozilla Location "
+"Service. Geoclue uses this service for determining a user's location when "
+"requested by other applications. The only supported alternative by upstream "
+"is to use Google's Geolocation Service."
+msgstr ""
+"Em março de 2024, a Mozilla anunciou o encerramento do Mozilla Location "
+"Service. Geoclue usa esse serviço para determinar um local de usuário(a) "
+"quando solicitado por outras aplicações. A única alternativa suportada pelo "
+"fluxo de desenvolvimento é a de usar o Serviço de Geolocalização do Google."
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/networking/netlibs/geoclue2.xml:186
+#, xml-text
+msgid ""
+"To use Google's Geolocation Service, an API key must be used, and a "
+"configuration file must be created. <emphasis role=\"bold\">This API key is "
+"only intended for use with LFS. Please do not use this API key if you are "
+"building for another distro or distributing binary copies. If you need an "
+"API key, you can request one at <ulink "
+"url=\"https://www.chromium.org/developers/how-tos/api-keys\"/>.</emphasis>"
+msgstr ""
+"Para usar o Serviço de Geolocalização do Google, uma chave de API precisa "
+"ser usada e um arquivo de configuração precisa ser criado. <emphasis "
+"role=\"bold\">Esta chave de API é destinada somente para uso com LFS. Por "
+"favor, não use esta chave de API se você estiver construindo para outra "
+"distribuição ou distribuindo cópias binárias. Se precisar de uma chave de "
+"API, você pode solicitar uma em <ulink "
+"url=\"https://www.chromium.org/developers/how-tos/api-keys\"/>.</emphasis>"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/networking/netlibs/geoclue2.xml:195
+#, xml-text
+msgid ""
+"Create the configuration needed for using Google's Geolocation Service as "
+"the &root; user:"
+msgstr ""
+"Crie a configuração necessária para usar o Serviço de Geolocalização do "
+"Google como o(a) usuário(a) &root;:"
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/networking/netlibs/geoclue2.xml:199
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt;&gt; /etc/geoclue/conf.d/90-lfs-google.conf &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/geoclue/conf.d/90-lfs-google.conf\n"
+"\n"
+"# This configuration applies for the WiFi source.\n"
+"[wifi]\n"
+"\n"
+"# Set the URL to Google's Geolocation Service.\n"
+"url=https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ\n"
+"\n"
+"# End /etc/geoclue/conf.d/90-lfs-google.conf</literal>\n"
+"EOF</userinput>"
+msgstr ""
+"<userinput>cat &gt;&gt; /etc/geoclue/conf.d/90-lfs-google.conf &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/geoclue/conf.d/90-lfs-google.conf\n"
+"\n"
+"# This configuration applies for the WiFi source.\n"
+"[wifi]\n"
+"\n"
+"# Set the URL to Google's Geolocation Service.\n"
+"url=https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ\n"
+"\n"
+"# End /etc/geoclue/conf.d/90-lfs-google.conf</literal>\n"
+"EOF</userinput>"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/networking/netlibs/geoclue2.xml:212
+#, xml-text
+msgid ""
+"If you do not wish to request your location from a Geolocation service, you "
+"can hardcode your location in <filename>/etc/geolocation</filename> using "
+"the format described in <ulink role='man' "
+"url='&man;geoclue'>geoclue(5)</ulink>."
+msgstr ""
+"Se não desejar solicitar teu local a partir de um serviço de geolocalização,"
+" você pode rigidamente codificar teu local em "
+"<filename>/etc/geolocation</filename> usando o formato descrito em <ulink "
+"role='man' url='&man;geoclue'>geoclue(5)</ulink>."
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/networking/netlibs/geoclue2.xml:221
+#, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netlibs/geoclue2.xml:166
+#: blfs-en/networking/netlibs/geoclue2.xml:224
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netlibs/geoclue2.xml:167
+#: blfs-en/networking/netlibs/geoclue2.xml:225
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netlibs/geoclue2.xml:168
+#: blfs-en/networking/netlibs/geoclue2.xml:226
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netlibs/geoclue2.xml:172
+#: blfs-en/networking/netlibs/geoclue2.xml:230
 #, xml-text
 msgid "None"
 msgstr "Nenhum(a)"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netlibs/geoclue2.xml:175
+#: blfs-en/networking/netlibs/geoclue2.xml:233
 #, xml-text
 msgid "libgeoclue-2.so"
 msgstr "libgeoclue-2.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netlibs/geoclue2.xml:178
+#: blfs-en/networking/netlibs/geoclue2.xml:236
 #, xml-text
 msgid ""
 "/etc/geoclue, /usr/include/libgeoclue-2.0, /usr/libexec/geoclue-2.0, and "

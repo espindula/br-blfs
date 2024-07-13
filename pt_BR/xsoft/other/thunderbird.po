@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:59+0000\n"
-"PO-Revision-Date: 2024-06-23 00:48+0000\n"
+"PO-Revision-Date: 2024-07-11 16:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch-12-1/xsoft_other_thunderbird/pt_BR/>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/xsoft_other_thunderbird/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. type: Content of the thunderbird-download-http entity
 #: blfs-en/xsoft/other/thunderbird.xml:7
@@ -27,20 +27,20 @@ msgstr ""
 #. type: Content of the thunderbird-md5sum entity
 #: blfs-en/xsoft/other/thunderbird.xml:9
 #, xml-text
-msgid "00100df1feb11016fed632db29fbcfb8"
-msgstr "00100df1feb11016fed632db29fbcfb8"
+msgid "699134531dc31e9e7e62c47b82773508"
+msgstr "699134531dc31e9e7e62c47b82773508"
 
 #. type: Content of the thunderbird-size entity
 #: blfs-en/xsoft/other/thunderbird.xml:10
 #, xml-text
-msgid "516 MB"
-msgstr "516 MB"
+msgid "515 MB"
+msgstr "515 MB"
 
 #. type: Content of the thunderbird-buildsize entity
 #: blfs-en/xsoft/other/thunderbird.xml:11
 #, xml-text
-msgid "6.4 GB (229 MB installed)"
-msgstr "6,4 GB (229 MB instalado)"
+msgid "6.1 GB (224 MB installed)"
+msgstr "6,1 GB (224 MB instalado)"
 
 #. type: Content of the thunderbird-time entity
 #: blfs-en/xsoft/other/thunderbird.xml:12
@@ -144,15 +144,15 @@ msgid ""
 "linkend=\"gtk3\"/>, <xref linkend=\"llvm\"/> including clang, <xref "
 "linkend=\"nodejs\"/>, <xref linkend=\"pulseaudio\"/> (or <xref "
 "linkend=\"alsa-lib\"/> if you edit the mozconfig; although it is now "
-"deprecated by mozilla), <xref linkend=\"python311\"/> (rebuilt with the "
-"sqlite module), <xref linkend=\"startup-notification\"/>, and <xref "
+"deprecated by mozilla), <xref linkend=\"python\"/> (rebuilt with the sqlite "
+"module), <xref linkend=\"startup-notification\"/>, and <xref "
 "linkend=\"unzip\"/>"
 msgstr ""
 "<xref linkend=\"cbindgen\"/>, <xref linkend=\"dbus-glib\"/>, <xref "
 "linkend=\"gtk3\"/>, <xref linkend=\"llvm\"/> incluindo clang, <xref "
 "linkend=\"nodejs\"/>, <xref linkend=\"pulseaudio\"/> (ou <xref "
 "linkend=\"alsa-lib\"/> se você editar o mozconfig; embora agora esteja "
-"obsoleto pela mozilla), <xref linkend=\"python311\"/> (reconstruído com o "
+"obsoleto pela mozilla), <xref linkend=\"python\"/> (reconstruído com o "
 "módulo sqlite), <xref linkend=\"startup-notification\"/> e <xref "
 "linkend=\"unzip\"/>"
 
@@ -285,8 +285,10 @@ msgid ""
 "ac_add_options --disable-debug-symbols\n"
 "ac_add_options --disable-tests\n"
 "\n"
-"# This enables SIMD optimization in the shipped encoding_rs crate.\n"
-"ac_add_options --enable-rust-simd\n"
+"# The SIMD code relies on the unmaintained packed_simd crate which\n"
+"# fails to build with Rustc >= 1.78.0.  We may re-enable it once\n"
+"# Mozilla port the code to use std::simd and std::simd is stabilized.\n"
+"ac_add_options --disable-rust-simd\n"
 "\n"
 "ac_add_options --enable-strip\n"
 "ac_add_options --enable-install-strip\n"
@@ -308,29 +310,29 @@ msgid ""
 "EOF</userinput>"
 msgstr ""
 "<userinput>cat &gt; mozconfig &lt;&lt; \"EOF\"\n"
-"<literal># Se você tiver uma máquina multicore, todos cores serão usados.\n"
+"<literal># If you have a multicore machine, all cores will be used.\n"
 "\n"
-"# Se você tiver instalado wireless-tools, comente esta linha:\n"
+"# If you have installed wireless-tools comment out this line:\n"
 "ac_add_options --disable-necko-wifi\n"
 "\n"
-"# Descomente a seguinte opção se você não tiver instalado PulseAudio\n"
+"# Uncomment the following option if you have not installed PulseAudio\n"
 "#ac_add_options --enable-audio-backends=alsa\n"
 "\n"
-"# Comente as seguintes opções se você não tiver instalado\n"
-"# dependências recomendadas:\n"
+"# Comment out following options if you have not installed\n"
+"# recommended dependencies:\n"
 "ac_add_options --with-system-libevent\n"
 "ac_add_options --with-system-libvpx\n"
 "ac_add_options --with-system-nspr\n"
 "ac_add_options --with-system-nss\n"
 "ac_add_options --with-system-webp\n"
 "\n"
-"# em algumas máquinas. Supõe-se que melhore o tempo de inicialização e reduza\n"
-"# a libxul.so em alguns MB. Com lançamentos recentes do Binutils, o vinculador\n"
-"# já suporta uma forma muito mais segura e genérica para isso.\n"
+"# on some machines. It is supposed to improve startup time and it shrinks\n"
+"# libxul.so by a few MB.  With recent Binutils releases the linker already\n"
+"# supports a much safer and generic way for this.\n"
 "ac_add_options --disable-elf-hack\n"
 "export LDFLAGS=\"$LDFLAGS -Wl,-z,pack-relative-relocs\"\n"
 "\n"
-"# Os(As) editores(as) do BLFS recomendam não mudar nada abaixo desta linha:\n"
+"# The BLFS editors recommend not changing anything below this line:\n"
 "ac_add_options --prefix=/usr\n"
 "ac_add_options --enable-application=comm/mail\n"
 "\n"
@@ -340,13 +342,15 @@ msgstr ""
 "ac_add_options --disable-debug-symbols\n"
 "ac_add_options --disable-tests\n"
 "\n"
-"# Isto habilita otimização SIMD na caixa encoding_rs enviada.\n"
-"ac_add_options --enable-rust-simd\n"
+"# The SIMD code relies on the unmaintained packed_simd crate which\n"
+"# fails to build with Rustc >= 1.78.0.  We may re-enable it once\n"
+"# Mozilla port the code to use std::simd and std::simd is stabilized.\n"
+"ac_add_options --disable-rust-simd\n"
 "\n"
 "ac_add_options --enable-strip\n"
 "ac_add_options --enable-install-strip\n"
 "\n"
-"# Você não pode distribuir o binário se fizer isto.\n"
+"# You cannot distribute the binary if you do this.\n"
 "ac_add_options --enable-official-branding\n"
 "\n"
 "ac_add_options --enable-system-ffi\n"
@@ -356,14 +360,106 @@ msgstr ""
 "ac_add_options --with-system-png\n"
 "ac_add_options --with-system-zlib\n"
 "\n"
-"# Usar bibliotecas wasm em sandbox foi movido para todas as construções,\n"
-"# em vez de somente construções de automação da Mozilla. Exige pacotes llvm extras\n"
-"# e foi informado que retarda seriamente a construção. Desabilite-a.\n"
+"# Using sandboxed wasm libraries has been moved to all builds instead\n"
+"# of only mozilla automation builds. It requires extra llvm packages\n"
+"# and was reported to seriously slow the build. Disable it.\n"
 "ac_add_options --without-wasm-sandboxed-libraries</literal>\n"
 "EOF</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:248
+#: blfs-en/xsoft/other/thunderbird.xml:251
+#, xml-text
+msgid ""
+"Adapt the shipped <application>rust-bindgen</application> copy for LLVM-18 "
+"and later, and tell <command>cargo</command> we've modified the code of "
+"<application>rust-bindgen</application> so the checksum verification of this"
+" crate should be skipped:"
+msgstr ""
+"Adapte a cópia enviada do <application>rust-bindgen</application> para "
+"LLVM-18 e posterior e informe ao <command>cargo</command> que nós "
+"modificamos o código do <application>rust-bindgen</application>, de forma "
+"que a verificação da soma de verificação dessa caixa deva ser ignorada:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/xsoft/other/thunderbird.xml:257
+#, no-wrap, xml-text
+msgid ""
+"<userinput>sed -e \"/match cursor.kind()/a                                    \\\n"
+"        CXCursor_LinkageSpec => return Err(ParseError::Recurse),\" \\\n"
+"    -i third_party/rust/bindgen/ir/item.rs                        &amp;&amp;\n"
+"\n"
+"cat &gt;&gt; Cargo.toml &lt;&lt; EOF &amp;&amp;\n"
+"<literal>[patch.crates-io.bindgen_0_64_0]\n"
+"package = \"bindgen\"\n"
+"version = \"0.64.0\"\n"
+"path = \"third_party/rust/bindgen\"</literal>\n"
+"EOF\n"
+"\n"
+"sed -r '/name = \"bindgen\"/,+5 s/^source|^checksum/#&amp;/' \\\n"
+"    -i Cargo.lock</userinput>"
+msgstr ""
+"<userinput>sed -e \"/match cursor.kind()/a                                    \\\n"
+"        CXCursor_LinkageSpec => return Err(ParseError::Recurse),\" \\\n"
+"    -i third_party/rust/bindgen/ir/item.rs                        &amp;&amp;\n"
+"\n"
+"cat &gt;&gt; Cargo.toml &lt;&lt; EOF &amp;&amp;\n"
+"<literal>[patch.crates-io.bindgen_0_64_0]\n"
+"package = \"bindgen\"\n"
+"version = \"0.64.0\"\n"
+"path = \"third_party/rust/bindgen\"</literal>\n"
+"EOF\n"
+"\n"
+"sed -r '/name = \"bindgen\"/,+5 s/^source|^checksum/#&amp;/' \\\n"
+"    -i Cargo.lock</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/xsoft/other/thunderbird.xml:273
+#, xml-text
+msgid ""
+"Adapt the WebRTC code to use 64-bit timestamp to fix a build failure with "
+"Clang-18 and later:"
+msgstr ""
+"Adapte o código WebRTC para usar carimbo de tempo de 64 bits para corrigir "
+"uma falha de construção com Clang-18 e posterior:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/xsoft/other/thunderbird.xml:277
+#, no-wrap, xml-text
+msgid ""
+"<userinput>sed 's/uint32_t timestamp/uint64_t timestamp/'                \\\n"
+"    -i dom/media/gmp-plugin-openh264/gmp-fake-openh264.cpp    \\\n"
+"       dom/media/gtest/TestGMPRemoveAndDelete.cpp             \\\n"
+"       dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.cpp &amp;&amp;\n"
+"\n"
+"sed '/mInputImageMap/s/uint32_t/uint64_t/' \\\n"
+"    -i dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.h</userinput>"
+msgstr ""
+"<userinput>sed 's/uint32_t timestamp/uint64_t timestamp/'                \\\n"
+"    -i dom/media/gmp-plugin-openh264/gmp-fake-openh264.cpp    \\\n"
+"       dom/media/gtest/TestGMPRemoveAndDelete.cpp             \\\n"
+"       dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.cpp &amp;&amp;\n"
+"\n"
+"sed '/mInputImageMap/s/uint32_t/uint64_t/' \\\n"
+"    -i dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.h</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/xsoft/other/thunderbird.xml:286
+#, xml-text
+msgid ""
+"Remove several lines of Rust code only useful for ARM and failing to compile"
+" with Rustc-1.78.0 or newer:"
+msgstr ""
+"Remova várias linhas de código Rust úteis somente para ARM e falhantes para "
+"compilar com Rustc-1.78.0 ou mais recente:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/xsoft/other/thunderbird.xml:290
+#, no-wrap, xml-text
+msgid "<userinput>sed '/cfg_attr/,/)]/d' -i gfx/qcms/src/lib.rs</userinput>"
+msgstr "<userinput>sed '/cfg_attr/,/)]/d' -i gfx/qcms/src/lib.rs</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/xsoft/other/thunderbird.xml:293
 #, xml-text
 msgid ""
 "Now invoke the Python <command>mach</command> script to compile "
@@ -374,27 +470,25 @@ msgstr ""
 "<application>Thunderbird</application>:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/xsoft/other/thunderbird.xml:257
+#: blfs-en/xsoft/other/thunderbird.xml:302
 #, no-wrap, xml-text
 msgid ""
 "<userinput>export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &amp;&amp;\n"
 "export MOZBUILD_STATE_PATH=./mozbuild               &amp;&amp;\n"
-"export PYTHON311=/opt/python3.11/bin/python3.11     &amp;&amp;\n"
-"$PYTHON311 ./mach build</userinput>"
+"./mach build</userinput>"
 msgstr ""
 "<userinput>export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &amp;&amp;\n"
 "export MOZBUILD_STATE_PATH=./mozbuild               &amp;&amp;\n"
-"export PYTHON311=/opt/python3.11/bin/python3.11     &amp;&amp;\n"
-"$PYTHON311 ./mach build</userinput>"
+"./mach build</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:263
+#: blfs-en/xsoft/other/thunderbird.xml:307
 #, xml-text
 msgid "This package does not come with a test suite."
 msgstr "Esse pacote não vem com uma suíte de teste."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:267
+#: blfs-en/xsoft/other/thunderbird.xml:311
 #, xml-text
 msgid ""
 "Install <application>Thunderbird</application> by running the following "
@@ -405,41 +499,39 @@ msgstr ""
 "class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/xsoft/other/thunderbird.xml:271
+#: blfs-en/xsoft/other/thunderbird.xml:315
 #, no-wrap, xml-text
 msgid ""
-"<userinput>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none $PYTHON311 ./mach "
+"<userinput>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none ./mach "
 "install</userinput>"
 msgstr ""
-"<userinput>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none $PYTHON311 ./mach "
+"<userinput>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none ./mach "
 "install</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:275
+#: blfs-en/xsoft/other/thunderbird.xml:319
 #, xml-text
 msgid "Empty the environment variables which were set above:"
 msgstr "Esvazie as variáveis de ambiente que foram configuradas acima:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/xsoft/other/thunderbird.xml:278
+#: blfs-en/xsoft/other/thunderbird.xml:322
 #, no-wrap, xml-text
 msgid ""
 "<userinput>unset MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE &amp;&amp;\n"
-"unset MOZBUILD_STATE_PATH                     &amp;&amp;\n"
-"unset PYTHON311</userinput>"
+"unset MOZBUILD_STATE_PATH</userinput>"
 msgstr ""
 "<userinput>unset MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE &amp;&amp;\n"
-"unset MOZBUILD_STATE_PATH                     &amp;&amp;\n"
-"unset PYTHON311</userinput>"
+"unset MOZBUILD_STATE_PATH</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/xsoft/other/thunderbird.xml:285
+#: blfs-en/xsoft/other/thunderbird.xml:328
 #, xml-text
 msgid "Command Explanations"
 msgstr "Explicações do Comando"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:288
+#: blfs-en/xsoft/other/thunderbird.xml:331
 #, xml-text
 msgid ""
 "<command>MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none</command>: Use the "
@@ -454,7 +546,7 @@ msgstr ""
 "do sistema e os módulos incluídos."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:302
+#: blfs-en/xsoft/other/thunderbird.xml:345
 #, xml-text
 msgid ""
 "<option>./mach build --verbose</option>: Use this alternative if you need "
@@ -466,7 +558,7 @@ msgstr ""
 "com quaisquer sinalizadores C ou C++ sendo usados."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:308
+#: blfs-en/xsoft/other/thunderbird.xml:351
 #, xml-text
 msgid ""
 "<option>./mach build -jN</option>: The build should, by default, use all the"
@@ -480,7 +572,7 @@ msgstr ""
 "poderá ser mais rápido."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/xsoft/other/thunderbird.xml:314
+#: blfs-en/xsoft/other/thunderbird.xml:357
 #, xml-text
 msgid ""
 "<option><envar>CC=gcc CXX=g++</envar></option>: BLFS used to prefer to use "
@@ -501,19 +593,19 @@ msgstr ""
 "quebrado."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/xsoft/other/thunderbird.xml:327
+#: blfs-en/xsoft/other/thunderbird.xml:370
 #, xml-text
 msgid "Configuring Thunderbird"
 msgstr "Configurando o Thunderbird"
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/xsoft/other/thunderbird.xml:329
+#: blfs-en/xsoft/other/thunderbird.xml:372
 #, xml-text
 msgid "Configuration Information"
 msgstr "Informação de Configuração"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/xsoft/other/thunderbird.xml:332
+#: blfs-en/xsoft/other/thunderbird.xml:375
 #, xml-text
 msgid ""
 "If your Window Manager or Desktop Environment does not allow you to "
@@ -532,7 +624,7 @@ msgstr ""
 "podem ser usadas para visualizar ou modificar quaisquer dos parâmetros."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/xsoft/other/thunderbird.xml:341
+#: blfs-en/xsoft/other/thunderbird.xml:384
 #, xml-text
 msgid ""
 "First, open the configuration dialog by opening the <quote>Edit</quote> "
@@ -567,7 +659,7 @@ msgstr ""
 "nos campos quando solicitado."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/xsoft/other/thunderbird.xml:358
+#: blfs-en/xsoft/other/thunderbird.xml:401
 #, xml-text
 msgid ""
 "The configuration preference item you need to check so that "
@@ -587,7 +679,7 @@ msgstr ""
 #. then
 #.       change the StartupNotify line to false.
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/xsoft/other/thunderbird.xml:376
+#: blfs-en/xsoft/other/thunderbird.xml:419
 #, xml-text
 msgid ""
 "If you use a desktop environment such as <application>GNOME</application> or"
@@ -606,7 +698,7 @@ msgstr ""
 "class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/xsoft/other/thunderbird.xml:387
+#: blfs-en/xsoft/other/thunderbird.xml:430
 #, no-wrap, xml-text
 msgid ""
 "<userinput>mkdir -pv /usr/share/{applications,pixmaps} &amp;&amp;\n"
@@ -648,75 +740,83 @@ msgstr ""
 "        /usr/share/pixmaps/thunderbird.png</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/xsoft/other/thunderbird.xml:409
+#: blfs-en/xsoft/other/thunderbird.xml:452
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/xsoft/other/thunderbird.xml:412
+#: blfs-en/xsoft/other/thunderbird.xml:455
 #, xml-text
 msgid "Installed Program"
 msgstr "Aplicativo Instalado"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/xsoft/other/thunderbird.xml:413
+#: blfs-en/xsoft/other/thunderbird.xml:456
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/xsoft/other/thunderbird.xml:414
+#: blfs-en/xsoft/other/thunderbird.xml:457
 #, xml-text
 msgid "Installed Directory"
 msgstr "Diretório Instalado"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/xsoft/other/thunderbird.xml:418
-#: blfs-en/xsoft/other/thunderbird.xml:441
+#: blfs-en/xsoft/other/thunderbird.xml:461
+#: blfs-en/xsoft/other/thunderbird.xml:484
 #, xml-text
 msgid "thunderbird"
 msgstr "thunderbird"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/xsoft/other/thunderbird.xml:421
+#: blfs-en/xsoft/other/thunderbird.xml:464
 #, xml-text
 msgid "Numerous libraries and modules in the /usr/lib/thunderbird directory"
 msgstr "Numerosas bibliotecas e módulos no diretório /usr/lib/thunderbird"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/xsoft/other/thunderbird.xml:424
+#: blfs-en/xsoft/other/thunderbird.xml:467
 #, xml-text
 msgid "/usr/lib/thunderbird"
 msgstr "/usr/lib/thunderbird"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/xsoft/other/thunderbird.xml:430
+#: blfs-en/xsoft/other/thunderbird.xml:473
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/xsoft/other/thunderbird.xml:431
+#: blfs-en/xsoft/other/thunderbird.xml:474
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/xsoft/other/thunderbird.xml:435
+#: blfs-en/xsoft/other/thunderbird.xml:478
 #, xml-text
 msgid "<command>thunderbird</command>"
 msgstr "<command>thunderbird</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/xsoft/other/thunderbird.xml:438
+#: blfs-en/xsoft/other/thunderbird.xml:481
 #, xml-text
 msgid "is <application>Mozilla</application>'s email and newsgroup client"
 msgstr ""
 "é o cliente de mensagens eletrônicas e grupo de notícias do "
 "<application>Mozilla</application>"
+
+#, xml-text
+#~ msgid "00100df1feb11016fed632db29fbcfb8"
+#~ msgstr "00100df1feb11016fed632db29fbcfb8"
+
+#, xml-text
+#~ msgid "516 MB"
+#~ msgstr "516 MB"
 
 #, xml-text
 #~ msgid "71242ab653ce087d137ccc1b3c6bdeb3"

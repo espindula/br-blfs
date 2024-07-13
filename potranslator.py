@@ -33,40 +33,40 @@ tt.append(re.compile('([a-f0-9]{32})$'),
 # convert KB to Ko, MB to Mo and GB to Go, and keep SBU
 tt.append(re.compile('([0-9\\.]+) ([KMG])B$'),
     {'fr': '#1&nbsp;#2o',
-     'pt_BR': '#1#2o'})
+     'pt_BR': '#1 #2B'})
 tt.append(re.compile('([0-9\\.]+) ([KMG])B \(with tests\)$'),
     {'fr': '#1&nbsp;#2o (avec les tests)',
-     'pt_BR': '#1#2o (com os testes)'})
+     'pt_BR': '#1 #2B (com os testes)'})
 tt.append(re.compile('([0-9\\.]+) ([KMG])B \(additional ([0-9\\.]+) ([KMG])B for the tests\)$'),
     {'fr': '#1&nbsp;#2o (#3&nbsp;#4o supplémentaires pour les tests)',
-     'pt_BR': '#1#2o (#3#4o adicionais para os testes)'})
+     'pt_BR': '#1 #2B (#3 #4B adicionais para os testes)'})
 tt.append(re.compile('([0-9\\.]+) ([KMG])B \(add ([0-9\\.]+) ([KMG])B for tests\)$'),
     {'fr': '#1&nbsp;#2o (plus #3&nbsp;#4o pour les tests)',
-     'pt_BR': '#1#2o (adicionar #3#4o para os testes)'})
+     'pt_BR': '#1 #2B (adicionar #3 #4B para os testes)'})
 tt.append(re.compile('([0-9\\.]+) SBU$'),
     {'fr': '#1&nbsp;SBU',
-     'pt_BR': '#1UPC'})
+     'pt_BR': '#1 UPC'})
 tt.append(re.compile('([0-9\\.]+) SBU \(with tests\)$'),
     {'fr': '#1&nbsp;SBU (avec les tests)',
-     'pt_BR': '#1UPC (com os testes)'})
+     'pt_BR': '#1 UPC (com os testes)'})
 tt.append(re.compile('([0-9\\.]+) SBU \(using parallelism=([0-9]+)\)$'),
     {'fr': '#1&nbsp;SBU (avec parallélisme = #2)',
-     'pt_BR': '#1UPC (usando paralelismo = #2)'})
+     'pt_BR': '#1 UPC (usando paralelismo = #2)'})
 tt.append(re.compile('([0-9\\.]+) SBU \(using parallelism=([0-9]+); with tests\)$'),
     {'fr': '#1&nbsp;SBU (avec parallélisme = #2&nbsp;; avec les tests)',
-     'pt_BR': '#1UPC (usando paralelismo = #2; com os testes)'})
+     'pt_BR': '#1 UPC (usando paralelismo = #2; com os testes)'})
 tt.append(re.compile('([0-9\\.]+) SBU \(additional ([0-9\\.]+) SBU for the tests\)$'),
     {'fr': '#1&nbsp;SBU (#2&nbsp;SBU supplémentaires pour les tests)',
-     'pt_BR': '#1UPC (#2UPC adicionais para os testes)'})
+     'pt_BR': '#1 UPC (#2 UPC adicionais para os testes)'})
 tt.append(re.compile('([0-9\\.]+) SBU \(add ([0-9\\.]+) SBU for tests\)$'),
     {'fr': '#1&nbsp;SBU (plus #2&nbsp;SBU pour les tests)',
-     'pt_BR': '#1UPC (adicionar #2UPC para os testes)'})
+     'pt_BR': '#1 UPC (adicionar #2 UPC para os testes)'})
 tt.append(re.compile('less than 0.1 SBU$'),
     {'fr': 'moins de 0,1&nbsp;SBU',
-     'pt_BR': 'menos que 0,1UPC'})
+     'pt_BR': 'menos que 0,1 UPC'})
 tt.append(re.compile('less than 0.1 SBU (with tests)'),
     {'fr': 'moins de 0,1&nbsp;SBU (avec les tests)',
-     'pt_BR': 'menos que 0,1UPC (com os testes)'})
+     'pt_BR': 'menos que 0,1 UPC (com os testes)'})
 # termes à gauche des informations
 tt.append(re.compile('Package Information$'),
     {'fr': 'Informations sur le paquet',
