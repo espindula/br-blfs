@@ -36,7 +36,7 @@ tt.append(re.compile('([0-9\\.]+) ([KMG])B$'),
      'pt_BR': '#1 #2B'})
 tt.append(re.compile('([0-9\\.]+) ([KMG])B \(with tests\)$'),
     {'fr': '#1&nbsp;#2o (avec les tests)',
-     'pt_BR': '#1 #2B (com os testes)'})
+     'pt_BR': '#1 #2B (com testes)'})
 tt.append(re.compile('([0-9\\.]+) ([KMG])B \(additional ([0-9\\.]+) ([KMG])B for the tests\)$'),
     {'fr': '#1&nbsp;#2o (#3&nbsp;#4o supplémentaires pour les tests)',
      'pt_BR': '#1 #2B (#3 #4B adicionais para os testes)'})
@@ -48,7 +48,7 @@ tt.append(re.compile('([0-9\\.]+) SBU$'),
      'pt_BR': '#1 UPC'})
 tt.append(re.compile('([0-9\\.]+) SBU \(with tests\)$'),
     {'fr': '#1&nbsp;SBU (avec les tests)',
-     'pt_BR': '#1 UPC (com os testes)'})
+     'pt_BR': '#1 UPC (com testes)'})
 tt.append(re.compile('([0-9\\.]+) SBU \(using parallelism=([0-9]+)\)$'),
     {'fr': '#1&nbsp;SBU (avec parallélisme = #2)',
      'pt_BR': '#1 UPC (usando paralelismo = #2)'})
@@ -60,13 +60,13 @@ tt.append(re.compile('([0-9\\.]+) SBU \(additional ([0-9\\.]+) SBU for the tests
      'pt_BR': '#1 UPC (#2 UPC adicionais para os testes)'})
 tt.append(re.compile('([0-9\\.]+) SBU \(add ([0-9\\.]+) SBU for tests\)$'),
     {'fr': '#1&nbsp;SBU (plus #2&nbsp;SBU pour les tests)',
-     'pt_BR': '#1 UPC (adicionar #2 UPC para os testes)'})
+     'pt_BR': '#1 UPC (adicionar #2 UPC para testes)'})
 tt.append(re.compile('less than 0.1 SBU$'),
     {'fr': 'moins de 0,1&nbsp;SBU',
      'pt_BR': 'menos que 0,1 UPC'})
 tt.append(re.compile('less than 0.1 SBU (with tests)'),
     {'fr': 'moins de 0,1&nbsp;SBU (avec les tests)',
-     'pt_BR': 'menos que 0,1 UPC (com os testes)'})
+     'pt_BR': 'menos que 0,1 UPC (com testes)'})
 # termes à gauche des informations
 tt.append(re.compile('Package Information$'),
     {'fr': 'Informations sur le paquet',
@@ -79,7 +79,7 @@ tt.append(re.compile('Download \(FTP\): (.*)$'),
      'pt_BR': 'Transferência (FTP): #1'})
 tt.append(re.compile('Download MD5 sum: (.*)$'),
     {'fr': 'Somme de contrôle MD5&nbsp;: #1',
-     'pt_BR': 'Soma de verificação MD5: #1'})
+     'pt_BR': 'Soma de verificação MD5 da transferência: #1'})
 tt.append(re.compile('Download size: (.*)$'),
     {'fr': 'Taille du téléchargement&nbsp;: #1',
      'pt_BR': 'Tamanho da transferência: #1'})
@@ -104,10 +104,10 @@ tt.append(re.compile('Optional Runtime Dependencies$'),
      'pt_BR': 'Dependências Opcionais em Tempo de Execução'})
 tt.append(re.compile('(.*) Dependencies$'),
     {'fr': 'Dépendances de #1',
-     'pt_BR': 'Dependências de #1'})
+     'pt_BR': 'Dependências do #1'})
 tt.append(re.compile('Required$'),
     {'fr': 'Requises',
-     'pt_BR': 'Exigida'})
+     'pt_BR': 'Exigidas'})
 tt.append(re.compile('Optional$'),
     {'fr': 'Facultatives',
      'pt_BR': 'Opcionais'})
@@ -116,7 +116,7 @@ tt.append(re.compile('Optional \(Required if building GNOME\)$'),
      'pt_BR': 'Opcionais (Exigidas se construir GNOME)'})
 tt.append(re.compile('Recommended$'),
     {'fr': 'Recommandées',
-     'pt_BR': 'Recomendada'})
+     'pt_BR': 'Recomendadas'})
 tt.append(re.compile('Recommended \(Required if building GNOME\)$'),
     {'fr': 'Recommandées (requises pour construire GNOME)',
      'pt_BR': 'Recomendadas (Exigidas se construir GNOME)'})
@@ -129,14 +129,20 @@ tt.append(re.compile('User Notes: (.*)$'),
 # Titres
 tt.append(re.compile('Installation of (.*)$'),
     {'fr': 'Installation de #1',
-     'pt_BR': 'Instalação de #1'})
+     'pt_BR': 'Instalação do #1'})
 tt.append(re.compile('Command Explanations$'),
     {'fr': 'Explication des commandes',
-     'pt_BR': 'Explicações de Comando'})
-tt.append(re.compile('Config [Ff]iles$'),
+     'pt_BR': 'Explicações do Comando'})
+tt.append(re.compile('Config files$'),
+    {'fr': 'Fichiers de configuration',
+     'pt_BR': 'Arquivos de configuração'})
+tt.append(re.compile('Config Files$'),
     {'fr': 'Fichiers de configuration',
      'pt_BR': 'Arquivos de Configuração'})
-tt.append(re.compile('Config [Ff]ile$'),
+tt.append(re.compile('Config file$'),
+    {'fr': 'Fichier de configuration',
+     'pt_BR': 'Arquivo de configuração'})
+tt.append(re.compile('Config File$'),
     {'fr': 'Fichier de configuration',
      'pt_BR': 'Arquivo de Configuração'})
 tt.append(re.compile('Configuring ([^ ]+)$'),
@@ -154,15 +160,21 @@ tt.append(re.compile('Boot Script$'),
 tt.append(re.compile('Boot Scripts$'),
     {'fr': 'Scripts de démarrage',
      'pt_BR': 'Scripts de Inicialização'})
-tt.append(re.compile('Systemd Unit(s?)$'),
-    {'fr': 'Unité#1 systemd',
-     'pt_BR': 'Unidade#1 do systemd'})
+tt.append(re.compile('Systemd Unit'),
+    {'fr': 'Unité systemd',
+     'pt_BR': 'Unidade do systemd'})
+tt.append(re.compile('Systemd Units'),
+    {'fr': 'Unités systemd',
+     'pt_BR': 'Unidades do systemd'})
 tt.append(re.compile('<phrase revision="sysv">Boot Script</phrase> <phrase revision="systemd">Systemd Unit</phrase>$'),
     {'fr': '<phrase revision="sysv">Script de démarrage</phrase> <phrase revision="systemd">Unité Systemd</phrase>',
      'pt_BR': '<phrase revision="sysv">Script de Inicialização</phrase> <phrase revision="systemd">Unidade do systemd</phrase>'})
 tt.append(re.compile('Configuration Information$'),
     {'fr': 'Informations sur la configuration',
      'pt_BR': 'Informação de Configuração'})
+tt.append(re.compile('Contents$'),
+    {'fr': 'Contenu',
+     'pt_BR': 'Conteúdo'})
 tt.append(re.compile('Installed Program$'),
     {'fr': 'Programme installé',
      'pt_BR': 'Aplicativo Instalado'})
@@ -220,7 +232,7 @@ tt.append(re.compile('(<othername>.*)$'),
      'pt_BR': '#1'})
 tt.append(re.compile('Introduction to (.*)$'),
     {'fr': 'Introduction à #1',
-     'pt_BR': 'Introdução a #1'})
+     'pt_BR': 'Introdução ao #1'})
 tt.append(re.compile('(<xref [^>]*>)$'),
     {'fr': '#1',
      'pt_BR': '#1'})

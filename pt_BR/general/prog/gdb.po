@@ -26,8 +26,8 @@ msgstr "&gnu-http;/gdb/gdb-&gdb-version;.tar.xz"
 #. type: Content of the gdb-md5sum entity
 #: blfs-en/general/prog/gdb.xml:9
 #, xml-text
-msgid "4452f575d09f94276cb0a1e95ecff856"
-msgstr "4452f575d09f94276cb0a1e95ecff856"
+msgid "494e3beaac44e66367c3e443a4414529"
+msgstr "494e3beaac44e66367c3e443a4414529"
 
 #. type: Content of the gdb-size entity
 #: blfs-en/general/prog/gdb.xml:10
@@ -37,17 +37,20 @@ msgstr "23 MB"
 
 #. type: Content of the gdb-buildsize entity
 #: blfs-en/general/prog/gdb.xml:11
-#, xml-text
-msgid "964 MB (add 805 MB for docs; add 654 MB for tests)"
+#, fuzzy, xml-text
+#| msgid "964 MB (add 805 MB for docs; add 654 MB for tests)"
+msgid "806 MB (add 1.0 GB for docs; add 720 MB for tests)"
 msgstr ""
 "964 MB (adicionar 805 MB para documentos; adicionar 654 MB para testes)"
 
 #. type: Content of the gdb-time entity
 #: blfs-en/general/prog/gdb.xml:12
-#, xml-text
+#, fuzzy, xml-text
+#| msgid ""
+#| "1.8 SBU (add 0.4 SBU for docs; add 15 SBU for tests; all using "
+#| "parallelism=4)"
 msgid ""
-"1.8 SBU (add 0.4 SBU for docs; add 15 SBU for tests; all using "
-"parallelism=4)"
+"0.9 SBU (add 0.4 SBU for docs; see below for tests; all using parallelism=8)"
 msgstr ""
 "1,8 UPC (adicionar 0,4 UPC para documentos; adicionar 15 UPC para testes; "
 "todos usando paralelismo=4)"
@@ -227,39 +230,76 @@ msgstr "<userinput>make -C gdb/doc doxy</userinput>"
 #. type: Content of: <sect1><sect2><para>
 #: blfs-en/general/prog/gdb.xml:136
 #, xml-text
-msgid "To test the results, issue:"
+msgid ""
+"Running the tests is not recommended.  The results vary a lot depending on "
+"the system architecture and what optional dependencies are installed and "
+"what version of gcc is being used.  On one system tested, there were 140 "
+"unexpected failures (out of over 108,000 tests) and on another system there "
+"were \"only\" 32 unexpected failures.  The time to run the tests varies from"
+" approximately 6 SBU to over 15 SBU when using -j8.  This depends on number "
+"of tests that time out as will as other factors."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><tip><para>
+#: blfs-en/general/prog/gdb.xml:147
+#, xml-text
+msgid ""
+"With a plain <command>make check</command>, there are many warning messages "
+"about a missing global configuration file.  These can be avoided by running "
+"<command>touch global.exp</command> and prepending the <command>make "
+"check</command> command with <command>DEJAGNU=$PWD/global.exp</command>.  In"
+" addition the tests can be speeded up considerably by using the "
+"<command>make</command> option \"-j&lt;N&gt;\" where &lt;N&gt; is the number"
+" of cores on your system."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/general/prog/gdb.xml:158
+#, fuzzy, xml-text
+#| msgid "To test the results, issue:"
+msgid "To test the results anyway, issue:"
 msgstr "Para testar os resultados, emita:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/general/prog/gdb.xml:139
+#: blfs-en/general/prog/gdb.xml:161
 #, no-wrap, xml-text
+#| msgid ""
+#| "<userinput>pushd gdb/testsuite &amp;&amp;\n"
+#| "make  site.exp      &amp;&amp;\n"
+#| "echo  \"set gdb_test_timeout 120\" &gt;&gt; site.exp &amp;&amp;\n"
+#| "runtest\n"
+#| "popd</userinput>"
 msgid ""
 "<userinput>pushd gdb/testsuite &amp;&amp;\n"
 "make  site.exp      &amp;&amp;\n"
-"echo  \"set gdb_test_timeout 120\" &gt;&gt; site.exp &amp;&amp;\n"
-"runtest\n"
+"echo  \"set gdb_test_timeout 30\" &gt;&gt; site.exp &amp;&amp;\n"
+"make check 2&gt;1 | tee gdb-check.log\n"
 "popd</userinput>"
 msgstr ""
 "<userinput>pushd gdb/testsuite &amp;&amp;\n"
-"make  site.exp     &amp;&amp;\n"
-"echo  \"set gdb_test_timeout 120\" &gt;&gt; site.exp &amp;&amp;\n"
-"runtest\n"
+"make  site.exp      &amp;&amp;\n"
+"echo  \"set gdb_test_timeout 30\" &gt;&gt; site.exp &amp;&amp;\n"
+"make check 2&gt;1 | tee gdb-check.log\n"
 "popd</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/prog/gdb.xml:146
-#, xml-text
+#: blfs-en/general/prog/gdb.xml:168
+#, fuzzy, xml-text
+#| msgid ""
+#| "See <emphasis>gdb/testsuite/README</emphasis> and <ulink "
+#| "url=\"https://sourceware.org/gdb/wiki/TestingGDB\">TestingGDB</ulink>.  "
+#| "There are many problems with the test suite:"
 msgid ""
 "See <emphasis>gdb/testsuite/README</emphasis> and <ulink "
 "url=\"https://sourceware.org/gdb/wiki/TestingGDB\">TestingGDB</ulink>.  "
-"There are many problems with the test suite:"
+"There are many additional problems with the test suite:"
 msgstr ""
 "Veja-se <emphasis>gdb/testsuite/README</emphasis> e <ulink "
 "url=\"https://sourceware.org/gdb/wiki/TestingGDB\">TestingGDB</ulink>. "
 "Existem muitos problemas com a suíte de teste:"
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/general/prog/gdb.xml:154
+#: blfs-en/general/prog/gdb.xml:176
 #, xml-text
 msgid ""
 "Clean directories are needed if re-running the tests.  For that reason, make"
@@ -271,46 +311,13 @@ msgstr ""
 "testes, caso precise executar os testes novamente."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/general/prog/gdb.xml:162
+#: blfs-en/general/prog/gdb.xml:184
 #, xml-text
 msgid "Results depend on installed compilers."
 msgstr "Os resultados dependem dos compiladores instalados."
 
-#.  for gdb-11.1, gcc-11.2 - pierre
-#.           A test run of the test suite had about 1700 unexpected failures
-#.           (out of over 80000 tests). Over 1370 of the failures were related
-#.           to FORTRAN tests.
-#.  for gdb-12.1, gcc-11.3.0 - bdubbs
-#.           A test run of the test suite had a little over 200 unexpected
-#. failures
-#.           out of over 94000 tests.
-#.  for gdb-13.0, gcc-12.2.0 - bdubbs
-#.           A test run of the test suite had 33 unexpected failures
-#.           out of over 106000 tests.
-#.  for gdb-13.2, gcc-13.1.0 - pierre
-#.           A test run of the test suite had 183 unexpected failures
-#.           out of over 105000 tests.
-#.  for gdb-14.1, gcc 13.2.0 - rahul
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/general/prog/gdb.xml:216
-#, xml-text
-msgid ""
-"A test run of the test suite had 51 unexpected failures out of the over "
-"106000 tests."
-msgstr ""
-"Uma execução de teste da suíte de teste teve cinquenta e uma (51) falhas "
-"inesperadas em mais de cento e seis mil (106.000) testes."
-
-#. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/general/prog/gdb.xml:223
-#, xml-text
-msgid "On some systems, the gdb.tui test suite will fail if running over SSH."
-msgstr ""
-"Em alguns sistemas, a suíte de teste \"gdb.tui\" falhará se executada em "
-"SSH."
-
-#. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/general/prog/gdb.xml:230
+#: blfs-en/general/prog/gdb.xml:253
 #, xml-text
 msgid ""
 "On some AMD-based systems, over 200 additional tests may fail due to a "
@@ -321,7 +328,7 @@ msgstr ""
 "camadas nessas \"CPUs\"."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/prog/gdb.xml:239
+#: blfs-en/general/prog/gdb.xml:262
 #, xml-text
 msgid "Now, as the <systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
@@ -329,7 +336,7 @@ msgstr ""
 "class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/general/prog/gdb.xml:242
+#: blfs-en/general/prog/gdb.xml:265
 #, no-wrap, xml-text
 msgid ""
 "<userinput>make -C gdb install &amp;&amp;\n"
@@ -339,7 +346,7 @@ msgstr ""
 "make -C gdbserver install</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/prog/gdb.xml:246
+#: blfs-en/general/prog/gdb.xml:269
 #, xml-text
 msgid ""
 "If you have built the API documentation, it is now in gdb/doc/doxy.  You can"
@@ -350,7 +357,7 @@ msgstr ""
 " class=\"username\">root</systemitem>):"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/general/prog/gdb.xml:252
+#: blfs-en/general/prog/gdb.xml:275
 #, no-wrap, xml-text
 msgid ""
 "<userinput>install -d /usr/share/doc/gdb-&gdb-version; &amp;&amp;\n"
@@ -362,13 +369,13 @@ msgstr ""
 "cp -Rv gdb/doc/doxy /usr/share/doc/gdb-&gdb-version;</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/general/prog/gdb.xml:259
+#: blfs-en/general/prog/gdb.xml:282
 #, xml-text
 msgid "Command Explanations"
 msgstr "Explicações do Comando"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/prog/gdb.xml:262
+#: blfs-en/general/prog/gdb.xml:285
 #, xml-text
 msgid ""
 "<parameter>--with-system-readline</parameter>: This switch forces "
@@ -380,7 +387,7 @@ msgstr ""
 "<application>Readline</application> instalada no LFS."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/prog/gdb.xml:268
+#: blfs-en/general/prog/gdb.xml:291
 #, xml-text
 msgid ""
 "<parameter>--with-python=/usr/bin/python3</parameter>: This switch forces "
@@ -390,109 +397,109 @@ msgstr ""
 "<application>GDB</application> a usar Python 3."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/general/prog/gdb.xml:275
+#: blfs-en/general/prog/gdb.xml:298
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/prog/gdb.xml:278
+#: blfs-en/general/prog/gdb.xml:301
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/prog/gdb.xml:279
+#: blfs-en/general/prog/gdb.xml:302
 #, xml-text
 msgid "Installed Library"
 msgstr "Biblioteca Instalada"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/prog/gdb.xml:280
+#: blfs-en/general/prog/gdb.xml:303
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/prog/gdb.xml:284
+#: blfs-en/general/prog/gdb.xml:307
 #, xml-text
 msgid "gcore, gdb, gdbserver, and gdb-add-index"
 msgstr "gcore, gdb, gdbserver e gdb-add-index"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/prog/gdb.xml:287 blfs-en/general/prog/gdb.xml:360
+#: blfs-en/general/prog/gdb.xml:310 blfs-en/general/prog/gdb.xml:383
 #, xml-text
 msgid "libinproctrace.so"
 msgstr "libinproctrace.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/prog/gdb.xml:290
+#: blfs-en/general/prog/gdb.xml:313
 #, xml-text
 msgid "/usr/{include,share}/gdb and /usr/share/doc/gdb-&gdb-version;"
 msgstr "/usr/{include,share}/gdb e /usr/share/doc/gdb-&gdb-version;"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/general/prog/gdb.xml:296
+#: blfs-en/general/prog/gdb.xml:319
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/general/prog/gdb.xml:297
+#: blfs-en/general/prog/gdb.xml:320
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/prog/gdb.xml:301
+#: blfs-en/general/prog/gdb.xml:324
 #, xml-text
 msgid "<command>gcore</command>"
 msgstr "<command>gcore</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/prog/gdb.xml:304
+#: blfs-en/general/prog/gdb.xml:327
 #, xml-text
 msgid "generates a core dump of a running program"
 msgstr "gera um despejo principal de um aplicativo em execução"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/prog/gdb.xml:307
+#: blfs-en/general/prog/gdb.xml:330
 #, xml-text
 msgid "gcore"
 msgstr "gcore"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/prog/gdb.xml:313
+#: blfs-en/general/prog/gdb.xml:336
 #, xml-text
 msgid "<command>gdb</command>"
 msgstr "<command>gdb</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/prog/gdb.xml:316
+#: blfs-en/general/prog/gdb.xml:339
 #, xml-text
 msgid "is the GNU Debugger"
 msgstr "é o Depurador GNU"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/prog/gdb.xml:319
+#: blfs-en/general/prog/gdb.xml:342
 #, xml-text
 msgid "gdb-prog"
 msgstr "gdb-prog"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/prog/gdb.xml:325
+#: blfs-en/general/prog/gdb.xml:348
 #, xml-text
 msgid "<command>gdbserver</command>"
 msgstr "<command>gdbserver</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/prog/gdb.xml:328
+#: blfs-en/general/prog/gdb.xml:351
 #, xml-text
 msgid ""
 "is a remote server for the GNU debugger (it allows programs to be debugged "
@@ -503,20 +510,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/prog/gdb.xml:332
+#: blfs-en/general/prog/gdb.xml:355
 #, xml-text
 msgid "gdbserver"
 msgstr "gdbserver"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/prog/gdb.xml:338
+#: blfs-en/general/prog/gdb.xml:361
 #, xml-text
 msgid "<command>gdb-add-index</command>"
 msgstr "<command>gdb-add-index</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/prog/gdb.xml:341
+#: blfs-en/general/prog/gdb.xml:364
 #, xml-text
 msgid ""
 "Allows adding index files to ELF binaries. This speeds up "
@@ -527,20 +534,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/prog/gdb.xml:345
+#: blfs-en/general/prog/gdb.xml:368
 #, xml-text
 msgid "gdb-add-index"
 msgstr "gdb-add-index"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/prog/gdb.xml:351
+#: blfs-en/general/prog/gdb.xml:374
 #, xml-text
 msgid "<filename class=\"libraryfile\">libinproctrace.so</filename>"
 msgstr "<filename class=\"libraryfile\">libinproctrace.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/prog/gdb.xml:354
+#: blfs-en/general/prog/gdb.xml:377
 #, xml-text
 msgid ""
 "contains functions for the in-process tracing agent. The agent allows for "
@@ -551,6 +558,24 @@ msgstr ""
 "instalar pontos de rastreamento rápidos, listar marcadores de pontos de "
 "rastreamento estáticos, sondar marcadores de pontos de rastreamento "
 "estáticos e iniciar o monitoramento de rastreamento."
+
+#, xml-text
+#~ msgid "4452f575d09f94276cb0a1e95ecff856"
+#~ msgstr "4452f575d09f94276cb0a1e95ecff856"
+
+#, xml-text
+#~ msgid ""
+#~ "A test run of the test suite had 51 unexpected failures out of the over "
+#~ "106000 tests."
+#~ msgstr ""
+#~ "Uma execução de teste da suíte de teste teve cinquenta e uma (51) falhas "
+#~ "inesperadas em mais de cento e seis mil (106.000) testes."
+
+#, xml-text
+#~ msgid "On some systems, the gdb.tui test suite will fail if running over SSH."
+#~ msgstr ""
+#~ "Em alguns sistemas, a suíte de teste \"gdb.tui\" falhará se executada em "
+#~ "SSH."
 
 #, xml-text
 #~ msgid "4a084d03915b271f67e9b8ea2ab24972"

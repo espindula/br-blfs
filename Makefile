@@ -230,7 +230,8 @@ weblate-patch/%: fr/%.po
 	@$(CURL) -H "Content-Type: application/json" --data-binary '{"allow_translation_propagation": false}' -X PATCH https://bright.lepiller.eu/api/components/beyond-linux-from-scratch/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate-patch/%,%,$@))))/ 2>/dev/null >/dev/null
 
 weblate/%: fr/%.po
-	@if $(CURL) $(WEBLATE_API)/components/beyond-linux-from-scratch/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))/ 2>/dev/null | grep '"detail":"Not found."' 1>/dev/null; then \
+	@echo [WEBLATE] $(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate-patch/%,%,$@))))
+	@if $(CURL) $(WEBLATE_API)/components/beyond-linux-from-scratch/$(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@))))/ 2>/dev/null | grep '"detail":"No Component matches the given query."' 1>/dev/null; then \
 		echo $(subst /,_,$(subst .,_,$(subst +,_,$(patsubst weblate/%,%,$@)))); \
 		$(CURL) -H "Content-Type: application/json" \
 			--data-binary "$(subst ",\",${createcomponent})" \
