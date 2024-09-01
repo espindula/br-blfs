@@ -321,12 +321,19 @@ blfsgen-fr/general.ent: $(ORIGDIR)/general.ent
 	    -e "s|<!ENTITY lfssvn_checked2 [^\r]*\">|<!ENTITY lfssvn_checked2 \" .\">|g" \
 	    -e "s|<!ENTITY lfssvn_built2 [^\r]*\">|<!ENTITY lfssvn_built2 \" mais n'a pas été testé.\">|g" \
 	    -e "s|<!ENTITY as_root *\"[^\"]*\">||g" \
-	    -e "s|<!ENTITY gi-doc-disable *\"[^\"]*\">|<!ENTITY gi-doc-disable \"permet de construire ce paquet sans installer <xref linkend='gi-docgen'/>. Si vous avez installé <xref linkend='gi-docgen'/> et souhaitez reconstruire et installer la documentation de l'API, une commande <command>meson configure</command> enlèvera cette option.\">|g" \
-	    -e "s|<!ENTITY gi-doc-disable *\"[^\"]*\">|<!ENTITY gi-doc-disable \"permet de construire ce paquet sans installer <xref linkend='gi-docgen'/>. Si vous avez installé <xref linkend='gi-docgen'/> et souhaitez reconstruire et installer la documentation de l'API, une commande <command>meson configure</command> enlèvera cette option.\">|g" \
+	    -e "s|<!ENTITY \(lfs[0-9]\+_checked\) *\"<note>[^\"]*\">|<!ENTITY \1 \"<note><para>Les versions de développement de BLFS peuvent ne pas arriver à contruire ou à exécuter certains paquets correctement si LFS ou des dépendances ont été mises à jour depuis la dernière version stable des livres.</para></note>\">|g" \
+	    -e "s|<!ENTITY \(lfs[0-9]\+_checked\) *\"<para>[^\"]*LFS \([^ ]*\) platform.</para>\">|<!ENTITY \1 \"<para>Ce paquet est connu pour pouvoir être construit et fonctionner correctement avec une plateform \2.</para>\">|g" \
+	    -e "s|<!ENTITY shell-env *\"[^\"]*\">|<!ENTITY shell-env \"<note><para>Si vous installez dans un environnement chroot, assurez-vous d'exporter la variable d'environnement <envar>SHELL</envar> ou la configuration de ce paquet échouera</para></note>\">|g" \
+	    -e "s|<!ENTITY gi-doc-disable[ \r]*\"[^\"]*\">|<!ENTITY gi-doc-disable \"permet de construire ce paquet sans installer <xref linkend='gi-docgen'/>. Si vous avez installé <xref linkend='gi-docgen'/> et souhaitez reconstruire et installer la documentation de l'API, une commande <command>meson configure</command> enlèvera cette option.\">|g" \
+	    -e "s|<!ENTITY build-use-internet[ \r]*\"[^\"]*\">|<!ENTITY build-use-internet \"<note><para>Il est nécessaire d'être connecté à internet pour construire ce paquet</para></note>\">|g" \
+	    -e "s|<!ENTITY test-use-internet[ \r]*\"[^\"]*\">|<!ENTITY test-use-internet \"<note><para>Il est nécessaire d'être connecté à internet pour certains tests de ce paquet</para></note>\">|g" \
+	    -e "s|<!ENTITY qt5-deps[ \r]*\"[^\"]*\">|<!ENTITY qt5-deps \"(<xref linkend='qt5'/> ou <xref role='nodep' linkend='qt5-alternate'/>)\">|g" \
+	    -e "s|<!ENTITY gobject-introspection *\"[^\"]*\">|<!ENTITY gobject-introspection \"<xref linkend='glib2'/> (avec GObject Introspection)\">|g" \
+	    -e "s|<!ENTITY berkeley-db *\"\(.*\) (deprecated)\">|<!ENTITY berkeley-db \"\1 (obsolète)\">|g" \
 	    -e "s|<!ENTITY not-katamari *\"[^\"]*\">|<!ENTITY not-katamari \"<para>Ce paquet ne fait pas partie de Xorg Katamari et est seulement fourni comme dépendance d'autres paquets ou pour tester l'installation complète de Xorg.</para>\">|g" \
 	    -e "s|<!ENTITY parallel_issues *\"[^\"]*\">|<!ENTITY parallel_issues \"<note><para>Ce paquet peut parfois échouer quand il est construit avec plusieurs processeurs. Voir <xref linkend='parallel-builds'/> pour plus d'information.</para></note>\">|g" \
 	    | tr '\r' '\n' > $@
-		cat general.ent.as_root >> $@
+		cat general.ent.as_root.fr >> $@
 
 blfsgen-fr/packages.ent: $(ORIGDIR)/packages.ent
 	mkdir -p $$(dirname $@)
@@ -365,9 +372,10 @@ blfsgen-pt_BR/general.ent: $(ORIGDIR)/general.ent
 	    -e "s|<!ENTITY as_root *\"[^\"]*\">||g" \
 	    -e "s|<!ENTITY gi-doc-disable *\"[^\"]*\">|<!ENTITY gi-doc-disable \"vamos compilar este pacote sem instalar <xref linkend='gi-docgen'/>. Se você instalou <xref linkend='gi-docgen'/> e deseja reconstruir e instalar a documentação da API, um comando <command>meson configure</command> removerá essa opção.\">|g" \
 	    -e "s|<!ENTITY not-katamari *\"[^\"]*\">|<!ENTITY not-katamari \"<para>Este pacote não faz parte do Xorg Katamari e é fornecido apenas como uma dependência de outros pacotes ou para testar a instalação completa do Xorg.</para>\">|g" \
+	    -e "s|<!ENTITY \(lfs[0-9]\+_checked\) *\"<note>[^\"]*\">|<!ENTITY \1 \"<note><para>Versões de desenvolvimento do BLFS possivelmente não construam ou executem alguns pacotes corretamente se o LFS ou as dependências tiverem sido atualizados desde as versões estáveis mais recentes dos livros.</para></note>\">|g" \
 	    -e "s|<!ENTITY parallel_issues *\"[^\"]*\">|<!ENTITY parallel_issues \"<note><para>Às vezes, esse pacote pode falhar quando construído com vários processadores. Consulte <xref linkend='parallel-builds'/> para obter mais informações.</para></note>\">|g" \
 	    | tr '\r' '\n' > $@
-	        cat general.ent.as_root >> $@
+	        cat general.ent.as_root.pt_BR >> $@
 
 blfsgen-pt_BR/packages.ent: $(ORIGDIR)/packages.ent
 	mkdir -p $$(dirname $@)

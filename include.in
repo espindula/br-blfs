@@ -26,7 +26,7 @@ COPY_MLANG := $(addprefix blfsgen-MLANG/,$(filestoget))
 
 blfsgen-MLANG/%.xml: $(ORIGDIR)/%.xml MLANG/%.po sed_MLANG.sh
 	mkdir -p $$(dirname $@)
-	LANG=$(LANG_MLANG) po4a-translate -k 0 -f docbook -m $< -l $@.tmp -p $(word 2,$^) -M UTF-8
+	LANG=$(LANG_MLANG) po4a-translate -k 0 -f docbook -m $< -l $@.tmp -p $(word 2,$^) -M UTF-8 -L UTF-8
 	./$(word 3,$^) $@.tmp
 	sed '0,/#-#/s|\([^>]*\) #-# \([^<]*\)|\1|' -i $@.tmp
 	sed '0,/#-#/s|\([^>]*\) #-# \([^<]*\)|\2|' -i $@.tmp

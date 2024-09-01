@@ -78,7 +78,7 @@ tt.append(re.compile('Download \(FTP\): (.*)$'),
     {'fr': 'Téléchargement (FTP)&nbsp;: #1',
      'pt_BR': 'Transferência (FTP): #1'})
 tt.append(re.compile('Download MD5 sum: (.*)$'),
-    {'fr': 'Somme de contrôle MD5&nbsp;: #1',
+    {'fr': 'Somme de contrôle MD5 du téléchargement&nbsp;: #1',
      'pt_BR': 'Soma de verificação MD5 da transferência: #1'})
 tt.append(re.compile('Download size: (.*)$'),
     {'fr': 'Taille du téléchargement&nbsp;: #1',
@@ -230,6 +230,8 @@ tt.append(re.compile('Required [pP]atch: (.*)$'),
 tt.append(re.compile('(<othername>.*)$'),
     {'fr': '#1',
      'pt_BR': '#1'})
+tt.append(re.compile('Introduction to (.*) Module$'),
+    {'fr': 'Introduction au module #1'})
 tt.append(re.compile('Introduction to (.*)$'),
     {'fr': 'Introduction à #1',
      'pt_BR': 'Introdução ao #1'})

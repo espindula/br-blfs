@@ -12,61 +12,60 @@ files=['introduction/welcome/changelog.po']
 
 tt = TemplateTranslator(files)
 
-
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+).?$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2.',
-     'pt_BR': '[#1] — Atualizado para #2.'})
+     'pt_BR': '[#1] - Atualização para #2.'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2. Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2. Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2. Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+). +Finishes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2. Termine #3',
-     'pt_BR': '[#1] — Atualizado para #2. Finaliza #3'})
+     'pt_BR': '[#1] - Atualização para #2. Finaliza #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? ([^ ]+). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2. Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2. Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2. Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+). +Part of (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] – Mise à jour vers #2. Corrige partiellement #3',
-     'pt_BR': '[#1] – Atualizado para #2. Corrige parcialmente #3'})
+     'pt_BR': '[#1] - Atualização para #2. Corrige parcialmente #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) and ([^ ]+). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 et #3. Corrige #4',
-     'pt_BR': '[#1] — Atualizado para #2 e #3. Corrige #4'})
+     'pt_BR': '[#1] - Atualização para #2 e #3. Corrige #4'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) ([0-9\.]+). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 #3. Corrige #4',
-     'pt_BR': '[#1] — Atualizado para #2 #3. Corrige #4'})
+     'pt_BR': '[#1] - Atualização para #2 #3. Corrige #4'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+). +Partially fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2. Corrige partiellement #3',
-     'pt_BR': '[#1] — Atualizado para #2. Corrige parcialmente #3'})
+     'pt_BR': '[#1] - Atualização para #2. Corrige parcialmente #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) (\([^ ]+\)). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 #3. Corrige #4',
-     'pt_BR': '[#1] — Atualizado para #2 #3. Corrige #4'})
+     'pt_BR': '[#1] - Atualização para #2 #3. Corrige #4'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) \(([^ ]+) [mM]odule\). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 (module #3). Corrige #4',
-     'pt_BR': '[#1] — Atualizado para #2 (módulo #3). Corrige #4'})
+     'pt_BR': '[#1] - Atualização para #2 (módulo #3). Corrige #4'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) \([sS]ecurity [fF]ixe?s?\). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 (correctif de sécurité). Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2 (Correções de Segurança). Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2 (Correções de Segurança). Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) \([sS]ecurity [uU]pdate?s?\). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 (correctif de sécurité). Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2 (Atualizações de Segurança). Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2 (Atualização de Segurança). Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) \(Xorg Library\). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 (bibliothèque Xorg). Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2 (Biblioteca Xorg). Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2 (Biblioteca Xorg). Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+) \(Xorg Application\). +Fixes (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2 (application Xorg). Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2 (Aplicativo Xorg). Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2 (Aplicativo Xorg). Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Up[dg]r?a[td]ed? to ([^ ]+). Addresses (<ulink [^>]+> *#[0-9]+ *</ulink>.?)$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Mise à jour vers #2. Corrige #3',
-     'pt_BR': '[#1] — Atualizado para #2. Corrige #3'})
+     'pt_BR': '[#1] - Atualização para #2. Corrige #3'})
 tt.append(re.compile('\[([^\]]+)\] - Reintroduce ([^ ]+).?$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Réintroduction de #2.',
-     'pt_BR': '[#1] — Reintrodução de #2.'})
+     'pt_BR': '[#1] - Reintrodução de #2.'})
 tt.append(re.compile('\[([^\]]+)\] - Reinstate ([^ ]+).?$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Réintroduction de #2.',
-     'pt_BR': '[#1] — Restabelecimento de #2.'})
+     'pt_BR': '[#1] - Restabelecimento de #2.'})
 tt.append(re.compile('\[([^\]]+)\] - Add? ([^ ]+).?$', re.MULTILINE|re.DOTALL),
     {'fr': '[#1] — Ajout de #2.',
-     'pt_BR': '[#1] — Adicionar #2.'})
+     'pt_BR': '[#1] - Adicionar #2.'})
 
 tt.translate(languages)
 
