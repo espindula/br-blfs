@@ -6,9 +6,9 @@
 
   <!ENTITY exiv2-download-http "https://github.com/Exiv2/exiv2/archive/v&exiv2-version;/exiv2-&exiv2-version;.tar.gz">
   <!ENTITY exiv2-download-ftp  "">
-  <!ENTITY exiv2-md5sum        "75a8766216a15ad104f09ab4a0eab7ca">
-  <!ENTITY exiv2-size          "43 MB">
-  <!ENTITY exiv2-buildsize     "127 MB (com testes)">
+  <!ENTITY exiv2-md5sum        "9944863400a43e79583b790f710b86c2">
+  <!ENTITY exiv2-size          "44 MB">
+  <!ENTITY exiv2-buildsize     "133 MB (com testes)">
   <!ENTITY exiv2-time          "0,3 UPC (Usando paralelismo=4, com testes)">
 ]>
 
@@ -23,14 +23,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Exiv2</title>
+    <title>Introdução ao Exiv2</title>
 
     <para>
-      <application>Exiv2</application> é uma biblioteca C++ e um utilitário de
-linha de comando para gerenciar metadados de imagem e de vídeo.
+      <application>Exiv2</application> contém uma biblioteca C++ e um utilitário
+de linha de comando para gerenciar metadados de imagem e de vídeo.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -82,7 +82,7 @@ Additional Downloads</bridgehead>
 -->
 <bridgehead renderas="sect3">Dependências do Exiv2</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cmake"/>
     </para>
@@ -121,61 +121,65 @@ linkend="libxslt"/>
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr  \
-      -DCMAKE_BUILD_TYPE=Release   \
-      -DEXIV2_ENABLE_VIDEO=yes     \
-      -DEXIV2_ENABLE_WEBREADY=yes  \
-      -DEXIV2_ENABLE_CURL=yes      \
-      -DEXIV2_BUILD_SAMPLES=no     \
-      -G "Unix Makefiles" .. &amp;&amp;
-make</userinput></screen>
+cmake -D CMAKE_INSTALL_PREFIX=/usr   \
+      -D CMAKE_BUILD_TYPE=Release    \
+      -D EXIV2_ENABLE_VIDEO=yes      \
+      -D EXIV2_ENABLE_WEBREADY=yes   \
+      -D EXIV2_ENABLE_CURL=yes       \
+      -D EXIV2_BUILD_SAMPLES=no      \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON \
+      -G Ninja ..                    &amp;&amp;
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make test</command>
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-skip-install-rpath.xml"/>
+
     <para>
-      <parameter>-DEXIV2_ENABLE_VIDEO=yes</parameter>: Essa chave habilita o
+      <parameter>-D EXIV2_ENABLE_VIDEO=yes</parameter>: Essa chave habilita o
 gerenciamento de metadados de vídeo.
     </para>
 
     <para>
-      <parameter>-DEXIV2_ENABLE_WEBREADY=yes</parameter>: Essa chave habilita o
+      <parameter>-D EXIV2_ENABLE_WEBREADY=yes</parameter>: Essa chave habilita o
 gerenciamento de metadados de imagem da web.
     </para>
 
     <para>
-      <parameter>-DEXIV2_BUILD_SAMPLES=no</parameter>: Essa chave é necessária
+      <parameter>-D EXIV2_BUILD_SAMPLES=no</parameter>: Essa chave é necessária
 para suprimir a construção e instalação de aplicativos de amostra. Se os
 aplicativos de amostra forem compilados, 34 aplicativos adicionais serão
 instalados em /usr/bin.
     </para>
 
     <para>
-      <parameter>-DEXIV2_ENABLE_CURL=yes</parameter>: Essa chave é necessária para
-habilitar os recursos de rede de comunicação/http.
+      <parameter>-D EXIV2_ENABLE_CURL=yes</parameter>: Essa chave é necessária
+para habilitar os recursos de rede de comunicação/http.
     </para>
 
     <para>
-      <option>-DEXIV2_ENABLE_INIH=no</option>: Use essa chave se você não tiver
+      <option>-D EXIV2_ENABLE_INIH=no</option>: Use essa chave se você não tiver
 instalado <xref linkend="inih"/>.
     </para>
 
     <para>
-      <option>-DEXIV2_ENABLE_BROTLI=no</option>: Use essa chave se você não tiver
+      <option>-D EXIV2_ENABLE_BROTLI=no</option>: Use essa chave se você não tiver
 instalado <xref linkend="brotli"/>.
     </para>
 

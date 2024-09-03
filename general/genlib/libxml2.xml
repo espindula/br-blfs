@@ -5,12 +5,12 @@
   %general-entities;
 
   <!-- Also update the download, md5, size entities in libxml2py2.xml -->
-  <!ENTITY libxml2-download-http "https://download.gnome.org/sources/libxml2/2.12/libxml2-&libxml2-version;.tar.xz">
+  <!ENTITY libxml2-download-http "https://download.gnome.org/sources/libxml2/2.13/libxml2-&libxml2-version;.tar.xz">
 <!--  <!ENTITY libxml2-download-http "http://xmlsoft.org/sources/libxml2-&libxml2-version;.tar.xz">-->
   <!ENTITY libxml2-download-ftp  "">
-  <!ENTITY libxml2-md5sum        "329138464b69422815c11e62acbc10dd">
+  <!ENTITY libxml2-md5sum        "aeb92dc58cea91c95a10751327193a11">
   <!ENTITY libxml2-size          "2,5 MB">
-  <!ENTITY libxml2-buildsize     "103 MB (com testes)">
+  <!ENTITY libxml2-buildsize     "111 MB (com testes)">
   <!ENTITY libxml2-time          "0,4 UPC (Usando paralelismo=4; com testes)">
   <!ENTITY testsuite-version     "20130923">
 ]>
@@ -26,14 +26,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libxml2</title>
+    <title>Introdução ao libxml2</title>
 
     <para>
       O pacote <application>libxml2</application> contém bibliotecas e utilitários
 usados para analisar arquivos "XML".
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -73,6 +73,12 @@ usados para analisar arquivos "XML".
     <itemizedlist spacing="compact">
       <listitem>
         <para>
+          Remendo exigido: <ulink
+url="&patch-root;/libxml2-&libxml2-version;-upstream_fix-2.patch"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Suíte de Teste Opcional: <ulink
 url="https://www.w3.org/XML/Test/xmlts&testsuite-version;.tar.gz"/> - Isso
 habilita <command>make check</command> para se fazer uma testagem completa.
@@ -95,6 +101,15 @@ habilita <command>make check</command> para se fazer uma testagem completa.
 
   <sect2 role="installation">
     <title>Instalação do libxml2</title>
+
+    <para>
+      Primeiro, corrija um problema causante do <command>xmlcatalog</command>
+emitir avisos falsos quando um novo arquivo de catálogo é criado. O remendo
+modificará o sistema de construção, de forma que regenere os conjuntos de
+comandos sequenciais de construção depois de aplicar o remendo:
+    </para>
+
+    <screen><userinput>patch -Np1 -i ../libxml2-&libxml2-version;-upstream_fix-2.patch</userinput></screen>
 
     <para>
       Instale <application>libxml2</application> executando os seguintes comandos:

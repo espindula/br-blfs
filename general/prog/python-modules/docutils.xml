@@ -6,9 +6,9 @@
 
   <!ENTITY docutils-download-http "https://files.pythonhosted.org/packages/source/d/docutils/docutils-&docutils-version;.tar.gz">
   <!ENTITY docutils-download-ftp  "">
-  <!ENTITY docutils-md5sum        "93bcfe0065cf1d0b6a0bcabeca7a2335">
-  <!ENTITY docutils-size          "2,0 MB">
-  <!ENTITY docutils-buildsize     "12 MB">
+  <!ENTITY docutils-md5sum        "c4064e1e0e3cd142951fd2b95b830874">
+  <!ENTITY docutils-size          "2,1 MB">
+  <!ENTITY docutils-buildsize     "10 MB">
   <!ENTITY docutils-time          "menos que 0,1 UPC">
 ]>
 
@@ -32,7 +32,7 @@ documentos de texto simples em formatos como &quot;HTML&quot;,
 &quot;XML&quot; ou &quot;LaTeX&quot;.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -77,6 +77,15 @@ documentos de texto simples em formatos como &quot;HTML&quot;,
 
       <!-- Editors note: Use - -root= instead of DESTDIR= when updating. -->
 <para>
+        Primeiro, remova alguns arquivos instalados em uma versão anterior que não
+mais são válidos. Como o(a) usuário(a) &root;:
+      </para>
+
+<screen role="root"><userinput>for f in /usr/bin/rst*.py; do
+  rm -fv /usr/bin/$(basename $f .py)
+done</userinput></screen>
+
+      <para>
         Para construir os aplicativos &quot;<application>Python
 3</application>&quot;, execute o seguinte comando:
       </para>
@@ -91,31 +100,37 @@ execute o seguinte como o(a) usuário(a) &quot;&root;&quot;:
 <!-- FHS 3.0 section 4.4.2:
            "There must be no subdirectories in /usr/bin."
            But pip maintainers closed this as WONTFIX:
-           https://github.com/pypa/pip/issues/6906 -->
-<screen role="root"><userinput>&install-wheel; docutils &amp;&amp;
+           https://github.com/pypa/pip/issues/6906
 
-for f in /usr/bin/rst*.py; do
-  ln -svf $(basename $f) /usr/bin/$(basename $f .py)
-done</userinput></screen>
+           No longer happening after the upstream removed .py suffix for
+           /usr/bin scripts
+      <para>
+
+        To reduce the time needed for loading Python scripts,
+        <command>pip3 install</command> will compile the scripts with
+        extension <filename class='extension'>.py</filename> into byte code
+        and save the result into
+        <filename class='extension'>.pyc</filename> files in the directory
+        <filename class='directory'>__pycache__</filename>.
+        But this package installs <filename class='extension'>.py</filename>
+        scripts into <filename class='directory'>/usr/bin</filename>.
+        So the byte code files for them will be installed into
+        <filename class='directory'>/usr/bin/__pycache__</filename>, which
+        is not allowed by FHS.  Still as the &root; user, remove this
+        directory:
+      </para>
+
+      <screen role="root"><userinput>rm -rfv /usr/bin/__pycache__</userinput></screen> -->
+<!-- Don't try pytest.
+           The test suite isn't compatible with pytest.  -->
+<screen role="root"><userinput>&install-wheel; docutils</userinput></screen>
+
+      
 
       
       <para>
-        Para reduzir o tempo necessário para carregar &quot;scripts&quot;
-&quot;Python&quot;, &quot;<command>pip3 install</command>&quot; compilará os
-&quot;scripts&quot; com extensão &quot;<filename
-class='extension'>.py</filename>&quot; em código de bytes e salvará o
-resultado em arquivos &quot;<filename
-class='extension'>.pyc</filename>&quot; no diretório &quot;<filename
-class='directory'>__pycache__</filename>&quot;. Mas esse pacote instala
-&quot;scripts&quot; &quot;<filename class='extension'>.py</filename>&quot;
-em &quot;<filename class='directory'>/usr/bin</filename>&quot;. Portanto, os
-arquivos de código de bytes para eles serão instalados em &quot;<filename
-class='directory'>/usr/bin/__pycache__</filename>&quot;, o que não é
-permitido pelo &quot;FHS&quot;. Ainda como o(a) usuário(a)
-&quot;&root;&quot;, remova esse diretório:
+        Para testar a instalação, emita: <command>test/alltests.py</command>.
       </para>
-
-<screen role="root"><userinput>rm -rfv /usr/bin/__pycache__</userinput></screen>
     </sect3>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"

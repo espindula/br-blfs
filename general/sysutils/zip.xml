@@ -31,7 +31,7 @@
 arquivamentos <filename>ZIP</filename>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -76,7 +76,7 @@ arquivamentos <filename>ZIP</filename>.
       Instale <application>Zip</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>make -f unix/Makefile generic_gcc</userinput></screen>
+<screen><userinput>make -f unix/Makefile generic CC="gcc -std=gnu89"</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -94,12 +94,20 @@ arquivamentos <filename>ZIP</filename>.
     <title>Explicações do Comando</title>
 
     <para>
-      <command>make prefix=/usr -f unix/Makefile install</command>: Esse comando
-substitui a variável <varname>prefix</varname> que está configurada como
-<filename class='directory'>/usr/local</filename> no
-<filename>unix/Makefile</filename>. Alternativas para
-<parameter>generic_gcc</parameter> podem ser vistas com um comando
-<command>make -f unix/Makefile list</command>.
+      <parameter>CC="gcc -std=gnu89"</parameter>: Esse parâmetro substitui a
+variável <varname>CC</varname> que é configurada como <command>cc</command>
+no arquivo <filename>unix/Makefile</filename>. No LFS, <command>cc</command>
+é um link simbólico para <command>gcc</command> e usa
+<option>-std=gnu17</option> (ISO 9899:2017 com extensões GNU) como padrão,
+mas Zip é um pacote <quote>legado</quote> onde algumas construções
+gramaticais são inválidas no ISO 9899:1999 e usos comuns mais recentes.
+    </para>
+
+    <para>
+      <parameter>prefix=/usr</parameter>: Esse parâmetro substitui a variável
+<varname>prefix</varname> que está configurada como <filename
+class='directory'>/usr/local</filename> no arquivo
+<filename>unix/Makefile</filename>.
     </para>
 
   </sect2>

@@ -7,8 +7,8 @@
   <!ENTITY urllib3-download-http "https://files.pythonhosted.org/packages/source/u/urllib3/urllib3-&urllib3-version;.tar.gz">
   <!ENTITY urllib3-download-ftp  "">
   <!ENTITY urllib3-md5sum        "&urllib3-md5sum;">
-  <!ENTITY urllib3-size          "272 KB">
-  <!ENTITY urllib3-buildsize     "3,2 MB (adicionar 49 MB para os testes)">
+  <!ENTITY urllib3-size          "288 KB">
+  <!ENTITY urllib3-buildsize     "3,2 MB (adicionar 38 MB para os testes)">
   <!ENTITY urllib3-time          "menos que 0,1 UPC (1,6 UPC para testes)">
 ]>
 
@@ -30,7 +30,7 @@
 bibliotecas padrão do &quot;Python&quot;.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -78,12 +78,17 @@ bibliotecas padrão do &quot;Python&quot;.
         <!-- <ulink url="https://pypi.org/project/pytest-freezegun/">
 pytest-freezegun</ulink>,-->
 <xref linkend="pytest"/>, <ulink
+url="https://pypi.org/project/httpx/">httpx</ulink>, <ulink
+url="https://pypi.org/project/Hypercorn/">hypercorn</ulink>, <ulink
 url="https://pypi.org/project/mock/">mock</ulink>, <ulink
 url="https://pypi.org/project/PySocks/">PySocks</ulink>, <ulink
 url="https://pypi.org/project/pytest-timeout/">pytest-timeout</ulink>,
 <ulink
 url="https://pypi.org/project/python-dateutil/">python-dateutil</ulink>,
-<ulink url="https://pypi.org/project/tornado/">tornado</ulink> e <ulink
+<ulink url="https://pypi.org/project/Quart/">quart</ulink>, <ulink
+url="https://pypi.org/project/quart-trio/">quart-trio</ulink>, <ulink
+url="https://pypi.org/project/tornado/">tornado</ulink>, <ulink
+url="https://pypi.org/project/trio/">trio</ulink> e <ulink
 url="https://pypi.org/project/trustme/">trustme</ulink>
       </para>
 
@@ -92,14 +97,18 @@ url="https://pypi.org/project/trustme/">trustme</ulink>
     <sect3 role="installation">
       <title>Instalação do Urllib3</title>
 
-    <para> Se você quiser executar os testes, remova alguns que possivelmente travem: </para>
+
+
+    <!--
+    <para>
+ If you want to run the tests, remove some that may hang: </para>
 
 <screen><userinput>rm -v test/test_retry.py \
       test/contrib/test_pyopenssl.py \
       test/contrib/test_securetransport.py \
       test/with_dummyserver/test_socketlevel.py</userinput></screen>
-
-    <para> Construa o módulo: </para>
+-->
+<para> Construa o módulo: </para>
 
 &build-wheel;
 
@@ -108,14 +117,18 @@ url="https://pypi.org/project/trustme/">trustme</ulink>
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>&install-wheel; urllib3</userinput></screen>
-
+<!--
     <note>
+
       <para>
-        Executar os testes possivelmente resulte no procedimento abaixo travando e
-não é recomendado.
+        Running the tests may result in the procedure below hanging and are
+        not recommended.
       </para>
     </note>
+ -->
+<screen role="root"><userinput>&install-wheel; urllib3</userinput></screen>
+
+
 
     <para>
       Supondo que &quot;<xref linkend="pytest"/>&quot; esteja instalado, mas as
@@ -131,7 +144,12 @@ pip3 install trustme         \
              python-dateutil \
              mock            \
              pysocks         \
-             pytest-timeout  &amp;&amp;
+             pytest-timeout  \
+             trio            \
+             hypercom        \
+             quart           \
+             quart_trio      \
+             httpx           &amp;&amp;
 python3 /usr/bin/pytest
 deactivate</userinput></screen>
 

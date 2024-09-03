@@ -7,10 +7,10 @@
   <!ENTITY NetworkManager-download-http
 "&gnome-download-http;/NetworkManager/&NetworkManager-minor;/NetworkManager-&NetworkManager-version;.tar.xz">
   <!ENTITY NetworkManager-download-ftp  "">
-  <!ENTITY NetworkManager-md5sum        "bd6c9cb0ecd0fb7f516cde7bf4dee3fb">
-  <!ENTITY NetworkManager-size          "6,6 MB">
-  <!ENTITY NetworkManager-buildsize     "904 MB (com os testes e documentação)">
-  <!ENTITY NetworkManager-time          "1,2 UPC (com testes, usando paralelismo=4)">
+  <!ENTITY NetworkManager-md5sum        "716942df6afa53f8dad0902f4a3497b4">
+  <!ENTITY NetworkManager-size          "5,8 MB">
+  <!ENTITY NetworkManager-buildsize     "299 MB (com testes e documentação)">
+  <!ENTITY NetworkManager-time          "0,9 UPC (com testes, usando paralelismo=4)">
 ]>
 
 <sect1 id="NetworkManager" xreflabel="NetworkManager-&NetworkManager-version;">
@@ -37,7 +37,7 @@ sido configurada e conectada uma vez, ela poderá ser detectada e conectada
 novamente automaticamente na próxima vez que estiver disponível.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <note revision="systemd">
       <para>
@@ -91,14 +91,14 @@ gerenciar as interfaces que você quiser gerenciar com o
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="curl"/>, <xref linkend="dhcpcd"/>, <xref
-linkend="gobject-introspection"/>, <xref linkend="iptables"/>, <xref
-linkend="libpsl"/>, <xref linkend="newt"/> (para <command>nmtui</command>),
-<xref linkend="nss"/>, <xref role='runtime' linkend="polkit"/> (tempo de
-execução), <xref linkend="pygobject3"/>, <phrase revision="sysv"><xref
-linkend="elogind"/>,</phrase> <phrase revision="systemd"><xref
-linkend="systemd"/>,</phrase> <xref linkend="vala"/> e <xref
-linkend="wpa_supplicant"/> (tempo de execução, construído com suporte D-Bus)
+      <xref linkend="curl"/>, <xref linkend="dhcpcd"/>, &gobject-introspection;,
+<xref linkend="iptables"/>, <xref linkend="libpsl"/>, <xref linkend="newt"/>
+(para <command>nmtui</command>), <xref linkend="nss"/>, <xref role='runtime'
+linkend="polkit"/> (tempo de execução), <xref linkend="pygobject3"/>,
+<phrase revision="sysv"><xref linkend="elogind"/>,</phrase> <phrase
+revision="systemd"><xref linkend="systemd"/>,</phrase> <xref
+linkend="vala"/> e <xref linkend="wpa_supplicant"/> (tempo de execução,
+construído com suporte a D-Bus)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -108,11 +108,10 @@ linkend="wpa_supplicant"/> (tempo de execução, construído com suporte D-Bus)
 <xref linkend="bluez"/>, <xref linkend="dbus-python"/> (para a suíte de
 teste), <xref linkend="gnutls"/> (pode ser usado em vez de <xref
 linkend="nss"/>), <xref linkend="gtk-doc"/>, <xref linkend="jansson"/>,
-<xref linkend="ModemManager"/>, (<xref linkend="qt5"/> ou <xref role="node"
-linkend="qt5-components"/> com qtdoc) (para exemplos), <xref
-linkend="upower"/>, <xref linkend="valgrind"/>, <ulink
-url="https://thekelleys.org.uk/dnsmasq/doc.html">dnsmasq</ulink>, <ulink
-url="https://firewalld.org/">firewalld</ulink>, <ulink
+<xref linkend="ModemManager"/>, <xref linkend="qt5-components"/> com qtdoc
+(para exemplos), <xref linkend="upower"/>, <xref linkend="valgrind"/>,
+<ulink url="https://thekelleys.org.uk/dnsmasq/doc.html">dnsmasq</ulink>,
+<ulink url="https://firewalld.org/">firewalld</ulink>, <ulink
 url="https://github.com/Distrotech/libaudit">libaudit</ulink>, <ulink
 url="https://github.com/jpirko/libteam">libteam</ulink>, <ulink
 url="&gnome-download-http;/mobile-broadband-provider-info/">mobile-broadband-provider-info</ulink>,
@@ -158,9 +157,8 @@ se necessário:
     <title>Instalação do NetworkManager</title>
 
     <para>
-      Se &quot;<xref linkend="qt5"/>&quot; estiver instalado e os exemplos
-baseados em &quot;Qt&quot; forem desejados, [então] corrija dois arquivos
-&quot;meson.build&quot;:
+      Se <xref linkend="qt5-components"/> estiver instalado e os exemplos baseados
+em Qt forem desejados, corrija dois arquivos meson.build:
     </para>
 
 <!--
@@ -195,37 +193,37 @@ comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-CXXFLAGS+="-O2 -fPIC"            \
-meson setup ..                   \
-      --prefix=/usr              \
-      --buildtype=release        \
-      -Dlibaudit=no              \
-      -Dnmtui=true               \
-      -Dovs=false                \
-      -Dppp=false                \
-      -Dselinux=false            \
-      -Dsession_tracking=elogind \
-      -Dmodem_manager=false      \
-      -Dsystemdsystemunitdir=no  \
-      -Dsystemd_journal=false    \
-      -Dqt=false                 &amp;&amp;
+CXXFLAGS+="-O2 -fPIC"             \
+meson setup ..                    \
+      --prefix=/usr               \
+      --buildtype=release         \
+      -D libaudit=no              \
+      -D nmtui=true               \
+      -D ovs=false                \
+      -D ppp=false                \
+      -D selinux=false            \
+      -D session_tracking=elogind \
+      -D modem_manager=false      \
+      -D systemdsystemunitdir=no  \
+      -D systemd_journal=false    \
+      -D qt=false                 &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
-cd    build    &amp;&amp;
+cd    build &amp;&amp;
 
-CXXFLAGS+="-O2 -fPIC"            \
-meson setup ..                   \
-      --prefix=/usr              \
-      --buildtype=release        \
-      -Dlibaudit=no              \
-      -Dnmtui=true               \
-      -Dovs=false                \
-      -Dppp=false                \
-      -Dselinux=false            \
-      -Dqt=false                 \
-      -Dsession_tracking=systemd \
-      -Dmodem_manager=false      &amp;&amp;
+CXXFLAGS+="-O2 -fPIC"             \
+meson setup ..                    \
+      --prefix=/usr               \
+      --buildtype=release         \
+      -D libaudit=no              \
+      -D nmtui=true               \
+      -D ovs=false                \
+      -D ppp=false                \
+      -D selinux=false            \
+      -D qt=false                 \
+      -D session_tracking=systemd \
+      -D modem_manager=false      &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -248,9 +246,9 @@ class="username">root</systemitem>&quot;:
 mv -v /usr/share/doc/NetworkManager{,-&NetworkManager-version;}</userinput></screen>
 
     <para>
-      Se você não passou a opção &quot;<option>-Ddocs=true</option>&quot; para
-&quot;<command>meson</command>&quot;, [então] você consegue instalar as
-páginas de manual pré geradas com (como o(a) usuário(a) &quot;&root;&quot;):
+      Se você não passou a opção <option>-D docs=true</option> para
+<command>meson</command>, você consegue instalar as páginas de manual pré
+geradas com (como o(a) usuário(a) &root;):
     </para>
 
 <screen role="root"><userinput>for file in $(echo ../man/*.[1578]); do
@@ -260,7 +258,7 @@ páginas de manual pré geradas com (como o(a) usuário(a) &quot;&root;&quot;):
 done</userinput></screen>
 
     <para>
-      Se você não tiver usado <option>-Ddocs=true</option>, a documentação HTML
+      Se você não tiver usado <option>-D docs=true</option>, a documentação HTML
 pré gerada também pode ser instalada com (como o(a) usuário(a) &root;):
     </para>
 
@@ -281,58 +279,50 @@ necessárias para construir exemplos baseados em &quot;Qt5&quot;.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>-Ddocs=true</option>: Use essa chave para habilitar a construção de
-páginas de manual e documentação se &quot;<xref linkend="gtk-doc"/>&quot;
-estiver instalado.
+      <option>-D docs=true</option>: Use essa chave para habilitar construir
+páginas de manual e documentação se <xref linkend="gtk-doc"/> estiver
+instalado.
     </para>
 
     <para>
-      <parameter>-Dnmtui=true</parameter>: Essa chave habilita construir
+      <parameter>-D nmtui=true</parameter>: Essa chave habilita construir
 <command>nmtui</command>.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dsystemdsystemunitdir=no</parameter> e
-<parameter>-Dsystemd_journal=false</parameter>: systemd não é usado para
-sistemas de inicialização SysV, de forma que evite instalar unidades e usar
-o diário do systemd.
+      <parameter>-D systemdsystemunitdir=no</parameter> e <parameter>-D
+systemd_journal=false</parameter>: systemd não é usado para sistemas de
+inicialização SysV, de forma que evite instalar unidades e usar o diário do
+systemd.
     </para>
 
     <para>
-      <parameter>-Dovs=false</parameter>: Essa chave desabilita a integração do
+      <parameter>-D ovs=false</parameter>: Essa chave desabilita a integração do
 Open vSwitch porque ela precisa de <xref linkend='jansson'/>. Remova-a se
 você tiver <xref linkend='jansson'/> instalado em teu sistema.
     </para>
 
     <para>
-      <parameter>-Dmodem_manager=false</parameter>: Essa chave é exigida se o
+      <parameter>-D modem_manager=false</parameter>: Essa chave é exigida se o
 <application>ModemManager</application> não estiver instalado. Omita essa
 chave se você tiver construído <application>ModemManager</application> e
 <application>mobile-broadband-provider-info</application>.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dsession_tracking=elogind</parameter>: Essa chave é usada para
-configurar o &quot;<command>elogind</command>&quot; como o aplicativo padrão
-para rastreamento de sessão.
+      <parameter>-D session_tracking=elogind</parameter>: Essa chave é usada para
+configurar <command>elogind</command> como o aplicativo padrão para
+rastreamento de sessão.
     </para>
 
     <para revision="systemd">
-      <parameter>-Dsession_tracking=systemd</parameter>: Essa chave é usada para
-configurar o &quot;<command>systemd-logind</command>&quot; como o aplicativo
-padrão para rastreamento de sessão.
+      <parameter>-D session_tracking=systemd</parameter>: Essa chave é usada para
+configurar <command>systemd-logind</command> como o aplicativo padrão para
+rastreamento de sessão.
     </para>
 
-    <!-- not in instrucitons anymore
-    <para revision="systemd">
-
-      <parameter>-Dsystemdsystemunitdir=/lib/systemd/system</parameter>:
-      This switch is used to set the correct installation directory for
-      systemd units.
-    </para>
--->
-<para>
-      <parameter>-Dppp=false</parameter>: Essa chave desabilita o suporte a
+    <para>
+      <parameter>-D ppp=false</parameter>: Essa chave desabilita suporte a
 <application>PPP</application> no <application>NetworkManager</application>,
 já que os aplicativos necessários para isso não estão instalados. Remova
 essa chave se você precisar de suporte a PPP e tiver o
@@ -340,33 +330,33 @@ essa chave se você precisar de suporte a PPP e tiver o
     </para>
 
     <para>
-      <parameter>-Dlibaudit=no</parameter> e
-<parameter>-Dselinux=false</parameter>: Essa chave desabilita o suporte para
-libaudit e SELinux, vez que ele(a) não é usado(a) no BLFS.
+      <parameter>-D libaudit=no</parameter> e <parameter>-D
+selinux=false</parameter>: Essa chave desabilita o suporte para libaudit e
+SELinux, vez que ele(a) não é usado(a) no BLFS.
     </para>
 
     <para>
-      <parameter>-Dqt=false</parameter>: Essa chave desabilita os exemplos
+      <parameter>-D qt=false</parameter>: Essa chave desabilita os exemplos
 <application>QT</application>. Omita se você tiver o
 <application>Qt</application> disponível e desejar instalar os exemplos.
     </para>
 
     <para>
-      <option>-Dcrypto=gnutls</option>: Use essa chave se você tiver o GnuTLS
+      <option>-D crypto=gnutls</option>: Use essa chave se você tiver GnuTLS
 instalado e quiser usá-lo para operações de certificados e chaves no
 NetworkManager, em vez de usar o NSS (o padrão).
     </para>
 
     <para>
-      <option>-Dcrypto=null</option>: Use essa chave se nem o NSS nem o GnuTLS
-estiverem instalados, mas você quiser construir o NetworkManager de qualquer
-maneira. Essa chave fará com que o NetworkManager careça de alguns recursos
+      <option>-D crypto=null</option>: Use essa chave se nem NSS nem GnuTLS
+estiverem instalados, mas você quiser construir NetworkManager de qualquer
+maneira. Essa chave fará com que NetworkManager careça de alguns recursos
 (por exemplo, 802.1X).
     </para>
 
     <para>
-      <option>-Dsuspend_resume=upower</option>: Use essa chave se você tiver <xref
-linkend='upower'/> instalado e quiser usá-lo (em vez de &logind;) para
+      <option>-D suspend_resume=upower</option>: Use essa chave se você tiver
+<xref linkend='upower'/> instalado e quiser usá-lo (em vez de &logind;) para
 suspender e retomar o suporte.
     </para>
   </sect2>
@@ -471,7 +461,7 @@ EOF</userinput></screen>
     </sect3>
 
     <sect3 id="NetworkManager-init">
-      <title><phrase revision="sysv">Conjunto Sequencial de Comandos de
+      <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
 Inicialização</phrase> <phrase revision="systemd">Unidade do
 systemd</phrase></title>
 

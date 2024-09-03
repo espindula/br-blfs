@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY x265-download-http "&sources-anduin-http;/x265/x265-&x265-version;.tar.xz">
+  <!ENTITY x265-download-http "https://bitbucket.org/multicoreware/x265_git/downloads/x265_&x265-version;.tar.gz">
   <!ENTITY x265-download-ftp  "">
-  <!ENTITY x265-md5sum        "71144c71b399d7b3d55c9dc1e2377e10">
-  <!ENTITY x265-size          "1,0 MB">
-  <!ENTITY x265-buildsize     "38 MB">
+  <!ENTITY x265-md5sum        "99997ecc8ee4d3575ba7715c759ad3bb">
+  <!ENTITY x265-size          "1,6 MB">
+  <!ENTITY x265-buildsize     "45 MB">
   <!ENTITY x265-time          "0,5 UPC (usando paralelismo=4)">
 ]>
 
@@ -30,7 +30,7 @@
 codificação de fluxos de vídeo no formato H.265/HEVC.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -97,21 +97,47 @@ codificação de fluxos de vídeo no formato H.265/HEVC.
 <userinput>mkdir bld &amp;&amp;
 cd    bld &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DGIT_ARCHETYPE=1           \
-      -Wno-dev ../source          &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -W no-dev ../source          &amp;&amp;
 make</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
     </para>
 
+    
+    <!-- To editors: hard coded versions "209", "212", and "3.6" are not a
+         bug.  This <important>
+ block should be removed when we update x265
+         to 3.7 (or 4.0 or whatever new version).  The problem only happens
+         when we downgrade libx265.so, upgrading is OK (as long as following
+         the LFS package management page).  -->
+<important>
+      <para>
+        Se desatualizar do x265-20240812 de última geração (ele esteve sendo usado
+por engano no livro de desenvolvimento do BLFS por vários dias), remova a
+biblioteca compartilhada do x265-20240812 como o(a) usuário(a) &root;:
+      </para>
+
+      <screen role='root'><userinput>rm -fv /usr/lib/libx265.so.212</userinput></screen>
+
+      <para>
+        Isso é para evitar que <command>ldconfig</command> recrie o link simbólico
+<filename>libx265.so</filename> com o alvo
+<filename>/usr/lib/libx265.so.212</filename>, que parece ser <quote>uma
+versão mais recente</quote> de <filename>libx265.so.209</filename> oriundo
+do x265-3.6.
+      </para>
+    </important>
+
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Para instalar o pacote, primeiro remova quaisquer versões antigas da
+biblioteca. Depois da instalação, remova uma biblioteca estática. Como o(a)
+usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
-rm -vf /usr/lib/libx265.a </userinput></screen>
+rm -vf /usr/lib/libx265.a</userinput></screen>
 
   </sect2>
 
@@ -119,15 +145,7 @@ rm -vf /usr/lib/libx265.a </userinput></screen>
       <title>Explicações do Comando</title>
 
       <para>
-        <parameter>-DGIT_ARCHETYPE=1</parameter>: o(a) Desenvolvedor(a) não mais
-fornece lançamentos. O BLFS está usando um instantâneo git, mas se o
-construtor não tiver instalado o <application>git</application>, a
-construção não instalará a biblioteca compartilhada ou o arquivo pkgconfig
-sem essa chave.
-      </para>
-
-      <para>
-        <parameter>-Wno-dev</parameter>: Essa chave é usada para suprimir avisos
+        <parameter>-W no-dev</parameter>: Essa chave é usada para suprimir avisos
 destinados para os(as) desenvolvedores(as) do pacote.
       </para>
 

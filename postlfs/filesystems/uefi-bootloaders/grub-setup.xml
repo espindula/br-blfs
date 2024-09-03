@@ -3,6 +3,8 @@
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../../general.ent">
   %general-entities;
+
+  <!ENTITY lfs-kernel-ver "6.10.5-lfs-12.2">
 ]>
 
 <sect1 id="grub-setup" xreflabel="Usando o GRUB para Configurar o Processo de Inicialização com UEFI">
@@ -144,12 +146,12 @@ monte-o:
 <screen role="nodump"><userinput>umount /mnt/rescue</userinput></screen>
 
     <para>
-      Agora, a unidade flash USB pode ser usada como um disco de inicialização de
-emergência em qualquer plataforma UEFI x86-64. Ele inicializará o sistema e
-mostrará o shell do GRUB. Então você consegue digitar comandos para
-inicializar seu sistema operacional a partir da unidade rígida. Para saber
-como selecionar o dispositivo de inicialização, leia-se o manual da sua
-placa-mãe ou notebook.
+      Agora a unidade flash USB pode ser usada como um disco de inicialização de
+emergência em qualquer plataforma UEFI x86-64. Para saber como selecionar
+essa unidade flash como o dispositivo de inicialização, leia o manual da tua
+placa-mãe ou laptop. Ele inicializará o sistema e mostrará o shell do
+GRUB. Em seguida, você pode digitar comandos para inicializar teu sistema
+operacional a partir da unidade rígida.
     </para>
 
   </sect2>
@@ -434,8 +436,10 @@ versão do GRUB instalada pelo LFS será usada para inicializar o sistema.
 inicialização do GRUB:
     </para>
 
-<screen role="nodump"><userinput>cat &gt; /boot/grub/grub.cfg &lt;&lt; EOF</userinput>
-<literal># Inicia /boot/grub/grub.cfg
+<screen role="nodump"><!-- to editors: do not use all_video which -->
+<!-- breaks Linux simpledrm driver in QEMU -->
+<userinput>cat &gt; /boot/grub/grub.cfg &lt;&lt; EOF</userinput>
+<literal># Begin /boot/grub/grub.cfg
 set default=0
 set timeout=5
 
@@ -443,13 +447,14 @@ insmod part_gpt
 insmod ext2
 set root=(hd0,2)
 
-insmod all_video
+insmod efi_gop
+insmod efi_uga
 if loadfont /boot/grub/fonts/unicode.pf2; then
   terminal_output gfxterm
 fi
 
-menuentry "GNU/Linux, Linux 6.7.4-lfs-12.1"  {
-  linux   /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
+menuentry "GNU/Linux, Linux &lfs-kernel-ver;" {
+  linux   /boot/vmlinuz-&lfs-kernel-ver; root=/dev/sda2 ro
 }
 
 menuentry "Firmware Setup" {
@@ -461,15 +466,18 @@ menuentry "Firmware Setup" {
       Consulte-se <ulink url='&lfs-root;/chapter10/grub.html'>o livro LFS</ulink>
 para o conhecimento básico acerca do arquivo
 <filename>grub.cfg</filename>. <literal>(hd0,2)</literal>,
-<literal>sda2</literal> e <literal>6.4.10-lfs-12.0</literal> precisam
+<literal>sda2</literal> e <literal>&lfs-kernel-ver;</literal> precisam
 corresponderem à tua configuração.
     </para>
 
     <para>
-      A diretiva <command>insmod all_video</command> carrega vários módulos para
-suporte de vídeo. Ela é necessária para inicializar o framebuffer EFI para o
-núcleo imprimir mensagens corretamente antes da inicialização do controlador
-GPU de núcleo.
+      As diretivas <command>insmod efi_gop</command> e <command>insmod
+efi_uga</command> carregam dois módulos para suporte de vídeo baseado em
+EFI. Na maioria dos sistemas, o módulo <literal>efi_gop</literal> é
+suficiente. O módulo <literal>efi_uga</literal> é útil somente para sistemas
+legados, mas é inofensivo carregá-lo de qualquer maneira. O suporte de vídeo
+é necessário para a diretiva <command>terminal_output gfxterm</command>
+realmente funcionar.
     </para>
 
     <para>

@@ -7,11 +7,11 @@
   <!ENTITY gcc-download-http  "&gnu-http;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
   <!ENTITY gcc-download-ftp   "">
   <!-- Update this also on the grub-uefi page -->
-  <!ENTITY gcc-md5sum         "e0e48554cc6e4f261d55ddee9ab69075">
-  <!ENTITY gcc-size           "84 MB">
-  <!ENTITY gcc-buildsize      "13 GB (2,9 GB instalado com todas as linguagens listadas; adicionar 1,5 GB
+  <!ENTITY gcc-md5sum         "2268420ba02dc01821960e274711bde0">
+  <!ENTITY gcc-size           "88 MB">
+  <!ENTITY gcc-buildsize      "11 GB (3,4 GB instalado com todas as linguagens listadas; adicionar 1,6 GB
 para testes)">
-  <!ENTITY gcc-time           "13 UPC (adicionar 29 UPC para testes; ambos com paralelismo=8)">
+  <!ENTITY gcc-time           "14 UPC (adicionar 34 UPC para testes; ambos com paralelismo=8)">
 ]>
 
 <sect1 id="gcc" xreflabel="GCC-&gcc-version;">
@@ -47,7 +47,7 @@ binário, adicionando <option>ada</option> ou <option>d</option> à linha
       </para>
     </note>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <caution>
       <para>
@@ -60,10 +60,7 @@ usa para construir o módulo de terceiros. Esse problema não afeta as
 atualizações do núcleo nativo (e dos módulos do núcleo), pois as instruções
 abaixo são uma reinstalação completa do <application>GCC</application>. Se
 você tiver módulos de terceiros instalados, certifique-se de que eles sejam
-recompilados usando a versão atualizada do
-<application>GCC</application>. Como sempre, nunca atualize os cabeçalhos do
-núcleo a partir daqueles usados quando o <application>Glibc</application>
-foi compilado durante o LFS.
+recompilados usando a versão atualizada do <application>GCC</application>.
       </para>
     </caution>
 
@@ -117,9 +114,12 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gdb"/>, <xref linkend="valgrind"/> (para os testes) e <ulink
-url="https://repo.or.cz/isl.git">ISL</ulink> (para habilitar a otimização
-"graphite")
+      <xref linkend="gdb"/>, <xref linkend="graphviz"/> (alguns testes usam ele se
+instalado; observe que se ele estiver instalado, porém não construído com
+<xref role='nodep' linkend='libpng'/>, esses testes falharão), <xref
+linkend="valgrind"/> (para testes) e <ulink
+url="https://repo.or.cz/isl.git">ISL</ulink> (para habilitar otimização do
+graphite)
     </para>
 
   </sect2>
@@ -175,27 +175,36 @@ cd    build               &amp;&amp;
     --with-system-zlib    \
     --enable-default-pie  \
     --enable-default-ssp  \
+    --enable-host-pie     \
     --disable-fixincludes \
     --enable-languages=c,c++,fortran,go,objc,obj-c++,m2 &amp;&amp;
 make</userinput></screen>
 
-    <para>
+    <para>Se executar testes, como no LFS, remova/corrija várias falhas de teste
+conhecidas:</para>
+
+<screen><userinput>sed -e '/cpython/d'               -i ../gcc/testsuite/gcc.dg/plugin/plugin.exp
+sed -e 's/no-pic /&amp;-no-pie /'     -i ../gcc/testsuite/gcc.target/i386/pr113689-1.c
+sed -e 's/300000/(1|300000)/'     -i ../libgomp/testsuite/libgomp.c-c++-common/pr109062.c
+sed -e 's/{ target nonpic } //' \
+    -e '/GOTPCREL/d'              -i ../gcc/testsuite/gcc.target/i386/fentryname3.c</userinput></screen>
+
+<para>
       Se você tiver instalado pacotes adicionais, como
 <application>valgrind</application> e <application>gdb</application>, a
 parte <application>gcc</application> da suíte de teste executará mais testes
 que no LFS. Alguns deles informarão FAIL e outros XPASS (aprovados quando
-esperado FAIL). A partir do gcc-13.2.0, cerca de sessenta e cinco (65) FAIL
+esperado FAIL). A partir do gcc-14.1.0, cerca de setenta e quatro (74) FAIL
 ocorrem na suíte <quote>guality</quote>, bem como falhas diversas em todo o
 resto da suíte de teste. Se todos os compiladores acima forem construídos,
-existirão um pouco mais que oitenta (80) falhas inesperadas em mais que
-quinhentos e quarenta e seis mil (546.000) testes. Para executar os testes,
-emita:
+existirão um pouco mais que cento e dez (110) falhas inesperadas em mais que
+seiscentos e dezessete mil (617.000) testes. Para executar os testes, emita:
     </para>
+
 
 <!-- The command above may error out, so using && may prevent the summary
 to be run. -->
-<screen><userinput>ulimit -s 32768 &amp;&amp;
-make -k check</userinput></screen>
+<screen><userinput>make -k check</userinput></screen>
 
 
     <para>
@@ -212,11 +221,14 @@ encontrar nos registros, especialmente se você usar tarefas paralelas com
 
 <screen role="root"><userinput>make install &amp;&amp;
 
-mkdir -pv /usr/share/gdb/auto-load/usr/lib             &amp;&amp;
+mkdir -pv /usr/share/gdb/auto-load/usr/lib              &amp;&amp;
 mv -v /usr/lib/*gdb.py /usr/share/gdb/auto-load/usr/lib &amp;&amp;
 
 chown -v -R root:root \
-    /usr/lib/gcc/*linux-gnu/&gcc-version;/include{,-fixed}</userinput></screen>
+    /usr/lib/gcc/*linux-gnu/&gcc-version;/include{,-fixed}     &amp;&amp;
+
+ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so \
+        /usr/lib/bfd-plugins/</userinput></screen>
 
   </sect2>
 
@@ -257,6 +269,13 @@ fluxo do programa por corrompimento da pilha de parâmetros.
     </para>
 
     <para>
+      <parameter>--enable-host-pie</parameter>: Torna os executáveis do compilador
+PIE (Position Independent Executable). Isso pode ser usado para aumentar a
+proteção contra ataques ROP (Return Oriented Programming) e pode ser visto
+como parte de uma tendência mais ampla de fortalecer os binários.
+    </para>
+
+    <para>
       <parameter>--enable-languages=c,c++,fortran,go,objc,obj-c++,m2</parameter>:
 Esse comando identifica quais linguagens construir. Você pode modificar esse
 comando para remover linguagens indesejadas. A GCC também suporta Ada e D,
@@ -264,12 +283,16 @@ mas construir a GCC com suporte a Ada (ou D) precisa de um compilador Ada
 (ou D) existente. Portanto, eles não estão habilitados aqui.
     </para>
 
-    <para>
-      <command>ulimit -s 32768</command>: Esse comando evita que vários testes
-fiquem sem espaço na pilha.
-    </para>
 
+
+    <!--
     <para>
+
+      <command>ulimit -s 32768</command>: This command prevents several
+      tests from running out of stack space.
+    </para>
+-->
+<para>
       <command>make -k check</command>: Esse comando executa a suíte de teste sem
 parar se quaisquer erros forem encontrados.
     </para>

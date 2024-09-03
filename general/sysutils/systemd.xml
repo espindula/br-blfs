@@ -7,10 +7,10 @@
   <!--  <!ENTITY systemd-download-http "https://anduin.linuxfromscratch.org/LFS/systemd-&systemd-version;-&systemd-stable;.tar.xz"> For whenever we move to a stable snapshot for backports -->
   <!ENTITY systemd-download-http "https://github.com/systemd/systemd/archive/v&systemd-version;/systemd-&systemd-version;.tar.gz">
   <!ENTITY systemd-download-ftp  "">
-  <!ENTITY systemd-md5sum        "521cda27409a9edf0370c128fae3e690">
+  <!ENTITY systemd-md5sum        "03bd1ff158ec0bc55428c77a8f8495bd">
   <!ENTITY systemd-size          "15 MB">
-  <!ENTITY systemd-buildsize     "198 MB (com testes)">
-  <!ENTITY systemd-time          "3,7 UPC (com testes usando quatro elementos de processamento da CPU)">
+  <!ENTITY systemd-buildsize     "328 MB (com testes)">
+  <!ENTITY systemd-time          "1,5 UPC (com testes usando quatro núcleos)">
 
 ]>
 
@@ -39,7 +39,7 @@ serviço <command>systemd-logind</command> funcional, o qual fornece muitos
 recursos adicionais para pacotes dependentes.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -76,18 +76,19 @@ recursos adicionais para pacotes dependentes.
     </itemizedlist>
 
 
-    <!--  Comment out (instead of remove) in case a patch will be needed.-->
-<bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--  Comment out (instead of remove) in case a patch will be needed.
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-         Remendo exigido: <ulink
-url="&patch-root;/systemd-&systemd-version;-upstream_fixes-1.patch"/>
+         Required patch:
+         <ulink url="&patch-root;/systemd-&systemd-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do "systemd"</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do "systemd"</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
 
@@ -132,8 +133,7 @@ url="https://www.kernel.org/pub/linux/utils/kernel/kexec/">kexec-tools</ulink>,
 url="https://sourceware.org/elfutils/">libdw</ulink>, <ulink
 url="https://developers.yubico.com/libfido2/">libfido2</ulink>, <ulink
 url="https://www.gnu.org/software/libmicrohttpd/">libmicrohttpd</ulink>,
-<ulink url="https://lz4.github.io/lz4/">lz4</ulink>, <ulink
-url="https://pypi.org/project/pefile/">pefile</ulink>, <ulink
+<ulink url="https://pypi.org/project/pefile/">pefile</ulink>, <ulink
 url="https://pypi.org/project/pyelftools/">pyelftools</ulink>, <ulink
 url="https://sourceforge.net/projects/linuxquota/">quota-tools</ulink>,
 <ulink url="https://rpm.org/">rpm</ulink>, <ulink
@@ -169,15 +169,6 @@ class="groupname">sgx</systemitem>, das regras padrão do "udev":
       -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in</userinput></screen>
 
     <para>
-      Agora corrija uma vulnerabilidade de segurança na verificação DNSSEC do
-<command>systemd-resolved</command> e um defeito que quebra a execução de
-<command>systemd-analyze verify</command> em uma unidade instanciada do
-systemd:
-    </para>
-
-    <screen><userinput>patch -Np1 -i ../systemd-&systemd-version;-upstream_fixes-1.patch</userinput></screen>
-
-    <para>
       Reconstrua o <application>systemd</application> executando os seguintes
 comandos:
     </para>
@@ -186,26 +177,26 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                \
-      --prefix=/usr           \
-      --buildtype=release     \
-      -Ddefault-dnssec=no     \
-      -Dfirstboot=false       \
-      -Dinstall-tests=false   \
-      -Dldconfig=false        \
-      -Dman=auto              \
-      -Dsysusers=false        \
-      -Drpmmacrosdir=no       \
-      -Dhomed=disabled        \
-      -Duserdb=false          \
-      -Dmode=release          \
-      -Dpam=enabled           \
-      -Dpamconfdir=/etc/pam.d \
-      -Ddev-kvm-mode=0660     \
-      -Dnobody-group=nogroup  \
-      -Dsysupdate=disabled    \
-      -Dukify=disabled        \
-      -Ddocdir=/usr/share/doc/systemd-&systemd-version; &amp;&amp;
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -D default-dnssec=no     \
+      -D firstboot=false       \
+      -D install-tests=false   \
+      -D ldconfig=false        \
+      -D man=auto              \
+      -D sysusers=false        \
+      -D rpmmacrosdir=no       \
+      -D homed=disabled        \
+      -D userdb=false          \
+      -D mode=release          \
+      -D pam=enabled           \
+      -D pamconfdir=/etc/pam.d \
+      -D dev-kvm-mode=0660     \
+      -D nobody-group=nogroup  \
+      -D sysupdate=disabled    \
+      -D ukify=disabled        \
+      -D docdir=/usr/share/doc/systemd-&systemd-version; &amp;&amp;
 
 ninja</userinput></screen>
 
@@ -219,10 +210,8 @@ testes a partir de um sistema que seja inicializado pela mesma versão do
     </note>
 
     <para>
-      <!-- test-netlink: https://github.com/systemd/systemd/issues/27969 -->
-Para testar os resultados, emita: <command>ninja test</command>. Os testes
-chamados <filename>test-stat-util</filename> e
-<filename>test-netlink</filename> são conhecidos por falharem se alguns
+      Para testar os resultados, emita: <command>ninja test</command>. O teste
+chamado <filename>test-stat-util</filename> é conhecido por falhar se alguns
 recursos do núcleo não estiverem habilitados. Se a suíte de teste for
 executada como o(a) usuário(a) &root;, alguns outros testes possivelmente
 falhem, porque dependem de várias opções de configuração do núcleo.
@@ -243,20 +232,20 @@ falhem, porque dependem de várias opções de configuração do núcleo.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dpamconfdir=/etc/pam.d</parameter>: Força os arquivos do "PAM"
-serem instalados em "/etc/pam.d" em vez de "/usr/lib/pam.d".
+      <parameter>-D pamconfdir=/etc/pam.d</parameter>: Força os arquivos do PAM
+serem instalados em /etc/pam.d em vez de /usr/lib/pam.d.
     </para>
 
     <para>
-      <parameter>-Duserdb=false</parameter>: Remove um processo de segundo plano
+      <parameter>-D userdb=false</parameter>: Remove um processo de segundo plano
 que não oferece qualquer uso sob uma configuração do BLFS. Se você deseja
 habilitar o processo de segundo plano <application>userdbd</application>,
-[então] substitua "false" por "true" no comando "meson" acima.
+substitua "false" por "true" no comando meson acima.
     </para>
 
     <para>
-      <parameter>-Dhomed=disabled</parameter>: Remove um processo de segundo plano
-que não oferece qualquer uso sob uma configuração tradicional do BLFS,
+      <parameter>-D homed=disabled</parameter>: Remove um processo de segundo
+plano que não oferece qualquer uso sob uma configuração tradicional do BLFS,
 especialmente usando contas criadas com useradd. Para habilitar o
 systemd-homed, primeiro certifique-se de que você tenha <xref
 linkend="cryptsetup"/> e <xref linkend="libpwquality"/> instalados e, em
@@ -265,7 +254,7 @@ seguida, mude <quote>disabled</quote> para <quote>enabled</quote> no comando
     </para>
 
     <para>
-      <parameter>-Dukify=disabled</parameter>: Remove um conjunto de comandos
+      <parameter>-D ukify=disabled</parameter>: Remove um conjunto de comandos
 sequenciais para combinar um núcleo, um initramfs e uma linha de comando do
 núcleo, etc., em um aplicativo UEFI que pode ser carregado pelo firmware
 UEFI para iniciar o núcleo incorporado Linux. Ele não é necessário para
@@ -402,7 +391,7 @@ url="&lfs-root;/chapter08/systemd.html#contents-systemd"/>.
       </para>
 
       <para>
-        Listados abaixo estão os aplicativos recém-instalados, juntamente com
+        Listados abaixo estão os programas recém-instalados, juntamente com
 descrições curtas.
       </para>
 

@@ -6,10 +6,10 @@
 
   <!ENTITY libxkbcommon-download-http "https://xkbcommon.org/download/libxkbcommon-&libxkbcommon-version;.tar.xz">
   <!ENTITY libxkbcommon-download-ftp  "">
-  <!ENTITY libxkbcommon-md5sum        "90079ab4a0c6fa56dc75abffef9b1bc6">
-  <!ENTITY libxkbcommon-size          "500 KB">
-  <!ENTITY libxkbcommon-buildsize     "23 MB (com testes)">
-  <!ENTITY libxkbcommon-time          "0,4 UPC (com testes)">
+  <!ENTITY libxkbcommon-md5sum        "b05b1a0d473189efb2dd995dd944f152">
+  <!ENTITY libxkbcommon-size          "524 KB">
+  <!ENTITY libxkbcommon-buildsize     "26 MB (com testes)">
+  <!ENTITY libxkbcommon-time          "0,5UPC (com testes)">
 ]>
 
 <sect1 id="libxkbcommon" xreflabel="libxkbcommon-&libxkbcommon-version;">
@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libxkbcommon</title>
+    <title>Introdução ao libxkbcommon</title>
 
     <para>
       <application>libxkbcommon</application> é um compilador de mapa de teclas e
@@ -31,7 +31,7 @@ biblioteca de suporte que processa um subconjunto reduzido de mapas de
 teclas conforme definido pela especificação "XKB".
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,7 +69,7 @@ teclas conforme definido pela especificação "XKB".
 
     <bridgehead renderas="sect3">Dependências do libxkbcommon</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref role="runtime" linkend="xkeyboard-config"/> (tempo de execução)
     </para>
@@ -82,7 +82,9 @@ linkend="wayland-protocols"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-       <xref linkend="doxygen"/>
+      <xref linkend="doxygen"/> (para gerar a documentação) e
+<command>Xvfb</command> (oriundo do <xref linkend='xorg-server'/> ou <xref
+role='nodep' linkend='xwayland'/>)
     </para>
 
   </sect2>
@@ -98,14 +100,16 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -Denable-docs=false &amp;&amp;
+meson setup ..             \
+      --prefix=/usr        \
+      --buildtype=release  \
+      -D enable-docs=false &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>ninja test</command>.
+      Para testar os resultados, garanta que <command>Xvfb</command> e <xref
+linkend='xkeyboard-config'/> estão disponíveis, então emita: <command>ninja
+test</command>.
     </para>
 
     <para>
@@ -137,15 +141,15 @@ ninja</userinput></screen>
     </para>
     -->
 <para>
-      <parameter>-Denable-docs=false</parameter>: Essa chave desabilita a geração
-de documentação. Remova-a se <xref linkend="doxygen"/> estiver instalado.
+      <parameter>-D enable-docs=true</parameter>: Essa chave habilita a geração de
+documentação. O <xref linkend="doxygen"/> é exigido.
     </para>
 
     <para>
       <command>mv -v
 /usr/share/doc/libxkbcommon{,-&libxkbcommon-version;}</command>: se você
-removeu "-Denable-docs=false", [então] use esse comando para instalar a
-documentação em um diretório versionado.
+construiu a documentação, use esse comando para instalá-la em um diretório
+versionado.
     </para>
 
   </sect2>

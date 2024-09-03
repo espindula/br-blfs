@@ -6,10 +6,10 @@
 
   <!ENTITY elogind-download-http "https://github.com/elogind/elogind/archive/v&elogind-version;/elogind-&elogind-version;.tar.gz">
   <!ENTITY elogind-download-ftp  "">
-  <!ENTITY elogind-md5sum        "2be2c43298e2fc41c5bee33dde605f01">
-  <!ENTITY elogind-size          "1,8 MB">
-  <!ENTITY elogind-buildsize     "45 MB (com testes)">
-  <!ENTITY elogind-time          "0,3 UPC (com paralelismo=4)">
+  <!ENTITY elogind-md5sum        "8653d1959c25b649c398a932ce56b396">
+  <!ENTITY elogind-size          "2,0 MB">
+  <!ENTITY elogind-buildsize     "48 MB (com testes)">
+  <!ENTITY elogind-time          "0,4 UPC (com paralelismo=4; com testes)">
 ]>
 
 <sect1 id="elogind" revision="sysv" xreflabel="elogind-&elogind-version;">
@@ -38,7 +38,7 @@ usando o esquema padrão <filename class="directory">/run/systemd</filename>
 do "systemd".
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -135,37 +135,41 @@ usuário(a) do núcleo, a qual é habilitada com:
 comandos:
     </para>
 
-<screen><!--sed -i '/Disable polkit/,+8 d' meson.build &amp;&amp;
-
-sed '/request_name/i\
-r = sd_bus_set_exit_on_disconnect(m->
-bus, true);\
-if (r &lt; 0)\
-    return log_error_errno(r, "Failed to set exit on disconnect: %m");' \
-    -i src/login/logind.c &amp;&amp;
-
--->
-<userinput>mkdir build &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                              \
-      --prefix=/usr                         \
-      --buildtype=release                   \
-      -Dman=auto                            \
-      -Ddocdir=/usr/share/doc/elogind-&elogind-version; \
-      -Dcgroup-controller=elogind           \
-      -Ddev-kvm-mode=0660                   \
-      -Ddbuspolicydir=/etc/dbus-1/system.d &amp;&amp;
+meson setup ..                               \
+      --prefix=/usr                          \
+      --buildtype=release                    \
+      -D man=auto                            \
+      -D docdir=/usr/share/doc/elogind-&elogind-version; \
+      -D cgroup-controller=elogind           \
+      -D dev-kvm-mode=0660                   \
+      -D dbuspolicydir=/etc/dbus-1/system.d &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>ninja test</command>. Uns poucos
-testes serão ignorados se não executados com privilégios de <systemitem
-class="username">root</systemitem>. Dois testes chamados
-<filename>test-fs-util</filename> e <filename>test-id128</filename> exigem o
-link simbólico <filename>/etc/machine-id</filename>, de forma que eles
-falharão se esse link simbólico ainda não estiver criado seguindo as
-instruções em <xref linkend='dbus'/>.
+      <!--
+      <filename>
+test-id128</filename> require the
+      <filename>/etc/machine-id</filename> symlink, so they will fail if
+      this symlink is not created following the instruction in
+      <xref linkend='dbus'/> yet.
+
+      I did have the symlink and test-fs-util still failed (the only
+      one).  The error was 
+         Assertion 'chase_symlinks(q, NULL, CHASE_SAFE, NULL, NULL) >= 0' 
+         failed at src/test/test-fs-util.c:303, function 
+         test_chase_symlinks(). Aborting.
+      Looking at the code, I don't think that is related to the
+      /etc/machine-id symlink. - bdubbs, version 252.23
+      -->
+Para testar os resultados, emita: <command>ninja test</command>. Uns poucos
+testes são ignorados se não executados com privilégios de &root;. Três
+testes, <filename>test-login</filename>,
+<filename>dbus-docs-fresh</filename> e
+<filename>check-version-history</filename>, são conhecidos por falharem.
+      
     </para>
 
     <para>
@@ -197,12 +201,12 @@ ln -sfvn elogind /usr/include/systemd</userinput></screen>
     </para>
     -->
 <para>
-      <parameter>-Ddocdir=/usr/share/doc/elogind-&elogind-version;</parameter>:
+      <parameter>-D docdir=/usr/share/doc/elogind-&elogind-version;</parameter>:
 Isso é necessário para instalar a documentação em um diretório versionado.
     </para>
 
     <para>
-      <parameter>-Dcgroup-controller=elogind</parameter>: Essa chave é necessária
+      <parameter>-D cgroup-controller=elogind</parameter>: Essa chave é necessária
 para construir esse pacote quando o núcleo não for compilado com
 <option>CONFIG_CGROUPS</option> habilitada. Observe que
 <application>elogind</application> precisa estritamente de um núcleo com
@@ -211,34 +215,34 @@ chave permitirá construir o pacote primeiro.
     </para>
 
     <para>
-      <parameter>-Ddbuspolicydir=/etc/dbus-1/system.d</parameter>: Essa chave
+      <parameter>-D dbuspolicydir=/etc/dbus-1/system.d</parameter>: Essa chave
 configura o local do diretório de políticas do
 <application>D-Bus</application>.
     </para>
 
     <para>
-      <parameter>-Ddev-kvm-mode=0660</parameter>: A regra udev do LFS configura o
+      <parameter>-D dev-kvm-mode=0660</parameter>: A regra udev do LFS configura o
 modo de <filename class='devicefile'>/dev/kvm</filename> como 0660. Essa
 opção garante que as regras udev do elogind sejam consistentes com a
 configuração do LFS.
     </para>
 
     <para>
-      <parameter>-Dman=auto</parameter>: O valor padrão dessa chave é
+      <parameter>-D man=auto</parameter>: O valor padrão dessa chave é
 <emphasis>false</emphasis>. Configurá-lo como <emphasis>auto</emphasis>
 permite construir e instalar as páginas de manual se as dependências
 recomendadas estiverem instaladas.
     </para>
 
     <para>
-      <option>-Dhtml=auto</option>: O valor padrão dessa chave é
+      <option>-D html=auto</option>: O valor padrão dessa chave é
 <emphasis>false</emphasis>. Configurá-la como <emphasis>auto</emphasis>
 permite construir e instalar a documentação HTML se as dependências
 recomendadas estiverem instaladas.
     </para>
 
     <para>
-      <option>-Ddefault-kill-user-processes=false</option>: Determina se os
+      <option>-D default-kill-user-processes=false</option>: Determina se os
 processos de um(a) usuário(a) deveriam ser eliminados quando o(a) usuário(a)
 sai. O padrão é <emphasis>true</emphasis>, mas isso anula o uso tradicional
 de <command>screen</command> ou <command>tmux</command>. Isso também pode

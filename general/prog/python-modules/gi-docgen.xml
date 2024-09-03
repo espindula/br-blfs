@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../../general.ent">
   %general-entities;
 
-  <!ENTITY gi-docgen-download-http "https://files.pythonhosted.org/packages/source/g/gi-docgen/gi-docgen-&gi-docgen-version;.tar.gz">
+  <!ENTITY gi-docgen-download-http "https://files.pythonhosted.org/packages/source/g/gi-docgen/gi_docgen-&gi-docgen-version;.tar.gz">
   <!ENTITY gi-docgen-download-ftp  "">
   <!ENTITY gi-docgen-md5sum        "&gi-docgen-md5sum;">
   <!ENTITY gi-docgen-size          "2,4 MB">
-  <!ENTITY gi-docgen-buildsize     "18 MB (com testes)">
+  <!ENTITY gi-docgen-buildsize     "17 MB (com testes)">
   <!ENTITY gi-docgen-time          "menos que 0,1 UPC (com testes)">
 ]>
 
@@ -24,15 +24,14 @@
       <title>Introdução ao Módulo Gi-DocGen</title>
 
       <para>
-        &quot;<application>Gi-DocGen</application>&quot; é um gerador de documentos
-para bibliotecas baseadas em &quot;GObject&quot;. &quot;GObject&quot; é o
-sistema básico de tipos do projeto &quot;GNOME&quot;. &quot;GI-Docgen&quot;
-reusa os dados de introspecção gerados por bibliotecas baseadas em
-&quot;GObject&quot; para gerar a referência &quot;API&quot; dessas
+        <application>Gi-DocGen</application> é um gerador de documentos para
+bibliotecas baseadas em GObject. GObject é o sistema básico de tipos do
+projeto GNOME. Gi-DocGen reusa os dados de introspecção gerados por
+bibliotecas baseadas em GObject para gerar a referência de API dessas
 bibliotecas, bem como outras documentações auxiliares.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -76,15 +75,29 @@ bibliotecas, bem como outras documentações auxiliares.
 linkend="pygments"/> e <xref linkend="typogrify"/>
       </para>
 
-      <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
+      <bridgehead renderas="sect5">Opcionais</bridgehead>
       <para role="optional">
-        <xref linkend="pytest"/>
+        <xref role='runtime' linkend='graphviz'/> (tempo de execução, para
+visualizar gráficos de hierarquia de classes) e <xref linkend="pytest"/>
+(para testagem)
       </para>
 
     </sect3>
 
     <sect3 role="installation">
       <title>Instalação do gi-docgen</title>
+
+    
+    <!-- https://gitlab.gnome.org/GNOME/gi-docgen/-/issues/188 -->
+<para>
+      Silencie um aviso oriundo do utilitário <command>dot</command> do Graphviz
+que fará com que a documentação de vários pacotes falhe para construir se o
+Graphviz estiver instalado, mas construído sem Pango, e
+<command>gi-docgen</command> for invocado com a opção
+<option>--fatal-warnings</option>:
+    </para>
+
+    <screen><userinput>sed -i '/if err:/s/err/proc.returncode/' gidocgen/utils.py</userinput></screen>
 
     <para> Construa o módulo: </para>
 

@@ -4,19 +4,19 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY kwayland-download-http "&kf5-download-http;/kwayland-&kf5-version;.tar.xz">
+  <!ENTITY kwayland-download-http "http://download.kde.org/stable/plasma/&plasma-version;/kwayland-&plasma-version;.tar.xz">
   <!ENTITY kwayland-download-ftp  "">
-  <!ENTITY kwayland-md5sum        "5031ae48f5214293ca8484e719a78895">
-  <!ENTITY kwayland-size          "332 KB">
-  <!ENTITY kwayland-buildsize     "31 MB">
-  <!ENTITY kwayland-time          "0,3 UPC (Usando paralelismo=4)">
+  <!ENTITY kwayland-md5sum        "d297f096ac9492262b8274a024618bd3">
+  <!ENTITY kwayland-size          "132 KB">
+  <!ENTITY kwayland-buildsize     "13 MB">
+  <!ENTITY kwayland-time          "0,2 UPC (Usando paralelismo=4)">
 ]>
 
-<sect1 id="lxqt-kwayland" xreflabel="kwayland-&kf5-version; para lxqt">
+<sect1 id="lxqt-kwayland" xreflabel="kwayland-&plasma-version; para lxqt">
   <?dbhtml filename="lxqt-kwayland.html"?>
 
 
-  <title>kwayland-&kf5-version; para lxqt</title>
+  <title>kwayland-&plasma-version; para lxqt</title>
 
   <indexterm zone="lxqt-kwayland">
     <primary sortas="a-kwayland">kwayland</primary>
@@ -31,12 +31,12 @@ API do <application>wayland-client</application> e do
 <application>wayland-server</application>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <important>
       <para>
-        Esse pacote é extraído a partir do conjunto de pacotes do KF5. Se o <xref
-linkend="kf5-frameworks"/> for construído, <emphasis
+        Esse pacote é extraído a partir do conjunto de pacotes do KF6. Se o <xref
+linkend="kf6-frameworks"/> for construído, <emphasis
 role="bold">NÃO</emphasis> construa também esse pacote conforme apresentado
 aqui.
       </para>
@@ -82,7 +82,7 @@ aqui.
     <para role="required">
       <xref linkend="extra-cmake-modules"/>, <xref linkend="mesa"/> (construído
 com suporte a <xref linkend="wayland"/>), <xref
-linkend="plasma-wayland-protocols"/> e &qt5-deps;
+linkend="plasma-wayland-protocols"/> e <xref linkend="qt6"/>
     </para>
 
   </sect2>
@@ -95,15 +95,15 @@ linkend="plasma-wayland-protocols"/> e &qt5-deps;
 comandos:
     </para>
 
-<screen><userinput>mkdir -v build &amp;&amp;
-cd       build &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr        \
-      -DCMAKE_INSTALL_LIBEXECDIR=libexec \
-      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON  \
-      -DCMAKE_BUILD_TYPE=Release         \
-      -DBUILD_TESTING=OFF                \
-      -Wno-dev ..                        &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr        \
+      -D CMAKE_BUILD_TYPE=Release         \
+      -D CMAKE_INSTALL_LIBEXECDIR=libexec \
+      -D KDE_INSTALL_USE_QT_SYS_PATHS=ON  \
+      -D BUILD_TESTING=OFF                \
+      -W no-dev ..                        &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -115,24 +115,6 @@ make</userinput></screen>
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
-
-  </sect2>
-
-  <sect2 role="commands">
-    <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>-DCMAKE_INSTALL_LIBEXECDIR=libexec</parameter>: Isso substitui o
-padrão em extra-cmake-modules, que é <filename
-class="directory">/usr/lib/libexec</filename> e não é compatível com FHS.
-    </para>
-
-    <para>
-      <parameter>-DKDE_INSTALL_USE_QT_SYS_PATHS=ON</parameter>: Isso força a
-instalação de plugins Qt no mesmo diretório que o próprio <xref
-linkend="qt5"/>. Caso contrário, eles serão instalados em <filename
-class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
-    </para>
 
   </sect2>
 
@@ -149,11 +131,10 @@ class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
           Nenhum(a)
         </seg>
         <seg>
-          libKF5WaylandClient.so e libKF5WaylandServer.so
+          libKWaylandClient.so 
         </seg>
         <seg>
-          /usr/lib/cmake/KF5Wayland, /usr/include/KF5/KWayland e
-/usr/share/qlogging-categories5
+          /usr/include/KWayland e /usr/lib/cmake/KWayland
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -163,7 +144,7 @@ class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="lxqt-kwayland-client">
-        <term><filename class="libraryfile">libKF5WaylandClient.so</filename></term>
+        <term><filename class="libraryfile">libKWaylandClient.so</filename></term>
         <listitem>
           <para>
             contém a biblioteca envolucradora estilo Qt do
@@ -171,19 +152,6 @@ class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
           </para>
           <indexterm zone="lxqt-kwayland-client">
             <primary sortas="c-libKF5WaylandClient">libKF5WaylandClient.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="lxqt-kwayland-server">
-        <term><filename class="libraryfile">libKF5WaylandServer.so</filename></term>
-        <listitem>
-          <para>
-            contém a biblioteca envolucradora estilo Qt do
-<application>wayland-server</application>
-          </para>
-          <indexterm zone="lxqt-kwayland-server">
-            <primary sortas="c-libKF5WaylandServer">libKF5WaylandServer.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

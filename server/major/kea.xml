@@ -6,8 +6,8 @@
 
   <!ENTITY kea-download-http "https://downloads.isc.org/isc/kea/&kea-dhcp-version;/kea-&kea-dhcp-version;.tar.gz">
   <!ENTITY kea-download-ftp  "">
-  <!ENTITY kea-md5sum        "ad23d02b3ce0475eb077da05b0ae2429">
-  <!ENTITY kea-size          "10 MB">
+  <!ENTITY kea-md5sum        "5f4fe79ed29f5ff2802e2961d1827b25">
+  <!ENTITY kea-size          "9,9 MB">
   <!ENTITY kea-buildsize     "1,5 GB (332 MB instalado; adicionar 4 GB para testes)">
   <!ENTITY kea-time          "4,1 UPC (com paralelismo=4; adicionar 12 UPC para testes)">
   <!ENTITY kea-arm-vers      "&kea-dhcp-version;">
@@ -31,7 +31,7 @@ servidor para DHCP. É o sucessor do antigo servidor DHCP do ISC, que está em
 fim de vida desde dezembro de 2022.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -115,21 +115,26 @@ Editor Notes:
   <sect2 role="installation">
     <title>Instalação do Servidor DHCP Kea do ISC</title>
 
+
+    <!-- Aug 01, 2024: looks like this tweaks are no longer required
+     (were introduced with upgrading to version 2.4.1)
+
     <para>
-      Primeiro, corrija a detecção do Python-3.12 pelo sistema de construção:
+
+      First fix detection of Python-3.12 by the build system:
     </para>
 
 <screen><userinput>sed -e 's/:3/:4/' \
     -i configure</userinput></screen>
 
     <para>
-      Remova uma etapa de instalação que usa um módulo obsoleto do Python:
+      Remove one installation step that uses an obsolete python module:
     </para>
 
 <screen><userinput>sed -e '/dlist="/d' \
     -i src/bin/shell/Makefile.in</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale o <application>Servidor DHCP Kea do ISC</application> executando os
 seguintes comandos:
     </para>
@@ -450,7 +455,7 @@ maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
       </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/kea/kea-dhcp4.conf &lt;&lt; "EOF"
-<literal>// Inicia /etc/kea/kea-dhcp4.conf
+<literal>// Begin /etc/kea/kea-dhcp4.conf
 {
   "Dhcp4": {
     // Add names of your network interfaces to listen on.
@@ -490,6 +495,7 @@ maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
 
     "subnet4": [
       {
+        "id": 1001,   // Each subnet requires a unique numeric id
         "subnet": "192.168.56.0/24",
         "pools": [ { "pool": "192.168.56.16 - 192.168.56.254" } ],
         "option-data": [
@@ -528,7 +534,7 @@ maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
     ]
   }
 }
-// Termina /etc/kea/kea-dhcp4.conf</literal>
+// End /etc/kea/kea-dhcp4.conf</literal>
 EOF</userinput></screen>
 
     </sect3>

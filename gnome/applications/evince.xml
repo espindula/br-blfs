@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY evince-download-http
-     "&gnome-download-http;/evince/&gnome-45;/evince-&evince-version;.tar.xz">
+     "&gnome-download-http;/evince/&gnome-46;/evince-&evince-version;.tar.xz">
   <!ENTITY evince-download-ftp  "">
-  <!ENTITY evince-md5sum        "494cdeef8898a2479aa86f8def7a63bc">
+  <!ENTITY evince-md5sum        "e017e3544751c2442020f4d10a39e24d">
   <!ENTITY evince-size          "2,8 MB">
-  <!ENTITY evince-buildsize     "45 MB">
+  <!ENTITY evince-buildsize     "49 MB">
   <!ENTITY evince-time          "0,2 UPC (Usando paralelismo=4)">
 ]>
 
@@ -34,7 +34,7 @@ aplicativo simples em vez dos múltiplos visualizadores de documentos que
 existiam na Área de Trabalho do <application>GNOME</application>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -82,8 +82,8 @@ e <xref linkend="openjpeg2"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gnome-keyring"/>, <xref linkend="gobject-introspection"/>,
-<xref linkend="libarchive"/>, <xref linkend="libsecret"/> e <xref
+      <xref linkend="gnome-keyring"/>, &gobject-introspection;, <xref
+linkend="libarchive"/>, <xref linkend="libsecret"/> e <xref
 linkend="poppler"/>
     </para>
 
@@ -114,31 +114,31 @@ comandos:
 cd    build &amp;&amp;
 
 CPPFLAGS+=" -I/opt/texlive/&texlive-year;/include" \
-meson setup --prefix=/usr          \
-            --buildtype=release    \
-            -Dgtk_doc=false        \
-            --wrap-mode=nodownload \
-            -Dsystemduserunitdir=no .. &amp;&amp;
+meson setup --prefix=/usr                \
+            --buildtype=release          \
+            -D gtk_doc=false             \
+            --wrap-mode=nodownload       \
+            -D systemduserunitdir=no ..  &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 CPPFLAGS+=" -I/opt/texlive/&texlive-year;/include" \
-meson setup --prefix=/usr          \
-            --buildtype=release    \
-            -Dgtk_doc=false        \
-            --wrap-mode=nodownload \
-            ..                     &amp;&amp;
+meson setup --prefix=/usr                \
+            --buildtype=release          \
+            -D gtk_doc=false             \
+            --wrap-mode=nodownload       \
+            ..                           &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Se você tiver o <xref linkend='gi-docgen'/> instalado e desejar construir a
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar construir a
 documentação da API para esse pacote, emita:
     </para>
 
 <screen role='nodump'><userinput>sed "/docs_dir/s@\$@ / 'evince-&evince-version;'@" -i ../help/meson.build &amp;&amp;
-meson configure -Dgtk_doc=true                                &amp;&amp;
+meson configure -D gtk_doc=true                                 &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -172,38 +172,38 @@ sem o TeXLive instalado.
     <para>
       <parameter>--wrap-mode=nodownload</parameter>: Essa chave desabilita a busca
 de qualquer dependência: o sistema de construção tenta buscar gi-docgen
-mesmo se <parameter>-Dgtk_doc=false</parameter> for passado.
+mesmo se <parameter>-D gtk_doc=false</parameter> for passado.
     </para>
 
     <para>
-      <parameter>-Dgtk_doc=false</parameter>: &gi-doc-disable;
+      <parameter>-D gtk_doc=false</parameter>: &gi-doc-disable;
     </para>
 
     <para>
-      <option>-Dgspell=false</option>: Essa chave desliga o suporte para o plugin
+      <option>-D gspell=false</option>: Essa chave desliga o suporte para o plugin
 de verificação ortográfica.
     </para>
 
     <para>
-      <option>-Dintrospection=false</option>: Use essa opção se você não tiver o
-<xref role="nodep" linkend="gobject-introspection"/> instalado e não desejar
+      <option>-D introspection=false</option>: Use essa opção se você não tiver
+construído <xref linkend='glib2'/> com GObject Introspection e não desejar
 ter suporte de introspecção integrado ao Evince.
     </para>
 
     <para>
-      <option>-Dnautilus=false</option>: Essa chave desabilita a construção do
+      <option>-D nautilus=false</option>: Essa chave desabilita a construção do
 plug-in do <application>Nautilus</application>. Use essa chave se o
 <application>Nautilus</application> não estiver instalado.
     </para>
 
     <para>
-      <option>-Dkeyring=false</option>: Essa chave desabilita o uso da
+      <option>-D keyring=false</option>: Essa chave desabilita o uso da
 <application>libsecret</application>. Use essa chave se a
 <application>libsecret</application> não estiver instalada.
     </para>
 
     <para>
-      <option>-Dps=enabled</option>: Use essa chave se a
+      <option>-D ps=enabled</option>: Use essa chave se a
 <application>libspectre</application> estiver instalada e você quiser
 visualizar arquivos PostScript com o <application>Evince</application>.
     </para>

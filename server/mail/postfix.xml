@@ -9,8 +9,8 @@
   mirror status, some of the mirrors shown as http are actually https -->
   <!ENTITY postfix-download-http "https://ghostarchive.org/postfix/postfix-release/official/postfix-&postfix-version;.tar.gz">
   <!ENTITY postfix-download-ftp  "">
-  <!ENTITY postfix-md5sum        "ae12d4dfc965a74a691a22ace14e7207">
-  <!ENTITY postfix-size          "4,6 MB">
+  <!ENTITY postfix-md5sum        "3eda9b945ed6cdf11ef58a731c574a04">
+  <!ENTITY postfix-size          "4,7 MB">
   <!ENTITY postfix-buildsize     "208 MB">
   <!ENTITY postfix-time          "0,1 UPC (Usando paralelismo=4)">
 ]>
@@ -37,7 +37,7 @@ domínio, um agente de retransmissão de mensagens ou simplesmente um agente
 de entrega de mensagens para o teu Provedor local de Serviços de Internet.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -98,8 +98,7 @@ linkend="lmdb"/>
       <xref linkend="icu"/> para suporte a Internacionalização de Endereços de
 Mensagens Eletrônicas (SMTPUTF8), <xref linkend="mariadb"/> ou <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
-<xref linkend="pcre2"/> (<emphasis>ou</emphasis> o obsoleto <xref
-role='nodep' linkend='pcre'/>), <xref linkend="postgresql"/>, <xref
+<xref linkend="pcre2"/>, <xref linkend="postgresql"/>, <xref
 linkend="sqlite"/>, &berkeley-db; e <ulink
 url="https://cr.yp.to/cdb.html">CDB</ulink> ou <ulink
 url="https://www.corpit.ru/mjt/tinycdb.html">TinyCDB</ulink>
@@ -165,15 +164,35 @@ das configurações apropriadas &quot;<envar>CCARGS</envar>&quot; e
 
       <note>
         <para>
-          Para todas as variantes do CCARGS, você deveria garantir que -DNO_NIS esteja
-especificado, de forma que a construção não tente acessar um cabeçalho
-rpcsvc que não existe no BLFS. Se o &berkeley-db; não estiver instalado,
--DNO_DB também precisa ser especificado.
+          Para todas as variantes do CCARGS, você deveria garantir que '-DNO_NIS'
+esteja especificado, de forma que a construção não tente acessar um
+cabeçalho de rpcsvc que não existe no BLFS. Se &berkeley-db; não estiver
+instalado, '-DNO_DB' também precisa ser especificado.
         </para>
       </note>
 
       <para>
         Para mais detalhes, leiam-se os arquivos &quot;readme&quot;.
+      </para>
+
+      <para>
+        Inicialize a <envar>CCARGS</envar> e <envar>AUXLIBS</envar> de acordo com a
+observação acima:
+      </para>
+
+
+
+<screen><!-- This package does not accept a space between -D and the argument. -->
+<userinput>CCARGS="-DNO_NIS -DNO_DB"
+AUXLIBS=""</userinput></screen>
+
+      <para>
+        A seguir, as variáveis <envar>CCARGS</envar> e <envar>AUXLIBS</envar> são
+preenchidas com configurações dependendo da atual configuração do
+sistema. Se um pacote opcional estiver instalado, mas deveria
+<emphasis>não</emphasis> estar incluído na construção do
+<application>Postfix</application>, simplesmente ignore os correspondentes
+fragmentos de script <code>if [ ... ]; then</code>.
       </para>
 
       <sect4>
@@ -184,9 +203,10 @@ rpcsvc que não existe no BLFS. Se o &berkeley-db; não estiver instalado,
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS="-DNO_NIS -DNO_DB \
-        -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl"
-AUXLIBS='-lsasl2'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/libsasl2.so ]; then
+  CCARGS="$CCARGS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl"
+  AUXLIBS="$AUXLIBS -lsasl2"
+fi</userinput></screen>
       </sect4>
 
       <sect4>
@@ -196,8 +216,10 @@ AUXLIBS='-lsasl2'</literal></screen>
 <application>Postfix</application>, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DHAS_LMDB'
-AUXLIBS_LMDB='-llmdb'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/liblmdb.so ]; then
+  CCARGS="$CCARGS -DHAS_LMDB"
+  AUXLIBS="$AUXLIBS -llmdb"
+fi</userinput></screen>
       </sect4>
 
       <sect4>
@@ -208,8 +230,10 @@ AUXLIBS_LMDB='-llmdb'</literal></screen>
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DHAS_LDAP'
-AUXLIBS_LDAP='-lldap -llber'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/libldap.so -a -r /usr/lib/liblber.so ]; then
+  CCARGS="$CCARGS -DHAS_LDAP"
+  AUXLIBS="$AUXLIBS -lldap -llber"
+fi</userinput></screen>
 
       </sect4>
 
@@ -221,8 +245,10 @@ AUXLIBS_LDAP='-lldap -llber'</literal></screen>
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DHAS_SQLITE'
-AUXLIBS_SQLITE='-lsqlite3 -lpthread'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/libsqlite3.so ]; then
+  CCARGS="$CCARGS -DHAS_SQLITE"
+  AUXLIBS="$AUXLIBS -lsqlite3 -lpthread"
+fi</userinput></screen>
 
       </sect4>
 
@@ -234,8 +260,10 @@ AUXLIBS_SQLITE='-lsqlite3 -lpthread'</literal></screen>
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DHAS_MYSQL -I/usr/include/mysql'
-AUXLIBS_MYSQL='-lmysqlclient -lz -lm'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/libmysqlclient.so ]; then
+  CCARGS="$CCARGS -DHAS_MYSQL -I/usr/include/mysql"
+  AUXLIBS="$AUXLIBS -lmysqlclient -lz -lm"
+fi</userinput></screen>
 
       </sect4>
 
@@ -247,8 +275,10 @@ AUXLIBS_MYSQL='-lmysqlclient -lz -lm'</literal></screen>
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DHAS_PGSQL -I/usr/include/postgresql'
-AUXLIBS_PGSQL='-lpq -lz -lm'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/libpq.so ]; then
+  CCARGS="$CCARGS -DHAS_PGSQL -I/usr/include/postgresql"
+  AUXLIBS="$AUXLIBS -lpq -lz -lm"
+fi</userinput></screen>
 
       </sect4>
 
@@ -261,8 +291,10 @@ AUXLIBS_PGSQL='-lpq -lz -lm'</literal></screen>
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DHAS_CDB'
-AUXLIBS_CDB='<replaceable>&lt;/caminho/para/CDB&gt;</replaceable>/libcdb.a'</literal></screen>
+<screen><literal>if [ -r <replaceable>&lt;/path/to/CDB&gt;</replaceable>/libcdb.a ]; then
+  CCARGS="$CCARGS -DHAS_CDB"
+  AUXLIBS="$AUXLIBS <replaceable>&lt;/path/to/CDB&gt;</replaceable>/libcdb.a"
+fi</literal></screen>
 
       </sect4>
 
@@ -274,8 +306,15 @@ AUXLIBS_CDB='<replaceable>&lt;/caminho/para/CDB&gt;</replaceable>/libcdb.a'</lit
 &quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
         </para>
 
-<screen><literal>CCARGS='-DNO_NIS -DNO_DB -DUSE_TLS -I/usr/include/openssl/'
-AUXLIBS='-lssl -lcrypto'</literal></screen>
+<screen><userinput>if [ -r /usr/lib/libssl.so -a -r /usr/lib/libcrypto.so ]; then
+  CCARGS="$CCARGS -DUSE_TLS -I/usr/include/openssl/"
+  AUXLIBS="$AUXLIBS -lssl -lcrypto"
+fi</userinput></screen>
+        <para>
+          <application>OpenSSL</application> é instalado pelo LFS, de forma que ele
+deveria estar sempre lá. O <code>if ... then</code> está aqui apenas para
+consistência.
+        </para>
       </sect4>
 
     </sect3>
@@ -284,21 +323,17 @@ AUXLIBS='-lssl -lcrypto'</literal></screen>
       <title>Instalando o Postfix</title>
 
       <para>
-        Ajuste o seguinte de acordo com as tuas necessidades. Por exemplo, se você
-tiver o <application>Cyrus SASL</application> e
-<application>LMDB</application>, instale o
-<application>Postfix</application> executando os seguintes comandos:
+        Podem existir configurações duplicadas em <envar>AUXLIBS</envar>, como
+<code>-lm</code>, quando ambos, <application>MariaDB</application> e
+<application>PostgreSQL</application> são usados. Elas não
+danificam. Instale o <application>Postfix</application> executando os
+seguintes comandos:
       </para>
 
 <!-- There is a test suite, but it fails a lot. It seems to need
          the host to be specifically setup for the tests.
          Run with `make tests' and `make root_tests' -->
-<screen><userinput>make CCARGS="-DNO_NIS -DNO_DB -DUSE_TLS -I/usr/include/openssl/    \
-             -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl  \
-             -DHAS_LMDB"                                           \
-     AUXLIBS="-lssl -lcrypto -lsasl2"                              \
-     AUXLIBS_LMDB="-llmdb"                                         \
-     makefiles &amp;&amp;
+<screen><userinput>make CCARGS="$CCARGS" AUXLIBS="$AUXLIBS" makefiles &amp;&amp;
 make</userinput></screen>
 
     
@@ -345,10 +380,10 @@ poucos. Se as opções &quot;<option>html_directory</option>&quot; e
     </para>
 
     <para>
-      <option>CCARGS="-DNO_EAI ..."</option>: isso desligará o suporte a
-&quot;SMTPUTF8&quot;, por exemplo, se o restante da sua infraestrutura de
-endereço de correio eletrônico não puder lidar com endereços
-&quot;UTF-8&quot; de correio eletrônico e valores de cabeçalho de mensagem.
+      <option>CCARGS="-DNO_EAI ..."</option>: isso desligará o suporte a SMTPUTF8,
+por exemplo, se o restante da tua infraestrutura de endereço de correio
+eletrônico não puder lidar com endereços UTF-8 de correio eletrônico e
+valores de cabeçalho de mensagem.
     </para>
 
   </sect2>

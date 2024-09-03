@@ -13,7 +13,7 @@
   <!ENTITY fontforge-md5sum        "7043f25368ed25bcd75d168564919fb7">
   <!ENTITY fontforge-size          "13 MB">
   <!ENTITY fontforge-buildsize     "102 MB (adicionar 52 MB para os testes)">
-  <!ENTITY fontforge-time          "0,4 UPC (com paralelismo=4, adicionar 0,1 UPC para os testes)">
+  <!ENTITY fontforge-time          "0,4 UPC (com paralelismo=4, adicionar 0,1 UPC para testes)">
 ]>
 
 <sect1 id="fontforge" xreflabel="FontForge-&fontforge-version;">
@@ -36,7 +36,7 @@ opentype, cid-keyed, multi-master, cff, svg e bitmap (bdf, FON, NFNT), ou
 editar as existentes.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
 
@@ -69,6 +69,16 @@ editar as existentes.
       <listitem>
         <para>
           Tempo de construção estimado: &fontforge-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/fontforge-&fontforge-version;-security_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -119,7 +129,15 @@ documentação HTML) e <xref linkend="woff2"/>
     <title>Instalação do FontForge</title>
 
     <para>
-      Primeiro corrija um problema com traduções antigas exposto por gettext-0.22:
+      Primeiro, corrija duas vulnerabilidades de segurança na funcionalidade
+Splinefont:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../fontforge-&fontforge-version;-security_fixes-1.patch</userinput></screen>
+
+    <para>
+      A seguir, corrija um problema com traduções antigas exposto por
+gettext-0.22:
     </para>
 
 <screen><userinput>sed -i.orig 's/\(%[^%[:space:]]*\)hs/\1s/g' \
@@ -135,9 +153,9 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -Wno-dev .. &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -W no-dev .. &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -167,18 +185,18 @@ como um diretório versionado, crie um link simbólico como o(a) usuário(a)
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DCMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
+      <parameter>-D CMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
 criar um lançamento otimizado sem informações de depuração.
     </para>
 
     <para>
-      <parameter>-Wno-dev</parameter>: Essa chave é usada para suprimir avisos
+      <parameter>-W no-dev</parameter>: Essa chave é usada para suprimir avisos
 destinados para os(as) desenvolvedores(as) do pacote.
     </para>
 
     <para>
-      <option>-DENABLE_X11=ON</option>: use uma estrutura de retaguarda X11 em vez
-da GDK3 (gtk+-3) para gráficos básicos do Xorg.
+      <option>-D ENABLE_X11=ON</option>: use uma estrutura de retaguarda X11 em
+vez da GDK3 (gtk+-3) para gráficos básicos do Xorg.
     </para>
 
   </sect2>

@@ -6,12 +6,10 @@
 
   <!ENTITY wireshark-download-http "https://www.wireshark.org/download/src/all-versions/wireshark-&wireshark-version;.tar.xz">
   <!ENTITY wireshark-download-ftp  "">
-  <!ENTITY wireshark-md5sum        "6c773f66b127ea1928d43b96d0e28098">
+  <!ENTITY wireshark-md5sum        "e118da25ca399111a4e5d947385c7c79">
   <!ENTITY wireshark-size          "43 MB">
-  <!ENTITY wireshark-buildsize     "915 MB (com todas as dependências opcionais disponíveis no livro BLFS; 170
-MB instalado)">
-  <!ENTITY wireshark-time          "2,9 UPC (com paralelismo=4 e todas as dependências opcionais disponíveis no
-livro BLFS)">
+  <!ENTITY wireshark-buildsize     "743 MB (171 MB instalado)">
+  <!ENTITY wireshark-time          "2,4 UPC (com paralelismo=4)">
 ]>
 
 
@@ -38,9 +36,9 @@ livro BLFS)">
     <title>Introdução ao Wireshark</title>
 
     <para>
-      O pacote &quot;<application>Wireshark</application>&quot; contém um
-analisador de protocolo de rede de intercomunicação, também conhecido como
-um <quote>sniffer</quote>. Isso é útil para analisar dados capturados
+      O pacote <application>Wireshark</application> contém um analisador de
+protocolo de rede de intercomunicação, também conhecido como um
+<quote>sniffer</quote>. Isso é útil para analisar dados capturados
 <quote>fora do fio</quote> a partir de uma conexão ativa de rede de
 intercomunicação ou dados lidos a partir de um arquivo de captura.
     </para>
@@ -54,7 +52,7 @@ captura a partir de muitos outros analisadores populares de rede de
 intercomunicação.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -116,7 +114,7 @@ documentos em uma variedade de formatos)
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cmake"/>, <xref linkend="c-ares"/>, <xref linkend="glib2"/>,
-<xref linkend="libgcrypt"/> e <xref linkend="qt6"/>
+<xref linkend="libgcrypt"/>, <xref linkend="qt6"/> e <xref linkend="speex"/>
     </para>
 
     <note>
@@ -138,21 +136,18 @@ Comando</quote> abaixo.
 linkend="doxygen"/>, <xref linkend="git"/>, <xref linkend="gnutls"/>, <xref
 linkend="libnl"/>, <xref linkend="libxslt"/>, <xref linkend="libxml2"/>,
 <xref linkend="lua52"/>, <xref linkend="mitkrb"/>, <xref
-linkend="nghttp2"/>, (<xref linkend="qt5"/> ou <xref role="nodep"
-linkend="qt5-components"/> com qtmultimedia) (exigido se <xref role="nodep"
-linkend="qt6"/> não estiver instalado), <xref linkend="sbc"/>, <xref
-linkend="speex"/>, <ulink
+linkend="nghttp2"/>, <xref linkend="qt5-components"/> com qtmultimedia
+(exigido se <xref role="nodep" linkend="qt6"/> não estiver instalado), <xref
+linkend="sbc"/>, <ulink
 url="https://www.linphone.org/technical-corner/bcg729">BCG729</ulink>,
 <ulink url="https://github.com/TimothyGu/libilbc">libilbc</ulink>, <ulink
 url="https://www.ibr.cs.tu-bs.de/projects/libsmi/">libsmi</ulink>, <ulink
-url="https://lz4.github.io/lz4/">lz4</ulink>, <ulink
 url="https://www.libssh.org/">libssh</ulink>, <ulink
 url="https://github.com/maxmind/libmaxminddb">MaxMindDB</ulink>, <ulink
 url="https://www.winimage.com/zLibDll/minizip.html">Minizip</ulink>, <ulink
 url="https://google.github.io/snappy/">Snappy</ulink> e <ulink
 url="https://github.com/freeswitch/spandsp">Spandsp</ulink>
     </para>
-
 
   </sect2>
 
@@ -201,11 +196,11 @@ executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/wireshark-&wireshark-version; \
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D CMAKE_INSTALL_DOCDIR=/usr/share/doc/wireshark-&wireshark-version; \
       -G Ninja \
       .. &amp;&amp;
 ninja</userinput></screen>
@@ -249,8 +244,8 @@ para permitir somente usuários(as) autorizados(as). Como o(a) usuário(a)
 &quot;<systemitem class="username">root </systemitem>&quot;:
     </para>
 
-<screen role="root"><userinput>chown -v root:wireshark /usr/bin/{tshark,dumpcap} &amp;&amp;
-chmod -v 6550 /usr/bin/{tshark,dumpcap}</userinput></screen>
+<screen role="root"><userinput>chown -v root:wireshark /usr/bin/tshark &amp;&amp;
+chmod -v 6550 /usr/bin/tshark</userinput></screen>
 
     <para>
       Finalmente, adicione quaisquer usuários(as) ao grupo &quot;Wireshark&quot;
@@ -273,9 +268,9 @@ o &quot;Wireshark&quot; em teus grupos, pois, caso contrário, o
     <title>Explicações do Comando</title>
 
       <para>
-        <option>-DUSE_qt6=OFF</option>: Use essa chave se <xref linkend="qt6"/> não
-estiver disponível. Você precisará de <xref linkend="qt5"/> ou, pelo menos,
-<xref linkend="qt5-components"/> com qtmultimedia nesse caso.
+        <option>-D USE_qt6=OFF</option>: Use essa chave se <xref linkend="qt6"/> não
+estiver disponível. Você precisará de <xref linkend="qt5-components"/> com
+qtmultimedia.
       </para>
 
   <!--
@@ -347,7 +342,7 @@ classes de pacotes, [então] é mais eficiente fazê-lo com o
 
       <seglistitem>
         <seg>
-          capinfos, captype, dumpcap, editcap, idl2wrs, mergecap, randpkt, rawshark,
+          capinfos, captype, editcap, idl2wrs, mergecap, randpkt, rawshark,
 reordercap, sharkd, text2pcap, tshark e wireshark
         </seg>
         <seg>
@@ -391,21 +386,22 @@ qualquer captura suportada pelo pacote
         </listitem>
       </varlistentry>
 
+      <!--  No longer built/installed
       <varlistentry id="dumpcap">
+
         <term><command>dumpcap</command></term>
         <listitem>
           <para>
-            é uma ferramenta de despejo de tráfego de rede de intercomunicação. Ela te
-permite capturar dados de pacotes a partir de uma rede de intercomunicação
-ativa e escrever os pacotes em um arquivo
+            is a network traffic dump tool. It lets you capture packet data
+            from a live network and write the packets to a file
           </para>
           <indexterm zone="wireshark dumpcap">
             <primary sortas="b-dumpcap">dumpcap</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="editcap">
+-->
+<varlistentry id="editcap">
         <term><command>editcap</command></term>
         <listitem>
           <para>

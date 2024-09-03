@@ -9,10 +9,10 @@
   <!ENTITY gs-download-http
   "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs&gs-packver;/ghostscript-&gs-dl-version;.tar.xz">
   <!ENTITY gs-download-ftp  "">
-  <!ENTITY gs-md5sum        "26c0cbfa2e09da97f1fc78728048ada8">
+  <!ENTITY gs-md5sum        "248294abc5aee3ca8161012853d73b52">
   <!ENTITY gs-size          "65 MB">
-  <!ENTITY gs-buildsize     "391 MB (com fontes e libgs.so)">
-  <!ENTITY gs-time          "1,9 UPC (Usando paralelismo=4; com libgs.so)">
+  <!ENTITY gs-buildsize     "291 MB (com fontes e libgs.so)">
+  <!ENTITY gs-time          "1,2 UPC (Usando paralelismo=4; com libgs.so)">
 
   <!ENTITY gs-standard-fonts-download
   "&sourceforge-dl;/gs-fonts/ghostscript-fonts-std-8.11.tar.gz">
@@ -44,7 +44,7 @@ PostScript com a capacidade de renderizar PostScript para diferentes
 alvos. É uma parte obrigatória da pilha de impressão do CUPS.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -147,7 +147,7 @@ alvos. É uma parte obrigatória da pilha de impressão do CUPS.
       <xref linkend="cups"/> (exigido para construir a estrutura de retaguarda do
 dispositivo <quote>cups</quote>, o qual é necessário para
 <application>cups-filters</application>), <xref linkend="fontconfig"/>
-(exigido, se você estiver instalando qualquer fonte sugerida), <xref
+(exigido se você estiver instalando quaisquer das fontes sugeridas), <xref
 linkend="freetype2"/>, <xref linkend="lcms2"/>, <xref linkend="libjpeg"/>,
 <xref linkend="libpng"/>, <xref linkend="libtiff"/> e <xref
 linkend="openjpeg2"/>
@@ -203,6 +203,14 @@ as cópias de <application>freetype</application>,
 
 
     <para>
+      Corrija construir esse pacote com gcc-14 e libidn:
+    </para>
+
+<screen><userinput remap="pre">sed -e '186 s/NewPassword =/*NewPassword =/' \
+    -e '187 s/NewLen =/*NewLen =/'           \
+    -i pdf/pdf_sec.c</userinput></screen>
+
+    <para>
       Compile o <application>Ghostscript</application>:
     </para>
 
@@ -242,10 +250,10 @@ instalação do pacote.
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      Se você quiser a biblioteca compartilhada também:
+      Se você construiu a biblioteca compartilhada, instale-a com:
     </para>
 
-<screen role="root"><userinput>make soinstall &amp;&amp;
+<screen role="root"><userinput>make soinstall                                     &amp;&amp;
 install -v -m644 base/*.h /usr/include/ghostscript &amp;&amp;
 ln -sfvn ghostscript /usr/include/ps</userinput></screen>
 
@@ -255,9 +263,9 @@ ln -sfvn ghostscript /usr/include/ps</userinput></screen>
 
 
 <screen role="root"><!-- Starting with 9.23, the install does not seem to copy the examples any more -->
-<userinput>mv -v /usr/share/doc/ghostscript/&gs-version; /usr/share/doc/ghostscript-&gs-version;  &amp;&amp;
-rm -rfv /usr/share/doc/ghostscript &amp;&amp;
-cp -r examples/ /usr/share/ghostscript/&gs-version;/</userinput></screen>
+<userinput>mv -v /usr/share/doc/ghostscript/&gs-version; /usr/share/doc/ghostscript-&gs-version; &amp;&amp;
+rmdir /usr/share/doc/ghostscript                                            &amp;&amp;
+cp -r examples/ -T /usr/share/ghostscript/&gs-version;/examples</userinput></screen>
 
     <para>
       Se você tiver baixado as fontes, desempacote-as em <filename
@@ -275,8 +283,8 @@ fc-cache -v /usr/share/ghostscript/fonts/</userinput></screen>
       Você pode agora testar a renderização de vários arquivos PostScript e PDF a
 partir de <filename
 class="directory">/usr/share/ghostscript/&gs-version;/examples
-</filename>. Para fazer isso, execute o seguinte comando (em uma tela do
-Janelas X):
+</filename>. Para fazer isso, execute o seguinte comando (em uma sessão do
+X11):
     </para>
 
 <screen remap="test"><userinput>gs -q -dBATCH /usr/share/ghostscript/&gs-version;/examples/tiger.eps</userinput></screen>
@@ -315,13 +323,13 @@ esperam encontrar os cabeçalhos da interface em um local alternativo.
     </para>
 
     <para>
-        <command>mv -v /usr/share/doc/ghostscript/&gs-version;
+      <command>mv -v /usr/share/doc/ghostscript/&gs-version;
 /usr/share/doc/ghostscript-&gs-version;</command>: Isso move a documentação
 para onde ela é esperada ser encontrada.
     </para>
 
     <para>
-      <option>--disable-cups</option>: essa opção economizará uma pequena
+      <option>--disable-cups</option>: Essa opção economizará uma pequena
 quantidade de espaço ao não vincular <command>gs</command> e
 <filename>libgs.so</filename> às bibliotecas do <xref linkend="cups"/> se
 você as tiver instalado.

@@ -6,9 +6,9 @@
 
   <!ENTITY pango-download-http "&gnome-download-http;/pango/&pango-minor;/pango-&pango-version;.tar.xz">
   <!ENTITY pango-download-ftp  "">
-  <!ENTITY pango-md5sum        "dad79982a79badc27901d90400a32324">
+  <!ENTITY pango-md5sum        "7ad89b03f6850e0be28f91522b793842">
   <!ENTITY pango-size          "1,9 MB">
-  <!ENTITY pango-buildsize     "28 MB (com testes)">
+  <!ENTITY pango-buildsize     "27 MB (com testes)">
   <!ENTITY pango-time          "0,1 UPC (Usando paralelismo=4; com testes)">
 ]>
 
@@ -35,7 +35,7 @@ contexto do kit de ferramentas de pequena engenhoca do
 &quot;<application>GTK+</application>&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,17 +75,16 @@ contexto do kit de ferramentas de pequena engenhoca do
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="fontconfig"/> (precisa ser construído com o &quot;<xref
-linkend="freetype2"/>&quot; usando o &quot;<xref
-linkend="harfbuzz"/>&quot;), <xref linkend="fribidi"/> e <xref
-linkend="glib2"/>
-
+      <xref linkend="fontconfig"/> (precisa ser construído com <xref
+linkend="freetype2"/> usando <xref linkend="harfbuzz"/>), <xref
+linkend="fribidi"/> e <xref linkend="glib2"/> (GObject Introspection exigido
+para GNOME)
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="cairo"/>, <xref linkend="gobject-introspection"/> (exigido se
-construir o &quot;GNOME&quot;) e <xref linkend="xorg7-lib"/>
+      <xref linkend="cairo"/> (construído depois de <xref linkend="harfbuzz"/>) e
+<xref linkend="xorg7-lib"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -121,24 +120,30 @@ meson setup --prefix=/usr          \
 ninja</userinput></screen>
 
     <para>
-      Se você tiver o &quot;<xref linkend='gi-docgen'/>&quot; instalado e desejar
-construir a documentação da &quot;API&quot; para esse pacote, [então] emita:
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar construir a
+documentação da API para esse pacote, emita:
     </para>
 
 <screen remap='doc'><userinput>sed "/docs_dir =/s@\$@ / 'pango-&pango-version;'@" -i ../docs/meson.build &amp;&amp;
-meson configure -Dgtk_doc=true                                   &amp;&amp;
+meson configure -D documentation=true                            &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      <!--<filename>
+      <!-- One test,
+      <filename>
+test-font</filename> is known to fail.  Some tests may
+      fail if no Opentype or Truetype fonts are installed in
+      <filename class='directory'>/usr/share/fonts</filename>.
+      -->
+<!--<filename>
 test-itemize</filename>, are are known to fail. if
       <xref linkend="cantarell-fonts"/> are not installed.-->
 <!-- the other problematic tests get skipped now -->
 <!-- Even with cantarell-fonts, pango-1.50.9 test-font fails again. -->
-Para testar os resultados, emita: <command>ninja test</command>. Um teste,
-<filename>test-font</filename> é conhecido por falhar. Alguns testes
-possivelmente falhem se nenhuma fonte Opentype ou Truetype estiver instalada
-em <filename class='directory'>/usr/share/fonts</filename>.
+Para testar os resultados, emita: <command>ninja test</command>. Dois
+testes, testiter e test-font, são conhecidos por falharem por motivo
+desconhecido.
+      
       
       
       
@@ -169,8 +174,8 @@ install -vm 644 ../utils/pango-view.1.in /usr/share/man/man1/pango-view.1</useri
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>-Dintrospection=disabled</option>: Use essa chave se não quiser usar
-o &quot;<xref linkend="gobject-introspection"/>&quot;.
+      <option>-D introspection=disabled</option>: Use essa chave se você não
+quiser usar GObject Introspection.
     </para>
 
     

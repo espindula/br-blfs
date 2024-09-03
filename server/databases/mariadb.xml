@@ -7,10 +7,10 @@
 
   <!ENTITY mariadb-download-http "https://downloads.mariadb.org/interstitial/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
   <!ENTITY mariadb-download-ftp  "">
-  <!ENTITY mariadb-md5sum        "904693e6fb92aa8804a6cb161441b474">
+  <!ENTITY mariadb-md5sum        "ba7abfae7947893c5a5343180808b0cb">
   <!ENTITY mariadb-size          "96 MB">
   <!ENTITY mariadb-buildsize     "1,9 GB (415 MB instalado)">
-  <!ENTITY mariadb-time          "8,7 UPC (com paralelismo=4, adicionar 0,3 UPC para testes)">
+  <!ENTITY mariadb-time          "4,8 UPC (com paralelismo=8, adicionar 0,3 UPC para testes)">
 ]>
 
 <sect1 id="mariadb" xreflabel="MariaDB-&mariadb-version;">
@@ -32,7 +32,7 @@ pela comunidade e um substituto imediato para o sistema de gerenciamento de
 bases de dados relacionais &quot;<application>MySQL</application>&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -70,8 +70,8 @@ bases de dados relacionais &quot;<application>MySQL</application>&quot;.
 
     <note>
       <para>
-        O tamanho instalado do MariaDB é 723 MB, mas isso pode ser reduzido em cerca
-de 262 MB, se desejado, removendo-se o diretório <filename
+        O tamanho instalado do MariaDB é de 725 MB, mas isso pode ser reduzido em
+cerca de 265 MB, se desejado, removendo-se o diretório <filename
 class="directory">/usr/share/mysql/test</filename> depois da instalação.
       </para>
     </note>
@@ -111,7 +111,6 @@ linkend="libxml2"/>, <xref linkend="linux-pam"/>, <xref linkend="lzo"/>,
 linkend="valgrind"/>, <ulink url="https://groonga.org/">Groonga</ulink>,
 <ulink url="https://www.phontron.com/kytea/">KyTea</ulink>, <ulink
 url="https://sourceforge.net/projects/judy/">Judy</ulink>, <ulink
-url="https://github.com/Cyan4973/lz4">lz4</ulink>, <ulink
 url="https://taku910.github.io/mecab">MeCab</ulink>, <ulink
 url="https://msgpack.org/">MessagePack</ulink>, <ulink
 url="https://www.mruby.org/">mruby</ulink>, <ulink
@@ -160,27 +159,27 @@ seguintes comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_BUILD_TYPE=Release                       \
-      -DCMAKE_INSTALL_PREFIX=/usr                      \
-      -DGRN_LOG_PATH=/var/log/groonga.log              \
-      -DINSTALL_DOCDIR=share/doc/mariadb-&mariadb-version;       \
-      -DINSTALL_DOCREADMEDIR=share/doc/mariadb-&mariadb-version; \
-      -DINSTALL_MANDIR=share/man                       \
-      -DINSTALL_MYSQLSHAREDIR=share/mysql              \
-      -DINSTALL_MYSQLTESTDIR=share/mysql/test          \
-      -DINSTALL_PAMDIR=lib/security                    \
-      -DINSTALL_PAMDATADIR=/etc/security               \
-      -DINSTALL_PLUGINDIR=lib/mysql/plugin             \
-      -DINSTALL_SBINDIR=sbin                           \
-      -DINSTALL_SCRIPTDIR=bin                          \
-      -DINSTALL_SQLBENCHDIR=share/mysql/bench          \
-      -DINSTALL_SUPPORTFILESDIR=share/mysql            \
-      -DMYSQL_DATADIR=/srv/mysql                       \
-      -DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock        \
-      -DWITH_EXTRA_CHARSETS=complex                    \
-      -DWITH_EMBEDDED_SERVER=ON                        \
-      -DSKIP_TESTS=ON                                  \
-      -DTOKUDB_OK=0                                    \
+cmake -D CMAKE_BUILD_TYPE=Release                       \
+      -D CMAKE_INSTALL_PREFIX=/usr                      \
+      -D GRN_LOG_PATH=/var/log/groonga.log              \
+      -D INSTALL_DOCDIR=share/doc/mariadb-&mariadb-version;       \
+      -D INSTALL_DOCREADMEDIR=share/doc/mariadb-&mariadb-version; \
+      -D INSTALL_MANDIR=share/man                       \
+      -D INSTALL_MYSQLSHAREDIR=share/mysql              \
+      -D INSTALL_MYSQLTESTDIR=share/mysql/test          \
+      -D INSTALL_PAMDIR=lib/security                    \
+      -D INSTALL_PAMDATADIR=/etc/security               \
+      -D INSTALL_PLUGINDIR=lib/mysql/plugin             \
+      -D INSTALL_SBINDIR=sbin                           \
+      -D INSTALL_SCRIPTDIR=bin                          \
+      -D INSTALL_SQLBENCHDIR=share/mysql/bench          \
+      -D INSTALL_SUPPORTFILESDIR=share/mysql            \
+      -D MYSQL_DATADIR=/srv/mysql                       \
+      -D MYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock        \
+      -D WITH_EXTRA_CHARSETS=complex                    \
+      -D WITH_EMBEDDED_SERVER=ON                        \
+      -D SKIP_TESTS=ON                                  \
+      -D TOKUDB_OK=0                                    \
       .. &amp;&amp;
 make</userinput></screen>
 
@@ -226,24 +225,23 @@ mv -v /usr/share/user_map.conf /etc/security</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DWITH_EMBEDDED_SERVER=ON</parameter>: Essa chave habilita
+      <parameter>-D WITH_EMBEDDED_SERVER=ON</parameter>: Essa chave habilita
 compilar a biblioteca incorporada do servidor necessária para determinados
 aplicativos, como o &quot;<application>Amarok</application>&quot;.
     </para>
 
     <para>
-      <parameter>-DWITH_EXTRA_CHARSETS=complex</parameter>: Essa chave habilita
+      <parameter>-D WITH_EXTRA_CHARSETS=complex</parameter>: Essa chave habilita
 suporte para os conjuntos de caracteres complexos.
     </para>
 
     <para>
-      <parameter>-DSKIP_TESTS=ON</parameter>: Essa chave desabilita testes para
-&quot;Connector/C&quot; do &quot;MariaDB&quot; que não são suportados sem
-configuração adicional.
+      <parameter>-D SKIP_TESTS=ON</parameter>: Essa chave desabilita testes para
+Connector/C do MariaDB que não são suportados sem configuração adicional.
     </para>
 
     <para>
-      <option>-DWITHOUT_SERVER=ON</option>: Use essa chave se você não quiser o
+      <option>-D WITHOUT_SERVER=ON</option>: Use essa chave se você não quiser o
 servidor e gostaria de construir somente o cliente.
     </para>
 
@@ -280,9 +278,9 @@ personalização.
       <title>Informação de Configuração</title>
 
       <para>
-        Crie o &quot;<filename>/etc/mysql/my.cnf</filename>&quot; básico usando o
-seguinte comando como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+        Crie um arquivo <filename>/etc/mysql/my.cnf</filename> básico usando o
+seguinte comando como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
       </para>
 
 <screen role="root"><!--

@@ -7,17 +7,17 @@
   <!ENTITY audacious-download-http
            "https://distfiles.audacious-media-player.org/audacious-&audacious-version;.tar.bz2">
   <!ENTITY audacious-download-ftp         "">
-  <!ENTITY audacious-md5sum               "751a002964907c3a8fc2f571ffc00ec7">
-  <!ENTITY audacious-size                 "620 KB">
-  <!ENTITY audacious-buildsize            "16 MB (com suporte a Qt5 e GTK3)">
-  <!ENTITY audacious-time                 "0,2 UPC (com suporte a Qt5 e GTK3)">
+  <!ENTITY audacious-md5sum               "812367242529db8ca0fb0fdb71ffc91f">
+  <!ENTITY audacious-size                 "624 KB">
+  <!ENTITY audacious-buildsize            "14 MB (com suporte a GTK)">
+  <!ENTITY audacious-time                 "0,2 UPC (com suporte a GTK)">
 
   <!ENTITY audacious-plugins-download
            "https://distfiles.audacious-media-player.org/audacious-plugins-&audacious-plugins-version;.tar.bz2">
-  <!ENTITY audacious-plugins-md5sum       "3e233d8219407218244e684e096236ec">
+  <!ENTITY audacious-plugins-md5sum       "0946f32277afc60ec12510bd09507016">
   <!ENTITY audacious-plugins-size         "1,7 MB">
-  <!ENTITY audacious-plugins-buildsize    "37 MB (com suporte a Qt5 e GTK3)">
-  <!ENTITY audacious-plugins-time         "1,4 UPC (com suporte a Qt5 e GTK3)">
+  <!ENTITY audacious-plugins-buildsize    "40 MB (com suporte a GTK)">
+  <!ENTITY audacious-plugins-time         "2,0 UPC (com suporte a GTK)">
 ]>
 
 <sect1 id="audacious" xreflabel="Audacious-&audacious-version;">
@@ -37,7 +37,7 @@
       <application>Audacious</application> é um reprodutor de áudio.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -107,8 +107,7 @@
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="gtk3"/> ou (<xref linkend="qt5"/> ou <xref role="nodep"
-linkend="qt5-components"/> com qtmultimedia)
+      <xref linkend="gtk3"/> e <xref linkend="qt6"/> 
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -129,7 +128,7 @@ linkend="qt5-components"/> com qtmultimedia)
 
     <bridgehead renderas="sect4">Opcionais (para Plugins)</bridgehead>
     <para role="optional">
-      <xref linkend="alsa"/>, <xref linkend="curl"/>, <xref linkend="faad2"/>,
+      <xref linkend="alsa-lib"/>, <xref linkend="curl"/>, <xref linkend="faad2"/>,
 <xref linkend="flac"/>, <xref linkend="lame"/>, <xref linkend="libxml2"/>,
 <xref linkend="libcdio"/> (para identificar e reproduzir CDs), <xref
 linkend="libnotify"/>, <xref linkend="libsndfile"/>, <xref
@@ -172,9 +171,10 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dgtk3=true         \
-            -Dbuildstamp=BLFS   \
-            -Dlibarchive=true   \
+            -D gtk=true         \
+            -D qt=true          \
+            -D buildstamp=BLFS  \
+            -D libarchive=true  \
             ..                  &amp;&amp;
 
 ninja</userinput></screen>
@@ -201,16 +201,14 @@ ninja</userinput></screen>
 <screen><userinput>tar -xf ../../audacious-plugins-&audacious-plugins-version;.tar.bz2 &amp;&amp;
 cd audacious-plugins-&audacious-plugins-version;                    &amp;&amp;
 
-sed -e '/libxml/a #include &lt;libxml/parser.h&gt;' \
-    -i src/scrobbler2/scrobbler.h             &amp;&amp;
-
 mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 meson setup           \
   --prefix=/usr       \
   --buildtype=release \
-  -Dgtk3=true         \
+  -D gtk=true         \
+  -D qt=true          \
   ..                  &amp;&amp;
 
 ninja</userinput></screen>
@@ -228,27 +226,27 @@ ninja</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-Dbuildstamp=BLFS</parameter>: Essa chave acrescenta o texto
+      <parameter>-D buildstamp=BLFS</parameter>: Essa chave acrescenta o texto
 fornecido à sequência de caracteres da versão.
     </para>
 
     <para>
-      <parameter>-Dgtk3=true</parameter>: Essa opção configura a interface gráfica
-padrão de usuário(a).
+      <parameter>-D gtk=true</parameter>: Essa opção habilita suporte a GTK para a
+interface gráfica de usuário(a).
     </para>
 
     <para>
-      <parameter>-Dlibarchive=true</parameter>: Isso adiciona suporte para a
+      <parameter>-D qt=true</parameter>: Essa opção habilita suporte a Qt para a
+interface gráfica de usuário(a).
+    </para>
+
+    <para>
+      <parameter>-D libarchive=true</parameter>: Isso adiciona suporte para a
 libarchive, para leitura de conjuntos de módulos comprimidos ou skins.
     </para>
 
     <para>
-      <command>sed -e '/libxml/a ...'</command>: Isso corrige construir contra
-libxml-2.12.x.
-    </para>
-
-    <para>
-      <option>-Dvalgrind=true</option>: A opção habilita o suporte à análise
+      <option>-D valgrind=true</option>: A opção habilita o suporte à análise
 Valgrind.
     </para>
 

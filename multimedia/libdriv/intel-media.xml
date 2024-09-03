@@ -6,12 +6,12 @@
 
 <!--<!ENTITY intel-media-driver-version                "23.2.4">-->
 
-  <!ENTITY intel-media-download-http "https://github.com/intel/media-driver/archive/refs/tags/intel-media-&intel-media-version;.tar.gz">
+  <!ENTITY intel-media-download-http "https://github.com/intel/media-driver/archive/intel-media-&intel-media-version;.tar.gz">
   <!ENTITY intel-media-download-ftp  "">
-  <!ENTITY intel-media-md5sum        "5e2fffaf1c1972b8791c3cfd59cd6a9e">
+  <!ENTITY intel-media-md5sum        "c602d9a3ebebb2ad8a5239dc5951c65b">
   <!ENTITY intel-media-size          "25 MB">
-  <!ENTITY intel-media-buildsize     "2,1 GB (359 MB instalado)">
-  <!ENTITY intel-media-time          "6,3 UPC (com paralelismo=4)">
+  <!ENTITY intel-media-buildsize     "2,1 GB (360 MB instalado com um modelo de GPU)">
+  <!ENTITY intel-media-time          "3,8 UPC (com paralelismo=4 e um modelo de GPU)">
 
 ]>
 
@@ -36,7 +36,7 @@ API para GPUs da Intel fornecidas com CPUs Broadwell e superiores. Isso
 inclui suporte para uma variedade de codificadores.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -72,8 +72,6 @@ inclui suporte para uma variedade de codificadores.
         </listitem>
       </itemizedlist>
 
-
-
       <!--
       <bridgehead renderas="sect2">
 Additional Downloads</bridgehead>
@@ -81,7 +79,7 @@ Additional Downloads</bridgehead>
         <listitem>
           <para>
             Required patch:
-            <ulink url="&patch-root;/intel-media-&intel-media-version;-upstream_fixes-1.patch"/>
+            <ulink url="&patch-root;/intel-media-&intel-media-version;-gcc14_fixes-1.patch"/>
           </para>
         </listitem>
       </itemizedlist>
@@ -161,7 +159,7 @@ produzirá algumas informações acerca da GPU. Se a saída gerada contiver
 <literal>MTL</literal>. Caso contrário, siga <ulink
 url='https://dgpu-docs.intel.com/devices/hardware-table.html'/> para
 encontrar a entrada para tua GPU e o modelo da GPU deveria estar na coluna
-<quote>Architecture</quote>. As arquiteturas Xe e XeHPG são cobertas pelo
+<quote>Architecture</quote>. As arquiteturas Xe e Xe-HPG são cobertas pelo
 modelo <literal>GEN12</literal>.
         </para>
         
@@ -171,15 +169,13 @@ modelo <literal>GEN12</literal>.
         Not sure if anyone will run LFS in a data center. -->
 </note>
 
-
-
       <!--
       <para>
 
-        First, fix a few build failures with GCC-13:
+        First, fix a few build failures with GCC-14:
       </para>
 
- <screen><userinput remap="pre">patch -Np1 -i ../intel-media-&intel-media-version;-upstream_fixes-1.patch</userinput></screen>
+ <screen><userinput remap="pre">patch -Np1 -i ../intel-media-&intel-media-version;-gcc14_fixes-1.patch</userinput></screen>
 -->
 <para>
         Instale o <application>intel-media</application> executando os seguintes
@@ -189,11 +185,11 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=$XORG_PREFIX \
-      -DINSTALL_DRIVER_SYSCONF=OFF        \
-      -DBUILD_TYPE=Release                \
-      -G Ninja                            \
-      -Wno-dev ..                   &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=$XORG_PREFIX \
+      -D INSTALL_DRIVER_SYSCONF=OFF        \
+      -D BUILD_TYPE=Release                \
+      -G Ninja                             \
+      -W no-dev ..                         &amp;&amp;
 ninja</userinput></screen>
 
 

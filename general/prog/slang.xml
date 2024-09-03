@@ -9,7 +9,7 @@
   <!ENTITY slang-md5sum        "69015c8300088373eb65ffcc6ed4db8c">
   <!ENTITY slang-size          "1,6 MB">
   <!ENTITY slang-buildsize     "22 MB (adicionar 15 MB para os testes)">
-  <!ENTITY slang-time          "0,4 UPC (adicionar 0,5 UPC para os testes)">
+  <!ENTITY slang-time          "0,4 UPC (adicionar 0,5 UPC para testes)">
 ]>
 
 <sect1 id="slang" xreflabel="slang-&slang-version;">
@@ -33,7 +33,7 @@ interativos, como gerenciamento de exibição/tela, entrada de teclado e mapas
 de teclado.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -67,7 +67,7 @@ de teclado.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="libpng"/>, <xref linkend="pcre"/> e <ulink
+      <xref linkend="libpng"/> e <ulink
 url="https://github.com/kkos/oniguruma">Oniguruma</ulink>
     </para>
 
@@ -88,12 +88,12 @@ comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr \
-           --sysconfdir=/etc \
-           --with-readline=gnu &amp;&amp;
-make -j1</userinput></screen>
+            --sysconfdir=/etc \
+            --with-readline=gnu &amp;&amp;
+make -j1 RPATH=</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>.
+      Para testar os resultados, emita: <command>LC_ALL=C make check</command>.
     </para>
 
     <para>
@@ -103,7 +103,7 @@ class="username">root</systemitem>&quot;:
 
 <screen role='root'><userinput>make install_doc_dir=/usr/share/doc/slang-&slang-version;   \
      SLSH_DOC_DIR=/usr/share/doc/slang-&slang-version;/slsh \
-     install</userinput></screen>
+     RPATH= install</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
@@ -117,10 +117,19 @@ usado pela interface do analisador em vez da versão interna do
     </para>
 
     <para>
-      <command>make install_doc_dir=/usr/share/doc/slang-&slang-version;
-SLSH_DOC_DIR=/usr/share/doc/slang-&slang-version;/slsh install</command>:
-Esse comando instala esse pacote com um diretório versionado de instalação
-da documentação.
+      <parameter>RPATH=</parameter>: Essa variável substituída do
+<command>make</command> impede codificar rigidamente caminhos de pesquisa de
+biblioteca (rpath) nos arquivos executáveis binários e nas bibliotecas
+compartilhadas. Esse pacote não precisa do rpath para uma instalação no
+local padrão, e o rpath às vezes pode causar efeitos indesejados ou até
+mesmo problemas de segurança.
+    </para>
+
+    <para>
+      <parameter>install_doc_dir=/usr/share/doc/slang-&slang-version;
+SLSH_DOC_DIR=/usr/share/doc/slang-&slang-version;/slsh</parameter>: Essas
+variáveis substituídas do <command>make</command> garantem instalar esse
+pacote com um diretório versionado de instalação da documentação.
     </para>
 
   </sect2>

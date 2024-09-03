@@ -6,9 +6,9 @@
 
   <!ENTITY libwacom-download-http "https://github.com/linuxwacom/libwacom/releases/download/libwacom-&libwacom-version;/libwacom-&libwacom-version;.tar.xz">
   <!ENTITY libwacom-download-ftp  "">
-  <!ENTITY libwacom-md5sum        "9baf8fb0e486e225ef81b9becb46031b">
-  <!ENTITY libwacom-size          "116 KB">
-  <!ENTITY libwacom-buildsize     "3,4 MB (com testes)">
+  <!ENTITY libwacom-md5sum        "7005d961cc44995d8c04d586fa060c63">
+  <!ENTITY libwacom-size          "152 KB">
+  <!ENTITY libwacom-buildsize     "7,9 MB (com testes)">
   <!ENTITY libwacom-time          "menos que 0,1 UPC (com testes)">
 ]>
 
@@ -23,15 +23,15 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libwacom</title>
+    <title>Introdução ao libwacom</title>
 
     <para>
       O pacote <application>libwacom</application> contém uma biblioteca usada
-para identificar os tablets "Wacom" e os recursos específicos do modelo
-deles.
+para identificar tablets gráficos oriundos da Wacom ou de vários outros
+fornecedores e os recursos deles específicos do modelo.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,9 +69,9 @@ deles.
 
     <bridgehead renderas="sect3">Dependências do libwacom</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libgudev"/>
+      <xref linkend="libevdev"/> e <xref linkend="libgudev"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -114,15 +114,27 @@ cd    build &amp;&amp;
 meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
-      -Dtests=disabled    &amp;&amp;
+      -D tests=disabled    &amp;&amp;
 ninja</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>ninja test</command>. Para
 executar testes adicionais, instale <xref linkend="pytest"/>,
-"python-libevdev" e "pyudev" e, então, remova a opção "-Dtests=disabled" da
-linha "meson" acima.
+python-libevdev e pyudev e, então, remova a opção "-D tests=disabled" da
+linha meson acima.
     </para>
+
+    
+    <!-- The duplicated match is causing many mutter test failures if
+         unfixed. It also prevents running any of the utilities -->
+<para>
+      Se atualizar a partir de uma versão anterior da libwacom, remova a
+instalação antiga da base de dados de dispositivos para evitar uma possível
+correspondência duplicada de dispositivos caso alguns arquivos antigos da
+base de dados não forem sobrescritos:
+    </para>
+
+    <screen role="root"><userinput>rm -rf /usr/share/libwacom</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -139,7 +151,7 @@ linha "meson" acima.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dtests=disabled</parameter>: Esse parâmetro desabilita alguns
+      <parameter>-D tests=disabled</parameter>: Esse parâmetro desabilita alguns
 dos testes mais avançados porque eles exigem <xref linkend="pytest"/> e
 outros dois módulos Python além do escopo do BLFS para funcionar
 adequadamente.

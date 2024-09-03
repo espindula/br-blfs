@@ -7,10 +7,10 @@
   <!ENTITY libgweather-download-http
            "&gnome-download-http;/libgweather/&libgweather-minor;/libgweather-&libgweather-version;.tar.xz">
   <!ENTITY libgweather-download-ftp  "">
-  <!ENTITY libgweather-md5sum        "bba9065a75a7482be21d0427a12233c0">
+  <!ENTITY libgweather-md5sum        "57ec40f5ac366b7d9757580913bf2e3b">
   <!ENTITY libgweather-size          "2,7 MB">
-  <!ENTITY libgweather-buildsize     "96 MB (com testes)">
-  <!ENTITY libgweather-time          "0,3 UPC (com testes)">
+  <!ENTITY libgweather-buildsize     "98 MB (com testes)">
+  <!ENTITY libgweather-time          "0,2UPC (com testes)">
 ]>
 
 <sect1 id="libgweather" xreflabel="libgweather-&libgweather-version;">
@@ -32,7 +32,7 @@ acessar informações meteorológicas a partir de serviços online para
 numerosos locais.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,14 +78,13 @@ linkend="libsoup3"/> e <xref linkend="pygobject3"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <xref linkend="libxml2"/> e <xref
-linkend="vala"/>
+      &gobject-introspection;, <xref linkend="libxml2"/> e <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="gi-docgen"/> (gi-docgen também é fornecido como um subprojeto
-meson, que será usado se <option>-Dgtk_doc=false</option> não for passado
+meson, que será usado se <option>-D gtk_doc=false</option> não for passado
 para <command>meson</command>), <xref linkend="llvm"/> (para formato clang)
 e <ulink url="https://pypi.org/project/pylint/">pylint</ulink>
     </para>
@@ -107,18 +106,18 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dgtk_doc=false     \
+            -D gtk_doc=false    \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Se você tiver o <xref linkend='gi-docgen'/> instalado e desejar construir a
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar construir a
 documentação da API para esse pacote, emita:
     </para>
 
 <screen role='nodump'><userinput>sed "s/libgweather_full_version/'libgweather-&libgweather-version;'/" \
     -i ../doc/meson.build                             &amp;&amp;
-meson configure -Dgtk_doc=true                        &amp;&amp;
+meson configure -D gtk_doc=true                       &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -134,17 +133,7 @@ pacote.
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      <!--
-        https://gitlab.gnome.org/GNOME/libgweather/-/commit/3c60094ffdc5
-        It's not a simple URL change, so just document it instead of
-	patching the test suite...
-      -->
-Para testar os resultados, emita: <command>LC_ALL=C ninja test</command>. Um
-teste, <filename>style / style-format</filename>, é conhecido por falhar
-devido a diferenças entre a versão do formato clang do LLVM-16 e do
-LLVM-17. Um teste chamado <filename>libgweather / metar</filename> é
-conhecido por falhar porque exige alguns recursos online que foram
-removidos.
+      Para testar os resultados, emita: <command>LC_ALL=C ninja test</command>.
     </para>
 
   </sect2>
@@ -156,7 +145,7 @@ removidos.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dgtk_doc=false</parameter>: &gi-doc-disable;
+      <parameter>-D gtk_doc=false</parameter>: &gi-doc-disable;
     </para>
 
   </sect2>

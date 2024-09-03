@@ -6,10 +6,10 @@
 
   <!ENTITY librsvg-download-http "&gnome-download-http;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
   <!ENTITY librsvg-download-ftp  "">
-  <!ENTITY librsvg-md5sum        "0a9d809a4bdd371c894792e4c2eb94e9">
-  <!ENTITY librsvg-size          "5,4 MB">
-  <!ENTITY librsvg-buildsize     "998 MB (16 MB instalado), adicionar 589 MB para testes">
-  <!ENTITY librsvg-time          "1,2 UPC (adicionar 0,5 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY librsvg-md5sum        "8f954b5c25ffff602b4e62813c98c8c9">
+  <!ENTITY librsvg-size          "5,9 MB">
+  <!ENTITY librsvg-buildsize     "723 MB (17 MB instalado), adicionar 545 MB para testes">
+  <!ENTITY librsvg-time          "0,7 UPC (adicionar 0,7 UPC para testes; ambos usando paralelismo=4)">
 ]>
 
 <sect1 id="librsvg" xreflabel="librsvg-&librsvg-version;">
@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a librsvg</title>
+    <title>Introdução ao librsvg</title>
 
     <para>
       O pacote <application>librsvg</application> contém uma biblioteca e
@@ -31,7 +31,7 @@ ferramentas usadas para manipular, converter e visualizar imagens "Scalable
 Vector Graphic" ("SVG").
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -79,7 +79,7 @@ linkend="pango"/> e <xref linkend="rust"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/> e <xref linkend="vala"/>
+      &gobject-introspection; e <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -101,6 +101,8 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
 <!-- With some locales (zh_CN.UTF-8) 31 tests fail.  With LC_ALL=C only
          one failure.
          https://gitlab.gnome.org/GNOME/librsvg/-/issues/1021 -->
+<!-- Be sure to unset GLIB_LOG_LEVEL.  If set, it interferes with the 
+         tests. -->
 <screen><userinput>./configure --prefix=/usr   \
             --enable-vala    \
             --disable-static \
@@ -108,8 +110,18 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
 make</userinput></screen>
 
     
+
+    
+
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C make -k check</command>.
+      Para testar os resultados, emita:
+    </para>
+
+    <screen remap='test'><userinput>cargo update --precise 0.3.36 time &amp;&amp;
+LC_ALL=C make check -k</userinput></screen>
+
+    <para>
+      Todos os 68 testes deveriam passar.
     </para>
 
     <para>
@@ -148,6 +160,13 @@ instalado.
       <parameter>DOC_INSTALL_DIR='$(docdir)'</parameter>: Essa substituição
 garante instalar a documentação da API no local esperado se <xref
 linkend='gi-docgen'/> estiver instalado.
+    </para>
+
+    <para>
+      <command>cargo update --precise=0.3.36 time</command>: Isso atualiza o
+arquivo <filename>Cargo.lock</filename> para se referir à versão 0.3.36 da
+caixa de tempo para a suíte de teste. Originalmente, ele se refere à versão
+0.3.34, que falha para construir com Rustc-1.80.0 ou posterior.
     </para>
 
     <para>

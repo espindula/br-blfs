@@ -6,9 +6,9 @@
 
   <!ENTITY pipewire-download-http "https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/&pipewire-version;/pipewire-&pipewire-version;.tar.bz2">
   <!ENTITY pipewire-download-ftp  "">
-  <!ENTITY pipewire-md5sum        "92eb16fb925aa9dc9191d8ef7b04687d">
-  <!ENTITY pipewire-size          "1,6 MB">
-  <!ENTITY pipewire-buildsize     "67 MB (com testes)">
+  <!ENTITY pipewire-md5sum        "9a37ae78752ac7462bb0660f61a4a870">
+  <!ENTITY pipewire-size          "1,7 MB">
+  <!ENTITY pipewire-buildsize     "69 MB (com testes)">
   <!ENTITY pipewire-time          "0,6 UPC (com testes, ambos usando paralelismo=4)">
 ]>
 
@@ -32,7 +32,7 @@ API universal para conectar-se a dispositivos multimídia, bem como
 compartilhar arquivos multimídia entre aplicativos.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,7 +68,23 @@ compartilhar arquivos multimídia entre aplicativos.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do Pipewire</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Recommended patch:
+          <ulink url="&patch-root;/pipewire-&pipewire-version;-upstream_fix-1.patch"/>
+          (required to fix <quote>could not play camera stream</quote> error
+          from <xref linkend='snapshot'/>)
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do Pipewire</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
@@ -107,7 +123,19 @@ url="https://sourceforge.net/projects/xmltoman/">xmltoman</ulink>
   <sect2 role="installation">
     <title>Instalação do Pipewire</title>
 
+
+
+    <!--
     <para>
+
+      If building <xref linkend='snapshot'/>, apply a patch to fix an issue
+      causing <xref linkend='snapshot'/> fail to play stream from some
+      cameras:
+    </para>
+
+    <screen><userinput>patch -Np1 -i ../pipewire-&pipewire-version;-upstream_fix-1.patch</userinput></screen>
+-->
+<para>
       Instale o <application>pipewire</application> executando os seguintes
 comandos:
     </para>
@@ -115,10 +143,10 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                \
-      --prefix=/usr           \
-      --buildtype=release     \
-      -Dsession-managers="[]" &amp;&amp;
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -D session-managers="[]" &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -149,11 +177,11 @@ ninja</userinput></screen>
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dsession-managers="[]"</parameter>: Essa chave permite
+      <parameter>-D session-managers="[]"</parameter>: Essa chave permite
 especificar-se os gerenciadores de sessão para construir-se como
 subprojetos. Nós especificamos uma lista vazia para evitar que
 <command>meson</command> baixe qualquer cópia externa dos gerenciadores de
-sessão. Um gerenciador de sessão Pipewire recomendado pelos(as)
+sessão. Um gerenciador de sessão do Pipewire recomendado pelos(as)
 desenvolvedores(as) do PipeWire para uso geral, <xref linkend="wireplumber"
 role="nodep"/>, está disponível como um pacote do BLFS separado. Construa-o
 depois de instalar Pipewire se você precisar executar o processo de segundo
@@ -162,24 +190,24 @@ linkend="snapshot" role="nodep"/>).
     </para>
 
     <para>
-      <option>-Ddocs=true</option>: Essa chave habilita a geração de documentação
+      <option>-D docs=true</option>: Essa chave habilita a geração de documentação
 HTML. As dependências opcionais para documentação precisam estar instaladas
 para isso funcionar.
     </para>
 
     <para>
-      <option>-Dman=true</option>: Essa chave habilita a geração de páginas de
+      <option>-D man=true</option>: Essa chave habilita a geração de páginas de
 manual. As dependências opcionais para documentação precisam estar
 instaladas para isso funcionar.
     </para>
 
     <para>
-      <option>-Dffmpeg=enabled</option>: Essa chave habilita usar FFmpeg para
+      <option>-D ffmpeg=enabled</option>: Essa chave habilita usar FFmpeg para
 conversão de áudio como uma estrutura de retaguarda SPA.
     </para>
 
     <para>
-      <option>-Dvulkan=enabled</option>: Essa chave habilita usar Vulkan para
+      <option>-D vulkan=enabled</option>: Essa chave habilita usar Vulkan para
 renderização de vídeo como uma estrutura de retaguarda do SPA.
     </para>
 
@@ -455,7 +483,7 @@ testar e depurar
         <term><command>spa-json-dump</command></term>
         <listitem>
           <para>
-            despeja a configuração atual do pipewire no formato JSON.
+            despeja a configuração atual do pipewire no formato JSON
           </para>
           <indexterm zone="pipewire spa-json-dump">
             <primary sortas="b-spa-json-dump">spa-json-dump</primary>

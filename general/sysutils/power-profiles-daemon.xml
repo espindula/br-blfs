@@ -10,9 +10,9 @@
 
   <!ENTITY power-profiles-daemon-download-http "https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/archive/&power-profiles-daemon-version;/power-profiles-daemon-&power-profiles-daemon-version;.tar.gz">
   <!ENTITY power-profiles-daemon-download-ftp  "">
-  <!ENTITY power-profiles-daemon-md5sum        "92df21de1148ef6e7c30e4a0829e02b1">
-  <!ENTITY power-profiles-daemon-size          "68 KB">
-  <!ENTITY power-profiles-daemon-buildsize     "1,4 MB">
+  <!ENTITY power-profiles-daemon-md5sum        "0196aae5798263d3d8f33a9280a6cb10">
+  <!ENTITY power-profiles-daemon-size          "76 KB">
+  <!ENTITY power-profiles-daemon-buildsize     "3,2 MB">
   <!ENTITY power-profiles-daemon-time          "menos que 0,1 UPC (com testes)">
 ]>
 
@@ -34,10 +34,13 @@
 programa que permite a modificação do estado de eletricidade/comportamento
 do sistema. Isso é usado em muitos laptops e pode ser usado por um ambiente
 de área de trabalho para ativar a economia de eletricidade ou controladores
-de desempenho da CPU por meio do dbus.
+de desempenho da CPU por meio do dbus. Em outros sistemas, o
+Power-profiles-daemon pode ser usado como uma forma simplificada para
+configurar o controladores da CPU para a finalidade de aumentar o desempenho
+do sistema ao custo do uso de eletricidade.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -77,8 +80,8 @@ de desempenho da CPU por meio do dbus.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="gobject-introspection"/>, <xref linkend="libgudev"/>, <xref
-linkend="polkit"/> e <xref linkend="pygobject3"/>
+      <xref linkend="polkit"/>, <xref linkend="pygobject3"/> (pycairo <emphasis
+role="bold">não</emphasis> é necessário) e <xref linkend="upower"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -122,12 +125,12 @@ seguintes comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd build &amp;&amp;
 
-meson setup                       \
-      --prefix=/usr               \
-      --buildtype=release         \
-      -Dgtk_doc=false             \
-      -Dtests=false               \
-      -Dsystemdsystemunitdir=/tmp \
+meson setup                        \
+      --prefix=/usr                \
+      --buildtype=release          \
+      -D gtk_doc=false             \
+      -D tests=false               \
+      -D systemdsystemunitdir=/tmp \
       .. &amp;&amp;
 ninja</userinput></screen>
 
@@ -135,11 +138,11 @@ ninja</userinput></screen>
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd build &amp;&amp;
 
-meson setup               \
-      --prefix=/usr       \
-      --buildtype=release \
-      -Dgtk_doc=false     \
-      -Dtests=false       \
+meson setup                \
+      --prefix=/usr        \
+      --buildtype=release  \
+      -D gtk_doc=false     \
+      -D tests=false       \
       .. &amp;&amp;
 ninja</userinput></screen>
 
@@ -154,12 +157,21 @@ emita: <command> ninja test</command>.
 
 <screen role="root"><userinput>ninja install</userinput></screen>
 
-    <para>
+    <para revision="sysv">
       Agora, limpe uma unidade do systemd desnecessária instalada em /tmp:
     </para>
 
 <screen revision="sysv" role="root">
 <userinput>rm -fv /tmp/power-profiles-daemon.service</userinput>
+</screen>
+
+    <para revision="sysv">
+      Crie um diretório exigido para estados persistentes de eletricidade depois
+de reinicialização:
+    </para>
+
+<screen revision="sysv" role="root">
+<userinput>install -vdm755 /var/lib/power-profiles-daemon</userinput>
 </screen>
 
   </sect2>
@@ -169,19 +181,19 @@ emita: <command> ninja test</command>.
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-Dgtk_doc=false</parameter>: Impede construir a
+      <parameter>-D gtk_doc=false</parameter>: Impede construir a
 documentação. Remova isso se você tiver o <application>GTK-Doc</application>
 instalado e desejar construir a documentação.
     </para>
 
     <para>
-      <parameter>-Dtests=false</parameter>: Impede construir os testes porque eles
-não podem ser executados dentro dos limites do BLFS. Remova isso se você
-tiver instalado as dependências externas e desejar executar os testes.
+      <parameter>-D tests=false</parameter>: Impede construir os testes porque
+eles não podem ser executados dentro dos limites do BLFS. Remova isso se
+você tiver instalado as dependências externas e desejar executar os testes.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dsystemdsystemunitdir=/tmp</parameter>: Remove a dependência em
+      <parameter>-D systemdsystemunitdir=/tmp</parameter>: Remove a dependência em
 relação ao <application>systemd</application>.
     </para>
 
@@ -220,6 +232,39 @@ systemd que foi instalado executando o seguinte comando como o(a) usuário(a)
       </para>
 
       <screen role="root"><userinput>systemctl enable power-profiles-daemon</userinput></screen>
+    </sect3>
+
+    <sect3>
+      <title>Selecione um Perfil de Eletricidade</title>
+
+      <para>
+        Para listar todos os perfis de eletricidade suportados, emita:
+      </para>
+
+      <screen role="nodump"><userinput>powerprofilesctl</userinput></screen>
+
+      <para>
+        Para ativar um perfil de eletricidade (por exemplo
+<replaceable>performance</replaceable>), emita:
+      </para>
+
+      <screen role="nodump"><userinput>powerprofilesctl set <replaceable>performance</replaceable></userinput></screen>
+
+      <para>
+        Alguns ambientes de área de trabalho (por exemplo GNOME e KDE) também
+fornecem uma interface gráfica para interagir com
+<command>power-profiles-daemon</command> e ativar um perfil de eletricidade.
+      </para>
+
+      <para>
+        O perfil de eletricidade ativado é automaticamente armazenado em
+<filename>/var/lib/power-profiles-daemon/state.ini</filename> e
+<command>power-profiles-daemon</command> irá lê-lo e ativá-lo novamente na
+próxima inicialização se <phrase revision='sysv'>o conjunto de comandos
+sequenciais de inicialização estiver instalado</phrase><phrase
+revision='systemd'>a unidade do Systemd estiver habilitada</phrase> como
+acima.
+      </para>
     </sect3>
 
   </sect2>

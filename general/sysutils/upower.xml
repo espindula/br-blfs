@@ -6,10 +6,10 @@
 
   <!ENTITY upower-download-http "https://gitlab.freedesktop.org/upower/upower/-/archive/v&upower-version;/upower-v&upower-version;.tar.bz2">
   <!ENTITY upower-download-ftp  "">
-  <!ENTITY upower-md5sum        "bfd6e3275e61d7e097b53eb2b216fffa">
-  <!ENTITY upower-size          "136 KB">
-  <!ENTITY upower-buildsize     "6,5 MB (adicionar 1,1 MB para testes)">
-  <!ENTITY upower-time          "menos que 0,1 UPC (usando paralelismo=4, adicionar 0,6 UPC para os testes)">
+  <!ENTITY upower-md5sum        "2399845217a9c6e4510f66033fcd7cf6">
+  <!ENTITY upower-size          "140 KB">
+  <!ENTITY upower-buildsize     "5,5 MB (adicionar 2,6 MB para os testes)">
+  <!ENTITY upower-time          "menos que 0,1 UPC (adicionar 0,6 UPC para testes)">
 ]>
 
 <sect1 id="upower" xreflabel="UPower-&upower-version;">
@@ -33,7 +33,7 @@ sistema pode acessar o serviço org.freedesktop.UPower por meio do barramento
 de mensagens do sistema.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,7 +78,7 @@ de mensagens do sistema.
 
     <bridgehead renderas="sect4">Opcionais (Exigidas se construir GNOME)</bridgehead>
     <para role="optional">
-      <xref linkend="gobject-introspection"/>
+      &gobject-introspection;
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -116,12 +116,6 @@ se necessário:
     <title>Instalação do "UPower"</title>
 
     <para>
-      Primeiro, remova uma dependência desnecessária oriunda de um teste:
-    </para>
-
-<screen><userinput>sed '/parse_version/d' -i src/linux/integration-test.py</userinput></screen>
-
-    <para>
       Instale <application>UPower</application> executando os seguintes comandos:
     </para>
 
@@ -129,7 +123,7 @@ se necessário:
          Chinese error message with English references and failed.
          LC_ALL=C fixes the problem.  -->
 <!-- Headphone hotplug (bluetooth and AUX) was tested and seems to work
-         okay even with the test faliures. Maybe it's wants headphones plugged
+         okay even with the test failures. Maybe it's wants headphones plugged
          in during the test? Regardless, it can be safely ignored. -->
 <!-- On a 32-bit machine, the following test failure can be observed:
          ======================================================================
@@ -144,16 +138,18 @@ se necessário:
          properly -renodr
 
          test_bluetooth_le_device: upstream MR !207  -xry111 -->
+<!-- On my system all 68 tests passed for v1.90.4.  
+         Did not check on a 32-bit system. - bdubbs -->
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                  \
-      --prefix=/usr             \
-      --buildtype=release       \
-      -Dgtk-doc=false           \
-      -Dman=false               \
-      -Dsystemdsystemunitdir=no \
-      -Dudevrulesdir=/usr/lib/udev/rules.d &amp;&amp;
+meson setup ..                   \
+      --prefix=/usr              \
+      --buildtype=release        \
+      -D gtk-doc=false           \
+      -D man=false               \
+      -D systemdsystemunitdir=no \
+      -D udevrulesdir=/usr/lib/udev/rules.d &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build                         &amp;&amp;
@@ -161,26 +157,25 @@ cd    build                         &amp;&amp;
 meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
-      -Dgtk-doc=false     \
-      -Dman=false         &amp;&amp;
+      -D gtk-doc=false    \
+      -D man=false        &amp;&amp;
 ninja</userinput></screen>
 
     
     
     
 
+    
+
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C ninja
-test</command>. Algumas verificações podem não passar devido à arquivos
-ausentes. A suíte de teste deveria ser executada a partir de uma sessão GUI
-local iniciada com dbus-launch. Em máquinas de 32 bits, um teste falhará
-devido a erros de arredondamento:
+      Para testar os resultados, emita: <command>LC_ALL=C ninja test</command>. A
+suíte de teste deveria ser executada a partir de uma sessão GUI local
+iniciada com dbus-launch. Em máquinas de 32 bits, um teste falhará devido a
+erros de arredondamento:
 <filename>Tests.test_battery_energy_charge_mixed</filename>. Em alguns
 sistemas, dois testes relacionados ao recurso hotplug de fone de ouvido são
 conhecidos por falharem. Eles podem ser ignorados com segurança, pois a
-funcionalidade ainda funciona. O teste denominado
-<filename>Tests.test_bluetooth_le_device</filename> é conhecido por falhar
-com dbusmock-0.30.1 ou posterior.
+funcionalidade ainda funciona.
     </para>
 
     <para>
@@ -195,24 +190,24 @@ com dbusmock-0.30.1 ou posterior.
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-Dgtk-doc=false</parameter>: Impede construir a
+      <parameter>-D gtk-doc=false</parameter>: Impede construir a
 documentação. Remova isso se você tiver o <application>GTK-Doc</application>
 instalado e desejar construir a documentação.
     </para>
 
     <para>
-      <parameter>-Dman=false</parameter>: Impede construir as páginas de
+      <parameter>-D man=false</parameter>: Impede construir as páginas de
 manual. Remova isso se você tiver <xref linkend='libxslt'/> e <xref
 linkend='docbook-xsl'/> instalados e desejar construir as páginas de manual.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dsystemdsystemunitdir=no</parameter>: Remove a dependência do
+      <parameter>-D systemdsystemunitdir=no</parameter>: Remove a dependência do
 <application>systemd</application>.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dudevrulesdir=/usr/lib/udev/rules.d</parameter>: Informa ao
+      <parameter>-D udevrulesdir=/usr/lib/udev/rules.d</parameter>: Informa ao
 sistema de construção onde instalar as regras do
 <application>udev</application> porque as informações estão ausentes em
 <filename>/usr/lib/pkgconfig/libudev.pc</filename>

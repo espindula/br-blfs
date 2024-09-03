@@ -6,12 +6,12 @@
 
   <!ENTITY certhost              "https://hg.mozilla.org/">
   <!ENTITY certpath              "/lib/ckfw/builtins/certdata.txt">
-  <!ENTITY make-ca-buildsize     "6,9 MB (com todas as dependências em tempo de execução)">
+  <!ENTITY make-ca-buildsize     "164 KB (com todas as dependências em tempo de execução)">
   <!ENTITY make-ca-time          "0,1 UPC (com todas as dependências em tempo de execução)">
 
-  <!ENTITY make-ca-download      "https://github.com/lfs-book/make-ca/releases/download/v&make-ca-version;/make-ca-&make-ca-version;.tar.xz">
-  <!ENTITY make-ca-size          "32 KB">
-  <!ENTITY make-ca-md5sum        "04bd86fe2eb299788439c3466782ce45">
+  <!ENTITY make-ca-download      "https://github.com/lfs-book/make-ca/archive/v&make-ca-version;/make-ca-&make-ca-version;.tar.gz">
+  <!ENTITY make-ca-size          "40 KB">
+  <!ENTITY make-ca-md5sum        "e99d2985ead0037caedb765fd66b33f0">
 ]>
 
 <sect1 id="make-ca" xreflabel="make-ca-&make-ca-version;">
@@ -24,7 +24,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a make-ca</title>
+    <title>Introdução ao make-ca</title>
 
     <para>
       A Infraestrutura de Chave Pública (ICP) é um método para validar a
@@ -50,7 +50,7 @@ descritas <ulink
 url="https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/policy/">aqui</ulink>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -95,7 +95,7 @@ lançamento</ulink> se esse problema ocorrer.
 
     <bridgehead renderas="sect3">Dependências do make-ca</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       
       <!-- Attention: no role="runtime" here because jhalfs don't assume
@@ -313,12 +313,13 @@ diferentes. Por exemplo, se você gostaria de desconfiar do arquivo
     <title>Usando make-ca com Python3</title>
 
     <para>
-      Quando o <application>Python3</application> foi instalado no LFS ele incluiu
-o módulo <application>pip3</application> com certificados fornecidos pelo
-módulo <application>Certifi</application>. Isso foi necessário, mas
-significa que, sempre que o <command>pip3</command> for usado, ele poderá
-referenciar esses certificados, principalmente ao criar um ambiente virtual
-ou ao instalar um módulo com todas as dependências "wheel" dele de uma vez.
+      Quando <application>Python3</application> foi instalado no LFS, ele incluiu
+o módulo <application>pip3</application> com certificados vendidos
+originários do módulo <application>Certifi</application>. Isso era
+necessário, mas significa que sempre que <command>pip3</command> for usado,
+ele pode referenciar esses certificados, principalmente ao criar um ambiente
+virtual ou ao instalar um módulo com todas as dependências wheel dele de uma
+vez.
     </para>
 
     <para>
@@ -337,9 +338,9 @@ fornecida se tornará desatualizada.
     </para>
 
     <para>
-      Para usar os certificados do sistema no <application>Python3</application>
+      Para usar os certificados do sistema no <application>Python3</application>,
 você deveria configurar <envar>_PIP_STANDALONE_CERT</envar> para apontar
-para eles, por exemplo, para o "shell" <application>bash</application>:
+para eles, por exemplo, para o shell <application>bash</application>:
     </para>
 
 <screen><userinput>export _PIP_STANDALONE_CERT=/etc/pki/tls/certs/ca-bundle.crt</userinput></screen>
@@ -349,9 +350,9 @@ para eles, por exemplo, para o "shell" <application>bash</application>:
         Se você tiver criado ambientes virtuais, por exemplo, ao testar módulos, e
 eles incluem os módulos <application>Requests</application> e
 <application>Certifi</application> em <filename
-class="directory">~/.local/lib/python3.11/</filename>, então esses módulos
-locais serão usados em vez dos certificados do sistema, a menos que você
-remova os módulos locais.
+class="directory">~/.local/lib/python&python3-majorver;/</filename>, então
+esses módulos locais serão usados em vez dos certificados do sistema, a
+menos que você remova os módulos locais.
       </para>
     </warning>
 

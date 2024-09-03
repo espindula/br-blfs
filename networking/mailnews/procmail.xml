@@ -5,11 +5,11 @@
   %general-entities;
 
 <!--  <!ENTITY procmail-download-http "http://www.ring.gr.jp/archives/net/mail/procmail/procmail-&procmail-version;.tar.gz"> -->
-  <!ENTITY procmail-download-http "https://ftp.osuosl.org/pub/blfs/conglomeration/procmail/procmail-&procmail-version;.tar.gz">
+  <!ENTITY procmail-download-http "https://github.com/BuGlessRB/procmail/archive/refs/tags/v&procmail-version;/procmail-&procmail-version;.tar.gz">
   <!ENTITY procmail-download-ftp  "">
-  <!ENTITY procmail-md5sum        "1678ea99b973eb77eda4ecf6acae53f1">
-  <!ENTITY procmail-size          "226 KB">
-  <!ENTITY procmail-buildsize     "1,7 MB">
+  <!ENTITY procmail-md5sum        "e38b8739e5c6400e3586c5fd9810c1e0">
+  <!ENTITY procmail-size          "296 KB">
+  <!ENTITY procmail-buildsize     "2,1 MB">
   <!ENTITY procmail-time          "menos que 0,1 UPC">
 ]>
 
@@ -32,7 +32,7 @@ processador autônomo de mensagem. Isso é útil para filtrar e classificar as
 mensagens recebidas.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing='compact'>
@@ -106,8 +106,7 @@ seguintes comandos como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role='root'><userinput>sed -i 's/getline/get_line/' src/*.[ch]                  &amp;&amp;
-patch -Np1 -i ../procmail-&procmail-version;-consolidated_fixes-1.patch &amp;&amp;
+<screen role='root'><userinput>patch -Np1 -i ../procmail-&procmail-version;-consolidated_fixes-1.patch &amp;&amp;
 
 make LOCKINGTEST=/tmp MANDIR=/usr/share/man install       &amp;&amp;
 make install-suid</userinput></screen>
@@ -117,14 +116,17 @@ make install-suid</userinput></screen>
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <command>sed -i 's/getline/get_line/' src/*.[ch]</command>: Isso renomeia a
-função &quot;getline&quot; do &quot;Procmail&quot; para evitar conflito com
-a função &quot;getline&quot; proveniente da
-&quot;<application>glibc</application>&quot;.
-    </para>
 
+
+    <!--
     <para>
+
+      <command>sed -i 's/getline/get_line/' src/*.[ch]</command>: This renames
+      procmail's getline function to avoid conflict with the getline function
+      from <application>glibc</application>.
+    </para>
+-->
+<para>
       <command>make LOCKINGTEST=/tmp install</command>: Isso evita que o
 &quot;<command>make</command>&quot; te pergunte onde testar os padrões de
 bloqueio de arquivos.

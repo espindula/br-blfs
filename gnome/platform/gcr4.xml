@@ -6,9 +6,9 @@
 
   <!ENTITY gcr4-download-http "&gnome-download-http;/gcr/&gcr4-minor;/gcr-&gcr4-version;.tar.xz">
   <!ENTITY gcr4-download-ftp  "">
-  <!ENTITY gcr4-md5sum        "59259f5cb4e5a799c20db2dcf3d60a8e">
-  <!ENTITY gcr4-size          "704 KB">
-  <!ENTITY gcr4-buildsize     "29 MB (com testes)">
+  <!ENTITY gcr4-md5sum        "51ae0448c7c42caf0b7deb2639c9e9b8">
+  <!ENTITY gcr4-size          "712 KB">
+  <!ENTITY gcr4-buildsize     "30 MB (com testes)">
   <!ENTITY gcr4-time          "0,1 UPC (com testes; ambos usando paralelismo=4)">
 ]>
 
@@ -32,7 +32,7 @@ visualizador para arquivos criptográficos na área de trabalho do
 <application>GNOME</application>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,20 +72,21 @@ visualizador para arquivos criptográficos na área de trabalho do
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/>, <xref linkend="libgcrypt"/> e <xref
-linkend="p11-kit"/>
+      <xref linkend="glib2"/> (recomendado GObject Introspection), <xref
+linkend="libgcrypt"/> e <xref linkend="p11-kit"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gnupg2"/>, <xref linkend="gobject-introspection"/>, <xref
-linkend="gtk4"/>, <xref linkend="libsecret"/>, <xref linkend="libxslt"/>,
-<xref linkend="openssh"/> e <xref linkend="vala"/>
+      <xref linkend="gnupg2"/>, <xref linkend="gtk4"/>, <xref
+linkend="libsecret"/>, <xref linkend="libxslt"/>, <xref linkend="openssh"/>
+e <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gi-docgen"/> e <xref linkend="valgrind"/>
+      <xref linkend="gi-docgen"/>, <xref linkend="gnutls"/> e <xref
+linkend="valgrind"/>
     </para>
 
   </sect2>
@@ -108,19 +109,18 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dgtk_doc=false     \
+            -D gtk_doc=false    \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Se você tiver o <xref linkend='gi-docgen'/> instalado e desejar construir a
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar construir a
 documentação da API para esse pacote, emita:
     </para>
 
 <screen remap='doc'><userinput>sed -e "/install_dir/s@,\$@ / 'gcr-&gcr4-version;'&amp;@" \
-    -e "/fatal-warnings/d"                    \
     -i ../docs/*/meson.build                 &amp;&amp;
-meson configure -Dgtk_doc=true               &amp;&amp;
+meson configure -D gtk_doc=true              &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -142,26 +142,28 @@ precisam ser executados a partir de um Terminal do X ou similar.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>-Dgtk=false</option>: Use essa chave se você não tiver instalado o
-<xref linkend="gtk4"/>. Observe que o <application>gcr-viewer</application>
-não será instalado se isso for passado para o meson.
+      <option>-D gtk4=false</option>: Use essa chave se você não tiver instalado
+<xref linkend="gtk4"/>. Observe que <application>gcr-viewer</application>
+não será instalado se isso for passado para meson.
     </para>
 
     <para>
-      <option>-Dssh_agent=false</option>: Use essa chave se você não tiver
+      <option>-D ssh_agent=false</option>: Use essa chave se você não tiver
 instalado <xref linkend="openssh"/> e desejar desabilitar compatibilidade
 ssh.
     </para>
 
     <para>
-      <option>-Dgtk_doc=true</option>: &gi-doc-disable;
+      <option>-D gtk_doc=true</option>: &gi-doc-disable;
     </para>
-    
 
-  <!--<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-    href="../../xincludes/gtk-doc-rebuild.xml"/>
--->
-</sect2>
+    <para>
+      <option>-D crypto=gnutls</option>: Use essa chave se você tiver <xref
+linkend="gnutls" role="nodep"/> instalado e desejar usá-lo em vez de <xref
+linkend="libgcrypt" role="nodep"/>.
+    </para>
+
+  </sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>

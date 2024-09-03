@@ -4,19 +4,19 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY kconfig-download-http "&kf5-download-http;/kconfig-&kf5-version;.tar.xz">
+  <!ENTITY kconfig-download-http "&kf6-download-http;/kconfig-&kf6-version;.tar.xz">
   <!ENTITY kconfig-download-ftp  "">
-  <!ENTITY kconfig-md5sum        "fcb77cb2d9349b33e9e085ca4d2ebe7f">
-  <!ENTITY kconfig-size          "288 KB">
-  <!ENTITY kconfig-buildsize     "20 MB">
-  <!ENTITY kconfig-time          "0,1 UPC (Usando paralelismo=4)">
+  <!ENTITY kconfig-md5sum        "698ab95acdc713571f917bb70073e2df">
+  <!ENTITY kconfig-size          "336 KB">
+  <!ENTITY kconfig-buildsize     "25 MB">
+  <!ENTITY kconfig-time          "0,2 UPC (Usando paralelismo=4)">
 ]>
 
-<sect1 id="lxqt-kconfig" xreflabel="kconfig-&kf5-version; para lxqt">
+<sect1 id="lxqt-kconfig" xreflabel="kconfig-&kf6-version; para lxqt">
   <?dbhtml filename="lxqt-kconfig.html"?>
 
 
-  <title>kconfig-&kf5-version; para lxqt</title>
+  <title>kconfig-&kf6-version; para lxqt</title>
 
   <indexterm zone="lxqt-kconfig">
     <primary sortas="a-kconfig">kconfig</primary>
@@ -30,12 +30,12 @@
 configuração.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <important>
       <para>
-        Esse pacote é extraído a partir do conjunto de pacotes do KF5. Se o <xref
-linkend="kf5-frameworks"/> for construído, <emphasis
+        Esse pacote é extraído a partir do conjunto de pacotes do KF6. Se o <xref
+linkend="kf6-frameworks"/> for construído, <emphasis
 role="bold">NÃO</emphasis> construa também esse pacote conforme apresentado
 aqui.
       </para>
@@ -79,7 +79,7 @@ aqui.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="extra-cmake-modules"/> e &qt5-deps;
+      <xref linkend="extra-cmake-modules"/> e <xref linkend="qt6"/>
     </para>
 
   </sect2>
@@ -92,15 +92,15 @@ aqui.
 comandos:
     </para>
 
-<screen><userinput>mkdir -v build &amp;&amp;
-cd       build &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr        \
-      -DCMAKE_BUILD_TYPE=Release         \
-      -DCMAKE_INSTALL_LIBEXECDIR=libexec \
-      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON  \
-      -DBUILD_TESTING=OFF                \
-      -Wno-dev ..                        &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr        \
+      -D CMAKE_BUILD_TYPE=Release         \
+      -D CMAKE_INSTALL_LIBEXECDIR=libexec \
+      -D KDE_INSTALL_USE_QT_SYS_PATHS=ON  \
+      -D BUILD_TESTING=OFF                \
+      -W no-dev ..                        &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -115,24 +115,6 @@ make</userinput></screen>
 
   </sect2>
 
-  <sect2 role="commands">
-    <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>-DCMAKE_INSTALL_LIBEXECDIR=libexec</parameter>: Isso substitui o
-padrão em extra-cmake-modules, que é <filename
-class="directory">/usr/lib/libexec</filename> e não é compatível com FHS.
-    </para>
-
-    <para>
-      <parameter>-DKDE_INSTALL_USE_QT_SYS_PATHS=ON</parameter>: Isso força a
-instalação de plugins Qt no mesmo diretório que o próprio <xref
-linkend="qt5"/>. Caso contrário, eles serão instalados em <filename
-class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
-    </para>
-
-  </sect2>
-
   <sect2 role="content">
     <title>Conteúdo</title>
 
@@ -143,14 +125,14 @@ class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
 
       <seglistitem>
         <seg>
-          kreadconfig5 e kwriteconfig5
+          kreadconfig6 e kwriteconfig6
         </seg>
         <seg>
-          libKF5ConfigCore.so, libKF5ConfigGui.so e libKF5ConfigQml.so
+          libKF6ConfigCore.so, libKF6ConfigGui.so e libKF6ConfigQml.so
         </seg>
         <seg>
-          /usr/lib/cmake/KF5Config e
-/usr/include/KF5/{KConfigCore,KConfig,KConfigQml,KConfigGui}
+          /usr/lib/libexec/kf6, /usr/lib/qml/org/kde/config, /usr/lib/cmake/KF6Config
+e /usr/include/KF6/{KConfigCore,KConfig,KConfigQml,KConfigGui}
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -159,62 +141,62 @@ class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
-      <varlistentry id="lxqt-kconfig-kreadconfig5">
-        <term><command>kreadconfig5</command></term>
+      <varlistentry id="lxqt-kconfig-kreadconfig6">
+        <term><command>kreadconfig6</command></term>
         <listitem>
           <para>
             lê um arquivo de configuração usando a interface KConfig
           </para>
-          <indexterm zone="lxqt-kconfig kreadconfig5">
-            <primary sortas="b-kreadconfig5">kreadconfig5</primary>
+          <indexterm zone="lxqt-kconfig kreadconfig6">
+            <primary sortas="b-kreadconfig6">kreadconfig6</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="lxqt-kconfig-kwriteconfig5">
-        <term><command>kwriteconfig5</command></term>
+      <varlistentry id="lxqt-kconfig-kwriteconfig6">
+        <term><command>kwriteconfig6</command></term>
         <listitem>
           <para>
             escreve em um arquivo de configuração usando a interface KConfig
           </para>
-          <indexterm zone="lxqt-kconfig kwriteconfig5">
-            <primary sortas="b-kwriteconfig5">kwriteconfig5</primary>
+          <indexterm zone="lxqt-kconfig kwriteconfig6">
+            <primary sortas="b-kwriteconfig6">kwriteconfig6</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="lxqt-kconfig-libKF5ConfigCore">
-        <term><filename class="libraryfile">libKF5ConfigCore.so</filename></term>
+      <varlistentry id="lxqt-kconfig-libKF6ConfigCore">
+        <term><filename class="libraryfile">libKF6ConfigCore.so</filename></term>
         <listitem>
           <para>
-            contém a biblioteca de configuração central para o KF5
+            contém a biblioteca central de configuração para o KF6
           </para>
-          <indexterm zone="lxqt-kconfig lxqt-kconfig-libKF5ConfigCore">
-            <primary sortas="c-libKF5ConfigCore">libKF5ConfigCore.so</primary>
+          <indexterm zone="lxqt-kconfig lxqt-kconfig-libKF6ConfigCore">
+            <primary sortas="c-libKF6ConfigCore">libKF6ConfigCore.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="lxqt-kconfig-libKF5ConfigGui">
-        <term><filename class="libraryfile">libKF5ConfigGui.so</filename></term>
+      <varlistentry id="lxqt-kconfig-libKF6ConfigGui">
+        <term><filename class="libraryfile">libKF6ConfigGui.so</filename></term>
         <listitem>
           <para>
             contém funções para uma GUI para KConfig
           </para>
-          <indexterm zone="lxqt-kconfig lxqt-kconfig-libKF5ConfigGui">
-            <primary sortas="c-libKF5ConfigGui">libKF5ConfigGui.so</primary>
+          <indexterm zone="lxqt-kconfig lxqt-kconfig-libKF6ConfigGui">
+            <primary sortas="c-libKF6ConfigGui">libKF6ConfigGui.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-       <varlistentry id="lxqt-kconfig-libKF5ConfigQml">
-        <term><filename class="libraryfile">libKF5ConfigQml.so</filename></term>
+       <varlistentry id="lxqt-kconfig-libKF6ConfigQml">
+        <term><filename class="libraryfile">libKF6ConfigQml.so</filename></term>
         <listitem>
           <para>
             contém uma interface QML para o KConfig
           </para>
-          <indexterm zone="lxqt-kconfig lxqt-kconfig-libKF5ConfigQml">
-            <primary sortas="c-libKF5ConfigQml">libKF5ConfigQml.so</primary>
+          <indexterm zone="lxqt-kconfig lxqt-kconfig-libKF6ConfigQml">
+            <primary sortas="c-libKF6ConfigQml">libKF6ConfigQml.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

@@ -4,19 +4,19 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY kwindowsystem-download-http "&kf5-download-http;/kwindowsystem-&kf5-version;.tar.xz">
+  <!ENTITY kwindowsystem-download-http "&kf6-download-http;/kwindowsystem-&kf6-version;.tar.xz">
   <!ENTITY kwindowsystem-download-ftp  "">
-  <!ENTITY kwindowsystem-md5sum        "7ff6c4358016468807c4d8c9ab9e0f5e">
+  <!ENTITY kwindowsystem-md5sum        "5631073e18780513a3005159dd73e290">
   <!ENTITY kwindowsystem-size          "2,3 MB">
-  <!ENTITY kwindowsystem-buildsize     "69 MB">
-  <!ENTITY kwindowsystem-time          "0,2 UPC">
+  <!ENTITY kwindowsystem-buildsize     "73 MB">
+  <!ENTITY kwindowsystem-time          "0,7 UPC">
 ]>
 
-<sect1 id="lxqt-kwindowsystem" xreflabel="kwindowsystem-&kf5-version; para lxqt">
+<sect1 id="lxqt-kwindowsystem" xreflabel="kwindowsystem-&kf6-version; para lxqt">
   <?dbhtml filename="lxqt-kwindowsystem.html"?>
 
 
-  <title>kwindowsystem-&kf5-version; para lxqt</title>
+  <title>kwindowsystem-&kf6-version; para lxqt</title>
 
   <indexterm zone="lxqt-kwindowsystem">
     <primary sortas="a-kwindowsystem">kwindowsystem</primary>
@@ -32,12 +32,12 @@ independente do sistema de janelas e tem implementações específicas de
 plataforma.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <important>
       <para>
-        Esse pacote é extraído a partir do conjunto de pacotes do KF5. Se o <xref
-linkend="kf5-frameworks"/> for construído, <emphasis
+        Esse pacote é extraído a partir do conjunto de pacotes do KF6. Se o <xref
+linkend="kf6-frameworks"/> for construído, <emphasis
 role="bold">NÃO</emphasis> construa também esse pacote conforme apresentado
 aqui.
       </para>
@@ -81,8 +81,9 @@ aqui.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="extra-cmake-modules"/>, <xref linkend="xorg7-lib"/> e
-&qt5-deps;
+      <xref linkend="extra-cmake-modules"/>, <xref
+linkend="plasma-wayland-protocols"/>, <xref linkend="qt6"/> e <xref
+linkend="xorg7-lib"/> 
     </para>
 
 
@@ -102,15 +103,13 @@ aqui.
 comandos:
     </para>
 
-<screen><userinput>mkdir -v build &amp;&amp;
-cd       build &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr        \
-      -DCMAKE_INSTALL_LIBEXECDIR=libexec \
-      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON  \
-      -DCMAKE_BUILD_TYPE=Release         \
-      -DBUILD_TESTING=OFF                \
-      -Wno-dev ..                        &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D BUILD_TESTING=OFF         \
+      -W no-dev ..                 &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -122,24 +121,6 @@ make</userinput></screen>
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
-
-  </sect2>
-
-  <sect2 role="commands">
-    <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>-DCMAKE_INSTALL_LIBEXECDIR=libexec</parameter>: Isso substitui o
-padrão em extra-cmake-modules, que é <filename
-class="directory">/usr/lib/libexec</filename> e não é compatível com FHS.
-    </para>
-
-    <para>
-      <parameter>-DKDE_INSTALL_USE_QT_SYS_PATHS=ON</parameter>: Isso força a
-instalação de plugins Qt no mesmo diretório que o próprio <xref
-linkend="qt5"/>. Caso contrário, eles serão instalados em <filename
-class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
-    </para>
 
   </sect2>
 
@@ -159,7 +140,8 @@ class="directory">/usr/mkspecs</filename>, que não é compatível com FHS.
           libKF5WindowSystem.so
         </seg>
         <seg>
-          /usr/lib/cmake/KF5WindowSystem, /usr/include/KF5 e /usr/lib/plugins/kf5
+          $QT6DIR/qml/org/kde, $QT6DIR/plugins/kf6, /usr/share/qlogging-categories6,
+/usr/lib/cmake/KF5WindowSystem e /usr/include/KF6
         </seg>
       </seglistitem>
     </segmentedlist>

@@ -6,11 +6,11 @@
 
   <!ENTITY gdb-download-http "&gnu-http;/gdb/gdb-&gdb-version;.tar.xz">
   <!ENTITY gdb-download-ftp  "">
-  <!ENTITY gdb-md5sum        "4a084d03915b271f67e9b8ea2ab24972">
+  <!ENTITY gdb-md5sum        "494e3beaac44e66367c3e443a4414529">
   <!ENTITY gdb-size          "23 MB">
-  <!ENTITY gdb-buildsize     "966 MB (adicionar 805 MB para documentos; adicionar 710 MB para testes)">
-  <!ENTITY gdb-time          "2,1 UPC (adicionar 0,4 UPC para documentos; adicionar 18 UPC para testes;
-todos usando paralelismo=4)">
+  <!ENTITY gdb-buildsize     "806 MB (adicionar 1,0 GB para documentos; adicionar 720 MB para testes)">
+  <!ENTITY gdb-time          "0,9 UPC (adicionar 0,4 UPC para documentos; veja-se abaixo para testes;
+todos usando paralelismo=8)">
 ]>
 
 <sect1 id="gdb" xreflabel="GDB-&gdb-version;">
@@ -35,7 +35,7 @@ eficaz ao rastrear aplicativos e bibliotecas que foram construídos(as) com
 símbolos de depuração e não despojados(as).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -135,19 +135,41 @@ linkend="doxygen"/>, execute:
 <screen remap="doc"><userinput>make -C gdb/doc doxy</userinput></screen>
 
     <para>
-      Para testar os resultados, emita:
+      Executar os testes não é recomendada. Os resultados variam muito dependendo
+da arquitetura do sistema e de quais dependências opcionais estão instaladas
+e qual versão do GCC está sendo usada. Em um sistema testado, existiram 140
+falhas inesperadas (de mais de 108.000 testes) e em outro sistema existiram
+“somente” 32 falhas inesperadas. O tempo para executar os testes varia de
+aproximadamente 6 UPC a mais de 15 UPC ao usar -j8. Isso depende do número
+de testes que expiram, assim como de outros fatores.  
+    </para>
+
+    <tip>
+      <para>
+         Com um <command>make check</command> simples, existem muitas mensagens de
+aviso acerca de um arquivo de configuração global ausente. Essas podem ser
+evitadas executando-se <command>touch global.exp</command> e antepondo-se ao
+comando <command>make check</command>
+<command>DEJAGNU=$PWD/global.exp</command>. Além disso, os testes podem ser
+consideravelmente acelerados usando-se a opção do <command>make</command>
+"-j&lt;N&gt;", onde &lt;N&gt; é o número de núcleos em teu sistema.
+      </para>
+    </tip>
+
+    <para>
+      Para testar os resultados de qualquer forma, emita:
     </para>
 
 <screen remap="test"><userinput>pushd gdb/testsuite &amp;&amp;
-make  site.exp     &amp;&amp;
-echo  "set gdb_test_timeout 120" &gt;&gt; site.exp &amp;&amp;
-runtest
+make  site.exp      &amp;&amp;
+echo  "set gdb_test_timeout 30" &gt;&gt; site.exp &amp;&amp;
+make check 2&gt;1 | tee gdb-check.log
 popd</userinput></screen>
 
     <para>
       Veja-se <emphasis>gdb/testsuite/README</emphasis> e <ulink
 url="https://sourceware.org/gdb/wiki/TestingGDB">TestingGDB</ulink>. Existem
-muitos problemas com a suíte de teste:
+muitos problemas adicionais com a suíte de teste:
     </para>
 
     <itemizedlist>
@@ -164,6 +186,13 @@ testes, caso precise executar os testes novamente.
           Os resultados dependem dos compiladores instalados.
         </para>
       </listitem>
+
+
+
+
+
+
+
 
 
 
@@ -204,14 +233,11 @@ or this
         </para>
       </listitem>
 -->
-<listitem>
+<!--      <listitem>
+
         <para>
-
-
-
-
-
-          <!-- for gdb-11.1, gcc-11.2 - pierre
+-->
+<!-- for gdb-11.1, gcc-11.2 - pierre
           A test run of the test suite had about 1700 unexpected failures
           (out of over 80000 tests). Over 1370 of the failures were related
           to FORTRAN tests. -->
@@ -225,18 +251,20 @@ or this
           A test run of the test suite had 183 unexpected failures
           out of over 105000 tests. -->
 <!-- for gdb-14.1, gcc 13.2.0 - rahul -->
-Uma execução de teste da suíte de teste teve cinquenta e uma (51) falhas
-inesperadas em mais de cento e seis mil (106.000) testes.
+<!--          A test run of the test suite had 51 unexpected failures
+          out of the over 106000 tests.
         </para>
+
       </listitem>
 
       <listitem>
         <para>
-          Em alguns sistemas, a suíte de teste "gdb.tui" falhará se executada em SSH.
+          On some systems, the gdb.tui test suite will fail if running over
+          SSH.
         </para>
       </listitem>
-
-      <listitem>
+-->
+<listitem>
         <para>
           Em alguns sistemas baseados em "AMD", mais que duzentos (200) testes
 adicionais possivelmente falhem devido a uma diferença na implementação de

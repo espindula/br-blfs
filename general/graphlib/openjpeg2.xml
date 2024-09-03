@@ -6,10 +6,10 @@
 
   <!ENTITY openjpeg2-download-http "https://github.com/uclouvain/openjpeg/archive/v&openjpeg2-version;/openjpeg-&openjpeg2-version;.tar.gz">
   <!ENTITY openjpeg2-download-ftp  "">
-  <!ENTITY openjpeg2-md5sum        "5cbb822a1203dd75b85639da4f4ecaab">
+  <!ENTITY openjpeg2-md5sum        "f9ee64845881a15109ed0aa73a12202f">
   <!ENTITY openjpeg2-size          "1,8 MB">
-  <!ENTITY openjpeg2-buildsize     "13 MB">
-  <!ENTITY openjpeg2-time          "0,2 UPC">
+  <!ENTITY openjpeg2-buildsize     "13 MB (adicionar 1,7 GB para os testes)">
+  <!ENTITY openjpeg2-time          "0,2UPC (adicionar 0,8UPC para os testes)">
 ]>
 
 <sect1 id="openjpeg2" xreflabel="OpenJPEG-&openjpeg2-version;">
@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a OpenJPEG</title>
+    <title>Introdução ao OpenJPEG</title>
 
     <para>
       <application>OpenJPEG</application> é uma implementação de fonte aberto do
@@ -31,7 +31,7 @@ padrão "JPEG-2000". O OpenJPEG respeita totalmente as especificações
 "JPEG-2000" e consegue comprimir/descomprimir imagens de 16 bits sem perdas.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,17 +69,17 @@ padrão "JPEG-2000". O OpenJPEG respeita totalmente as especificações
 
     <bridgehead renderas="sect3">Dependências do OpenJPEG</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cmake"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="lcms2"/>, <xref linkend="libpng"/>, <xref linkend="libtiff"/>
-e <xref linkend="doxygen"/> (para construir a documentação da API)
+      <xref linkend="git"/> (para testes), <xref linkend="lcms2"/>, <xref
+linkend="libpng"/>, <xref linkend="libtiff"/> e <xref linkend="doxygen"/>
+(para construir a documentação da API)
     </para>
-
 
   </sect2>
 
@@ -91,24 +91,24 @@ e <xref linkend="doxygen"/> (para construir a documentação da API)
 comandos:
     </para>
 
-<!-- Thread discussing the tests, fixing instructions,
-  but obtaining poor results:
-  http://lists.linuxfromscratch.org/pipermail/blfs-dev/2015-April/030035.html
-
-  There does not seem to be a test suite at all. 2022-05-15 (openjpeg-2.5.0)
--->
 <screen><userinput>mkdir -v build &amp;&amp;
-cd      build &amp;&amp;
+cd       build &amp;&amp;
 
-cmake -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DBUILD_STATIC_LIBS=OFF .. &amp;&amp;
+cmake -D CMAKE_BUILD_TYPE=Release  \
+      -D CMAKE_INSTALL_PREFIX=/usr \
+      -D BUILD_STATIC_LIBS=OFF ..  &amp;&amp;
 make</userinput></screen>
 
-
     <para>
-      Esse pacote não vem com uma suíte de teste.
+      Se você desejar executar os testes, alguns arquivos adicionais serão
+necessários. Baixe esses arquivos e execute os testes usando os seguintes
+comandos, mas observe que oito (8) testes são conhecidos por falharem:
     </para>
+
+<screen remap="test"><userinput>git clone https://github.com/uclouvain/openjpeg-data.git --depth 1 &amp;&amp;
+OPJ_DATA_ROOT=$PWD/openjpeg-data cmake -D BUILD_TESTING=ON ..      &amp;&amp;
+make                                                               &amp;&amp;
+make test</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -126,7 +126,7 @@ cp -rv ../doc/man -T /usr/share/man</userinput></screen>
     <title>Command Explanations</title>
 
     <para>
-      <option>-DBUILD_TESTING=ON</option>: This switch enables
+      <option>-D BUILD_TESTING=ON</option>: This switch enables
       building the test suite.
     </para>
 

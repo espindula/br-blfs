@@ -6,10 +6,10 @@
 
   <!ENTITY nmap-download-http "https://nmap.org/dist/nmap-&nmap-version;.tar.bz2">
   <!ENTITY nmap-download-ftp  "">
-  <!ENTITY nmap-md5sum        "4f65e08148d1eaac6b1a1482e7185e1d">
+  <!ENTITY nmap-md5sum        "b481d293e53b20278d5370458da9a950">
   <!ENTITY nmap-size          "11 MB">
-  <!ENTITY nmap-buildsize     "138 MB (adicionar 17 MB para testes)">
-  <!ENTITY nmap-time          "0,3 UPC (Usando paralelismo=4; adicionar 0,1 UPC para testes)">
+  <!ENTITY nmap-buildsize     "116 MB (adicionar 38 MB para os testes)">
+  <!ENTITY nmap-time          "0,4 UPC (Usando paralelismo=4; adicionar 0,1 UPC para testes)">
 ]>
 
 <sect1 id="nmap" xreflabel="Nmap-&nmap-version;">
@@ -32,7 +32,7 @@ de &quot;ping&quot;, varredura de porta e impressão digital
 &quot;TCP&quot;/&quot;IP&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,7 +68,19 @@ de &quot;ping&quot;, varredura de porta e impressão digital
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do &quot;Nmap&quot;</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing='compact'>
+      <listitem>
+        <para>
+          Recommended patch: <ulink url=
+            "&patch-root;/nmap-&nmap-version;-pcre_2-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do &quot;Nmap&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <note>
@@ -84,7 +96,7 @@ o processo de construção compilará e se vinculará à própria versão deles
       http://nmap.org/svn/libdnet-stripped/NMAP_MODIFICATIONS
 -->
 <xref linkend="liblinear"/>, <xref linkend="libpcap"/>, <xref
-linkend="libssh2"/>, <xref linkend="lua"/>, <xref linkend="pcre"/> e <xref
+linkend="libssh2"/>, <xref linkend="lua"/>, <xref linkend="pcre2"/> e <xref
 linkend="pygobject3"/>
 
     </para>
@@ -100,20 +112,27 @@ linkend="pygobject3"/>
     <title>Instalação do Nmap</title>
 
     <para>
+      Primeiro, se ainda não estiver instalado, adicione um módulo Python
+necessário. Como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>pip3 install build</userinput></screen>
+
+    <para>
       Instale o &quot;<application>Nmap</application>&quot; executando os
 seguintes comandos:
     </para>
 
-<!--
-    <para>
-
-      If you wish to run the test suite, run the following command:
-    </para>
-
-<screen><userinput>sed -i 's/lib./lib/' zenmap/test/run_tests.py</userinput></screen>
--->
 <screen><userinput>./configure --prefix=/usr &amp;&amp;
 make</userinput></screen>
+
+    <para>
+      Se você deseja executar a suíte de teste, execute o seguinte comando:
+    </para>
+
+    <screen><userinput>sed -e '/import imp/d'                \
+    -e 's/^ndiff = .*$/import ndiff/' \
+    -i ndiff/ndifftest.py</userinput></screen>
 
     <para>
       Para testar os resultados, emita: &quot;<command>make check</command>&quot;
@@ -131,20 +150,7 @@ class="username">root</systemitem>&quot;:
 
   </sect2>
 
-
-
-  <!-- nmap-7.90: everything seems ok without this switch
-  <sect2 role="commands">
-
-    <title>Command Explanations</title>
-    <para>
-      <parameter>- -with-liblua=included</parameter>: This switch is
-      required to fix compilation with <application>lua</application> 5.4.
-    </para>
-
-  </sect2>
--->
-<sect2 role="content">
+  <sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>

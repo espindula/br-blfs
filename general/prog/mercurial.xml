@@ -6,10 +6,10 @@
 
   <!ENTITY mercurial-download-http "https://www.mercurial-scm.org/release/mercurial-&mercurial-version;.tar.gz">
   <!ENTITY mercurial-download-ftp  "">
-  <!ENTITY mercurial-md5sum        "b6c1716150b0da35d44d1155cb3ae853">
+  <!ENTITY mercurial-md5sum        "f0c076d22c07bf65ffb02753fc516084">
   <!ENTITY mercurial-size          "7,9 MB">
-  <!ENTITY mercurial-buildsize     "115 MB (com documentos, adicionar 1,5 GB para testes)">
-  <!ENTITY mercurial-time          "0,3 UPC (com documentos; adicionar 14 UPC para testes; ambos usando
+  <!ENTITY mercurial-buildsize     "113 MB (com documentos, adicionar 1,5 GB para testes)">
+  <!ENTITY mercurial-time          "0,3 UPC (com documentos; adicionar 16 UPC para testes; ambos usando
 paralelismo=8)">
 ]>
 
@@ -35,7 +35,7 @@ escrita em <application>Python</application> e é usada por projetos como
 &quot;Mozilla&quot; para &quot;Firefox&quot; e &quot;Thunderbird&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,7 +75,7 @@ escrita em <application>Python</application> e é usada por projetos como
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-    <xref linkend="docutils"/> (exigido para construir a documentação), <xref
+      <xref linkend="docutils"/> (exigido para construir a documentação), <xref
 linkend="git"/>, <xref linkend="gpgme"/> (com ligações &quot;Python&quot;),
 <xref role="runtime" linkend="openssh"/> (tempo de execução, para acessar
 repositórios &quot;ssh://...&quot;), <xref linkend="pygments"/>, <xref
@@ -87,9 +87,7 @@ url="https://www.nongnu.org/cvs/">CVS</ulink>, <ulink
 url="https://pypi.python.org/pypi/pyflakes">pyflakes</ulink>, <ulink
 url="https://www.pyopenssl.org/en/stable/">pyOpenSSL</ulink> e <ulink
 url="https://github.com/google/re2/">re2</ulink>
-
     </para>
-
 
   </sect2>
 
@@ -108,7 +106,14 @@ url="https://github.com/google/re2/">re2</ulink>
       Para construir a documentação (exige <xref linkend="docutils"/>), emita:
     </para>
 
+<!--
+    The tests do not hang.  Better to just report what failed.
+
+    [renodr]: The tests do crash due to syntax errors and crash before they get
+    to the Python portion (which is where most of Mercurial is)
+-->
 <screen remap="doc"><userinput>make doc</userinput></screen>
+
 
     <para>
       Se você desejar executar os testes, os testes rust precisam ser removidos,
@@ -129,7 +134,15 @@ emita:
 
 
     <para>
-      <!--
+      onde <replaceable>&lt;N&gt;</replaceable> é um número inteiro entre um e o
+número de (camadas X do processador), inclusive. Testes possivelmente falhem
+porque algumas mensagens de erro foram mudadas no Python ou alguns avisos de
+descontinuação são impressos, que não estavam presentes quando o teste foi
+projetado. Dois testes são conhecidos por falharem: test-duplicateoptions.py
+e test-profile.t.
+    </para>
+      
+    <!--
       # Ran 908 tests, 65 skipped, 4 failed.  real  10m37.422s -bdubbs  6 Sep 22.
       # Ran 881 tests,102 skipped, 23 failed.                  -plabs  17 Nov 22.
       # Ran 919 tests, 64 skipped, 23 failed. real  10m25.285s -bdubbs 10 Jan 23.
@@ -140,13 +153,12 @@ emita:
       # Ran 948 tests, 66 skipped, 0 failed. -pierre 12 Jul 23 (mercurial-6.5).
       # Ran 950 tests, 65 skipped, 1 failed. -pierre 8  Nov 23 (mercurial-6.5.3).
       # Ran 948 tests, 66 skipped, 0 failed. -renodr 22 Nov 23 (mercurial-6.6).
+      # Ran 946 tests, 71 skipped, 2 failed. -bdubbs 20 Mar 24 (mercurial-6.7).
+      # Ran 966 tests, 58 skipped, 1 failed. -renodr 16 Mar 24 (mercurial-6.8).
       -->
-onde <replaceable>&lt;N&gt;</replaceable> é um número inteiro entre um e o
-número de (camadas X do processador), inclusive. Vários testes falham porque
-algumas mensagens de erro foram mudadas no Python ou alguns avisos de
-descontinuação são impressos, que não estavam presentes quando o teste foi
-projetado. Para a finalidade de investigar quaisquer testes aparentemente
-falhos, você possivelmente use o conjunto de comandos sequenciais
+<para>
+      Para a finalidade de investigar quaisquer testes aparentemente falhos, você
+possivelmente use o conjunto de comandos sequenciais
 <command>run-tests.py</command>. Para ver as quase quarenta chaves, algumas
 delas muito úteis, emita <command>tests/run-tests.py
 --help</command>. Executando os seguintes comandos, você executará somente

@@ -36,7 +36,7 @@ url='&man;useradd.8'>useradd(8)</ulink> e <ulink role='man'
 url='&man;userdel.8'>userdel(8)</ulink>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -84,7 +84,7 @@ url='&man;userdel.8'>userdel(8)</ulink>.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <phrase revision="sysv"><xref
+      &gobject-introspection;, <phrase revision="sysv"><xref
 linkend="elogind"/></phrase> <phrase revision="systemd"><xref role='runtime'
 linkend="systemd"/> (tempo de execução)</phrase> e <xref linkend="vala"/>
     </para>
@@ -135,16 +135,17 @@ estiver instalada:
 comandos:
     </para>
 
+<!-- We have to do this after meson setup because mocklibc is extracted
+         from a tarball by the meson setup command.  -->
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -Dadmin_group=adm   \
-      -Delogind=true      \
-      -Dsystemdsystemunitdir=no &amp;&amp;
-ninja</userinput></screen>
+meson setup ..             \
+      --prefix=/usr        \
+      --buildtype=release  \
+      -D admin_group=adm   \
+      -D elogind=true      \
+      -D systemdsystemunitdir=no</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
@@ -152,8 +153,24 @@ cd    build &amp;&amp;
 meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
-      -Dadmin_group=adm   &amp;&amp;
-ninja</userinput></screen>
+      -D admin_group=adm</userinput></screen>
+
+    
+    <para>
+      Agora adapte a cópia de mocklibc enviada para permitir construir a suíte de
+teste com GCC 14 ou posterior:
+    </para>
+
+<screen><userinput>grep 'print_indent'     ../subprojects/mocklibc-1.0/src/netgroup.c \
+     | sed 's/ {/;/' >> ../subprojects/mocklibc-1.0/src/netgroup.h &amp;&amp;
+sed -i '1i#include &lt;stdio.h&gt;'                                      \
+    ../subprojects/mocklibc-1.0/src/netgroup.h</userinput></screen>
+
+    <para>
+      Construa o pacote:
+    </para>
+
+    <screen><userinput>ninja</userinput></screen>
 
     <para>
       Para testar o pacote, emita <command>ninja test</command>.
@@ -174,24 +191,24 @@ ninja</userinput></screen>
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dadmin_group=adm</parameter>: Essa chave configura o grupo para
+      <parameter>-D admin_group=adm</parameter>: Essa chave configura o grupo para
 contas de administrador(a).
     </para>
 
     <para>
-      <option>-Ddocbook=true</option>: Essa chave habilita construir a
+      <option>-D docbook=true</option>: Essa chave habilita construir a
 documentação da API da interface do D-Bus (precisa do <xref
 linkend="xmlto"/>).
     </para>
 
     <para>
-      <option>-Dgtk_doc=true</option>: Essa chave habilita construir a
+      <option>-D gtk_doc=true</option>: Essa chave habilita construir a
 documentação da API da libaccountsservice (precisa do <xref
 linkend="gtk-doc"/>).
     </para>
 
     <para>
-      <option>-Dvapi=false</option>: Essa chave desabilita construir as ligações
+      <option>-D vapi=false</option>: Essa chave desabilita construir as ligações
 vala. Use-a se você não tiver instalado <xref linkend="vala"/>.
     </para>
 

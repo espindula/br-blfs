@@ -6,24 +6,43 @@
   <!-- utah -->
   <!ENTITY texlive-download-http "https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/&texlive-year;/texlive-&texlive-version;-source.tar.xz">
   <!ENTITY texlive-download-ftp  "">
-  <!ENTITY texlive-md5sum        "bec84c5d6e340967783302f432c78efe">
-  <!ENTITY texlive-size          "66 MB">
+  <!ENTITY texlive-md5sum        "1da2f08e3ba4a3708870dd088c1d6823">
+  <!ENTITY texlive-size          "67 MB">
 
-  <!ENTITY texlive-buildsize      "8,5 GB incluindo a transferência adicional e os testes; 7,7 GB instalado">
-  <!ENTITY texlive-time           "2,3 UPC incluindo a transferência adicional e os testes, construindo com
+  <!ENTITY texlive-buildsize      "9,1 GB incluindo a transferência adicional e os testes; 8,3 GB instalado">
+  <!ENTITY texlive-time           "4,6 UPC incluindo a transferência adicional e os testes, construindo com
 paralelismo=4">
 
   <!-- utah -->
   <!ENTITY texlive-texmf-download-http "https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/&texlive-year;/texlive-&texlive-version;-texmf.tar.xz">
   <!ENTITY texlive-texmf-download-ftp  "">
-  <!ENTITY texlive-texmf-md5sum        "704fb39c69e3710b8e9e9158cec5047a">
-  <!ENTITY texlive-texmf-size          "3,7 GB">
+  <!ENTITY texlive-texmf-md5sum        "e67ce334dd0fddda5f4a87b4fcaaf48f">
+  <!ENTITY texlive-texmf-size          "4,0 GB">
 
-  <!ENTITY texlive-tlpdb-download-http "https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/&texlive-year;/texlive-&tex-tlpdb-version;-tlpdb-full.tar.gz">
-  <!ENTITY texlive-tlpdb-download-ftp  "">
-  <!ENTITY texlive-tlpdb-md5sum        "5078a7ddaa7b309b7392e33916b817f7">
-  <!ENTITY texlive-tlpdb-size          "3,2 MB">
+  <!ENTITY texlive-extra-download-http "https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/&texlive-year;/texlive-&texlive-version;-extra.tar.xz">
+  <!ENTITY texlive-extra-download-ftp  "">
+  <!ENTITY texlive-extra-md5sum        "1bd045bd1673ce61bde590c10b86c6cc">
+  <!ENTITY texlive-extra-size          "1,9 MB">
 
+<!-- The following commit will change future installs so that the scripts in
+texmf-dist linked from bin/ are copied instead of symlinks.
+
+commit 0c9707142465610f0e22745a22bf8c71850cef49
+Author: Karl Berry <karl@freefriends.org>
+Date:   Tue Mar 19 22:03:22 2024 +0000
+
+    (%opts): create the generically-named output files as copies by default.
+    (@cmdline_options): allow -no-copy.
+    (help): document.
+    
+    
+    git-svn-id: svn://tug.org/texlive/trunk@70707 c570f23f-e606-0410-a88d-b1316a301751
+
+That was done to simplify the process (windows has always used copy) and will likely
+make the installed sizes somewhat bigger.
+
+There is an option \-\-no-copy for updmap.pl, unclear if that can be used here,
+and it might have been removed by next year. -->
 ]>
 
 
@@ -42,7 +61,7 @@ paralelismo=4">
 
     <note>
       <para>
-        <!-- the chinese mirros do not use a 'historic' subdirectory. -->
+        <!-- the Chinese mirrors do not use a 'historic' subdirectory. -->
 De acordo com <ulink url="https://www.tug.org/historic/"/> o site mestre na
 França suporta somente FTP e rsync. Agora que o FTP está geralmente
 obsoleto, essa página tem links para espelhos, alguns dos quais suportam
@@ -77,7 +96,7 @@ isso, você deveria iniciar em <xref linkend="tex-path"/>, de forma que os
 comandos finais para inicializar a nova instalação sejam encontrados.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -116,18 +135,19 @@ comandos finais para inicializar a nova instalação sejam encontrados.
     <bridgehead renderas="sect3">Transferências Adicionais Exigidas</bridgehead>
 
       <para>
-        Grande parte do ambiente do texlive (incluindo conjuntos de comandos
-sequenciais, documentação, fontes e vários outros arquivos) não faz parte do
-tarball do fonte. Você precisa baixá-lo separadamente. Isso te dará todos os
-arquivos adicionais fornecidos por uma instalação completa da versão
-binária; não existe uma maneira realista de restringir quais partes serão
+        Muito do ambiente do texlive (incluindo conjuntos de comandos sequenciais,
+documentação, fontes e vários outros arquivos) não faz parte do tarball do
+fonte. Você precisa baixá-lo separadamente. Isso te dará todos os arquivos
+adicionais que são fornecidos por uma instalação completa da versão binária,
+pois não existe uma maneira realista de restringir quais partes serão
 instaladas.
       </para>
 
       <para>
-        Devido ao tamanho desse pacote, é improvável que seja espelhado por espelhos
-do BLFS. Em caso de dificuldade, vá até http://www.ctan.org/mirrors/ para
-encontrar um espelho mais acessível.
+        Devido ao tamanho desse pacote, é improvável que ele seja espelhado por
+espelhos do BLFS. Se você estiver impossibilitado(a) de baixar os arquivos
+para esse pacote, vá para https://www.ctan.org/mirrors/ para encontrar um
+espelho mais acessível.
       </para>
 
     <itemizedlist spacing="compact">
@@ -154,38 +174,37 @@ encontrar um espelho mais acessível.
     </itemizedlist>
 
       <para>
-        A partir do ano de 2019, a base de dados tlpdb dos pacotes do texlive não
-mais é instalada com o fonte. Mas, o <command>texdoc</command> precisa de um
-arquivo de cache derivado a partir desse (e criará o cache na primeira
-execução dele).
+        A base de dados tlpdb é enviada como um tarball separado. O programa
+<command>texdoc</command> precisa de um arquivo de cache derivado a partir
+desse (e criará o cache na primeira execução dele).
       </para>
 
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Transferência (HTTP): <ulink url="&texlive-tlpdb-download-http;"/>
+          Transferência (HTTP): <ulink url="&texlive-extra-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Transferência (FTP): <ulink url="&texlive-tlpdb-download-ftp;"/>
+          Transferência (FTP): <ulink url="&texlive-extra-download-ftp;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Soma de verificação MD5 da transferência: &texlive-tlpdb-md5sum;
+          Soma de verificação MD5 da transferência: &texlive-extra-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Tamanho da transferência: &texlive-tlpdb-size;
+          Tamanho da transferência: &texlive-extra-size;
         </para>
       </listitem>
 
       <listitem>
         <para>
           Remendo exigido: <ulink url=
-"&patch-root;/texlive-&texlive-version;-source-security_fix-1.patch"/>
+"&patch-root;/texlive-&texlive-version;-source-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -233,21 +252,25 @@ descrito em <xref linkend="tex-path"/>.
 
     <caution>
       <para>
-        Se você desejar atualizar para o <application>texlive</application> atual em
+        <!-- Ken: comment biber - usually a new texyear has brought a new version
+        but not so far for 2024. Looking at what it installs it is only perl
+        modules and their man pages so those ought to still exist after the
+        previous year's texlive has been removed.
+        <application>biber</application>, -->
+Se você desejar atualizar para o <application>texlive</application> atual em
 um sistema mais antigo, onde pacotes extras
-(<application>asymptote</application>, <application>biber</application>,
-<application>dvisvgm</application> ou <application>xindy</application>)
-tenham sido instalados, você precisará reinstalá-los, bem como corrigir teu
-<literal>PATH</literal> para <literal>$TEXLIVE_PREFIX</literal>.
+(<application>asymptote</application>, <application>dvisvgm</application> ou
+<application>xindy</application>) tenham sido instalados, você precisará
+reinstalá-los, bem como corrigir teu <literal>PATH</literal> para
+<literal>$TEXLIVE_PREFIX</literal>.
       </para>
     </caution>
 
     <note>
       <para>
-        Uma instalação bem-sucedida requer que alguns comandos do texlive sejam
+        Uma instalação bem-sucedida exige que alguns comandos do texlive sejam
 executados como o(a) usuário(a) root, de forma que nós exportaremos a
-variável TEXARCH para permitir que o(a) <systemitem
-class="username">root</systemitem> a use.
+variável TEXARCH para permitir que o(a) &root; a use.
       </para>
     </note>
 
@@ -255,9 +278,13 @@ class="username">root</systemitem> a use.
       Agora, como um(a) usuário(a) normal:
     </para>
 
-<screen><userinput>export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &amp;&amp;
 
-patch -Np1 -i ../texlive-&texlive-version;-source-security_fix-1.patch &amp;&amp;
+<screen><!-- if a patch for the source is needed, this should go between the export
+	ande configure. But keeping it there as a commented line adds too much vertical space.
+    patch -Np1 -i ../texlive-&texlive-version;-source-security_fix-1.patch &amp;&amp;-->
+<userinput>export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &amp;&amp;
+
+patch -Np1 -i ../texlive-&texlive-version;-source-upstream_fixes-1.patch &amp;&amp;
 
 mkdir texlive-build &amp;&amp;
 cd    texlive-build &amp;&amp;
@@ -291,15 +318,14 @@ cd    texlive-build &amp;&amp;
 make</userinput></screen>
 
     <para>
-      <!-- It started to fail with libpaper-2.0.10 which rounds differently
-           in the 6th place of decimals, causing diff to fail -->
-<!-- Upstream say that encoding conversion procedure Encode::from_to()
-      failed in fn-generate.perl, test now skips if that errors: possibly
-      related to changes in perl-5.36 since I understand current slackware
-      also sees this - ken -->
-Para testar os resultados, emita: <command>make -k check</command>. Dois
-testes, <filename>psutils.test</filename> e
-<filename>eptexdir/wcfname.test</filename> são conhecidos por falharem.
+      <!-- https://github.com/rrthomas/libpaper/issues/43 -->
+Para testar os resultados, emita: <command>make -k check</command>. Um
+teste, <filename>psutils.test</filename>, é conhecido por falhar se usar a
+libpaper do sistema porque o TeX Live inclui versões antigas de
+<application>psutils</application> e <application>libpaper</application> que
+resultam em uma diferença nas casas decimais finais do teste psresize. O(A)
+desenvolvedor(a) do <application>libpaper</application> não pensa que isso
+seja significativo.
     </para>
 
     <para>
@@ -308,12 +334,12 @@ testes, <filename>psutils.test</filename> e
 
 
 <screen role="root"><!-- Editors, you can run 'make texlinks' in a DESTDIR by passing
-DESTDIR#some/where -->
+DESTDIR=some/where -->
 <userinput>make install-strip &amp;&amp;
 make texlinks      &amp;&amp;
 mkdir -pv                                $TEXLIVE_PREFIX/tlpkg/TeXLive/ &amp;&amp;
 install -v -m644 ../texk/tests/TeXLive/* $TEXLIVE_PREFIX/tlpkg/TeXLive/ &amp;&amp;
-tar -xf ../../texlive-&tex-tlpdb-version;-tlpdb-full.tar.gz -C $TEXLIVE_PREFIX/tlpkg</userinput></screen>
+tar -xf ../../texlive-&texlive-version;-extra.tar.xz -C $TEXLIVE_PREFIX/tlpkg --strip-components=2</userinput></screen>
 
     <note>
       <para>
@@ -359,63 +385,29 @@ class="directory">/usr/lib</filename>:
 <screen role="root"><userinput>ln -svf $TEXLIVE_PREFIX/lib/libkpathsea.so{,.6} /usr/lib</userinput></screen>
 
     <note>
-      
-      <!-- following based on fedora, but amended to run in the BLFS
-           layout, where adapting fedora's script for mtxrun did not
-           reliably work. ken -->
-<para>
-        <!-- FIXME - when removing, keep that link to luametatex tags, and note
-        that building and installing that to fit with a BLFS install of TeXLive
-        will not be a trivial exercise.-->
-TeXLive inclui alguns arquivos para ConTeXt, mas o fonte deles é separado e
-passou do uso de luatex na versão 'mkiv' anterior para o uso de luametatex,
-que pode ser extraído com git a partir de <ulink
-url="https://github.com/contextgarden/luametatex/tags">luametatex do
-github</ulink>. LuaMetaTeX usa meson e ninja, mas não se encaixa facilmente
-no esquema do BLFS do TeXLive.
-        
-      </para>
       <para>
-        Entretanto, com um pouco de trabalho extra, os arquivos 'mkiv' ainda podem
-ser processados usando os arquivos enviados no texmf.
+        O TeX Live não inclui o fonte para ConTeXt, somente os itens que estão no
+CTAN. Tentar construir o ConTeXt puramente a partir do fonte em um sistema
+TeX Live do BLFS é um uso de nicho e parece que será mais problemático do
+que vale a pena.
       </para>
 
       <para>
-        <emphasis>As correções para usar o ConTeXt serão removidas quando o fonte do
-texlive tiver que ser atualizado para uma correção de vulnerabilidade que
-exija backporting das mudanças do luatex ou para o TeXLive 2024. Se você for
-um(a) usuário(a) BLFS do ConTeXt, você deveria estar preparado(a) para usar
-a etiqueta mais recente a partir do GitHub (o link está no primeiro
-parágrafo desta Observação). Construir e instalar isso para funcionar com
-uma instalação BLFS do TeXLive não será um exercício trivial.</emphasis>
+        <!-- trying to use a filename tag here is rejected within para ?? -->
+Se você desejar usar o ConTeXt com <command>luametatex</command> (a maior
+parte do antigo código do MKII e MKIV foi removido do TeX Live 2023 pelo(a)
+desenvolvedor(a) do ConTeXt), começando com o binário (somente instalando o
+ConTeXt, 753 MB em março de 2024 ) provavelmente seria a maneira mais fácil
+de inicializá-lo. O fonte para <command>luametatex</command> pode ser
+extraída com git a partir de <ulink
+url="https://github.com/contextgarden/luametatex/tags">github
+luametatex</ulink>, compilado com meson e ninja, e instalado copiando-se
+para o diretório correto do programa. Isso deveria evitar ter-se que
+corrigir todos os links simbólicos, etc., e também evitar incluir as muitas
+partes não relacionadas do texmf-dist. Vejam-se os comentários 1 a 5 de
+<ulink url="&blfs-ticket-root;17823">#17823</ulink>.
       </para>
     </note>
-
-    <para>
-       As seguintes etapas, executadas como o(a) usuário(a) <systemitem
-class="username">root</systemitem>, criarão <command>mtxrun</command> e
-<command>context</command>.
-     </para>
-
-
-<screen role="root"><!-- I've put blank lines in this to make it a little less hard to read. ken -->
-<userinput>sed -e '/local template=\[\[--ini/s/\(primaryflags%\)\(.*\)/\1 --socket --shell-escape \2/' \
- -e '/local template=\[\[%primaryflags%/s/\(primaryflags%\)\(.*\)/\1 --socket --shell-escape \2/' \
-  -i $TEXLIVE_PREFIX/texmf-dist/scripts/context/lua/mtxrun.lua &amp;&amp;
-
-mkdir -pv $TEXLIVE_PREFIX/texmf-var/luatex-cache/context/ &amp;&amp;
-
-ln -sfv /$TEXLIVE_PREFIX/texmf-dist/scripts/context/lua/mtxrun.lua \
-        /$TEXLIVE_PREFIX/bin/$TEXARCH/mtxrun &amp;&amp;
-
-cat > $TEXLIVE_PREFIX/bin/$TEXARCH/context &lt;&lt; EOF
-#!/bin/sh
-export TEXMF=$TEXLIVE_PREFIX/texmf-dist;
-export TEXMFCNF=$TEXLIVE_PREFIX/texmf-dist/web2c;
-export TEXMFCACHE=$TEXLIVE_PREFIX/texmf-var/luatex-cache/context/;
-$TEXLIVE_PREFIX/bin/$TEXARCH/mtxrun --script context "\$@"
-EOF
-chmod -v 0755 $TEXLIVE_PREFIX/bin/$TEXARCH/context</userinput></screen>
 
     <para>
       Agora você pode prosseguir para <xref linkend="asymptote"/>, <xref
@@ -429,21 +421,8 @@ se desejar instalá-los.
     <title>Explicações do Comando</title>
 
     <para>
-      <command>patch -Np1 -i
-../texlive-&texlive-version;-source-security_fix-1.patch</command>: isso
-atualiza o fonte do luatex para v1.17.0 para corrigir problemas de
-segurança.
-    </para>
-
-    <para>
-      <command>sed -e '/local template (...)' (...)mtxrun.lua</command>: isso faz
-uma mudança em um conjunto de comandos sequenciais do texmf-dist, de forma
-que o ConTeXt agora consiga executar com o luatex-v1.17.0.
-    </para>
-
-    <para>
-      <command>-C</command>: cria config.cache; isso economiza tempo significativo
-em uma construção paralela.
+      <command>-C</command>: cria config.cache, o que economiza tempo
+significativo em uma construção paralela.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -467,7 +446,7 @@ em uma construção paralela.
       href="../../xincludes/tex-xpdf.xml"/>
 -->
 <para>
-      <command>--disable-dvisvgm</command>: Conforme observado acima, a versão
+      <parameter>--disable-dvisvgm</parameter>: Conforme observado acima, a versão
 enviada do dvisvgm, que tem arquivos modificados de configuração, não pode
 ser construída com bibliotecas de sistema compartilhadas.
     </para>
@@ -505,13 +484,6 @@ arquivos.
     <para>
       <command>fmtutil-sys --all</command>: Isso inicializa os formatos do TeX,
 bases Metafont e memorandos Metapost.
-    </para>
-
-    <para>
-      <command>mkdir -pv
-$TEXLIVE_PREFIX/texmf-var/luatex-cache/context/</command>: o conjunto de
-comandos sequenciais de contexto criado depois disso não executará
-corretamente se esse diretório não estiver presente.
     </para>
 
     <para>

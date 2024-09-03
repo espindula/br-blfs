@@ -34,7 +34,7 @@ bem como estruturas de contêiner para transportar amostras de áudio ou
 imagens de vídeo dentro de um aplicativo.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -89,12 +89,20 @@ imagens de vídeo dentro de um aplicativo.
     <title>Instalação do Gavl</title>
 
     <para>
-      Instale o <application>Gavl</application> executando os seguintes comandos:
+      Primeiro, corrija um problema com o gcc-14 e posteriores:
     </para>
 
-<screen><userinput>LIBS=-lm                      \
-./configure --prefix=/usr     \
-            --without-doxygen \
+<screen><userinput>sed -i "/stdio/a #include &lt;string.h&gt;" src/fill_test.c</userinput></screen>
+
+    <para>
+      Agora, instale <application>Gavl</application> executando os seguintes
+comandos:
+    </para>
+
+<screen><userinput>LIBS=-lm                         \
+./configure --prefix=/usr        \
+            --without-doxygen    \
+            --with-cpuflags=none \
             --docdir=/usr/share/doc/gavl-&gavl-version; &amp;&amp;
 make</userinput></screen>
 
@@ -122,6 +130,11 @@ seja pesquisada durante a vinculação.
       <parameter>--without-doxygen</parameter>: Essa chave desabilita o uso do
 Doxygen. Omita se o Doxygen estiver instalado e você desejar construir a
 documentação da API.
+    </para>
+
+    <para>
+      <parameter>--with-cpuflags=none</parameter>: Essa chave corrige um problema
+de identificação de recursos da arquitetura do sistema.
     </para>
 
   </sect2>

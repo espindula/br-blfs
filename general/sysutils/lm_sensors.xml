@@ -32,7 +32,7 @@ Linux. Isso é útil para monitorar a temperatura da "CPU" e ajustar o
 desempenho de alguns hardwares (como ventiladores de resfriamento).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -136,9 +136,10 @@ comandos:
 
 <screen><!-- <screen>
 <userinput>patch -Np1 -i ../lm_sensors-&lm_sensors-version;-upstream_fixes-1.patch &amp;&amp; -->
-<userinput>make PREFIX=/usr       \
-     BUILD_STATIC_LIB=0 \
-     MANDIR=/usr/share/man</userinput></screen>
+<userinput>make PREFIX=/usr           \
+     BUILD_STATIC_LIB=0    \
+     MANDIR=/usr/share/man \
+     EXLDFLAGS=</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -164,6 +165,14 @@ cp -rv              README INSTALL doc/* \
       <parameter>BUILD_STATIC_LIB=0</parameter>: Esse parâmetro desabilita a
 compilação e instalação da versão estática da <filename
 class="libraryfile">libsensors</filename>.
+    </para>
+
+    <para>
+      <parameter>EXLDFLAGS=</parameter>: Esse parâmetro desabilita codificar
+rigidamente caminhos de pesquisa de biblioteca (rpath) nos arquivos binários
+executáveis e bibliotecas compartilhadas. Esse pacote não precisa do rpath
+para uma instalação no local padrão, e o rpath às vezes pode causar efeitos
+indesejados ou até mesmo problemas de segurança.
     </para>
 
     <para>

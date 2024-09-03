@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY gnome-settings-daemon-download-http
-           "&gnome-download-http;/gnome-settings-daemon/&gnome-45;/gnome-settings-daemon-&gnome-settings-daemon-version;.tar.xz">
+           "&gnome-download-http;/gnome-settings-daemon/&gnome-46;/gnome-settings-daemon-&gnome-settings-daemon-version;.tar.xz">
   <!ENTITY gnome-settings-daemon-download-ftp  "">
-  <!ENTITY gnome-settings-daemon-md5sum        "61c2d2eb639e6eae775e4330c0dc47fe">
+  <!ENTITY gnome-settings-daemon-md5sum        "408d4fc18cf6971828ff957e052ce4dd">
   <!ENTITY gnome-settings-daemon-size          "1,4 MB">
-  <!ENTITY gnome-settings-daemon-buildsize     "29 MB">
+  <!ENTITY gnome-settings-daemon-buildsize     "35 MB">
   <!ENTITY gnome-settings-daemon-time          "0,1 UPC (Usando paralelismo=4)">
 ]>
 
@@ -32,7 +32,7 @@ configurar vários parâmetros de uma <application>Sessão do
 GNOME</application> e dos aplicativos que executam sob ela.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,17 +68,21 @@ GNOME</application> e dos aplicativos que executam sob ela.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo opcional (exigido para executar a suíte de teste): <ulink
-url="&patch-root;/gnome-settings-daemon-&gnome-settings-daemon-version;-testsuite_fix-1.patch"/>
+          Optional patch (required for running the test suite):
+          <ulink url="&patch-root;/gnome-settings-daemon-&gnome-settings-daemon-version;-testsuite_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do GNOME Settings Daemon</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do GNOME Settings Daemon</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -93,9 +97,8 @@ linkend="upower"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="alsa"/>, <xref linkend="cups"/>, <xref
-linkend="NetworkManager"/>, <xref linkend="nss"/> e <xref
-linkend="wayland"/>
+      <xref linkend="cups"/>, <xref linkend="NetworkManager"/>, <xref
+linkend="nss"/> e <xref linkend="wayland"/>
     </para>
 
     <note>
@@ -147,15 +150,19 @@ linkend="xorg-server"/> ou <xref role="nodep" linkend="xwayland"/>)
        A seguir, corrija a funcionalidade da luz de fundo no gnome-control-center:
     </para>
 
-<screen revision="sysv"><userinput>sed -e 's/(backlight->logind_proxy)/(0)/' \
-    -i plugins/power/gsd-backlight.c</userinput></screen>
-
+<!--
     <para>
-      Se executar a suíte de teste, aplique um remendo para corrigir tempos limite
-de teste com python-dbusmock 0.30.0 ou posterior:
+
+      If running the test suite, apply a patch to fix test timeouts
+      with python-dbusmock 0.30.0 or later:
     </para>
 
     <screen><userinput>patch -Np1 -i ../gnome-settings-daemon-&gnome-settings-daemon-version;-testsuite_fix-1.patch</userinput></screen>
+-->
+<screen revision="sysv"><userinput>sed -e 's/(backlight->logind_proxy)/(0)/' \
+    -i plugins/power/gsd-backlight.c</userinput></screen>
+
+
 
     <para>
       Instale o <application>Gnome Settings Daemon</application> executando os
@@ -174,7 +181,7 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dsystemd=false     \
+            -D systemd=false    \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -225,8 +232,8 @@ dependendo do sistema init em uso.
           libgsd.so
         </seg>
         <seg>
-          /etc/xdg/Xwayland-session.d, /usr/include/gnome-settings-daemon-45,
-/usr/lib/gnome-settings-daemon-45 e /usr/share/gnome-settings-daemon
+          /etc/xdg/Xwayland-session.d, /usr/include/gnome-settings-daemon-46,
+/usr/lib/gnome-settings-daemon-46 e /usr/share/gnome-settings-daemon
         </seg>
       </seglistitem>
     </segmentedlist>

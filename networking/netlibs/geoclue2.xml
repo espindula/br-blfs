@@ -34,7 +34,7 @@ informação construído sobre o sistema de mensagens
 aplicativos com reconhecimento de localização o mais simples possível.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -103,7 +103,7 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dgtk-doc=false     \
+            -D gtk-doc=false    \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -127,35 +127,94 @@ class="username">root</systemitem>&quot;:
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>-D3g-source=false</option>: Essa chave desativa a estrutura de
-retaguarda &quot;3G&quot;. Use-a se você não tiver instalado o pacote
-&quot;<application>ModemManager</application>&quot;.
+      <option>-D 3g-source=false</option>: Essa chave desabilita a estrutura de
+retaguarda 3G. Use-a se você não tiver instalado o pacote
+<application>ModemManager</application>.
     </para>
 
     <para>
-      <option>-Dmodem-gps-source=false</option>: Essa chave desativa a estrutura
-de retaguarda &quot;GPS&quot; do modem. Use-a se você não tiver instalado o
-pacote &quot;<application>ModemManager</application>&quot;.
+      <option>-D modem-gps-source=false</option>: Essa chave desabilita a
+estrutura de retaguarda GPS do modem. Use-a se você não tiver instalado o
+pacote <application>ModemManager</application>.
     </para>
 
     <para>
-      <option>-Dcdma-source=false</option>: Essa chave desabilita a estrutura de
-retaguarda fonte &quot;CDMA&quot;. Use-a se você não tiver instalado o
-pacote &quot;<application>ModemManager</application>&quot;.
+      <option>-D cdma-source=false</option>: Essa chave desabilita a estrutura de
+retaguarda fonte CDMA. Use-a se você não tiver instalado o pacote
+<application>ModemManager</application>.
     </para>
 
     <para>
-      <option>-Dnmea-source=false</option>: Essa chave desabilita a fonte
-&quot;NMEA&quot;. Use-a se você não tiver instalado o pacote
-&quot;<application>Avahi</application>&quot;.
+      <option>-D nmea-source=false</option>: Essa chave desabilita a fonte
+NMEA. Use-a se você não tiver instalado o pacote
+<application>Avahi</application>.
     </para>
 
     <para>
-      <option>-Ddemo-agent=false</option>: Essa chave desabilita a
+      <option>-D demo-agent=false</option>: Essa chave desabilita a
 demonstração. Use-a se você não tiver instalado o pacote
-&quot;<application>libnotify</application>&quot;.
+<application>libnotify</application>.
     </para>
 
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configurando GeoClue</title>
+
+    <sect3 id="geoclue2-config">
+      <title>Arquivos de Configuração</title>
+      <para>
+        <filename>/etc/geoclue/conf.d/90-lfs-google.conf</filename>
+      </para>
+
+      <indexterm zone="geoclue2 geoclue2-config">
+        <primary sortas="etc-geoclue-conf.d-90-lfs-google.conf">/etc/geoclue/conf.d/90-lfs-google.conf</primary>
+      </indexterm>
+    </sect3>
+
+    <sect3><title>Informação de Configuração</title>
+
+      <para>
+        Em março de 2024, a Mozilla anunciou o encerramento do Mozilla Location
+Service. Geoclue usa esse serviço para determinar um local de usuário(a)
+quando solicitado por outras aplicações. A única alternativa suportada pelo
+fluxo de desenvolvimento é a de usar o Serviço de Geolocalização do Google.
+      </para>
+
+      <para>
+        Para usar o Serviço de Geolocalização do Google, uma chave de API precisa
+ser usada e um arquivo de configuração precisa ser criado. <emphasis
+role="bold">Esta chave de API é destinada somente para uso com LFS. Por
+favor, não use esta chave de API se você estiver construindo para outra
+distribuição ou distribuindo cópias binárias. Se precisar de uma chave de
+API, você pode solicitar uma em <ulink
+url="https://www.chromium.org/developers/how-tos/api-keys"/>.</emphasis>
+      </para>
+
+      <para>
+        Crie a configuração necessária para usar o Serviço de Geolocalização do
+Google como o(a) usuário(a) &root;:
+      </para>
+
+<screen role="root"><userinput>cat &gt; /etc/geoclue/conf.d/90-lfs-google.conf &lt;&lt; "EOF"
+<literal># Begin /etc/geoclue/conf.d/90-lfs-google.conf
+
+# This configuration applies for the WiFi source.
+[wifi]
+
+# Set the URL to Google's Geolocation Service.
+url=https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ
+
+# End /etc/geoclue/conf.d/90-lfs-google.conf</literal>
+EOF</userinput></screen>
+
+      <para>
+        Se não desejar solicitar teu local a partir de um serviço de geolocalização,
+você pode rigidamente codificar teu local em
+<filename>/etc/geolocation</filename> usando o formato descrito em <ulink
+role='man' url='&man;geoclue'>geoclue(5)</ulink>.
+      </para>
+    </sect3>
   </sect2>
 
   <sect2 role="content">

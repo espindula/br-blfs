@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a "Colord"</title>
+    <title>Introdução ao "Colord"</title>
 
     <para>
       <application>Colord</application> é um serviço de sistema que facilita
@@ -32,7 +32,7 @@ pelo <application>GNOME Color Manager</application> para integração do
 sistema e uso quando nenhum(a) usuário(a) está logado.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,21 +68,32 @@ sistema e uso quando nenhum(a) usuário(a) está logado.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+         Remendo exigido: <ulink
+url="&patch-root;/colord-&colord-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do "Colord"</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <!-- Polkit now needed, see #11481 in Trac -->
-<xref linkend="dbus"/>, <xref linkend="glib2"/>, <xref linkend="lcms2"/>,
-<xref linkend="polkit"/> e <xref linkend="sqlite"/>
+<xref linkend="dbus"/>, <xref linkend="glib2"/> (GObject Introspection
+recomendado), <xref linkend="lcms2"/>, <xref linkend="polkit"/> e <xref
+linkend="sqlite"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <phrase revision="sysv"><xref linkend="elogind"/>,</phrase> <xref
-linkend="gobject-introspection"/>, <xref linkend="libgudev"/>, <xref
-linkend="libgusb"/><phrase revision="systemd" role="runtime">, <xref
-linkend="systemd"/> (tempo de execução)</phrase> e <xref linkend="vala"/>
+linkend="libgudev"/>, <xref linkend="libgusb"/><phrase revision="systemd"
+role="runtime">, <xref linkend="systemd"/> (tempo de execução)</phrase> e
+<xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -98,6 +109,15 @@ url="https://github.com/scop/bash-completion/">Bash Completion</ulink>
 
   <sect2 role="installation">
     <title>Instalação do "Colord"</title>
+
+    <para>
+      Primeiro, corrija um uso indevido da API do sqlite, causante de uma falha de
+teste e possível quebra ao tempo da execução<phrase revision='systemd'> bem
+como uma configuração de proteção do systemd excessivamente restrita,
+causante do serviço do systemd falhar para iniciar</phrase>:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../colord-&colord-version;-upstream_fixes-1.patch</userinput></screen>
 
     <para>
       Deveria existir um(a) usuário(a) e um grupo dedicados para assumir o
@@ -117,33 +137,33 @@ useradd -c "Proprietário(a) do Processo de Segundo Plano de Cores" -d /var/lib/
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                 \
-      --prefix=/usr            \
-      --buildtype=release      \
-      -Ddaemon_user=colord     \
-      -Dvapi=true              \
-      -Dsystemd=false          \
-      -Dlibcolordcompat=true   \
-      -Dargyllcms_sensor=false \
-      -Dbash_completion=false  \
-      -Ddocs=false             \
-      -Dman=false              &amp;&amp;
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -D daemon_user=colord     \
+      -D vapi=true              \
+      -D systemd=false          \
+      -D libcolordcompat=true   \
+      -D argyllcms_sensor=false \
+      -D bash_completion=false  \
+      -D docs=false             \
+      -D man=false              &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                 \
-      --prefix=/usr            \
-      --buildtype=release      \
-      -Ddaemon_user=colord     \
-      -Dvapi=true              \
-      -Dsystemd=true           \
-      -Dlibcolordcompat=true   \
-      -Dargyllcms_sensor=false \
-      -Dbash_completion=false  \
-      -Ddocs=false             \
-      -Dman=false              &amp;&amp;
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -D daemon_user=colord     \
+      -D vapi=true              \
+      -D systemd=true           \
+      -D libcolordcompat=true   \
+      -D argyllcms_sensor=false \
+      -D bash_completion=false  \
+      -D docs=false             \
+      -D man=false              &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -168,53 +188,53 @@ abrangente ao sistema em execução.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Ddaemon_user=colord</parameter>: Essa chave é usada de modo que
-o processo de segundo plano "colord" executará como um(a) usuário(a) sem
+      <parameter>-D daemon_user=colord</parameter>: Essa chave é usada de modo que
+o processo de segundo plano colord executará como um(a) usuário(a) sem
 privilégios em vez do(a) usuário(a) <systemitem
 class="username">root</systemitem>.
     </para>
 
     <para>
-      <parameter>-Dvapi=true</parameter>: Essa chave habilita construir as
+      <parameter>-D vapi=true</parameter>: Essa chave habilita construir as
 ligações <application>Vala</application>. Remova se você não tiver <xref
 linkend="vala"/> instalado.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dsystemd=false</parameter>: Essa chave desabilita o suporte para
-login <application>systemd</application> em aplicativos "Colord".
+      <parameter>-D systemd=false</parameter>: Essa chave desabilita o suporte
+para login <application>systemd</application> em aplicativos Colord.
     </para>
 
     <para revision="systemd">
-      <parameter>-Dsystemd=true</parameter>: Essa chave habilita a instalação do
+      <parameter>-D systemd=true</parameter>: Essa chave habilita a instalação do
 serviço <application>systemd</application>.
     </para>
 
     <para>
-      <parameter>-Dlibcolordcompat=true</parameter>: Essa chave habilita construir
-uma biblioteca de compatibilidade para pacotes mais antigos que usam
-<application>Colord</application>.
+      <parameter>-D libcolordcompat=true</parameter>: Essa chave habilita
+construir uma biblioteca de compatibilidade para pacotes mais antigos que
+usam <application>Colord</application>.
     </para>
 
     <para>
-      <parameter>-Dargyllcms_sensor=false</parameter>: Essa chave desabilita o
-controlador do sensor "ArgLLCMS". Omita se você tiver <ulink
+      <parameter>-D argyllcms_sensor=false</parameter>: Essa chave desabilita o
+controlador do sensor ArgLLCMS. Omita se você tiver <ulink
 url="https://www.argyllcms.com/">ArgyllCMS</ulink> instalado e desejar
 usá-lo.
     </para>
 
     <para>
-      <parameter>-Dbash_completion=false</parameter>: Essa chave desabilita o
-suporte ao "Bash Completion" para aplicativos "Colord".
+      <parameter>-D bash_completion=false</parameter>: Essa chave desabilita o
+suporte ao Completação do Bash para aplicativos Colord.
     </para>
 
     <para>
-      <parameter>-Ddocs=false</parameter>: Essa chave desabilita a construção de
+      <parameter>-D docs=false</parameter>: Essa chave desabilita a construção de
 documentação. Omita se você tiver <xref linkend="gtk-doc"/> disponível.
     </para>
 
     <para>
-      <parameter>-Dman=false</parameter>: Essa chave desabilita a construção de
+      <parameter>-D man=false</parameter>: Essa chave desabilita a construção de
 páginas de manual. Omita se você tiver <xref linkend="docbook-utils"/>
 disponível. Versões de espaço de nomes das folhas de estilo "docbook-xsl"
 também são necessárias.

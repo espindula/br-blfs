@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY evolution-data-server-download-http
-           "&gnome-download-http;/evolution-data-server/&gnome-minor-50;/evolution-data-server-&evolution-data-server-version;.tar.xz">
+           "&gnome-download-http;/evolution-data-server/&gnome-minor-52;/evolution-data-server-&evolution-data-server-version;.tar.xz">
   <!ENTITY evolution-data-server-download-ftp  "">
-  <!ENTITY evolution-data-server-md5sum        "3aca3ad79c9ee833f25d68e6097b46ee">
-  <!ENTITY evolution-data-server-size          "4,7 MB">
-  <!ENTITY evolution-data-server-buildsize     "177 MB (com testes)">
-  <!ENTITY evolution-data-server-time          "0,7 UPC (usando paralelismo=4, adicionar 0,2 UPC para testes)">
+  <!ENTITY evolution-data-server-md5sum        "a7a269c877206f36c72f2c3e37f79e9c">
+  <!ENTITY evolution-data-server-size          "4,8 MB">
+  <!ENTITY evolution-data-server-buildsize     "181 MB (com testes)">
+  <!ENTITY evolution-data-server-time          "0,7UPC (usando paralelismo = 4)">
 ]>
 
 <sect1 id="evolution-data-server"
@@ -35,7 +35,7 @@ desenvolvido para <application>Evolution</application> (daí o nome), mas
 agora também é usado por outros pacotes.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -81,11 +81,10 @@ linkend="nss"/> e <xref linkend="sqlite"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gnome-online-accounts"/>, <xref
-linkend="gobject-introspection"/>, <xref linkend="gtk3"/>, <xref
-linkend="icu"/>, <xref linkend="libcanberra"/>, <xref
-linkend="libgweather"/>, <xref linkend="vala"/> e <xref
-linkend="webkitgtk"/>
+      <xref linkend="gnome-online-accounts"/>, &gobject-introspection;, <xref
+linkend="gtk3"/>, <xref linkend="gtk4"/>, <xref linkend="icu"/>, <xref
+linkend="libcanberra"/>, <xref linkend="libgweather"/>, <xref
+linkend="vala"/> e <xref linkend="webkitgtk"/>
     </para>
 
     <bridgehead renderas="sect4"
@@ -126,32 +125,32 @@ seguintes comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr    \
-      -DSYSCONF_INSTALL_DIR=/etc     \
-      -DENABLE_VALA_BINDINGS=ON      \
-      -DENABLE_INSTALLED_TESTS=ON    \
-      -DWITH_OPENLDAP=OFF            \
-      -DWITH_KRB5=OFF                \
-      -DENABLE_INTROSPECTION=ON      \
-      -DENABLE_GTK_DOC=OFF           \
-      -DWITH_LIBDB=OFF               \
-      -DWITH_SYSTEMDUSERUNITDIR=no   \
-      -Wno-dev -G Ninja ..           &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr    \
+      -D SYSCONF_INSTALL_DIR=/etc     \
+      -D ENABLE_VALA_BINDINGS=ON      \
+      -D ENABLE_INSTALLED_TESTS=ON    \
+      -D WITH_OPENLDAP=OFF            \
+      -D WITH_KRB5=OFF                \
+      -D ENABLE_INTROSPECTION=ON      \
+      -D ENABLE_GTK_DOC=OFF           \
+      -D WITH_LIBDB=OFF               \
+      -D WITH_SYSTEMDUSERUNITDIR=no   \
+      -W no-dev -G Ninja ..           &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr    \
-      -DSYSCONF_INSTALL_DIR=/etc     \
-      -DENABLE_VALA_BINDINGS=ON      \
-      -DENABLE_INSTALLED_TESTS=ON    \
-      -DWITH_OPENLDAP=OFF            \
-      -DWITH_KRB5=OFF                \
-      -DENABLE_INTROSPECTION=ON      \
-      -DENABLE_GTK_DOC=OFF           \
-      -DWITH_LIBDB=OFF               \
-      -Wno-dev -G Ninja ..           &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr    \
+      -D SYSCONF_INSTALL_DIR=/etc     \
+      -D ENABLE_VALA_BINDINGS=ON      \
+      -D ENABLE_INSTALLED_TESTS=ON    \
+      -D WITH_OPENLDAP=OFF            \
+      -D WITH_KRB5=OFF                \
+      -D ENABLE_INTROSPECTION=ON      \
+      -D ENABLE_GTK_DOC=OFF           \
+      -D WITH_LIBDB=OFF               \
+      -W no-dev -G Ninja ..           &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -175,13 +174,13 @@ ninja</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DENABLE_VALA_BINDINGS=ON</parameter>: Essa chave habilita
+      <parameter>-D ENABLE_VALA_BINDINGS=ON</parameter>: Essa chave habilita
 construir as ligações Vala. Remova-a se você não tiver <xref
 linkend="vala"/> instalado.
     </para>
 
     <para>
-      <parameter>-DENABLE_GTK_DOC=OFF</parameter>: Essa chave desabilita a
+      <parameter>-D ENABLE_GTK_DOC=OFF</parameter>: Essa chave desabilita a
 construção da documentação da API. Ela está quebrada para esse pacote devido
 ao uso de um aplicativo gtk-doc há muito obsoleto que não mais está
 disponível.
@@ -190,19 +189,19 @@ disponível.
     <para>
       <!--This package only uses
       &berkeley-db; to import data from very outdated releases.-->
-<parameter>-DWITH_LIBDB=OFF</parameter>: Essa chave permite construir esse
+<parameter>-D WITH_LIBDB=OFF</parameter>: Essa chave permite construir esse
 pacote sem &berkeley-db;. <xref linkend="sqlite"/> é usado para operação
 normal.
     </para>
 
     <para>
-      <option>-DENABLE_OAUTH2_WEBKITGTK4=OFF</option>: Use essa chave se você não
+      <option>-D ENABLE_OAUTH2_WEBKITGTK4=OFF</option>: Use essa chave se você não
 construiu <xref linkend="webkitgtk" role="nodep"/> com GTK-4.
     </para>
 
     <para revision="sysv">
-      <parameter>-DWITH_SYSTEMDUSERUNITDIR=no</parameter>: Essa chave desabilita a
-instalação das unidades do systemd, que não são usadas para uma construção
+      <parameter>-D WITH_SYSTEMDUSERUNITDIR=no</parameter>: Essa chave desabilita
+a instalação das unidades do systemd, que não são usadas para uma construção
 do Sysv.
     </para>
 

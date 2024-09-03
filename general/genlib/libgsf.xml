@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libgsf</title>
+    <title>Introdução ao libgsf</title>
 
     <para>
       O pacote <application>libgsf</application> contém uma biblioteca usada para
@@ -31,7 +31,7 @@ fornecer uma camada extensível de abstração de entrada/saída para formatos
 estruturados de arquivo.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -67,6 +67,16 @@ estruturados de arquivo.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/libgsf-&libgsf-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do libgsf</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -82,8 +92,8 @@ estruturados de arquivo.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gobject-introspection"/>, <xref linkend="gtk-doc"/> e <xref
-linkend="valgrind"/> (para testes)
+      <xref linkend="gtk-doc"/>, <xref linkend='p7zip'/> (para testes), <xref
+linkend='unzip'/> (para testes) e <xref linkend="valgrind"/> (para testes)
     </para>
 
   </sect2>
@@ -92,14 +102,23 @@ linkend="valgrind"/> (para testes)
     <title>Instalação do libgsf</title>
 
     <para>
+      Primeiro, corrija construir <application>libgsf</application> com
+libxml2-2.13:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../libgsf-&libgsf-version;-upstream_fixes-1.patch</userinput></screen>
+
+    <para>
       Instale <application>libgsf</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
+<screen><userinput>autoreconf                                 &amp;&amp;
+./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>. 
+      Para testar os resultados, emita: <command>make check</command>. Dois testes
+relacionados ao <xref linkend="valgrind"/> são conhecidos por falharem.
     </para>
 
     <para>

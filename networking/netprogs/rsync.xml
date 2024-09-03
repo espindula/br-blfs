@@ -6,11 +6,10 @@
 
   <!ENTITY rsync-download-http "https://www.samba.org/ftp/rsync/src/rsync-&rsync-version;.tar.gz">
   <!ENTITY rsync-download-ftp  "">
-  <!ENTITY rsync-md5sum        "f216f350ef56b9ba61bc313cb6ec2ed6">
-  <!ENTITY rsync-size          "1,1 MB">
-  <!ENTITY rsync-buildsize     "9,6 MB (com os testes; adicionar 24 MB para a documentação &quot;HTML&quot;
-da &quot;API&quot;)">
-  <!ENTITY rsync-time          "0,7 UPC (com os testes)">
+  <!ENTITY rsync-md5sum        "f5c17f9c9164ef9e60d9d8c96b23da06">
+  <!ENTITY rsync-size          "1,2 MB">
+  <!ENTITY rsync-buildsize     "9,2 MB (com testes; adicionar 24 MB para documentação HTML da API)">
+  <!ENTITY rsync-time          "0,7 UPC (com testes)">
 ]>
 
 <sect1 id="rsync" xreflabel="rsync-&rsync-version;">
@@ -32,7 +31,7 @@ da &quot;API&quot;)">
 arquivamentos grandes por intermédio de uma rede de intercomunicação.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -71,7 +70,7 @@ arquivamentos grandes por intermédio de uma rede de intercomunicação.
     <bridgehead renderas="sect3">Dependências do &quot;rsync&quot;</bridgehead>
 
     
-    <!-- This does now use OpenSSL and zstd from LFS. -->
+    <!-- This now uses LZ4, OpenSSL, and zstd from LFS. -->
 <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="popt"/>
@@ -79,8 +78,7 @@ arquivamentos grandes por intermédio de uma rede de intercomunicação.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="doxygen"/>, <ulink
-url="https://lz4.github.io/lz4/">lz4</ulink> e <ulink
+      <xref linkend="doxygen"/> e <ulink
 url="https://cyan4973.github.io/xxHash/">xxhash</ulink>
     </para>
 
@@ -109,8 +107,7 @@ useradd -c "Processo de segundo plano rsyncd" -m -d /home/rsync -g rsyncd \
 seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr   \
-            --disable-lz4    \
+<screen><userinput>./configure --prefix=/usr    \
             --disable-xxhash \
             --without-included-zlib &amp;&amp;
 make</userinput></screen>
@@ -147,13 +144,6 @@ install -v -m644 dox/html/*  /usr/share/doc/rsync-&rsync-version;/api</userinput
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>--disable-lz4</parameter>: Essa chave desabilita o suporte à
-compressão &quot;LZ4&quot;. Observe que ele usa o algoritmo superior
-&quot;zstd&quot; quando essa chave estiver em uso, e o &quot;zstd&quot; é
-fornecido no LFS.
-    </para>
 
     <para>
       <parameter>--disable-xxhash</parameter>: Essa chave desabilita o suporte

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ <!ENTITY % general-entities SYSTEM "../../general.ent">
+ %general-entities;
+
+  <!ENTITY kf6-download-http "&kf6-download-http;">
+  <!ENTITY kf6-download-ftp  "">
+  <!ENTITY kf6-md5sum        "Veja-se Abaixo">
+  <!ENTITY kf6-size          "30 MB">
+  <!ENTITY kf6-buildsize     "11,7 MB">
+  <!ENTITY kf6-time          "0,4UPC">
+]>
+
+<sect1 id="kf6-intro" xreflabel="Introdução ao KF6">
+  <?dbhtml filename="kf6-intro.html"?>
+
+
+  <title>Configuração de Pré-instalação do KDE Frameworks 6</title>
+
+  <indexterm zone="kf6-intro">
+     <primary sortas="g-kf6">Introdução ao Frameworks do KDE</primary>
+  </indexterm>
+
+  <para>
+    KF6 pode ser instalado em <filename class="directory">/usr</filename> ou
+<filename class="directory">/opt/kf6</filename>. Os(As) editores(as) do BLFS
+recomendam o último no ambiente do BLFS.
+  </para>
+
+  <sect2>
+    <title>Instalando in /usr</title>
+
+    <para>
+      Uma opção é a de instalar <application>KDE Frameworks</application> na
+hierarquia <filename class="directory">/usr</filename>. Isso cria uma
+configuração mais simples, mas torna mais difícil testar múltiplas versões
+do <application>KDE Frameworks</application>.
+    </para>
+
+<screen><userinput>export KF6_PREFIX=/usr</userinput></screen>
+
+    <para>
+      É uma boa ideia adicionar as seguintes variáveis aos teus perfis de sistema
+ou pessoal:
+    </para>
+
+<screen role="root"><userinput>cat &gt;&gt; /etc/profile.d/qt6.sh &lt;&lt; "EOF"
+<literal># Begin kf6 extension for /etc/profile.d/qt6.sh
+
+pathappend /usr/lib/plugins        QT_PLUGIN_PATH
+pathappend $QT6DIR/lib/plugins     QT_PLUGIN_PATH
+
+pathappend /usr/lib/qt6/qml        QML2_IMPORT_PATH
+pathappend $QT6DIR/lib/qml         QML2_IMPORT_PATH
+
+# End extension for /etc/profile.d/qt6.sh</literal>
+EOF
+
+cat &gt; /etc/profile.d/kf6.sh &lt;&lt; "EOF"
+<literal># Begin /etc/profile.d/kf6.sh
+
+export KF6_PREFIX=/usr
+
+# End /etc/profile.d/kf6.sh</literal>
+EOF</userinput></screen>
+
+    <note>
+      <para>
+        Se <application>qt6</application> foi instalado em <filename
+class="directory">/usr</filename>, as porções <filename
+class="directory">$QT6DIR/lib/</filename> dos caminhos acima possivelmente
+precisem ser mudadas para <filename
+class="directory">$QT6DIR/lib/qt6/</filename>.
+      </para>
+    </note>
+
+    <para>
+      Adicionalmente, se <xref linkend="sudo"/> estiver instalado, essas variáveis
+deveriam estar disponíveis para o(a) superusuário(a). Execute os seguintes
+comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>cat &gt;&gt; /etc/sudoers.d/qt &lt;&lt; "EOF"
+<literal>Defaults env_keep += QT_PLUGIN_PATH
+Defaults env_keep += QML2_IMPORT_PATH</literal>
+EOF
+
+cat &gt;&gt; /etc/sudoers.d/kde &lt;&lt; "EOF"
+<literal>Defaults env_keep += KF6_PREFIX</literal>
+EOF</userinput></screen>
+
+  </sect2>
+
+  <sect2>
+    <title>Instalando em /opt</title>
+
+    <para>
+      Um método de construir múltiplas versões instala <application>KDE
+Frameworks</application> na hierarquia <filename
+class="directory">/opt</filename>:
+    </para>
+
+<screen><userinput>export KF6_PREFIX=/opt/kf6</userinput></screen>
+
+    <para>
+      Se você não estiver instalando <application>KDE Frameworks</application> em
+<filename class="directory">/usr</filename>, você precisará fazer algumas
+mudanças adicionais de configuração. A melhor prática é a de adicioná-las ao
+teu perfil de sistema ou pessoal:
+    </para>
+
+<screen role="root"><userinput>cat &gt; /etc/profile.d/kf6.sh &lt;&lt; "EOF"
+<literal># Begin /etc/profile.d/kf6.sh
+
+export KF6_PREFIX=/opt/kf6
+
+pathappend $KF6_PREFIX/bin              PATH
+pathappend $KF6_PREFIX/lib/pkgconfig    PKG_CONFIG_PATH
+
+pathappend $KF6_PREFIX/etc/xdg          XDG_CONFIG_DIRS
+pathappend $KF6_PREFIX/share            XDG_DATA_DIRS
+
+pathappend $KF6_PREFIX/lib/plugins      QT_PLUGIN_PATH
+pathappend $KF6_PREFIX/lib/plugins/kcms QT_PLUGIN_PATH
+
+pathappend $KF6_PREFIX/lib/qml          QML2_IMPORT_PATH
+
+pathappend $KF6_PREFIX/lib/python&python3-majorver;/site-packages PYTHONPATH
+
+pathappend $KF6_PREFIX/share/man        MANPATH
+
+pathappend $KF6_PREFIX/include          CPLUS_INCLUDE_PATH
+# End /etc/profile.d/kf6.sh</literal>
+EOF
+
+cat &gt;&gt; /etc/profile.d/qt6.sh &lt;&lt; "EOF"
+<literal># Begin Qt6 changes for KF6
+
+pathappend /usr/lib/plugins            QT_PLUGIN_PATH
+pathappend $QT6DIR/plugins             QT_PLUGIN_PATH
+pathappend $QT6DIR/qml                 QML2_IMPORT_PATH
+
+# End Qt6 changes for KF6</literal>
+EOF</userinput></screen>
+
+    <para>
+      Expanda teu arquivo <filename>/etc/ld.so.conf</filename>:
+    </para>
+
+<screen role="root"><userinput>cat &gt;&gt; /etc/ld.so.conf &lt;&lt; "EOF"
+<literal># Begin KF6 addition
+
+/opt/kf6/lib
+
+# End KF6 addition</literal>
+EOF</userinput></screen>
+
+    <indexterm zone="kf6-intro">
+      <primary sortas="e-etc-ld.so.conf">/etc/ld.so.conf</primary>
+    </indexterm>
+
+    <para revision="sysv">
+      Vários pacotes do <application>KDE Frameworks</application> e do
+<application>Plasma</application> instalam arquivos nos diretórios do
+<application>D-Bus</application> e do <application>Polkit</application>. Ao
+instalar <application>KDE Frameworks</application> em um local diferente de
+<filename class="directory">/usr</filename>,
+<application>D-Bus</application> e <application>Polkit</application>
+precisam ser capazes de encontrar esses arquivos. A maneira mais fácil de
+conseguir isso é a de criar os seguintes links simbólicos (como o(a)
+usuário(a) <systemitem class="username">root</systemitem>):
+    </para>
+
+<screen role="root"
+        revision="sysv"><userinput>install -v -dm755           $KF6_PREFIX/{etc,share} &amp;&amp;
+ln -sfv /etc/dbus-1         $KF6_PREFIX/etc         &amp;&amp;
+ln -sfv /usr/share/dbus-1   $KF6_PREFIX/share       &amp;&amp;
+ln -sfv /usr/share/polkit-1 $KF6_PREFIX/share</userinput></screen>
+
+    <para revision="systemd">
+      Vários pacotes do <application>KDE Frameworks</application> e do
+<application>KDE Plasma</application> instalam arquivos nos diretórios do
+<application>D-Bus</application>, do <application>Polkit</application> e do
+<application>systemd</application>. Ao instalar <application>KDE
+6</application> em um local diferente de <filename
+class="directory">/usr</filename>, <application>D-Bus</application>,
+<application>Polkit</application> e <application>systemd</application>
+precisam ser capazes de encontrar esses arquivos. A maneira mais fácil de
+conseguir isso é a de criar os seguintes links simbólicos (como o(a)
+usuário(a) <systemitem class="username">root</systemitem>):
+    </para>
+
+<screen role="root"
+        revision="systemd"><userinput>install -v -dm755           $KF6_PREFIX/{etc,share} &amp;&amp;
+ln -sfv /etc/dbus-1         $KF6_PREFIX/etc         &amp;&amp;
+ln -sfv /usr/share/dbus-1   $KF6_PREFIX/share       &amp;&amp;
+ln -sfv /usr/share/polkit-1 $KF6_PREFIX/share       &amp;&amp;
+install -v -dm755           $KF6_PREFIX/lib         &amp;&amp;
+ln -sfv /usr/lib/systemd    $KF6_PREFIX/lib</userinput></screen>
+
+    <para>
+      Alguns pacotes também possivelmente instalem ícones provenientes do conjunto
+de ícones "hicolor". Como esse conjunto de ícones é usado por muitos
+pacotes, é uma boa ideia criar um link simbólico para aquele em <filename
+class="directory">/usr/share</filename>, para se evitar ter múltiplas
+instalações de <xref linkend="hicolor-icon-theme"/>. Execute os seguintes
+comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>install -v -dm755                $KF6_PREFIX/share/icons &amp;&amp;
+ln -sfv /usr/share/icons/hicolor $KF6_PREFIX/share/icons</userinput></screen>
+
+    <tip>
+      <para>
+        Ocasionalmente, os caminhos de instalação estão rigidamente codificados nos
+arquivos instalados. Essa é a razão pela qual <filename
+class="directory">/opt/kf6</filename> é usado como prefixo de instalação em
+vez de <filename class="directory">/opt/kf6-&kf6-version;</filename>. Depois
+de instalar <application>KDE Frameworks</application>, você pode renomear o
+diretório e criar um link simbólico:
+      </para>
+
+<screen role="root"><userinput>mv /opt/kf6{,-&kf6-version;}
+ln -sfv kf6-&kf6-version; /opt/kf6</userinput></screen>
+
+      <para>
+        Mais tarde, você poderá querer instalar outras versões do <application>KDE
+Frameworks</application>. Para fazer isso, basta remover o link simbólico e
+usar <filename class="directory">/opt/kf6</filename> como o prefixo
+novamente. Qual versão do <application>KDE Frameworks</application> você usa
+depende somente de onde o link simbólico aponta. Nenhuma outra
+reconfiguração será necessária.
+      </para>
+    </tip>
+
+  </sect2>
+
+</sect1>

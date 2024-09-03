@@ -5,10 +5,10 @@
   %general-entities;
 
   <!ENTITY dtc-download-http "https://kernel.org/pub/software/utils/dtc/dtc-&dtc-version;.tar.xz">
-  <!ENTITY dtc-md5sum        "228576aceed3aa89f54283aa0f1eb820">
-  <!ENTITY dtc-size          "164 KB">
-  <!ENTITY dtc-buildsize     "14 MB">
-  <!ENTITY dtc-time          "less than 0.1 SBU">
+  <!ENTITY dtc-md5sum        "8dc1c58c84ca19f825f6939801b44c52">
+  <!ENTITY dtc-size          "168 KB">
+  <!ENTITY dtc-buildsize     "15 MB">
+  <!ENTITY dtc-time          "0,3 UPC">
 ]>
 
 
@@ -16,7 +16,7 @@
 <sect1 id="dtc" xreflabel="dtc-&dtc-version;">
   <?dbhtml filename="dtc.html"?>
 
-  <title>Dtc-&dtc-version;</title>
+  <title>dtc-&dtc-version;</title>
 
   <!--Required section-->
 <indexterm zone="dtc">
@@ -25,92 +25,97 @@
 
   
   <sect2 role="package">
-    <title>Introduction to Dtc</title>
+    <title>Introdução ao Dtc</title>
 
     <para>
-      The <application>dtc</application> package contains the Device Tree Compiler
-for working with device tree source and binary files and also libfdt, a
-utility library for reading and manipulating device trees in the binary
-format.
+      O pacote <application>dtc</application> contém o Device Tree Compiler para
+trabalhar com fontes de árvores de dispositivos e arquivos binários e também
+libfdt, uma biblioteca de utilitários para ler e manipular árvores de
+dispositivos no formato binário.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
-    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Download (HTTP): <ulink url="&dtc-download-http;"/>
+          Transferência (HTTP): <ulink url="&dtc-download-http;"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Download MD5 sum: &dtc-md5sum;
+          Soma de verificação MD5 da transferência: &dtc-md5sum;
         </para>
       </listitem>
       <listitem>
         <para>
-          Download size: &dtc-size;
+          Tamanho da transferência: &dtc-size;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated disk space required: &dtc-buildsize;
+          Espaço em disco estimado exigido: &dtc-buildsize;
         </para>
       </listitem>
       <listitem>
         <para>
-          Estimated build time: &dtc-time;
+          Tempo de construção estimado: &dtc-time;
         </para>
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dtc Dependencies</bridgehead>
+    <bridgehead renderas="sect3">Dependências de Dtc</bridgehead>
 
-    <bridgehead renderas="sect4">Optional</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend='libyaml'/>, <xref linkend='setuptools_scm'/>, <xref
-linkend='swig'/>, and <xref linkend='texlive'/>
+      <xref linkend='libyaml'/>, <xref linkend='swig'/> e <xref
+linkend='texlive'/>
     </para>
   </sect2>
 
   <sect2 role="installation">
-    <title>Installation of Dtc</title>
+    <title>Instalação do Dtc</title>
 
     <para>
-      Install <application>dtc</application> by running the following commands:
+      Instale <application>dtc</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr        \
-            --buildtype=release  \
-            -Dpython=disabled .. &amp;&amp;
+meson setup --prefix=/usr         \
+            --buildtype=release   \
+            -D python=disabled .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
       <!-- https://github.com/dgibson/dtc/commit/32174a66efa4 -->
-To test the results, issue: <command>meson test -v</command>.  Two tests
-named <filename>cell-overflow.dts</filename> and
-<filename>cell-overflow-results.dts</filename> are known to fail.
+<!--
+      Two tests named <filename>
+cell-overflow.dts</filename> and
+      <filename>cell-overflow-results.dts</filename> are known to fail.
+      -->
+Para testar os resultados, emita: <command>meson test -v</command>.
+      
+      
     </para>
 
     <para>
-      Now, as the &root; user:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
     <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Still as the &root; user, remove the useless static library:
+      Ainda como o(a) usuário(a) &root;, remova a biblioteca estática inútil:
     </para>
 
     <screen role="root"><userinput>rm /usr/lib/libfdt.a</userinput></screen>
 
     <para>
-      If you have <xref linkend='texlive'/> installed, you can build the PDF
-format of the documentation by issuing the following command:
+      Se você tiver <xref linkend='texlive'/> instalado, poderá construir o
+formato PDF da documentação emitindo o seguinte comando:
     </para>
 
     <screen remap="doc"><userinput>pushd ../Documentation
@@ -119,80 +124,73 @@ format of the documentation by issuing the following command:
 popd</userinput></screen>
 
     <para>
-      To install the documentation, as the &root; user issue the following
-command:
+      Para instalar a documentação, como o(a) usuário(a) &root; emita o seguinte
+comando:
     </para>
 
     <screen role="root"><userinput>cp -R ../Documentation -T /usr/share/doc/dtc-&dtc-version;</userinput></screen>
 
     <para>
-      If you have installed both <xref linkend='setuptools_scm'/> and <xref
-linkend='swig'/> and you wish to install the Python 3 binding of this
-package, build the Python 3 module:
+      Se você tiver instalado <xref linkend='swig'/> e desejar instalar a ligação
+Python 3 desse pacote, construa o módulo Python 3:
     </para>
-
-    <screen role="nodump"><userinput>sed '/use_scm_version/i "fallback_version": "1.7.0",' \
-    -i ../setup.py                                    &amp;&amp;
-
-&build-wheel-cmd; ..</userinput></screen>
+ 
+<screen role="nodump"><userinput>&build-wheel-cmd; ..</userinput></screen>
 
     <para>
-      As the &root; user, install the Python 3 module:
+      Como o(a) usuário(a) &root;, instale o módulo Python 3:
     </para>
 
-    <screen role="nodump"><userinput>&install-wheel;</userinput></screen>
+    <screen role="nodump"><userinput>&install-wheel; libfdt</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
-    <title>Command Explanations</title>
+    <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dpython=disabled</parameter>: This switch prevents building the
-Python 3 binding with the deprecated method (running
-<command>setup.py</command> directly).  We will build the Python 3 binding
-with the <command>pip3 wheel</command> command separately if wanted.
-    </para>
-
-    <para>
-      <command>sed ... ../setup.py</command>: This command allows building the
-Python 3 binding from a release tarball (instead of a Git checkout).
+      <parameter>-D python=disabled</parameter>: Essa chave impede construir a
+ligação do Python 3 com o método obsoleto (executando
+<command>setup.py</command> diretamente). Nós construiremos a ligação do
+Python 3 com o comando <command>pip3 wheel</command> separadamente, se
+desejado.
     </para>
 
   </sect2>
 
   <sect2 role="content">
-    <title>Contents</title>
+    <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle>Installed Programs</segtitle>
-      <segtitle>Installed Library</segtitle>
-      <segtitle>Installed Directory</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
         <seg>
-          convert-dtsv0, dtc, dtdiff, fdtdump, fdtget, fdtoverlay, and fdtput
+          convert-dtsv0, dtc, dtdiff, fdtdump, fdtget, fdtoverlay e fdtput
         </seg>
         <seg>
           libfdt.so
         </seg>
         <seg>
           /usr/lib/python&python3-majorver;/site-packages/libfdt-&dtc-version;.dist-info
+e /usr/share/doc/dtc-&dtc-version; (opcionalmente)
         </seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
-      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="convert-dtsv0">
         <term><command>convert-dtsv0</command></term>
         <listitem>
           <para>
-            converts device tree v0 source to device tree v1
+            converte a fonte da árvore de dispositivos v0 em árvore de dispositivos v1
           </para>
           <indexterm zone="dtc convert-dtsv0">
             <primary sortas="b-convert-dtsv0">convert-dtsv0</primary>
@@ -204,8 +202,8 @@ Python 3 binding from a release tarball (instead of a Git checkout).
         <term><command>dtc</command></term>
         <listitem>
           <para>
-            compiles device tree source (dts) to device tree binary blob (dtb), or
-de-compiles dtb to dts
+            compila a fonte da árvore de dispositivos (dts) para o blob binário da
+árvore de dispositivos (dtb) ou descompila dtb para dts
           </para>
           <indexterm zone="dtc dtc-prog">
             <primary sortas="b-dtc">dtc</primary>
@@ -217,7 +215,7 @@ de-compiles dtb to dts
         <term><command>dtdiff</command></term>
         <listitem>
           <para>
-            compares two different device tree
+            compara duas árvores de dispositivos
           </para>
           <indexterm zone="dtc dtdiff">
             <primary sortas="b-dtdiff">dtdiff</primary>
@@ -229,7 +227,7 @@ de-compiles dtb to dts
         <term><command>fdtdump</command></term>
         <listitem>
           <para>
-            prints a readable version of a flat device-tree file
+            imprime uma versão legível de um arquivo simples de árvore de dispositivos
           </para>
           <indexterm zone="dtc fdtdump">
             <primary sortas="b-fdtdump">fdtdump</primary>
@@ -241,7 +239,7 @@ de-compiles dtb to dts
         <term><command>fdtget</command></term>
         <listitem>
           <para>
-            reads values from device-tree
+            lê valores a partir da árvore de dispositivos
           </para>
           <indexterm zone="dtc fdtget">
             <primary sortas="b-fdtget">fdtget</primary>
@@ -253,7 +251,7 @@ de-compiles dtb to dts
         <term><command>fdtoverlay</command></term>
         <listitem>
           <para>
-            applies a number of overlays to a base device tree blob
+            aplica uma série de sobreposições a um blob de árvore de dispositivo base
           </para>
           <indexterm zone="dtc fdtoverlay">
             <primary sortas="b-fdtoverlay">fdtoverlay</primary>
@@ -265,7 +263,7 @@ de-compiles dtb to dts
         <term><command>fdtput</command></term>
         <listitem>
           <para>
-            writes a property value to a device tree
+            escreve um valor de propriedade em uma árvore de dispositivos
           </para>
           <indexterm zone="dtc fdtput">
             <primary sortas="b-fdtput">fdtput</primary>
@@ -277,8 +275,8 @@ de-compiles dtb to dts
         <term><filename class="libraryfile">libfdt.so</filename></term>
         <listitem>
           <para>
-            is a utility library for reading and manipulating device trees in the binary
-format
+            é uma biblioteca de utilitários para ler e manipular árvores de dispositivos
+no formato binário
           </para>
           <indexterm zone="dtc libfdt">
             <primary sortas="c-libfdt">libfdt.so</primary>

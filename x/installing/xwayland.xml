@@ -6,9 +6,9 @@
 
   <!ENTITY xwayland-download-http "&xorg-download-http;/xserver/xwayland-&xwayland-version;.tar.xz">
   <!ENTITY xwayland-download-ftp  "">
-  <!ENTITY xwayland-md5sum        "9d04fbe9c3a531c9cd08d38f51788ae6">
+  <!ENTITY xwayland-md5sum        "312c5cf17d1b147df1b787fd170958e1">
   <!ENTITY xwayland-size          "1,2 MB">
-  <!ENTITY xwayland-buildsize     "53 MB (adicionar 364 MB para testes)">
+  <!ENTITY xwayland-buildsize     "28 MB (adicionar 362 MB para os testes)">
   <!ENTITY xwayland-time          "0,2 UPC (com paralelismo=4; adicionar 1,7 UPC para testes, não incluindo o
 tempo de clonagem)">
 ]>
@@ -33,7 +33,7 @@ separado do pacote principal do servidor &quot;Xorg&quot;. Permite executar
 clientes do &quot;X&quot; dentro de uma sessão &quot;wayland&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -111,10 +111,10 @@ seguintes comandos:
 mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=$XORG_PREFIX         \
-            --buildtype=release           \
-            -Dxkb_output_dir=/var/lib/xkb \
-            ..                            &amp;&amp;
+meson setup ..                       \
+      --prefix=$XORG_PREFIX          \
+      --buildtype=release            \
+      -D xkb_output_dir=/var/lib/xkb &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -131,17 +131,7 @@ construção da integração contínua do(a) desenvolvedor(a)</ulink>.
 
     </para>
 
-    <!--
     <para>
-
-      Furthermore, an X server needs to be running during the build of
-      <application>xts</application>. If not running the tests in a
-      graphical environment, you'll need to enable <command>Xvfb</command>
-      by removing the <parameter>-Dxvfb=false</parameter> above. The
-      instructions below expect this has been done.
-    </para>
--->
-<para>
       Executar os testes envolve transferir outras duas estruturas, em adição às
 mencionadas dependências opcionais:
     </para>
@@ -213,23 +203,7 @@ planejar instalá-lo mais tarde.
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
-    <!--
-    <para>
-
-      <parameter>-Dxvfb=false</parameter>: Prevents building the
-      <command>xvfb</command> program, which is also installed by
-      <xref linkend="xorg-server"/>. Remove this option if you do not plan to
-      install the X server.
-    </para>
-
-    <para>
-      <command>mkdir -pv /etc/X11/xorg.conf.d</command>: This directory is
-      needed to put configuration files for Xwayland. This command ensures
-      that it exists, as some applications might use it without first
-      creating it.
-    </para>
--->
-<para revision="sysv">
+    <para revision="sysv">
       <command>cat &gt;&gt; /etc/sysconfig/createfiles...</command>: Esse comando
 cria o diretório &quot;<filename
 class="directory">/tmp/.X11-unix</filename>&quot; na inicialização e garante

@@ -4,14 +4,14 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libinput-version "1.25.0">
+  <!ENTITY libinput-version "1.26.1">
 
 <!--  <!ENTITY libinput-download-http "https://www.freedesktop.org/software/libinput/libinput-&libinput-version;.tar.xz">-->
   <!ENTITY libinput-download-http "https://gitlab.freedesktop.org/libinput/libinput/-/archive/&libinput-version;/libinput-&libinput-version;.tar.gz"
 >
   <!ENTITY libinput-download-ftp  "">
-  <!ENTITY libinput-md5sum        "fc582c553e40be99bea49adf6d4aa669">
-  <!ENTITY libinput-size          "996 KB">
+  <!ENTITY libinput-md5sum        "aae34911d662f77c1cd9be60c8502664">
+  <!ENTITY libinput-size          "1,0 MB">
   <!ENTITY libinput-buildsize     "11 MB (adicionar 23 MB para documentação e 9,6 MB para testes)">
   <!ENTITY libinput-time          "0,1 UPC (adicionar 0,1 UPC para documentação e 4,9 UPC para testes)">
 ]>
@@ -37,7 +37,7 @@ dispositivos de entrada para servidores de exibição e outras aplicações que
 precisam lidar diretamente com dispositivos de entrada.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -143,18 +143,18 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=$XORG_PREFIX    \
-            --buildtype=release      \
-            -Ddebug-gui=false        \
-            -Dtests=false            \
-            -Dlibwacom=false         \
-            -Dudev-dir=/usr/lib/udev \
-            ..                      &amp;&amp;
+meson setup ..                  \
+      --prefix=$XORG_PREFIX     \
+      --buildtype=release       \
+      -D debug-gui=false        \
+      -D tests=false            \
+      -D libwacom=false         \
+      -D udev-dir=/usr/lib/udev &amp;&amp;
 ninja</userinput></screen>
 
       <note>
         <para>
-          Se você quiser executar os testes completos, remova -Dtests do comando
+          Se você quiser executar os testes completos, remova -D tests do comando
 <command>meson</command> acima. Por favor, leia "configuração do núcleo para
 executar a suíte de teste do libinput" (acima).
         </para>
@@ -174,7 +174,7 @@ executado. Um teste falha no Wayland.
 <screen role="root"><userinput>ninja install</userinput></screen>
 
       <para>
-        Se você tiver passado <option>-Ddocumentation=true</option> para
+        Se você tiver passado <option>-D documentation=true</option> para
 <command>meson</command>, você pode instalar a documentação gerada
 executando os seguintes comandos como o(a) usuário(a) <systemitem
 class="username">root</systemitem>:
@@ -196,26 +196,26 @@ cp -rv Documentation/* /usr/share/doc/libinput-&libinput-version;/html</userinpu
         href="../../xincludes/meson-buildtype-release.xml"/>
 
       <para>
-        <parameter>-Ddebug-gui=false</parameter>: Essa chave desabilita a criação de
-um auxiliar visual de depuração para libinput. Remova se o quiser e você
+        <parameter>-D debug-gui=false</parameter>: Essa chave desabilita a criação
+de um auxiliar visual de depuração para libinput. Remova se o quiser e você
 tiver o <xref linkend="gtk3"/> instalado.
       </para>
 
       <para>
-        <parameter>-Dtests=false</parameter>: Essa chave desabilita a compilação dos
-testes principais. Mesmo com os testes definidos como false, você ainda
+        <parameter>-D tests=false</parameter>: Essa chave desabilita a compilação
+dos testes principais. Mesmo com os testes definidos como false, você ainda
 consegue executar os primeiros quatro testes secundários, como um(a)
 usuário(a) normal, mas um será ignorado se o <xref linkend="pyparsing"/> não
 estiver instalado.
       </para>
 
       <para>
-        <parameter>-Dlibwacom=false</parameter>: Remova essa opção se você tiver
+        <parameter>-D libwacom=false</parameter>: Remova essa opção se você tiver
 <xref linkend="libwacom"/> instalado ou se estiver instalando o GNOME.
       </para>
 
       <para>
-        <parameter>-Dudev-dir=/usr/lib/udev</parameter>: Caso o valor de
+        <parameter>-D udev-dir=/usr/lib/udev</parameter>: Caso o valor de
 <envar>XORG_PREFIX</envar> não esteja configurado como <filename
 class='directory'>/usr</filename>, essa opção evita que o pacote instale
 regras e auxiliares do Udev em <filename
@@ -226,7 +226,7 @@ class='directory'>/usr</filename>, mas não causa danos.
       </para>
 
       <para>
-        <option>-Ddocumentation=true</option>: Essa chave habilita a geração da
+        <option>-D documentation=true</option>: Essa chave habilita a geração da
 documentação. Adicione-a se quiser gerar a documentação. Você precisa ter
 <xref linkend="doxygen"/> e <xref linkend="graphviz"/> instalados.
       </para>

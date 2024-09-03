@@ -12,8 +12,8 @@
   <!ENTITY grub-efi-time          "0,4 UPC (no LFS de 64 bits, usando paralelismo=4)">
 
   <!ENTITY unifont-download-http  "https://unifoundry.com/pub/unifont/unifont-&unifont-version;/font-builds/unifont-&unifont-version;.pcf.gz">
-  <!ENTITY unifont-md5sum         "72f95e7ecb47a4c7ed610babe6959ead">
-  <!ENTITY unifont-size           "1,3 MB">
+  <!ENTITY unifont-md5sum         "da47e9c7a2cec3b68a0fad5d2a341dcc">
+  <!ENTITY unifont-size           "1,4 MB">
 ]>
 
 <sect1 id="grub-efi" xreflabel="GRUB-&grub-version; para EFI">
@@ -35,7 +35,7 @@ Bootloader. Nesta página, ele será construído com suporte UEFI, que não est�
 habilitado para o GRUB construído no LFS.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -122,10 +122,8 @@ linkend="freetype2"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="lvm2"/>
+      <xref linkend="lvm2"/> e <xref linkend="fuse3"/>
     </para>
-
-
   </sect2>
 
   <sect2 role="installation">
@@ -197,11 +195,30 @@ significativos.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, se você tiver ignorado o pacote GRUB do LFS, como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install &amp;&amp;
+<screen role="nodump"><userinput>make install &amp;&amp;
 mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions</userinput></screen>
+
+    <para>
+      Se você não tiver ignorado o pacote GRUB do LFS, como o(a) usuário(a)
+&root;, instale somente os componentes não instalados a partir do pacote
+GRUB do LFS:
+    </para>
+
+<screen role="root"><userinput>make DESTDIR=$PWD/dest install
+cp -av dest/usr/lib/grub/x86_64-efi -T /usr/lib/grub/x86_64-efi
+cp -av dest/usr/share/grub/*.{pf2,h}   /usr/share/grub
+cp -av dest/usr/bin/grub-mkfont        /usr/bin</userinput></screen>
+
+    <para>
+      Se as dependências opcionais estiverem instaladas, instale também o programa
+<command>grub-mount</command>:
+    </para>
+
+<screen role="nodump"><userinput>cp -av dest/usr/bin/grub-mount /usr/bin</userinput></screen>
 
   </sect2>
 
@@ -258,7 +275,56 @@ discutido em <xref linkend="grub-setup"/>.
   <sect2 role="content">
     <title>Conteúdo</title>
 
-    <para>Veja-se a página para o GRUB no livro LFS.</para>
+    <para>
+      Uma lista dos arquivos instalados, juntamente com descrições curtas deles,
+pode ser encontrada em <ulink
+url="&lfs-root;/chapter08/grub.html#contents-gRUB"/>.
+    </para>
+
+    <para>
+      Listados abaixo estão os programas recém-instalados, juntamente com
+descrições curtas.
+    </para>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>grub-mkfont e grub-mount (opcional)</seg>
+        <seg>/usr/lib/grub/x86_64-efi</seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="grub-mkfont">
+        <term><command>grub-mkfont</command></term>
+        <listitem>
+          <para>
+            converte formatos de arquivo de fontes comuns em PF2
+          </para>
+          <indexterm zone="grub-efi grub-mkfont">
+            <primary sortas="b-grub-mkfont">grub-mkfont</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="grub-mount">
+        <term><command>grub-mount</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta de depuração para controlador de sistema de arquivos
+          </para>
+          <indexterm zone="grub-efi grub-mount">
+            <primary sortas="b-grub-mount">grub-mount</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
   </sect2>
 
 </sect1>

@@ -6,11 +6,11 @@
 
   <!ENTITY ffmpeg-download-http "https://ffmpeg.org/releases/ffmpeg-&ffmpeg-version;.tar.xz">
   <!ENTITY ffmpeg-download-ftp  "">
-  <!ENTITY ffmpeg-md5sum        "341d719415b7f95bb59f5016f2864ac6">
+  <!ENTITY ffmpeg-md5sum        "e22725fc3738e314d71a7fb32f2336db">
   <!ENTITY ffmpeg-size          "10 MB">
-  <!ENTITY ffmpeg-buildsize     "237 MB (adicionar 1,5 GB para a suíte/testes FATE; adicionar 792 MB para
+  <!ENTITY ffmpeg-buildsize     "228 MB (adicionar 1,5 GB para a suíte/testes FATE; adicionar 792 MB para
 documentação)">
-  <!ENTITY ffmpeg-time          "1,3 UPC (usando paralelismo=4; adicionar 3,2 UPC (com THREADS=4) para
+  <!ENTITY ffmpeg-time          "1,1 UPC (usando paralelismo=4; adicionar 3,2 UPC (com THREADS=4) para
 executar a suíte FATE depois que arquivos de amostra forem baixados;
 adicionar 0,3 UPC para documentos doxygen)">
 ]>
@@ -41,7 +41,7 @@ qualidade. <application>FFmpeg</application> pode usar uma fonte de vídeo
 compatível com Video4Linux e qualquer fonte de áudio Open Sound System.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -100,9 +100,12 @@ linkend="nasm"/> ou <xref linkend="yasm"/>
 
     <bridgehead renderas="sect4">Recomendadas para uso de área de trabalho</bridgehead>
     <para role="recommended">
-      <xref linkend="alsa-lib"/>, <xref linkend="libva"/>, <xref
-linkend="libvdpau"/> (com o correspondente pacote de controlador) e <xref
-linkend="sdl2"/>
+      <xref linkend="alsa-lib"/>, <xref linkend="libva"/>, <xref linkend="sdl2"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas para sistemas com Vídeo Intel</bridgehead>
+    <para role="recommended">
+      <xref linkend="libvdpau"/> e <xref linkend="libvdpau-va-gl"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -114,11 +117,11 @@ Vulkan</ulink>, and-->
 <xref linkend="doxygen"/>, <xref linkend="fontconfig"/>, <xref
 linkend="fribidi"/>, <xref linkend="frei0r"/>, <xref linkend="libcdio"/>
 (para identificar e reproduzir CDs), <xref linkend="libdrm"/> (para entrada
-<quote>kmsgrab</quote>), <xref linkend="libwebp"/>, <xref
-linkend="opencv"/>, <xref linkend="openjpeg2"/>, <xref linkend="gnutls"/>,
-<xref linkend="pulseaudio"/>, <xref linkend="samba"/>, <xref
-linkend="speex"/>, <xref linkend="texlive"/> (ou <xref
-linkend="tl-installer"/>) para documentação PDF e PS, <xref
+<quote>kmsgrab</quote>), <xref linkend="libjxl"/>, <xref
+linkend="libwebp"/>, <xref linkend="opencv"/>, <xref linkend="openjpeg2"/>,
+<xref linkend="gnutls"/>, <xref linkend="pulseaudio"/>, <xref
+linkend="samba"/>, <xref linkend="speex"/>, <xref linkend="texlive"/> (ou
+<xref linkend="tl-installer"/>) para documentação PDF e PS, <xref
 linkend="v4l-utils"/>, <xref linkend="vulkan-loader"/>, <xref
 linkend="xvid"/>, <xref linkend="x-window-system"/>, <ulink
 url="https://code.videolan.org/videolan/dav1d">dav1d</ulink>, <ulink
@@ -185,8 +188,7 @@ comandos:
             --enable-libx264     \
             --enable-libx265     \
             --enable-openssl     \
-            --disable-vulkan     \
-	    --ignore-tests=enhanced-flv-av1 \
+            --ignore-tests=enhanced-flv-av1 \
             --docdir=/usr/share/doc/ffmpeg-&ffmpeg-version; &amp;&amp;
 
 make &amp;&amp;
@@ -408,12 +410,17 @@ de alta qualidade via <filename class="libraryfile">libx265</filename>.
 fluxos de rede de intercomunicação.
     </para>
 
-    <para>
-      <parameter>--disable-vulkan</parameter>: Desabilita Vulkan para a atual
-versão de <xref linkend="vulkan-loader"/> devido a um conflito de API.
-    </para>
+    
 
+    <!--
     <para>
+
+      <parameter>- -disable-vulkan</parameter>: Disables Vulkan for the
+      current version of <xref linkend="vulkan-loader"/> due to
+      an API conflict.
+    </para>
+    -->
+<para>
       <parameter>--ignore-tests=...</parameter>: Desabilita testes que falham para
 executar no BLFS sem os pacotes opcionais. Atualmente o teste AV1 está
 desabilitado porque precisa do dav1d para fazer decodificação AV1 na CPU. O

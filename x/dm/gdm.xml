@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-45;/gdm-&gdm-version;.tar.xz">
+  <!ENTITY gdm-download-http "&gnome-download-http;/gdm/&gnome-46;/gdm-&gdm-version;.tar.xz">
   <!ENTITY gdm-download-ftp  "">
-  <!ENTITY gdm-md5sum        "4912429c0231a95fedd086d1ac8f54ea">
-  <!ENTITY gdm-size          "836 KB">
-  <!ENTITY gdm-buildsize     "34 MB">
-  <!ENTITY gdm-time          "0,3 UPC">
+  <!ENTITY gdm-md5sum        "1d92ec4dd0643907fa135056aee18066">
+  <!ENTITY gdm-size          "912 KB">
+  <!ENTITY gdm-buildsize     "37 MB">
+  <!ENTITY gdm-time          "0,2UPC">
 ]>
 
 <sect1 id="gdm" xreflabel="GDM-&gdm-version;">
@@ -31,7 +31,7 @@ responsável por fornecer &quot;logins&quot; gráficos e gerenciar exibições
 locais e remotas.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -140,25 +140,25 @@ comandos:
 mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                  \
-      --prefix=/usr             \
-      --buildtype=release       \
-      -Dgdm-xsession=true       \
-      -Drun-dir=/run/gdm        \
-      -Dlogind-provider=elogind \
-      -Dsystemd-journal=false   \
-      -Dsystemdsystemunitdir=no \
-      -Dsystemduserunitdir=no   &amp;&amp;
+meson setup ..                   \
+      --prefix=/usr              \
+      --buildtype=release        \
+      -D gdm-xsession=true       \
+      -D run-dir=/run/gdm        \
+      -D logind-provider=elogind \
+      -D systemd-journal=false   \
+      -D systemdsystemunitdir=no \
+      -D systemduserunitdir=no   &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -Dgdm-xsession=true \
-      -Drun-dir=/run/gdm  &amp;&amp;
+meson setup ..             \
+      --prefix=/usr        \
+      --buildtype=release  \
+      -D gdm-xsession=true \
+      -D run-dir=/run/gdm  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -181,21 +181,21 @@ class="username">root</systemitem>&quot;:
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>-Dinitial-vt=7</option>: Use essa chave para fazer o
-&quot;<application>GDM</application>&quot; iniciar no &quot;VT7&quot; em vez
-do primeiro&quot; VT&quot; livre.
+      <option>-D initial-vt=7</option>: Use essa chave para fazer o
+<application>GDM</application> iniciar no Terminal Virtual 7 em vez do
+primeiro Terminal Virtual livre.
     </para>
 
     <para>
-      <option>-Ddefault-pam-config=lfs</option>: Use essa chave se você não criou
-o arquivo &quot;<filename>/etc/lfs-release</filename>&quot; ou a detecção
-automática da distribuição falhará e você estará inapto(a) para usar o
-&quot;<application>GDM</application>&quot;.
+      <option>-D default-pam-config=lfs</option>: Use essa chave se você não criou
+o arquivo <filename>/etc/lfs-release</filename> ou a detecção automática da
+distribuição falhará e você estará inapto(a) para usar o
+<application>GDM</application>.
     </para>
 
     <para>
-      <parameter>-Dgdm-xsession=true</parameter>: Isso habilita a instalação do
-arquivo &quot;Xsession&quot; do &quot;<application>GDM</application>&quot;.
+      <parameter>-D gdm-xsession=true</parameter>: Isso habilita a instalação do
+arquivo Xsession do <application>GDM</application>.
     </para>
 
   </sect2>
@@ -337,7 +337,7 @@ trabalho), como o(a) usuário(a) &root;, emita:
           libgdm.so e pam_gdm.so (Módulo &quot;PAM&quot;)
         </seg>
         <seg>
-          <!-- seems those diretories are not created at install, but at
+          <!-- seems those directories are not created at install, but at
      runtime
           /var/cache/gdm,
           /var/lib/gdm,

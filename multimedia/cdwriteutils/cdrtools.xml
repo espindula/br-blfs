@@ -31,7 +31,7 @@ de CD. Eles são úteis para ler, criar ou escrever (gravar) CDs, DVDs e
 discos Blu-ray.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -92,8 +92,17 @@ discos Blu-ray.
 comandos:
     </para>
 
-<screen><userinput>export GMAKE_NOWARN=true &amp;&amp;
-make -j1 INS_BASE=/usr DEFINSUSR=root DEFINSGRP=root</userinput></screen>
+<screen><userinput>sed -i 's|/opt/schily|/usr|g'           DEFAULTS/Defaults.linux &amp;&amp;
+sed -i 's|DEFINSGRP=.*|DEFINSGRP=root|' DEFAULTS/Defaults.linux &amp;&amp;
+sed -i 's|INSDIR=\s*sbin|INSDIR=bin|'   rscsi/Makefile          &amp;&amp;
+
+export GMAKE_NOWARN=true &amp;&amp;
+export CFLAGS="$CFLAGS -std=gnu89 -fno-strict-aliasing" &amp;&amp;
+
+make -j1 INS_BASE=/usr  \
+         DEFINSUSR=root \
+         DEFINSGRP=root \
+         VERSION_OS="LinuxFromScratch"</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -103,8 +112,14 @@ make -j1 INS_BASE=/usr DEFINSUSR=root DEFINSGRP=root</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>export GMAKE_NOWARN=true &amp;&amp;
-make INS_BASE=/usr MANSUFF_LIB=3cdr DEFINSUSR=root DEFINSGRP=root install &amp;&amp;
+<screen role="root"><userinput>GMAKE_NOWARN=true &amp;&amp;
+
+make INS_BASE=/usr    \
+     DEFINSUSR=root   \
+     DEFINSGRP=root   \
+     MANSUFF_LIB=3cdr \
+     install          &amp;&amp;
+
 install -v -m755 -d /usr/share/doc/cdrtools-&cdrtools-version; &amp;&amp;
 install -v -m644 README.* READMEs/* ABOUT doc/*.ps \
                     /usr/share/doc/cdrtools-&cdrtools-version;</userinput></screen>
@@ -171,8 +186,8 @@ libscgcmd.a, libschily.a, libsiconv.a</seg>
         <term><command>btcflash</command></term>
         <listitem>
           <para>
-            atualiza o firmware no gravador DVD+/-RW BTC DRW1008. Por favor, tenha
-cuidado com esse aplicativo
+            atualiza o firmware em gravadores de DVD+/-RW BTC DRW1008. Por favor, tenha
+cuidado com esse programa
           </para>
           <indexterm zone="cdrtools btcflash">
             <primary sortas="b-btcflash">btcflash</primary>
@@ -196,7 +211,7 @@ cuidado com esse aplicativo
         <term><command>cdrecord</command></term>
         <listitem>
           <para>
-            grava CDs de áudio ou dados
+            grava áudio ou dados em Discos Compactos
           </para>
           <indexterm zone="cdrtools cdrecord">
             <primary sortas="b-cdrecord">cdrecord</primary>

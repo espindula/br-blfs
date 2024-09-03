@@ -8,7 +8,7 @@
   <!ENTITY gcr-download-ftp  "">
   <!ENTITY gcr-md5sum        "40a754ba44d5e95e4d07656d6302900c">
   <!ENTITY gcr-size          "1012 KB">
-  <!ENTITY gcr-buildsize     "33 MB (com os testes)">
+  <!ENTITY gcr-buildsize     "33 MB (com testes)">
   <!ENTITY gcr-time          "0,2 UPC (com testes; ambos usando paralelismo=4)">
 ]>
 
@@ -32,7 +32,7 @@ visualizador para arquivos criptográficos na área de trabalho do
 <application>GNOME</application>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,15 +72,14 @@ visualizador para arquivos criptográficos na área de trabalho do
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/>, <xref linkend="libgcrypt"/> e <xref
-linkend="p11-kit"/>
+      <xref linkend="glib2"/> (recomendado GObject Introspection), <xref
+linkend="libgcrypt"/> e <xref linkend="p11-kit"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gnupg2"/>, <xref linkend="gobject-introspection"/>, <xref
-linkend="gtk3"/>, <xref linkend="libsecret"/>, <xref linkend="libxslt"/> e
-<xref linkend="vala"/>
+      <xref linkend="gnupg2"/>, <xref linkend="gtk3"/>, <xref
+linkend="libsecret"/>, <xref linkend="libxslt"/> e <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -127,19 +126,19 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dgtk_doc=false     \
+            -D gtk_doc=false    \
+            -D ssh_agent=false  \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Se você tiver o <xref linkend='gi-docgen'/> instalado e desejar construir a
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar construir a
 documentação da API para esse pacote, emita:
     </para>
 
 <screen remap='doc'><userinput>sed -e "/install_dir/s@,\$@ / 'gcr-&gcr-version;'&amp;@" \
-    -e "/fatal-warnings/d"                     \
     -i ../docs/*/meson.build                  &amp;&amp;
-meson configure -Dgtk_doc=true                &amp;&amp;
+meson configure -D gtk_doc=true               &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -187,13 +186,19 @@ precisam ser executados a partir de um Terminal do X ou similar.
     </para>
     -->
 <para>
-      <option>-Dgtk=false</option>: Use essa chave se você não tiver instalado o
+      <parameter>-D ssh_agent=false</parameter>: Evita um conflito com <xref
+linkend='gcr4'/>. Omita essa chave se você não planeja instalar o <xref
+linkend='gcr4'/> e deseja usar o <command>gcr-ssh-agent</command>.
+    </para>
+
+    <para>
+      <option>-D gtk=false</option>: Use essa chave se você não tiver instalado o
 <xref linkend="gtk3"/>. Observe que o <application>gcr-viewer</application>
 não será instalado se isso for passado para o meson.
     </para>
 
     <para>
-      <option>-Dgtk_doc=true</option>: &gi-doc-disable;
+      <option>-D gtk_doc=true</option>: &gi-doc-disable;
     </para>
 
     

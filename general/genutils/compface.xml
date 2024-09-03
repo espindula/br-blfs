@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Compface</title>
+    <title>Introdução ao Compface</title>
 
     <para>
       O <application>Compface</application> fornece utilitários e uma biblioteca
@@ -32,7 +32,7 @@ para transportar miniaturas dos(as) autores(as) de mensagens eletrônicas em
 um cabeçalho de mensagem.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,6 +74,21 @@ um cabeçalho de mensagem.
     <title>Instalação do Compface</title>
 
     <para>
+      Primeiro, corrija o conjunto de comandos sequenciais configure, de forma que
+ele seja compatível com C99:
+    </para>
+
+<screen><userinput remap="pre">autoreconf</userinput></screen>
+
+    <para>
+      A seguir, corrija uma falha de construção que ocorre com GCC 14:
+    </para>
+
+<screen><userinput remap="pre">sed -e '/compface.h/a #include &lt;unistd.h&gt;' \
+    -i cmain.c                             \
+    -i uncmain.c</userinput></screen>
+
+    <para>
       Instale <application>Compface</application> executando os seguintes
 comandos:
     </para>
@@ -104,8 +119,8 @@ install -m755 -v xbm2xface.pl /usr/bin</userinput></screen>
 
       <seglistitem>
         <seg>compface, uncompface e xbm2xface.pl</seg>
-        <seg>libcompface.{so,a}</seg>
-        <seg>Nenhum</seg>
+        <seg>libcompface.a</seg>
+        <seg>Nenhum(a)</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -151,14 +166,14 @@ imagem de face 48x48x1
       </varlistentry>
 
       <varlistentry id="libcompface">
-        <term><filename class="libraryfile">libcompface.{so,a}</filename></term>
+        <term><filename class="libraryfile">libcompface.a</filename></term>
         <listitem>
           <para>
             permite que os algoritmos de compressão e descompressão sejam usados em
 outros aplicativos, tais como "MTAs"
           </para>
           <indexterm zone="compface libcompface">
-            <primary sortas="c-libcompface">libcompface.{so,a}</primary>
+            <primary sortas="c-libcompface">libcompface.a</primary>
           </indexterm>
         </listitem>
       </varlistentry>

@@ -6,16 +6,16 @@
 
   <!ENTITY firefox-download-http "&mozilla-http;/firefox/releases/&firefox-version;esr/source/firefox-&firefox-version;esr.source.tar.xz">
   <!ENTITY firefox-download-ftp  "">
-  <!ENTITY firefox-md5sum        "212e126b43e8fb72a7314f2c3256b79f">
-  <!ENTITY firefox-size          "485 MB">
+  <!ENTITY firefox-md5sum        "efbf349f0b7442fc6f2995bef4d32785">
+  <!ENTITY firefox-size          "536 MB">
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "6,1 GB (199 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "6,7 GB (223 MB instalado) sem testes">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "12 UPC usando -j8, sem testes">
+  <!ENTITY firefox-time          "15 UPC usando -j8, sem testes">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -41,7 +41,7 @@ Firefox-&firefox-version;</title>-->
 de código <application>Mozilla</application>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -138,16 +138,14 @@ precisem de configuração de tempo de execução para que o som funcione.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <!--<xref linkend="six"/>
-,-->
-<xref linkend="cbindgen"/>, <xref linkend="dbus-glib"/>, <xref
-linkend="gtk3"/>, <xref linkend="libnotify"/>, <xref linkend="llvm"/> (com
-clang, usado para bindgen mesmo se usar gcc), <xref linkend="nodejs"/>,
-<xref linkend="pulseaudio"/> (ou <xref linkend="alsa-lib"/> se você editar o
-mozconfig; agora obsoleto pela Mozilla), em qualquer caso, por favor,
-leiam-se as Informações de Configuração, <xref linkend="python311"/>
-(construído depois de instalar <xref linkend="sqlite"/>), <xref
-linkend="startup-notification"/> e <xref linkend="unzip"/>
+      <xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref
+linkend="libnotify"/>, <xref linkend="llvm"/> (com clang, usado para bindgen
+mesmo se usar gcc), <xref linkend="nodejs"/>, <xref linkend="pulseaudio"/>
+(ou <xref linkend="alsa-lib"/> se você editar o mozconfig; agora obsoleto
+pela Mozilla), em qualquer caso, por favor, leiam-se as Informações de
+Configuração, <xref linkend="python3"/> (depois de instalar <xref
+linkend="sqlite"/>), <xref linkend="startup-notification"/> e <xref
+linkend="unzip"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -168,9 +166,10 @@ mas podem estar desatualizadas ou conter falhas de segurança.
     <para role="optional">
       <xref linkend="curl"/>, <xref linkend="doxygen"/>, <xref role="runtime"
 linkend="ffmpeg"/> (tempo de execução, para reproduzir arquivos mov, mp3 ou
-mp4), <xref linkend="liboauth"/>, <xref role="runtime" linkend="pciutils"/>
-(tempo de execução), <xref linkend="valgrind"/>, <xref linkend="wget"/>,
-<xref linkend="wireless_tools"/>, <xref linkend="yasm"/>, <ulink
+mp4), <xref role="runtime" linkend="geoclue2"/> (tempo de execução), <xref
+linkend="liboauth"/>, <xref role="runtime" linkend="pciutils"/> (tempo de
+execução), <xref linkend="valgrind"/>, <xref linkend="wget"/>, <xref
+linkend="wireless_tools"/>, <xref linkend="yasm"/>, <ulink
 url="https://github.com/libproxy/libproxy">libproxy</ulink>
     </para>
 
@@ -193,33 +192,30 @@ descomente quaisquer outras opções desejadas. Crie o arquivo emitindo o
 seguinte comando:
     </para>
 
-<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
-         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
-<screen><!-- With Firefox ESR 128 we'd replace the following part with
-"- -enable-elf-hack=relr", or remove it if relr becomes the default. -->
-<userinput>cat &gt; mozconfig &lt;&lt; "EOF"
-<literal># Se você tiver uma máquina multi cores, todos os cores serão usados por padrão.
+<!-- https://phabricator.services.mozilla.com/D219025 -->
+<screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
+<literal># If you have a multicore machine, all cores will be used by default.
 
-# Se você tiver instalado (ou instalará) o "wireless-tools" e desejar
-# usar serviços de geolocalização da web, comente esta linha
+# If you have installed (or will install) wireless-tools, and you wish
+# to use geolocation web services, comment out this line
 ac_add_options --disable-necko-wifi
 
-# Chaves de API para APIs de geolocalização - necko-wifi (acima) é exigido para MLS.
-# Descomente a linha seguinte se desejar usar o Serviço de Localização do Mozilla
-#ac_add_options --with-mozilla-api-keyfile=$PWD/mozilla-key
+# Comment out the following line if you wish not to use Google's Location
+# Service (GLS).  Note that if Geoclue is installed and configured to use
+# GLS (as the BLFS instruction does), Firefox can access GLS via Geoclue
+# anyway.  On the other hand if Geoclue is not installed (or not properly
+# configured) and this line is commented out, the website requiring a
+# location service will not function properly.
+ac_add_options --with-google-location-service-api-keyfile=$PWD/google-key
 
-# Descomente a linha seguinte se desejar usar a API de geolocalização do Google
-# (necessária para uso com mapas salvos com o Google Maps)
-#ac_add_options --with-google-location-service-api-keyfile=$PWD/google-key
+# startup-notification is required since firefox-78
 
-# notificação de inicialização é necessária desde o Firefox-78
-
-# Descomente a seguinte opção se você não tiver instalado o PulseAudio
-# e quiser usar o alsa
+# Uncomment the following option if you have not installed PulseAudio and
+# want to use alsa instead
 #ac_add_options --enable-audio-backends=alsa
 
-# Comente as seguintes opções se você não tiver instalado
-# as dependências recomendadas:
+# Comment out following options if you have not installed
+# recommended dependencies:
 ac_add_options --with-system-icu
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
@@ -227,47 +223,35 @@ ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-webp
 
-# Ao contrário do Thunderbird, embora usar o vinculador Gold possa
-# economizar quatro megabytes no arquivo instalado, isso não torna
-# a construção mais rápida.
-
-# A biblioteca libdavid (decodificador av1) exige nasm. Descomente isto
-# se o nasm não tiver sido instalado. Não descomente se você tiver o
-# ffmpeg instalado.
+# The libdav1d library (av1 decoder) requires nasm. Uncomment this
+# if nasm has not been installed. Do not uncomment this if you have
+# ffmpeg installed.
 #ac_add_options --disable-av1
 
-# Você não pode distribuir o binário se fizer isto
+# You cannot distribute the binary if you do this.
 ac_add_options --enable-official-branding
 
-# A remoção agora está habilitada por padrão. Descomente estas linhas
-# se você precisar executar um depurador:
+# Stripping is now enabled by default.
+# Uncomment these lines if you need to run a debugger:
 #ac_add_options --disable-strip
 #ac_add_options --disable-install-strip
 
-# Desabilitar os símbolos de depuração torna a construção muito menor e um pouco
-# mais rápida. Comente isto se você precisar executar um depurador. Observação: Isto é
-# exigido para compilação em i686.
+# Disabling debug symbols makes the build much smaller and a little
+# faster. Comment this if you need to run a debugger.
 ac_add_options --disable-debug-symbols
 
-# Foi informado que elf-hack causa instalações falhas (depois de construções bem-sucedidas)
-# em algumas máquinas. Supõe-se que melhore o tempo de inicialização e reduza a libxul.so em
-# alguns MB. Com lançamentos recentes do Binutils, o vinculador já suporta
-# uma maneira muito mais segura e genérica para isso.
-ac_add_options --disable-elf-hack
-export LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
-
-# Os(As) editores(as) do BLFS recomendam não mudar nada abaixo desta linha:
+# The BLFS editors recommend not changing anything below this line:
 ac_add_options --prefix=/usr
 ac_add_options --enable-application=browser
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 
-# Habilitar os testes usará muito mais espaço e aumentará significativamente
-# o tempo de construção, sem nenhum benefício óbvio.
+# Enabling the tests will use a lot more space and significantly
+# increase the build time, for no obvious benefit.
 ac_add_options --disable-tests
 
-# O nível padrão de otimização novamente produz uma construção funcional com o gcc.
-ac_add_options --enable-optimize
+# This enables SIMD optimization in the shipped encoding_rs crate.
+ac_add_options --enable-rust-simd
 
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
@@ -276,26 +260,36 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
 
-# O sandboxing funciona bem em x86_64, mas pode causar problemas em outras
-# plataformas. Se não estiver em x86_64, por exemplo, i686, é recomendado
-# descomentar a seguinte chave.
-#ac_add_options --disable-sandbox
+# Sandboxing works well on x86_64 but might cause issues on other
+# platforms, e.g. i686.
+[ $(uname -m) != x86_64 ] &amp;&amp; ac_add_options --disable-sandbox
 
-# Usar bibliotecas wasm em sandbox foi movido para todas as construções, em vez de
-# apenas construções de automação do Mozilla. Exige pacotes extras llvm e foi
-# informado que retarda seriamente a construção. Desative-o.
+# Using sandboxed wasm libraries has been moved to all builds instead
+# of only mozilla automation builds. It requires extra llvm packages
+# and was reported to seriously slow the build. Disable it.
 ac_add_options --without-wasm-sandboxed-libraries
 
-# A opção seguinte desabilita o Informe de Telemetria. Com o Add-on Fiasco,
-# constatou-se que a Mozilla estava coletando dados de usuário(a), incluindo senhas salvas
-# e dados de formulários da web, sem o consentimento dos(as) usuários(as). Constatou-se, também,
-# que a Mozilla estava enviando atualizações para sistemas sem o conhecimento ou permissão do(a)
-# usuário(a). Como resultado disso, use o seguinte comando para desabilitar permanentemente
-# os informes de telemetria no Firefox.
+# The following option unsets Telemetry Reporting. With the Addons Fiasco,
+# Mozilla was found to be collecting user's data, including saved passwords and
+# web form data, without users consent. Mozilla was also found shipping updates
+# to systems without the user's knowledge or permission.
+# As a result of this, use the following command to permanently disable
+# telemetry reporting in Firefox.
 unset MOZ_TELEMETRY_REPORTING
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir</literal>
 EOF</userinput></screen>
+
+    
+    <para>
+      Adapte dois arquivos para compatibilidade com cbindgen-0.27.0 ou posterior:
+    </para>
+
+    <!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
+         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
+<screen><userinput>sed 's/input.try/&amp;_parse/' \
+    -i servo/components/style_traits/values.rs &amp;&amp;
+sed '0,/"Keyframe"/{//d}' -i servo/ports/geckolib/cbindgen.toml</userinput></screen>
 
     
     <para>
@@ -339,24 +333,28 @@ esac</userinput></screen>
         @linuxfromscratch.org email address, and I'll make you an administrator
         for the 'Google APIs for LFS' project (where the API and OAuth keys
         were created for use in the book).-->
-As chaves de API do Google e Mozilla abaixo são específicas para o LFS. Se
-usar essas instruções para outra distribuição ou se pretender distribuir
-cópias binárias do software usando essas instruções, por favor, obtenha as
-tuas próprias chaves seguindo as instruções localizadas em <ulink
-url="https://www.chromium.org/developers/how-tos/api-keys"/> e <ulink
-url="https://location.services.mozilla.com/api"/> respectivamente.
+A chave de API do Google abaixo é específica para o LFS. Se usar essas
+instruções para outra distribuição ou se você pretender distribuir cópias
+binárias do software usando essas instruções, por favor, obtenha as tuas
+próprias chaves seguindo as instruções localizadas em <ulink
+url="https://www.chromium.org/developers/how-tos/api-keys"/>.
         
       </para>
     </note>
 
-<screen><userinput>echo "AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ" > google-key
-echo "613364a7-9418-4c86-bcee-57e32fd70c23" > mozilla-key</userinput></screen>
+<screen><userinput>echo "AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ" > google-key</userinput></screen>
 
     <note>
       <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
        href="../../xincludes/mozshm.xml"/>
     </note>
 
+
+
+    
+
+
+    
 
 
     <!--<para>
@@ -372,6 +370,53 @@ echo "613364a7-9418-4c86-bcee-57e32fd70c23" > mozilla-key</userinput></screen>
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;-ffmpeg_6-1.patch</userinput></screen>-->
+<!-- https://github.com/rust-lang/rust-bindgen/pull/2689 -->
+<!--
+    <para>
+
+      Adapt the shipped <application>rust-bindgen</application> copy for
+      LLVM-18 and later, and tell <command>cargo</command> we've modified
+      the code of <application>rust-bindgen</application> so the checksum
+      verification of this crate should be skipped:
+    </para>
+
+    <screen><userinput>sed -e "/match cursor.kind()/a                                    \
+        CXCursor_LinkageSpec => return Err(ParseError::Recurse)," \
+    -i third_party/rust/bindgen/ir/item.rs                        &amp;&amp;
+
+cat &gt;&gt; Cargo.toml &lt;&lt; EOF &amp;&amp;
+<literal>[patch.crates-io.bindgen_0_64_0]
+package = "bindgen"
+version = "0.64.0"
+path = "third_party/rust/bindgen"</literal>
+EOF
+
+sed -r '/name = "bindgen"/,+5 s/^source|^checksum/#&amp;/' \
+    -i Cargo.lock</userinput></screen>
+-->
+<!-- https://hg.mozilla.org/mozilla-central/rev/ba6abbd36b49 -->
+<!--
+    <para>
+
+      Adapt the WebRTC code to use 64-bit timestamp to fix a build
+      failure with Clang-18 and later:
+    </para>
+
+    <screen><userinput>sed 's/uint32_t timestamp/uint64_t timestamp/'                \
+    -i dom/media/gmp-plugin-openh264/gmp-fake-openh264.cpp    \
+       dom/media/gtest/TestGMPRemoveAndDelete.cpp             \
+       dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.cpp &amp;&amp;
+
+sed '/mInputImageMap/s/uint32_t/uint64_t/' \
+    -i dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.h</userinput></screen>
+
+    <para>
+      Remove several lines of Rust code only useful for ARM and failing to
+      compile with Rustc-1.78.0 or newer:
+    </para>
+
+    <screen><userinput>sed '/cfg_attr/,/)]/d' -i gfx/qcms/src/lib.rs</userinput></screen>
+-->
 <para>
       Agora invoque o conjunto de comandos sequenciais Python
 <command>mach</command> para compilar o pacote.
@@ -379,8 +424,7 @@ echo "613364a7-9418-4c86-bcee-57e32fd70c23" > mozilla-key</userinput></screen>
 
 <screen><userinput>export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &amp;&amp;
 export MOZBUILD_STATE_PATH=${PWD}/mozbuild          &amp;&amp;
-export PYTHON311=/opt/python3.11/bin/python3.11     &amp;&amp;
-$PYTHON311 ./mach build</userinput></screen>
+./mach build</userinput></screen>
 
     <para>
       O <filename>mozconfig</filename> acima desabilita os testes porque eles usam
@@ -399,16 +443,14 @@ desse comando, de forma que consiga revisá-la(s).
     </para>
 
 <screen role="root"><userinput>export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &amp;&amp;
-export PYTHON311=/opt/python3.11/bin/python3.11     &amp;&amp;
-$PYTHON311 ./mach install</userinput></screen>
+./mach install</userinput></screen>
 
     <para>
       Esvazie as variáveis de ambiente que foram configuradas acima:
     </para>
 
 <screen><userinput>unset MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE
-unset MOZBUILD_STATE_PATH
-unset PYTHON311</userinput></screen>
+unset MOZBUILD_STATE_PATH</userinput></screen>
 
   </sect2>
 

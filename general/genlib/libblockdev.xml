@@ -7,7 +7,7 @@
   <!ENTITY libblockdev-download-http
     "https://github.com/storaged-project/libblockdev/releases/download/&libblockdev-version;-1/libblockdev-&libblockdev-version;.tar.gz">
   <!ENTITY libblockdev-download-ftp "">
-  <!ENTITY libblockdev-md5sum        "033f2098a13f9dae6105d0337470efd3">
+  <!ENTITY libblockdev-md5sum        "28d43f2d6bff85245502a8c4c478c5a3">
   <!ENTITY libblockdev-size          "1,0 MB">
   <!ENTITY libblockdev-buildsize     "13 MB">
   <!ENTITY libblockdev-time          "0,1 UPC">
@@ -34,7 +34,7 @@ implementada em um plug-in separado, possivelmente com várias implementações
 (por exemplo, usando CLI do LVM ou a nova API DBus do LVM).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,13 +74,12 @@ implementada em um plug-in separado, possivelmente com várias implementações
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/>
+      <xref linkend="glib2"/> (GObject Introspection exigido para GNOME)
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="cryptsetup"/>, <xref linkend="gobject-introspection"/>
-(exigido para GNOME), <xref linkend="keyutils"/>, <xref
+      <xref linkend="cryptsetup"/>, <xref linkend="keyutils"/>, <xref
 linkend="libbytesize"/>, <xref linkend="libnvme"/> e <xref linkend="lvm2"/>
     </para>
 
@@ -104,17 +103,13 @@ url="https://github.com/Datera/targetcli">targetcli</ulink> (para testes)
   <sect2 role="installation">
     <title>Instalação do libblockdev</title>
 
-    <!--
     <para>
-
-      Fix the usage of a glib function deprecated for security:
+      Primeiro, contorne um problema ao usar e2fsprogs-1.47.1 ou posteriores:
     </para>
 
-<screen><userinput>sed 's/g_memdup/&amp;2/' -i             \
-    src/lib/plugin_apis/vdo.{c,api} \
-    src/plugins/vdo.c</userinput></screen>
--->
-<para>
+<screen><userinput>find -name Makefile.in -exec sed -i "s/-Werror//" {} \;</userinput></screen>
+
+    <para>
       Instale o <application>libblockdev</application> executando os seguintes
 comandos:
     </para>

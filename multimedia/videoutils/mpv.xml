@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY mpv-download-http "https://github.com/mpv-player/mpv/archive/refs/tags/v&mpv-version;/mpv-&mpv-version;.tar.gz">
+  <!ENTITY mpv-download-http "https://github.com/mpv-player/mpv/archive/v&mpv-version;/mpv-&mpv-version;.tar.gz">
   <!ENTITY mpv-download-ftp  "">
-  <!ENTITY mpv-md5sum        "54bd6864cc831f1fee6dee693a0421eb">
-  <!ENTITY mpv-size          "3,2 MB">
-  <!ENTITY mpv-buildsize     "25 MB">
-  <!ENTITY mpv-time          "0,2 UPC (Usando paralelismo=4)">
+  <!ENTITY mpv-md5sum        "7c1a400867e8930f037efc86c1f90a14">
+  <!ENTITY mpv-size          "3,3 MB">
+  <!ENTITY mpv-buildsize     "28 MB">
+  <!ENTITY mpv-time          "0,1 UPC (Usando paralelismo=4)">
 
 ]>
 
@@ -31,7 +31,7 @@ de comando. Ele suporta uma ampla variedade de formatos de arquivos de
 mídia, codificadores de áudio e vídeo e tipos de legendas.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -71,9 +71,9 @@ mídia, codificadores de áudio e vídeo e tipos de legendas.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="alsa"/>, <xref linkend="ffmpeg"/>, <xref linkend="libass"/>,
-<xref linkend="libplacebo"/>, <xref linkend="mesa"/> e <xref
-linkend="pulseaudio"/>
+      <xref linkend="alsa-lib"/>, <xref linkend="ffmpeg"/>, <xref
+linkend="libass"/>, <xref linkend="libplacebo"/>, <xref linkend="mesa"/> e
+<xref linkend="pulseaudio"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -113,6 +113,11 @@ url="https://www.svgalib.org/">SVGAlib</ulink>
     <title>Instalação do mpv</title>
 
       <para>
+        Adicione uma correção para construir com FFMpeg &gt; 7.0
+      </para>
+<screen><userinput>sed -i 's/AV_OPT_TYPE_CHANNEL_LAYOUT/AV_OPT_TYPE_CHLAYOUT/' filters/f_lavfi.c</userinput></screen>
+
+      <para>
         Instale <application>mpv</application> executando os seguintes comandos:
       </para>
 
@@ -121,7 +126,7 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dx11=enabled       \
+            -D x11=enabled      \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -144,20 +149,20 @@ ninja</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-Dx11=enabled</parameter>: permite vincular com as bibliotecas do
-X11.
+      <parameter>-D x11=enabled</parameter>: permite vincular com as bibliotecas
+do X11.
     </para>
 
     <para>
-      <option>-Ddvdnav=enabled</option>: habilita suporte para reprodução de DVD.
+      <option>-D dvdnav=enabled</option>: habilita suporte para reprodução de DVD.
     </para>
 
     <para>
-      <option>-Dcdda=enabled</option>: habilita suporte para áudio de CD.
+      <option>-D cdda=enabled</option>: habilita suporte para áudio de CD.
     </para>
 
     <para>
-      <option>-Dsdl2=enabled</option>: habilita o uso de SDL2 para saída de áudio
+      <option>-D sdl2=enabled</option>: habilita o uso de SDL2 para saída de áudio
 e vídeo.
     </para>
 

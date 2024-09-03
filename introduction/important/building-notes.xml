@@ -347,6 +347,7 @@ a recarregar a configuração:
 cat &gt; /etc/systemd/system/user@.service.d/delegate.conf &lt;&lt; EOF &amp;&amp;
 <literal>[Service]
 Delegate=memory cpuset</literal>
+EOF
 systemctl daemon-reload</userinput></screen>
 
     <para revision='systemd'>
@@ -421,10 +422,10 @@ núcleos E físicos. Portanto, se quisermos usar quatro camadas de quatro
 núcleos P, precisamos especificar <literal>0,2,4,6</literal> em vez de
 <literal>0-3</literal>. Observe que os outros modelos de CPU podem usar um
 esquema de mapeamento diferente. Se você não tiver certeza acerca do
-mapeamento entre os núcleos lógicos e os núcleos físicos, execute
-<command>grep -E '^processor|^core' /proc/cpuinfo</command> que gerará IDs
-de núcleo lógico nas linhas <computeroutput>processor</computeroutput> e IDs
-de núcleo físico nas linhas <computeroutput>core id</computeroutput>.
+mapeamento entre os núcleos lógicos e os núcleos físicos, execute o comando
+<command>lscpu --extended</command> que gerará IDs de núcleo lógico na
+coluna <computeroutput>CPU</computeroutput> e IDs de núcleo físico na coluna
+<computeroutput>CORE</computeroutput>.
     </para>
 
     <para>
@@ -593,9 +594,9 @@ redirecionamento da saída gerada para desviar-se de ter que paginar ao longo
 da saída gerada e, então, fornecerá um <keycap>y</keycap> para uma
 solicitação. Essa técnica poderia ser usada em instâncias quando, de outra
 maneira, você teria que paginar ao longo da saída gerada de um arquivo (como
-um acordo de licença) e, então, responder à pergunta de <quote>você aceita o
-acima?</quote>. Para esse exemplo, outro script curto do
-<application>Bash</application> é exigido:</para>
+um acordo de licença) e, então, responder à pergunta de <computeroutput>você
+aceita o acima?</computeroutput>. Para esse exemplo, outro conjunto curto de
+comandos sequenciais do <application>Bash</application> é exigido:</para>
 
 <screen><userinput>cat &gt; blfs-yes-test2 &lt;&lt; "EOF"
 <literal>#!/bin/bash
@@ -669,24 +670,24 @@ esse pacote seja instalado primeiro (exceto se for considerada <quote>tempo
 de execução</quote>, veja-se abaixo) para uma construção limpa e livre de
 problemas, que não terá problemas durante o processo de construção ou em
 tempo de execução. As instruções no livro assumem que esses pacotes estão
-instalados. Algumas mudanças ou soluções alternativas podem ser exigidas se
-esses pacotes não estiverem instalados. Se uma dependência recomendada for
-considerada <quote>tempo de execução</quote>, isso significa que o BLFS
-sugere fortemente que essa dependência seja instalada antes de usar o
-pacote, para obter funcionalidade completa.</para>
+instalados. Algumas mudanças ou soluções alternativas possivelmente sejam
+exigidas se esses pacotes não estiverem instalados. Se uma dependência
+recomendada for considerada <quote>tempo de execução</quote>, isso significa
+que o BLFS sugere fortemente que essa dependência seja instalada antes de
+usar o pacote, para obter funcionalidade completa.</para>
       </listitem>
       <listitem>
         <para><emphasis>Opcional</emphasis> significa que esse pacote pode ser instalado
 para funcionalidade adicional. Frequentemente, o BLFS descreverá a
-dependência para explicar a funcionalidade adicional resultante. Uma
-dependência opcional pode ser selecionada automaticamente pelo pacote alvo
-se a dependência estiver instalada, mas outra dependência opcional também
-pode precisar de opções adicionais de configuração para habilitá-las quando
-o pacote alvo for construído. Essas opções adicionais frequentemente estão
-documentadas no livro BLFS. Se uma dependência opcional for considerada de
-<quote>tempo de execução</quote>, significa que você pode instalar a
-dependência depois de instalar o pacote alvo, para suportar alguns recursos
-opcionais do pacote alvo se precisar desses recursos.</para>
+dependência para explicar a funcionalidade adicional que resultará. Algumas
+dependências opcionais são automaticamente selecionadas pelo pacote alvo se
+a dependência estiver instalada, enquanto outras também precisam de opções
+de configuração adicionais para serem habilitadas quando o pacote alvo for
+construído. Essas opções adicionais frequentemente estão documentadas no
+livro BLFS. Se uma dependência opcional for dita como <quote>tempo de
+execução</quote>, significa que você pode instalar a dependência depois de
+instalar o pacote alvo para suportar alguns recursos opcionais do pacote
+alvo se precisar desses recursos.</para>
         <para>Uma dependência opcional pode estar fora do BLFS. Se você precisar de uma
 tal dependência opcional <emphasis>externa</emphasis> para alguns recursos
 necessários, leia <xref linkend='beyond'/> para as dicas gerais acerca de
@@ -761,11 +762,12 @@ install-strip</command> em vez de <command>make install</command>.
       </listitem>
       <listitem>
         <para>
-          Os pacotes que usam o sistema de construção "Meson" conseguem aceitar
-<parameter>-Dstrip=true</parameter> ao executar <command>meson</command>. Se
-esqueceu de adicionar essa opção executando o <command>meson</command>,
-[então] você também consegue executar <command>meson install
---strip</command> em vez de <command>ninja install</command>.
+          Os pacotes que usam o sistema de construção do meson conseguem aceitar
+<parameter>-D strip=true</parameter> ao executar
+<command>meson</command>. Se tiver esquecido de adicionar essa opção
+executando o <command>meson</command>, você também consegue executar
+<command>meson install --strip</command> em vez de <command>ninja
+install</command>.
         </para>
       </listitem>
       <listitem>
@@ -930,7 +932,7 @@ padrão específico para C ou C++ (<option>-std=c++17</option>, por
 exemplo). Porém, uma coisa que agora veio à tona é que os(as)
 programadores(as) poderiam incluir asserções de depuração no código
 deles(as), esperando que sejam desabilitadas em lançamentos usando-se
-<option>-DNDEBUG</option>. Especificamente, se o <xref linkend="mesa"/> for
+<option>-D NDEBUG</option>. Especificamente, se o <xref linkend="mesa"/> for
 construído com essas asserções habilitadas, algumas atividades, tais como o
 carregamento de níveis dos jogos, podem tomar tempos extremamente longos,
 mesmo em placas de vídeo de alta qualidade.
@@ -998,7 +1000,7 @@ de valores CMAKE_BUILD_TYPE e esses afetam os sinalizadores. O padrão é o de
 que isso não seja configurado e nenhum sinalizador seja gerado. Quaisquer
 <envar>CFLAGS</envar> ou <envar>CXXFLAGS</envar> no ambiente serão
 usadas. Se o(a) programador(a) tiver codificado quaisquer asserções de
-depuração, essas estarão habilitadas, a menos que -DNDEBUG seja usado. Os
+depuração, essas estarão habilitadas, a menos que -D NDEBUG seja usado. Os
 seguintes valores CMAKE_BUILD_TYPE gerarão os sinalizadores mostrados e
 esses virão <emphasis>depois de</emphasis> quaisquer sinalizadores no
 ambiente e, portanto, terão precedência.
@@ -1016,13 +1018,13 @@ ambiente e, portanto, terão precedência.
               <entry>Debug</entry><entry><option>-g</option></entry>
             </row>
             <row>
-              <entry>Release</entry><entry><option>-O3 -DNDEBUG</option></entry>
+              <entry>Release</entry><entry><option>-O3 -D NDEBUG</option></entry>
             </row>
             <row>
-              <entry>RelWithDebInfo</entry><entry><option>-O2 -g -DNDEBUG</option></entry>
+              <entry>RelWithDebInfo</entry><entry><option>-O2 -g -D NDEBUG</option></entry>
             </row>
             <row>
-              <entry>MinSizeRel</entry><entry><option>-Os -DNDEBUG</option></entry>
+              <entry>MinSizeRel</entry><entry><option>-Os -D NDEBUG</option></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1063,7 +1065,7 @@ do diretório de construção, executar <command>meson configure</command>, por
 exemplo, para configurar uma opção:
       </para>
 
-<screen><userinput>meson configure -D&lt;alguma_opção&gt;=true</userinput></screen>
+<screen><userinput>meson configure -D &lt;some_option&gt;=true</userinput></screen>
 
       <para>
         Se você fizer isso, [então] o arquivo
@@ -1079,23 +1081,23 @@ quaisquer sinalizadores fornecidos no ambiente e, portanto, tem precedência.
 
       <itemizedlist>
         <listitem>
-          <para>plano : nenhum sinalizador adicionado. Isso é para os(as) distribuidores(as)
-fornecerem os próprios <envar>CFLAGS</envar>, <envar>CXXFLAGS</envar> e
-<envar>LDFLAGS</envar> deles(as). Não existe razão óbvia para usar isso no
-BLFS.</para>
+          <para>simples: nenhum sinalizador adicionado. Isso é para os(as)
+distribuidores(as) fornecerem os próprios <envar>CFLAGS</envar>,
+<envar>CXXFLAGS</envar> e <envar>LDFLAGS</envar> deles(as). Não existe razão
+óbvia para usar isso no BLFS.</para>
         </listitem>
         <listitem>
-          <para>depuração : <option>-g</option> - isso é o padrão, se nada for especificado,
+          <para>depuração: <option>-g</option> - isso é o padrão, se nada for especificado,
 seja no <filename>meson.build</filename>, seja na linha de
 comando. Entretanto, resulta em binários grandes e lentos, de forma que nós
 deveríamos substitui-lo no BLFS.</para>
         </listitem>
         <listitem>
-          <para>depuração otimizada : <option>-O2 -g</option> : isso é o padrão,
-especificado no <filename>meson.build</filename>, de alguns pacotes.</para>
+          <para>depuração otimizada: <option>-O2 -g</option> : isso é o padrão, especificado
+no <filename>meson.build</filename>, de alguns pacotes.</para>
         </listitem>
         <listitem>
-          <para>lançamento : <option>-O3</option> (ocasionalmente um pacote forçará
+          <para>lançamento: <option>-O3</option> (ocasionalmente um pacote forçará
 <option>-O2</option> aqui) - esse é o tipo de construção que usamos para a
 maioria dos pacotes com sistema de construção Meson no BLFS.</para>
         </listitem>
@@ -1107,10 +1109,10 @@ maioria dos pacotes com sistema de construção Meson no BLFS.</para>
            true, false, if-release.  Some packages sets it to if-release
            so we mistakenly believed if-release had been the default.  -->
 <para>
-        O sinalizador <option>-DNDEBUG</option> é implícito pelo tipo de construção
-de lançamento para alguns pacotes (por exemplo <xref
+        O sinalizador <option>-D NDEBUG</option> está implícito pelo tipo de
+construção de lançamento para alguns pacotes (por exemplo <xref
 linkend='mesa'/>). Também pode ser fornecido explicitamente passando-se
-<option>-Db_ndebug=true</option>.
+<option>-D b_ndebug=true</option>.
       </para>
 
       <para>
@@ -1134,15 +1136,15 @@ fazer uma diferença significante.
       </para>
 
       <para>
-        Se você estiver compilando um aplicativo Rust independente (como um arquivo
+        Se você estiver compilando um programa Rust independente (como um arquivo
 <filename class='extension'>.rs</filename> desempacotado) executando
 <command>rustc</command> diretamente, você deveria especificar
 <option>-O</option> (a abreviatura de <option>-Copt-level=2</option>) ou
 <option>-Copt-level=3</option>, caso contrário ele fará uma compilação não
 otimizada e executará <emphasis>muito</emphasis> mais lento. Se estiver
-compilando o aplicativo para depurá-lo, substitua as opções
+compilando o programa para depurá-lo, substitua as opções
 <option>-O</option> ou <option>-Copt-level=</option> por <option>-g</option>
-para produzir um aplicativo não otimizado com informações de depuração.
+para produzir um programa não otimizado com informações de depuração.
       </para>
 
       <para>
@@ -1304,37 +1306,87 @@ aplicará várias medidas de fortalecimento.
       </para>
 
       <para>
-        No passado, existia o "LFS Reforçado", onde o "GCC" (uma versão muito mais
-antiga) era forçado a usar reforçamento (com opções para desativar parte
-dele por pacote). Os livros atuais LFS e BLFS estão levando adiante uma
-parte do espírito dele, habilitando "PIE" (<option>-fPIE -pie</option>) e
-"SSP" (<option>-fstack-protector-strong</option>) como padrões para o "GCC"
-e o "clang". O que está sendo abordado aqui é diferente - primeiro, você
-precisa ter certeza de que o pacote está realmente usando os teus
-sinalizadores adicionados e não os substituindo.
+        No passado, existia o LFS Reforçado, onde o gcc (uma versão muito mais
+antiga) era forçado a usar o reforçamento (com opções para desativar parte
+dele na base do por pacote). Os livros atuais do LFS e BLFS estão levando
+adiante uma parte do espírito dele ao habilitar PIE (<option>-fPIE
+-pie</option>) e SSP (<option>-fstack-protector-strong</option>) como
+padrões para GCC e clang. E os lincadores (<command>ld.bfd</command> e
+<command>ld.gold</command>) também habilitaram
+<option>-Wl,-z,relro</option>, o que torna uma parte da Global Offset Table
+(GOT) imutável, por padrão desde Binutils 2.27. O que está sendo abordado
+aqui é diferente - primeiro você tem que ter certeza de que o pacote está
+realmente usando teus sinalizadores adicionados e não os substituindo-os.
       </para>
 
       <para>
         Para opções de reforço que são razoavelmente baratas, existe alguma
 discussão no link "ajuste" acima (ocasionalmente, uma ou mais dessas opções
-podem ser inadequadas para um pacote). Essas opções são
-<option>-D_FORTIFY_SOURCE=2</option> (ou
-<option>-D_FORTIFY_SOURCE=3</option> que é mais seguro, mas com maior
-sobrecarga de desempenho) e (para C++)
-<option>-D_GLIBCXX_ASSERTIONS</option>. Nas máquinas modernas, isso deveria
-ter somente um pequeno impacto na rapidez com que as coisas executam e,
-muitas vezes, não serão perceptíveis.
+podem ser inadequadas para um pacote). Essas opções são <option>-D
+_FORTIFY_SOURCE=2</option> (ou <option>-D _FORTIFY_SOURCE=3</option> que é
+mais seguro, mas com maior sobrecarga de desempenho) e (para C++) <option>-D
+_GLIBCXX_ASSERTIONS</option>. Nas máquinas modernas, isso deveria ter
+somente um pequeno impacto na rapidez com que as coisas executam e, muitas
+vezes, não serão perceptíveis.
       </para>
 
       <para>
-        As principais distribuições usam muito mais, como "RELRO" ("Relocation Read
-Only") e talvez <option>-fstack-clash-protection</option>. Você também
-possivelmente encontre a chamada <quote>retpoline do espaço de
+        As principais distribuições usam muito mais, como:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <option>-Wl,-z,now</option>: desabilita vinculação preguiçosa para aprimorar
+<option>-Wl,-z,relro</option>, de forma que <emphasis>todo</emphasis> o GOT
+possa se tornar imutável.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <option>-fstack-clash-protection</option>: impede o(a) atacante de usar um
+deslocamento grande o suficiente e não verificado adequadamente para pular a
+página de proteção de pilha colocada pelo núcleo e o canário de pilha
+colocado por <option>-fstack-protector=strong</option>, e modificar a pilha
+a partir de um endereço de pilha, ou vice-versa.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <option>-ftrivial-auto-var-init=zero</option>: inicializa algumas variáveis
+preenchendo zero bytes se elas não forem inicializadas por outros meios.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <option>-fcf-protection=full</option>: utiliza a tecnologia CET da Intel e
+da AMD para limitar os endereços alvo das instruções de transferência de
+fluxo de controle. Para torná-lo realmente eficaz para um pacote, todos os
+pacotes que fornecem uma biblioteca compartilhada para o pacote usar
+precisam ser construídos com essa opção, bem como o próprio pacote, a Glibc
+precisa ser configurada com a opção <option>--enable-cet</option>
+habilitada, e o sistema precisa executar no Intel Tiger Lake ou mais
+recente, ou no AMD Zen 3 ou mais recente. Se o critério não for atendido, o
+programa compilado com essa opção ainda executará, mas não realmente
+protegido pelo CET.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        No GCC 14, a opção <option>-fhardened</option> é uma abreviação para
+habilitar todas as opções de reforçamento mencionadas acima. Ela configura
+<option>-D _FORTIFY_SOURCE=3</option> em vez de <option>-D
+_FORTIFY_SOURCE=2</option>.
+      </para>
+
+      <para>
+        Você também pode encontrar o assim chamado <quote>retpoline de espaço de
 usuário(a)</quote> (<option>-mindirect-branch=thunk</option> etc.), que é o
-equivalente às mitigações de espectro aplicadas ao núcleo Linux no final de
-2018. As mitigações do núcleo causaram muitas reclamações acerca de perda de
-desempenho; se você tiver um servidor de produção, você pode desejar
-considerar testá-las, juntamente com outras opções disponíveis, para ver se
+equivalente das mitigações de espectro aplicadas para o núcleo Linux no
+final de 2018. As mitigações do núcleo causaram muitas reclamações acerca da
+perda de desempenho. Se tiver um servidor de produção, você pode desejar
+considerar testar isso, junto com as outras opções disponíveis, para ver se
 o desempenho ainda é suficiente.
       </para>
 

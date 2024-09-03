@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY tracker3-miners-download-http "&gnome-download-http;/tracker-miners/3.6/tracker-miners-&tracker3-miners-version;.tar.xz">
+  <!ENTITY tracker3-miners-download-http "&gnome-download-http;/tracker-miners/3.7/tracker-miners-&tracker3-miners-version;.tar.xz">
   <!ENTITY tracker3-miners-download-ftp  "">
-  <!ENTITY tracker3-miners-md5sum        "36b1149a9b10ee3db3e3aa6d8a95c5dc">
-  <!ENTITY tracker3-miners-size          "7,2 MB">
-  <!ENTITY tracker3-miners-buildsize     "85 MB (com testes)">
+  <!ENTITY tracker3-miners-md5sum        "8c1b48f2fa57d888967de9b5ff348fc1">
+  <!ENTITY tracker3-miners-size          "4,3 MB">
+  <!ENTITY tracker3-miners-buildsize     "36 MB (com testes)">
   <!ENTITY tracker3-miners-time          "0,3 UPC (com paralelismo=4; adicionar até 1,0 UPC para testes, dependente da
 velocidade do disco)">
 ]>
@@ -31,7 +31,7 @@ velocidade do disco)">
 extratores de dados para o Tracker.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -67,21 +67,17 @@ extratores de dados para o Tracker.
       </listitem>
     </itemizedlist>
 
-
-
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/tracker-miners-&tracker3-miners-version;-upstream_fixes-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/tracker-miners-&tracker3-miners-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do Tracker-miners</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do Tracker-miners</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -94,9 +90,8 @@ linkend="exempi"/> e <xref linkend="gexiv2"/>
       <xref linkend="giflib"/>, <xref role='runtime'
 linkend="gst10-plugins-good"/> (tempo de execução), <xref role='runtime'
 linkend="gst10-libav"/> (tempo de execução), <xref linkend="icu"/>, <xref
-linkend="libexif"/>, <xref linkend="libgrss"/>, <xref linkend="libgxps"/>,
-<xref linkend="libseccomp"/>, <xref linkend="poppler"/> e <xref
-linkend="upower"/>
+linkend="libexif"/>, <xref linkend="libgxps"/>, <xref
+linkend="libseccomp"/>, <xref linkend="poppler"/> e <xref linkend="upower"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -106,11 +101,28 @@ linkend="dconf"/>, <xref linkend="ffmpeg"/>, <xref linkend="libgsf"/>, <xref
 linkend="NetworkManager"/>, <xref linkend="taglib"/>, <xref
 linkend="totem-pl-parser"/>, <ulink
 url="https://github.com/lipnitsk/libcue">libcue</ulink>, <ulink
+url="https://gitlab.gnome.org/GNOME/libgrss">libgrss</ulink>, <ulink
 url="https://libiptcdata.sourceforge.net/">libitpcdata</ulink>, <ulink
 url="https://libosinfo.org">libosinfo</ulink> e <ulink
 url="https://gitlab.gnome.org/GNOME/gupnp">gupnp</ulink>
     </para>
 
+  </sect2>
+
+  <sect2 role="kernel" id="tracker3-miners-kernel">
+    <title>Configuração do Núcleo</title>
+
+    <para>
+      Habilite as seguintes opções na configuração do núcleo, em seguida recompile
+o núcleo e reinicialize se necessário:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="tracker3-miners-kernel.xml"/>
+
+    <indexterm zone="tracker3-miners tracker3-miners-kernel">
+      <primary sortas="d-traker-miners">tracker-miners</primary>
+    </indexterm>
   </sect2>
 
   <sect2 role="installation">
@@ -133,25 +145,12 @@ seguinte comando (substitua 200 por um valor adequado para a tua máquina):
 <screen remap="test"><userinput>sed -i s/120/<replaceable>200</replaceable>/ tests/functional-tests/meson.build</userinput></screen>
     </note>
 
-
-
-    <!-- Applied in 3.6.2
     <para>
-
-      First, fix some problems with the recent tightening of the seccomp
-      sandbox:
+      Primeiro, corrija um problema no extrator TIFF e outro problema na sandbox
+Landlock:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../tracker-miners-&tracker3-miners-version;-upstream_fixes-1.patch</userinput></screen>
--->
-<para>
-      <!-- https://gitlab.gnome.org/GNOME/tracker-miners/-/issues/252 and
-      https://gitlab.gnome.org/GNOME/tracker-miners/-/issues/299 -->
-Primeiro, corrija algumas quebras introduzidas por gstreamer-1.22.9:
-      
-    </para>
-
-<screen><userinput remap="pre">sed -i '/ALLOW_RULE (shutdown);/a ALLOW_RULE (getsockopt);' src/libtracker-miners-common/tracker-seccomp.c</userinput></screen>
 
     <para>
       Instale o <application>Tracker-miners</application> executando os seguintes
@@ -164,29 +163,37 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dman=false         \
+            -D man=false        \
+            -D miner_rss=false  \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr                 \
-            --buildtype=release           \
-            -Dsystemd_user_services=false \
-            -Dman=false                   \
-            ..                            &amp;&amp;
+meson setup --prefix=/usr                  \
+            --buildtype=release            \
+            -D systemd_user_services=false \
+            -D man=false                   \
+            -D miner_rss=false             \
+            ..                             &amp;&amp;
 ninja</userinput></screen>
 
+
     <para>
-      
-      <!-- Some tests fail in 3.6.1 due to seccomp sandbox changes.
-      See https://github.blog/2023-10-09-coordinated-disclosure-1-click-rce-on-gnome-cve-2023-43641/ -->
-Para testar os resultados, emita (ajuste o tempo limite do teste individual
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+    <screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita (ajuste o tempo limite do teste individual
 para um valor adequado para a tua máquina; veja-se a nota acima):
     </para>
 
-<screen remap="test"><userinput>dbus-run-session env TRACKER_TESTS_AWAIT_TIMEOUT=<replaceable>20</replaceable> ninja test &amp;&amp;
+<screen remap="test"><userinput>meson configure -D debug=true &amp;&amp;
+dbus-run-session env LC_ALL=C.UTF-8 TRACKER_TESTS_AWAIT_TIMEOUT=<replaceable>20</replaceable> \
+                 ninja test &amp;&amp;
 rm -rf ~/tracker-tests</userinput></screen>
 
     <note>
@@ -195,12 +202,6 @@ rm -rf ~/tracker-tests</userinput></screen>
 que eles tem de ser removidos posteriormente.
       </para>
     </note>
-
-    <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
-    </para>
-
-<screen role="root"><userinput>ninja install</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
@@ -210,36 +211,48 @@ que eles tem de ser removidos posteriormente.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dman=false</parameter>: Essa chave evita que o processo de
+      <parameter>-D man=false</parameter>: Essa chave evita que o processo de
 construção gere páginas de manual. Omita essa chave se você tiver <xref
 linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
 páginas de manual.
     </para>
 
+    <para>
+      <parameter>-D miner_rss=false</parameter>: Essa chave impede usar libgrss
+para indexar feeds RSS porque libgrss é insegura e não mais está no BLFS.
+    </para>
+
     <para revision="sysv">
-      <parameter>-Dsystemd_user_services=false</parameter>: Essa chave impede que
+      <parameter>-D systemd_user_services=false</parameter>: Essa chave impede que
 o processo de construção instale unidades do systemd, pois elas são inúteis
 em sistemas SysV.
     </para>
 
     <para>
-      <option>-Dseccomp=false</option>: Essa opção desabilita o filtro de chamada
+      <option>-D seccomp=false</option>: Essa opção desabilita o filtro de chamada
 de sistema seccomp. Em algumas arquiteturas, como i686 e ARM, as funções que
-o tracker-miners usa não são protegidas adequadamente e, como resultado, o
-tracker-miners será morto com um SIGSYS.
+tracker-miners usam não são protegidas corretamente, e tracker-miners será
+morto com um SIGSYS como resultado. Observe que desabilitar o seccomp pode
+fazer com que o sistema seja comprometido ainda mais no caso de uma
+vulnerabilidade de segurança no tracker-miners ou em nas dependências dele
+ser explorada.
     </para>
 
     <para>
-      <option>-Dminer_rss=false</option>: Use essa opção se você não tiver
-instalado a dependência recomendada libgrss.
+      <option>-D landlock=disabled</option>: Essa chave desabilita a sandbox de
+acesso a arquivos do Landlock. Use-a se você não quiser construir o núcleo
+com suporte Landlock. Observe que, desabilitar o Landlock, pode fazer com
+que o sistema seja comprometido mais severamente no caso de uma
+vulnerabilidade de segurança no tracker-miners, ou nas dependências dele,
+ser explorada.
     </para>
 
     <para>
-      <option>-Dbattery_detection=none</option>: Use essa opção se você não tiver
+      <option>-D battery_detection=none</option>: Use essa opção se você não tiver
 instalado a dependência recomendada, upower. Não use essa opção se teu
-sistema tiver uma bateria (bateria de laptop ou UPS), ou os rastreadores
-mineradores poderão desperdiçar a eletricidade e a vida útil da bateria
-quando a eletricidade C/A não estiver disponível.
+sistema tiver uma bateria (UPS ou bateria de laptop), ou tracker-miners
+possivelmente desperdice a eletricidade e a vida útil da bateria quando a
+eletricidade C/A estiver indisponível.
     </para>
 
   </sect2>
@@ -254,7 +267,8 @@ quando a eletricidade C/A não estiver disponível.
 
       <seglistitem>
         <seg>
-          Nenhum(a)
+          tracker3-daemon, tracker3-extract, tracker3-index, tracker3-info,
+tracker3-reset, tracker3-search, tracker3-status e tracker3-tag
         </seg>
         <seg>
           Vários módulos sob /usr/lib/tracker-miners-3.0
@@ -265,6 +279,108 @@ quando a eletricidade C/A não estiver disponível.
         </seg>
       </seglistitem>
     </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presnetation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="tracker3-daemon">
+        <term><command>tracker3-daemon</command></term>
+        <listitem>
+          <para>
+            inicia, para, reinicia e lista processos de segundo plano responsáveis pela
+indexação de conteúdo
+          </para>
+          <indexterm zone="tracker3-miners tracker3-daemon">
+            <primary sortas="b-tracker3-daemon">tracker3-daemon</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-extract">
+        <term><command>tracker3-extract</command></term>
+        <listitem>
+          <para>
+            extrai metadados a partir de um arquivo
+          </para>
+          <indexterm zone="tracker3-miners tracker3-extract">
+            <primary sortas="b-tracker3-extract">tracker3-extract</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-index">
+        <term><command>tracker3-index</command></term>
+        <listitem>
+          <para>
+            indexa conteúdo usando o minerador de sistema de arquivos Tracker
+          </para>
+          <indexterm zone="tracker3-miners tracker3-index">
+            <primary sortas="b-tracker3-index">tracker3-index</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-info">
+        <term><command>tracker3-info</command></term>
+        <listitem>
+          <para>
+            recupera todas as informações disponíveis para um determinado arquivo
+          </para>
+          <indexterm zone="tracker3-miners tracker3-info">
+            <primary sortas="b-tracker3-info">tracker3-info</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-reset">
+        <term><command>tracker3-reset</command></term>
+        <listitem>
+          <para>
+            reconfigura o índice e a configuração do Tracker
+          </para>
+          <indexterm zone="tracker3-miners tracker3-reset">
+            <primary sortas="b-tracker3-reset">tracker3-reset</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-search">
+        <term><command>tracker3-search</command></term>
+        <listitem>
+          <para>
+            pesquisa conteúdo por tipo ou ao longo de todos os tipos
+          </para>
+          <indexterm zone="tracker3-miners tracker3-search">
+            <primary sortas="b-tracker3-search">tracker3-search</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-status">
+        <term><command>tracker3-status</command></term>
+        <listitem>
+          <para>
+            fornece situação e estatísticas acerca de dados que tenham sido indexados
+          </para>
+          <indexterm zone="tracker3-miners tracker3-status">
+            <primary sortas="b-tracker3-status">tracker3-status</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-tag">
+        <term><command>tracker3-tag</command></term>
+        <listitem>
+          <para>
+            adiciona, remove e lista etiquetas
+          </para>
+          <indexterm zone="tracker3-miners tracker3-tag">
+            <primary sortas="b-tracker3-tag">tracker3-tag</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </sect2>
 
 </sect1>

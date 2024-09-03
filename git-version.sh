@@ -15,7 +15,7 @@ echo "<!ENTITY % sysv    \"$SYSV\">"     >  conditional.ent
 echo "<!ENTITY % systemd \"$SYSTEMD\">"  >> conditional.ent
 
 if ! git status > /dev/null; then
-    # Either it's not a git repository, or git is unavaliable.
+    # Either it's not a git repository, or git is unavailable.
     # Just workaround.
     echo "<!ENTITY year              \"????\">"            >  version.ent
     echo "<!ENTITY version           \"unknown\">"         >> version.ent

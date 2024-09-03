@@ -29,7 +29,7 @@ extrair versões de pacotes &quot;Python&quot; a partir dos metadados
 &quot;git&quot; ou &quot;hg&quot; em vez de declará-los.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -69,13 +69,14 @@ extrair versões de pacotes &quot;Python&quot; a partir dos metadados
 
       <bridgehead renderas="sect5">Exigidas</bridgehead>
       <para role="required">
-        <xref linkend="packaging"/> e <xref linkend="typing_extensions"/>
+        <xref linkend="packaging"/>
       </para>
 
-      <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
+      <bridgehead renderas="sect5">Opcionais (parar testagem)</bridgehead>
       <para role="optional">
-        <xref linkend="git"/>, <xref linkend="mercurial"/> e <xref
-linkend="pytest"/>
+        <xref linkend="git"/>, <xref linkend="mercurial"/>, <xref
+linkend="pytest"/>, <xref linkend="sudo"/> e <ulink
+url="https://pypi.org/project/build/">build</ulink>
       </para>
 
     </sect3>
@@ -95,10 +96,20 @@ class="username">root</systemitem>&quot;:
 <screen role="root"><userinput>&install-wheel; setuptools_scm</userinput></screen>
 
     <para>
-      A instalação pode ser testada com &quot;<command>pytest</command>&quot;. Uns
-poucos testes possivelmente falhem se a tua configuração do
-&quot;<application>git</application>&quot; não for aquela esperada pela
-suíte de teste.
+      Para testar a instalação, certifique-se de que <xref linkend='pytest'/> está
+instalado a execute (<literal>HOME=</literal> evita que o arquivo
+<filename>.gitconfig</filename> no diretório inicial de interfira nos
+testes):
+    </para>
+
+<screen remap="test"><userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
+testenv/bin/pip3 install build                 &amp;&amp;
+HOME= testenv/bin/python -m pytest</userinput></screen>
+
+    <para>
+      Se <xref linkend='git'/> e (ou) <xref linkend='mercurial'/> não estiverem
+instalados, os testes dependentes do(s) ausente(s) serão ignorados. Alguns
+testes possivelmente invoquem <xref linkend='sudo'/> e solicitem uma senha.
     </para>
 
     </sect3>

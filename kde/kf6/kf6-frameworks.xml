@@ -1,0 +1,857 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ <!ENTITY % general-entities SYSTEM "../../general.ent">
+ %general-entities;
+
+  <!-- kf6-download-http is defined on packages.ent
+  <!ENTITY kf6-download-http "&kf6-download-http;"> -->
+  <!ENTITY kf6-download-ftp  "">
+  <!ENTITY kf6-md5sum        "Veja-se Abaixo">
+  <!ENTITY kf6-size          "99 MB">
+  <!ENTITY kf6-buildsize     "2,6 GB (183 MB instalado)">
+  <!ENTITY kf6-time          "18 UPC (usando paralelismo = 8)">
+]>
+
+<sect1 id="kf6-frameworks" xreflabel="KDE Frameworks-&kf6-version;">
+  <?dbhtml filename="frameworks6.html"?>
+
+  <title>Construindo KDE Frameworks &kf6-version; (KF6)</title>
+
+  <indexterm zone="kf6-frameworks">
+     <primary sortas="a-kde-frameworks">KDE Frameworks</primary>
+  </indexterm>
+
+  <para>
+    KDE Frameworks é uma coleção de bibliotecas baseadas em Qt6 e QML derivadas
+a partir de bibliotecas anteriores do KDE. Elas podem ser usadas
+independentemente do ambiente de exibição do KDE (Plasma 6).
+  </para>
+
+  &lfs122_checked;
+
+  <para>
+    As instruções abaixo constroem todos os pacotes do KDE Frameworks em uma
+etapa, usando um conjunto de comandos sequenciais do bash.
+  </para>
+
+  <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Transferência (HTTP): <ulink url="&kf6-download-http;"/>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Transferência (FTP): <ulink url="&kf6-download-ftp;"/>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Soma de verificação MD5 da transferência: &kf6-md5sum;
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Tamanho da transferência: &kf6-size;
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Espaço em disco estimado exigido: &kf6-buildsize;
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Tempo de construção estimado: &kf6-time;
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <bridgehead renderas="sect3">Dependências de KF6</bridgehead>
+
+  <bridgehead renderas="sect4">Exigidas</bridgehead>
+  <para role="required">
+    
+    <!--<xref linkend="boost"/>
+,-->
+<!--<xref linkend="giflib"/>
+,-->
+<!--<xref linkend="libepoxy"/>
+,-->
+<!--<xref linkend="libjpeg"/>
+,-->
+<!--<xref linkend="libpng"/>
+,-->
+<!--<xref linkend="phonon"/>
+,-->
+<xref linkend="extra-cmake-modules"/>, <xref linkend="breeze-icons"/>, <xref
+linkend="DocBook"/>, <xref linkend="docbook-xsl"/>, <xref
+linkend="libcanberra"/>, <xref linkend="libgcrypt"/>, <xref
+linkend="libical"/>, <xref linkend="libxslt"/>, <xref linkend="lmdb"/>,
+<xref linkend="qca"/>, <xref linkend="qrencode"/>, <xref
+linkend="plasma-wayland-protocols"/>, <xref linkend="PyYAML"/>, <xref
+linkend="shared-mime-info"/>, <xref linkend="perl-uri"/> e <xref
+linkend="wget"/> (exigido para baixar os pacotes)
+  </para>
+
+  <bridgehead renderas="sect4">Recomendadas</bridgehead>
+  <para role="recommended">
+    <xref linkend="aspell"/> (estrutura de retaguarda de dicionário para
+Sonnet), <xref linkend="avahi"/> (estrutura de retaguarda de DNS-SD para
+KDNSSD), <xref linkend="ModemManager"/> (necessário para construir
+ModemManager-Qt), <xref linkend="NetworkManager"/> (necessário para
+construir NetworkManager-Qt), <xref linkend="polkit-qt"/> (estrutura de
+retaguarda de autenticação para KAuth) e <xref linkend="vulkan-loader"/>
+(adiciona suporte para controladores gráficos do Vulkan)
+  </para>
+
+  <para role="recommended">
+    Além disso, as instruções abaixo pressupõem que o ambiente tenha sido
+configurado conforme descrito em <xref linkend="kf6-intro"/>.
+  </para>
+
+  <bridgehead renderas="sect4">Opcionais</bridgehead>
+  <para role="optional">
+    <xref linkend="bluez"/> (necessário para construir Bluez-Qt), <ulink
+url="https://libdmtx.sourceforge.net/">Datamatrix</ulink> (considerado
+recomendado para Prison pelo fluxo de desenvolvimento)
+  </para>
+
+  <bridgehead renderas="sect4">Dependência de tempo de execução para FrameworkIntegration</bridgehead>
+  <para role="optional">
+    <xref role="runtime" linkend="noto-fonts"/>
+  </para>
+  <bridgehead renderas="sect4">Dependências adicionais recomendadas para kapidox</bridgehead>
+  <para role="recommended">
+    <xref role="runtime" linkend="doxygen"/> (tempo de execução), <xref
+linkend="doxypypy"/>, <xref linkend="doxyqml"/> e <xref linkend="requests"/>
+  </para>
+
+  <bridgehead renderas="sect4">Suporte a formatos adicionais de imagem no KImageFormats</bridgehead>
+  <para role="optional">
+    <xref linkend="libavif"/>, <xref linkend="libjxl"/>, <xref
+linkend="libraw"/>, <ulink
+url="https://github.com/strukturag/libheif">libheif</ulink>, <ulink
+url="https://github.com/AcademySoftwareFoundation/openexr">OpenEXR</ulink>
+  </para>
+
+  <bridgehead renderas="sect4">Dependências opcionais para Solid</bridgehead>
+  <para role="optional">
+    <xref linkend="udisks2"/>, <xref linkend="upower"/> e <ulink role="runtime"
+url="https://www.freedesktop.org/software/media-player-info/">media-player-info</ulink>
+(tempo de execução)
+  </para>
+
+  <bridgehead renderas="sect4">Dependência opcional para KWallet</bridgehead>
+  <para role="optional">
+    <xref linkend="gpgme"/>, construído com ligações C++ (o que é o padrão).
+  </para>
+
+  <bridgehead renderas="sect4">Estruturas de retaguarda opcionais de dicionário para Sonnet</bridgehead>
+  <para role="optional">
+    <ulink url="http://hspell.ivrix.org.il/">Hspell</ulink> e <ulink
+url="https://hunspell.sourceforge.net/">Hunspell</ulink>
+  </para>
+
+  <sect2>
+    <title>Baixando KDE Frameworks</title>
+
+    <para>
+      A maneira mais fácil de obter os pacotes do KDE Frameworks é a de usar um
+<command>wget</command> para buscá-los todos de uma vez:
+    </para>
+
+<screen><userinput>url=https://download.kde.org/stable/frameworks/&kf6-short-version;/
+wget -r -nH -nd -A '*.xz' -np $url</userinput>
+<literal>
+The options used here are:
+  -r            recurse through child directories
+  -nH           disable generation of host-prefixed directories
+  -nd           do not create a hierarchy of directories
+  -A '*.xz'     just get the *.xz files
+  -np           don't get parent directories</literal></screen>
+
+   </sect2>
+
+  <sect2>
+    <title>Configurando a Ordem do Pacote</title>
+
+    <para>
+      A ordem de construção dos arquivos é importante devido às dependências
+internas. Crie a lista de arquivos na ordem correta conforme segue:
+    </para>
+
+<screen><userinput>cat &gt; frameworks-&kf6-version;.md5 &lt;&lt; "EOF"
+<literal>9f93da02571dc32c0c39db4911546731  attica-6.5.0.tar.xz
+#bceea430e534852558b54f4bd3354474  extra-cmake-modules-6.5.0.tar.xz
+05e0a1b09e3abb81068e4614f7e9b4a5  kapidox-6.5.0.tar.xz
+77c9c2100e36a44714c665644a4773c3  karchive-6.5.0.tar.xz
+facb9708090a0eb54a3f6c22f2baa86e  kcodecs-6.5.0.tar.xz
+698ab95acdc713571f917bb70073e2df  kconfig-6.5.0.tar.xz
+ab4868788299d29e9016bc57be64b6e6  kcoreaddons-6.5.0.tar.xz
+763aa4bc47b19a4b7471eca628be7e8a  kdbusaddons-6.5.0.tar.xz
+a30dc9bc14f6f2c2316a252e1f6ee7b7  kdnssd-6.5.0.tar.xz
+e23c576829b3a35631b729a3826eb381  kguiaddons-6.5.0.tar.xz
+54d5c5dc203772577b6e01e7704f23d2  ki18n-6.5.0.tar.xz
+fb7a5aec22e99bc69d4c4d50ee418dd5  kidletime-6.5.0.tar.xz
+6751e1b3b08bfd34b7f791f90419796a  kimageformats-6.5.0.tar.xz
+5fd3404f7197097a23d2db7cd776432e  kitemmodels-6.5.0.tar.xz
+6b6f3cd08284cef4c7bed3d31c5735a4  kitemviews-6.5.0.tar.xz
+0a33080b08df165501d065eb0ccbb4d6  kplotting-6.5.0.tar.xz
+ff9f14101fe8bb6686cc3bc8e1d352f7  kwidgetsaddons-6.5.0.tar.xz
+5631073e18780513a3005159dd73e290  kwindowsystem-6.5.0.tar.xz
+579eea31abc156e82cc4b746d212f4d2  networkmanager-qt-6.5.0.tar.xz
+712a3c59785bd0de4862cce34de58e4c  solid-6.5.0.tar.xz
+afe1cc49342b0b78993172c8a9e1dc20  sonnet-6.5.0.tar.xz
+b9df82b41676d91ea0371bd61e6082d0  threadweaver-6.5.0.tar.xz
+952c44490af601ebd58cae56a5c38481  kauth-6.5.0.tar.xz
+1db39b1e20b31bbff7d2079e9856b067  kcompletion-6.5.0.tar.xz
+104bcce4ba8d7d5936ffb4be66762ff0  kcrash-6.5.0.tar.xz
+43dfbda305f57ae0cda57091202d034a  kdoctools-6.5.0.tar.xz
+b39dc81ffbea67c69a1e9e41e6c4acb5  kpty-6.5.0.tar.xz
+f721e794c896d48f4143bf8054f471d0  kunitconversion-6.5.0.tar.xz
+5f37c1b7b58d13109f9d77f2f47610a0  kcolorscheme-6.5.0.tar.xz
+3da8c7755a7207ce332775f7bea879a9  kconfigwidgets-6.5.0.tar.xz
+36af7db35be0bdae9d9ae10d67ea1b1f  kservice-6.5.0.tar.xz
+51be7e11487b2d3ef3a35bdd2d3eec74  kglobalaccel-6.5.0.tar.xz
+1bc8471d498ad3de7c144bcac545ab29  kpackage-6.5.0.tar.xz
+c12d163df68d8aaee566618c2b886fe0  kdesu-6.5.0.tar.xz
+a94b4e76eff97c0e2fe461e10535cf11  kiconthemes-6.5.0.tar.xz
+f75c675a77172fd1cb8eaee62086fd93  knotifications-6.5.0.tar.xz
+878a3dc9bb42497d6c6b3f9744372635  kjobwidgets-6.5.0.tar.xz
+ea43454373673b7dfdc928609b80fbf1  ktextwidgets-6.5.0.tar.xz
+7aef61c37386c5750f83a438fc140453  kxmlgui-6.5.0.tar.xz
+11f331d02cd2f542cfa5be32f3c780dd  kbookmarks-6.5.0.tar.xz
+fe89e3850dfe0200c3ee04e0bcf0ea86  kwallet-6.5.0.tar.xz
+dadc7cc6e488d1db9b8dc482e89f07a7  kded-6.5.0.tar.xz
+0f2bd915931d6501c212ff3c84433126  kio-6.5.0.tar.xz
+7ef47616f65781126b29f3ff7c6637d4  kdeclarative-6.5.0.tar.xz
+3478698203e69dc14ca9a8fe58b6263c  kcmutils-6.5.0.tar.xz
+82ff71c1903a2d205b873e0b04715839  kirigami-6.5.0.tar.xz
+39559a047c8da6aba78ba1d619353808  syndication-6.5.0.tar.xz
+a6d662cf3920c575bb2fb7541c33f691  knewstuff-6.5.0.tar.xz
+cb414562458340f793878c5a2b328af8  frameworkintegration-6.5.0.tar.xz
+bad702d8866893c19339eab1b65c9c24  kparts-6.5.0.tar.xz
+16874e76c5058e1943d04bc3bf512f03  syntax-highlighting-6.5.0.tar.xz
+fbe2608ded4b47a1e7974c92d458596a  ktexteditor-6.5.0.tar.xz
+7dc07ea6306795a866e4ef62e03b54da  modemmanager-qt-6.5.0.tar.xz
+ca118c3fa1d01c5e98290475a4ef341d  kcontacts-6.5.0.tar.xz
+ab5907924e9e35d8f328a66a5fa241ad  kpeople-6.5.0.tar.xz
+124cf04998f0399a300baa585a01db6b  bluez-qt-6.5.0.tar.xz
+f5d8507325dce3768b77e2565f3e70d7  kfilemetadata-6.5.0.tar.xz
+00951e5fd64e184f5e1d4bc3e71f28a2  baloo-6.5.0.tar.xz
+#25c0a753edc62593ecca9f56a34f7ef1  breeze-icons-6.5.0.tar.xz
+940fe29e162175c932475ed20f241979  krunner-6.5.0.tar.xz
+4598c42a8a4e1a93457cb2aebd392bb2  prison-6.5.0.tar.xz
+c2eb5204f9f7b43798566666b06fa3ae  qqc2-desktop-style-6.5.0.tar.xz
+612f5190aebd9d4c89122113fd97e73e  kholidays-6.5.0.tar.xz
+9c92e566404c25c2bd142c8c5937441f  purpose-6.5.0.tar.xz
+5bf4fa5abc19addec2ab47440c0b660e  kcalendarcore-6.5.0.tar.xz
+2f3150f1162013f6c089dd9c48358a58  kquickcharts-6.5.0.tar.xz
+9e3db7659cfe0735461d64bb959a115f  knotifyconfig-6.5.0.tar.xz
+780193271545a8f7add8a171effcb36c  kdav-6.5.0.tar.xz
+78b6317709ad47539b4728b22618379f  kstatusnotifieritem-6.5.0.tar.xz
+7bb7d7f6ff6a4d41e81389dba5982fac  ksvg-6.5.0.tar.xz
+f24694fc1e66236182cf41f1f8a789e2  ktexttemplate-6.5.0.tar.xz
+52e318daedfd8b855e0554f66041535a  kuserfeedback-6.5.0.tar.xz</literal>
+EOF</userinput></screen>
+
+  <para>
+    Na lista acima, observe que alguns arquivos foram comentados com um
+caractere cerquilha (#). 
+    
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          A entrada extra-cmake-modules foi comentada porque foi construída
+anteriormente no <xref linkend="kde-prereq"/>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          O pacote de ícones é abordado separadamente em <xref
+linkend="breeze-icons"/>.
+        </para>
+      </listitem>
+
+    <!--      
+      <listitem>
+
+        <para>
+          There are four packages that were downloaded but superseded by later
+          versions: kwidgetsaddons-6.2.0, kwidgetsaddons-6.2.1, kwallet-6.2.0, 
+          and kirigami-6.2.0.
+        </para>
+      </listitem>
+-->
+</itemizedlist>
+  </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do KDE Frameworks</title>
+
+    &as_root;
+
+    <caution>
+
+      <para>
+        Se instalar em <filename class="directory">/opt</filename> e existir um
+/opt/kf6 existente ou como um diretório regular ou como um link simbólico,
+ele deveria ser reinicializado (como <systemitem class="username">
+root</systemitem>):
+      </para>
+
+      <screen role="root" revision="sysv"><userinput>mv -v /opt/kf6 /opt/kf6.old                         &amp;&amp;
+install -v -dm755           $KF6_PREFIX/{etc,share} &amp;&amp;
+ln -sfv /etc/dbus-1         $KF6_PREFIX/etc         &amp;&amp;
+ln -sfv /usr/share/dbus-1   $KF6_PREFIX/share       &amp;&amp;
+ln -sfv /usr/share/polkit-1 $KF6_PREFIX/share</userinput></screen>
+
+      <screen role="root" revision="systemd"><userinput>mv -v /opt/kf6 /opt/kf6.old                         &amp;&amp;
+install -v -dm755           $KF6_PREFIX/{etc,share} &amp;&amp;
+ln -sfv /etc/dbus-1         $KF6_PREFIX/etc         &amp;&amp;
+ln -sfv /usr/share/dbus-1   $KF6_PREFIX/share       &amp;&amp;
+ln -sfv /usr/share/polkit-1 $KF6_PREFIX/share       &amp;&amp;
+install -v -dm755           $KF6_PREFIX/lib         &amp;&amp;
+ln -sfv /usr/lib/systemd    $KF6_PREFIX/lib</userinput></screen>
+
+    </caution>
+
+    <para>
+      Primeiro, inicie um sub shell que sairá em caso de erro:
+    </para>
+
+
+<screen><userinput>bash -e</userinput></screen>
+
+    <para>
+      Instale todos os pacotes executando os seguintes comandos:
+    </para>
+
+<screen><!-- some packages end with files owned by root in $packagedir, so use as_root
+     in the following -->
+<userinput>while read -r line; do
+
+    # Get the file name, ignoring comments and blank lines
+    if $(echo $line | grep -E -q '^ *$|^#' ); then continue; fi
+    file=$(echo $line | cut -d" " -f2)
+
+    pkg=$(echo $file|sed 's|^.*/||')          # Remove directory
+    packagedir=$(echo $pkg|sed 's|\.tar.*||') # Package directory
+
+    name=$(echo $pkg|sed 's|-6.*$||') # Isolate package name
+
+    tar -xf $file
+    pushd $packagedir
+
+      # kapidox is a python module
+      case $name in
+        kapidox)
+          &build-wheel-cmd; $PWD
+          as_root &install-wheel; kapidox
+          popd
+          rm -rf $packagedir
+          continue
+          ;;
+      esac
+
+      mkdir build
+      cd    build
+
+      cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
+            -D CMAKE_INSTALL_LIBEXECDIR=libexec \
+            -D CMAKE_PREFIX_PATH=$QT6DIR        \
+            -D CMAKE_SKIP_INSTALL_RPATH=ON      \
+            -D CMAKE_BUILD_TYPE=Release         \
+            -D BUILD_TESTING=OFF                \
+            -W no-dev ..
+      make
+      as_root make install
+    popd
+
+  as_root rm -rf $packagedir
+  as_root /sbin/ldconfig
+
+done &lt; frameworks-&kf6-version;.md5
+
+exit</userinput></screen>
+
+    <note>
+      <para>
+        Quaisquer módulos que tenham sido omitidos podem ser instalados
+posteriormente usando-se o mesmo procedimento <command>mkdir build; cd
+build; cmake; make; make install</command> conforme acima.
+      </para>
+    </note>
+
+    <para revision="sysv">
+      Unidades do systemd inúteis foram instaladas em <filename
+class="directory">$KF6_PREFIX/lib</filename>. Remova-as agora (como &root;):
+    </para>
+
+<screen role="root"
+        revision="sysv"><userinput>rm -rf $KF6_PREFIX/lib/systemd</userinput></screen>
+
+    <para>
+      Ocasionalmente, os caminhos de instalação estão rigidamente codificados nos
+arquivos instalados. Se o diretório instalado não for /usr, renomeie o
+diretório e crie um link simbólico:
+    </para>
+
+    <screen role="root"><userinput>mv -v /opt/kf6 /opt/kf6-&kf6-version;
+ln -sfvn kf6-&kf6-version; /opt/kf6</userinput></screen>
+
+  </sect2>
+
+    <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D CMAKE_PREFIX_PATH=$QT6DIR</parameter>: Essa chave é usada para
+permitir que cmake encontre as bibliotecas Qt adequadas.
+    </para>
+
+    <para>
+      <parameter>-D CMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
+aplicar um nível mais alto de otimização à compilação.
+    </para>
+
+    <para>
+      <parameter>-D BUILD_TESTING=OFF</parameter>: Essa chave é usada para evitar
+construir aplicativos de teste e bibliotecas que não são de uso para um(a)
+usuário(a) final.
+    </para>
+
+  </sect2>
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          balooctl, baloo_file, baloo_file_extractor, baloosearch, balooshow,
+checkXML6, depdiagram-generate, depdiagram-generate-all, depdiagram-prepare,
+desktoptojson, gentrigrams, kactivities-cli, kapidox_generate,
+kate-syntax-highlighter, kbuildsycoca6, kcookiejar6, kdebugdialog6, kded6,
+kdeinit6, kdeinit6_shutdown, kdeinit6_wrapper, kf6-config, kf6kross,
+kgendesignerplugin, kglobalaccel6, kiconfinder6, kjs6, kjscmd6, kjsconsole,
+knewstuff-dialog, kpackagelauncherqml, kpackagetool6, kquitapp6,
+kreadconfig6, kshell6, ktelnetservice6, ktrash6, kwalletd6, kwallet-query,
+kwrapper6, kwriteconfig6, meinproc6, parsetrigrams, plasmapkg2,
+preparetips6, protocoltojson e solid-hardware6
+        </seg>
+        <seg>
+          libkdeinit6_klauncher.so, libKF6Activities.so, libKF6ActivitiesStats.so,
+libKF6Archive.so, libKF6Attica.so, libKF6AuthCore.so, libKF6Auth.so,
+libKF6Baloo.so, libKF6BluezQt.so, libKF6Bookmarks.so, libKF6CalendarCore.so,
+libKF6CalendarEvents.so, libKF6Codecs.so, libKF6Completion.so,
+libKF6ConfigCore.so, libKF6ConfigGui.so, libKF6ConfigWidgets.so,
+libKF6Contacts.so, libKF6CoreAddons.so, libKF6Crash.so, libKF6DAV.so,
+libKF6DBusAddons.so, libKF6Declarative.so, libKF6DNSSD.so,
+libKF6DocTools.so, libKF6Emoticons.so, libKF6FileMetaData.so,
+libKF6GlobalAccel.so, libKF6GuiAddons.so, libKF6Holidays.so, libKF6I18n.so,
+libKF6IconThemes.so, libKF6IdleTime.so, libKF6ItemModels.so,
+libKF6ItemViews.so, libKF6JobWidgets.so, libKF6JSApi.so, libKF6JsEmbed.so,
+libKF6JS.so, libKF6KCMUtils.so, libKF6KDELibs4Support.so, libKF6KHtml.so,
+libKF6KIOCore.so, libKF6KIOFileWidgets.so, libKF6KIOGui.so,
+libKF6KIONTLM.so, libKF6KIOWidgets.so, libKF6Kirigami2.so,
+libKF6KrossCore.so, libKF6KrossUi.so, libKF6MediaPlayer.so,
+libKF6NetworkManagerQt.so, libKF6NewStuffCore.so, libKF6NewStuff.so,
+libKF6Notifications.so, libKF6NotifyConfig.so, libKF6Package.so,
+libKF6Parts.so, libKF6PeopleBackend.so, libKF6People.so,
+libKF6PeopleWidgets.so, libKF6PlasmaQuick.so, libKF6Plasma.so,
+libKF6Plotting.so, libKF6Prison.so, libKF6Pty.so, libKF6Purpose.so,
+libKF6PurposeWidgets.so, libKF6QuickAddons.so, libKF6Runner.so,
+libKF6Service.so, libKF6Solid.so, libKF6SonnetCore.so, libKF6SonnetUi.so,
+libKF6Style.so, libKF6Su.so, libKF6SyntaxHighlighting.so,
+libKF6TextEditor.so, libKF6TextWidgets.so, libKF6ThreadWeaver.so,
+libKF6UnitConversion.so, libKF6Wallet.so, libKF6WaylandClient.so,
+libKF6WaylandServer.so, libKF6WidgetsAddons.so, libKF6WindowSystem.so,
+libKF6XmlGui.so, libKF6XmlRpcClient.so e libkwalletbackend6.so
+        </seg>
+        <seg>
+          /opt/kf6 (link simbólico para /opt/kf6-&kf6-version;) se instalar em /opt
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="checkXML6">
+        <term><command>checkXML6</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para verificar erros de sintaxe em arquivos XML DocBook do
+KDE
+          </para>
+          <indexterm zone="kf6-frameworks checkXML6">
+            <primary sortas="b-checkXML6">checkXML6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="depdiagram-generate">
+        <term><command>depdiagram-generate</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para gerar um diagrama de dependências
+          </para>
+          <indexterm zone="kf6-frameworks depdiagram-generate">
+            <primary sortas="b-depdiagram-generate">depdiagram-generate</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="depdiagram-generate-all">
+        <term><command>depdiagram-generate-all</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para gerar um diagrama de dependências para todas as
+estruturas essenciais de suporte de uma vez
+          </para>
+          <indexterm zone="kf6-frameworks depdiagram-generate-all">
+            <primary sortas="b-depdiagram-generate-all">depdiagram-generate-all</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="depdiagram-prepare">
+        <term><command>depdiagram-prepare</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para preparar arquivos de ponto
+          </para>
+          <indexterm zone="kf6-frameworks depdiagram-prepare">
+            <primary sortas="b-depdiagram-prepare">depdiagram-prepare</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="desktoptojson">
+        <term><command>desktoptojson</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para converter um arquivo .desktop em um arquivo .json
+          </para>
+          <indexterm zone="kf6-frameworks desktoptojson">
+            <primary sortas="b-desktoptojson">desktoptojson</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kbuildsycoca6">
+        <term><command>kbuildsycoca6</command></term>
+        <listitem>
+          <para>
+            reconstrói o cache de configuração do sistema de arquivos da área de
+trabalho KService
+          </para>
+          <indexterm zone="kf6-frameworks kbuildsycoca6">
+            <primary sortas="b-kbuildsycoca6">kbuildsycoca6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kcookiejar6">
+        <term><command>kcookiejar6</command></term>
+        <listitem>
+          <para>
+            é uma interface de linha de comando para o armazenamento de cookies HTTP
+usado pelo KDE; um serviço do D-BUS para armazenar/recuperar/limpar cookies
+          </para>
+          <indexterm zone="kf6-frameworks kcookiejar6">
+            <primary sortas="b-kcookiejar6">kcookiejar6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kded6">
+        <term><command>kded6</command></term>
+        <listitem>
+          <para>
+            consolida vários pequenos serviços em um processo
+          </para>
+          <indexterm zone="kf6-frameworks kded6">
+            <primary sortas="b-kded6">kded6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kdeinit6">
+        <term><command>kdeinit6</command></term>
+        <listitem>
+          <para>
+            é um iniciador de processos mais ou menos semelhante ao famoso init usado
+para inicializar o UNIX
+          </para>
+          <indexterm zone="kf6-frameworks kdeinit6">
+            <primary sortas="b-kdeinit6">kdeinit6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kf6-config">
+        <term><command>kf6-config</command></term>
+        <listitem>
+          <para>
+            é um aplicativo de linha de comando usado para recuperar informações a
+respeito da instalação do KDE ou de caminhos de usuário(a)
+          </para>
+          <indexterm zone="kf6-frameworks kf6-config">
+            <primary sortas="b-kf6-config">kf6-config</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kf6kross">
+        <term><command>kf6kross</command></term>
+        <listitem>
+          <para>
+            executa conjuntos de comandos sequenciais kross escritos em Javascript,
+Python, Ruby, Java e Falcon do KDE
+          </para>
+          <indexterm zone="kf6-frameworks kf6kross">
+            <primary sortas="b-kf6kross">kf6kross</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <!--
+      <varlistentry id="kgenapidox">
+
+        <term><command>kgenapidox</command></term>
+        <listitem>
+          <para>
+            is a tool to generate API documentation in the KDE style.
+          </para>
+          <indexterm zone="kf6-frameworks kgenapidox">
+            <primary sortas="b-kgenapidox">kgenapidox</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+-->
+<varlistentry id="kgendesignerplugin">
+        <term><command>kgendesignerplugin</command></term>
+        <listitem>
+          <para>
+            gera plugins de pequena engenhoca para o Qt(TM) Designer
+          </para>
+          <indexterm zone="kf6-frameworks kgendesignerplugin">
+            <primary sortas="b-kgendesignerplugin">kgendesignerplugin</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kglobalaccel6">
+        <term><command>kglobalaccel6</command></term>
+        <listitem>
+          <para>
+            é um processo de segundo plano usado para registrar as combinações de teclas
+e para ser notificado(a) quando a ação for deflagrada
+          </para>
+          <indexterm zone="kf6-frameworks kglobalaccel6">
+            <primary sortas="b-kglobalaccel6">kglobalaccel6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kjs6">
+        <term><command>kjs6</command></term>
+        <listitem>
+          <para>
+            é o mecanismo ECMAScript/JavaScript do KDE
+          </para>
+          <indexterm zone="kf6-frameworks kjs6">
+            <primary sortas="b-kjs5">kjs6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kjscmd6">
+        <term><command>kjscmd6</command></term>
+        <listitem>
+          <para>
+             é uma ferramenta para iniciar conjuntos de comandos sequenciais KJSEmbed a
+partir da linha de comando
+          </para>
+          <indexterm zone="kf6-frameworks kjscmd6">
+            <primary sortas="b-kjscmd6">kjscmd6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kjsconsole">
+        <term><command>kjsconsole</command></term>
+        <listitem>
+          <para>
+            é um console para <command>kjs6</command>
+          </para>
+          <indexterm zone="kf6-frameworks kjsconsole">
+            <primary sortas="b-kjsconsole">kjsconsole</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kpackagelauncherqml">
+        <term><command>kpackagelauncherqml</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta de linha de comando para iniciar o aplicativo QML kpackage
+          </para>
+          <indexterm zone="kf6-frameworks kpackagelauncherqml">
+            <primary sortas="b-kpackagelauncherqml">kpackagelauncherqml</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kpackagetool6">
+        <term><command>kpackagetool6</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta de linha de comando do kpackage
+          </para>
+          <indexterm zone="kf6-frameworks kpackagetool6">
+            <primary sortas="b-kpackagetool6">kpackagetool6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kreadconfig6">
+        <term><command>kreadconfig6</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta de linha de comando para recuperar valores a partir dos
+arquivos de configuração do KDE
+          </para>
+          <indexterm zone="kf6-frameworks kreadconfig6">
+            <primary sortas="b-kreadconfig6">kreadconfig6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kshell6">
+        <term><command>kshell6</command></term>
+        <listitem>
+          <para>
+            inicia aplicativos via kdeinit
+          </para>
+          <indexterm zone="kf6-frameworks kshell6">
+            <primary sortas="b-kshell6">kshell6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="ktelnetservice6">
+        <term><command>ktelnetservice6</command></term>
+        <listitem>
+          <para>
+            é um serviço de telnet
+          </para>
+          <indexterm zone="kf6-frameworks ktelnetservice6">
+            <primary sortas="b-ktelnetservice6">ktelnetservice6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="ktrash6">
+        <term><command>ktrash6</command></term>
+        <listitem>
+          <para>
+            é um aplicativo auxiliar para lidar com a lixeira do KDE
+          </para>
+          <indexterm zone="kf6-frameworks ktrash6">
+            <primary sortas="b-ktrash6">ktrash6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kwalletd6">
+        <term><command>kwalletd6</command></term>
+        <listitem>
+          <para>
+           é o processo de segundo plano do gerenciador de carteira
+          </para>
+          <indexterm zone="kf6-frameworks kwalletd6">
+            <primary sortas="b-kwalletd6">kwalletd6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="kwriteconfig6">
+        <term><command>kwriteconfig6</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta de linha de comando para escrever valores nos arquivos de
+configuração do KDE
+          </para>
+          <indexterm zone="kf6-frameworks kwriteconfig6">
+            <primary sortas="b-kwriteconfig6">kwriteconfig6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="meinproc6">
+        <term><command>meinproc6</command></term>
+        <listitem>
+          <para>
+            converte arquivos DocBook para HTML
+          </para>
+          <indexterm zone="kf6-frameworks meinproc6">
+            <primary sortas="b-meinproc6">meinproc6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="plasmapkg2">
+        <term><command>plasmapkg2</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para instalar, listar e remover pacotes Plasma
+          </para>
+          <indexterm zone="kf6-frameworks plasmapkg2">
+            <primary sortas="b-plasmapkg2">plasmapkg2</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="preparetips6">
+        <term><command>preparetips6</command></term>
+        <listitem>
+          <para>
+            é um conjunto de comandos sequenciais para extrair o texto a partir de um
+arquivo de dicas
+          </para>
+          <indexterm zone="kf6-frameworks preparetips6">
+            <primary sortas="b-preparetips6">preparetips6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="solid-hardware6">
+        <term><command>solid-hardware6</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta de linha de comando para investigar dispositivos
+disponíveis
+         </para>
+          <indexterm zone="kf6-frameworks solid-hardware6">
+            <primary sortas="b-solid-hardware6">solid-hardware6</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+   </variablelist>
+
+  </sect2>
+
+</sect1>

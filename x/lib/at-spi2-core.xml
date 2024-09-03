@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY at-spi2-core-download-http
-           "&gnome-download-http;/at-spi2-core/2.50/at-spi2-core-&at-spi2-core-version;.tar.xz">
+           "&gnome-download-http;/at-spi2-core/2.52/at-spi2-core-&at-spi2-core-version;.tar.xz">
   <!ENTITY at-spi2-core-download-ftp  "">
-  <!ENTITY at-spi2-core-md5sum        "14a15f1087292f18a1ab02c2bdd0ce53">
-  <!ENTITY at-spi2-core-size          "556 KB">
-  <!ENTITY at-spi2-core-buildsize     "24 MB (com testes)">
+  <!ENTITY at-spi2-core-md5sum        "e6591545b2bf204fe9a58f777bd0b78a">
+  <!ENTITY at-spi2-core-size          "564 KB">
+  <!ENTITY at-spi2-core-buildsize     "15 MB (com testes)">
   <!ENTITY at-spi2-core-time          "0,2 UPC (com testes)">
 ]>
 
@@ -34,7 +34,7 @@ inclui um conjunto de interfaces que são implementadas por outros kits de
 ferramentas e aplicativos.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -76,14 +76,10 @@ ferramentas e aplicativos.
     <para role="required">
       <!-- Reports "Cannot get the default GSettingsSchemaSource" on
            startup w/o it. -->
-<xref linkend="dbus"/>, <xref linkend="glib2"/>, <xref role="runtime"
+<xref linkend="dbus"/>, <xref linkend="glib2"/> (GObject Introspection
+exigido para GNOME), <xref role="runtime"
 linkend="gsettings-desktop-schemas"/> (tempo de execução) e <xref
 linkend="xorg7-lib"/>
-    </para>
-
-    <bridgehead renderas="sect4">Opcionais (Exigidas se construir o &quot;GNOME&quot;)</bridgehead>
-    <para role="optional">
-      <xref linkend="gobject-introspection"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -107,7 +103,7 @@ cd    build &amp;&amp;
 meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
-      -Dsystemd_user_dir=/tmp &amp;&amp;
+      -D systemd_user_dir=/tmp &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
@@ -115,14 +111,6 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
-
-    <para>
-      A suíte de teste também exige que os esquemas simplistas do pacote já
-estejam instalados. Para testar os resultados, instale o pacote primeiro e,
-então, emita: <command>dbus-run-session ninja test</command>. Um teste,
-<filename>atk-test</filename>, é conhecido por atingir o tempo limite em
-alguns sistemas.
-    </para>
 
     <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -133,6 +121,13 @@ class="username">root</systemitem>&quot;:
 <screen role="root" revision="sysv"><userinput>ninja install &amp;&amp;
 rm /tmp/at-spi-dbus-bus.service</userinput></screen>
 
+    <para>
+      A suíte de teste exige que os esquemas da glib do pacote já estejam
+instalados. Os testes também precisam executar em um ambiente gráfico. Agora
+que o pacote está instalado, teste os resultados emitindo:
+<command>dbus-run-session ninja test</command>.
+    </para>
+
   </sect2>
 
   <sect2 role="commands">
@@ -142,13 +137,13 @@ rm /tmp/at-spi-dbus-bus.service</userinput></screen>
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para revision="sysv">
-      <parameter>-Dsystemd_user_dir=/tmp</parameter>: Esse sinalizador coloca o
+      <parameter>-D systemd_user_dir=/tmp</parameter>: Esse sinalizador coloca o
 arquivo da unidade do systemd em /tmp onde será removido. O SysV é inapto
 para usar esse arquivo.
     </para>
 
     <para>
-      <option>-Ddocs=true</option>: Use essa chave se você quiser construir a
+      <option>-D docs=true</option>: Use essa chave se você quiser construir a
 documentação. Observe que você precisa ter <xref role="nodep"
 linkend="gi-docgen"/> e <xref linkend='sphinx'/> instalados em teu sistema.
     </para>
@@ -158,7 +153,7 @@ linkend="gi-docgen"/> e <xref linkend='sphinx'/> instalados em teu sistema.
   <!-- For when we remove gtk2 from the book:
     <para>
 
-      <parameter>-Dgtk2_atk_adaptor=false</parameter>: This switch disables
+      <parameter>-D gtk2_atk_adaptor=false</parameter>: This switch disables
       building the GTK+-2 module for this package.
     </para>
     -->

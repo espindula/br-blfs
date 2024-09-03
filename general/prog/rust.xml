@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "14a8ac688b461a3127090cad513aee05">
-  <!ENTITY rust-size          "155 MB">
+  <!ENTITY rust-md5sum        "0b00381728b6c005e95194f7e44cff33">
+  <!ENTITY rust-size          "191 MB">
   <!ENTITY rust-buildsize     "8,9 GB (298 MB instalado); adicionar 6,4 GB se executar os testes">
   <!ENTITY rust-time          "6,7 UPC (incluindo o tempo de transferência; adicionar 6,2 UPC para os
 testes, ambos usando paralelismo=8)">
@@ -117,7 +117,7 @@ valores discrepantes muito lentos.
       </para>
     </note>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -152,18 +152,20 @@ valores discrepantes muito lentos.
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    
+    <!-- only keep this here for reuse in case we need a patch
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo opcional (recomendado se executar a suíte de teste): <ulink
-url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
+          Optional patch (recommended if running the test suite):
+          <ulink url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Rust</bridgehead>
+    -->
+<bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -177,9 +179,10 @@ url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="libssh2"/> e <xref linkend="llvm"/> (construído com
--DLLVM_LINK_LLVM_DYLIB=ON, de forma que Rust consiga vincular ao LLVM do
-sistema em vez de construir a versão enviada dele)
+      <xref linkend="libssh2"/>, <xref linkend="llvm"/> (construído com -D
+LLVM_LINK_LLVM_DYLIB=ON, de forma que Rust consiga vincular ao LLVM do
+sistema em vez de construir a versão fornecida dele) e <xref
+linkend="sqlite"/>
     </para>
 
     <note>
@@ -208,33 +211,6 @@ url='https://libgit2.org/'>libgit2</ulink>
   <sect2 role="installation">
     <title>Instalação do Rust</title>
 
-    <note>
-      <para>
-        Atualmente o compilador Rust produz instruções SSE2 para x86 de 32 bits,
-fazendo com que o código gerado seja quebrado em sistemas de 32 bits sem um
-processador compatível com SSE2. Todos os modelos de processador x86
-lançados após 2004 deveriam ser compatíveis com SSE2. Execute <command>lscpu
-| grep sse2</command> como teste. Se gerar alguma coisa, tua CPU é
-compatível com SSE2 e está OK. Caso contrário, você pode tentar construir
-esse pacote <emphasis>em um sistema compatível com SSE2</emphasis> com a
-seguinte correção aplicada:
-      </para>
-
-      
-<screen role="nodump"><!-- computeroutput used deliberately to stop anyone from copying
-           blindly -->
-<computeroutput>sed 's@pentium4@pentiumpro@' -i \
-   compiler/rustc_target/src/spec/i686_unknown_linux_gnu.rs</computeroutput></screen>
-
-      <para>
-        E copie o &quot;<filename
-class="directory">/opt/rustc-&rust-version;</filename>&quot; resultante para
-o sistema sem capacidade &quot;SSE2&quot;. Mas, essa mudança ainda está sob
-revisão do(a) desenvolvedor(a) e não foi testada pelos(as) editores(as) do
-BLFS.
-      </para>
-    </note>
-
     <para>
       Para instalar no diretório &quot;<filename
 class="directory">/opt</filename>&quot;, remova qualquer link simbólico
@@ -259,50 +235,43 @@ exige somente mudar o link simbólico
     </note>
 
     <para>
-      Se executar a suíte de teste, aplique um remendo para evitar que o sistema
-de construção reconstrua desnecessariamente o compilador:
-    </para>
-
-    <screen><userinput>patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
-
-    <para>
       Crie um arquivo &quot;<filename>config.toml</filename>&quot; adequado que
 configurará a construção.
     </para>
 
 <screen><userinput>cat &lt;&lt; EOF &gt; config.toml
-<literal># veja-se config.toml.example para mais possíveis opções
-# Veja-se o livro 8.4 para um antigo exemplo usando LLVM enviada
-# por exemplo, se não instalar clang ou usar uma versão anterior a 13.0
+<literal># see config.toml.example for more possible options
+# See the 8.4 book for an old example using shipped LLVM
+# e.g. if not installing clang, or using a version before 13.0
 
-# Informe ao x.py que os editores revisaram o conteúdo deste arquivo
-# e o atualizaram para acompanhar as principais mudanças do sistema de
-# construção, de forma que x.py não nos avisará para fazer tal revisão.
-change-id = 118703
+# Tell x.py the editors have reviewed the content of this file
+# and updated it to follow the major changes of the building system,
+# so x.py will not warn us to do such a review.
+change-id = 125535
 
 [llvm]
-# por padrão, Rust construirá para uma miríade de arquiteturas
+# by default, rust will build for a myriad of architectures
 targets = "X86"
 
-# Ao usar o llvm do sistema, prefira bibliotecas compartilhadas
+# When using system llvm prefer shared libraries
 link-shared = true
 
 [build]
-# omita documentos para economizar tempo e espaço (o padrão é construí-los)
+# omit docs to save time and space (default is to build them)
 docs = false
 
-# instalar ferramentas extendidas: cargo, clippy, etc
+# install extended tools: cargo, clippy, etc
 extended = true
 
-# Não consulte novas versões de dependências online.
+# Do not query new versions of dependencies online.
 locked-deps = true
 
-# Especifique quais ferramentas extendidas (aquelas provenientes da instalação padrão).
+# Specify which extended tools (those from the default install).
 tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 
-# Use o código-fonte enviado no tarball para as dependências.
-# A combinação disso e da entrada "locked-deps" evita o download de muitas
-# caixas a partir da Internet e torna a construção do Rustc mais estável.
+# Use the source code shipped in the tarball for the dependencies.
+# The combination of this and the "locked-deps" entry avoids downloading
+# many crates from Internet, and makes the Rustc build more stable.
 vendor = true
 
 [install]
@@ -311,38 +280,32 @@ docdir = "share/doc/rustc-&rust-version;"
 
 [rust]
 channel = "stable"
-description = "para BLFS &version;"
+description = "for BLFS &version;"
 
-# O BLFS costumava não instalar o executável FileCheck oriundo do llvm, então
-# desabilitou os testes de codegen. Os testes de montagem dependem do FileCheck
-# e não podem ser facilmente desabilitados; portanto, eles falharão de qualquer
-# maneira se o FileCheck não tiver sido instalado.
-#codegen-tests = false
-
-# Habilite as mesmas otimizações da construção de fluxo de desenvolvimento oficial.
+# Enable the same optimizations as the official upstream build.
 lto = "thin"
 codegen-units = 1
 
 [target.x86_64-unknown-linux-gnu]
-# Observe Bem: a saída gerada de llvm-config (ou seja, opções de ajuda) pode ser
-# despejada na tela quando config.toml for analisado.
+# NB the output of llvm-config (i.e. help options) may be
+# dumped to the screen when config.toml is parsed.
 llvm-config = "/usr/bin/llvm-config"
 
 [target.i686-unknown-linux-gnu]
-# Observe Bem: a saída gerada de llvm-config (ou seja, opções de ajuda) pode ser
-# despejada na tela quando config.toml for analisado.
+# NB the output of llvm-config (i.e. help options) may be
+# dumped to the screen when config.toml is parsed.
 llvm-config = "/usr/bin/llvm-config"</literal>
 EOF</userinput></screen>
 
     <note>
       <para>
         Os comandos <command>python3 x.py</command> podem gerar uma mensagem de
-aviso reclamando <quote><computeroutput>nenhuma configuração de
-codegen-backends correspondeu ao caminho solicitado para construir uma
-estrutura de retaguarda de codegen</computeroutput></quote>. E a
-<quote>sugestão</quote> fornecida (<computeroutput>adicionar estrutura de
-retaguarda a codegen-backends em config.toml</computeroutput>) não irá
-silenciá-la. Esse aviso é <ulink
+aviso reclamando <computeroutput>nenhuma configuração de codegen-backends
+correspondeu ao caminho solicitado para construir uma estrutura de
+retaguarda de codegen</computeroutput>. E a <quote>sugestão</quote>
+fornecida (<computeroutput>adicionar estrutura de retaguarda a
+codegen-backends em config.toml</computeroutput>) não irá silenciá-la. Esse
+aviso é <ulink
 url='https://github.com/rust-lang/rust/issues/110692'>falso</ulink> e
 deveria ser ignorado.
       </para>
@@ -361,7 +324,9 @@ comandos:
        -e '/^curl-sys /s/0.4.48/0.4.50/' \
        src/tools/cargo/Cargo.toml &amp;&amp; -->
 <userinput>{ [ ! -e /usr/include/libssh2.h ] ||
-  export LIBSSH2_SYS_USE_PKG_CONFIG=1; } &amp;&amp;
+  export LIBSSH2_SYS_USE_PKG_CONFIG=1; }    &amp;&amp;
+{ [ ! -e /usr/include/sqlite3.h ] ||
+  export LIBSQLITE3_SYS_USE_PKG_CONFIG=1; } &amp;&amp;
 python3 x.py build</userinput></screen>
 
     <note>
@@ -379,26 +344,32 @@ motivo de preocupação, apenas uma maneira do teste ser terminado.
 disponíveis), emita:
     </para>
 
-<!-- https://github.com/rust-lang/rust/pull/115869 -->
+<!-- Both "unused import: `std::io::BufRead`"
+         Test suite internal issues and the unused imports are removed in
+         https://github.com/rust-lang/rust/pull/126097.  -->
 <screen remap="test"><userinput>SSL_CERT_DIR=/etc/ssl/certs \
-python3 x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
+python3 x.py test --verbose --no-fail-fast --keep-stage-std=1 | \
+    tee rustc-testlog</userinput></screen>
 
     
     <para>
-      Dois testes,<filename>tests/ui/issues/issue-21763.rs</filename> e
-<filename>tests/debuginfo/regression-bad-location-list-67992.rs</filename>,
-são conhecidos por falharem.
+      Três testes chamados <filename>tests/run-make/print-cfg</filename>,
+<filename>tests/run-make/print-to-output</filename> e
+<literal>core::config::tests::download_ci_llvm</literal> são conhecidos por
+falharem.
     </para>
 
-    <para>
-      Se o &quot;<command>FileCheck</command>&quot; originário do
-&quot;<application>LLVM</application>&quot; não tiver sido instalado,
-[então] todos os quarenta e sete (47) testes da suíte
-<quote>assembly</quote> falharão.
-    </para>
 
+    <!-- Let's just comment this out.  Nobody has tested on a system w/o
+     FileCheck for a long time.
     <para>
-      Tal como acontece com todas as grandes suítes de teste, outros testes podem
+      If <command>FileCheck</command> from <application>LLVM</application> has
+      not been installed, all 47 tests from the <quote>assembly</quote> suite
+      will fail.
+    </para>
+-->
+<para>
+      Tal como acontece com todas as grandes suítes de teste, alguns testes podem
 falhar em algumas máquinas - se o número de falhas adicionais for baixo,
 verifique se existem 'failures:' no registro e revise as linhas acima,
 especialmente as linhas 'stderr:'. Qualquer menção ao SIGSEGV ou ao sinal
@@ -417,11 +388,8 @@ disso). A maioria das outras falhas não será crítica.
     </para>
 
     <para>
-      Portanto, você deveria determinar o número de falhas.
-    </para>
-
-    <para>
-      O número de testes que passaram e falharam pode ser encontrado executando:
+      Portanto, você deveria determinar o número de falhas. O número de testes que
+passaram e falharam pode ser encontrado executando-se:
     </para>
 
 
@@ -443,49 +411,51 @@ sejam zero.
     <note>
       <para>
         Se <command>sudo</command> ou <command>su</command> for invocado para
-comutar para o(a) usuário(a) &root;, garanta que
-<envar>LIBSSH2_SYS_USE_PKG_CONFIG</envar> seja passada corretamente ou o
-comando seguinte possivelmente reconstrua completamente esse pacote. Para
-<command>sudo</command>, use a opção
-<option>--preserve-env=LIBSSH2_SYS_USE_PKG_CONFIG</option>. Para
+comutar para o(a) usuário(a) &root;, certifique-se de que
+<envar>LIBSSH2_SYS_USE_PKG_CONFIG</envar> e
+<envar>LIBSQLITE3_SYS_USE_PKG_CONFIG</envar> sejam passados corretamente ou
+o comando a seguir pode reconstruir <command>cargo</command> com cópias
+enviadas de libssh2 e sqlite. Para <command>sudo</command>, use a opção
+<option>--preserve-env=LIB{SSH2,SQLITE3}_SYS_USE_PKG_CONFIG</option>. Para
 <command>su</command>, <emphasis>não</emphasis> use as opções
 <option>-</option> ou <option>--login</option>.
       </para>
     </note>
 
-<!-- https://github.com/rust-lang/rust/issues/115213 -->
-<screen role='root'><userinput>python3 x.py install</userinput></screen>
-
-    
-    <para>
-      O sistema de construção tenta instalar alguns arquivos duas vezes e, durante
-a segunda tentativa, renomeia o antigo (instalado na primeira tentativa) com
-o sufixo <filename class='extension'>.old</filename>. Como o(a) usuário(a)
-&root;, remova esses arquivos:
-    </para>
-
-    <screen role='root'><userinput>find /opt/rustc-&rust-version; -name "*.old" -delete</userinput></screen>
+<screen role='root'><userinput>python3 x.py install rustc std &amp;&amp;
+install -vm755 \
+  build/host/stage1-tools/*/*/{cargo{,-clippy,-fmt},clippy-driver,rustfmt} \
+  /opt/rustc-&rust-version;/bin &amp;&amp;</userinput>
+install -vDm644 \
+  src/tools/cargo/src/etc/_cargo \
+  /opt/rustc-&rust-version;/share/zsh/site-functions/_cargo &amp;&amp;
+install -vm644 src/tools/cargo/src/etc/man/* \
+  /opt/rustc-&rust-version;/share/man/man1</screen>
 
     <para>
-      Ainda como o(a) usuário(a) &root;, crie um link simbólico de um arquivo de
-completação do <application>Zsh</application> para o local correto:
+      Ainda como o(a) usuário(a) &root;, corrija a instalação da documentação e
+linque simbolicamente um arquivo de completação do
+<application>Zsh</application> para o local correto:
     </para>
 
-<screen role='root'><userinput>install -vdm755 /usr/share/zsh/site-functions      &amp;&amp;
+    <screen role='root'><userinput>rm -fv /opt/rustc-&rust-version;/share/doc/rustc-&rust-version;/*.old   &amp;&amp;
+install -vm644 README.md                                \
+               /opt/rustc-&rust-version;/share/doc/rustc-&rust-version; &amp;&amp;
+
+install -vdm755 /usr/share/zsh/site-functions      &amp;&amp;
 ln -sfv /opt/rustc/share/zsh/site-functions/_cargo \
         /usr/share/zsh/site-functions</userinput></screen>
 
     <para>
-      Finalmente, desconfigure a variável
-<envar>LIBSSH2_SYS_USE_PKG_CONFIG</envar>:
+      Finalmente, desconfigure as variáveis de ambiente exportadas:
     </para>
 
-<screen><userinput>unset LIBSSH2_SYS_USE_PKG_CONFIG</userinput></screen>
+<screen><userinput>unset LIB{SSH2,SQLITE3}_SYS_USE_PKG_CONFIG</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
-    <title>Explicações do Comando</title>			
+    <title>Explicações do Comando</title>
 
     <para>
       <command>ln -svfn rustc-&rust-version; /opt/rustc</command>: se esse não for
@@ -554,12 +524,23 @@ resultante será maior e demorará mais.
 sistema.
     </para>
 
+    
+    <!-- src/tools/cargo/Cargo.toml is specifying "bundled" as the
+         upstream is suggesting to avoid issues building for Windoge.
+         We don't care about Windoge so override this if we have
+         system sqlite3.  -->
+<para>
+      <command>export LIBSQLITE3_SYS_USE_PKG_CONFIG=1</command>: Permite
+<command>cargo</command> lincar ao sqlite do sistema.
+    </para>
+
 
 
     
     <!--<para>
 
-      <command>export RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi"</command>:
+      <command>export RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi"</command>
+:
       This adds a link to libffi to any RUSTFLAGS you may already be passing
       to the build. On some systems, linking fails to include libffi unless
       this is used. The reason why this is needed is not clear.
@@ -581,6 +562,30 @@ informações relativas a um teste que falhe.
     <para>
       <parameter>--no-fail-fast</parameter>: essa chave garante que a suíte de
 teste não parará no primeiro erro.
+    </para>
+
+    <para>
+      <parameter>--keep-stage-std 1</parameter>: essa chave impede que
+<command>x.py test</command> reconstrua o pacote inteiro por algum motivo
+desconhecido.
+    </para>
+
+    
+
+    <!-- https://github.com/rust-lang/rust/issues/94147
+         Do a manual installation for these 5 binaries for 1.80.0, the
+         build system insists to rebuild them even with this.
+    <para>
+
+      <parameter>- -stage=1</parameter>: this switch works around an issue
+      causing some Rustc components unnecessarily rebuilt running
+      <command>python3 x.py install</command>.
+    </para>-->
+<para>
+      <command>install ... /opt/rustc-&rust-version;/...</command>: esses comandos
+instalam explicitamente alguns componentes do Rust. Eles são usados em vez
+de depender de <command>x.py install</command> porque o último reconstruiria
+esses componentes por algum motivo desconhecido.
     </para>
 
   </sect2>
@@ -606,14 +611,11 @@ class="username">root</systemitem>&quot;, crie o arquivo
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/rustc.sh &lt;&lt; "EOF"
-<literal># Inicia /etc/profile.d/rustc.sh
+<literal># Begin /etc/profile.d/rustc.sh
 
 pathprepend /opt/rustc/bin           PATH
 
-# Inclui "/opt/rustc/man" na variável "MANPATH" para acessar páginas de manual
-pathappend  /opt/rustc/share/man     MANPATH
-
-# Termina /etc/profile.d/rustc.sh</literal>
+# End /etc/profile.d/rustc.sh</literal>
 EOF</userinput></screen>
 
       <para>
@@ -635,7 +637,7 @@ seu &quot;shell&quot; atual como um(a) usuário(a) normal:
       <segtitle>Bibliotecas Instaladas</segtitle>
       <segtitle>Diretórios Instalados</segtitle>
 
-      <seglistitem>			
+      <seglistitem>
         <seg>
           cargo-clippy, cargo-fmt, cargo, clippy-driver, rust-gdb, rust-gdbgui,
 rust-lldb, rustc, rustdoc e rustfmt

@@ -6,8 +6,8 @@
 
   <!ENTITY gst10-libav-download-http "&gstreamer-dl;/gst-libav/gst-libav-&gst10-libav-version;.tar.xz">
   <!ENTITY gst10-libav-download-ftp  "">
-  <!ENTITY gst10-libav-md5sum        "35b6b39e03e5e6d75404b694cca09550">
-  <!ENTITY gst10-libav-size          "204 KB">
+  <!ENTITY gst10-libav-md5sum        "be00cf9f9c8ca13791e6193f584213b6">
+  <!ENTITY gst10-libav-size          "208 KB">
   <!ENTITY gst10-libav-buildsize     "14 MB">
   <!ENTITY gst10-libav-time          "menos que 0,1 UPC">
 ]>
@@ -31,7 +31,7 @@
 (uma bifurcação do <application>FFmpeg</application>).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -89,7 +89,25 @@
   <sect2 role="installation">
     <title>Instalação do GStreamer Libav</title>
 
+
+    <!-- Appear to be fixed in version 1.24.6.
     <para>
+
+      First, fix some usage of deprecated APIs that causes a build failure:
+    </para>
+
+<screen><userinput remap="pre">sed -e '1375,1430d' \
+    -e '2058d'      \
+    -e '2105,2140d' \
+    -e '2217,2221d' \
+    -i ext/libav/gstavdemux.c &amp;&amp;
+
+sed -i '2122a if (!gst_element_register (plugin, type_name, rank, type)) {' ext/libav/gstavdemux.c &amp;&amp;
+
+sed -i '272 s/gst_ffmpegdata_write/(void*)&amp;/' ext/libav/gstavprotocol.c
+</userinput></screen>
+-->
+<para>
       Instale o <application>GStreamer Libav</application> executando os seguintes
 comandos:
     </para>
@@ -97,13 +115,10 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson  setup ..            \
-       --prefix=/usr       \
-       --buildtype=release \
-       -Dpackage-origin=https://www.linuxfromscratch.org/blfs/view/&blfs-version;/ \
-       -Dpackage-name="GStreamer &gst10-libav-version; BLFS" &amp;&amp;
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release &amp;&amp;
 ninja</userinput></screen>
-
 
     <para>
       Para executar os testes, emita: <command>ninja test</command>.
@@ -136,7 +151,7 @@ ninja</userinput></screen>
           Nenhum(a)
         </seg>
         <seg>
-          libgstlibav.so no diretório /usr/lib/gstreamer-1.0
+          libgstlibav.so em /usr/lib/gstreamer-1.0
         </seg>
         <seg>
           Nenhum(a)

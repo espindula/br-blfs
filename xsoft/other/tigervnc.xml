@@ -6,11 +6,11 @@
 
   <!ENTITY tigervnc-download-http "https://github.com/TigerVNC/tigervnc/archive/v&tigervnc-version;/tigervnc-&tigervnc-version;.tar.gz">
   <!ENTITY tigervnc-download-ftp  "">
-  <!ENTITY tigervnc-md5sum        "3a794e3a063443e07250de8e99e2e05a">
-  <!ENTITY tigervnc-size          "1,8 MB">
-  <!ENTITY tigervnc-buildsize     "97 MB">
-  <!ENTITY tigervnc-time          "0,4 UPC (Usando paralelismo=4)">
-  <!ENTITY tigervnc-xorg-version  "21.1.11">
+  <!ENTITY tigervnc-md5sum        "402c2ec1f38bd0fb4ad7d93631dc1502">
+  <!ENTITY tigervnc-size          "2,0 MB">
+  <!ENTITY tigervnc-buildsize     "101 MB">
+  <!ENTITY tigervnc-time          "0,5 UPC (Usando paralelismo=4)">
+  <!--<!ENTITY tigervnc-xorg-version  "21.1.12">-->
 ]>
 
 <sect1 id="tigervnc" xreflabel="tigervnc-&tigervnc-version;">
@@ -33,7 +33,7 @@ vinculado a um console físico e também fornece um cliente para visualização
 da área de trabalho gráfica remota.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,7 +74,7 @@ da área de trabalho gráfica remota.
       <listitem>
         <para>
           Arquivo exigido: <ulink
-url="&xorg-download-http;/xserver/xorg-server-&tigervnc-xorg-version;.tar.xz"/>
+url="&xorg-download-http;/xserver/xorg-server-&xorg-server-version;.tar.xz"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -153,23 +153,23 @@ compatíveis com sistemas LFS:
 comandos:
     </para>
 
-<screen revision="sysv"><userinput># Coloca o código no lugar
+<screen revision="sysv"><userinput># Put code in place
 mkdir -p unix/xserver &amp;&amp;
-tar -xf ../xorg-server-&tigervnc-xorg-version;.tar.xz \
+tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
     --strip-components=1              \
     -C unix/xserver                   &amp;&amp;
 ( cd unix/xserver &amp;&amp;
-  patch -Np1 -i ../xserver21.1.1.patch ) &amp;&amp;
+  patch -Np1 -i ../xserver21.patch ) &amp;&amp;
 
-# Construa o visualizador
-cmake -G "Unix Makefiles"         \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DINSTALL_SYSTEMD_UNITS=OFF \
-      -Wno-dev . &amp;&amp;
+# Build viewer
+cmake -G "Unix Makefiles"          \
+      -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D INSTALL_SYSTEMD_UNITS=OFF \
+      -W no-dev .                  &amp;&amp;
 make &amp;&amp;
 
-# Construa o servidor
+# Build server
 pushd unix/xserver &amp;&amp;
   autoreconf -fiv  &amp;&amp;
 
@@ -186,22 +186,22 @@ pushd unix/xserver &amp;&amp;
   make  &amp;&amp;
 popd</userinput></screen>
 
-<screen revision="systemd"><userinput># Coloque o código no lugar
+<screen revision="systemd"><userinput># Put code in place
 mkdir -p unix/xserver &amp;&amp;
-tar -xf ../xorg-server-&tigervnc-xorg-version;.tar.xz \
+tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
     --strip-components=1              \
     -C unix/xserver                   &amp;&amp;
 ( cd unix/xserver &amp;&amp;
   patch -Np1 -i ../xserver21.1.1.patch ) &amp;&amp;
 
-# Construa o visualizador
-cmake -G "Unix Makefiles"         \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -Wno-dev . &amp;&amp;
+# Build viewer
+cmake -G "Unix Makefiles"          \
+      -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -W no-dev . &amp;&amp;
 make &amp;&amp;
 
-# Construa o servidor
+# Build server
 pushd unix/xserver &amp;&amp;
   autoreconf -fiv  &amp;&amp;
 
@@ -226,10 +226,11 @@ popd</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput># Instale o visualizador
+<screen role="root"><userinput>#Install viewer
 make install &amp;&amp;
+mv  /usr/share/doc/tigervnc /usr/share/doc/tigervnc-&tigervnc-version;
 
-# Instale o servidor
+#Install server
 ( cd unix/xserver/hw/vnc &amp;&amp; make install ) &amp;&amp;
 
 [ -e /usr/bin/Xvnc ] || ln -svf $XORG_PREFIX/bin/Xvnc /usr/bin/Xvnc</userinput></screen>
@@ -238,30 +239,7 @@ make install &amp;&amp;
      Finalmente, modifique o arquivo PAM para estar compatível com elogind:
    </para>
 
-<!-- These are installed as part of 'make install' for the client.
-    <para>
-
-      Finally, create a menu entry.  As the
-      <systemitem class="username">root</systemitem> user:
-    </para>
-
-<screen role="root"><userinput>cat &gt; /usr/share/applications/vncviewer.desktop &lt;&lt; "EOF"
-<literal>[Desktop Entry]
-Type=Application
-Name=TigerVNC Viewer
-Comment=VNC client
-Exec=/usr/bin/vncviewer
-Icon=tigervnc
-Terminal=false
-StartupNotify=false
-Categories=Network;RemoteAccess;</literal>
-EOF
-
-install -vm644 media/icons/tigervnc_24.png /usr/share/pixmaps &amp;&amp;
-ln -sfv tigervnc_24.png /usr/share/pixmaps/tigervnc.png</userinput></screen>
--->
 <screen role="root" revision="sysv"><userinput>sed -i 's/pam_systemd.so/pam_elogind.so/' /etc/pam.d/tigervnc</userinput></screen>
-
 
   </sect2>
 
@@ -325,7 +303,7 @@ iniciar um xterm em uma sessão do twm. Um exemplo de
 <screen revision='sysv'>#!/bin/sh
 [ -x /etc/vnc/xstartup ] &amp;&amp; exec /etc/vnc/xstartup
 [ -r $HOME/.Xresources ] &amp;&amp; xrdb $HOME/.Xresources
-startlxde &amp;</screen>
+startlxqt &amp;</screen>
 
     <para revision='sysv'>
       O arquivo <filename>xstartup</filename> precisa ser executável para que os

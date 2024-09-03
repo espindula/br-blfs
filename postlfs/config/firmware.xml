@@ -36,9 +36,9 @@ navegador da web em <ulink url="&sources-anduin-http;/linux-firmware/"/>.
     Para obter o firmware, aponte um navegador para um dos repositórios acima e,
 então, baixe o(s) item(s) que você precisar. Se você quiser todos esses
 arquivos de firmware (por exemplo, você estiver distribuindo o sistema em
-vários sistemas de hardware), instale <xref linkend="git"/> e clone <ulink
-url='&linux-firmware-git;'/>, ou abra essa URL em um navegador e baixe o
-instantâneo mais recente listado na tabela <literal>Tag</literal>.
+vários sistemas de hardware), ou instale <xref linkend="git"/> e clone
+<ulink url='&linux-firmware-git;'/>, ou abra essa URL em um navegador e
+baixe o instantâneo mais recente listado na tabela <literal>Tag</literal>.
   </para>
 
   <para>
@@ -226,24 +226,22 @@ comparado a tipicamente vinte e quatro (24) KB para uma máquina.
       <title>Microcódigo Intel para a CPU</title>
 
       <para>
-        <!-- at one time, some skylakes had problems with a certain revision
-        secure version of the microcode, for those machines which can boot it, -->
-O primeiro passo é o de obter a versão mais recente do microcódigo da
+        O primeiro passo é o de obter a versão mais recente do microcódigo da
 Intel. Isso precisa ser feito navegando-se até <ulink url=
 'https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/'/>
 e baixando-se o arquivo mais recente lá. Ao tempo da escrita deste texto, a
-versão mais segura do microcódigo era microcode-20231114. Extraia esse
-arquivo da maneira normal; o microcódigo estará no diretório
-<filename>intel-ucode</filename>, contendo vários blobs com nomes na forma
-XX-YY-ZZ. Também existem vários outros arquivos e uma observação de
-lançamento.
+versão mais segura do microcódigo era
+microcode-&intel-microcode-version;. Extraia esse arquivo da maneira normal;
+o microcódigo estará no diretório <filename>intel-ucode</filename>, contendo
+vários blobs com nomes na forma XX-YY-ZZ. Também existem vários outros
+arquivos e uma observação de lançamento.
       </para>
 
       <para>
-        No passado, a "Intel" não fornecia quaisquer detalhes relativos a quais
-"blobs" tinham versões mudadas, mas agora a nota de lançamento detalha
-isso. Você consegue comparar a versão do microcódigo em
-<filename>/proc/cpuinfo</filename> com a versão do seu modelo de "CPU" na
+        No passado, a Intel não fornecia quaisquer detalhes relativos a quais blobs
+tinham versões mudadas, mas agora a nota de lançamento detalha isso. Você
+consegue comparar a versão do microcódigo em
+<filename>/proc/cpuinfo</filename> com a versão para teu modelo de CPU na
 nota de lançamento para saber se existe uma atualização.
       </para>
 
@@ -263,8 +261,8 @@ online em <ulink url=
 i5-11300H), os valores relevantes são cpu family 6, model 140, stepping 1,
 de modo que, nesse caso, a identificação exigida é 06-8c-01. A observação de
 lançamento diz que o microcódigo mais recente para ele está versionado
-0xb4. Se o valor do campo <quote>microcode</quote> em
-<filename>/proc/cpuinfo</filename> for 0xb4 ou superior, isso indica que a
+0xb8. Se o valor do campo <quote>microcode</quote> em
+<filename>/proc/cpuinfo</filename> for 0xb8 ou superior, isso indica que a
 atualização do microcódigo já foi aplicada pelo BIOS. Caso contrário,
 prossiga para <xref linkend='early-microcode'/>.
       </para>
@@ -419,11 +417,10 @@ diferentes em máquinas AMD e Intel. Primeiro, um exemplo de uma Intel
 (dispositivo móvel Tigerlake) com carregamento antecipado:
       </para>
 
-<screen><literal>[    0.000000] microcode: microcode updated early: 0x86 -> 0xb4, date = 2023-09-07
-[    0.000000] Linux version 6.6.1 (xry111@stargazer) (gcc (GCC) 13.2.0, GNU ld (GNU Binutils) 2.41) #36 SMP PREEMPT_DYNAMIC Tue Nov 14 01:56:04 CST 2023
-[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.6.1 root=PARTUUID=<replaceable>&lt;CLASSIFIED&gt;</replaceable> ro
-[    0.424002] microcode: Microcode Update Driver: v2.2.</literal></screen>
-
+<screen><literal>[    0.000000] Linux version 6.10.4 (xry111@stargazer) (gcc (GCC) 14.2.0, GNU ld (GNU Binutils) 2.43) #4 SMP PREEMPT_DYNAMIC Tue Aug 15 18:04:11 CST 2024
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.10.0 root=PARTUUID=<replaceable>&lt;CLASSIFIED&gt;</replaceable> ro
+[    0.585605] microcode: Current revision: 0x000000b8
+[    0.585611] microcode: Updated early from: 0x00000086</literal></screen>
 
       <para>
         Um exemplo histórico AMD:
@@ -670,23 +667,13 @@ cp -av -T --no-preserve=ownership sof-tplg \
    /usr/lib/firmware/intel/sof-tplg</userinput></screen>
 
     <para>
-      <xref linkend="alsa-lib"/> também precisa de arquivos de configuração do Use
-Case Manager para os sistemas que usam Firmware Aberto de Som. Os arquivos
-de configuração UCM do ALSA podem ser baixados a partir de <ulink
-url='https://www.alsa-project.org/files/pub/lib/alsa-ucm-conf-&alsa-lib-version;.tar.bz2'/>.
-Extraia o tarball e mude para o diretório extraído e, em seguida, como o(a)
-usuário(a) &root; instale os arquivos de configuração:
-    </para>
-
-    <screen role="nodump"><userinput>install -vdm755 /usr/share/alsa &amp;&amp;
-cp -av -T --no-preserve=ownership ucm2 /usr/share/alsa/ucm2</userinput></screen>
-
-    <para>
-      Assim que o firmware for carregado (você possivelmente precise de uma
-reinicialização, de forma que o núcleo os carregue) e os arquivos de
-configuração do UCM forem instalados, siga <xref
-linkend="alsa-utils-config-sect"/> para configurar tua placa de som para
-ALSA apropriadamente.
+      <xref linkend="alsa-lib"/> precisa de arquivos de configuração do Use Case
+Manager para os sistemas que usam o Sound Open Firmware também. Leia-se a
+página <xref linkend="alsa-lib"/> para as instruções para
+instalá-los. Depois que o firmware for carregado (você possivelmente precise
+reinicializar para que o núcleo os carregue) e os arquivos de configuração
+do UCM forem instalados, siga <xref linkend="alsa-utils-config-sect"/> para
+configurar tua placa de som para ALSA corretamente.
     </para>
   </sect2>
 

@@ -7,16 +7,17 @@
   <!ENTITY python3-download-http
            "https://www.python.org/ftp/python/&python3-version;/Python-&python3-version;.tar.xz">
   <!ENTITY python3-download-ftp  "">
-  <!ENTITY python3-md5sum        "e7c178b97bf8f7ccd677b94d614f7b3c">
-  <!ENTITY python3-size          "20 MB">
-  <!ENTITY python3-buildsize     "337 MB (adicionar 57 MB para testes)">
-  <!ENTITY python3-time          "2,5 UPC (adicionar 0,7 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY python3-md5sum        "02c7d269e077f4034963bba6befdc715">
+  <!ENTITY python3-size          "19 MB">
+  <!ENTITY python3-buildsize     "335 MB (adicionar 59 MB para os testes)">
+  <!ENTITY python3-time          "1,6 UPC (adicionar 0,6 UPC para testes; ambos usando paralelismo=4)">
   <!--
   Note: Size does not reflect docs that were installed in LFS.
+  Test time measured with 60 second timeout.
   -->
   <!ENTITY python3htmldoc-download-http
   "https://www.python.org/ftp/python/doc/&python3-version;/python-&python3-version;-docs-html.tar.bz2">
-  <!ENTITY python3-docs-md5sum "8a6310f6288e7f60c3565277ec3b5279" >
+  <!ENTITY python3-docs-md5sum "52274d813236ca4a972fb6988480dc56" >
 ]>
 
 <sect1 id="python3" xreflabel="Python-&python3-version;">
@@ -48,16 +49,17 @@ atualizar esse pacote.
       </para>
     </note>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <important>
       <para>
-         Se atualizar para uma nova versão menor do Python 3 (por exemplo, de
+         Se atualizar para uma nova versão secundária do Python-3 (por exemplo, de
 Python-3.11.x para Python-3.12.0), você precisará reinstalar quaisquer
-módulos Python3 que tiver instalado. Você também deveria reinstalar pacotes
-que gerem módulos Python3, incluindo <xref
-linkend="gobject-introspection"/>, <xref linkend="libxml2"/>, <xref
-linkend="opencv"/>, <xref linkend="graphviz"/> (se swig estiver instalado).
+módulos do Python3 que tiver instalado. Você também deveria reinstalar
+pacotes que geram módulos do Python3, incluindo &gobject-introspection;,
+<xref linkend="libxml2"/>, <xref linkend="opencv"/>, <xref
+linkend="fontforge"/>, <xref linkend="gnome-tweaks"/>, <xref
+linkend="samba"/> e <xref linkend="graphviz"/> (se swig estiver instalado).
       </para>
 
       <para>Antes de atualizar, você pode obter uma lista de módulos instalados com
@@ -167,29 +169,38 @@ seguintes comandos:
 make</userinput></screen>
 
     <para>
-      
-      <!-- I'm getting a test failure with empty $LANG:
-           "test test_curses failed"
-           "_curses.error: inswstr() returned ERR"
-           not sure why, but let's just work around it with LC_ALL.  
-  
-           For Python-3.12.0 all tests pass with only LANG=en_US.utf8.
-           Total tests: run=41,505 skipped=1,199
-           Total test files: run=477/483 skipped=12 resource_denied=6
+      Alguns testes são conhecidos por travarem ocasional e
+indefinidamente. Portanto, para testar os resultados, execute a suíte de
+teste, porém configure um limite de tempo de 2 minutos para cada caso de
+teste:
+    </para>
 
-           For Python-3.12.1 all tests pass
-           Total tests: run=40,624 skipped=1,136
-           Total test files: run=486/489 skipped=24 resource_denied=3
+<!-- 
+         For Python-3.12.3 all tests pass
+         Total tests: run=41,778 skipped=1,155
+         Total test files: run=485/488 skipped=24 resource_denied=3
 
-           For Python-3.12.2 all tests pass
-           Total tests: run=41,580 skipped=1,144
-           Total test files: run=485/488 skipped=23 resource_denied=3
-      -->
-Para testar o resultado, emita <command>LC_ALL=en_US.UTF-8 make
-test</command>. Alguns testes possivelmente precisem de uma conexão com a
-Internet. Dois testes chamados <filename>test_xml_etree</filename> e
-<filename>test_xml_etree_c</filename> são conhecidos por falharem com
-expat-2.6.0 ou mais recentes.
+         For Python-3.13.4 
+         Total tests: run=42,152 failures=6 skipped=1,234
+         Total test files: run=487/489 failed=4 skipped=17 resource_denied=6 rerun=4
+    -->
+<screen remap='test'><userinput>make test TESTOPTS="--timeout 120"</userinput></screen>
+
+    
+
+    <para>
+      Para um sistema relativamente lento, você possivelmente precise aumentar o
+limite de tempo e 1 UPC (medido ao construir Binutils  a passagem 1 com um
+núcleo de CPU) deveria ser suficiente. Alguns testes são instáveis, de forma
+que a suíte de teste automaticamente reexecutará testes falhos. Se um teste
+falhou, porém a seguir passou quando reexecutado, ele deveria ser
+considerado como passado.
+    </para>
+
+    <para>
+      Dos mais de quarenta e dois mil (42.000) testes, os seguintes são conhecidos
+por falharem: test__xxsubinterpreters, test_import, test_interpreters e
+test_threading.
     </para>
 
     <para>
@@ -228,6 +239,7 @@ versão do sistema do <application>Expat</application>.
     </para>
 
 
+
     <!--
     <para>
 
@@ -238,14 +250,6 @@ versão do sistema do <application>Expat</application>.
     </para>
 -->
 <para>
-      <option>--with-dbmliborder=bdb:gdbm:ndbm</option>: Use essa chave se você
-desejar construir o módulo &quot;DBM&quot; do
-&quot;<application>Python</application>&quot; contra
-&quot;<application>Berkeley DB</application>&quot; em vez de
-&quot;<application>GDBM</application>&quot;.
-    </para>
-
-    <para>
       <parameter>--enable-optimizations</parameter>: Essa chave habilita
 otimizações estáveis, mas caras.
     </para>

@@ -6,10 +6,10 @@
 
   <!ENTITY gnutls-download-http "&gnupg-http;/gnutls/v3.8/gnutls-&gnutls-version;.tar.xz">
   <!ENTITY gnutls-download-ftp  "">
-  <!ENTITY gnutls-md5sum        "269966167fa5bf8bae5f7534bcc3c454">
-  <!ENTITY gnutls-size          "6,2 MB">
-  <!ENTITY gnutls-buildsize     "168 MB (adicionar 114 MB para testes)">
-  <!ENTITY gnutls-time          "0,7 UPC (adicionar 1,4 UPC para testes; ambos usando paralelismo=8)">
+  <!ENTITY gnutls-md5sum        "46777802233eb7203d47a8b8880c8c90">
+  <!ENTITY gnutls-size          "6,4 MB">
+  <!ENTITY gnutls-buildsize     "154 MB (adicionar 115 MB para os testes)">
+  <!ENTITY gnutls-time          "0,5 UPC (adicionar 1,5 UPC para testes; ambos usando paralelismo=8)">
 ]>
 
 <sect1 id="gnutls" xreflabel="GnuTLS-&gnutls-version;">
@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a GnuTLS</title>
+    <title>Introdução ao GnuTLS</title>
 
     <para>
       O pacote <application>GnuTLS</application> contém bibliotecas e ferramentas
@@ -51,7 +51,7 @@ Pre-Shared-Keys (PSK), a extensão Inner Application (TLS/IA) e manuseio de
 certificados OpenPGP e X.509.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -87,9 +87,16 @@ certificados OpenPGP e X.509.
       </listitem>
     </itemizedlist>
 
+    <note>
+      <para>
+        Ao extrair esse tarball de pacote, ele expande para o diretório
+gnutls-3.8.7, em vez do diretório esperado gnutls-3.8.7.1.
+      </para>
+    </note>
+
     <bridgehead renderas="sect3">Dependências do GnuTLS</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="nettle"/>
     </para>
@@ -120,7 +127,7 @@ Platform Module)
  
       <!-- Note that if you do not install <xref linkend="libtasn1"/>
 , an older
-       3.8.0 includes minitasn1 4.19 which is currnet at the moment. ken -->
+       3.8.0 includes minitasn1 4.19 which is current at the moment. ken -->
 Observe que, se você não instalar o <xref linkend="libtasn1"/>, [então] uma
 versão enviada no tarball <application>GnuTLS</application> será usada em
 vez.
@@ -150,11 +157,13 @@ make</userinput></screen>
 
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>.
+      Um teste trava o procedimento de teste. Desabilite-o: <command>sed
+'/ocsp-must-staple-connection/d' -i tests/Makefile</command>. Para testar os
+resultados, agora emita: <command>make check</command>.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, instale o pacote como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -206,6 +215,11 @@ libunistring, em vez da do sistema. Use essa chave se você não tiver
 instalado <xref linkend="libunistring"/>.
     </para>
 
+    <para>
+      <option>--disable-dsa</option>: desabilita completamente o suporte ao
+algoritmo DSA.
+    </para>
+
   </sect2>
 
   <sect2 role="content">
@@ -222,12 +236,11 @@ instalado <xref linkend="libunistring"/>.
 p11tool, psktool e srptool
         </seg>
         <seg>
-          libgnutls.so, libgnutls-dane.so, libgnutlsxx.so, libgnutls-openssl.so
-(opcional) e /usr/lib/guile/3.0/extensions/guile-gnutls-v-2.so
+          libgnutls.so, libgnutls-dane.so, libgnutlsxx.so e libgnutls-openssl.so
+(opcional)
         </seg>
         <seg>
-          /usr/include/gnutls, /usr/lib/guile/3.0/site-ccache/gnutls,
-/usr/share/guile/site/3.0/gnutls e /usr/share/doc/gnutls-&gnutls-version;
+          /usr/include/gnutls e /usr/share/doc/gnutls-&gnutls-version;
         </seg>
       </seglistitem>
     </segmentedlist>

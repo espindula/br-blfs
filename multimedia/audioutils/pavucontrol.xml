@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY pavucontrol-download-http "https://freedesktop.org/software/pulseaudio/pavucontrol/pavucontrol-&pavucontrol-version;.tar.xz">
+  <!ENTITY pavucontrol-download-http "https://www.freedesktop.org/software/pulseaudio/pavucontrol/pavucontrol-&pavucontrol-version;.tar.xz">
   <!ENTITY pavucontrol-download-ftp  "">
-  <!ENTITY pavucontrol-md5sum        "a4a5dc51dcf4d912443faf3fe8d32b55">
-  <!ENTITY pavucontrol-size          "192 KB">
-  <!ENTITY pavucontrol-buildsize     "14 MB">
-  <!ENTITY pavucontrol-time          "0,3 UPC">
+  <!ENTITY pavucontrol-md5sum        "51743b9bc9eb01959bf3c770facc6555">
+  <!ENTITY pavucontrol-size          "168 KB">
+  <!ENTITY pavucontrol-buildsize     "5,2 MB">
+  <!ENTITY pavucontrol-time          "0,2UPC">
 ]>
 
 <sect1 id="pavucontrol" xreflabel="pavucontrol-&pavucontrol-version;">
@@ -33,7 +33,7 @@ o volume dos dispositivos de hardware e de cada fluxo de reprodução
 separadamente.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -73,9 +73,13 @@ separadamente.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="gtkmm3"/>, <xref linkend="json-glib"/>, <xref
-linkend="libcanberra"/>, <xref linkend="libsigc"/> e <xref
-linkend="pulseaudio"/>
+      <xref linkend="gtkmm4"/>, <xref linkend="json-glib"/>, <xref
+linkend="libsigc3"/> e <xref linkend="pulseaudio"/>
+    </para>
+
+    <bridgehead renderas="sect3">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="libcanberra"/> e <xref linkend="lynx"/>
     </para>
 
   </sect2>
@@ -88,8 +92,11 @@ linkend="pulseaudio"/>
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --docdir=/usr/share/doc/pavucontrol-&pavucontrol-version; &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release -D lynx=false .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -99,7 +106,20 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install &amp;&amp;
+mv /usr/share/doc/pavucontrol /usr/share/doc/pavucontrol-&pavucontrol-version;
+</userinput></screen>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D lynx=false</parameter>: Essa chave desabilita gerar o arquivo
+README em formato de texto. Remova essa chave se você quiser o arquivo
+README em formato de texto e tiver <xref linkend="lynx"/> instalado.
+    </para>
+
   </sect2>
 
   <sect2 role="content">
@@ -118,7 +138,7 @@ make</userinput></screen>
           Nenhum(a)
         </seg>
         <seg>
-          /usr/share/pavucontrol e /usr/share/doc/pavucontrol-5.0
+          /usr/share/pavucontrol e /usr/share/doc/pavucontrol-&pavucontrol-version;
         </seg>
       </seglistitem>
     </segmentedlist>

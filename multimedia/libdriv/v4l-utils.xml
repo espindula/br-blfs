@@ -6,10 +6,10 @@
 
   <!ENTITY v4l-download-http "https://www.linuxtv.org/downloads/v4l-utils/v4l-utils-&v4l-utils-version;.tar.xz">
   <!ENTITY v4l-download-ftp  "">
-  <!ENTITY v4l-md5sum        "a3565a8ccc427dcce52845c2b8880c28">
+  <!ENTITY v4l-md5sum        "6716de513a1fd2e1edb404a46a455855">
   <!ENTITY v4l-size          "1,2 MB">
-  <!ENTITY v4l-buildsize     "32 MB">
-  <!ENTITY v4l-time          "1,1 UPC (usando paralelismo = 4)">
+  <!ENTITY v4l-buildsize     "34 MB">
+  <!ENTITY v4l-time          "0,4 UPC (usando paralelismo = 4)">
 ]>
 
 <sect1 id="v4l-utils" xreflabel="v4l-utils-&v4l-utils-version;">
@@ -32,7 +32,7 @@ proprietários disponíveis a partir da maioria das câmeras de web (libv4l), e
 fornecendo ferramentas para testar dispositivos V4L.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -84,16 +84,16 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="alsa-lib"/>, <xref linkend="glu"/>, <xref linkend="libjpeg"/>
-e &qt5-deps;
+      <xref linkend="alsa-lib"/>, <xref linkend="glu"/> e <xref
+linkend="libjpeg"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="doxygen"/>, <xref linkend="sdl2"/>, ambos <xref
-linkend="llvm"/> (com Clang e alvo BPF) e <ulink
-url='https://github.com/libbpf/libbpf'>libbpf</ulink> (para decodificadores
-de controle remoto infravermelho baseados em BPF) e <ulink
+      <xref linkend="doxygen"/>, <xref linkend="qt6"/> (para qv4l2 e qvidcap),
+<xref linkend="sdl2"/>, ambos <xref linkend="llvm"/> (com Clang e alvo BPF)
+e <ulink url='https://github.com/libbpf/libbpf'>libbpf</ulink> (para
+decodificadores de controle remoto infravermelho baseados em BPF) e <ulink
 url="https://github.com/libsdl-org/SDL_image">SDL_image</ulink>
     </para>
 
@@ -105,15 +105,14 @@ url="https://github.com/libsdl-org/SDL_image">SDL_image</ulink>
     <note>
       <para>
         Se você tiver instalado o LLVM e a libbpf (não no BLFS), ou habilite o alvo
-BPF (via <option>-DLLVM_TARGETS_TO_BUILD=</option>) construindo o LLVM ou
-desabilite os decodificadores de controle remoto infravermelho baseados em
-BPF:
+BPF (via <option>-D LLVM_TARGETS_TO_BUILD=</option>) quando construir o LLVM
+ou desabilite os decodificadores de controle remoto infravermelho baseados
+em BPF:
       </para>
 
       
       <screen><!-- not "nodump" because it's harmless for BLFS anyway -->
-<userinput>sed '/^ir_bpf_enabled/s/=.*/= false/' \
-    -i utils/keytable/meson.build</userinput></screen>
+<userinput>sed -i '/^ir_bpf_enabled/s/=.*/= false/' utils/keytable/meson.build</userinput></screen>
     </note>
 
     <para>
@@ -124,12 +123,12 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr          \
-            -Ddoxygen-doc=disabled \
-            -Dgconv=disabled       \
-            --buildtype=release    .. &amp;&amp;
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -D gconv=disabled   \
+      -D doxygen-doc=disabled &amp;&amp;
 ninja</userinput></screen>
-
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -150,19 +149,36 @@ do
    cp -v contrib/test/$prog /usr/bin
 done</userinput></screen>
 
-
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <parameter>-Dgconv=disabled</parameter>: Essa chave desabilita a instalação
-errada de módulos gconv que quebrariam a glibc.
+    
+    <!-- Please do NOT touch this unless you've tried a DESTDIR installation
+         and you really understand what will be going on:
+
+         Without this option the package will overwrite
+         /usr/lib/gconv/gconv-modules which is a part of the **Glibc**
+         installation and break iconv (both the command iconv(1) and the
+         Glibc function iconv(3)).  Then some BLFS packages will FTBFS or
+         fail a dozen of tests etc.
+
+         Already reported as https://lore.kernel.org/linux-media/3ffb1568a9ff6c0b6f5424de3a0fafb24e7b3ac0.camel@xry111.site/.
+
+         Debian and Gentoo also have -D gconv=disabled.  Fedora manually
+         moves the gconv-modules file in a DESTDIR installation.  IMO it's
+         completely stupid to have an installation conflicting with Glibc in
+         the default configuration, but they just completely ignore my
+         report and rely on the distro maintainers to resolve the issue,
+         even without mentioning the conflict in README.md, nor INSTALL.md.
+         This is the worst upstream behavior I've ever seen.  -->
+<para>
+      <parameter>-D gconv=disabled</parameter>: Essa chave desabilita a instalação
+errada do gconv-modules que quebraria a glibc.
     </para>
 
   </sect2>
-
 
   <sect2 role="content">
     <title>Conteúdo</title>

@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY tracker3-download-http
-           "&gnome-download-http;/tracker/3.6/tracker-&tracker3-version;.tar.xz">
+           "&gnome-download-http;/tracker/3.7/tracker-&tracker3-version;.tar.xz">
   <!ENTITY tracker3-download-ftp  "">
-  <!ENTITY tracker3-md5sum        "7be27edcf56214277cdff6ebfd8cfbf0">
-  <!ENTITY tracker3-size          "2,4 MB">
-  <!ENTITY tracker3-buildsize     "51 MB (com testes)">
-  <!ENTITY tracker3-time          "0,6 UPC (com testes)">
+  <!ENTITY tracker3-md5sum        "65cd2945506b7303e9eea493d56431d8">
+  <!ENTITY tracker3-size          "1,7 MB">
+  <!ENTITY tracker3-buildsize     "58 MB (com testes)">
+  <!ENTITY tracker3-time          "0,4 UPC (com testes)">
 ]>
 
 <sect1 id="tracker3" xreflabel="Tracker-&tracker3-version;">
@@ -32,7 +32,7 @@ arquivos usado no ambiente de área de trabalho do
 <application>GNOME</application>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -92,9 +92,9 @@ linkend="vala"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/>, <xref linkend="icu"/>, <xref
-linkend="libsoup3"/>, <xref linkend="pygobject3"/>, <xref linkend="sqlite"/>
-e <xref linkend="tracker3-miners"/> (tempo de execução)
+      &gobject-introspection;, <xref linkend="icu"/>, <xref linkend="libsoup3"/>,
+<xref linkend="pygobject3"/>, <xref linkend="sqlite"/> e <xref
+linkend="tracker3-miners"/> (tempo de execução)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -107,8 +107,8 @@ e <xref linkend="tracker3-miners"/> (tempo de execução)
 <!--<ulink url="https://pypi.python.org/pypi/tap.py/">
 tap.py</ulink>
       (for tests)-->
-<xref linkend="asciidoc"/>, <xref linkend="graphviz"/>, <xref
-linkend="libsoup"/>, <ulink
+<xref linkend="asciidoc"/>, <xref linkend="avahi"/>, <xref
+linkend="graphviz"/>, <xref linkend="libsoup"/>, <ulink
 url="https://github.com/scop/bash-completion/">bash-completion</ulink> e
 <ulink url="https://github.com/snowballstem/snowball/">libstemmer</ulink>
       
@@ -123,9 +123,20 @@ url="https://github.com/scop/bash-completion/">bash-completion</ulink> e
       Corrija o local para instalar a documentação:
     </para>
 
+<!-- https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/665
+    <para>
+
+      Adapt for a behavior change of SQLite 3.45.3:
+    </para>
+
+    <screen><userinput>sed 's/ROWID/\\"rdfs:Resource\\".ID/' \
+    -i src/libtracker-sparql/core/tracker-fts.c</userinput></screen>
+    -->
 <screen><userinput>mv docs/reference/libtracker-sparql/doc/{Tracker-3.0,tracker-&tracker3-version;} &amp;&amp;
 sed '/docs_name/s/Tracker-3.0/tracker-&tracker3-version;/' \
     -i docs/reference/libtracker-sparql/meson.build</userinput></screen>
+
+    
 
     <para>
       Instale o <application>Tracker</application> executando os seguintes
@@ -137,17 +148,17 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dman=false         \
+            -D man=false        \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr                 \
-            --buildtype=release           \
-            -Dman=false                   \
-            -Dsystemd_user_services=false \
+meson setup --prefix=/usr                  \
+            --buildtype=release            \
+            -D man=false                   \
+            -D systemd_user_services=false \
             ..                            &amp;&amp;
 ninja</userinput></screen>
 
@@ -162,7 +173,7 @@ ninja</userinput></screen>
       <filename>
 tracker: fts / fts</filename>, is known to fail due to an
       incompatibility with SQLite-3.42.-->
-Para testar os resultados, emita: <command>meson configure -Ddebug=true
+Para testar os resultados, emita: <command>meson configure -D debug=true
 &amp;&amp; ninja test</command>. A suíte de teste deveria ser executada a
 partir de uma sessão gráfica. 
     </para>
@@ -177,20 +188,20 @@ partir de uma sessão gráfica.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dman=false</parameter>: Essa chave evita que o processo de
+      <parameter>-D man=false</parameter>: Essa chave evita que o processo de
 construção gere páginas de manual. Omita essa chave se você tiver o <xref
 linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
 páginas de manual.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dsystemd_user_services=false</parameter>: Essa chave impede que
+      <parameter>-D systemd_user_services=false</parameter>: Essa chave impede que
 o processo de construção instale serviços de usuário(a) do systemd, pois
 eles são inúteis em sistemas SysV.
     </para>
 
     <para>
-      <command>meson configure -Ddebug=true</command>: Esse comando habilita
+      <command>meson configure -D debug=true</command>: Esse comando habilita
 algumas verificações de depuração necessárias para a suíte de teste. Nós não
 queremos habilitá-las para as bibliotecas e aplicativos instaladas do
 Tracker 3, de forma que executamos a suíte de teste depois da instalação.
@@ -209,7 +220,8 @@ Tracker 3, de forma que executamos a suíte de teste depois da instalação.
 
       <seglistitem>
         <seg>
-          tracker3
+          tracker3, tracker3-endpoint, tracker3-export, tracker3-help,
+tracker3-import, tracker3-sparql e tracker3-sql
         </seg>
         <seg>
           libtracker-sparql-3.0.so
@@ -233,6 +245,78 @@ Tracker 3, de forma que executamos a suíte de teste depois da instalação.
           </para>
           <indexterm zone="tracker3 tracker3-prog">
             <primary sortas="b-tracker3">tracker3</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-endpoint">
+        <term><command>tracker3-endpoint</command></term>
+        <listitem>
+          <para>
+            cria um ponto de acesso de SPARQL
+          </para>
+          <indexterm zone="tracker3 tracker3-endpoint">
+            <primary sortas="b-tracker3-endpoint">tracker3-endpoint</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-export">
+        <term><command>tracker3-export</command></term>
+        <listitem>
+          <para>
+            exporta todos os dados oriundos de uma base de dados Tracker
+          </para>
+          <indexterm zone="tracker3 tracker3-export">
+            <primary sortas="b-tracker3-export">tracker3-export</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+       <varlistentry id="tracker3-help">
+        <term><command>tracker3-help</command></term>
+        <listitem>
+          <para>
+            mostra páginas de manual relacionadas ao Tracker
+          </para>
+          <indexterm zone="tracker3 tracker3-help">
+            <primary sortas="b-tracker3-help">tracker3-help</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-import">
+        <term><command>tracker3-import</command></term>
+        <listitem>
+          <para>
+            importa dados para uma base de dados Tracker
+          </para>
+          <indexterm zone="tracker3 tracker3-import">
+            <primary sortas="b-tracker3-import">tracker3-import</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-sparql">
+        <term><command>tracker3-sparql</command></term>
+        <listitem>
+          <para>
+            usa SparQL para consultar uma base de dados Tracker
+          </para>
+          <indexterm zone="tracker3 tracker3-sparql">
+            <primary sortas="b-tracker3-sparql">tracker3-sparql</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tracker3-sql">
+        <term><command>tracker3-sql</command></term>
+        <listitem>
+          <para>
+            usa SQL para consultar uma base de dados Tracker
+          </para>
+          <indexterm zone="tracker3 tracker3-sql">
+            <primary sortas="b-tracker3-sql">tracker3-sql</primary>
           </indexterm>
         </listitem>
       </varlistentry>

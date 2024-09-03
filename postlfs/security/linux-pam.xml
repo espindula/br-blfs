@@ -6,14 +6,14 @@
 
   <!ENTITY linux-pam-download-http "https://github.com/linux-pam/linux-pam/releases/download/v&linux-pam-version;/Linux-PAM-&linux-pam-version;.tar.xz">
   <!ENTITY linux-pam-download-ftp  "">
-  <!ENTITY linux-pam-md5sum        "41a10af5fc35a7be472ae9864338e64a">
+  <!ENTITY linux-pam-md5sum        "8ad1e72d1ff6480d8e0af658e2d7b768">
   <!ENTITY linux-pam-size          "1,0 MB">
-  <!ENTITY linux-pam-buildsize     "39 MB (com os testes)">
+  <!ENTITY linux-pam-buildsize     "39 MB (com testes)">
   <!ENTITY linux-pam-time          "0,4 UPC (com testes)">
 
   <!ENTITY linux-pam-docs-download "https://github.com/linux-pam/linux-pam/releases/download/v&linux-pam-version;/Linux-PAM-&linux-pam-docs-version;-docs.tar.xz">
-  <!ENTITY linux-pam-docs-md5sum   "db41b71435df078658b3db1f57bb2a49">
-  <!ENTITY linux-pam-docs-size     "456 KB">
+  <!ENTITY linux-pam-docs-md5sum   "46dc9f9a27ef73a2fbe3b667877e88da">
+  <!ENTITY linux-pam-docs-size     "455 KB">
   <!--
   <!ENTITY debian-pam-docs         "http://debian.securedservers.com/kernel/pub/linux/libs/pam">
   -->
@@ -30,7 +30,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Linux PAM</title>
+    <title>Introdução ao Linux PAM</title>
 
     <para>
       O pacote <application>Linux PAM</application> contém Módulos Plugáveis de
@@ -38,7 +38,7 @@ Autenticação usados pelo(a) administrador(a) local do sistema para controlar
 como os aplicativos autenticam usuários(as).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -136,6 +136,28 @@ fortes.
 
   </sect2>
 
+  <sect2 role="kernel" id="linux-pam-kernel">
+    <title>Configuração do Núcleo</title>
+
+    <para>
+      Para o módulo PAM <filename class='libraryfile'>pam_loginuid.so</filename>
+(referido pelo arquivo de configuração PAM
+<filename>system-session</filename>, se <phrase revision='sysv'><xref
+linkend='elogind'/> for construído</phrase><phrase revision='systemd'><xref
+linkend='systemd'/> for reconstruído com suporte a PAM</phrase>
+posteriormente) funcionar, um parâmetro de configuração do núcleo precisa
+ser configurado ou o módulo simplesmente não fará nada:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="linux-pam-kernel.xml"/>
+
+    <indexterm zone="linux-pam linux-pam-kernel">
+      <primary sortas="d-linux-pam">Linux-PAM</primary>
+    </indexterm>
+
+  </sect2>
+
   <sect2 role="installation">
     <title>Instalação do Linux PAM</title>
 
@@ -143,9 +165,21 @@ fortes.
       Primeiro, evite a instalação de um arquivo desnecessário do systemd:
     </para>
 
+<!-- https://github.com/linux-pam/linux-pam/issues/809 -->
 <screen revision="sysv"><userinput>sed -e /service_DATA/d \
-   -i modules/pam_namespace/Makefile.am &amp;&amp;
-autoreconf</userinput></screen>
+    -i modules/pam_namespace/Makefile.am</userinput></screen>
+
+    
+    <para>
+      O arquivo <filename>libtool.m4</filename> enviado tem uma configuração
+inconsistente com a hierarquia <filename class='directory'>/usr</filename>
+do LFS. Esse problema causaria <filename
+class='libraryfile'>libpam_misc.so</filename> lincada com um sinalizador
+rpath que às vezes pode causar problemas ou até mesmo problemas de
+segurança. Regenere o sistema de construção para corrigir a inconsistência:
+    </para>
+
+<screen><userinput>autoreconf -fi</userinput></screen>
 
     <para>
       Se você baixou a documentação, [então] desempacote o tarball emitindo o

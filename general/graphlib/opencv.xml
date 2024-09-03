@@ -6,12 +6,14 @@
 
   <!ENTITY opencv-download-http     "https://github.com/opencv/opencv/archive/&opencv-version;/opencv-&opencv-version;.tar.gz">
   <!ENTITY opencv-download-ftp      "">
-  <!ENTITY opencv-md5sum            "153b4b8dd103b1bfe447f7dd1f22eac0">
-  <!ENTITY opencv-size              "88 MB">
-  <!ENTITY opencv-buildsize         "820 MB">
-  <!ENTITY opencv-time              "7,4 UPC (usando paralelismo = 4)">
+  <!ENTITY opencv-md5sum            "adaf23e87339e6df6d50d68001138ccc">
+  <!ENTITY opencv-size              "91 MB">
+  <!ENTITY opencv-buildsize         "698 MB (com opencv-contrib)">
+  <!ENTITY opencv-time              "3,0UPC (usando paralelismo = 8)">
 
   <!ENTITY opencv-contrib-download "https://github.com/opencv/opencv_contrib/archive/&opencv-version;/opencv_contrib-&opencv-contrib-version;.tar.gz">
+  <!ENTITY opencv-contrib-md5sum   "5a4bc09177b74813c72648c117783dba">
+  <!ENTITY opencv-contrib-size     "53 MB">
 ]>
 
 <sect1 id="opencv" xreflabel="opencv-&opencv-version;">
@@ -25,14 +27,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a opencv</title>
+    <title>Introdução ao opencv</title>
 
     <para>
       O pacote <application>opencv</application> contém bibliotecas gráficas
 voltadas principalmente para visão computacional em tempo real.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -75,6 +77,17 @@ voltadas principalmente para visão computacional em tempo real.
           Módulos adicionais opcionais: <ulink url="&opencv-contrib-download;"/>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 dos módulos adicionais opcionais:
+&opencv-contrib-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho dos módulos opcionais adicionais: &opencv-contrib-size;
+        </para>
+      </listitem>
     </itemizedlist>
 
     <note>
@@ -104,11 +117,9 @@ linkend="v4l-utils"/> e <xref linkend="xine-lib"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--  <ulink url="https://www.numpy.org/">
-NumPy</ulink>, -->
-<xref linkend="apache-ant"/>, <xref linkend="doxygen"/>, <xref
-linkend="java"/>, <xref linkend="numpy"/>, <ulink
-url="https://math-atlas.sourceforge.net/">ATLAS</ulink>, <ulink
+      <xref linkend="apache-ant"/>, <xref linkend="doxygen"/>, <xref
+linkend="java"/>, <xref linkend="numpy"/>, <xref linkend="protobuf"/>,
+<ulink url="https://math-atlas.sourceforge.net/">ATLAS</ulink>, <ulink
 url="https://www.netlib.org/blas/">blas</ulink>, <ulink
 url="https://developer.nvidia.com/cuda-zone">Cuda</ulink>, <ulink
 url="https://eigen.tuxfamily.org/">Eigen</ulink>, <ulink
@@ -137,18 +148,18 @@ Toolkit</ulink>,
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr      \
-      -DCMAKE_BUILD_TYPE=Release       \
-      -DENABLE_CXX11=ON                \
-      -DBUILD_PERF_TESTS=OFF           \
-      -DWITH_XINE=ON                   \
-      -DBUILD_TESTS=OFF                \
-      -DENABLE_PRECOMPILED_HEADERS=OFF \
-      -DCMAKE_SKIP_RPATH=ON            \
-      -DBUILD_WITH_DEBUG_INFO=OFF      \
-      -Wno-dev  ..                     &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr      \
+      -D CMAKE_BUILD_TYPE=Release       \
+      -D ENABLE_CXX11=ON                \
+      -D BUILD_PERF_TESTS=OFF           \
+      -D WITH_XINE=ON                   \
+      -D BUILD_TESTS=OFF                \
+      -D ENABLE_PRECOMPILED_HEADERS=OFF \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON    \
+      -D BUILD_WITH_DEBUG_INFO=OFF      \
+      -W no-dev  ..                     &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -166,18 +177,22 @@ make</userinput></screen>
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-skip-install-rpath.xml"/>
+
     <para>
-      <parameter>-DWITH_XINE=ON</parameter>: Essa opção instrui o procedimento
-"make" a usar <xref linkend="xine-lib"/>.
+      <parameter>-D WITH_XINE=ON</parameter>: Essa opção instrui o procedimento
+make a usar <xref linkend="xine-lib"/>.
     </para>
 
     <para>
-      <parameter>-DENABLE_PRECOMPILED_HEADERS=OFF</parameter>: Essa opção é
+      <parameter>-D ENABLE_PRECOMPILED_HEADERS=OFF</parameter>: Essa opção é
 necessária para compatibilidade com "gcc-6.1" e posteriores.
     </para>
 
     <para>
-      <option>-DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-&opencv-version;/modules</option>:
+      <option>-D
+OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-&opencv-version;/modules</option>:
 instrui o sistema de construção a construir módulos adicionais.
     </para>
 

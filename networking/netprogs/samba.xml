@@ -6,9 +6,9 @@
 
   <!ENTITY samba-download-http "https://download.samba.org/pub/samba/stable/samba-&samba-version;.tar.gz">
   <!ENTITY samba-download-ftp  "">
-  <!ENTITY samba-md5sum        "123979dc044d747be56393dcb455454e">
-  <!ENTITY samba-size          "40 MB">
-  <!ENTITY samba-buildsize     "610 MB (adicionar 64 MB para quicktest)">
+  <!ENTITY samba-md5sum        "a366c985dd1b988ff1fda902876f3241">
+  <!ENTITY samba-size          "41 MB">
+  <!ENTITY samba-buildsize     "590 MB (adicionar 64 MB para teste rápido)">
   <!ENTITY samba-time          "2,1 UPC (usando paralelismo=4; adicionar 0,4 UPC para quicktest)">
 ]>
 
@@ -37,7 +37,7 @@ Directory&quot; e um servidor de nomes &quot;NetBIOS&quot; (&quot;RFC&quot;
 &quot;LAN&quot;).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,8 +78,8 @@ Directory&quot; e um servidor de nomes &quot;NetBIOS&quot; (&quot;RFC&quot;
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="gnutls"/>, <xref linkend="jansson"/>, <xref
-linkend="perl-json"/>, <xref linkend="libtirpc"/>, <xref
-linkend="perl-parse-yapp"/> e <xref linkend="rpcsvc-proto"/>
+linkend="libtirpc"/>, <xref linkend="perl-parse-yapp"/> e <xref
+linkend="rpcsvc-proto"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -88,7 +88,7 @@ linkend="perl-parse-yapp"/> e <xref linkend="rpcsvc-proto"/>
 em sistemas que suportam Volume Shadow Copies em Windows),</phrase> <xref
 linkend="fuse3"/>, <xref linkend="gpgme"/>, <xref linkend="icu"/>, <xref
 linkend="libtasn1"/>, <xref linkend="libxslt"/> (para documentação), <xref
-linkend="linux-pam"/> e <xref linkend="openldap"/>
+linkend="linux-pam"/>, <xref linkend="mitkrb"/> e <xref linkend="openldap"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -99,12 +99,11 @@ linkend="linux-pam"/> e <xref linkend="openldap"/>
 linkend="libaio"/>, <xref linkend="libarchive"/> (para tar em smbclient),
 <xref linkend="libcap-pam"/>, <xref linkend="libgcrypt"/>, <xref
 linkend="libnsl"/>, <xref linkend="libunwind"/>, <xref linkend="lmdb"/>,
-<xref linkend="markdown"/>, <xref linkend="mitkrb"/>, <xref linkend="nss"/>,
-<xref linkend="popt"/>, <xref linkend="talloc"/> (incluído), <xref
-linkend="vala"/>, <xref linkend="valgrind"/> (opcionalmente usado pela suíte
-de teste), <xref linkend="xfsprogs"/>, <ulink
-url="https://cmocka.org/">cmocka</ulink>, <ulink
-url="https://cryptography.io/en/latest/">cryptography</ulink>, <ulink
+<xref linkend="markdown"/>, <xref linkend="nss"/>, <xref linkend="popt"/>,
+<xref linkend="talloc"/> (incluído), <xref linkend="vala"/>, <xref
+linkend="valgrind"/> (opcionalmente usado pela suíte de teste), <xref
+linkend="xfsprogs"/>, <ulink url="https://cmocka.org/">cmocka</ulink>,
+<ulink url="https://cryptography.io/en/latest/">cryptography</ulink>, <ulink
 url="https://ctdb.samba.org/">ctdb</ulink> (incluído), <ulink
 url="https://cwrap.org/">cwrap</ulink>, <ulink
 url="&pypi;/dnspython/">dnspython</ulink>, <ulink
@@ -163,7 +162,9 @@ PATH=$PWD/pyvenv/bin:$PATH                 \
     --enable-fhs                           \
     --without-ad-dc                        \
     --without-systemd                      \
-    --enable-selftest                      &amp;&amp;
+    --with-system-mitkrb5                  \
+    --enable-selftest                      \
+    --disable-rpath-install                &amp;&amp;
 make</userinput></screen>
 
 <screen revision="systemd"><userinput>PYTHON=$PWD/pyvenv/bin/python3             \
@@ -175,7 +176,9 @@ make</userinput></screen>
     --with-pammodulesdir=/usr/lib/security \
     --enable-fhs                           \
     --without-ad-dc                        \
-    --enable-selftest                      &amp;&amp;
+    --with-system-mitkrb5                  \
+    --enable-selftest                      \
+    --disable-rpath-install                &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -289,6 +292,27 @@ unidade do &quot;systemd&quot; do Samba para um controlador de domínio do
     </para>
 
     <para>
+      <parameter>--with-system-mitkrb5</parameter>: Habilita construir com a
+versão do sistema do Kerberos. Isso atenua vulnerabilidades de segurança e
+reduz o tempo de construção. Remova isso se você não tiver <xref
+linkend="mitkrb"/> instalado.
+    </para>
+
+    
+    <!-- Note that /usr/lib/samba is still in rpath and it's really
+         needed. -->
+<para>
+      <parameter>--disable-rpath-install</parameter>: Remove o caminho de
+instalação da biblioteca dos caminhos incorporados de pesquisa de
+bibliotecas compartilhadas nos arquivos executáveis binários instalados e
+nas bibliotecas compartilhadas. Quando esse pacote é instalado no local
+padrão, o caminho de instalação da biblioteca é <filename
+class='directory'>/usr/lib</filename>. Ele sempre é pesquisado pelo
+vinculador dinâmico, de forma que não existe necessidade de incorporá-lo aos
+arquivos instalados.
+    </para>
+
+    <para>
       <option>--with-selftest-prefix=SELFTEST_PREFIX</option>: Essa opção
 especifica o diretório de trabalho da suíte de teste (padrão=./st).
     </para>
@@ -396,17 +420,17 @@ seguintes três parâmetros é suficiente:
         <para>
           Os valores nesse exemplo especificam que o computador pertence a um grupo de
 trabalho do Windows chamado
-<quote><replaceable>GRUPO_DE_TRABALHO</replaceable></quote>, usa o conjunto
-de caracteres <quote><replaceable>cp850</replaceable></quote> na rede ao
-conversar com &quot;MS-DOS&quot; e &quot;MS Windows 9x&quot;, e que os nomes
-dos arquivos são armazenados na codificação
-<quote><replaceable>ISO-8859-1</replaceable></quote> no disco. Ajuste esses
-valores adequadamente para a tua instalação. O valor <quote>unix
-charset</quote> precisa ser o mesmo que a saída gerada de
-&quot;<command>locale charmap</command>&quot; quando executado com a
-variável &quot;<envar>LANG</envar>&quot; configurada para o teu local
-preferido, caso contrário o comando &quot;<command>ls</command>&quot;
-possivelmente não exiba nomes de arquivos corretos dos arquivos baixados.
+<literal><replaceable>GRUPO_DE_TRABALHO</replaceable></literal>, que usa o
+conjunto de caracteres <literal><replaceable>cp850</replaceable></literal>
+na rede ao conversar com MS-DOS e MS Windows 9x, e que os nomes dos arquivos
+são armazenados na codificação
+<literal><replaceable>ISO-8859-1</replaceable></literal> no disco. Ajuste
+esses valores adequadamente para a tua instalação. O valor <literal>unix
+charset</literal> precisa ser o mesmo que a saída gerada de <command>locale
+charmap</command> quando executado com a variável <envar>LANG</envar>
+configurada para a tua localidade preferida, caso contrário o comando
+<command>ls</command> possivelmente não exiba nomes de arquivos corretos dos
+arquivos baixados.
         </para>
 
         <para>

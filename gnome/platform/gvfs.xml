@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY gvfs-download-http "&gnome-download-http;/gvfs/1.52/gvfs-&gvfs-version;.tar.xz">
+  <!ENTITY gvfs-download-http "&gnome-download-http;/gvfs/1.54/gvfs-&gvfs-version;.tar.xz">
   <!ENTITY gvfs-download-ftp  "">
-  <!ENTITY gvfs-md5sum        "87c087d868352e702e5dcaf42eb729ea">
+  <!ENTITY gvfs-md5sum        "587c5b279ec3020c597f3ab3f6a73bbd">
   <!ENTITY gvfs-size          "1,2 MB">
-  <!ENTITY gvfs-buildsize     "29 MB">
+  <!ENTITY gvfs-buildsize     "30 MB">
   <!ENTITY gvfs-time          "0,2 UPC (usando paralelismo = 4)">
 ]>
 
@@ -31,7 +31,7 @@ espaço de usuário(a) projetado para funcionar com as abstrações de E/S da
 biblioteca GIO da GLib.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -83,14 +83,14 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="dbus"/>, <xref linkend="glib2"/>, <xref linkend="libusb"/> e
-<xref linkend="libsecret"/>
+      <xref linkend="dbus"/>, <xref linkend="glib2"/>, <xref linkend="gcr4"/>,
+<xref linkend="libusb"/> e <xref linkend="libsecret"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gcr"/>, <xref linkend="gtk3"/>, <xref linkend="libcdio"/>,
-<xref linkend="libgudev"/>, <xref linkend="libsoup3"/>, <phrase
+      <xref linkend="gtk3"/>, <xref linkend="libcdio"/>, <xref
+linkend="libgudev"/>, <xref linkend="libsoup3"/>, <phrase
 revision="sysv"><xref linkend="elogind"/></phrase> <phrase
 revision="systemd"><xref role='runtime' linkend="systemd"/> (tempo de
 execução)</phrase> e <xref linkend="udisks2"/>
@@ -109,6 +109,7 @@ url="&gnome-download-http;/gnome-desktop-testing/">gnome-desktop-testing</ulink>
 url="https://www.videolan.org/developers/libbluray.html">libbluray</ulink>,
 <ulink url="http://www.gphoto.org/">libgphoto2</ulink>, <ulink
 url="https://www.libimobiledevice.org/">libimobiledevice</ulink>, <ulink
+url="https://gitlab.gnome.org/GNOME/msgraph">libmsgraph</ulink>, <ulink
 url="https://libmtp.sourceforge.net/">libmtp</ulink>, <ulink
 url="https://github.com/sahlberg/libnfs/">libnfs</ulink> e <ulink
 url="https://twisted.org/">Twisted</ulink>
@@ -129,18 +130,19 @@ cd    build &amp;&amp;
 meson setup               \
       --prefix=/usr       \
       --buildtype=release \
-      -Dfuse=false        \
-      -Dgphoto2=false     \
-      -Dafc=false         \
-      -Dbluray=false      \
-      -Dnfs=false         \
-      -Dmtp=false         \
-      -Dsmb=false         \
-      -Dtmpfilesdir=no    \
-      -Ddnssd=false       \
-      -Dgoa=false         \
-      -Dgoogle=false      \
-      -Dsystemduserunitdir=no .. &amp;&amp;
+      -D onedrive=false   \
+      -D fuse=false       \
+      -D gphoto2=false    \
+      -D afc=false        \
+      -D bluray=false     \
+      -D nfs=false        \
+      -D mtp=false        \
+      -D smb=false        \
+      -D tmpfilesdir=no   \
+      -D dnssd=false      \
+      -D goa=false        \
+      -D google=false     \
+      -D systemduserunitdir=no .. &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision='systemd'><userinput>mkdir build &amp;&amp;
@@ -149,16 +151,17 @@ cd    build &amp;&amp;
 meson setup               \
       --prefix=/usr       \
       --buildtype=release \
-      -Dfuse=false        \
-      -Dgphoto2=false     \
-      -Dafc=false         \
-      -Dbluray=false      \
-      -Dnfs=false         \
-      -Dmtp=false         \
-      -Dsmb=false         \
-      -Ddnssd=false       \
-      -Dgoa=false         \
-      -Dgoogle=false      .. &amp;&amp;
+      -D onedrive=false   \
+      -D fuse=false       \
+      -D gphoto2=false    \
+      -D afc=false        \
+      -D bluray=false     \
+      -D nfs=false        \
+      -D mtp=false        \
+      -D smb=false        \
+      -D dnssd=false      \
+      -D goa=false        \
+      -D google=false     .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -183,24 +186,26 @@ está além do escopo do BLFS.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-D&lt;option&gt;=false</parameter>: Essas chaves são exigidas se
+      <parameter>-D &lt;option&gt;=false</parameter>: Essas chaves são exigidas se
 a dependência correspondente não estiver instalada. Remova aquelas onde você
 tiver instalado o aplicativo correspondente e desejar usá-lo com o
 <application>Gvfs</application>. A opção dnssd exige avahi e, ambos, goa e
-google exigem GNOME Online Accounts. A opção google também exige libgdata.
+google exigem GNOME Online Accounts. A opção google também exige libgdata. A
+opção google também exige libgdata. O suporte a onedrive exige o pacote
+libmsgraph.
     </para>
 
     <para revision="sysv">
-      <parameter>-Dtmpfilesdir=no</parameter>
-<parameter>-Dsystemduserunitdir=no</parameter>: Essas chaves fornecem locais
-de diretório do systemd. Configurá-las para <quote>no</quote> desabilita a
-dependência do systemd e do logind.
+      <parameter>-D tmpfilesdir=no</parameter> <parameter>-D
+systemduserunitdir=no</parameter>: Essas chaves fornecem locais de diretório
+do systemd. Configurá-las para <quote>no</quote> desabilita a dependência do
+systemd e do logind.
     </para>
 
     <para>
-      <option>-Dcdda=false</option>: Essa chave é exigida se a libcdio não estiver
-instalada. A estrutura de retaguarda cdda é inútil em máquinas sem uma
-unidade de CDROM/DVD.
+      <option>-D cdda=false</option>: Essa chave é exigida se a libcdio não
+estiver instalada. A estrutura de retaguarda cdda é inútil em máquinas sem
+uma unidade de CDROM/DVD.
     </para>
 
   </sect2>

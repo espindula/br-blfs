@@ -6,19 +6,19 @@
 
   <!ENTITY spidermonkey-download-http "&mozilla-http;/firefox/releases/&spidermonkey-version;esr/source/firefox-&spidermonkey-version;esr.source.tar.xz">
   <!ENTITY spidermonkey-download-ftp  "">
-  <!ENTITY spidermonkey-md5sum        "9105bdf076d457ce5e0aa5628d5acc84">
-  <!ENTITY spidermonkey-size          "492 MB">
+  <!ENTITY spidermonkey-md5sum        "deb750363b35d86629f824c0f8ba7f56">
+  <!ENTITY spidermonkey-size          "484 MB">
   <!ENTITY spidermonkey-buildsize     "3,6 GB (40 MB instalado depois de remover 36 MB de bibliotecas estáticas;
 adicionar 34 MB para os testes principais e 37 MB para os testes jit)">
-  <!ENTITY spidermonkey-time          "1,9 UPC (com paralelismo=4; adicionar 1,1 UPC para os testes principais e
-3,7 UPC para os testes jit)">
+  <!ENTITY spidermonkey-time          "1,9 UPC (com paralelismo=4; adicionar 1,1 UPC para testes principais e 3,7
+UPC para os testes jit)">
 ]>
 
 <sect1 id="spidermonkey" xreflabel="SpiderMonkey oriundo de Firefox-&spidermonkey-version;">
   <?dbhtml filename="spidermonkey.html"?>
 
 
-  <title>SpiderMonkey oriundo de Firefox-&spidermonkey-version;</title>
+  <title>SpiderMonkey oriundo de firefox-&spidermonkey-version;</title>
 
   <indexterm zone="spidermonkey">
     <primary sortas="a-spidermonkey">SpiderMonkey</primary>
@@ -36,7 +36,7 @@ SpiderMonkey é retirado do Firefox.
     
     <!-- To editors: make sure polkit works with mozjs when
          tagging SpiderMonkey or upgrading it to a new major version.  -->
-&lfs121_checked;
+&lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -88,8 +88,9 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="icu"/>, <xref linkend="rust"/>, <xref linkend="six"/> e <xref
-linkend="which"/>
+      <!--<xref linkend="six"/>
+, and-->
+<xref linkend="icu"/>, <xref linkend="rust"/> e <xref linkend="which"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -129,8 +130,8 @@ Optional</bridgehead>
       <para>
         Ao contrário da maioria dos outros pacotes no BLFS, as instruções abaixo
 exigem que você desempacote
-<filename>firefox-&spidermonkey-version;esr.tar.xz</filename> e mude para a
-pasta <filename>firefox-&spidermonkey-version;</filename>.
+<filename>firefox-&spidermonkey-version;esr.tar.xz</filename> e mude para o
+diretório <filename>firefox-&spidermonkey-version;</filename>.
       </para>
 
       <para>
@@ -154,18 +155,20 @@ sticky estiver configurado - isso irá desconfigurá-lo.
 
     </note>
 
+    <!--
     <para>
-      O sistema de construção envia várias cópias internas do módulo Python 3
-<filename>six.py</filename>. As cópias enviadas são muito antigas para
-funcionar bem com Python 3.12 ou posterior. Substitua-as pelos links
-simbólicos para <xref linkend='six'/> já instalado no sistema:
+
+      The building system ships several internal copies of the Python 3
+      module <filename>six.py</filename>.  The shipped copies are too old
+      to work well with Python 3.12 or later.  Replace them with the
+      symlinks to <xref linkend='six'/> already installed on the system:
     </para>
 
 <screen><userinput>for i in $(find -name six.py); do
   ln -sfv /usr/lib/python&python3-majorver;/site-packages/six.py $i;
 done</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>SpiderMonkey</application> executando os seguintes
 comandos:
     </para>
@@ -186,7 +189,6 @@ cd    obj &amp;&amp;
                     --disable-debug-symbols  \
                     --disable-jemalloc       \
                     --enable-readline        \
-                    --enable-rust-simd       \
                     --with-intl-api          \
                     --with-system-icu        \
                     --with-system-zlib       &amp;&amp;
@@ -197,7 +199,7 @@ make</userinput></screen>
 Para executar a suíte de teste do SpiderMonkey, emita: <command>make -C
 js/src check-jstests JSTESTS_EXTRA_ARGS="--timeout 300
 --wpt=disabled"</command>. É recomendado redirecionar a saída gerada para um
-registro. Como nós estamos construindo com ICU do sistema, 42 testes (de um
+registro. Como nós estamos construindo com ICU do sistema, 39 testes (de um
 total de mais de 50.000) são conhecidos por falharem. A suíte de teste é
 executada com todos os elementos de processamento de CPU disponíveis: mesmo
 em um cgroup com menos elementos de processamento atribuídos, ele ainda
@@ -219,7 +221,7 @@ será controlado.
 
            "peak": the time period using so much memory is very short, so
            don't just watch the output of "top" or "free" with eyesight.
-           Run the test in a cgroup and read the "memory.peak" psuedo file
+           Run the test in a cgroup and read the "memory.peak" pseudo file
            for a proper measurement.
 
            Q: Why not just document some test failures?
@@ -235,17 +237,16 @@ será controlado.
 Para executar a suíte de teste JIT, emita: <command>make -C js/src
 check-jit-test JITTEST_EXTRA_ARGS="--timeout 300"</command>. Assim como a
 suíte de teste do SpiderMonkey, o número de tarefas de teste é igual ao
-número de todos os elementos de processamento de CPU no sistema, mesmo se um
-cgroup for usado. Para piorar as coisas, existem seis testes, cada um deles
-usará 3 GB de memória do sistema, de forma que o pico de uso de memória pode
-ser de até 18 GB se o número de elementos de processamento for seis ou
-mais. Executar a suíte de teste JIT sem memória suficiente pode invocar o
-OOM killer do núcleo e causar problemas de estabilidade. Se você não tiver
-memória de sistema suficiente disponível, acrescente <option>-jN</option>
-depois de <option>--timeout 300</option> com N substituído pelo número de
-tarefas paralelas de teste que você queira iniciar. Por exemplo, se você
-tiver 16 GB de memória de sistema disponível e 8 elementos de processamento
-de CPU, emita <command>make -C js/src check-jit-test
+número de todos os núcleos de CPU no sistema, mesmo se um cgroup for
+usado. Para piorar as coisas, existem seis testes que usarão 3 GB cada da
+memória do sistema, de forma que o pico de uso da memória pode ser de até 18
+GB se o número de núcleos for seis ou mais. Executar a suíte de teste JIT
+sem memória suficiente pode invocar o OOM killer do núcleo e causar
+problemas de estabilidade. Se você não tiver memória de sistema suficiente
+disponível, posponha <option>-jN</option> depois de <option>--timeout
+300</option> com N substituído pelo número de tarefas paralelas de teste que
+você queira iniciar. Por exemplo, se você tiver 16 GB de memória de sistema
+disponível e 8 núcleos de CPU, emita <command>make -C js/src check-jit-test
 JITTEST_EXTRA_ARGS="--timeout=300 -j5"</command> para executar o teste com 5
 tarefas paralelas, de forma que o uso de memória não exceda 15 GB.
       
@@ -296,13 +297,15 @@ alocador jemalloc forem liberados no alocador do sistema (glibc).
       <parameter>--enable-readline</parameter>: Essa chave habilita suporte
 Readline na interface de linha de comando do SpiderMonkey.
     </para>
-
+    
+    <!--
     <para>
-      <parameter>--enable-rust-simd</parameter>: Essa chave habilita otimização do
-SIMD na caixa encoding_rs enviada.
+
+      <parameter>- -enable-rust-simd</parameter>: This switch enables SIMD
+      optimization in the shipped encoding_rs crate.
     </para>
-
-    <para>
+    -->
+<para>
       <parameter>--with-intl-api</parameter>: Isso habilita as funções de
 internacionalização exigidas pelo <application>Gjs</application>.
     </para>
@@ -401,7 +404,8 @@ processadores x86 de 64 bits suportam SSE2 e os compiladores de 64 bits
 vinculador
           </para>
           <indexterm zone="spidermonkey js&spidermonkey-major;-config">
-            <primary sortas="b-js&spidermonkey-major;-config">i js&spidermonkey-major;-config
+            <primary sortas="b-js&spidermonkey-major;-config">
+              js&spidermonkey-major;-config
             </primary>
           </indexterm>
         </listitem>

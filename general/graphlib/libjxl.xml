@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY libjxl-download-http "https://github.com/libjxl/libjxl/archive/v&libjxl-version;/libjxl-&libjxl-version;.tar.gz">
+  <!ENTITY libjxl-md5sum        "0fd3db8956a41d13b5e8eac4fe61d8d3">
+  <!ENTITY libjxl-size          "1,8 MB">
+  <!ENTITY libjxl-buildsize     "42 MB">
+  <!ENTITY libjxl-time          "0,6 UPC (com paralelismo=4)">
+
+]>
+
+<sect1 id="libjxl" xreflabel="libjxl-&libjxl-version;">
+  <?dbhtml filename="libjxl.html"?>
+
+  <title>libjxl-&libjxl-version;</title>
+
+  <indexterm zone="libjxl">
+    <primary sortas="a-libjxl">libjxl</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao libjxl</title>
+
+    <para>
+      O pacote <application>libjxl</application> contém a implementação de
+referência do formato de imagem JPEG XL.
+    </para>
+
+    &lfs122_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&libjxl-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &libjxl-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &libjxl-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &libjxl-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &libjxl-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências de libjxl</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="brotli"/>, <xref linkend="cmake"/>, <xref linkend="giflib"/>,
+<xref linkend="highway"/>, <xref linkend="lcms2"/>, <xref
+linkend="libjpeg"/> e <xref linkend="libpng"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="gdk-pixbuf"/> (para o plugin)
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <!--<xref linkend="gimp"/>
+ (for the plugin),-->
+<xref linkend="doxygen"/> e <xref linkend="graphviz"/> (para documentação),
+<xref linkend="java"/> (para o JAR), <xref linkend="libavif"/>, <xref
+linkend="libwebp"/>, <ulink
+url="https://github.com/google/googletest">gtest</ulink>, <ulink
+url="https://www.openexr.com/">OpenEXR</ulink>, <ulink
+url="https://github.com/webmproject/sjpeg">sjpeg</ulink> e <ulink
+url="https://skia.googlesource.com/skcms/">skcms</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do libjxl</title>
+
+    <para>
+      Instale <application>libjxl</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr             \
+      -D CMAKE_BUILD_TYPE=Release              \
+      -D BUILD_TESTING=OFF                     \
+      -D BUILD_SHARED_LIBS=ON                  \
+      -D JPEGXL_ENABLE_SKCMS=OFF               \
+      -D JPEGXL_ENABLE_SJPEG=OFF               \
+      -D JPEGXL_ENABLE_PLUGINS=ON              \
+      -D JPEGXL_INSTALL_JARDIR=/usr/share/java \
+      -G Ninja ..                              &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Esse pacote vem com uma suíte de teste, porém ela exige <ulink
+url="https://github.com/google/googletest">gtest</ulink>, que não está no
+BLFS.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install &amp;&amp;
+gdk-pixbuf-query-loaders --update-cache</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <command>gdk-pixbuf-query-loaders --update-cache</command>: Esse comando
+regenera o cache do carregador do <application>GDK Pixbuf</application>, de
+forma que ele esteja ciente do carregador JPEG-XL.
+    </para>
+
+    <para>
+      <parameter>-D BUILD_TESTING=OFF</parameter>: Esse parâmetro desabilita os
+testes porque eles exigem <ulink
+url="https://github.com/google/googletest">gtest</ulink>, que não está no
+BLFS. Se você deseja executar os testes e ter o <ulink
+url="https://github.com/google/googletest">gtest</ulink> instalado, remova
+esse parâmetro.
+    </para>
+
+    <para>
+      <parameter>-D BUILD_SHARED_LIBS=ON</parameter>: Esse parâmetro habilita
+construir versões compartilhadas das bibliotecas em vez das estáticas.
+    </para>
+    
+    <para>
+      <parameter>-D JPEGXL_ENABLE_SKCMS=OFF</parameter>: Esse parâmetro desabilita
+construir suporte para <application>skcms</application> do Skia, pois não é
+necessário para fins de BLFS e exige <ulink
+url="https://skia.googlesource.com/skcms/">skcms</ulink>.
+    </para>
+    
+    <para>
+      <parameter>-D JPEGXL_ENABLE_SJPEG=OFF</parameter>: Esse parâmetro desabilita
+o suporte para SimpleJPEG, pois não é necessário para fins de BLFS e exige
+<ulink url="https://github.com/webmproject/sjpeg">sjpeg</ulink>.
+    </para>
+    
+    <para>
+      <!--<xref linkend="gimp"/>
+ and-->
+<parameter>-D JPEGXL_ENABLE_PLUGINS=ON</parameter>: Esse parâmetro habilita
+o suporte de Plugin, que cria plug-ins para <xref linkend="gdk-pixbuf"/> se
+o pacote estiver instalado.
+    </para>
+
+    <para>
+      <parameter>-D JPEGXL_INSTALL_JARDIR=/usr/share/java</parameter>: Esse
+parâmetro coloca o arquivo JAR para suporte JPEG XL no diretório correto se
+<xref linkend="java"/> estiver instalado.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          benchmark_xl, cjxl, djxl e jxlinfo
+        </seg>
+        <seg>
+          libjxl.so, libjxl_cms.so, libjxl_extras_codec.so, libjxl_jni.so,
+libjxl_threads.so e libpixbufloader-jxl.so (em
+/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders)
+        </seg>
+        <seg>
+          /usr/include/jxl
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="benchmark_xl">
+        <term><command>benchmark_xl</command></term>
+        <listitem>
+          <para>
+            executa avaliações de desempenho em relação à libjxl
+          </para>
+          <indexterm zone="libjxl benchmark_xl">
+            <primary sortas="b-benchmark_xl">benchmark_xl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="cjxl">
+        <term><command>cjxl</command></term>
+        <listitem>
+          <para>
+            comprime imagens no formato JPEG XL
+          </para>
+          <indexterm zone="libjxl cjxl">
+            <primary sortas="b-cjxl">cjxl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="djxl">
+        <term><command>djxl</command></term>
+        <listitem>
+          <para>
+            descomprime imagens do formato JPEG XL para outros formatos
+          </para>
+          <indexterm zone="libjxl djxl">
+            <primary sortas="b-djxl">djxl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="jxlinfo">
+        <term><command>jxlinfo</command></term>
+        <listitem>
+          <para>
+            exibe informações acerca de imagens JPEG XL
+          </para>
+          <indexterm zone="libjxl jxlinfo">
+            <primary sortas="b-jxlinfo">jxlinfo</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libjxl-lib">
+        <term><filename class="libraryfile">libjxl.so</filename></term>
+        <listitem>
+          <para>
+            contém a implementação de referência do padrão JPEG XL
+          </para>
+          <indexterm zone="libjxl libjxl-lib">
+            <primary sortas="c-libjxl">libjxl.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libjxl_cms">
+        <term><filename class="libraryfile">libjxl_cms.so</filename></term>
+        <listitem>
+          <para>
+            contém suporte para Little CMS na libjxl
+          </para>
+          <indexterm zone="libjxl libjxl_cms">
+            <primary sortas="c-libjxl_cms">libjxl_cms.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry id="libjxl_extras_codec">
+        <term><filename class="libraryfile">libjxl_extras_codec.so</filename></term>
+        <listitem>
+          <para>
+            contém suporte adicional de codificador/decodificador para imagens JPEG XL
+          </para>
+          <indexterm zone="libjxl libjxl_extras_codec">
+            <primary sortas="c-libjxl_extras_codec">libjxl_extras_codec.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry id="libjxl_jni">
+        <term><filename class="libraryfile">libjxl_jni.so</filename></term>
+        <listitem>
+          <para>
+            contém uma interface Java para suportar JPEG XL em sistemas onde <xref
+linkend="java"/> foi instalado ao tempo da construção
+          </para>
+          <indexterm zone="libjxl libjxl_jni">
+            <primary sortas="c-libjxl_jni">libjxl_jni.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry id="libjxl_threads">
+        <term><filename class="libraryfile">libjxl_threads.so</filename></term>
+        <listitem>
+          <para>
+            contém funções de camada para JPEG XL
+          </para>
+          <indexterm zone="libjxl libjxl_threads">
+            <primary sortas="c-libjxl_threads">libjxl_threads.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry id="libpixbufloader-jxl">
+        <term><filename class="libraryfile">libpixbufloader-jxl.so</filename></term>
+        <listitem>
+          <para>
+            contém um carregador para gdk-pixbuf para permiti-lo carregar imagens JPEG
+XL
+          </para>
+          <indexterm zone="libjxl libpixbufloader-jxl">
+            <primary sortas="c-libpixbufloader-jxl">libpixbufloader-jxl.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect2>
+</sect1>

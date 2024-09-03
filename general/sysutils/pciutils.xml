@@ -6,9 +6,9 @@
 
   <!ENTITY pciutils-download-http "https://mj.ucw.cz/download/linux/pci/pciutils-&pciutils-version;.tar.gz">
   <!ENTITY pciutils-download-ftp  "">
-  <!ENTITY pciutils-md5sum        "ca53b87d2a94cdbbba6e09aca90924bd">
-  <!ENTITY pciutils-size          "912 KB">
-  <!ENTITY pciutils-buildsize     "5,7 MB">
+  <!ENTITY pciutils-md5sum        "1edb865de7a2de84e67508911010091b">
+  <!ENTITY pciutils-size          "660 KB">
+  <!ENTITY pciutils-buildsize     "4,9 MB">
   <!ENTITY pciutils-time          "menos que 0,1 UPC">
 ]>
 
@@ -31,7 +31,7 @@ aplicativos para listar dispositivos "PCI", inspecionar a situação deles e
 configurar os registros de configuração deles.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -67,22 +67,25 @@ configurar os registros de configuração deles.
       </listitem>
     </itemizedlist>
 
-
-    <!-- Needed to update the pci-ids. systemd has a unit and timer for this,
-    but for anyone who updates this file on either platform, it's needed
-    to download the pci.ids file. -->
-<bridgehead renderas="sect3">Dependências do "PCI Utils"</bridgehead>
+    <bridgehead renderas="sect3">Dependências do "PCI Utils"</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-       <xref linkend="curl"/>, <xref linkend="wget"/> ou <xref linkend="lynx"/>
-(para o script "update-pciids" funcionar corretamente).
+       <xref role="runtime" linkend="hwdata"/> (tempo de execução)
     </para>
 
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do "PCI Utils"</title>
+
+    <para>
+      Evite a instalação do arquivo <filename>pci.ids</filename> para evitar um
+conflito com o pacote <xref linkend='hwdata'/>:
+    </para>
+
+    <screen><userinput>sed -r '/INSTALL/{/PCI_IDS|update-pciids /d; s/update-pciids.8//}' \
+    -i Makefile</userinput></screen>
 
     <para>
       Instale o <application>PCI Utils</application> executando os seguintes
@@ -108,6 +111,11 @@ comandos:
 
 chmod -v 755 /usr/lib/libpci.so</userinput></screen>
 
+    <para>
+      Em seguida, instale o pacote <xref linkend='hwdata'/> para o arquivo
+<filename>pci.ids</filename>.
+    </para>
+
   </sect2>
 
   <sect2 role="commands">
@@ -117,73 +125,6 @@ chmod -v 755 /usr/lib/libpci.so</userinput></screen>
       <parameter>SHARED=yes</parameter>: Esse parâmetro habilita a construção da
 biblioteca compartilhada em vez da estática.
     </para>
-
-    <para>
-      <option>ZLIB=no</option>: Essa opção evita a compressão do arquivo
-<filename>pci.ids</filename>.
-    </para>
-
-  </sect2>
-
-  <sect2 role="configuration">
-    <title>Configurando o "PCI Utils"</title>
-
-    <para>
-      O arquivo de dados <filename>pci.ids</filename> está sendo constantemente
-atualizado. Para obter uma versão atual desse arquivo, execute
-<command>update-pciids</command> como o(a) usuário(a) <systemitem
-class="username">root</systemitem>. Esse aplicativo exige o script ou
-aplicativo <xref linkend="which"/> para encontrar o <xref linkend="curl"/>,
-<xref linkend="lynx"/> ou o <xref linkend="wget"/> que são usados para
-baixar o arquivo mais atual e, em seguida, substituir o arquivo existente em
-<filename class="directory">/usr/share/hwdata</filename>.
-    </para>
-
-    <para>
-      Você deveria atualizar o arquivo
-<filename>/usr/share/hwdata/pci.ids</filename> periodicamente. <phrase
-revision="sysv">Se você tiver instalado o <xref linkend="fcron"/> e
-completou a seção relativa a tarefas periódicas, [então]
-execute</phrase><phrase revision="systemd">Execute</phrase> os seguintes
-comandos, como o(a) usuário(a) <systemitem
-class="username">root</systemitem>, para criar <phrase revision="sysv">uma
-tarefa semanal do "cron":</phrase> <phrase revision="systemd">um cronômetro
-do "systemd" para atualizá-lo semanalmente aos domingos às 2h30 (hora
-local):</phrase>
-    </para>
-
-<screen role="nodump" revision="sysv"><userinput>cat &gt; /etc/cron.weekly/update-pciids.sh &lt;&lt; "EOF" &amp;&amp;
-<literal>#!/bin/bash
-/usr/sbin/update-pciids</literal>
-EOF
-chmod 754 /etc/cron.weekly/update-pciids.sh</userinput></screen>
-
-<screen role="root" revision="systemd"><userinput>cat &gt; /usr/lib/systemd/system/update-pciids.service &lt;&lt; "EOF" &amp;&amp;
-<literal>[Unit]
-Description=Atualiza o arquivo "pci.ids"
-Documentation=man:update-pciids(8)
-DefaultDependencies=no
-After=local-fs.target network-online.target
-Before=shutdown.target
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/sbin/update-pciids</literal>
-EOF
-cat &gt; /usr/lib/systemd/system/update-pciids.timer &lt;&lt; "EOF" &amp;&amp;
-<literal>[Unit]
-Description=Atualiza o arquivo "pci.ids" semanalmente
-
-[Timer]
-OnCalendar=Sun 02:30:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target</literal>
-EOF
-systemctl enable update-pciids.timer</userinput></screen>
-
 
   </sect2>
 
@@ -197,13 +138,13 @@ systemctl enable update-pciids.timer</userinput></screen>
 
       <seglistitem>
         <seg>
-          lspci, setpci e update-pciids
+          lspci, pcilmr e setpci
         </seg>
         <seg>
           libpci.so
         </seg>
         <seg>
-          /usr/include/pci e /usr/share/hwdata
+          /usr/include/pci
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -225,6 +166,18 @@ systemctl enable update-pciids.timer</userinput></screen>
         </listitem>
       </varlistentry>
 
+      <varlistentry id="pcilmr">
+        <term><command>pcilmr</command></term>
+        <listitem>
+          <para>
+            é um utilitário para avaliar margem de links PCIe
+          </para>
+          <indexterm zone="pciutils pcilmr">
+            <primary sortas="b-pcilmr">pcilmr</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="setpci">
         <term><command>setpci</command></term>
         <listitem>
@@ -233,23 +186,6 @@ systemctl enable update-pciids.timer</userinput></screen>
           </para>
           <indexterm zone="pciutils setpci">
             <primary sortas="b-setpci">setpci</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="update-pciids">
-        <term><command>update-pciids</command></term>
-        <listitem>
-          <para>
-             <!-- Requires
-            <xref linkend="curl"/>
-, <xref linkend="lynx"/> or
-            <xref linkend="wget"/>.
-            -->
-busca a versão atual da lista de "IDs" de "PCI". 
-          </para>
-          <indexterm zone="pciutils update-pciids">
-            <primary sortas="b-update-pciids">update-pciids</primary>
           </indexterm>
         </listitem>
       </varlistentry>

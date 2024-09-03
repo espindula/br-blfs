@@ -6,12 +6,11 @@
 
   <!ENTITY btrfs-progs-download-http "&kernel-dl;/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v&btrfs-progs-version;.tar.xz">
   <!ENTITY btrfs-progs-download-ftp  "">
-  <!ENTITY btrfs-progs-md5sum        "3898c68efdc0fe4e3a6a1bd90b3b4fa4">
-  <!ENTITY btrfs-progs-size          "2,4 MB">
-  <!ENTITY btrfs-progs-buildsize     "62 MB (arquivos temporários criados durante os testes precisam de até 10 GB)">
-  <!ENTITY btrfs-progs-time          "0,3 UPC (com paralelismo=4; adicionar 4,6 UPC para testes, até 14 UPC em
+  <!ENTITY btrfs-progs-md5sum        "a72e76a634ad70dd183153bb99034e4c">
+  <!ENTITY btrfs-progs-size          "2,5 MB">
+  <!ENTITY btrfs-progs-buildsize     "65 MB (arquivos temporários criados durante testes precisam de até 10 GB)">
+  <!ENTITY btrfs-progs-time          "0,3 UPC (com paralelismo=4; adicionar 4,0 UPC para testes, até 14 UPC em
 discos lentos)">
-  <!-- tests run with reiserfs disabled in kernel -->
 ]>
 
 <sect1 id="btrfs-progs" xreflabel="btrfs-progs-&btrfs-progs-version;">
@@ -32,7 +31,7 @@ discos lentos)">
 administração e de depuração para o sistema de arquivos B-tree (btrfs).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,44 +67,21 @@ administração e de depuração para o sistema de arquivos B-tree (btrfs).
       </listitem>
     </itemizedlist>
 
-    <!--
-<bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Required patch if building with linux kernel headers version
-          before 5.12:
-          <ulink url="&patch-root;/btrfs-progs-&btrfs-progs-version;-headers_fix-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do Btrfs-progs</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Btrfs-progs</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="lzo"/>
     </para>
-    
-    <!-- In v6.2.1 (and maybe previous), sphinx is required for the doc
-    <bridgehead renderas="sect4">
-Recommended</bridgehead>
-    <para role="recommended">
-      <xref linkend="asciidoc"/> (or <xref role="nodep" linkend="asciidoctor"/>)
-      and <xref linkend="xmlto"/> (both required to generate man pages)
-    </para>
-    -->
-<bridgehead renderas="sect4">Opcionais</bridgehead>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="lvm2"/> (<command>dmsetup</command> é usado em testes), <xref
 linkend="sphinx"/> e <xref linkend="sphinx_rtd_theme"/> (exigido para
 construir documentação) e <ulink
 url='https://mirrors.edge.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/'>
 reiserfsprogs</ulink> (para testes).
-
     </para>
-
 
   </sect2>
 
@@ -121,7 +97,10 @@ reiserfsprogs</ulink> (para testes).
 
     <para>
       Além do acima e das opções exigidas para <xref linkend="lvm2"/>, as
-seguintes opções precisam ser habilitadas para executar-se testes:
+seguintes opções precisam estar configuradas para executar-se testes. As
+opções marcadas como vazias <emphasis>não</emphasis> deveriam estar
+selecionadas porque elas são para desenvolvedores(as) e fazem alguns testes
+falharem.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -154,9 +133,7 @@ de instalar o <xref linkend="pcre2"/>.
       </para>
     </note>
 
-    <!-- Keeping this for now, but it seems that calling "make test" is
-     simpler and does the same thing -->
-<para>
+    <para>
       Antes de executar os testes, construa um aplicativo de suporte:
     </para>
 
@@ -167,11 +144,9 @@ de instalar o <xref linkend="pcre2"/>.
     </para>
 
 <!-- Template for failed test removal:
-    <para>
-
-      To test the results, first disable one test that fails and prevents
       the other ones to run:
     </para>
+
 
 <screen remap="test"><userinput>mv tests/fsck-tests/012-leaf-corruption/test.sh{,.broken}</userinput></screen>
 Substitute your test failure with the one above.
@@ -194,18 +169,16 @@ popd</userinput></screen>
 
     <note>
       <para>
-        Se as opções do núcleo mencionadas acima não estiverem habilitadas, alguns
-testes falharão e impedirão todos os testes restantes de executarem, porque
-a imagem de teste do disco não foi desmontada corretamente.
+        Se as opções de núcleo mencionadas acima não estiverem habilitadas, alguns
+testes falharão e impedirão que todos os testes restantes executem, porque a
+imagem do disco de teste não foi desmontada corretamente. Certifique-se
+também de que o módulo de núcleo do btrfs esteja carregado.
       </para>
     </note>
 
-    <!--  Now passes in version 6.3.1.
-    <para>
 
-      The mkfs test 025-zoned-parallel is known to fail.
-    </para>
--->
+
+    <!-- 6.10 - No test failures.  -->
 <para>
       Instale o pacote como o(a) usuário(a) &root;:
     </para>

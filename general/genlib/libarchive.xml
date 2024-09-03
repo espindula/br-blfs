@@ -6,10 +6,10 @@
 
   <!ENTITY libarchive-download-http "https://github.com/libarchive/libarchive/releases/download/v&libarchive-version;/libarchive-&libarchive-version;.tar.xz">
   <!ENTITY libarchive-download-ftp  "">
-  <!ENTITY libarchive-md5sum        "4f4ef6a17c7b0b484aa2c95aa6deefac">
-  <!ENTITY libarchive-size          "5,0 MB">
-  <!ENTITY libarchive-buildsize     "42 MB (adicionar 34 MB para testes)">
-  <!ENTITY libarchive-time          "0,3 UPC (adicionar 0,7 UPC para os testes)">
+  <!ENTITY libarchive-md5sum        "1bab4c1b443ecf4f23ff9881665e680a">
+  <!ENTITY libarchive-size          "5,2 MB">
+  <!ENTITY libarchive-buildsize     "42 MB (adicionar 32 MB para os testes)">
+  <!ENTITY libarchive-time          "0,4UPC (adicionar 0,6UPC para os testes)">
 ]>
 
 <sect1 id="libarchive" xreflabel="libarchive-&libarchive-version;">
@@ -23,14 +23,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libarchive</title>
+    <title>Introdução ao libarchive</title>
 
     <para>
       A biblioteca <application>libarchive</application> fornece interface única
 para leitura/gravação de vários formatos de compressão.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -81,12 +81,14 @@ Additional Downloads</bridgehead>
 -->
 <bridgehead renderas="sect3">Dependências do libarchive</bridgehead>
 
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="libxml2"/>
+    </para>
+
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!-- <ulink url="https://facebook.github.io/zstd/">
-zstd</ulink> Now in LFS -->
-<xref linkend="libxml2"/>, <xref linkend="lzo"/> e <xref linkend="nettle"/>
-      
+      <xref linkend="lzo"/>, <xref linkend="nettle"/> e <xref linkend="pcre2"/>
     </para>
   </sect2>
 
@@ -98,11 +100,12 @@ zstd</ulink> Now in LFS -->
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
+<screen><userinput>./configure --prefix=/usr --disable-static --without-expat &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C make check</command>.
+      Para testar os resultados, emita: <command>LC_ALL=C.UTF-8 make
+check</command>.
     </para>
 
     <para>
@@ -119,13 +122,23 @@ make</userinput></screen>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
-    <para>
-      <option>--without-xml2</option>: Essa chave configura "expat" para suporte
-ao formato de arquivamento "xar" em vez do preferido "libxml2" se ambos os
-pacotes estiverem instalados.
+    
+    <!-- https://github.com/libarchive/libarchive/issues/2146 -->
+<para>
+      <parameter>--without-expat</parameter>: Essa chave desabilita usar expat
+para suporte ao formato xar. Devido a um defeito, o leitor xar circulará
+infinitamente se expat for usado. O fluxo de desenvolvimento prefere libxml2
+para suporte ao xar de qualquer maneira.
     </para>
 
+    <!--
     <para>
+
+      <option>- -without-xml2</option>: This switch sets expat for xar archive
+      format support instead of preferred libxml2 if both packages are installed.
+    </para>
+-->
+<para>
       <option>--without-nettle</option>: Essa chave configura o "OpenSSL" para
 suporte de criptografia em vez do preferido "Nettle" se ambos os pacotes
 estiverem instalados.
@@ -149,7 +162,7 @@ estiverem instalados.
           libarchive.so
         </seg>
         <seg>
-          Nenhum
+          Nenhum(a)
         </seg>
       </seglistitem>
     </segmentedlist>

@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Cyrus SASL</title>
+    <title>Introdução ao Cyrus SASL</title>
 
     <para>
       O pacote <application>Cyrus SASL</application> contém uma implementação de
@@ -39,7 +39,7 @@ de segurança é inserida entre o protocolo e a conexão.
          testsaslauthd -u <current user>
  -p <password>
          after saslauthd is started. -->
-&lfs121_checked;
+&lfs122_checked;
 
     
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
@@ -141,14 +141,21 @@ url="https://metacpan.org/pod/Pod::POM::View::Restructured">Pod::POM::View::Rest
 <screen><userinput remap="pre">patch -Np1 -i ../cyrus-sasl-2.1.27-doc_fixes-1.patch</userinput></screen>
     -->
 <para>
+      Primeiro, corrija um problema revelado pelo gcc-14:
+    </para>
+
+<screen><userinput>sed '/saslint/a #include &lt;time.h&gt;'       -i lib/saslutil.c &amp;&amp;
+sed '/plugin_common/a #include &lt;time.h&gt;' -i plugins/cram.c</userinput></screen>
+
+    <para>
       Instale o <application>Cyrus SASL</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr        \
-            --sysconfdir=/etc    \
-            --enable-auth-sasldb \
-            --with-dblib=lmdb    \
+<screen><userinput>./configure --prefix=/usr                       \
+            --sysconfdir=/etc                   \
+            --enable-auth-sasldb                \
+            --with-dblib=lmdb                   \
             --with-dbpath=/var/lib/sasl/sasldb2 \
             --with-sphinx-build=no              \
             --with-saslauthd=/var/run/saslauthd &amp;&amp;
@@ -212,16 +219,7 @@ de retaguarda de autenticação SASLDB.
 retaguarda de autenticação LDAPDB.
     </para>
 
-
-
-    <!-- Removed in 2.1.28
     <para>
-
-      <option>- -enable-java</option>: This switch enables compiling of the
-      <application>Java</application> support libraries.
-    </para>
--->
-<para>
       <option>--enable-login</option>: Essa opção habilita a autenticação não
 suportada LOGIN.
     </para>

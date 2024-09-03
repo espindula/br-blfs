@@ -174,8 +174,8 @@ export HISTSIZE=1000
 export HISTIGNORE="&amp;:[bf]g:exit"
 
 # Configura alguns padrões para os sistemas gráficos
-export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share/}
-export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg/}
+export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share}
+export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}
 
 # Configura um prompt vermelho para o(a) root e um verde para os(as) usuários(as).
@@ -348,10 +348,25 @@ if [ -d /usr/local/share ]; then
         pathprepend /usr/local/share XDG_DATA_DIRS
 fi
 
-# Configura alguns parâmetros residuais antes de outros aplicativos adicionarem a estes caminhos.
-pathappend /usr/share/man  MANPATH
+# Set some defaults before other applications add to these paths.
 pathappend /usr/share/info INFOPATH</literal>
 EOF</userinput></screen>
+
+      <note>
+        <para>
+          O programa <command>man</command> deduz automaticamente o caminho de
+pesquisa para páginas de manual examinando o conteúdo da variável
+<envar>PATH</envar>; veja-se <ulink role='man'
+url='&man;manpath.5'>manpath(5)</ulink> para detalhes. Configurar a variável
+<envar>MANPATH</envar> pode substituir a dedução automática, de forma que
+os(as) editores(as) do BLFS não recomendam configurá-la. Se você precisar
+configurá-la por qualquer motivo, é melhor iniciar o valor dela com dois
+pontos (<literal>:</literal>), por exemplo
+<command>MANPATH=:/opt/somepkg/share/man:/opt/otherpkg /share/man</command>,
+de forma que os caminhos listados na variável <envar>MANPATH</envar> sejam
+anexados ao valor deduzido automaticamente em vez de substituí-lo.
+        </para>
+      </note>
 
     </sect3>
 
@@ -444,8 +459,8 @@ EOF</userinput></screen>
         Este script configura uma variável de ambiente necessária para o suporte ao
 idioma nativo. Uma discussão completa acerca de se determinar esta variável
 pode ser encontrada na página <ulink
-url="&lfs-root;/chapter09/profile.html">Arquivos de Inicialização do Shell
-Bash do LFS</ulink>.
+url="&lfs-root;/chapter09/locale.html">Configurando o Local do
+Sistema</ulink>.
       </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; "EOF"

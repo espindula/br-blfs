@@ -8,10 +8,12 @@
 can be found there, no need to change directory -->
   <!ENTITY mupdf-download-http "https://www.mupdf.com/downloads/archive/mupdf-&mupdf-version;-source.tar.gz">
   <!ENTITY mupdf-download-ftp  "">
-  <!ENTITY mupdf-md5sum        "8ac643af103b4be7b93a57e67fc3aaad">
-  <!ENTITY mupdf-size          "53 MB">
+  <!ENTITY mupdf-md5sum        "68a444a4828626c0c8aa7552fef583bf">
+  <!ENTITY mupdf-size          "52 MB">
   <!ENTITY mupdf-buildsize     "251 MB">
   <!ENTITY mupdf-time          "0,2 UPC (Usando paralelismo=4)">
+  <!ENTITY mupdf-lib-major     "24,8">
+  <!ENTITY mupdf-lib-minor     "8">
 ]>
 
 <sect1 id="mupdf" xreflabel="mupdf-&mupdf-version;">
@@ -31,7 +33,7 @@ can be found there, no need to change directory -->
       <application>MuPDF</application> é um visualizador leve de PDF e XPS.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -91,13 +93,7 @@ Required Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      
-      <!--<xref linkend="freeglut"/>
-, use of the bundled glut is preferred -->
-<!-- This no-longer gets linked in with our system libs patch
-      <xref linkend="lcms2"/>
-, -->
-<xref linkend="harfbuzz"/>, <xref linkend="libjpeg"/>, <xref
+      <xref linkend="harfbuzz"/>, <xref linkend="libjpeg"/>, <xref
 linkend="openjpeg2"/> e <xref linkend="curl"/>
     </para>
 
@@ -118,15 +114,6 @@ url="https://mujs.com/">MuJS</ulink>
   <sect2 role="installation">
     <title>Instalação do MuPDF</title>
 
-    <para>Primeiro, corrija o Makefile para se vincular corretamente com a biblioteca
-compartilhada:</para>
-
-<screen><userinput>sed -i '/MU.*_EXE. :/{
-        s/\(.(MUPDF_LIB)\)\(.*\)$/\2 | \1/
-        N
-        s/$/ -lmupdf -L$(OUT)/
-        }' Makefile</userinput></screen>
-
     <para>
       Instale o <application>MuPDF</application> executando os seguintes comandos:
     </para>
@@ -135,19 +122,19 @@ compartilhada:</para>
 USE_SYSTEM_FREETYPE := yes
 USE_SYSTEM_HARFBUZZ := yes
 USE_SYSTEM_JBIG2DEC := no
-USE_SYSTEM_JPEGXR := no # não usada sem HAVE_JPEGXR
-USE_SYSTEM_LCMS2 := no # necessária bifurcação lcms2-art
+USE_SYSTEM_JPEGXR := no # not used without HAVE_JPEGXR
+USE_SYSTEM_LCMS2 := no # need lcms2-art fork
 USE_SYSTEM_LIBJPEG := yes
-USE_SYSTEM_MUJS := no # construção precisa de fonte de qualquer maneira
+USE_SYSTEM_MUJS := no # build needs source anyway
 USE_SYSTEM_OPENJPEG := yes
 USE_SYSTEM_ZLIB := yes
-USE_SYSTEM_GLUT := no # necessária bifurcação freeglut2-art
+USE_SYSTEM_GLUT := no # need freeglut2-art fork
 USE_SYSTEM_CURL := yes
 USE_SYSTEM_GUMBO := no
 EOF
 
-export XCFLAGS=-fPIC                               &amp;&amp;
-make build=release shared=yes                      &amp;&amp;
+export XCFLAGS=-fPIC                      &amp;&amp;
+make build=release shared=yes verbose=yes &amp;&amp;
 unset XCFLAGS</userinput></screen>
 
     <para>
@@ -155,7 +142,7 @@ unset XCFLAGS</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make prefix=/usr                        \
@@ -163,7 +150,10 @@ unset XCFLAGS</userinput></screen>
      docdir=/usr/share/doc/mupdf-&mupdf-version; \
      install                            &amp;&amp;
 
-chmod 755 /usr/lib/libmupdf.so          &amp;&amp;
+ln -sfv libmupdf.so.&mupdf-lib-major; /usr/lib/libmupdf.so   &amp;&amp;
+ln -sfv libmupdf.so.&mupdf-lib-major; /usr/lib/libmupdf.so.&mupdf-lib-minor; &amp;&amp;
+chmod 755 /usr/lib/libmupdf.so.&mupdf-lib-major;             &amp;&amp;
+
 ln -sfv mupdf-x11 /usr/bin/mupdf</userinput></screen>
 
   </sect2>

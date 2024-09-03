@@ -37,7 +37,7 @@ obtém de gráficos vetoriais escaláveis. É útil para criar, visualizar e
 mudar imagens SVG.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,20 +72,18 @@ mudar imagens SVG.
         </para>
       </listitem>
     </itemizedlist>
-    
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch: <ulink
-          url="&patch-root;/inkscape-&inkscape-version;-poppler_22_09_fixes-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/inkscape-&inkscape-minor-version;-upstream_fixes-2.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-    -->
-<note>
+
+    <note>
       <para>
         O tarball <filename>inkscape-&inkscape-minor-version;.tar.xz</filename>
 extrairá para o diretório <filename
@@ -99,9 +97,8 @@ class="directory">inkscape-&inkscape-version;/</filename>.
     <para role="required">
       <xref linkend="boost"/>, <xref linkend="double-conversion"/>, <xref
 linkend="gc"/>, <xref linkend="gsl"/>, <xref linkend="gtkmm3"/>, <xref
-linkend="libsoup"/>, <xref linkend="libxslt"/>, <xref linkend="poppler"/>,
-<xref linkend="popt"/> e <xref linkend="wget"/> (para baixar as dependências
-de teste)
+linkend="libsoup"/>, <xref linkend="libxslt"/>, <xref linkend="poppler"/> e
+<xref linkend="popt"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -163,17 +160,14 @@ Optional Runtime Dependencies
   <sect2 role="installation">
     <title>Instalação do Inkscape</title>
 
-
-    <!--
     <para>
-
-      First, fix Inkscape to build with poppler-22.09.0:
+      Primeiro, corrija o Inkscape para construir com poppler-24.05.0:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-version;-poppler_22_09_fixes-1.patch</userinput></screen>
--->
-<para>
-      Primeiro, corrija uma falha de construção causada por libxml2-2.12.0:
+<screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-minor-version;-upstream_fixes-2.patch</userinput></screen>
+
+    <para>
+      A seguir, corrija uma falha de construção causada por libxml2-2.12.0:
     </para>
 
 <screen><userinput remap="pre">sed -i '/uri.h/a #include &lt;libxml/xmlmemory.h&gt;' src/object/uri.h</userinput></screen>
@@ -198,15 +192,11 @@ comandos:
       "bash download-gtest.sh". CMake is unable to find gtest.
     </para>
 -->
-<screen><!--
-<screen>
-<userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-version;-poppler_21.11.0-1.patch &amp;&amp;
--->
-<userinput>mkdir build                       &amp;&amp;
+<screen><userinput>mkdir build                       &amp;&amp;
 cd    build                       &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
       ..                          &amp;&amp;
 make</userinput></screen>
 
@@ -234,13 +224,13 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DCMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
+      <parameter>-D CMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
 construir a biblioteca de lançamento sem qualquer `assertiva` de depuração
 no código.
     </para>
 
     <para>
-      <option>-DWITH_DBUS=ON</option>: use isso se você desejar usar o
+      <option>-D WITH_DBUS=ON</option>: use isso se você desejar usar o
 <command>inkscape</command> em conjuntos de comandos sequenciais interativos
 que manipulam imagens.
     </para>

@@ -31,7 +31,7 @@ exibir informações relativas a barramentos "USB" no sistema e os
 dispositivos conectados a eles.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -88,17 +88,7 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-
-      <!-- git is required by autogen.sh. If using the tarball on kernel.org,
-     autogen.sh does not need to be run. If using the github source,
-     autogen.sh needs to be run, and git is used to pull the usbhid-dump
-     submodule.
-      <xref linkend="git"/>
- and -->
-<!-- In the systemd book, a unit/timer is installed to update the
-     usb.ids file automatically. wget is used in the instructions below. -->
-<xref linkend="wget"/>
-
+      <xref role="runtime" linkend="hwdata"/> (tempo de execução)
     </para>
 
   </sect2>
@@ -125,13 +115,9 @@ make</userinput></screen>
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para>
-      Para instalar o arquivo de dados <filename>usb.ids</filename>, usando <xref
-linkend="wget"/>, execute como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      Para o arquivo de dados <filename>usb.ids</filename>, instale o pacote <xref
+linkend='hwdata'/>.
     </para>
-
-<screen role="root"><userinput>install -dm755 /usr/share/hwdata/ &amp;&amp;
-wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</userinput></screen>
 
     <para>
       O script <command>lsusb.py</command> exibe informações em um formato mais
@@ -141,6 +127,7 @@ desenvolvedor(a) é <command>lsusb.py -ciu</command>.
     </para>
 
   </sect2>
+
 
   <!-- No longer needed
   <sect2 role="commands">
@@ -154,65 +141,7 @@ desenvolvedor(a) é <command>lsusb.py -ciu</command>.
 
   </sect2>
 -->
-<sect2 role="configuration">
-    <title>Configurando o "USB Utils"</title>
-
-    <para revision="sysv">
-      O arquivo de dados <filename>usb.ids</filename> está constantemente sendo
-atualizado. Para obter uma versão atual desse arquivo, usando <xref
-linkend="wget"/>, periodicamente execute novamente, como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
-    </para>
-
-<screen role="root" revision="sysv"><userinput>wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</userinput></screen>
-
-    <para>
-      Você deveria atualizar o arquivo
-<filename>/usr/share/hwdata/usb.ids</filename> periodicamente. <phrase
-revision="sysv">Se você tiver instalado <xref linkend="fcron"/> e completou
-a seção relativa a tarefas periódicas, [então] execute</phrase><phrase
-revision="systemd">Execute</phrase> os seguintes comandos, como o(a)
-usuário(a) <systemitem class="username">root</systemitem>, para criar
-<phrase revision="sysv">uma tarefa semanal do "cron":</phrase> <phrase
-revision="systemd">um cronômetro do "systemd" para atualizá-lo semanalmente
-aos domingos às 2h30. (hora local):</phrase>
-    </para>
-
-<screen role="nodump" revision="sysv"><userinput>cat &gt; /etc/cron.weekly/update-usbids.sh &lt;&lt; "EOF" &amp;&amp;
-<literal>#!/bin/bash
-/usr/bin/wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</literal>
-EOF
-chmod 754 /etc/cron.weekly/update-usbids.sh</userinput></screen>
-
-<screen role="root" revision="systemd"><userinput>cat &gt; /usr/lib/systemd/system/update-usbids.service &lt;&lt; "EOF" &amp;&amp;
-<literal>[Unit]
-Description=Atualiza arquivo "usb.ids"
-Documentation=man:lsusb(8)
-DefaultDependencies=no
-After=local-fs.target network-online.target
-Before=shutdown.target
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/bin/wget http://www.linux-usb.org/usb.ids -O /usr/share/hwdata/usb.ids</literal>
-EOF
-cat &gt; /usr/lib/systemd/system/update-usbids.timer &lt;&lt; "EOF" &amp;&amp;
-<literal>[Unit]
-Description=Atualiza semanalmente arquivo "usb.ids"
-
-[Timer]
-OnCalendar=Sun 03:00:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target</literal>
-EOF
-systemctl enable update-usbids.timer</userinput></screen>
-
-  </sect2>
-
-  <sect2 role="content">
+<sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>

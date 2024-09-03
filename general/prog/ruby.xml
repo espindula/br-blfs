@@ -6,10 +6,11 @@
 
   <!ENTITY ruby-download-http "https://cache.ruby-lang.org/pub/ruby/&ruby-minor-version;/ruby-&ruby-version;.tar.xz">
   <!ENTITY ruby-download-ftp  "">
-  <!ENTITY ruby-md5sum        "b5e59d56faf25b1ec6445abdf203affa">
+  <!ENTITY ruby-md5sum        "e696a878d05867a4d28e62fe9afb7862">
   <!ENTITY ruby-size          "16 MB">
-  <!ENTITY ruby-buildsize     "774 MB (com testes e documentos de API da C)">
-  <!ENTITY ruby-time          "3,4 UPC (usando paralelismo=4; com testes e documentos de API da C)">
+  <!ENTITY ruby-buildsize     "1,4 GB (com documentos de API da C e testes)">
+  <!ENTITY ruby-time          "2,4 UPC (usando paralelismo=4; com documentos de API da C; adicionar 0,4 UPC
+para testes)">
 ]>
 
 <sect1 id="ruby" xreflabel="Ruby-&ruby-version;">
@@ -31,7 +32,7 @@ desenvolvimento &quot;<application>Ruby</application>&quot;. Isso é útil
 para &quot;scripts&quot; orientados a objetos.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,8 +79,10 @@ para &quot;scripts&quot; orientados a objetos.
     <para role="optional">
       <xref linkend="doxygen"/>, <xref linkend="graphviz"/>, <xref
 linkend="rust"/>, <xref linkend="tk"/>, <xref linkend="valgrind"/>,
-&berkeley-db; e <ulink url="http://dtrace.org/blogs/about/">DTrace</ulink>
+&berkeley-db; e <ulink url="https://dtrace.org/about/">DTrace</ulink>
     </para>
+
+    &test-use-internet;
 
   </sect2>
 
@@ -108,22 +111,20 @@ executando os seguintes comandos:
 <screen><userinput>make capi</userinput></screen>
 
     <para>
-      <!-- https://bugs.ruby-lang.org/issues/20106 -->
-Para testar os resultados, emita: <command>make -j1 -k
-check</command>. Observe que executar a suíte de teste com tarefas paralelas
-possivelmente cause falhas de teste geradas como mensagens enigmáticas de
+      Para testar os resultados, emita: <command>make -j1 -k
+check</command>. Observe que a suíte de teste com tarefas paralelas
+possivelmente cause falha do teste, informada como mensagens enigmáticas de
 <computeroutput>unknown object</computeroutput>, resultando em um resumo
 alegando falsamente <quote>all tests passed</quote>. Se o ambiente tiver
-variáveis relacionadas às configurações de proxy (<envar>all_proxy</envar>,
-<envar>ALL_PROXY</envar>, <envar>http_proxy</envar> e etc.) configuradas, a
-suíte de teste será resgatado mais cedo com mensagens como
-<computeroutput>net/ftp is not found</computeroutput>. Portanto,
-certifique-se de desconfigurá-las para a suíte de teste. Existem mais de
-26.000 testes. 12 testes são conhecidos por falharem devido a certificados
-expirados nos dados de teste. Alguns testes relacionados ao ipv6
-possivelmente indiquem erros. Se os testes forem executados em um diretório
-que tenha um componente escrevível mundialmente (por exemplo, /tmp), então
-vários testes adicionais possivelmente falhem.
+variáveis relacionadas a configurações de proxy (<envar>all_proxy</envar>,
+<envar>ALL_PROXY</envar>, <envar>http_proxy</envar> e etc.) definidas, a
+suíte de teste será resgatada antecipadamente com mensagens como
+<computeroutput>net/ftp is not found</computeroutput>. Certifique-se de que
+você desconfigurou essas variáveis para a suíte de teste. Existem mais de
+26.000 testes. Alguns testes relacionados ao ipv6 possivelmente indiquem
+erros. Se os testes forem executados em um diretório que tenha um componente
+escrevível mundialmente (por exemplo, /tmp), então vários testes adicionais
+possivelmente falhem.
     </para>
 
     <para>

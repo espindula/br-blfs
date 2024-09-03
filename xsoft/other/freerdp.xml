@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY freerdp-download-http "https://github.com/freerdp/freerdp/archive/&freerdp-version;/FreeRDP-&freerdp-version;.tar.gz">
+  <!ENTITY freerdp-md5sum        "4658086473bb78ab6b1d876efe454e12">
+  <!ENTITY freerdp-size          "9,8 MB">
+  <!ENTITY freerdp-buildsize     "131 MB">
+  <!ENTITY freerdp-time          "0,6 UPC">
+]>
+
+<sect1 id="freerdp" xreflabel="FreeRDP-&freerdp-version;">
+  <?dbhtml filename="freerdp.html"?>
+
+  <title>FreeRDP-&freerdp-version;</title>
+
+  <indexterm zone="freerdp">
+    <primary sortas="a-freerdp">FreeRDP</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao FreeRDP</title>
+
+    <para>
+      O pacote <application>FreeRDP</application> contém bibliotecas e utilitários
+para utilizar o Remote Desktop Protocol. Isso inclui ferramentas para
+executar um servidor RDP, bem como conectar-se a um computador usando
+RDP. Isso é usado principalmente para conectar-se a computadores Microsoft
+Windows, mas também pode ser usado em Linux e macOS.
+    </para>
+
+    &lfs122_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&freerdp-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &freerdp-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &freerdp-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &freerdp-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &freerdp-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do FreeRDP</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="ffmpeg"/>, <xref linkend="icu"/> e <xref
+linkend="xorg7-lib"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="cairo"/>, <xref linkend="docbook-xsl"/>, <xref
+linkend="fuse3"/>, <xref linkend="json-c"/>, <xref linkend="mitkrb"/>, <xref
+linkend="libusb"/>, <xref linkend="libxkbcommon"/> e <xref
+linkend="wayland"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="cups"/>, <xref linkend="faac"/>, <xref linkend="faad2"/>,
+<xref linkend="fdk-aac"/>, <xref linkend="freerdp"/>, <xref
+linkend="lame"/>, <xref linkend="linux-pam"/>, <xref linkend="pulseaudio"/>,
+<ulink url="https://github.com/DaveGamble/cJSON">cJSON</ulink>, <ulink
+url="https://www.quut.com/gsm/">GSM</ulink>, <ulink
+url="https://github.com/OCL-dev/ocl-icd">ocl-icd</ulink>, <ulink
+url="https://github.com/Mbed-TLS/mbedtls">mbedTLS</ulink>, <ulink
+url="https://www.openh264.org/">openh264</ulink>, <ulink
+url="https://pcsclite.apdu.fr/">pcsclite</ulink>, <ulink
+url="https://github.com/libsdl-org/SDL_ttf">SDL_ttf</ulink>, <ulink
+url="https://github.com/chirlu/soxr">soxr</ulink> e <ulink
+url="https://github.com/uriparser/uriparser">uriparser</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do FreeRDP</title>
+
+    <para>
+      Instale <application>FreeRDP</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr   \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON \
+      -D CMAKE_BUILD_TYPE=Release    \
+      -D WITH_CAIRO=ON               \
+      -D WITH_CLIENT_SDL=OFF         \
+      -D WITH_DSP_FFMPEG=ON          \
+      -D WITH_FFMPEG=ON              \
+      -D WITH_PCSC=OFF               \
+      -D WITH_SERVER=ON              \
+      -D WITH_SERVER_CHANNELS=ON     \
+      -D DOCBOOKXSL_DIR=/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version; \
+      -W no-dev                      \
+      -G Ninja ..                    &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Esse pacote não vem com uma suíte de teste.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-skip-install-rpath.xml"/>
+
+    <para>
+      <parameter>-D
+DOCBOOKXSL_DIR=/usr/share/xml/docbook/xsl-stylesheets-nons-&docbook-xsl-version;</parameter>:
+Esse parâmetro aponta CMake para o local das folhas de estilo XSL do Docbook
+e é necessário porque o BLFS não usa versões com espaço de nomes das folhas
+de estilo. Isso é necessário para criar páginas de manual. Se você não
+quiser páginas de manual, passe -D WITH_MANPAGES=OFF para o CMake.
+    </para>
+
+    <para>
+      <parameter>-D WITH_CAIRO=ON</parameter>: Esse parâmetro usa Cairo para
+HighDPI e suporte ao redimensionamento de janelas.
+    </para>
+
+    <para>
+      <parameter>-D WITH_CLIENT_SDL=OFF</parameter>: Esse parâmetro desabilita
+usar SDL para desenhar a janela ao usar o cliente FreeRDP. Isso é
+desabilitado porque depende de <ulink
+url="https://github.com/libsdl-org/SDL_ttf">SDL_ttf</ulink>. Remova essa
+chave se você tiver o pacote SDL_ttf instalado.
+    </para>
+
+    <para>
+      <parameter>-D WITH_FFMPEG=ON</parameter>: Esse parâmetro habilita suporte
+para usar ffmpeg para o modo de renderização gráfica H.264, o qual é exigido
+ao conectar-se via RDP a dispositivos Windows Server 2012 (ou Windows 8) ou
+posteriores.
+    </para>
+
+    <para>
+      <parameter>-D WITH_DSP_FFMPEG=ON</parameter>: Esse parâmetro habilita
+suporte para usar ffmpeg para redirecionamento de som e microfone.
+    </para>
+
+    <para>
+      <parameter>-D WITH_PCSC=OFF</parameter>: Esse parâmetro desabilita suporte
+para SmartCards, pois o BLFS não tem a dependência exigida para ele.
+    </para>
+
+    <para>
+      <parameter>-D WITH_SERVER=ON</parameter>: Esse parâmetro habilita construir
+os componentes do servidor FreeRDP. Remova esse parâmetro se você não quiser
+usar o servidor FreeRDP.
+    </para>
+
+    <para>
+      <parameter>-D WITH_SERVER_CHANNELS=ON</parameter>: Esse parâmetro constrói
+plugins adicionais para o servidor FreeRDP.
+    </para>
+
+    <para>
+      <option>-D WITH_LAME=ON</option>: Use essa opção se você desejar habilitar
+suporte para usar LAME para fornecer suporte ao Codificador/Decodificador de
+áudio MP3.
+    </para>
+    
+    <para>
+      <option>-D WITH_FAAC=ON</option>: Use essa opção se você desejar habilitar
+suporte para usar FAAC para fornecer suporte ao Codificador/Decodificador de
+áudio AAC.
+    </para>
+    
+    <para>
+      <option>-D WITH_FAAD2=ON</option>: Use essa opção se você desejar habilitar
+suporte para usar FAAD2 para fornecer suporte ao Codificador/Decodificador
+de áudio AAC.
+    </para>
+
+    <para>
+      <option>-D WITH_FDK_AAC=ON</option>: Use essa opção se você desejar
+habilitar suporte para usar fdk-aac para fornecer suporte ao
+Codificador/Decodificador de áudio AAC.
+    </para>
+
+    <para>
+      <option>-D WITH_MBEDTLS=ON</option>: Use essa opção se você tiver a
+dependência opcional <ulink
+url="https://github.com/Mbed-TLS/mbedtls">mbedTLS</ulink> instalada e
+desejar usá-la como uma alternativa ao OpenSSL para suporte de criptografia.
+    </para>
+
+    <para>
+      <option>-D WITH_OPENCL=ON</option>: Use essa opção se você tiver a
+dependência opcional <ulink
+url="https://github.com/OCL-dev/ocl-icd">ocl-icd</ulink> instalada e desejar
+usar suporte a OpenCL.
+    </para>
+
+    <para>
+      <option>-D WITH_OPENH264=ON</option>: Use essa opção se você tiver a
+dependência opcional <ulink url="https://www.openh264.org/">openh264</ulink>
+instalada e desejar usá-la para suporte a H.264 em vez do ffmpeg.
+    </para>
+    
+    <para>
+      <option>-D WITH_GSM=ON</option>: Use essa opção se você tiver a dependência
+opcional <ulink url="https://www.quut.com/gsm/">GSM</ulink> instalada e
+desejar usar GSM como um codificador/decodificador de áudio.
+    </para>
+    
+    <para>
+      <option>-D WITH_SOXR=ON</option>: Use essa opção se você tiver a dependência
+opcional <ulink url="https://github.com/chirlu/soxr">soxr</ulink> instalada
+e desejar usá-la em vez do ffmpeg para redirecionamento de multimídia.
+    </para>
+    
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          freerdp-proxy, freerdp-shadow-cli, sfreerdp, sfreerdp-server, winpr-hash,
+winpr-makecert, wlfreerdp, xfreerdp
+        </seg>
+        <seg>
+          libfreerdp3.so, libfreerdp-client3.so, libfreerdp-server3.so,
+libfreerdp-server-proxy3.so, libfreerdp-shadow3.so,
+libfreerdp-shadow-subsystem3.so, librtdk0.so, libuwac0.so, libwinpr3.so e
+libwinpr-tools3.so
+        </seg>
+        <seg>
+          /usr/include/{freerdp3,rdtk0,uwac0,winpr3},
+/usr/lib/cmake/{FreeRDP3,FreeRDP-Client3,FreeRDP-Proxy3,FreeRDP-Server3,rdtk0,uwac0,WinPR3,WinPR-tools3},
+/usr/lib/freerdp3, /usr/share/FreeRDP
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <!-- If the program or library name conflicts with (is the same as) the
+      package name, add -prog or -lib to the varlistentry entity id
+      and the 2nd entry of the indexterm zone entity -->
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      
+
+      <varlistentry id="freerdp-proxy">
+        <term><command>freerdp-proxy</command></term>
+        <listitem>
+          <para>
+            configura FreeRDP para usar um servidor proxy
+          </para>
+          <indexterm zone="freerdp freerdp-proxy">
+            <primary sortas="b-freerdp-proxy">freerdp-proxy</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="freerdp-shadow-cli">
+        <term><command>freerdp-shadow-cli</command></term>
+        <listitem>
+          <para>
+            interfaceia com a funcionalidade de sombra no FreeRDP
+          </para>
+          <indexterm zone="freerdp freerdp-shadow-cli">
+            <primary sortas="b-freerdp-shadow-cli">freerdp-shadow-cli</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="sfreerdp">
+        <term><command>sfreerdp</command></term>
+        <listitem>
+          <para>
+            é um utilitário para compartilhar uma exibição do X via RDP
+          </para>
+          <indexterm zone="freerdp sfreerdp">
+            <primary sortas="b-sfreerdp">sfreerdp</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="sfreerdp-server">
+        <term><command>sfreerdp-server</command></term>
+        <listitem>
+          <para>
+            é um utilitário para compartilhar uma exibição do X via RDP
+          </para>
+          <indexterm zone="freerdp sfreerdp-server">
+            <primary sortas="b-sfreerdp-server">sfreerdp-server</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="winpr-hash">
+        <term><command>winpr-hash</command></term>
+        <listitem>
+          <para>
+            cria um resumo NTLM a partir de um par de nome de usuário(a) e senha
+          </para>
+          <indexterm zone="freerdp winpr-hash">
+            <primary sortas="b-winpr-hash">winpr-hash</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="winpr-makecert">
+        <term><command>winpr-makecert</command></term>
+        <listitem>
+          <para>
+            cria certificados X.509 para uso com FreeRDP
+          </para>
+          <indexterm zone="freerdp winpr-makecert">
+            <primary sortas="b-winpr-makecert">winpr-makecert</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="wlfreerdp">
+        <term><command>wlfreerdp</command></term>
+        <listitem>
+          <para>
+            é um cliente RDP para Wayland
+          </para>
+          <indexterm zone="freerdp wlfreerdp">
+            <primary sortas="b-wlfreerdp">wlfreerdp</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="xfreerdp">
+        <term><command>xfreerdp</command></term>
+        <listitem>
+          <para>
+            é um cliente RDP para X11
+          </para>
+          <indexterm zone="freerdp xfreerdp">
+            <primary sortas="b-xfreerdp">xfreerdp</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libfreerdp3">
+        <term><filename class="libraryfile">libfreerdp3.so</filename></term>
+        <listitem>
+          <para>
+            contém funções que fornecem funcionalidade de cliente e servidor RDP
+          </para>
+          <indexterm zone="freerdp libfreerdp3">
+            <primary sortas="c-libfreerdp3">libfreerdp3.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect2>
+</sect1>

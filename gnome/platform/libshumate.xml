@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libshumate-download-http "&gnome-download-http;/libshumate/1.1/libshumate-&libshumate-version;.tar.xz">
+  <!ENTITY libshumate-download-http "&gnome-download-http;/libshumate/1.2/libshumate-&libshumate-version;.tar.xz">
   <!ENTITY libshumate-download-ftp  "">
-  <!ENTITY libshumate-md5sum        "64c9ec76c3b1b073aa4130c081eabbba">
-  <!ENTITY libshumate-size          "296 KB">
-  <!ENTITY libshumate-buildsize     "5,4 MB">
+  <!ENTITY libshumate-md5sum        "4b8919088922eac80b103b464d7c5b8b">
+  <!ENTITY libshumate-size          "316 KB">
+  <!ENTITY libshumate-buildsize     "9,1 MB">
   <!ENTITY libshumate-time          "0,2 UPC">
 ]>
 
@@ -29,7 +29,7 @@
 GTK-4 para exibir mapas.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,17 +69,19 @@ GTK-4 para exibir mapas.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="gtk4"/> e <xref linkend="libsoup3"/>
+      <xref linkend="gtk4"/>, <xref linkend="libsoup3"/> e <xref
+linkend="protobuf-c"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend='gobject-introspection'/> (exigido para gnome-maps)
+      &gobject-introspection; (exigido para gnome-maps)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gi-docgen"/> e <ulink url="&sysprof-url;">sysprof</ulink>
+      <xref linkend="gi-docgen"/>, <xref linkend="valgrind"/> e <ulink
+url="&sysprof-url;">sysprof</ulink>
     </para>
 
   </sect2>
@@ -98,8 +100,8 @@ cd    build &amp;&amp;
 meson setup --prefix=/usr          \
             --buildtype=release    \
             --wrap-mode=nodownload \
-            -Dgtk_doc=false        \
-            ..                  &amp;&amp;
+            -D gtk_doc=false       \
+            ..                     &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -108,20 +110,40 @@ documentação da API para esse pacote, emita:
     </para>
 
 <screen remap='doc'><userinput>sed -e 's/lib_version/version/' \
-    -e '/fatal-warnings/d'      \
     -i ../docs/meson.build      &amp;&amp;
-meson configure -Dgtk_doc=true  &amp;&amp;
+meson configure -D gtk_doc=true &amp;&amp;
 ninja</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
+
+
+    <!--
     <para>
+
+      The test suite requires this package to be built with special options.
+      If you wish to run the tests, follow the instructions after installation.
+    </para>
+-->
+<para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
+<!--
+    <para>
+
+      If you wish to run the tests, issue:
+    </para>
+
+<screen><userinput>meson configure - -buildtype=debug &amp;&amp;
+ninja test</userinput></screen>
+-->
 <screen role="root"><userinput>ninja install</userinput></screen>
+
+
+
   </sect2>
 
   <sect2 role="commands">

@@ -6,10 +6,10 @@
 
   <!ENTITY mesa-download-http "https://mesa.freedesktop.org/archive/mesa-&mesa-version;.tar.xz">
   <!ENTITY mesa-download-ftp  "">
-  <!ENTITY mesa-md5sum        "9e7fa53b68fa6b60dba0bbfa8da7d0a9">
-  <!ENTITY mesa-size          "20 MB">
-  <!ENTITY mesa-buildsize     "618 MB (com documentos, adicionar 220 MB para testes)">
-  <!ENTITY mesa-time          "3,1 UPC (com documentos; adicionar 0,6 UPC para testes; ambos com
+  <!ENTITY mesa-md5sum        "0f4de2192e63b438637b98937ac85a10">
+  <!ENTITY mesa-size          "28 MB">
+  <!ENTITY mesa-buildsize     "825 MB (com documentos, adicionar 496 MB para testes)">
+  <!ENTITY mesa-time          "4,1 UPC (com documentos; adicionar 1,4 UPC para testes; ambos com
 paralelismo=4)">
 ]>
 
@@ -26,19 +26,19 @@ paralelismo=4)">
     <title>Introdução ao Mesa</title>
 
     <para>
-      &quot;<application>Mesa</application>&quot; é uma biblioteca gráfica
-&quot;3D&quot; compatível com &quot;OpenGL&quot;.
+      <application>Mesa</application> é uma biblioteca gráfica 3D compatível com
+OpenGL.
     </para>
 
     <note>
       <para>
-        &quot;<application>Mesa</application>&quot; é atualizada relativamente
-muitas vezes. Você possivelmente queira usar a versão &mesa-major-minor;.x
-do &quot;Mesa&quot; mais recente disponível.
+        <application>Mesa</application> é atualizada relativamente muitas
+vezes. Você possivelmente queira usar a versão &mesa-major-minor;.x do Mesa
+mais recente disponível.
       </para>
     </note>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -99,21 +99,113 @@ linkend="Mako"/>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
 
-      <xref linkend="glslang"/> (exigido para suporte Vulkan), <xref role="first"
-linkend="libva"/> (para fornecer suporte VA-API para alguns controladores
-gallium; observe que existe uma dependência circular. Você precisa construir
-<application>libva</application> primeiro sem suporte EGL e GLX, instalar
-esse pacote, e reconstruir <application>libva</application>), <xref
-linkend="libvdpau"/> (para construir controladores VDPAU), <xref
-linkend="llvm"/> (exigido para controladores Gallium3D, nouveau e radeonsi;
-e para swrast, o rasterizador de software que às vezes é chamado de
-llvmpipe. Veja-se <ulink role="nodep"
-url="https://docs.mesa3d.org/systems.html"/> para mais informações), <xref
-linkend="wayland-protocols"/> (exigido para <xref role="nodep"
-linkend='plasma5-build'/>, GNOME, e recomendado para <xref role="nodep"
-linkend='gtk3'/>) e <xref linkend="vulkan-loader"/> (exigido para suporte
-Vulkan)
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            <xref linkend="glslang"/> (exigido para suporte a Vulkan)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="libva"/> (para fornecer suporte VA-API para alguns
+controladores gallium. Observe que existe uma dependência circular. Você
+precisa construir <application>libva</application> primeiro sem suporte EGL
+e GLX do mesa, instalar esse pacote e reconstruir
+<application>libva</application>)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="libvdpau"/> (para construir controladores VDPAU)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="llvm"/> (exigido para os controladores r300, r600 e radeonsi
+e para o rasterizador de software LLVMpipe, que pode tornar o controlador
+swrast muito mais rápido)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="wayland-protocols"/> (exigido para <xref role="nodep"
+linkend='plasma-build'/>, GNOME e recomendado para <xref role="nodep"
+linkend='gtk3'/>)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="libclc"/> (exigido para o controlador iris gallium da Intel)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="vulkan-loader"/> (exigido para o controlador gallium Zink)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="ply"/> (exigido para o controlador vulkan da Intel)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="cbindgen"/> e <xref linkend="rust-bindgen"/> (exigido para o
+controlador Vulkan da Nouveau)
+          </para>
+        </listitem>
+      </itemizedlist>
     </para>
+
+    <note>
+      <para>
+        <emphasis role="bold">Escolhendo Controladores Mesa</emphasis>
+      </para>
+
+      <para>
+        Nas instruções abaixo, todos os controladores disponíveis são
+construídos. Isso quase sempre funcionará. No entanto, não é
+eficiente. Dependendo do teu hardware de vídeo, você provavelmente precisará
+somente de controladores específicos.
+      </para>
+
+      <para>
+        A primeira coisa que você precisa saber é qual tipo de dispositivo de vídeo
+você tem. Em alguns casos, ele está construído na CPU. Em outros, é uma
+placa PCI separada. Em ambos os casos, você pode saber qual hardware de
+vídeo tem instalando <xref linkend='pciutils'/> e executando:
+      </para>
+
+      <screen role='nodump'><userinput>lspci | grep VGA</userinput></screen>
+
+      <para>
+        O dispositivo de vídeo é provavelmente uma das três famílias: AMD, Intel ou
+Nvidia. Vejam-se as Explicações do Comando para <parameter>-D
+gallium-drivers=auto</parameter> abaixo para ver quais opções estão
+disponíveis para teu hardware de vídeo específico (ou hardware emulado de
+vídeo). Você provavelmente deveria adicionar a opção swrast como um
+controlador residual.
+      </para>
+
+      <para>
+        Para 'platforms' você pode selecionar x11 e (ou) wayland. Observe que
+atualmente no BLFS somente o Gnome e o KDE podem usar o wayland. Se você não
+for usar um desses ambientes de área de trabalho, então provavelmente
+desejará somente o x11.
+      </para>
+
+      <para>
+        Para 'vulkan-drivers' você pode querer limitar a seleção ao teu hardware
+atual. Esses controladores são usados por alguns aplicativos
+específicos. Por exemplo, ffmpeg (incluindo ffplay) usará Vulkan em vez de
+OpenGL para renderizar vídeo na GPU. Se você não quiser fazer isso, você
+pode ou não querer instalá-los. Vejam-se as Explicações do Comando para
+<parameter>-D vulkan-drivers=auto</parameter> abaixo para ver quais opções
+estão disponíveis para teu hardware de vídeo específico (ou hardware emulado
+de vídeo). Você provavelmente deveria adicionar a opção swrast como um
+controlador residual, a menos que não precise do Vulkan.
+      </para> 
+    </note>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -135,7 +227,8 @@ url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">lib
       
     </para>
 
-  <!--
+
+    <!--
     <note>
 
       <para>
@@ -148,7 +241,9 @@ url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">lib
       </para>
     </note>
 -->
-</sect2>
+&build-use-internet;
+
+  </sect2>
 
   <sect2 role="kernel" id="mesa-kernel"
          xreflabel='Configuração de Núcleo do Mesa'>
@@ -206,9 +301,9 @@ estritamente necessária, mas recomendada como uma otimização.
   <sect2 role="installation">
     <title>Instalação do Mesa</title>
     <para>
-      Se você baixou o remendo &quot;xdemos&quot; (necessário se testar a
-instalação do &quot;Xorg&quot; de acordo com as instruções do BLFS), [então]
-aplique-o executando o seguinte comando:
+      Se você baixou o remendo xdemos (necessário se testar a instalação do Xorg
+de acordo com as instruções do BLFS), aplique-o executando o seguinte
+comando:
     </para>
 
 
@@ -298,21 +393,20 @@ DRI_DRIVERS="i965,nouveau"</userinput></screen>
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup                   \
-      --prefix=$XORG_PREFIX   \
-      --buildtype=release     \
-      -Dplatforms=x11,wayland \
-      -Dgallium-drivers=auto  \
-      -Dvulkan-drivers=auto   \
-      -Dvalgrind=disabled     \
-      -Dlibunwind=disabled    \
-      ..                      &amp;&amp;
+meson setup ..                 \
+      --prefix=$XORG_PREFIX    \
+      --buildtype=release      \
+      -D platforms=x11,wayland \
+      -D gallium-drivers=auto  \
+      -D vulkan-drivers=auto   \
+      -D valgrind=disabled     \
+      -D libunwind=disabled    &amp;&amp;
 
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>meson configure
--Dbuild-tests=true &amp;&amp; ninja test</command>.
+      Para testar os resultados, emita: <command>meson configure -D
+build-tests=true &amp;&amp; ninja test</command>.
     </para>
 
 
@@ -329,9 +423,9 @@ class="username">root</systemitem>&quot;:
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Se desejado, [então] instale a documentação opcional executando os seguintes
-comandos como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Se desejado, instale a documentação opcional executando os seguintes
+comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root"
@@ -351,85 +445,184 @@ chave, os tamanhos de construção podem atingir a faixa de 2 GB.
 
     <para>
       <anchor id='mesa-gallium-drivers' xreflabel='Mesa Gallium3D Drivers'/>
-<parameter>-Dgallium-drivers=auto</parameter>: Esse parâmetro controla quais
-controladores Gallium3D deveriam ser construídos. <literal>auto</literal>
-seleciona todos os controladores Gallium3D disponíveis para x86:
-<literal>r300</literal> (para Radeon 9000 ou série Radeon X da ATI),
-<literal>r600</literal> (para série Radeon HD 2000-6000 da AMD/ATI),
-<literal>radeonsi</literal> (para Radeon HD 7000 da AMD ou modelos de GPU
-mais recentes da AMD), <literal>nouveau</literal> (para GPUs Suportadas da
-NVIDIA, elas estão listadas como todos os <quote>recursos de 3D</quote>
-tanto <quote>DONE</quote> quanto <quote>N/A</quote> na <ulink
+<parameter>-D gallium-drivers=auto</parameter>: Esse parâmetro controla
+quais controladores Gallium3D deveriam ser construídos:
+
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            <literal>auto</literal> seleciona todos os controladores Gallium3D
+disponíveis para x86. Com uma lista separada por vírgulas, somente um
+subconjunto desses controladores será construído. Se você souber exatamente
+quais controladores precisa, poderá selecioná-los explicitamente. Por
+exemplo, <option>-D gallium-drivers=radeonsi,iris,swrast</option>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>r300</literal> (para séries Radeon 9000 ou Radeon X da ATI) 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>r600</literal> (para séries Radeon HD 2000-6000 da AMD/ATI)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>radeonsi</literal> (para Radeon HD 7000 da AMD ou modelos mais
+recentes de GPU da AMD) 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>nouveau</literal> (para GPUs suportadas da NVIDIA, elas estão
+listadas como todos os <quote>recursos 3D</quote> ou <quote>DONE</quote> ou
+<quote>N/A</quote> na <ulink
 url='https://nouveau.freedesktop.org/FeatureMatrix.html'>página de situação
-da Nouveau</ulink>), <literal>virgl</literal> (para GPU virtual do QEMU com
-suporte <application>virglrender</application>; observe que o BLFS <xref
-linkend='qemu'/> não é construído com o
-<application>virglrender</application>), <literal>svga</literal> (para GPU
-virtual do VMWare), <literal>swrast</literal> (usando CPU para rasterização
-de 3D; observe que isso é muito mais lento que usar uma GPU moderna com
-recursos de 3D, de forma que deveria ser usado somente se a GPU não for
-suportada por outros controladores), <literal>iris</literal> (para GPUs
-Intel fornecidas com Broadwell ou CPUs mais recentes),
-<literal>crocus</literal> (para GPUs GMA 3000, série X3000, série 4000 ou
-série X4000 da Intel fornecidas com chipsets ou GPUs Intel HD fornecidas com
-CPUs pré-Broadwell), <literal>i915</literal> (para GPUs GMA 900, 950, 3100
-ou 3150 da Intel fornecidas com chipsets ou CPUs Atom D/N 4xx/5xx). Você
-pode substituir <literal>auto</literal> por uma lista separada por vírgulas,
-para construir somente um subconjunto desses controladores, se souber
-precisamente quais controladores precisa, por exemplo
-<option>-Dgallium-drivers=radeonsi,iris,swrast</option>.
+Nouveau</ulink>)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>virgl</literal> (para uma GPU virtual do QEMU com suporte a
+<application>virglrender</application>; observe que o <xref linkend='qemu'/>
+do BLFS não é construído com <application>virglrender</application>) 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>svga</literal> (para uma GPU virtual do VMWare)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>swrast</literal> (usar CPU para rasterização 3D. Observe que ele é
+muito mais lento que usar uma GPU moderna com capacidade 3D, de forma que
+ele deveria ser usado somente se a GPU não for suportada por outros
+controladores), 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>iris</literal> (para GPUs da Intel fornecidas com CPUs Broadwell ou
+mais recentes, ou como uma placa dedicada PCIe)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>crocus</literal> (para GPUs da Intel GMA 3000, série X3000, série
+4000 ou série X4000 fornecidas com chipsets ou GPUs HD da Intel fornecidas
+com CPUs pré Broadwell)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>i915</literal> (para GPUs da Intel GMA 900, 950, 3100 ou 3150
+fornecidas com chipsets ou CPUs Atom D/N 4xx/5xx)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>zink</literal> (usar Vulkan para implementar OpenGL, não é muito
+útil em x86 como no momento, mas pode substituir outros controladores para
+modelos modernos de GPU no futuro)
+          </para>
+        </listitem>
+      </itemizedlist>
     </para>
 
-
-    <!--
     <para>
+      <parameter>-D vulkan-drivers=auto</parameter>: Esse parâmetro controla quais
+controladores Vulkan deveriam ser construídos:
 
-      <parameter>-Dosmesa=true</parameter>: This switch enables building
-      the <filename class="libraryfile">libOSMesa</filename> library and
-      provides Gallium3D support in it. It requires the swrast gallium driver.
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            <literal>auto</literal> seleciona todos os controladores Vulkan disponíveis
+para x86. Com uma lista separada por vírgulas, somente um subconjunto desses
+controladores será construído. Se você souber exatamente quais controladores
+precisa, poderá selecioná-los explicitamente. Por exemplo, <option>-D
+vulkan-drivers=amd,nouveau,swrast</option>.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <literal>amd</literal> (para Radeon HD 7730 da AMD ou GPUs mais recentes da
+AMD)
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <literal>intel</literal> (para GPUs da Intel fornecidas com Skylake ou CPUs
+mais recentes, ou como uma placa dedicada PCIe)
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <literal>intel_hasvk</literal> (para GPUs da Intel fornecidas com CPUs Ivy
+Bridge, Haswell ou Broadwell)
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <literal>nouveau</literal> (para GTX 16XX, RTX 20XX ou GPUs mais recentes da
+NVIDIA)
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <literal>swrast</literal> (para usar a CPU para rasterização 3D). Observe
+que ele é muito mais lento que usar uma GPU moderna com capacidade 3D, de
+forma que ele deveria ser usado somente se a GPU não for suportada por
+outros controladores.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <literal>""</literal> (lista vazia, use <option>-D
+vulkan-drivers=""</option> se você não tiver instalado e não planeja
+instalar <xref linkend='vulkan-loader'/>)
+          </para>
+        </listitem>
+      </itemizedlist>
     </para>
--->
-<para>
-      <parameter>-Dplatforms=...</parameter>: Esse parâmetro controla quais
+
+    <para>
+      <parameter>-D platforms=...</parameter>: Esse parâmetro controla quais
 sistemas de janelas serão suportados. As plataformas Linux disponíveis são
 x11 e wayland.
     </para>
 
     <para>
-      <parameter>-Dvulkan-drivers=auto</parameter>: Essa chave habilita suporte
-para a API gráfica Vulkan. Ele constrói automaticamente todos os
-controladores gráficos que estão disponíveis para Vulkan. Se você desejar
-construir controladores específicos, as opções válidas incluem 'amd',
-'intel', 'intel_hasvk' e 'swrast'. Se você não quiser suporte Vulkan, mude
-'auto' para "".
+      <parameter>-D valgrind=disabled</parameter>: Esse parâmetro desabilita o uso
+do Valgrind durante o processo de construção. Remova esse parâmetro se você
+tiver o Valgrind instalado e desejar verificar vazamentos de memória.
     </para>
 
     <para>
-      <parameter>-Dvalgrind=disabled</parameter>: Esse parâmetro desabilita o uso
-do &quot;Valgrind&quot; durante o processo de construção. Remova esse
-parâmetro se você tiver o &quot;Valgrind&quot; instalado e desejar verificar
-vazamentos de memória.
+      <parameter>-D libunwind=disabled</parameter>: Esse parâmetro desabilita o
+uso da libunwind.
     </para>
 
     <para>
-      <parameter>-Dlibunwind=disabled</parameter>: Esse parâmetro desabilita o uso
-da &quot;libunwind&quot;.
+      <command>meson configure -D build-tests=true</command>: Esse comando
+reconfigurará a construção para configurar <option>-D
+build-tests=true</option>, mas manterá as outras opções especificadas no
+comando <command>meson setup</command> sem mudanças. Ele permite que
+<command>ninja test</command> construa e execute testes unitários.
     </para>
 
     <para>
-      <command>meson configure -Dbuild-tests=true</command>: Esse comando
-reconfigurará a construção para configurar
-&quot;<option>-Dbuild-tests=true</option>&quot;, mas manterá as outras
-opções especificadas no comando &quot;<command>meson setup</command>&quot;
-sem mudanças. Ele permite que o &quot;<command>ninja test</command>&quot;
-construa e execute testes unitários.
-    </para>
-
-    <para>
-      <option>-Degl-native-platform="..."</option>: Esse parâmetro controla qual
+      <option>-D egl-native-platform="..."</option>: Esse parâmetro controla qual
 suporte da Biblioteca de Gráficos Incorporados será construído. As opções de
-Linux disponíveis são &quot;auto&quot; (padrão), &quot;x11&quot;,
-&quot;wayland&quot;, &quot;surfaceless&quot; e &quot;drm&quot;.
+Linux disponíveis são auto (padrão), x11, wayland, surfaceless e drm.
     </para>
 
   </sect2>
@@ -451,7 +644,7 @@ Linux disponíveis são &quot;auto&quot; (padrão), &quot;x11&quot;,
 
       <seglistitem>
         <seg>
-          glxgears e glxinfo
+          glxgears, glxinfo, mme_fermi_sim_hw_test e mme_tu104_sim_hw_test
         </seg>
         <seg>
           libEGL.so, libGL.so, libGLESv1_CM.so, libGLESv2.so, libgbm.so, libglapi.so e
@@ -470,20 +663,20 @@ libxatracker.so
 crocus_dri.so, i915_dri.so, iris_dri.so, kms_swrast_dri.so, nouveau_dri.so,
 nouveau_drv_video.so, r300_dri.so, r600_dri.so, r600_drv_video.so,
 radeonsi_dri.so, radeonsi_drv_video.so, swrast_dri.so, virtio_gpu_dri.so,
-virtio_gpu_drv_video.so e vmwgfx_dri.so
+virtio_gpu_drv_video.so, vmwgfx_dri.so e zink_dri.so
           
         </seg>
         <seg>
           
           <!-- Begin VDPAU drivers -->
 <!-- End VDPAU drivers -->
-libvdpau_nouveau.so, libvdpau_r300.so, libvdpau_r600.so e
-libvdpau_radeonsi.so, libvdpau_virtio_gpu.so (Muitos desses controladores
-são rigidamente lincados).
+libvdpau_nouveau.so, libvdpau_r600.so e libvdpau_radeonsi.so
+libvdpau_virtio_gpu.so (Muitos desses controladores estão rigidamente
+lincados).
         </seg>
         <seg>
-          libvulkan_intel_hasvk.so, libvulkan_intel.so, libvulkan_lvp.so e
-libvulkan_radeon.so
+          libvulkan_intel_hasvk.so, libvulkan_intel.so, libvulkan_lvp.so,
+libvulkan_nouveau.so e libvulkan_radeon.so
         </seg>
         <seg>
           
@@ -504,7 +697,7 @@ $XORG_PREFIX/share/vulkan e /usr/share/doc/mesa-&mesa-version;
         <term><command>glxgears</command></term>
         <listitem>
           <para>
-            é uma demonstração &quot;GL&quot; útil para solucionar problemas gráficos
+            é uma demonstração GL útil para solucionar problemas gráficos
           </para>
           <indexterm zone="mesa glxgears">
             <primary sortas="b-glxgears">glxgears</primary>
@@ -517,7 +710,7 @@ $XORG_PREFIX/share/vulkan e /usr/share/doc/mesa-&mesa-version;
         <listitem>
           <para>
             é um aplicativo de diagnóstico que exibe informações relativas ao hardware
-gráfico e bibliotecas &quot;GL&quot; instaladas
+gráfico e bibliotecas GL instaladas
           </para>
           <indexterm zone="mesa glxinfo">
             <primary sortas="b-glxinfo">glxinfo</primary>
@@ -530,7 +723,7 @@ gráfico e bibliotecas &quot;GL&quot; instaladas
         <listitem>
           <para>
             fornece uma interface gráfica de plataforma nativa conforme definido pela
-especificação &quot;EGL-1.4&quot;
+especificação EGL-1.4
           </para>
           <indexterm zone="mesa libEGL">
             <primary sortas="c-libGL">libEGL.so</primary>
@@ -542,8 +735,7 @@ especificação &quot;EGL-1.4&quot;
         <term><filename class="libraryfile">libgbm.so</filename></term>
         <listitem>
           <para>
-            é a biblioteca &quot;Graphics Buffer Manager&quot; do
-&quot;<application>Mesa</application>&quot;
+            é a biblioteca Graphics Buffer Manager do <application>Mesa</application>
           </para>
           <indexterm zone="mesa libgbm">
             <primary sortas="c-libgbm">libgbm.so</primary>
@@ -555,8 +747,7 @@ especificação &quot;EGL-1.4&quot;
         <term><filename class="libraryfile">libGLESv1_CM.so</filename></term>
         <listitem>
           <para>
-            é a biblioteca &quot;OpenGL ES 1.1&quot; do
-&quot;<application>Mesa</application>&quot;
+            é a biblioteca OpenGL ES 1.1 do <application>Mesa</application>
           </para>
           <indexterm zone="mesa libGLESv1_CM">
             <primary sortas="c-libGLESv1_CM">libGLESv1_CM.so</primary>
@@ -568,8 +759,7 @@ especificação &quot;EGL-1.4&quot;
         <term><filename class="libraryfile">libGLES2.so</filename></term>
         <listitem>
           <para>
-            é a biblioteca &quot;OpenGL ES 2.0&quot; do
-&quot;<application>Mesa</application>&quot;
+            é a biblioteca OpenGL ES 2.0 do <application>Mesa</application>
           </para>
           <indexterm zone="mesa libGLES2">
             <primary sortas="c-libGLES2">libGLES2.so</primary>
@@ -581,8 +771,7 @@ especificação &quot;EGL-1.4&quot;
         <term><filename class="libraryfile">libGL.so</filename></term>
         <listitem>
           <para>
-            é a principal biblioteca &quot;OpenGL&quot; do
-&quot;<application>Mesa</application>&quot;
+            é a principal biblioteca OpenGL do <application>Mesa</application>
           </para>
           <indexterm zone="mesa libGL">
             <primary sortas="c-libGL">libGL.so</primary>

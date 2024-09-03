@@ -4,19 +4,19 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY falkon-download-http "&kf5apps-download-http;/falkon-&kf5apps-version;.tar.xz">
+  <!ENTITY falkon-download-http "&kf6apps-download-http;/falkon-&kf6apps-version;.tar.xz">
   <!ENTITY falkon-download-ftp  "">
-  <!ENTITY falkon-md5sum        "bac0775269c5961a66359e21dc96cf89">
+  <!ENTITY falkon-md5sum        "f48e602dfc36152df79287a4945618da">
   <!ENTITY falkon-size          "2,5 MB">
-  <!ENTITY falkon-buildsize     "134 MB">
-  <!ENTITY falkon-time          "1,2 UPC (Usando paralelismo=4)">
+  <!ENTITY falkon-buildsize     "154 MB">
+  <!ENTITY falkon-time          "1,5 UPC (Usando paralelismo=4; adicionar 0,9 UPC para testes)">
 ]>
 
-<sect1 id="falkon" xreflabel="falkon-&kf5apps-version;">
+<sect1 id="falkon" xreflabel="falkon-&kf6apps-version;">
   <?dbhtml filename="falkon.html"?>
 
 
-  <title>Falkon-&kf5apps-version;</title>
+  <title>falkon-&kf6apps-version;</title>
 
   <indexterm zone="falkon">
     <primary sortas="a-falkon">falkon</primary>
@@ -38,24 +38,11 @@ ser instalado sem o KDE (com a perda da funcionalidade do
 <application>kwallet</application>).
     </para>
 
-    <warning>
-      <para>
-        Falkon depende do QtWebEngine. Isso usa uma cópia bifurcada do chromium e,
-portanto, é vulnerável a muitos problemas encontrados lá. Os(As)
-desenvolvedores(as) do Qt tem sempre preferido fazer lançamentos ao mesmo
-tempo que o resto do Qt (em vez de adicionar correções emergenciais). Agora
-que eles(as) desejam migrar para o Qt6, os lançamentos 5.15.3 e posteriores
-do Qt-5.15 estão inicialmente disponíveis somente para clientes
-pagantes. QtWebEngine é uma exceção por causa da licença LGPL dele, mas
-levar os fontes git (com o submódulo bifurcado do chromium) a um ponto em
-que eles serão construídos com sucesso em um sistema BLFS atual pode exigir
-muito esforço. Esteja ciente de que futuras correções de vulnerabilidades
-podem demorar muito, a ponto de você desejar considerar usar um navegador
-diferente.
-      </para>
-    </warning>
+    <para>
+      Falkon depende de QtWebEngine. Por favor, leia o aviso nessa página.
+    </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -95,17 +82,18 @@ diferente.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="extra-cmake-modules"/>, <xref linkend="kf5-frameworks"/>
+      <xref linkend="extra-cmake-modules"/>, <xref linkend="kf6-frameworks"/>
 (para karchive) e <xref linkend="qtwebengine"/>
     </para>
 
     <note>
       <para>
-        Estritamente falando, somente o karchive é exigido para construir o falkon,
-mas vários outros pacotes no KF5 podem ser usados se estiverem
-presentes. Para construir somente o karchive, baixe esse pacote a partir do
-diretório especificado em <xref linkend="kf5-frameworks"/> e use as
-instruções de construção naquela página, mudando $KF5_PREFIX para /usr.
+        Estritamente falando, somente o karchive e ki18n são exigidos para construir
+o falkon, mas vários outros pacotes no <xref linkend="kf6-frameworks"/>
+podem ser usados se estiverem presentes. Para construir somente o karchive e
+ki18n, baixe esses pacotes a partir do diretório especificado em <xref
+linkend="kf6-frameworks"/> e use as instruções de construção naquela página,
+mudando a $KF6_PREFIX para /usr.
       </para>
     </note>
 
@@ -132,23 +120,28 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
       .. &amp;&amp;
 
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make test</command>. Todos os
-testes deveriam passar. Se algum falhar, os resultados completos estarão em
-<filename>Testing/Temporary/LastTest.log</filename>.
+      Os testes deveriam ser executados depois da instalação.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>make install &amp;&amp;
+ldconfig</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>make test</command>. Todos os
+testes deveriam passar. Se algum falhar, os resultados completos estarão em
+<filename>Testing/Temporary/LastTest.log</filename>.
+    </para>
 
     <note>
       <para>
@@ -181,7 +174,7 @@ Falkon.
     <title>Explicações do Comando</title>
 
     <para>
-      <option>-DBUILD_TESTING=OFF</option>: Isso economizará um pouco de tempo e
+      <option>-D BUILD_TESTING=OFF</option>: Isso economizará um pouco de tempo e
 espaço não construindo os aplicativos de teste; use isso se você não desejar
 executar o teste.
     </para>

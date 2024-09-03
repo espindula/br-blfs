@@ -6,10 +6,10 @@
 
   <!ENTITY libical-download-http "https://github.com/libical/libical/releases/download/v&libical-version;/libical-&libical-version;.tar.gz">
   <!ENTITY libical-download-ftp  "">
-  <!ENTITY libical-md5sum        "aab3e2c80a5a61c744204675bff19ae0">
+  <!ENTITY libical-md5sum        "cc790ea49701df0335d42b89d57c04bc">
   <!ENTITY libical-size          "888 KB">
-  <!ENTITY libical-buildsize     "38 MB (com testes e documentação da API)">
-  <!ENTITY libical-time          "0,4 UPC (com testes e documentação)">
+  <!ENTITY libical-buildsize     "24 MB (com testes)">
+  <!ENTITY libical-time          "0,1 UPC (usando paralelismo = 4; com os testes)">
 <!-- run at -j1 because it fails at -j4 -->
 ]>
 
@@ -24,14 +24,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libical</title>
+    <title>Introdução ao libical</title>
 
     <para>
       O pacote <application>libical</application> contém uma implementação dos
 protocolos e formatos de dados "iCalendar".
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
 
@@ -70,15 +70,14 @@ protocolos e formatos de dados "iCalendar".
 
     <bridgehead renderas="sect3">Dependências do libical</bridgehead>
 
-    <bridgehead renderas="sect4">Exigida</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cmake"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gobject-introspection"/> e <xref linkend="vala"/> (ambos
-exigidos pelo GNOME)
+      &gobject-introspection; e <xref linkend="vala"/> (ambos exigidos para GNOME)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -94,54 +93,55 @@ linkend="pygobject3"/> (para alguns testes) e &berkeley-db;
   <sect2 role="installation">
     <title>Instalação do libical</title>
 
-
-
-    <!-- Not needed with 3.0.9
-    <para>
-First make some fixes for the latest versions of icu and Python:</para>
-
-<screen><userinput>sed -i '/define LEAP_MONTH/a #define FALSE 0' src/libical/icalrecur.c &amp;&amp;
-sed -i 's/array/arraytest/'       src/test/libical-glib/CMakeLists.txt &amp;&amp;
-mv src/test/libical-glib/array.py src/test/libical-glib/arraytest.py</userinput></screen>
--->
+    
+    <!-- https://github.com/libical/libical/pull/690 -->
 <para>
+      Se <xref linkend='icu'/> estiver instalado, corrija uma incompatibilidade
+com ICU 75 ou posterior:
+    </para>
+
+    <screen><userinput>sed -i '/getKeywordValuesForLocale/s/NULL/""/' src/libical/icalrecur.c</userinput></screen>
+
+    <para>
       Instale <application>libical</application> executando os seguintes comandos:
     </para>
 
   
-    &parallel_issues;
 <screen><!-- Needs confirmation, but I got a race condition at -j8,
   -j1 allowed the build to pass. Pierre 2019-12-06
-  I always have it actually. Hence the entity.-->
-<userinput>mkdir build &amp;&amp;
-cd  build &amp;&amp;
+  I always have it actually. Hence the entity.
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr  \
-      -DCMAKE_BUILD_TYPE=Release   \
-      -DSHARED_ONLY=yes            \
-      -DICAL_BUILD_DOCS=false      \
-      -DGOBJECT_INTROSPECTION=true \
-      -DICAL_GLIB_VAPI=true        \
+  Works at -j8 and -j4 for version 3.0.18
+    &parallel_issues;-->
+<userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr  \
+      -D CMAKE_BUILD_TYPE=Release   \
+      -D SHARED_ONLY=yes            \
+      -D ICAL_BUILD_DOCS=false      \
+      -D ICAL_BUILD_EXAMPLES=false  \
+      -D GOBJECT_INTROSPECTION=true \
+      -D ICAL_GLIB_VAPI=true        \
       .. &amp;&amp;
-make -j1</userinput></screen>
+make</userinput></screen>
 
     <para>
       Se tiver <xref linkend="doxygen"/>, <xref linkend="graphviz"/> e <xref
 linkend="gtk-doc"/> instalados e desejar construir a documentação da API,
-[então] você deveria remover a chave
-<parameter>-DICAL_BUILD_DOCS=false</parameter> e emitir:
+você deveria remover a chave <parameter>-D ICAL_BUILD_DOCS=false</parameter>
+e emitir:
     </para>
 
+<!-- https://github.com/libical/libical/pull/684
+         It looks like an ICU bug but I've not got time to investigate
+         carefully.  -->
 <screen remap="doc"><userinput>make docs</userinput></screen>
 
+    
     <para>
-      <!-- One test, timezones, is known to fail on SysV systems. -->
-<!-- On systemd, we symlink the current timezone to
-           /etc/localtime, which is what libical expects.
-           This is now done on SysV as well.-->
-Para testar os resultados, emita: <command>make test</command>.
-      
-      
+      Para testar os resultados, emita: <command>make test</command>. Um teste
+chamado <literal>icalrecurtest-r</literal> é conhecido por falhar.
     </para>
 
     <para>
@@ -165,34 +165,39 @@ cp -vr apidocs/html/* /usr/share/doc/libical-&libical-version;/html</userinput><
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DCMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
-aplicar nível mais alto das otimizações de compilador.
+      <parameter>-D CMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
+aplicar um nível mais alto de otimização à compilação.
     </para>
 
     <para>
-      <parameter>-DSHARED_ONLY=yes</parameter>: Essa chave é usada para a
+      <parameter>-D SHARED_ONLY=yes</parameter>: Essa chave é usada para a
 finalidade de construir somente as bibliotecas compartilhadas.
     </para>
 
     <para>
-      <parameter>-DICAL_BUILD_DOCS=false</parameter>: Essa chave evita construir a
-documentação do <application>GTK</application>. Remova se você desejar
+      <parameter>-D ICAL_BUILD_DOCS=false</parameter>: Essa chave evita construir
+a documentação do <application>GTK</application>. Remova se você desejar
 construir a documentação.
     </para>
 
     <para>
-      <parameter>-DGOBJECT_INTROSPECTION=true</parameter>: Essa chave é usada para
-gerar ligações de meta dados do "GObject".
+      <parameter>-D ICAL_BUILD_EXAMPLES=false</parameter>: Essa chave impede
+construir exemplos. Remova se você quiser construí-los.
     </para>
 
     <para>
-      <parameter>-DICAL_GLIB_VAPI=true</parameter>: Essa chave é usada para a
+      <parameter>-D GOBJECT_INTROSPECTION=true</parameter>: Essa chave é usada
+para gerar ligações de meta dados do GObject.
+    </para>
+
+    <para>
+      <parameter>-D ICAL_GLIB_VAPI=true</parameter>: Essa chave é usada para a
 finalidade de construir ligações para <xref linkend="vala"/>.
     </para>
 
     <para>
-      <option>-DUSE_BUILTIN_TZDATA=yes</option>: Essa chave é usada para a
-finalidade de construir usando seus próprios dados de fuso horário.
+      <option>-D USE_BUILTIN_TZDATA=yes</option>: Essa chave é usada para a
+finalidade de construir usando teus próprios dados de fuso horário.
     </para>
 
     
@@ -220,7 +225,7 @@ finalidade de construir usando seus próprios dados de fuso horário.
 
       <seglistitem>
         <seg>
-          Nenhum
+          Nenhum(a)
         </seg>
         <seg>
           libical_cxx.so, libical.so, libical-glib.so, libicalss_cxx.so, libicalss.so

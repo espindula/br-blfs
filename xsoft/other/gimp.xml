@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY gimp-download-http "https://download.gimp.org/pub/gimp/v2.10/gimp-&gimp-version;.tar.bz2">
+  <!ENTITY gimp-download-http "&sources-anduin-http;/gimp/gimp3-&gimp-version;.tar.xz">
   <!ENTITY gimp-download-ftp  "">
-  <!ENTITY gimp-md5sum        "e44e1c91b09db8fcdc9ef5797ce11b77">
-  <!ENTITY gimp-size          "30 MB">
-  <!ENTITY gimp-buildsize     "882 MB (197 MB instalado, adicionar 835 MB para testes)">
-  <!ENTITY gimp-time          "2,3 UPC (Usando paralelismo=4; adicionar 0,7 UPC para testes)">
+  <!ENTITY gimp-md5sum        "17fcd0bfc8e66fc61d672b4409cb3e3a">
+  <!ENTITY gimp-size          "26 MB">
+  <!ENTITY gimp-buildsize     "456 MB (162 MB instalado)">
+  <!ENTITY gimp-time          "1,2 UPC (Usando paralelismo=4)">
 
   <!-- pro-tem, a pull of gimp-help, https://gitlab.gnome.org/GNOME/gimp-help.git
   git archive - -format=tar - -prefix=${DIRNAME}/ HEAD | xz >../${DIRNAME}.tar.xz -->
@@ -30,19 +30,17 @@
        anduin.-->
 
   <!ENTITY gimp-help-version    "&gimp-version;">
-<!--  <!ENTITY gimp-help-download   "&sources-anduin-http;/gimp/gimp-help-&gimp-help-version;.tar.xz"> -->
-  <!ENTITY gimp-help-download   "https://download.gimp.org/pub/gimp/help/gimp-help-&gimp-help-version;.tar.bz2">
-  <!ENTITY gimp-help-md5sum     "5e393d61c802e73ffe6c550759ed0853">
-  <!ENTITY gimp-help-size       "158 MB">
-  <!ENTITY gimp-help-buildsize  "From 412 MB (en only) to 1.8 GB (for all
-                                 languages)">
-  <!ENTITY gimp-help-time       "2.1 SBU (en only), 13 SBU, with parallelism=4,
-                                 for all languages">
+  <!ENTITY gimp-help-download   "&sources-anduin-http;/gimp/gimp3-help-&gimp-help-version;.tar.xz">
+<!--  <!ENTITY gimp-help-download   "https://download.gimp.org/pub/gimp/help/gimp-help-&gimp-help-version;.tar.bz2">-->
+  <!ENTITY gimp-help-md5sum     "162d57a67ff737ed221a8d7f274d119f">
+  <!ENTITY gimp-help-size       "129 MB">
+  <!ENTITY gimp-help-buildsize  "From 351 MB (74 MB installed) for en only to 1.5 GB for all
+                                 languages">
+  <!ENTITY gimp-help-time       "0,4 UPC (somente en), 5,1 UPC para todos os idiomas; usando paralelismo=4">
 ]>
 
 <sect1 id="gimp" xreflabel="Gimp-&gimp-version;">
   <?dbhtml filename="gimp.html" ?>
-
 
   <title>Gimp-&gimp-version;</title>
 
@@ -59,7 +57,7 @@ Program que é útil para retoque de fotos, composição de imagens e criação 
 imagens.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -148,46 +146,42 @@ do texto para muitos outros idiomas ainda não estão traduzidas.
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <!-- en can be built without this -->
-<!-- some parts of Xorg appear to be required, as are deps it pulls in -->
-<xref linkend="gegl"/>, <xref linkend="gexiv2"/>, <xref
-linkend="glib-networking"/>, <xref linkend="gtk2"/>, <xref
-linkend="harfbuzz"/>, <xref linkend="libjpeg"/>, <xref
-linkend="libmypaint"/>, <xref linkend="librsvg"/>, <xref
-linkend="libtiff"/>, <xref linkend="libxml2"/> (para construir os arquivos
-traduzidos de ajuda), <xref linkend="lcms2"/>, <xref
-linkend="mypaint-brushes"/>, <xref linkend="poppler"/> (incluindo
-poppler-data) e <xref linkend="x-window-system"/>
+<xref linkend="appstream-glib"/>, <xref linkend="gegl"/>, <xref
+linkend="gexiv2"/>, <xref linkend="glib-networking"/>, <xref
+linkend="gtk3"/>, <xref linkend="harfbuzz"/>, <xref linkend="libmypaint"/>,
+<xref linkend="librsvg"/>, <xref linkend="libtiff"/>, <xref
+linkend="libxml2"/> (para construir os arquivos da ajuda traduzida), <xref
+linkend="lcms2"/>, <xref linkend="mypaint-brushes"/> e <xref
+linkend="poppler"/> (incluindo poppler-data)
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="dbus-glib"/>, <xref linkend="graphviz"/>, <xref
-linkend="gs"/> (com libgs instalado), <xref linkend="iso-codes"/>, <xref
-linkend="libgudev"/>, <xref linkend="pygtk"/> (incluindo os módulos gtk,
-pango e pangocairo) e <xref linkend="xdg-utils"/>
+      <xref linkend="graphviz"/>, <xref linkend="gs"/> (com libgs instalado),
+<xref role='runtime' linkend="gvfs"/> e <xref role='runtime'
+linkend='glib-networking'/> (ambos tempo de execução, para acessar a ajuda
+online, abrir imagens provenientes de um URL HTTP ou HTTPS, arrastar e
+soltar imagens provenientes de um aplicativo externo, etc.), <xref
+linkend="iso-codes"/>, <xref linkend="libgudev"/>, <xref
+linkend="pygobject3"/> e <xref linkend="xdg-utils"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="aalib"/>, <xref linkend="alsa-lib"/>, <xref linkend="gvfs"/>
-(para acessar a ajuda online), <xref linkend="libmng"/>, <xref
-linkend="libunwind"/>, <xref linkend="libwebp"/>, <xref
-linkend="openjpeg2"/>, um <xref linkend="server-mail"/> (isso fornece um
-aplicativo <command>sendmail</command>), <xref linkend="gtk-doc"/>, <ulink
-url="https://people.freedesktop.org/~hughsient/appstream-glib">appstream-glib</ulink>,
-<ulink
+      <xref linkend="aalib"/>, <xref linkend="alsa-lib"/>, <xref linkend="gjs"/>,
+<xref linkend="libjxl"/>, <xref linkend="libmng"/>, <xref
+linkend="libunwind"/>, <xref linkend="libwebp"/>, <xref linkend="lua"/>,
+<xref linkend="openjpeg2"/>, <xref linkend="gtk-doc"/>, <ulink
+url="https://github.com/HEASARC/cfitsio">cfitsio</ulink>, <ulink
 url="https://github.com/ianlancetaylor/libbacktrace">libbacktrace</ulink>,
-<ulink url="https://github.com/strukturag/libheif/">libheif</ulink> com
-<ulink url="https://github.com/strukturag/libde265/">libde265</ulink> (ambos
-necessários para ler imagens heic do macOS), <ulink
-url="https://wvware.sourceforge.net/libwmf.html">libwmf</ulink> e <ulink
-url="https://www.openexr.com/">OpenEXR</ulink>
-    </para>
-
-    <para>
-      Quando tiver executado o configure, você verá que o WebKit não foi
-encontrado - essa dependência é para o legado webkit-1.0 que nunca deveria
-ser usado em um sistema moderno exposto à Internet.
+<ulink url="https://github.com/svanderburg/libiff">libiff</ulink>, <ulink
+url="https://github.com/svanderburg/libilbm">libilbm</ulink>, <ulink
+url="https://github.com/strukturag/libheif/">libheif</ulink> com <ulink
+url="https://github.com/strukturag/libde265/">libde265</ulink> (ambos
+necessários para ler-se imagens heic do macOS), <ulink
+url="https://wvware.sourceforge.net/libwmf.html">libwmf</ulink>, <ulink
+url="https://www.openexr.com/">OpenEXR</ulink> e <ulink
+url="https://github.com/phoboslab/qoi">qoi</ulink>
     </para>
 
     <bridgehead renderas="sect4">Opcionais, para construir o sistema de ajuda</bridgehead>
@@ -210,22 +204,25 @@ acima
       Instale o <application>Gimp</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --sysconfdir=/etc &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir gimp-build &amp;&amp;
+cd    gimp-build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       <!-- km: in 2.10.16 no failures, 2 tests were skipped -->
-Para testar os resultados (exige um terminal janelado do X): <command>make
-check</command>.
+Para testar os resultados (exige um terminal janelado do X) emita:
+<command>ninja test</command>.
       
 
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/update-icons-and-desktop.xml"/>
@@ -248,18 +245,19 @@ check</command>.
       url="https://docs.gimp.org/2.10/en/">https://docs.gimp.org/2.10/en</ulink>
      (change the language code if desired).-->
 O tarball <filename>gimp-help</filename> contém imagens e texto de ajuda em
-inglês para arquivos de ajuda, juntamente com traduções. 
+inglês para arquivos de ajuda, juntamente com traduções. Se você desejar
+instalar cópias locais dos arquivos de ajuda para ler offline, desempacote o
+tarball gimp-help e mude para a raiz da árvore do fonte recém-criada. 
+
+      
     </para>
 
-    <para>
-      <!--     If you nevertheless wish to install local copies of the help files to read
-      offline, u-->
-Desempacote o tarball <filename>gimp-help</filename> e mude para a raiz da
-recém-criada árvore do fonte. Prepare para a construção com o seguinte
-comando:
-    </para>
+<screen><userinput>tar -xf ../../gimp3-help-&gimp-version;.tar.xz &amp;&amp;
+cd gimp3-help-&gimp-version;
 
-<screen><userinput>ALL_LINGUAS=&quot;ca cs da de en en_GB es fa fr hr ko lt nl nn pt pt_BR ro sl sv uk zh_CN&quot; \
+automake --add-missing
+
+ALL_LINGUAS=&quot;ca cs da de en en_GB es fa fr hr ko lt nl nn pt pt_BR ro sl sv uk zh_CN&quot; \
 ./configure --prefix=/usr</userinput></screen>
 
     <para>
@@ -275,12 +273,12 @@ você não desejar instalar. Alternativamente, remova a linha que começa com
 <screen><userinput>make</userinput></screen>
 
     <para>
-      Emita os seguintes comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem> para instalar os arquivos de ajuda:
+      Emita os seguintes comandos como o(a) usuário(a) &root; para instalar os
+arquivos de ajuda:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
-chown -R root:root /usr/share/gimp/2.0/help</userinput></screen>
+chown -R root:root /usr/share/gimp/3.0/help</userinput></screen>
 
   </sect2>
 
@@ -294,14 +292,6 @@ disponíveis. Remova os códigos de quaisquer idiomas que você não desejar
 construir.
     </para>
 
-    <para>
-      <option>--disable-python</option>: Essa opção é necessária se você não tiver
-instaladoou o <application>PyGTK</application>.
-    </para>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/gtk-doc-rebuild.xml"/>
-
   </sect2>
 
   <sect2 role="configuration">
@@ -311,16 +301,11 @@ instaladoou o <application>PyGTK</application>.
       <title>Arquivos de Configuração</title>
 
       <para>
-        <filename>/etc/gimp/2.0/*</filename> e
-<filename>~/.gimp-2.8/gimprc</filename>
+        <filename>/etc/gimp/3.0/*</filename> 
       </para>
 
       <indexterm zone="gimp gimp-config">
-        <primary sortas="e-AA.gimp-2.0/gimprc">~/.g/GIMP/2.10/*</primary>
-      </indexterm>
-
-      <indexterm zone="gimp gimp-config">
-        <primary sortas="e-etc-gimp-2.0-star">/etc/gimp/2.0/*</primary>
+        <primary sortas="e-etc-gimp-3.0-star">/etc/gimp/3.0/*</primary>
       </indexterm>
 
     </sect3>
@@ -337,18 +322,17 @@ instaladoou o <application>PyGTK</application>.
 
       <seglistitem>
         <seg>
-          gimp (link simbólico), gimp-2.10, gimp-console (link simbólico),
-gimp-console-2.10, gimp-test-clipboard-2.0 e gimptool-2.0
+          gimp-2.99, gimp-console-2.99, gimptool-2.99, gimp-test-clipboard-2.99 e
+gimp-script-fu-interpreter-3.0
         </seg>
         <seg>
-          libgimp-2.0.so, libgimpbase-2.0.so, libgimpcolor-2.0.so,
-libgimpconfig-2.0.so, libgimpmath-2.0.so, libgimpmodule-2.0.so,
-libgimpthumb-2.0.so, libgimpui-2.0.so e libgimpwidgets-2.0.so
+          libgimp-3.0.so, libgimp-scriptfu-3.0, libgimpbase-3.0.so,
+libgimpcolor-3.0.so, libgimpconfig-3.0.so, libgimpmath-3.0.so,
+libgimpmodule-3.0.so, libgimpui-3.0.so e libgimpwidgets-3.0.so
         </seg>
         <seg>
-          /etc/gimp, /usr/include/gimp-2.0, /usr/{lib,share}/gimp,
-/usr/share/gtk-doc/html/libgimp{,base,color,config} e
-/usr/share/gtk-doc/html/libgimp{math,module,thumb,widgets}
+          /etc/gimp, /usr/include/gimp-3.0, /usr/lib/gimp-3.0, /usr/lib/gimp/3.0,
+/usr/share/gimp/3.0 e /usr/share/doc/gimp-2.99
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -357,89 +341,65 @@ libgimpthumb-2.0.so, libgimpui-2.0.so e libgimpwidgets-2.0.so
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
-      <varlistentry id="gimp-prog">
-        <term><command>gimp</command></term>
-        <listitem>
-          <para>
-            é um link simbólico para <command>gimp-2.10</command>
-          </para>
-          <indexterm zone="gimp gimp-prog">
-            <primary sortas="b-gimp">gimp</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="gimp-2.10">
-        <term><command>gimp-2.10</command></term>
+      <varlistentry id="gimp-2.99">
+        <term><command>gimp-2.99</command></term>
         <listitem>
           <para>
             é o GNU Image Manipulation Program. Ele funciona com uma variedade de
 formatos de imagem e oferece uma grande seleção de ferramentas
           </para>
-          <indexterm zone="gimp gimp-2.10">
-            <primary sortas="b-gimp-2.10">gimp-2.10</primary>
+          <indexterm zone="gimp gimp-2.99">
+            <primary sortas="b-gimp-2.99">gimp-2.99</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="gimp-console">
-        <term><command>gimp-console</command></term>
-        <listitem>
-          <para>
-            é um link simbólico para <command>gimp-console-2.10</command>
-          </para>
-          <indexterm zone="gimp gimp-console">
-            <primary sortas="b-gimp-console">gimp-console</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="gimp-console-2.10">
-        <term><command>gimp-console-2.10</command></term>
+      <varlistentry id="gimp-console-2.99">
+        <term><command>gimp-console-2.99</command></term>
         <listitem>
           <para>
             é um aplicativo de console que se comporta como se o
 <application>Gimp</application> fosse chamado com a opção de linha de
 comando <option>--no-interface</option>
           </para>
-          <indexterm zone="gimp gimp-console-2.10">
-            <primary sortas="b-gimp-console-2.10">gimp-console-2.10</primary>
+          <indexterm zone="gimp gimp-console-2.99">
+            <primary sortas="b-gimp-console-2.99">gimp-console-2.99</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="gimptool-2.0">
-        <term><command>gimptool-2.0</command></term>
+      <varlistentry id="gimptool-2.99">
+        <term><command>gimptool-2.99</command></term>
         <listitem>
           <para>
             é uma ferramenta que pode construir plug-ins ou conjunto de comandos
 sequenciais e instalá-los se forem distribuídos em um arquivo
-fonte. <command>gimptool-2.0</command> também pode ser usado por aplicativos
-que precisem saber com quais bibliotecas e caminhos de inclusão o
-<application>Gimp</application> foi compilado
+fonte. <command>gimptool-2.99</command> também pode ser usado por
+aplicativos que precisem saber com quais bibliotecas e caminhos de inclusão
+o <application>Gimp</application> foi compilado
           </para>
-          <indexterm zone="gimp gimptool-2.0">
-            <primary sortas="b-gimptool-2.0">gimptool-2.0</primary>
+          <indexterm zone="gimp gimptool-2.99">
+            <primary sortas="b-gimptool-2.99">gimptool-2.99</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimp-2.0">
-        <term><filename class="libraryfile">libgimp-2.0.so</filename></term>
+      <varlistentry id="libgimp-3.0">
+        <term><filename class="libraryfile">libgimp-3.0.so</filename></term>
         <listitem>
           <para>
-            fornece ligações C para a <application>Gimp</application>'s Procedural
-Database (PDB), as quais oferecem uma interface para funções centrais e para
-funcionalidades fornecidas por plug-ins
+            fornece ligações C para a Procedural Database (PDB) do
+<application>Gimp</application>, as quais oferecem uma interface para
+funções centrais e para funcionalidades fornecidas por plug-ins
           </para>
-          <indexterm zone="gimp libgimp-2.0">
-            <primary sortas="c-libgimp-2.0">libgimp-2.0.so</primary>
+          <indexterm zone="gimp libgimp-3.0">
+            <primary sortas="c-libgimp-3.0">libgimp-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpbase-2.0">
-        <term><filename class="libraryfile">libgimpbase-2.0.so</filename></term>
+      <varlistentry id="libgimpbase-3.0">
+        <term><filename class="libraryfile">libgimpbase-3.0.so</filename></term>
         <listitem>
           <para>
             fornece as funções C para funcionalidades básicas do
@@ -448,101 +408,101 @@ enumeração, tradução de gettext, determinar o número e os recursos da vers�
 do <application>Gimp</application>, manusear arquivos de dados e acessar o
 ambiente
           </para>
-          <indexterm zone="gimp libgimpbase-2.0">
-            <primary sortas="c-libgimpbase-2.0">libgimpbase-2.0.so</primary>
+          <indexterm zone="gimp libgimpbase-3.0">
+            <primary sortas="c-libgimpbase-3.0">libgimpbase-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpcolor-2.0">
-        <term><filename class="libraryfile">libgimpcolor-2.0.so</filename></term>
+      <varlistentry id="libgimpcolor-3.0">
+        <term><filename class="libraryfile">libgimpcolor-3.0.so</filename></term>
         <listitem>
           <para>
             fornece as funções C relacionadas às cores RGB, HSV e CMYK, bem como para
 converter cores entre diferentes modelos de cores e para realizar super
 amostragem adaptativa em uma área
           </para>
-          <indexterm zone="gimp libgimpcolor-2.0">
-            <primary sortas="c-libgimpcolor-2.0">libgimpcolor-2.0.so</primary>
+          <indexterm zone="gimp libgimpcolor-3.0">
+            <primary sortas="c-libgimpcolor-3.0">libgimpcolor-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpconfig-2.0">
-        <term><filename class="libraryfile">libgimpconfig-2.0.so</filename></term>
+      <varlistentry id="libgimpconfig-3.0">
+        <term><filename class="libraryfile">libgimpconfig-3.0.so</filename></term>
         <listitem>
           <para>
             contém funções C para ler e escrever informações de configuração
           </para>
-          <indexterm zone="gimp libgimpconfig-2.0">
-            <primary sortas="c-libgimpconfig-2.0">libgimpconfig-2.0.so</primary>
+          <indexterm zone="gimp libgimpconfig-3.0">
+            <primary sortas="c-libgimpconfig-3.0">libgimpconfig-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpmath-2.0">
-        <term><filename class="libraryfile">libgimpmath-2.0.so</filename></term>
+      <varlistentry id="libgimpmath-3.0">
+        <term><filename class="libraryfile">libgimpmath-3.0.so</filename></term>
         <listitem>
           <para>
             contém funções C que fornecem definições e macros matemáticas, manipulam
 matrizes de transformação 3x3, configuram e manipulam vetores e o algoritmo
 MD5 de resumo de mensagens
           </para>
-          <indexterm zone="gimp libgimpmath-2.0">
-            <primary sortas="c-libgimpmath-2.0">libgimpmath-2.0.so</primary>
+          <indexterm zone="gimp libgimpmath-3.0">
+            <primary sortas="c-libgimpmath-3.0">libgimpmath-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpmodule-2.0">
-        <term><filename class="libraryfile">libgimpmodule-2.0.so</filename></term>
+      <varlistentry id="libgimpmodule-3.0">
+        <term><filename class="libraryfile">libgimpmodule-3.0.so</filename></term>
         <listitem>
           <para>
             fornece as funções C que implementam o carregamento de módulo usando GModule
 e que suportam manter uma lista de GimpModule encontrados em um determinado
 caminho de pesquisa
           </para>
-          <indexterm zone="gimp libgimpmodule-2.0">
-            <primary sortas="c-libgimpmodule-2.0">libgimpmodule-2.0.so</primary>
+          <indexterm zone="gimp libgimpmodule-3.0">
+            <primary sortas="c-libgimpmodule-3.0">libgimpmodule-2.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpthumb-2.0">
-        <term><filename class="libraryfile">libgimpthumb-2.0.so</filename></term>
+      <varlistentry id="libgimpthumb-3.0">
+        <term><filename class="libraryfile">libgimpthumb-3.0.so</filename></term>
         <listitem>
           <para>
             fornece as funções C para manusear os objetos em miniatura do
 <application>Gimp</application>
           </para>
-          <indexterm zone="gimp libgimpthumb-2.0">
-            <primary sortas="c-libgimpthumb-2.0">libgimpthumb-2.0.so</primary>
+          <indexterm zone="gimp libgimpthumb-3.0">
+            <primary sortas="c-libgimpthumb-3.0">libgimpthumb-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpui-2.0">
-        <term><filename class="libraryfile">libgimpui-2.0.so</filename></term>
+      <varlistentry id="libgimpui-3.0">
+        <term><filename class="libraryfile">libgimpui-3.0.so</filename></term>
         <listitem>
           <para>
             contém as funções comuns de interface de usuário(a) do
 <application>Gimp</application>
           </para>
-          <indexterm zone="gimp libgimpui-2.0">
-            <primary sortas="c-libgimpui-2.0">libgimpui-2.0.so</primary>
+          <indexterm zone="gimp libgimpui-3.0">
+            <primary sortas="c-libgimpui-3.0">libgimpui-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
-      <varlistentry id="libgimpwidgets-2.0">
-        <term><filename class="libraryfile">libgimpwidgets-2.0.so</filename></term>
+      <varlistentry id="libgimpwidgets-3.0">
+        <term><filename class="libraryfile">libgimpwidgets-3.0.so</filename></term>
         <listitem>
           <para>
             contém as funções de criação e manipulação de pequenas engenhocas do
 <application>Gimp</application> e do <application>GTK</application>
           </para>
-          <indexterm zone="gimp libgimpwidgets-2.0">
-            <primary sortas="c-libgimpwidgets-2.0">libgimpwidgets-2.0.so</primary>
+          <indexterm zone="gimp libgimpwidgets-3.0">
+            <primary sortas="c-libgimpwidgets-3.0">libgimpwidgets-3.0.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

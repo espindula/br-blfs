@@ -6,10 +6,10 @@
 
   <!ENTITY qca-download-http "https://download.kde.org/stable/qca/&qca-version;/qca-&qca-version;.tar.xz">
   <!ENTITY qca-download-ftp  "">
-  <!ENTITY qca-md5sum        "4c6348286c170b3da24820c977565d75">
-  <!ENTITY qca-size          "744 KB">
-  <!ENTITY qca-buildsize     "42 MB">
-  <!ENTITY qca-time          "0,5 UPC (usando paralelismo=4; adicionar 0,1 UPC para testes)">
+  <!ENTITY qca-md5sum        "d8aaa46356a322464f65b04d00d2bac6">
+  <!ENTITY qca-size          "748 KB">
+  <!ENTITY qca-buildsize     "57 MB (com testes)">
+  <!ENTITY qca-time          "1,0UPC (usando paralelismo = 4; com os testes)">
 ]>
 
 <sect1 id="qca" xreflabel="qca-&qca-version;">
@@ -23,7 +23,7 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a Qca</title>
+    <title>Introdução ao Qca</title>
 
     <para>
       O <application>Qca</application> visa a fornecer uma API criptográfica
@@ -32,7 +32,7 @@ direta e multiplataforma, usando tipos de dados e convenções
 da implementação, usando "plugins" conhecidos como "Providers".
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -84,7 +84,7 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-    <xref linkend="make-ca"/>, <xref linkend="cmake"/>, <xref linkend="qt5"/> e
+    <xref linkend="make-ca"/>, <xref linkend="cmake"/>, <xref linkend="qt6"/> e
 <xref linkend="which"/>
     </para>
 
@@ -93,7 +93,7 @@ Additional Downloads</bridgehead>
     <xref linkend="cyrus-sasl"/>, <xref linkend="gnupg2"/>, <xref
 linkend="libgcrypt"/>, <xref linkend="libgpg-error"/>, <xref
 linkend="nss"/>, <xref linkend="nspr"/>, <xref linkend="p11-kit"/>, <xref
-linkend="doxygen"/>, <xref linkend="which"/> e <ulink
+linkend="doxygen"/> e <ulink
 url="https://botan.randombit.net/">Botan</ulink>
     </para>
 
@@ -113,20 +113,18 @@ url="https://botan.randombit.net/">Botan</ulink>
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd   build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=$QT5DIR            \
-      -DCMAKE_BUILD_TYPE=Release                \
-      -DQCA_MAN_INSTALL_DIR:PATH=/usr/share/man \
+cmake -D CMAKE_INSTALL_PREFIX=$QT6DIR            \
+      -D CMAKE_BUILD_TYPE=Release                \
+      -D QT6=ON                                  \
+      -D QCA_INSTALL_IN_QT_PREFIX=ON             \
+      -D QCA_MAN_INSTALL_DIR:PATH=/usr/share/man \
       .. &amp;&amp;
 make</userinput></screen>
 
     <para>
-      <!--One test
-      using <xref linkend="gnupg2"/>
- fails without a correct passphrase.  The
-      required passphrase does not seem to be published.-->
-Para testar os resultados, emita: <command>make test</command>. 
+      Para testar os resultados, emita: <command>make test</command>. 
     </para>
 
     <para>
@@ -141,13 +139,18 @@ Para testar os resultados, emita: <command>make test</command>.
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DCMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
-aplicar um nível mais alto de otimizações do compilador.
+      <parameter>-D CMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
+aplicar um nível mais alto de otimização à compilação.
     </para>
 
     <para>
-      <parameter>-DQCA_MAN_INSTALL_DIR:PATH=/usr/share/man</parameter>: Instala a
-página de manual do "qca" no local normal.
+      <parameter>-D QT6=ON</parameter>: Assegura que os pacotes sejam construídos
+com <xref linkend="qt6"/>.
+    </para>
+
+    <para>
+      <parameter>-D QCA_MAN_INSTALL_DIR:PATH=/usr/share/man</parameter>: Instala a
+página de manual do qca no local normal.
     </para>
 
   </sect2>
@@ -161,14 +164,14 @@ página de manual do "qca" no local normal.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>mozcerts-qt5 e qcatool-qt5</seg>
+        <seg>mozcerts-qt6 e qcatool-qt6</seg>
         <seg>
-          libqca-qt5.so, libqca-cyrus-sasl.so, libqca-gcrypt.so, libqca-gnupg.so,
+          libqca-qt6.so, libqca-cyrus-sasl.so, libqca-gcrypt.so, libqca-gnupg.so,
 libqca-logger.so, libqca-nss.so, libqca-ossl.so e libqca-softstore.so
         </seg>
         <seg>
-          &qt5-dir;/include/Qca-qt5, &qt5-dir;/lib/cmake/Qca-qt5 e
-&qt5-dir;/lib/qca-qt5
+          &qt6-dir;/include/Qca-qt6, &qt6-dir;/lib/cmake/Qca-qt6 e
+&qt6-dir;/lib/qca-qt6
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -178,39 +181,39 @@ libqca-logger.so, libqca-nss.so, libqca-ossl.so e libqca-softstore.so
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="mozcerts">
-        <term><command>mozcerts-qt5</command></term>
+        <term><command>mozcerts-qt6</command></term>
         <listitem>
           <para>
             é uma ferramenta de linha de comando para converter "certdata.txt" em
 arquivos "arquivo_saida_gerada.pem"
           </para>
           <indexterm zone="qca mozcerts">
-            <primary sortas="b-mozcerts">mozcerts-qt5</primary>
+            <primary sortas="b-mozcerts">mozcerts-qt6</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
       <varlistentry id="qcatool">
-        <term><command>qcatool-qt5</command></term>
+        <term><command>qcatool-qt6</command></term>
         <listitem>
           <para>
             é uma ferramenta de linha de comando para realizar várias operações
 criptográficas com o "Qca"
           </para>
           <indexterm zone="qca qcatool">
-            <primary sortas="b-qcatool">qcatool-qt5</primary>
+            <primary sortas="b-qcatool">qcatool-qt6</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
       <varlistentry id="libqca">
-        <term><filename class="libraryfile">libqca-qt5.so</filename></term>
+        <term><filename class="libraryfile">libqca-qt6.so</filename></term>
         <listitem>
           <para>
             é a biblioteca "Qt Cryptography Architecture" (Qca)
           </para>
           <indexterm zone="qca libqca">
-            <primary sortas="c-libqca">libqca-qt5.so</primary>
+            <primary sortas="c-libqca">libqca-qt6.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

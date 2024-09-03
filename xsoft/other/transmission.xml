@@ -6,9 +6,9 @@
 
   <!ENTITY transmission-download-http "https://github.com/transmission/transmission/releases/download/&transmission-version;/transmission-&transmission-version;.tar.xz">
   <!ENTITY transmission-download-ftp  "">
-  <!ENTITY transmission-md5sum        "d3cda868215246644c429b18a30f7e47">
-  <!ENTITY transmission-size          "9,2 MB">
-  <!ENTITY transmission-buildsize     "229 MB (com ambas interfaces GUI)">
+  <!ENTITY transmission-md5sum        "8132b9f012b8e6309911c80ee9fd00f7">
+  <!ENTITY transmission-size          "11 MB">
+  <!ENTITY transmission-buildsize     "226 MB (com ambas interfaces GUI)">
   <!ENTITY transmission-time          "2,3 UPC (com ambas interfaces GUI; usando paralelismo=4)">
 ]>
 
@@ -32,7 +32,7 @@ multiplataforma e de fonte aberto. Isso é útil para baixar arquivos grandes
 fornecerem largura de banda de servidor.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -68,6 +68,15 @@ fornecerem largura de banda de servidor.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/transmission-&transmission-version;-build_fix-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do Transmission</bridgehead>
 
@@ -84,7 +93,7 @@ do sistema, em vez das agrupadas)
 
     <bridgehead renderas="sect4">Recomendadas (para construir uma GUI)</bridgehead>
     <para role="recommended">
-      <xref linkend="gtkmm3"/> ou &qt5-deps; ou <xref linkend="qt6" role="nodep"/>
+      <xref linkend="gtkmm4"/> ou <xref linkend="qt6"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -109,6 +118,13 @@ url="https://github.com/miniupnp/miniupnp">miniupnp</ulink>
     <title>Instalação do Transmission</title>
 
     <para>
+      Primeiro, corrija uma falha de construção devido a declarações incorretas em
+CMakeLists.txt:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../transmission-&transmission-version;-build_fix-1.patch</userinput></screen>
+
+    <para>
       Instale o <application>Transmission</application> executando os seguintes
 comandos:
     </para>
@@ -116,9 +132,9 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/transmission-&transmission-version; \
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D CMAKE_INSTALL_DOCDIR=/usr/share/doc/transmission-&transmission-version; \
       .. &amp;&amp;
 
 make</userinput></screen>
@@ -144,25 +160,25 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <option>-DENABLE_QT=OFF</option>: Essa chave desabilita construir a
+      <option>-D ENABLE_QT=OFF</option>: Essa chave desabilita construir a
 interface <application>Qt</application>. O padrão é o de construí-la se
 &qt5-deps;, ou <xref linkend="qt6"/>, estiver instalado.
     </para>
 
     <para>
-      <option>-DENABLE_GTK=OFF</option>: Essa chave desabilita construir a
-interface GTK+-3. O padrão é o de construí-la se o <xref linkend="gtkmm3"/>
+      <option>-D ENABLE_GTK=OFF</option>: Essa chave desabilita construir a
+interface GTK-4. O padrão é o de construí-la se o <xref linkend="gtkmm4"/>
 estiver instalado.
     </para>
 
     <para>
-      <option>-DENABLE_WEB=OFF</option>: Essa chave desabilita a construção do
+      <option>-D ENABLE_WEB=OFF</option>: Essa chave desabilita a construção do
 cliente web. O padrão é o de construí-lo se o <xref linkend="nodejs"/>
 estiver instalado.
     </para>
 
     <para>
-      <option>-DREBUILD_WEB=ON</option>: Essa chave força reconstruir o cliente
+      <option>-D REBUILD_WEB=ON</option>: Essa chave força reconstruir o cliente
 web. Essa opção precisa de <xref linkend="nodejs"/> para ser instalado bem
 como de uma conexão de internet. O padrão é o de não reconstruir o cliente.
     </para>

@@ -7,8 +7,8 @@
   <!ENTITY bind-download-http "https://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
   <!ENTITY bind-download-ftp  "">
   <!ENTITY bind-md5sum        "&bind-md5;">
-  <!ENTITY bind-size          "5,3 MB">
-  <!ENTITY bind-buildsize     "126 MB (21 MB instalado)">
+  <!ENTITY bind-size          "5,5 MB">
+  <!ENTITY bind-buildsize     "138 MB (22 MB instalado)">
   <!ENTITY bind-time          "0,5 UPC (com paralelismo=4; cerca de 40 minutos, um tanto independente do
 processador, para executar a suíte completa de teste)">
 ]>
@@ -32,7 +32,7 @@ utilitários clientes. Se você estiver interessado(a) somente nos
 utilitários, [então] consulte <xref linkend="bind-utils"/>.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -84,7 +84,7 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libuv"/>
+      <xref linkend="liburcu"/> e <xref linkend="libuv"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -104,13 +104,6 @@ url="https://github.com/jemalloc/jemalloc">jemalloc</ulink>, <ulink
 url="&w3m-url;">w3m</ulink>
     </para>
 
-    <bridgehead renderas="sect4">Estruturas opcionais de retaguarda de base de dados</bridgehead>
-    <para role="optional">
-      <xref linkend="mariadb"/> ou <ulink
-url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
-<xref linkend="postgresql"/>, <xref linkend="unixodbc"/> e &berkeley-db;
-    </para>
-
     <bridgehead renderas="sect4">Opcional (para executar a suíte de teste)</bridgehead>
     <para role="optional">
       <xref linkend="perl-net-dns"/>
@@ -125,19 +118,7 @@ url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="openldap"/>,
   <sect2 role="installation">
     <title>Instalação do BIND</title>
 
-
-
-    <!--
-    <para>
-
-      To ensure <application>BIND</application> will build dnssec-keymgr,
-      install a python module as the <systemitem
-      class="username">root</systemitem> user:
-    </para>
-
-<screen role="root"><userinput>pip3 install ply</userinput></screen>
--->
-<note>
+    <note>
       <para>
          Começando com bind-9.18.20, os endereços de IP para B.ROOT-SERVERS.NET
 mudaram.
@@ -175,15 +156,24 @@ permitted&quot;. Essas mensagens não afetam os testes.
         remap="test"><userinput>bin/tests/system/ifconfig.sh up</userinput></screen>
 
     <para>
-      A suíte de teste possivelmente indique alguns testes ignorados dependendo de
-quais opções de configuração são usadas. Alguns testes são marcados como
-<quote>UNTESTED</quote> ou até falham se o <xref linkend="perl-net-dns"/>
-não estiver instalado. Dois testes, <filename>resolver</filename> e
-<filename>dispatch</filename>, são conhecidos por falharem. Para executar os
-testes, como um(a) usuário(a) sem privilégios, execute:
+      A suíte de teste pode indicar alguns testes ignorados, dependendo de quais
+opções de configuração forem usadas. Alguns testes são marcados com
+<quote>UNTESTED</quote> ou até mesmo falham se <xref
+linkend="perl-net-dns"/> não estiver instalado. Um teste,
+<filename>dnssec</filename>, é conhecido por falhar. Os testes exigem o
+módulo Python <ulink
+url="https://hypothesis.readthedocs.org/">hypothesis</ulink>, que não está
+no BLFS. Para contornar isso, as instruções abaixo criam um ambiente virtual
+Python e, em seguida, instalam o módulo nele antes de executar os
+testes. Para executar os testes, como um(a) usuário(a) sem privilégios,
+execute:
     </para>
 
-<screen remap="test"><userinput>make -k check</userinput></screen>
+<screen remap="test"><userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
+source testenv/bin/activate                    &amp;&amp;
+pip3 install hypothesis                        &amp;&amp;
+make -k check                                  &amp;&amp;
+deactivate</userinput></screen>
 
     <para>
       Novamente como &quot;<systemitem class="username">root</systemitem>&quot;,
@@ -226,17 +216,7 @@ configuração em &quot;<filename class='directory'>/etc</filename>&quot; em
 vez de &quot;<filename class='directory'>/usr/etc</filename>&quot;.
     </para>
 
-    
-
-    <!-- Seems to be removed in 9.18.0
     <para>
-
-      <parameter>- -with-libtool</parameter>: This parameter forces the
-      building of dynamic libraries and links the installed binaries to these
-      libraries.
-    </para>
-    -->
-<para>
       <option>--with-libidn2</option>: Esse parâmetro habilita o suporte a
 &quot;Internationalized Domain Names in Applications&quot;
 (&quot;IDNA2008&quot;).
@@ -249,20 +229,17 @@ possivelmente seja útil em servidores que recebem um grande número de
 consultas.
     </para>
 
-    <para>
-      <option>--disable-linux-caps</option>: O &quot;BIND&quot; também pode ser
-construído sem suporte de capacidade usando-se essa opção, ao custo de
-alguma perda de segurança.
-    </para>
 
-    <para>
-      <option>--with-dlz-{mysql,bdb,filesystem,ldap,odbc,stub}</option>: Use uma
-(ou mais) dessas opções para adicionar suporte a Zonas Dinamicamente
-Carregáveis. Para mais informações, consulte-se <ulink
-url="https://bind-dlz.sourceforge.net/">bind-dlz.sourceforge.net</ulink>.
-    </para>
 
+    <!-- Removed in 9.20.0 (and support has been in LFS for years)
     <para>
+
+      <option>- -disable-linux-caps</option>: BIND can also be built without
+      capability support by using this option, at the cost of some loss of
+      security.
+    </para>
+-->
+<para>
       <option>--disable-doh</option>: Use essa opção se você não tiver <xref
 linkend="nghttp2" role="nodep"/> instalado e não precisar de suporte para
 DNS sobre HTTPS.
@@ -616,17 +593,15 @@ url="https://downloads.isc.org/isc/bind9/&bind-version;/doc/arm/"/>.
       <seglistitem>
 
         <seg>arpaname, ddns-confgen, delv, dig, dnssec-cds, dnssec-dsfromkey,
-dnssec-importkey, dnssec-keyfromlabel, dnssec-keygen, dnssec-revoke,
-dnssec-settime, dnssec-signzone, dnssec-verify, host, mdig, named,
-named-checkconf, named-checkzone, named-compilezone, named-journalprint,
-named-nzd2nzf, named-rrchecker, nsec3hash, nslookup, nsupdate, rndc,
-rndc-confgen e tsig-keygen (link simbólico)</seg>
+dnssec-importkey, dnssec-keyfromlabel, dnssec-keygen, dnssec-ksr,
+dnssec-revoke, dnssec-settime, dnssec-signzone, dnssec-verify, host, mdig,
+named, named-checkconf, named-checkzone, named-compilezone,
+named-journalprint, named-nzd2nzf, named-rrchecker, nsec3hash, nslookup,
+nsupdate, rndc, rndc-confgen e tsig-keygen (link simbólico)</seg>
 
-        <seg>libbind9.so, libdns.so, libirs.so, libisc.so, libisccc.so, libisccfg.so e
-libns.so</seg>
+        <seg>libdns.so, libisc.so, libisccc.so, libisccfg.so e libns.so</seg>
 
-        <seg>/usr/include/{bind9,dns,dst,irs,isc,isccc,isccfg,ns}, /usr/lib/bind e
-/srv/named</seg>
+        <seg>/usr/include/{dns,dst,irs,isc,isccc,isccfg,ns}, /usr/lib/bind e /srv/named</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -746,6 +721,19 @@ definida
           </para>
           <indexterm zone="bind dnssec-keymgr">
             <primary sortas="b-dnssec-keymgr">dnssec-keymgr</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="dnssec-ksr">
+        <term><command>dnssec-ksr</command></term>
+        <listitem>
+          <para>
+            cria arquivos de resposta de chave assinada (SKR) para configurações KSK
+offline
+          </para>
+          <indexterm zone="bind dnssec-ksr">
+            <primary sortas="b-dnssec-ksr">dnssec-ksr</primary>
           </indexterm>
         </listitem>
       </varlistentry>

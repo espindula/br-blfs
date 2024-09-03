@@ -7,10 +7,10 @@
   <!ENTITY wpa_supplicant-download-http
            "https://w1.fi/releases/wpa_supplicant-&wpa_supplicant-version;.tar.gz">
   <!ENTITY wpa_supplicant-download-ftp  "">
-  <!ENTITY wpa_supplicant-md5sum        "d26797fcb002898d4ee989179346e1cc">
-  <!ENTITY wpa_supplicant-size          "3,4 MB">
-  <!ENTITY wpa_supplicant-buildsize     "37 MB">
-  <!ENTITY wpa_supplicant-time          "0,5 UPC (com a GUI opcional)">
+  <!ENTITY wpa_supplicant-md5sum        "72a4a00eddb7a499a58113c3361ab094">
+  <!ENTITY wpa_supplicant-size          "3,7 MB">
+  <!ENTITY wpa_supplicant-buildsize     "35 MB">
+  <!ENTITY wpa_supplicant-time          "0,3 UPC (sem GUI opcional)">
 ]>
 
 <sect1 id="wpa_supplicant" xreflabel="wpa_supplicant-&wpa_supplicant-version;">
@@ -38,7 +38,7 @@ autenticação/associação &quot;IEEE 802.11&quot; do controlador de
 sem fio protegido por senha.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -74,17 +74,19 @@ sem fio protegido por senha.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas (tempo de execução)</bridgehead>
     <para role="nodump">
@@ -170,20 +172,22 @@ configuração da construção do &quot;<application>WPA
 Supplicant</application>&quot; executando o seguinte comando:
     </para>
 
+<!-- Fixed in version 2.11
+    <para>
+
+      Next, patch a security vulnerability that occurs when connecting to some
+      networks:
+      <!- - CVE-2023-52160, see Ticket #19304. - ->
+    </para>
+
+<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch</userinput></screen>
+-->
 <screen><userinput>cat &gt;&gt; wpa_supplicant/.config &lt;&lt; "EOF"
 <literal>CONFIG_CTRL_IFACE_DBUS=y
 CONFIG_CTRL_IFACE_DBUS_NEW=y
 CONFIG_CTRL_IFACE_DBUS_INTRO=y</literal>
 EOF</userinput></screen>
 
-    <para>
-      <!-- CVE-2023-52160, see Ticket #19304. -->
-A seguir, remende uma vulnerabilidade de segurança que ocorre ao se conectar
-a algumas redes de intercomunicação:
-      
-    </para>
-
-<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch</userinput></screen>
 
     <para>
       Instale o <application>WPA Supplicant</application> executando os seguintes

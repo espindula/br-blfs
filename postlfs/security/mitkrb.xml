@@ -6,10 +6,10 @@
 
   <!ENTITY mitkrb-download-http "https://kerberos.org/dist/krb5/&mitkrb-major-version;/krb5-&mitkrb-version;.tar.gz">
   <!ENTITY mitkrb-download-ftp  "">
-  <!ENTITY mitkrb-md5sum        "97d5f3a48235c53f6d537c877290d2af">
-  <!ENTITY mitkrb-size          "8,2 MB">
-  <!ENTITY mitkrb-buildsize     "130 MB (adicionar 10 MB para testes)">
-  <!ENTITY mitkrb-time          "0,3 UPC (Usando paralelismo=4; adicionar 1,0 UPC para testes)">
+  <!ENTITY mitkrb-md5sum        "beb34d1dfc72ba0571ce72bed03e06eb">
+  <!ENTITY mitkrb-size          "8,7 MB">
+  <!ENTITY mitkrb-buildsize     "95 MB (adicionar 14 MB para os testes)">
+  <!ENTITY mitkrb-time          "0,3 UPC (Usando paralelismo=4; adicionar 1,1 UPC para testes)">
 ]>
 
 <sect1 id="mitkrb" xreflabel="MIT Kerberos V5-&mitkrb-version;">
@@ -23,7 +23,7 @@
   </indexterm>
 
     <sect2 role="package">
-      <title>Introdução a MIT Kerberos V5</title>
+      <title>Introdução ao MIT Kerberos V5</title>
 
     <para>
       <application>MIT Kerberos V5</application> é uma implementação livre do
@@ -34,7 +34,7 @@ suportem Kerberos, permitindo logins únicos e comunicação criptografada em
 redes internas de comunicação ou na Internet.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -90,10 +90,11 @@ Additional Downloads</bridgehead>
       implementation of rpc now.
       <xref linkend="rpcbind"/>
  (used during the test suite),-->
-<xref linkend="bind-utils"/>, <xref linkend="gnupg2"/> (para autenticar o
-pacote), <xref linkend="keyutils"/>, <xref linkend="openldap"/>, <xref
-linkend="valgrind"/> (usado durante a suíte de teste), <xref
-linkend="yasm"/>, <ulink
+<xref linkend="bind-utils"/>, <xref linkend='cracklib'/>
+(<filename>/usr/share/dict/words</filename> referenciado por alguns testes),
+<xref linkend="gnupg2"/> (para autenticar o pacote), <xref
+linkend="keyutils"/>, <xref linkend="openldap"/>, <xref linkend="valgrind"/>
+(usado durante a suíte de teste), <xref linkend="yasm"/>, <ulink
 url="https://thrysoee.dk/editline/">libedit</ulink>, <ulink
 url="https://cmocka.org/">cmocka</ulink>, <ulink
 url="https://pypi.org/project/kdcproxy/">kdcproxy</ulink>, <ulink
@@ -127,14 +128,8 @@ uma diferença de horário entre um cliente kerberizado e o servidor KDC.
 comandos:
     </para>
 
-<screen><!-- dejagnu is not used anymore for tests
-sed -i -e 's@\^u}@^u cols 300}@' tests/dejagnu/config/default.exp     &amp;&amp;
--->
-<!--sed -i '/t_kadm5.py/d'           lib/kadm5/Makefile.in                &amp;&amp;-->
-<userinput>cd src &amp;&amp;
-
-sed -i -e '/eq 0/{N;s/12 //}'    plugins/kdb/db2/libdb2/test/run.test &amp;&amp;
-
+<screen><userinput>cd src &amp;&amp;
+sed -i -e '/eq 0/{N;s/12 //}' plugins/kdb/db2/libdb2/test/run.test &amp;&amp;
 
 ./configure --prefix=/usr            \
             --sysconfdir=/etc        \
@@ -143,7 +138,8 @@ sed -i -e '/eq 0/{N;s/12 //}'    plugins/kdb/db2/libdb2/test/run.test &amp;&amp;
             --with-system-et         \
             --with-system-ss         \
             --with-system-verto=no   \
-            --enable-dns-for-realm &amp;&amp;
+            --enable-dns-for-realm   \
+            --disable-rpath          &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -165,7 +161,10 @@ check</command>. Alguns testes possivelmente falhem com a versão mais
 recente de dejagnu e glibc. Alguns testes possivelmente travem por um tempo
 longo e falhem se o sistema não estiver conectado a uma rede de
 comunicação. Um teste, <filename>t_kadm5srv</filename>, é conhecido por
-falhar.
+falhar.  Se <xref linkend='keyutils'/> estiver instalado, mas <xref
+linkend='keyutils-test-kernel'/> não estiver satisfeita, alguns testes
+falharão, reclamando que <computeroutput>keyctl falhou com o código
+1</computeroutput>.
       
     </para>
 
@@ -173,28 +172,17 @@ falhar.
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<!-- libsoup3 FTBFS with these flags if -Dgssapi=enabled (not used by
-         the book) -->
 <screen role="root"><userinput>make install &amp;&amp;
 cp -vfr ../doc -T /usr/share/doc/krb5-&mitkrb-version;</userinput></screen>
-
-    
-    <para>
-      Ainda como o(a) usuário(a) &root;, remova os sinalizadores do vinculador
-configurando RPATH do script <command>krb5-config</command>. Esses
-sinalizadores são desnecessários para uma instalação no prefixo padrão
-(<filename class='directory'>/usr</filename>) e podem causar alguns pacotes
-falharem para construir:
-    </para>
-
-    <screen role='root'><userinput>sed '/PROG_RPATH_FLAGS/d' -i /usr/bin/krb5-config</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
+    
+    <!-- https://krbdev.mit.edu/rt/Ticket/Display.html?id=9129 -->
+<para>
       O comando <command>sed</command> remove um teste que é conhecido por falhar.
     </para>
 
@@ -235,6 +223,17 @@ sistema, ao invés de instalar a nova versão.
     <para>
       <parameter>--enable-dns-for-realm</parameter>: Essa chave permite que os
 domínios sejam resolvidos usando o servidor DNS.
+    </para>
+
+    
+    <!-- libsoup3 FTBFS with rpath enabled if -D gssapi=enabled (not used by
+         the book) -->
+<para>
+      <parameter>--disable-rpath</parameter>: Essa chave evita codificar
+rigidamente caminhos de pesquisa de biblioteca (rpath) nos arquivos
+executáveis binários e bibliotecas compartilhadas. Esse pacote não precisa
+do rpath para uma instalação no local padrão, e o rpath às vezes pode causar
+efeitos indesejados ou até mesmo problemas de segurança.
     </para>
 
     <para>

@@ -6,7 +6,7 @@
 
   <!ENTITY ntp-download-http "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-&ntp-version;.tar.gz">
   <!ENTITY ntp-download-ftp  "">
-  <!ENTITY ntp-md5sum        "a15558df580bd1b955a105a8b91c078f">
+  <!ENTITY ntp-md5sum        "516bdabd94ab7c824e9771390761a46c">
   <!ENTITY ntp-size          "6,8 MB">
   <!ENTITY ntp-buildsize     "99 MB (com testes)">
   <!ENTITY ntp-time          "0,8 UPC (com testes; ambos usando paralelismo=4)">
@@ -32,7 +32,7 @@ rede de intercomunicação. Esse pacote é a implementação de referência
 oficial do protocolo &quot;NTP&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -129,6 +129,14 @@ useradd -c "Protocolo de horário da rede de intercomunicação" -d /var/lib/ntp
         -g ntp -s /bin/false ntp</userinput></screen>
 
 
+
+    <para>
+      Corrija um problema de tipo executando
+    </para>
+
+<screen><userinput>sed -e "s;pthread_detach(NULL);pthread_detach(0);" \
+    -i configure \
+       sntp/configure</userinput></screen>
 
     <para>
       Instale o &quot;<application>ntp</application>&quot; executando os seguintes

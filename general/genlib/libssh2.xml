@@ -23,14 +23,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a libssh2</title>
+    <title>Introdução ao libssh2</title>
 
     <para>
       O pacote <application>Libssh2</application> é uma biblioteca C do lado do
 cliente que implementa o protocolo "SSH2".
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -102,12 +102,14 @@ Primeiro, corrija uma vulnerabilidade crítica de segurança na libssh2:
 
     <para>
       Se você quiser testar o pacote, exclua os testes que exigem uma biblioteca
-estática:
+estática e remova a referência para um algoritmo inseguro removido desde
+OpenSSH 9.8:
     </para>
 
 <screen><userinput>sed -E '/^DOCKER_TEST/,/^SSHD_TEST/s/test_(auth_keyboard_info.* |hostkey |simple)/$(NOTHING)/' \
     -i tests/Makefile.inc &amp;&amp;
-autoreconf -fi</userinput></screen>
+autoreconf -fi &amp;&amp;
+sed 's/ssh-dss,//' -i tests/openssh_server/sshd_config</userinput></screen>
 
     <para>
       Instale <application>libssh2</application> executando os seguintes comandos:
@@ -153,13 +155,13 @@ tiver instalado o Docker e desejar executar a suíte de teste.
 
       <seglistitem>
         <seg>
-          Nenhum
+          Nenhum(a)
         </seg>
         <seg>
           libssh2.so
         </seg>
         <seg>
-          Nenhum
+          Nenhum(a)
         </seg>
       </seglistitem>
     </segmentedlist>

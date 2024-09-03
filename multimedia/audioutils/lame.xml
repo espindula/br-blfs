@@ -31,7 +31,7 @@ opcionalmente, um analisador de quadros de MP3. Isso é útil para criar e
 analisar arquivos de áudio comprimidos.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -83,6 +83,16 @@ Fence</ulink>, <xref linkend="libsndfile"/> e <xref linkend="nasm"/>
   <sect2 role="installation">
     <title>Instalação do LAME</title>
 
+    
+    <!-- Taken from Fedora -->
+<para>
+      Evite que o diretório do código-fonte seja codificado rigidamente por engano
+como um caminho de pesquisa de biblioteca compartilhada nos programas
+instalados:
+    </para>
+
+<screen><userinput>sed -i -e 's/^\(\s*hardcode_libdir_flag_spec\s*=\).*/\1/' configure</userinput></screen>
+
     <para>
       Instale o <application>LAME</application> executando os seguintes comandos:
     </para>
@@ -91,7 +101,8 @@ Fence</ulink>, <xref linkend="libsndfile"/> e <xref linkend="nasm"/>
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make test</command>.
+      Para testar os resultados, emita: <command>LD_LIBRARY_PATH=libmp3lame/.libs
+make test</command>.
     </para>
 
     <para>
@@ -114,9 +125,9 @@ aplicativo de codificação para RTP.
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <option>--enable-nasm</option>: Habilite o uso de <xref linkend="nasm"/>
-para compilar rotinas otimizadas de montagem para x86 de 32 bits. Essa opção
-não tem efeito em x86_64.
+      <option>--enable-nasm</option>: Essa opção habilita o uso do <xref
+linkend="nasm"/> para compilar rotinas otimizadas de montagem para x86 de 32
+bits. Observe que isso não tem efeito em x86_64.
     </para>
 
   </sect2>
@@ -175,8 +186,8 @@ não tem efeito em x86_64.
         <term><filename class="libraryfile">libmp3lame.so</filename></term>
         <listitem>
           <para>
-            bibliotecas fornecem as funções necessárias para converter arquivos brutos
-PCM e WAV em arquivos MP3
+            fornece as funções necessárias para converter arquivos brutos PCM e WAV para
+arquivos MP3
           </para>
           <indexterm zone="lame libmp3lame">
             <primary sortas="c-libmp3lame">libmp3lame.so</primary>

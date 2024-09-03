@@ -7,9 +7,9 @@
   <!ENTITY numpy-download-http "https://files.pythonhosted.org/packages/source/n/numpy/numpy-&numpy-version;.tar.gz">
   <!ENTITY numpy-download-ftp  "">
   <!ENTITY numpy-md5sum        "&numpy-md5sum;">
-  <!ENTITY numpy-size          "15 MB">
-  <!ENTITY numpy-buildsize     "91 MB (adicionar 333 MB para testes)">
-  <!ENTITY numpy-time          "0,4 UPC (adicionar 2,8 UPC para testes)">
+  <!ENTITY numpy-size          "18 MB">
+  <!ENTITY numpy-buildsize     "104 MB (adicionar 48 MB para os testes)">
+  <!ENTITY numpy-time          "0,6UPC (adicionar 1,1UPC para os testes)">
 ]>
 
   <sect2 id="numpy" xreflabel="NumPy-&numpy-version;">
@@ -28,7 +28,7 @@
 computação científica com &quot;Python&quot;.
       </para>
 
-      &lfs121_checked;
+      &lfs122_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -86,7 +86,7 @@ url="https://www.netlib.org/lapack/">lapack e cblas</ulink> e <ulink
 url="https://www.openblas.net/">openblas</ulink>
       </para>
 
-      <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
+      <bridgehead renderas="sect5">Opcionais (parar testagem)</bridgehead>
       <para role="optional">
         <xref linkend="attrs"/>, <xref linkend="pytest"/>, <xref linkend="pytz"/> e
 <ulink url="https://pypi.org/project/hypothesis/">hypothesis</ulink>
@@ -111,22 +111,24 @@ url="https://www.openblas.net/">openblas</ulink>
         A instalação pode ser testada com os seguintes comandos:
       </para>
 
-<screen remap="test"><!-- no && because of a possible error -->
-<userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
-source testenv/bin/activate                   &amp;&amp;
+<!-- no && for actual test because of a possible error -->
+<!--
+      <para>
+
+        Two tests, out of over 48000 tests, are known to fail.
+      </para>
+-->
+<screen remap="test"><userinput>mkdir -p test                                  &amp;&amp;
+cd       test                                  &amp;&amp;
+python3 -m venv --system-site-packages testenv &amp;&amp;
+source testenv/bin/activate                    &amp;&amp;
 pip3 install hypothesis                        &amp;&amp;
-python3 runtests.py
+python -c "import numpy, sys; sys.exit(numpy.test() is False)"
 deactivate</userinput></screen>
 
-      <para>
-        <!-- test_f2py2e.py::test_untitled_cli, 
-             test_f2py2e.py::test_no_py312_distutils_fcompiler
-             test_public_api.py::test_all_modules_are_expected
-             3 failed, 35182 passed, 1835 skipped, 1306 deselected, 
-                          32 xfailed, 2 xpassed -->
-Três testes, entre mais de 35.000 testes, são conhecidos por falharem.
-        
-      </para>
+
+
+
 
     </sect3>
 

@@ -6,10 +6,13 @@
 
   <!ENTITY webkitgtk-download-http "https://webkitgtk.org/releases/webkitgtk-&webkitgtk-version;.tar.xz">
   <!ENTITY webkitgtk-download-ftp  "">
-  <!ENTITY webkitgtk-md5sum        "9cf27d88b55e5b8168f4835b17ea6fd0">
-  <!ENTITY webkitgtk-size          "33 MB">
-  <!ENTITY webkitgtk-buildsize     "1,2 GB (195 MB instalado; adicionar 148 MB para GTK-4)">
-  <!ENTITY webkitgtk-time          "23 UPC (para GTK-3, usando paralelismo = 8; adicionar 22 UPC para GTK-4)">
+  <!ENTITY webkitgtk-md5sum        "46cf81df314acbf62f811bcfd99f4769">
+  <!ENTITY webkitgtk-size          "36 MB">
+  <!ENTITY webkitgtk-buildsize     "1,2 GB (159 MB instalado; adicionar 154 MB para GTK-4)">
+  <!ENTITY webkitgtk-time          "29 UPC (para GTK-3, usando paralelismo = 8; adicionar 30 UPC para GTK-4)">
+
+  <!ENTITY libbacktrace
+    "<ulink url='https://github.com/ianlancetaylor/libbacktrace'>libbacktrace</ulink>">
 ]>
 
 <sect1 id="webkitgtk" xreflabel="WebKitGTK-&webkitgtk-version;">
@@ -33,7 +36,7 @@ mecanismo de renderização &quot;web&quot; portável
 4</application>&quot;.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -93,34 +96,29 @@ linkend="gtk3"/>, <xref linkend="gtk4"/>, <xref linkend="icu"/>, <xref
 linkend="lcms2"/>, <xref linkend="libgudev"/>, <xref linkend="libsecret"/>,
 <xref linkend="libsoup3"/>, <xref linkend="libtasn1"/>, <xref
 linkend="libwebp"/>, <xref linkend="mesa"/>, <xref linkend="openjpeg2"/>,
-<xref linkend="ruby"/>, <xref linkend="sqlite"/>, <xref linkend="unifdef"/>,
-<xref linkend="which"/> e <xref linkend="wpebackend-fdo"/>
+<xref linkend="ruby"/>, <xref linkend="sqlite"/>, <xref linkend="unifdef"/>
+e <xref linkend="which"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="bubblewrap"/>, <xref linkend="enchant"/>, <xref
-linkend="geoclue2"/>, <xref linkend="gobject-introspection"/>, <xref
+linkend="geoclue2"/>, &gobject-introspection;, <xref
 linkend="hicolor-icon-theme"/>, <xref linkend="libavif"/>, <xref
-linkend="libseccomp"/> e <xref linkend="xdg-dbus-proxy"/>
+linkend="libjxl"/>, <xref linkend="libseccomp"/> e <xref
+linkend="xdg-dbus-proxy"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      
-      <!--<xref linkend="bubblewrap"/>
-,-->
-<!--<ulink url="https://github.com/AOMediaCodec/libavif">
-libavif</ulink>,-->
-<!--<ulink url="https://github.com/flatpak/xdg-dbus-proxy">
-xdg-dbus-proxy</ulink>-->
+      <!--<ulink url="https://github.com/libjxl/libjxl">
+libjxl</ulink>, and-->
 <xref linkend="gi-docgen"/>, <xref linkend="harfbuzz"/>, <xref
 linkend="wayland"/>, <xref linkend="woff2"/>, <ulink
 url="https://ccache.dev/">ccache</ulink>, <ulink
 url="https://sourceforge.net/projects/hunspell/files/Hyphen/">Hyphen</ulink>,
-<ulink url="https://github.com/libjxl/libjxl">libjxl</ulink> e <ulink
+&libbacktrace; e <ulink
 url="https://gnome.pages.gitlab.gnome.org/libmanette/">libmanette</ulink>
-      
     </para>
 
   </sect2>
@@ -130,23 +128,7 @@ url="https://gnome.pages.gitlab.gnome.org/libmanette/">libmanette</ulink>
 
     <bridgehead renderas="sect3">Instalação do <application>WebKitGTK</application></bridgehead>
 
-    
-
-
-
-    <!-- https://bugs.webkit.org/show_bug.cgi?id=262777
-         https://github.com/WebKit/WebKit/commit/c29a26a02441 -->
-<!-- Fixed in 2.42.2
-    <para>
-
-      First, fix an issue breaking Web sites relying on Javascript Blob API:
-    </para>
-
-<screen><userinput>sed "/bool BlobURL::isSecureBlobURL/,/^}/                                \
-     s/return false/return SecurityOrigin::isSecure(getOriginURL(url))/" \
-    -i Source/WebCore/fileapi/BlobURL.cpp</userinput></screen>
--->
-<important>
+    <important>
       <para>
         Esse pacote permite construir com GTK-3 ou GTK-4, mas não ambos na mesma
 construção. A versão GTK-4 é necessária para pacotes como <xref
@@ -154,25 +136,18 @@ linkend="epiphany"/>. Outros pacotes, como <xref linkend="balsa"/> ou <xref
 linkend="evolution"/>, requerem a versão GTK-3. Ambas as versões podem ser
 instaladas lado a lado no mesmo sistema. Nós fornecemos instruções de
 construção para ambos os casos abaixo, mas a única diferença é a
-configuração de <command>-DUSE_GTK4</command>
+configuração de <command>-D USE_GTK4</command>
       </para>
     </important>
 
-
-    
-
-    <!-- https://github.com/WebKit/WebKit/commit/3d53735756 and
-         https://bugs.webkit.org/show_bug.cgi?id=268739 -->
-<para>
-      Primeiro, se você estiver em uma máquina de 32 bits, corrija uma falha de
-construção:
+    <para>
+      <!-- Ticket #20235 -->
+Primeiro, corrija uma regressão que ocorre com alguns sítios da web que usam
+WebAssembly: 
     </para>
 
-<screen><userinput remap="pre">case $(uname -m) in
-   i?86) sed -e '/UNUSED_VARIABLE(t6)/d' \
-             -e '/UNUSED_VARIABLE(t7)/d' \
-             -i Source/JavaScriptCore/llint/LowLevelInterpreter.cpp ;;
-esac</userinput></screen>
+<screen><userinput remap="pre">sed '/returnLocation.isStackArgument/,/returnLocation = canonicalLocation/d'\
+    -i Source/JavaScriptCore/wasm/WasmBBQJIT.cpp</userinput></screen>
 
     <para>
       Se você quiser instalar a versão GTK+-3 do
@@ -182,42 +157,42 @@ esac</userinput></screen>
 <screen revision="systemd"><userinput>mkdir -vp build &amp;&amp;
 cd        build &amp;&amp;
 
-cmake -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_SKIP_RPATH=ON       \
-      -DPORT=GTK                  \
-      -DLIB_INSTALL_DIR=/usr/lib  \
-      -DUSE_LIBHYPHEN=OFF         \
-      -DENABLE_GAMEPAD=OFF        \
-      -DENABLE_MINIBROWSER=ON     \
-      -DENABLE_DOCUMENTATION=OFF  \
-      -DUSE_WOFF2=OFF             \
-      -DUSE_GTK4=OFF              \
-      -DUSE_WPE_RENDERER=ON       \
-      -DUSE_JPEGXL=OFF            \
-      -DENABLE_BUBBLEWRAP_SANDBOX=ON \
-      -Wno-dev -G Ninja ..        &amp;&amp;
+cmake -D CMAKE_BUILD_TYPE=Release     \
+      -D CMAKE_INSTALL_PREFIX=/usr    \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON  \
+      -D PORT=GTK                     \
+      -D LIB_INSTALL_DIR=/usr/lib     \
+      -D USE_LIBBACKTRACE=OFF         \
+      -D USE_LIBHYPHEN=OFF            \
+      -D ENABLE_GAMEPAD=OFF           \
+      -D ENABLE_MINIBROWSER=ON        \
+      -D ENABLE_DOCUMENTATION=OFF     \
+      -D ENABLE_WEBDRIVER=OFF         \
+      -D USE_WOFF2=OFF                \
+      -D USE_GTK4=OFF                 \
+      -D ENABLE_BUBBLEWRAP_SANDBOX=ON \
+      -W no-dev -G Ninja ..           &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir -vp build &amp;&amp;
 cd        build &amp;&amp;
 
-cmake -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_SKIP_RPATH=ON       \
-      -DPORT=GTK                  \
-      -DLIB_INSTALL_DIR=/usr/lib  \
-      -DUSE_LIBHYPHEN=OFF         \
-      -DENABLE_GAMEPAD=OFF        \
-      -DENABLE_MINIBROWSER=ON     \
-      -DENABLE_DOCUMENTATION=OFF  \
-      -DUSE_WOFF2=OFF             \
-      -DUSE_GTK4=OFF              \
-      -DUSE_JPEGXL=OFF            \
-      -DUSE_WPE_RENDERER=ON       \
-      -DENABLE_JOURNALD_LOG=OFF   \
-      -DENABLE_BUBBLEWRAP_SANDBOX=ON \
-      -Wno-dev -G Ninja ..        &amp;&amp;
+cmake -D CMAKE_BUILD_TYPE=Release     \
+      -D CMAKE_INSTALL_PREFIX=/usr    \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON  \
+      -D PORT=GTK                     \
+      -D LIB_INSTALL_DIR=/usr/lib     \
+      -D USE_LIBBACKTRACE=OFF         \
+      -D USE_LIBHYPHEN=OFF            \
+      -D ENABLE_GAMEPAD=OFF           \
+      -D ENABLE_MINIBROWSER=ON        \
+      -D ENABLE_DOCUMENTATION=OFF     \
+      -D ENABLE_WEBDRIVER=OFF         \
+      -D USE_WOFF2=OFF                \
+      -D USE_GTK4=OFF                 \
+      -D ENABLE_JOURNALD_LOG=OFF      \
+      -D ENABLE_BUBBLEWRAP_SANDBOX=ON \
+      -W no-dev -G Ninja ..           &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -235,64 +210,45 @@ class="username">root</systemitem>&quot;:
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Como a opção &quot;<option>-DENABLE_DOCUMENTATION=OFF</option>&quot; é
-usada, a documentação não é reconstruída nem instalada agora. Se precisar da
-documentação, [então] você pode, ou instalar o &quot;<xref
-linkend='gi-docgen'/>&quot; e remover essa opção do comando
-&quot;<command>cmake</command>&quot;, ou instalar a documentação pré
-construída:
-    </para>
-
-<screen role='root'><userinput>install -vdm755 /usr/share/gtk-doc/html/{jsc-glib,webkit2gtk{,-web-extension}}-4.1 &amp;&amp;
-install -vm644  ../Documentation/jsc-glib-4.1/*               \
-                /usr/share/gtk-doc/html/jsc-glib-4.1         &amp;&amp;
-install -vm644  ../Documentation/webkit2gtk-4.1/*            \
-                /usr/share/gtk-doc/html/webkit2gtk-4.1       &amp;&amp;
-install -vm644  ../Documentation/webkit2gtk-web-extension-4.1/* \
-                /usr/share/gtk-doc/html/webkit2gtk-web-extension-4.1</userinput></screen>
-
-    <para>
       Se você quiser instalar a versão GTK4 do
 <application>WebKitGTK</application>, execute os seguintes comandos:
     </para>
 
 <screen revision="systemd"><userinput>rm -rf * .[^.]* &amp;&amp;
 
-cmake -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_SKIP_RPATH=ON       \
-      -DPORT=GTK                  \
-      -DLIB_INSTALL_DIR=/usr/lib  \
-      -DUSE_LIBHYPHEN=OFF         \
-      -DENABLE_GAMEPAD=OFF        \
-      -DENABLE_MINIBROWSER=ON     \
-      -DENABLE_DOCUMENTATION=OFF  \
-      -DUSE_WOFF2=OFF             \
-      -DUSE_GTK4=ON               \
-      -DUSE_JPEGXL=OFF            \
-      -DUSE_WPE_RENDERER=ON       \
-      -DENABLE_BUBBLEWRAP_SANDBOX=ON \
-      -Wno-dev -G Ninja ..        &amp;&amp;
+cmake -D CMAKE_BUILD_TYPE=Release     \
+      -D CMAKE_INSTALL_PREFIX=/usr    \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON  \
+      -D PORT=GTK                     \
+      -D LIB_INSTALL_DIR=/usr/lib     \
+      -D USE_LIBBACKTRACE=OFF         \
+      -D USE_LIBHYPHEN=OFF            \
+      -D ENABLE_GAMEPAD=OFF           \
+      -D ENABLE_MINIBROWSER=ON        \
+      -D ENABLE_DOCUMENTATION=OFF     \
+      -D USE_WOFF2=OFF                \
+      -D USE_GTK4=ON                  \
+      -D ENABLE_BUBBLEWRAP_SANDBOX=ON \
+      -W no-dev -G Ninja ..           &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>rm -rf * .[^.]* &amp;&amp;
 
-cmake -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_SKIP_RPATH=ON       \
-      -DPORT=GTK                  \
-      -DLIB_INSTALL_DIR=/usr/lib  \
-      -DUSE_LIBHYPHEN=OFF         \
-      -DENABLE_GAMEPAD=OFF        \
-      -DENABLE_MINIBROWSER=ON     \
-      -DENABLE_DOCUMENTATION=OFF  \
-      -DUSE_WOFF2=OFF             \
-      -DUSE_GTK4=ON               \
-      -DUSE_JPEGXL=OFF            \
-      -DUSE_WPE_RENDERER=ON       \
-      -DENABLE_JOURNALD_LOG=OFF   \
-      -DENABLE_BUBBLEWRAP_SANDBOX=ON \
-      -Wno-dev -G Ninja ..        &amp;&amp;
+cmake -D CMAKE_BUILD_TYPE=Release     \
+      -D CMAKE_INSTALL_PREFIX=/usr    \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON  \
+      -D PORT=GTK                     \
+      -D LIB_INSTALL_DIR=/usr/lib     \
+      -D USE_LIBBACKTRACE=OFF         \
+      -D USE_LIBHYPHEN=OFF            \
+      -D ENABLE_GAMEPAD=OFF           \
+      -D ENABLE_MINIBROWSER=ON        \
+      -D ENABLE_DOCUMENTATION=OFF     \
+      -D USE_WOFF2=OFF                \
+      -D USE_GTK4=ON                  \
+      -D ENABLE_JOURNALD_LOG=OFF      \
+      -D ENABLE_BUBBLEWRAP_SANDBOX=ON \
+      -W no-dev -G Ninja ..           &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -301,6 +257,17 @@ class="username">root</systemitem>&quot;:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para>
+      Como a opção <option>-D ENABLE_DOCUMENTATION=OFF</option> é usada, a
+documentação não é reconstruída nem instalada agora. Se precisar da
+documentação, você pode, ou instalar o <xref linkend='gi-docgen'/> e remover
+essa opção do comando <command>cmake</command>, ou instalar a documentação
+pré construída (somente para a versão GTK-4):
+    </para>
+
+<screen role='root'><userinput>install -vdm755 /usr/share/gtk-doc/html &amp;&amp;
+cp -rv ../Documentation/* /usr/share/gtk-doc/html</userinput></screen>
 
   </sect2>
 
@@ -314,49 +281,65 @@ class="username">root</systemitem>&quot;:
       <command>sed ... TextCheckerEnchant.cpp</command>: This command
       is needed to allow the build to complete with enchant-2.x.
     </para> -->
-<para>
-      <parameter>-DUSE_LIBHYPHEN=OFF</parameter>: Essa chave desabilita a
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-skip-install-rpath.xml"/>
+
+    <para>
+      <parameter>-D USE_LIBBACKTRACE=OFF</parameter>: Essa chave desabilita o uso
+de libbacktrace para despejar um rastreamento de pilha quando uma falha
+acontece. Você precisa instalar o &libbacktrace; se desejar habilitá-la
+(substituindo OFF por ON ou apenas removendo a chave).
+    </para>
+
+    <para>
+      <parameter>-D USE_LIBHYPHEN=OFF</parameter>: Essa chave desabilita a
 implementação padrão de hifenização automática. Você precisa instalar o
-&quot;<ulink
-url="https://sourceforge.net/projects/hunspell/files/Hyphen/">Hyphen</ulink>&quot;
-se desejar habilitá-la (substituindo &quot;OFF&quot; por &quot;ON&quot; ou
-apenas removendo a chave).
+<ulink
+url="https://sourceforge.net/projects/hunspell/files/Hyphen/">Hyphen</ulink>
+se desejar habilitá-la (substituindo OFF por ON ou apenas removendo a
+chave).
     </para>
 
     <para>
-      <parameter>-DENABLE_DOCUMENTATION=OFF</parameter>: Essa chave desabilita a
-regeneração da documentação. Remova essa chave se você tiver o &quot;<xref
-linkend="gi-docgen"/>&quot; instalado e desejar gerar novamente a
-documentação.
+      <parameter>-D ENABLE_DOCUMENTATION=OFF</parameter>: Essa chave desabilita a
+regeneração da documentação. Remova essa chave se você tiver <xref
+linkend="gi-docgen"/> instalado e desejar gerar novamente a documentação.
     </para>
 
     <para>
-      <parameter>-DENABLE_GAMEPAD=OFF</parameter>: Essa chave desabilita o suporte
-ao &quot;gamepad&quot;. Remova essa chave se você tiver o &quot;<ulink
-url="https://gnome.pages.gitlab.gnome.org/libmanette/">libmanette</ulink>&quot;
-instalado e desejar ativá-lo.
+      <parameter>-D ENABLE_GAMEPAD=OFF</parameter>: Essa chave desabilita suporte
+ao gamepad. Remova essa chave se você tiver <ulink
+url="https://gnome.pages.gitlab.gnome.org/libmanette/">libmanette</ulink>
+instalado e desejar habilitá-lo.
     </para>
 
     <para>
-      <parameter>-DENABLE_MINIBROWSER=ON</parameter>: Essa chave habilita compilar
-e instalar o &quot;MiniBrowser&quot;.
+      <parameter>-D ENABLE_MINIBROWSER=ON</parameter>: Essa chave habilita
+compilar e instalar o MiniBrowser.
     </para>
 
     <para>
-      <parameter>-DUSE_WPE_RENDERER=ON</parameter>: Essa chave usa o renderizador
-&quot;WPE&quot;, que é recomendado pelo(a) desenvolvedor(a).
+      <parameter>-D ENABLE_WEBDRIVER=OFF</parameter>: Essa chave desabilita
+compilar e instalar <command>WebKitWebDriver</command>. Nós a usamos para a
+construção do GTK-3 porque o <command>WebKitWebDriver</command> proveniente
+da construção do GTK-3 será sobrescrito pela construção do GTK-4 de qualquer
+maneira. Remova essa opção se você não planeja construir esse pacote com
+GTK-4.
     </para>
 
-    <para>
-      <parameter>-DUSE_JPEGXL=OFF</parameter>: Essa chave desativa o suporte para
-imagens JPEG-XL. Remova-a se você tiver o pacote opcional <ulink
-url="https://github.com/libjxl/libjxl">libjxl</ulink> instalado.
-    </para>
 
+    <!--
     <para>
+
+      <parameter>-D USE_JPEGXL=OFF</parameter>: This switch turns off support
+      for JPEG-XL images. Remove it if you have the optional package
+      <ulink url="https://github.com/libjxl/libjxl">libjxl</ulink> installed.
+    </para>
+-->
+<para>
       <!-- Note: This works well on both i686 and x86_64. -renodr -->
-<parameter>-DENABLE_BUBBLEWRAP_SANDBOX=ON</parameter>: Essa chave habilita o
-sandbox Bubblewrap, que ajuda a mitigar o impacto da maioria das
+<parameter>-D ENABLE_BUBBLEWRAP_SANDBOX=ON</parameter>: Essa chave habilita
+o sandbox Bubblewrap, que ajuda a mitigar o impacto da maioria das
 vulnerabilidades de segurança nesse pacote. Mude essa chave para OFF se você
 não quiser instalar <xref linkend="bubblewrap" role="nodep"/>, <xref
 linkend='libseccomp' role="nodep"/> ou <xref linkend="xdg-dbus-proxy"
@@ -365,31 +348,37 @@ role="nodep"/>, mas observe que isso possivelmente te coloque em risco.
     </para>
 
     <para revision="sysv">
-      <parameter>-DENABLE_JOURNALD_LOG=OFF</parameter>: Essa chave desabilita o
-uso do diário do &quot;systemd&quot; para registrar erros e informações de
-depuração, uma vez que ele não está disponível em sistemas &quot;SysV&quot;.
+      <parameter>-D ENABLE_JOURNALD_LOG=OFF</parameter>: Essa chave desabilita
+usar o diário do systemd para registrar erros e informações de depuração,
+uma vez que ele não está disponível em sistemas SysV.
     </para>
 
     <para>
-      <option>-DUSE_SYSTEM_MALLOC=ON</option>: Essa chave habilita construir
-contra o &quot;<application>malloc</application>&quot; instalado no sistema.
+      <option>-D USE_SYSTEM_MALLOC=ON</option>: Essa chave habilita construir
+contra o <application>malloc</application> instalado no sistema.
     </para>
 
     <para>
-      <option>-DENABLE_GEOLOCATION=OFF</option>: Use essa chave se você não quiser
-instalar o &quot;<xref linkend="geoclue2"/>&quot;.
+      <option>-D ENABLE_GEOLOCATION=OFF</option>: Use essa chave se você não
+quiser instalar o <xref linkend="geoclue2"/>.
     </para>
 
     <para>
-      <option>-DUSE_AVIF=OFF</option>: Use essa chave se você não quiser instalar
+      <option>-D USE_AVIF=OFF</option>: Use essa chave se você não quiser instalar
 <xref linkend="libavif"/>. Observe que você não terá suporte para imagens
 AVIF se fizer isso.
     </para>
 
     <para>
-      <option>-DUSE_WOFF2=ON</option>: Use essa chave se o pacote opcional
-&quot;<xref linkend="woff2"/>&quot; estiver instalado. Isso adiciona suporte
-adicional para fontes.
+      <option>-D USE_WOFF2=ON</option>: Use essa chave se o pacote opcional <xref
+linkend="woff2"/> estiver instalado. Isso adiciona suporte adicional para
+fontes.
+    </para>
+
+    <para>
+      <option>-D USE_JPEGXL=OFF</option>: Use essa chave se o pacote recomendado
+<xref linkend="libjxl"/> não estiver instalado. Observe que você não terá
+suporte para imagens JPEG XL se essa opção for passada.
     </para>
 
   </sect2>
@@ -416,8 +405,10 @@ libwebkit2gtk-4.1.so e libwebkitgtk-6.0.so
         </seg>
         <seg>
           /usr/include/webkitgtk-4.1, /usr/include/webkitgtk-6.0,
-/usr/lib{,exec}/webkit2gtk-4.1, /usr/lib{,exec}/webkitgtk-6.0 e
+/usr/lib{,exec}/webkit2gtk-4.1, /usr/lib{,exec}/webkitgtk-6.0,
 /usr/share/gtk-doc/html/{jsc-glib,webkit2gtk{,-web-extension}}-4.1
+(opcional) e
+/usr/share/gtk-doc/html/{jsc-glib,webkit2gtk{,-web-process-extension}}-6.0
         </seg>
       </seglistitem>
     </segmentedlist>

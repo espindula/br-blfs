@@ -6,10 +6,11 @@
 
   <!ENTITY appstream-download-http "https://www.freedesktop.org/software/appstream/releases/AppStream-&appstream-version;.tar.xz">
   <!ENTITY appstream-download-ftp  "">
-  <!ENTITY appstream-md5sum        "a1122ba2d3c41ba694f00844c84dddd7">
-  <!ENTITY appstream-size          "2,6 MB">
-  <!ENTITY appstream-buildsize     "34 MB">
-  <!ENTITY appstream-time          "0,3 UPC (Usando paralelismo=4)">
+  <!ENTITY appstream-md5sum        "8db15579a7b25acca99677ddc6a12b68">
+  <!ENTITY appstream-size          "2,5 MB">
+  <!ENTITY appstream-buildsize     "30 MB">
+  <!ENTITY appstream-time          "0,5 UPC (Com testes; ambos usando paralelismo=4)">
+
 ]>
 
 <sect1 id="appstream" xreflabel="AppStream-&appstream-version;">
@@ -30,10 +31,7 @@ ferramenta que é útil para recuperar metadados de software e torná-los
 facilmente acessíveis para programas que precisam deles.
     </para>
 
-    
-    <!-- Remember to update the org.linuxfromscratch.lfs.xml file in
-         configuration section when tagging this.  -->
-&lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -80,7 +78,7 @@ linkend="libxml2"/>, <xref linkend="libxmlb"/> e <xref linkend="libyaml"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gi-docgen"/>, &qt5-deps;, <xref linkend="qt6"/>, <ulink
+      <xref linkend="gi-docgen"/>, <xref linkend="qt6"/>, <ulink
 url="https://github.com/openSUSE/daps">DAPS</ulink> e <ulink
 url="https://github.com/zvelo/libstemmer">libstemmer</ulink>
     </para>
@@ -107,8 +105,8 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -Dapidocs=false     \
-            -Dstemming=false    .. &amp;&amp;
+            -D apidocs=false    \
+            -D stemming=false   .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -131,7 +129,7 @@ mv -v /usr/share/doc/appstream{,-&appstream-version;}</userinput></screen>
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-Dapidocs=false</parameter>: Essa chave desabilita construir a
+      <parameter>-D apidocs=false</parameter>: Essa chave desabilita construir a
 documentação da API. Remova-a se você tiver <xref linkend="gi-docgen"
 role="nodep"/> instalado e desejar regerar a documentação da API. Quando a
 documentação da API não for regerada, uma cópia pré construída será
@@ -139,21 +137,22 @@ instalada de qualquer maneira.
     </para>
 
     <para>
-      <parameter>-Dstemming=false</parameter>: Essa chave desabilita o suporte de
+      <parameter>-D stemming=false</parameter>: Essa chave desabilita o suporte de
 lematização. Remova essa chave se você tiver <ulink
 url="https://github.com/zvelo/libstemmer">libstemmer</ulink> instalado e
 quiser pesquisas mais rápidas.
     </para>
     
     <para>
-      <option>-Dqt5=true</option>: Use essa opção se você tiver &qt5-deps;
+      <option>-D qt5=true</option>: Use essa opção se você tiver &qt5-deps;
 instalado e quiser construir suporte para aplicativos Qt-5 nesse pacote.
     </para>
     
     <para>
-      <option>-Dqt=true</option>: Use essa opção se você tiver <xref linkend="qt6"
-role="nodep"/> instalado e quiser construir suporte para aplicativos Qt6
-nesse pacote. Essa opção conflita com <option>-Dqt5=true</option>.
+      <option>-D qt=true</option>: Use essa opção se você tiver <xref
+linkend="qt6" role="nodep"/> instalado e quiser construir suporte para
+aplicativos Qt6 nesse pacote. Essa opção conflita com <option>-D
+qt5=true</option>.
     </para>
 
   </sect2>
@@ -190,31 +189,32 @@ cat > /usr/share/metainfo/org.linuxfromscratch.lfs.xml &lt;&lt; EOF
 &lt;component type="operating-system"&gt;
   &lt;id&gt;org.linuxfromscratch.lfs&lt;/id&gt;
   &lt;name&gt;Linux From Scratch&lt;/name&gt;
-  &lt;summary&gt;Um sistema Linux personalizado construído inteiramente a partir do fonte&lt;/summary&gt;
+  &lt;summary&gt;A customized Linux system built entirely from source&lt;/summary&gt;
   &lt;description&gt;
     &lt;p&gt;
-      Linux From Scratch (LFS) é um projeto que te fornece instruções 
-      passo a passo para construir teu próprio sistema Linux 
-      personalizado inteiramente a partir do fonte.
+      Linux From Scratch (LFS) is a project that provides you with
+      step-by-step instructions for building your own customized Linux
+      system entirely from source.
     &lt;/p&gt;
   &lt;/description&gt;
   &lt;url type="homepage"&gt;https://www.linuxfromscratch.org/lfs/&lt;/url&gt;
   &lt;metadata_license&gt;MIT&lt;/metadata_license&gt;
   &lt;developer id='linuxfromscratch.org'&gt;
-    &lt;name&gt;Os(As) Editores(as) do Linux From Scratch&lt;/name&gt;
+    &lt;name&gt;The Linux From Scratch Editors&lt;/name&gt;
   &lt;/developer&gt;
 
   &lt;releases&gt;
-    &lt;release version="12.2" type="development" date="2024-09-01"&gt;
+    &lt;release version="&lfs-appstream-meta-ver;" type="&lfs-appstream-meta-type;" date="&lfs-appstream-meta-date;"&gt;
       &lt;description&gt;
-        &lt;p&gt;O próximo lançamento do Linux From Scratch.&lt;/p&gt;
+        &lt;p&gt;Now contains Binutils 2.43.1, GCC-14.2.0, Glibc-2.40,
+        and Linux kernel 6.10.&lt;/p&gt;
       &lt;/description&gt;
     &lt;/release&gt;
 
     &lt;release version="12.1" type="stable" date="2024-03-01"&gt;
       &lt;description&gt;
-        &lt;p&gt;Agora contém Binutils 2.42, GCC-13.2.0, Glibc-2.39 e o núcleo Linux
-        6.7.&lt;/p&gt;
+        &lt;p&gt;Now contains Binutils 2.42, GCC-13.2.0, Glibc-2.39,
+        and Linux kernel 6.7.&lt;/p&gt;
       &lt;/description&gt;
     &lt;/release&gt;
   &lt;/releases&gt;
@@ -240,7 +240,7 @@ EOF</userinput></screen>
           libappstream.so
         </seg>
         <seg>
-          /usr/include/appstream, /usr/share/doc/appstream-&version; e
+          /usr/include/appstream, /usr/share/doc/appstream-&appstream-version; e
 /usr/share/installed-tests/appstream
         </seg>
       </seglistitem>

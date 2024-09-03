@@ -6,10 +6,10 @@
 
   <!ENTITY bluez-download-http "&kernel-dl;/linux/bluetooth/bluez-&bluez-version;.tar.xz">
   <!ENTITY bluez-download-ftp  "">
-  <!ENTITY bluez-md5sum        "fcacd4d6d65f7da141977a2beb1ba78f">
-  <!ENTITY bluez-size          "2,3 MB">
-  <!ENTITY bluez-buildsize     "81 MB (adicionar 84 MB para testes)">
-  <!ENTITY bluez-time          "0,4 UPC (usando paralelismo = 4; com os testes)">
+  <!ENTITY bluez-md5sum        "02878560e89165540c4a0b8c060d1092">
+  <!ENTITY bluez-size          "2,4 MB">
+  <!ENTITY bluez-buildsize     "168 MB (com testes)">
+  <!ENTITY bluez-time          "0,7UPC (usando paralelismo = 4; com os testes)">
 ]>
 
 <sect1 id="bluez" xreflabel="BlueZ-&bluez-version;">
@@ -23,14 +23,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a "BlueZ"</title>
+    <title>Introdução ao "BlueZ"</title>
 
     <para>
       O pacote <application>BlueZ</application> contém a pilha de protocolos
 "Bluetooth" para Linux.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -65,18 +65,21 @@
         </para>
       </listitem>
     </itemizedlist>
+    
 
-    <bridgehead renderas="sect3" revision="sysv">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3" revision="sysv">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact" revision="sysv">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/bluez-&bluez-version;-obexd_without_systemd-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/bluez-&bluez-version;-obexd_without_systemd-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do "BlueZ"</bridgehead>
+      -->
+<bridgehead renderas="sect3">Dependências do "BlueZ"</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -114,7 +117,6 @@ recompile o núcleo, se necessário:
     <title>Instalação do "BlueZ"</title>
 
 
-
     <!--
     <para>
 
@@ -122,12 +124,13 @@ recompile o núcleo, se necessário:
     </para>
 
 <screen><userinput>sed 's/pause(/bluez_&amp;/' -i profiles/audio/media.c</userinput></screen>
--->
-<para revision="sysv">Agora, faça algumas mudanças necessárias para sistemas "SystemV":</para>
+
+    <para revision="sysv">Now, make some changes needed for SystemV systems:</para>
 
 <screen revision="sysv"><userinput>patch -Np1 -i ../bluez-&bluez-version;-obexd_without_systemd-1.patch</userinput></screen>
 
-    <para>
+-->
+<para>
       Instale <application>BlueZ</application> executando os seguintes comandos:
     </para>
 
@@ -151,27 +154,31 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
 ln -svf ../libexec/bluetooth/bluetoothd /usr/sbin</userinput></screen>
 
     <para>
-      Instale o principal arquivo de configuração como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      Instale o principal arquivo de configuração como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>install -v -dm755 /etc/bluetooth &amp;&amp;
 install -v -m644 src/main.conf /etc/bluetooth/main.conf</userinput></screen>
 
     <para>
-      Se desejado, [então] instale a documentação da "API" como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
+      Se desejado, instale a documentação da API como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>install -v -dm755 /usr/share/doc/bluez-&bluez-version; &amp;&amp;
 install -v -m644 doc/*.txt /usr/share/doc/bluez-&bluez-version;</userinput></screen>
+
+    <para revision="sysv">
+      Instale um serviço ausente do D-Bus como o(a) usuário(a) &root;:
+    </para>
+
+ <screen role="root" revision='sysv'><userinput>install -m644 ./obexd/src/org.bluez.obex.service /usr/share/dbus-1/services</userinput></screen>
 
   </sect2>
 
@@ -216,15 +223,14 @@ conveniente.
 durante a instalação. Além disso, existem três arquivos de configuração
 suplementares. "/etc/sysconfig/bluetooth" é instalado como parte do script
 de inicialização abaixo. Além disso, você pode opcionalmente instalar o
-seguinte, como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+seguinte, como o(a) usuário(a) &root;:
       </para>
 
       <para revision="systemd">
         <filename>/etc/bluetooth/main.conf</filename> é instalado automaticamente
 durante a instalação. Além disso, existem dois arquivos de configuração
 suplementares. Você pode opcionalmente instalar os seguintes arquivos como
-o(a) usuário(a) <systemitem class="username">root</systemitem>:
+o(a) usuário(a) &root;:
      </para>
 
 <screen role="root"><userinput>cat > /etc/bluetooth/rfcomm.conf &lt;&lt; "EOF"</userinput>
@@ -267,8 +273,7 @@ originário do pacote <xref linkend="bootscripts"/>.
       <para revision="systemd">
         Para iniciar o processo de segundo plano <command>bluetoothd</command> na
 inicialização, habilite a unidade do systemd instalada anteriormente
-executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+executando o seguinte comando como o(a) usuário(a) &root;:
       </para>
 
 <screen role="root" revision="systemd"><userinput>systemctl enable bluetooth</userinput></screen>
@@ -278,7 +283,7 @@ class="username">root</systemitem>:
 sessão de usuário(a) (para suportar alguns aplicativos "Bluetooth" que o
 utilizam), habilite a unidade do "systemd" instalada anteriormente para
 todos(as) os(as) usuários(as) executando o seguinte comando como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+usuário(a) &root;:
        </para>
 
 <screen role="root" revision="systemd"><userinput>systemctl enable --global obex</userinput></screen>
@@ -352,7 +357,7 @@ hex2hcd, l2ping, l2test, mpris-proxy e rctest
         <term><command>bluemoon</command></term>
         <listitem>
           <para>
-            é um utilitário de configuração do "Bluemoon"
+            é um utilitário de configuração do Bluetooth
           </para>
           <indexterm zone="bluez bluemoon">
             <primary sortas="b-bluemoon">bluemoon</primary>

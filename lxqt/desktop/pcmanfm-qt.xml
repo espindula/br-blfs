@@ -4,19 +4,18 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY pcmanfm-qt-download-http "https://github.com/lxqt/pcmanfm-qt/releases/download/&pcmanfm-qt-version;/pcmanfm-qt-&pcmanfm-qt-version;.tar.xz">
+  <!ENTITY pcmanfm-qt-download-http "https://github.com/lxqt/pcmanfm-qt/releases/download/&lxqt-version;/pcmanfm-qt-&lxqt-version;.tar.xz">
   <!ENTITY pcmanfm-qt-download-ftp  "">
-  <!ENTITY pcmanfm-qt-md5sum        "91dfd38d6726ee3ef855beee5a41f8f3">
-  <!ENTITY pcmanfm-qt-size          "384 KB">
-  <!ENTITY pcmanfm-qt-buildsize     "14 MB">
+  <!ENTITY pcmanfm-qt-md5sum        "163f512c5ad0994394fd316a0caaef92">
+  <!ENTITY pcmanfm-qt-size          "388 KB">
+  <!ENTITY pcmanfm-qt-buildsize     "18 MB">
   <!ENTITY pcmanfm-qt-time          "0,4 UPC">
 ]>
 
-<sect1 id="pcmanfm-qt" xreflabel="pcmanfm-qt-&pcmanfm-qt-version;">
+<sect1 id="pcmanfm-qt" xreflabel="pcmanfm-qt-&lxqt-version;">
   <?dbhtml filename="pcmanfm-qt.html"?>
 
-
-  <title>pcmanfm-qt-&pcmanfm-qt-version;</title>
+  <title>pcmanfm-qt-&lxqt-version;</title>
 
   <indexterm zone="pcmanfm-qt">
     <primary sortas="a-pcmanfm-qt">pcmanfm-qt</primary>
@@ -32,7 +31,7 @@ gerenciador de ícones da área de trabalho (uma porta
 <application>libfm</application>).
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -72,8 +71,8 @@ gerenciador de ícones da área de trabalho (uma porta
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="liblxqt"/>, <xref linkend="libfm-qt"/> e <xref
-linkend="lxqt-menu-data"/>
+      <xref linkend="layer-shell-qt"/>, <xref linkend="liblxqt"/>, <xref
+linkend="libfm-qt"/> e <xref linkend="lxqt-menu-data"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -89,16 +88,31 @@ ausentes em vários lugares)
     <title>Instalação do pcmanfm-qt</title>
 
     <para>
+      Se libLayerShellQtInterface.so for instalado em /opt, ajude esse pacote a
+encontrá-lo. Como o(a) usuário(a) &root;:
+    </para>
+
+<screen><userinput>if [   -e /opt/kf6/lib/libLayerShellQtInterface.so -a \
+     ! -e /usr/lib/libLayerShellQtInterface.so ]; then
+
+    ln -sv /opt/kf6/lib/libLayerShellQtInterface.so \
+           /usr/lib/libLayerShellQtInterface.so
+fi</userinput></screen>
+
+
+
+
+    <para>
       Instale o <application>pcmanfm-qt</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>mkdir -v build &amp;&amp;
-cd       build &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      ..       &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      ..                           &amp;&amp;
 make</userinput></screen>
 
     <para>

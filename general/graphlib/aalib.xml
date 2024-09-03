@@ -23,14 +23,14 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução a AAlib</title>
+    <title>Introdução ao AAlib</title>
 
     <para>
       <application>AAlib</application> é uma biblioteca para renderizar qualquer
 gráfico em arte ASCII.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -94,6 +94,33 @@ linkend='xorg7-font'/>:
     -i src/aax.c</userinput></screen>
 
     <para>
+      Corrija o uso excessivo de algumas estruturas internas de dados do ncurses
+para permitir construir esse pacote com ncurses-6.5 ou posterior:
+    </para>
+
+    <screen><userinput>sed 's/stdscr->_max\([xy]\) + 1/getmax\1(stdscr)/' \
+    -i src/aacurses.c</userinput></screen>
+
+    <para>
+      Para permitir construir esse pacote com GCC-14 ou posterior, adicione
+algumas diretivas <literal>#include</literal> ausentes e corrija uma
+instrução <literal>return</literal> incorreta para tornar o código
+compatível com C99. Em seguida, gere novamente o conjunto de comandos
+sequenciais <command>configure</command> para garantir que o código C para
+avaliar o sistema também seja compatível com C99:
+    </para>
+
+<screen><userinput>sed -i '1i#include &lt;stdlib.h&gt;'                            \
+    src/aa{fire,info,lib,linuxkbd,savefont,test,regist}.c &amp;&amp;
+sed -i '1i#include &lt;string.h&gt;'                            \
+    src/aa{kbdreg,moureg,test,regist}.c                   &amp;&amp;
+sed -i '/X11_KBDDRIVER/a#include &lt;X11/Xutil.h&gt;'           \
+    src/aaxkbd.c                                          &amp;&amp;
+sed -i '/rawmode_init/,/^}/s/return;/return 0;/'          \
+    src/aalinuxkbd.c                                      &amp;&amp;
+autoconf</userinput></screen>
+
+    <para>
       Instale <application>AAlib</application> executando os seguintes comandos:
     </para>
 
@@ -127,7 +154,7 @@ make</userinput></screen>
       <seglistitem>
         <seg>aafire, aainfo, aalib-config, aasavefont e aatest</seg>
         <seg>libaa.so</seg>
-        <seg>Nenhum</seg>
+        <seg>Nenhum(a)</seg>
       </seglistitem>
     </segmentedlist>
 

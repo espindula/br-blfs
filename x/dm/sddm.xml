@@ -6,9 +6,9 @@
 
   <!ENTITY sddm-download-http "https://github.com/sddm/sddm/archive/v&sddm-version;/sddm-&sddm-version;.tar.gz">
   <!ENTITY sddm-download-ftp  "">
-  <!ENTITY sddm-md5sum        "7af67d5fb767639861d35c80eb4e1191">
+  <!ENTITY sddm-md5sum        "e32a35c282d9be3360737eefbe25b5fa">
   <!ENTITY sddm-size          "3,4 MB">
-  <!ENTITY sddm-buildsize     "22 MB">
+  <!ENTITY sddm-buildsize     "24 MB">
   <!ENTITY sddm-time          "0,3 UPC (Usando paralelismo=4)">
 ]>
 
@@ -29,7 +29,7 @@
 baseado em <application>Qt</application> e QML.
     </para>
 
-    &lfs121_checked;
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -69,7 +69,8 @@ baseado em <application>Qt</application> e QML.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cmake"/>, <xref linkend="extra-cmake-modules"/> e &qt5-deps;
+      <xref linkend="cmake"/>, <xref linkend="extra-cmake-modules"/> e <xref
+linkend="qt6"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -134,27 +135,29 @@ useradd  -c "Processo de Segundo Plano do sddm" \
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DENABLE_JOURNALD=OFF       \
-      -DNO_SYSTEMD=ON             \
-      -DRUNTIME_DIR=/run/sddm     \
-      -DUSE_ELOGIND=ON            \
-      -DBUILD_MAN_PAGES=ON        \
-      -DDATA_INSTALL_DIR=/usr/share/sddm \
-      -DDBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf \
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D ENABLE_JOURNALD=OFF       \
+      -D NO_SYSTEMD=ON             \
+      -D RUNTIME_DIR=/run/sddm     \
+      -D USE_ELOGIND=ON            \
+      -D BUILD_MAN_PAGES=ON        \
+      -D BUILD_WITH_QT6=ON         \
+      -D DATA_INSTALL_DIR=/usr/share/sddm \
+      -D DBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf \
       .. &amp;&amp;
 make</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DRUNTIME_DIR=/run/sddm     \
-      -DBUILD_MAN_PAGES=ON        \
-      -DDATA_INSTALL_DIR=/usr/share/sddm \
-      -DDBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf \
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D RUNTIME_DIR=/run/sddm     \
+      -D BUILD_MAN_PAGES=ON        \
+      -D BUILD_WITH_QT6=ON         \
+      -D DATA_INSTALL_DIR=/usr/share/sddm \
+      -D DBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf \
       .. &amp;&amp;
 make</userinput></screen>
 
@@ -176,25 +179,26 @@ install -v -dm755 -o sddm -g sddm /var/lib/sddm
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-DCMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
+      <parameter>-D CMAKE_BUILD_TYPE=Release</parameter>: Essa chave é usada para
 aplicar otimizações adicionais do compilador.
     </para>
 
     <para revision="sysv">
-      <parameter>-DENABLE_JOURNALD=OFF</parameter> e
-<parameter>-DNO_SYSTEMD=ON</parameter>: Essas chaves são usadas porque essa
-versão do BLFS não suporta <application>systemd</application>.
+      <parameter>-D ENABLE_JOURNALD=OFF</parameter> e <parameter>-D
+NO_SYSTEMD=ON</parameter>: Essas chaves são usadas porque essa versão do
+BLFS não suporta <application>systemd</application>.
     </para>
 
     <para>
-      <parameter>-DDBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf</parameter>:
+      <parameter>-D
+DBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf</parameter>:
 Essa chave evita que o arquivo <filename>
 /etc/dbus-1/system.d/org.freedesktop.DisplayManager.conf</filename> seja
 sobrescrito, pois ele possivelmente seja usado por outros DMs.
     </para>
 
     <para>
-      <parameter>-DBUILD_MAN_PAGES=ON</parameter>: Essa chave é usada para
+      <parameter>-D BUILD_MAN_PAGES=ON</parameter>: Essa chave é usada para
 construir e instalar páginas de manual.
     </para>
 
@@ -470,8 +474,9 @@ maya. Existe também um tema padrão, que não está presente nesse
 diretório. Você consegue instalar outros temas nesse diretório. Para a
 finalidade de mudar o tema, você precisa editar o
 <filename>/etc/sddm.conf</filename>, para mudar o tema padrão (vazio),
-substituindo <quote>Current=</quote> por <quote>Current=&lt;novo
-tema&gt;</quote>, por exemplo, <quote>Current=maldives</quote>.
+substituindo <literal>Current=</literal> por
+<literal>Current=<replaceable>&lt;novo tema&gt;</replaceable></literal>, por
+exemplo, <literal>Current=maldives</literal>.
       </para>
 
       <para>
