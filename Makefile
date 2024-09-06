@@ -267,12 +267,12 @@ release: $(SSH_AGENT) genhtml genpdf gentar genepub
 		cd ../html-$$lang-sysv ;\
 		rsync --progress --recursive * $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/view/blfs-$(MILESTONE)-$$lang/ ;\
 		cd .. ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang.pdf $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang-systemd.pdf $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang-HTML.tar.bz2 $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
-		rsync --progress BLFS-$(MILESTONE)-systemd-$$lang-HTML.tar.bz2 $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
-		rsync --progress BLFS-$(MILESTONE)-$$lang.epub $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
-		rsync --progress BLFS-$(MILESTONE)-systemd-$$lang.epub $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
+		rsync --progress BLFS-SYSV-BOOK-$(MILESTONE)-$$lang.pdf $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
+		rsync --progress BLFS-SYSD-BOOK-$(MILESTONE)-$$lang.pdf $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
+		rsync --progress BLFS-SYSV-BOOK-$(MILESTONE)-$$lang-HTML.tar.bz2 $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
+		rsync --progress BLFS-SYSD-BOOK-$(MILESTONE)-$$lang-HTML.tar.bz2 $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
+		rsync --progress BLFS-SYSV-BOOK-$(MILESTONE)-$$lang.epub $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)/ ;\
+		rsync --progress BLFS-SYSD-BOOK-$(MILESTONE)-$$lang.epub $(USER)@www.linuxfromscratch.org:/srv/www/www.$$lang.linuxfromscratch.org/archives/BLFS-$(MILESTONE)-systemd/ ;\
 	done
 
 commit: weblate-up
@@ -315,11 +315,6 @@ blfsgen-fr/general.ent: $(ORIGDIR)/general.ent
 	    -e "s|Unknown|Inconnu|g" \
 	    -e "s|<!ENTITY lfs\([0-9]+\)\([0-9]\)_checked [^\r]*\r[^\r]*\">|<!ENTITY lfs\1\2_checked \"<para>Ce paquet est connu pour se construire correctement sur une plateforme LFS-\1.\2.</para>\">|g" \
 	    -e "s|<!ENTITY lfs\([0-9]\)\([0-9]\)_built [^\r]*\r[^\r]*\">|<!ENTITY lfs\1\2_built \"<para>Ce paquet est connu pour se construire correctement sur une plateforme LFS-\1.\2 mais n'a pas été testé.</para>\">|g" \
-            -e "s|<!ENTITY gcc7_checked [^\r]*\r[^\r]*\">|<!ENTITY gcc7_checked \"<para>Ce paquet est connu pour se construire correctement avec gcc-7.1.</para>\">|g" \
-	    -e "s|<!ENTITY lfssvn_checked [^\r]*\r[^\r]*\">|<!ENTITY lfssvn_checked \"Ce paquet est connu pour se construire correctement sur une plateforme LFS-SVN-\">|g" \
-	    -e "s|<!ENTITY lfssvn_built [^\r]*\">|<!ENTITY lfssvn_checked \"Ce paquet est connu pour se construire correctement sur une plateforme LFS-SVN-\">|g" \
-	    -e "s|<!ENTITY lfssvn_checked2 [^\r]*\">|<!ENTITY lfssvn_checked2 \" .\">|g" \
-	    -e "s|<!ENTITY lfssvn_built2 [^\r]*\">|<!ENTITY lfssvn_built2 \" mais n'a pas été testé.\">|g" \
 	    -e "s|<!ENTITY as_root *\"[^\"]*\">||g" \
 	    -e "s|<!ENTITY \(lfs[0-9]\+_checked\) *\"<note>[^\"]*\">|<!ENTITY \1 \"<note><para>Les versions de développement de BLFS peuvent ne pas arriver à contruire ou à exécuter certains paquets correctement si LFS ou des dépendances ont été mises à jour depuis la dernière version stable des livres.</para></note>\">|g" \
 	    -e "s|<!ENTITY \(lfs[0-9]\+_checked\) *\"<para>[^\"]*LFS \([^ ]*\) platform.</para>\">|<!ENTITY \1 \"<para>Ce paquet est connu pour pouvoir être construit et fonctionner correctement avec une plateform \2.</para>\">|g" \
@@ -327,7 +322,6 @@ blfsgen-fr/general.ent: $(ORIGDIR)/general.ent
 	    -e "s|<!ENTITY gi-doc-disable[ \r]*\"[^\"]*\">|<!ENTITY gi-doc-disable \"permet de construire ce paquet sans installer <xref linkend='gi-docgen'/>. Si vous avez installé <xref linkend='gi-docgen'/> et souhaitez reconstruire et installer la documentation de l'API, une commande <command>meson configure</command> enlèvera cette option.\">|g" \
 	    -e "s|<!ENTITY build-use-internet[ \r]*\"[^\"]*\">|<!ENTITY build-use-internet \"<note><para>Il est nécessaire d'être connecté à internet pour construire ce paquet</para></note>\">|g" \
 	    -e "s|<!ENTITY test-use-internet[ \r]*\"[^\"]*\">|<!ENTITY test-use-internet \"<note><para>Il est nécessaire d'être connecté à internet pour certains tests de ce paquet</para></note>\">|g" \
-	    -e "s|<!ENTITY qt5-deps[ \r]*\"[^\"]*\">|<!ENTITY qt5-deps \"(<xref linkend='qt5'/> ou <xref role='nodep' linkend='qt5-alternate'/>)\">|g" \
 	    -e "s|<!ENTITY gobject-introspection *\"[^\"]*\">|<!ENTITY gobject-introspection \"<xref linkend='glib2'/> (avec GObject Introspection)\">|g" \
 	    -e "s|<!ENTITY berkeley-db *\"\(.*\) (deprecated)\">|<!ENTITY berkeley-db \"\1 (obsolète)\">|g" \
 	    -e "s|<!ENTITY not-katamari *\"[^\"]*\">|<!ENTITY not-katamari \"<para>Ce paquet ne fait pas partie de Xorg Katamari et est seulement fourni comme dépendance d'autres paquets ou pour tester l'installation complète de Xorg.</para>\">|g" \
