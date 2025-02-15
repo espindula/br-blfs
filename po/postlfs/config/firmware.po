@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-05 19:19-0300\n"
-"PO-Revision-Date: 2024-08-25 16:18+0000\n"
+"POT-Creation-Date: 2025-02-15 06:34-0300\n"
+"PO-Revision-Date: 2024-11-17 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/postlfs_config_firmware/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #. type: Content of the linux-firmware-git entity
 #: blfs-en/postlfs/config/firmware.xml:6
@@ -35,25 +35,30 @@ msgstr "Acerca de Firmware"
 #. type: Content of: <sect1><indexterm><primary>
 #: blfs-en/postlfs/config/firmware.xml:16
 #, xml-text
-msgid "/lib/firmware"
-msgstr "/lib/firmware"
+msgid "/usr/lib/firmware"
+msgstr "/usr/lib/firmware"
 
 #. type: Content of: <sect1><para>
 #: blfs-en/postlfs/config/firmware.xml:20
 #, xml-text
 msgid ""
 "On some recent PCs it can be necessary, or desirable, to load firmware to "
-"make them work at their best. There is a directory, <filename "
-"class=\"directory\">/lib/firmware</filename>, where the kernel or kernel "
-"drivers look for firmware images."
+"make them work at their best. The kernel or kernel drivers look for firmware"
+" images in <filename>/lib/firmware</filename>.  But in LFS "
+"<filename>/lib</filename> is a symlink to <filename>usr/lib</filename>, so "
+"the directory containing the firmware files is actually <filename "
+"class='directory'>/usr/lib/firmware</filename>."
 msgstr ""
 "Em alguns PCs recentes, pode ser necessário, ou desejável, carregar firmware"
-" para fazer com que trabalhem no melhor deles. Existe um diretório, "
-"<filename class=\"directory\">/lib/firmware</filename>, onde o núcleo ou os "
-"controladores de núcleo procuram por imagens de firmware."
+" para fazê-los funcionar da melhor forma possível. O núcleo ou os "
+"controladores de núcleo procuram imagens de firmware em "
+"<filename>/lib/firmware</filename>. Mas no LFS <filename>/lib</filename> é "
+"um link simbólico para <filename>usr/lib</filename>, de forma que o "
+"diretório que contém os arquivos de firmware é, na verdade, <filename "
+"class='directory'>/usr/lib/firmware</filename>."
 
 #. type: Content of: <sect1><para>
-#: blfs-en/postlfs/config/firmware.xml:27
+#: blfs-en/postlfs/config/firmware.xml:30
 #, xml-text
 msgid ""
 "Currently, most firmware can be found at a <userinput>git</userinput> "
@@ -71,7 +76,7 @@ msgstr ""
 "navegador da web em <ulink url=\"&sources-anduin-http;/linux-firmware/\"/>."
 
 #. type: Content of: <sect1><para>
-#: blfs-en/postlfs/config/firmware.xml:36
+#: blfs-en/postlfs/config/firmware.xml:39
 #, xml-text
 msgid ""
 "To get the firmware, point a browser to one of the above repositories and "
@@ -88,8 +93,42 @@ msgstr ""
 "<ulink url='&linux-firmware-git;'/>, ou abra essa URL em um navegador e "
 "baixe o instantâneo mais recente listado na tabela <literal>Tag</literal>."
 
+#. type: Content of: <sect1><important><para>
+#: blfs-en/postlfs/config/firmware.xml:50
+#, xml-text
+msgid ""
+"<anchor id='linux-firmware-symlink' xreflabel='create the symlink and "
+"download its target'/> Note that some required firmware files (and "
+"directories) are actually symlinks to other files (or directories).  Those "
+"symlinks are not stored in the Git repository, instead they are documented "
+"in the <filename>WHENCE</filename> file.  Each line beginning with "
+"<literal>Link:</literal> describes a symlink.  If you are downloading an "
+"item you need and it's such a symlink (or in a directory which is such a "
+"symlink), you need to create the symlink manually and download the target.  "
+"On the other hand, if you want all the firmware files, use the "
+"<command>./copy-firmware.sh /usr/lib/firmware</command> command which will "
+"copy the firmware files and create all the symlinks in the "
+"<filename>WHENCE</filename> file, instead of a plain copy command like "
+"<command>cp -r * /usr/lib/firmware/</command>."
+msgstr ""
+"<anchor id='linux-firmware-symlink' xreflabel='criar o link simbólico e "
+"baixar o alvo dele'/> Observe que alguns arquivos de firmware exigidos (e "
+"diretórios) são, na verdade, links simbólicos para outros arquivos (ou "
+"diretórios). Esses links simbólicos não são armazenados no repositório Git; "
+"em vez disso, eles estão documentados no arquivo "
+"<filename>WHENCE</filename>. Cada linha começando com "
+"<literal>Link:</literal> descreve um link simbólico. Se você estiver "
+"baixando um item que precisa e ele for um link simbólico (ou em um diretório"
+" que seja um link simbólico), você precisa criar o link simbólico "
+"manualmente e baixar o alvo. Por outro lado, se você quiser todos os "
+"arquivos de firmware, use o comando <command>./copy-firmware.sh "
+"/usr/lib/firmware</command> que copiará os arquivos de firmware e criará "
+"todos os links simbólicos no arquivo <filename>WHENCE</filename>, em vez de "
+"um comando de cópia simples como <command>cp -r * "
+"/usr/lib/firmware/</command>."
+
 #. type: Content of: <sect1><para>
-#: blfs-en/postlfs/config/firmware.xml:46
+#: blfs-en/postlfs/config/firmware.xml:68
 #, xml-text
 msgid ""
 "For some other firmware, particularly for Intel microcode and certain wifi "
@@ -103,7 +142,7 @@ msgstr ""
 "Internet pelo firmware necessário de vez em quando é necessária."
 
 #. type: Content of: <sect1><para>
-#: blfs-en/postlfs/config/firmware.xml:53
+#: blfs-en/postlfs/config/firmware.xml:75
 #, xml-text
 msgid ""
 "Firmware files are conventionally referred to as blobs because you cannot "
@@ -116,13 +155,13 @@ msgstr ""
 "engenharia reversa."
 
 #. type: Content of: <sect1><para>
-#: blfs-en/postlfs/config/firmware.xml:60
+#: blfs-en/postlfs/config/firmware.xml:82
 #, xml-text
 msgid "Firmware for PCs falls into four categories:"
 msgstr "Firmware para PCs caem em quatro categorias:"
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:66
+#: blfs-en/postlfs/config/firmware.xml:88
 #, xml-text
 msgid ""
 "Updates to the CPU to work around errata, usually referred to as microcode."
@@ -131,32 +170,30 @@ msgstr ""
 "microcódigo."
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:72
+#: blfs-en/postlfs/config/firmware.xml:94
 #, xml-text
 msgid ""
 "Firmware for video controllers. On x86 machines this is required for ATI "
 "devices (Radeon and AMDGPU chips) and may be useful for Intel (Skylake and "
-"later) and Nvidia (Kepler and later) GPUs."
+"later) and NVIDIA (Kepler and later) GPUs."
 msgstr ""
 "Firmware para controladores de vídeo. Em máquinas x86, isso é exigido para "
 "dispositivos ATI (chips Radeon e AMDGPU); e possivelmente seja útil para "
-"GPUs Intel (Skylake e posteriores) e Nvidia (Kepler e posteriores)."
+"GPUs Intel (Skylake e posteriores) e NVIDIA (Kepler e posteriores)."
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:78
+#: blfs-en/postlfs/config/firmware.xml:100
 #, xml-text
 msgid ""
 "ATI Radeon and AMDGPU devices all require firmware to be able to use KMS "
-"(kernel modesetting - the preferred option) as well as for Xorg. For old "
-"radeon chips (before the R600), the firmware is still in the kernel source."
+"(kernel modesetting - the preferred option) as well as for Xorg."
 msgstr ""
-"Os dispositivos \"ATI Radeon\" e \"AMGPU\" todos exigem \"firmware\" para "
-"estarem aptos a usar o \"KMS\" (kernel modesetting - a opção preferida), bem"
-" como para \"Xorg\". Para os antigos chips \"Radeon\" (antes do \"R600\"), o"
-" \"firmware\" ainda está no fonte do núcleo."
+"Dispositivos ATI Radeon e AMDGPU todos exigem firmware para estarem aptos "
+"para usar KMS (kernel modesetting - a opção preferida), bem como para o "
+"Xorg."
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:85
+#: blfs-en/postlfs/config/firmware.xml:105
 #, xml-text
 msgid ""
 "Intel integrated GPUs from Skylake onwards can use firmware for GuC (the "
@@ -181,24 +218,20 @@ msgstr ""
 "linux</ulink>."
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:99
+#: blfs-en/postlfs/config/firmware.xml:119
 #, xml-text
 msgid ""
-"Nvidia GPUs from Kepler onwards require signed firmware, otherwise the "
-"nouveau driver is unable to provide hardware acceleration. Nvidia has now "
-"released firmware up to Ampere (GeForce30 series) to linux-firmware.  Note "
-"that faster clocks than the default are not enabled by the released "
-"firmware."
+"NVIDIA GPUs from Kepler onwards require signed firmware, otherwise the "
+"nouveau driver is unable to provide hardware acceleration. NVIDIA has now "
+"released firmware up to Ada Lovelace (GeForce 40 series) to linux-firmware."
 msgstr ""
-"\"GPUs\" \"Nvidia\" a partir do \"Kepler\" em diante exigem \"firmware\" "
-"assinado, do contrário o controlador \"nouveau\" será incapaz de fornecer "
-"aceleração de \"hardware\". \"Nvidia\" agora lançou \"firmware\" até o "
-"\"Ampere\" (série \"GeForce30\") para o \"linux-firmware\". Observe que os "
-"relógios mais rápidos que o padrão não são habilitados pelo \"firmware\" "
-"lançado."
+"GPUs NVIDIA a partir do Kepler em diante exigem firmware assinado, caso "
+"contrário o controlador nouveau estará inapto para fornecer aceleração de "
+"hardware. A NVIDIA agora lançou firmware até Ada Lovelace (série GeForce 40)"
+" para linux-firmware."
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:108
+#: blfs-en/postlfs/config/firmware.xml:127
 #, xml-text
 msgid ""
 "Firmware updates for wired network ports. Most of them work even without the"
@@ -216,7 +249,7 @@ msgstr ""
 "ser usada."
 
 #. type: Content of: <sect1><itemizedlist><listitem><para>
-#: blfs-en/postlfs/config/firmware.xml:117
+#: blfs-en/postlfs/config/firmware.xml:136
 #, xml-text
 msgid ""
 "Firmware for other devices, such as wireless NICs. These devices are not "
@@ -228,7 +261,7 @@ msgstr ""
 "firmware antes que esses dispositivos possam ser usados."
 
 #. type: Content of: <sect1><note><para>
-#: blfs-en/postlfs/config/firmware.xml:126
+#: blfs-en/postlfs/config/firmware.xml:145
 #, xml-text
 msgid ""
 "Although not needed to load a firmware blob, the following tools may be "
@@ -244,13 +277,13 @@ msgstr ""
 " <xref linkend=\"wget\"/>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:138
+#: blfs-en/postlfs/config/firmware.xml:157
 #, xml-text
 msgid "Microcode updates for CPUs"
 msgstr "Atualizações de microcódigo para CPUs"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:141
+#: blfs-en/postlfs/config/firmware.xml:160
 #, xml-text
 msgid ""
 "In general, microcode can be loaded by the BIOS or UEFI, and it might be "
@@ -270,8 +303,32 @@ msgstr ""
 "lançado. Essas atualizações duram somente até que a máquina seja desligada, "
 "de forma que elas precisam ser aplicadas a cada inicialização."
 
+#.  deliberate hard coded version, not a bug
+#. type: Content of: <sect1><sect2><note><para>
+#: blfs-en/postlfs/config/firmware.xml:171
+#, xml-text
+msgid ""
+"In some rare cases a microcode update from the kernel can be ineffective.  "
+"For example, despite intel-microcode-20241029 contains the Raptor Lake "
+"microcode revision 0x12b which is intended to fix a notorious excessive "
+"voltage issue causing stability issues and even permanent CPU damages, when "
+"the kernel boots it's already <ulink url='https://github.com/intel/Intel-"
+"Linux-Processor-Microcode-Data-Files/issues/78#issuecomment-2286857023'>too "
+"late</ulink> for the microcode to fix the issue.  The only way to fix this "
+"issue is updating the BIOS."
+msgstr ""
+"Em alguns casos raros, uma atualização de microcódigo oriunda do núcleo pode"
+" ser inefetiva. Por exemplo, apesar de intel-microcode-20241029 conter a "
+"revisão de microcódigo Raptor Lake 0x12b, que visa a corrigir um problema "
+"notório de voltagem excessiva que causa problemas de estabilidade e até "
+"mesmo danos permanentes para a CPU, quando o núcleo inicializa, já é <ulink "
+"url='https://github.com/intel/Intel-Linux-Processor-Microcode-Data-"
+"Files/issues/78#issuecomment-2286857023'>tarde demais</ulink> para o "
+"microcódigo corrigir o problema. A única maneira de corrigir esse problema é"
+" a de atualizar o BIOS."
+
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:151
+#: blfs-en/postlfs/config/firmware.xml:184
 #, xml-text
 msgid ""
 "Intel provide updates of their microcode for Skylake and later processors as"
@@ -295,7 +352,7 @@ msgstr ""
 "mais recentes."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:162
+#: blfs-en/postlfs/config/firmware.xml:195
 #, xml-text
 msgid ""
 "There were two ways of loading the microcode, described as 'early' and "
@@ -328,7 +385,7 @@ msgstr ""
 "errada em situações incomuns."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:178
+#: blfs-en/postlfs/config/firmware.xml:211
 #, xml-text
 msgid ""
 "In previous versions of this book, late loading of microcode to see if it "
@@ -345,7 +402,7 @@ msgstr ""
 "máquinas ele cobre, não existe razão real para usar o carregamento atrasado."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:187
+#: blfs-en/postlfs/config/firmware.xml:220
 #, xml-text
 msgid ""
 "It might be still possible to manually force late loading of microcode.  But"
@@ -369,7 +426,7 @@ msgstr ""
 "microcódigo."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:199
+#: blfs-en/postlfs/config/firmware.xml:232
 #, xml-text
 msgid ""
 "To confirm what processor(s) you have (if more than one, they will be "
@@ -383,13 +440,13 @@ msgstr ""
 "(também informará a versão atual do microcódigo):"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/firmware.xml:205
+#: blfs-en/postlfs/config/firmware.xml:238
 #, no-wrap, xml-text
 msgid "<userinput>head -n7 /proc/cpuinfo</userinput>"
 msgstr "<userinput>head -n7 /proc/cpuinfo</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:208
+#: blfs-en/postlfs/config/firmware.xml:241
 #, xml-text
 msgid ""
 "Convert the cpu family, model and stepping to pairs of hexadecimal digits, "
@@ -401,7 +458,7 @@ msgstr ""
 "você pode verificar se existe algum microcódigo disponível."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:214
+#: blfs-en/postlfs/config/firmware.xml:247
 #, xml-text
 msgid ""
 "If you are creating an initrd to update firmware for different machines, as "
@@ -420,13 +477,13 @@ msgstr ""
 "MB comparado a tipicamente vinte e quatro (24) KB para uma máquina."
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/config/firmware.xml:223
+#: blfs-en/postlfs/config/firmware.xml:256
 #, xml-text
 msgid "Intel Microcode for the CPU"
 msgstr "Microcódigo Intel para a CPU"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:226
+#: blfs-en/postlfs/config/firmware.xml:259
 #, xml-text
 msgid ""
 "The first step is to get the most recent version of the Intel microcode.  "
@@ -450,7 +507,7 @@ msgstr ""
 "outros arquivos e uma observação de lançamento."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:238
+#: blfs-en/postlfs/config/firmware.xml:271
 #, xml-text
 msgid ""
 "In the past, intel did not provide any details of which blobs had changed "
@@ -465,7 +522,7 @@ msgstr ""
 "nota de lançamento para saber se existe uma atualização."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:246
+#: blfs-en/postlfs/config/firmware.xml:279
 #, xml-text
 msgid ""
 "The recent firmware for older processors is provided to deal with "
@@ -486,7 +543,7 @@ msgstr ""
 "guide/hw-vuln/index.html'/>."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:256
+#: blfs-en/postlfs/config/firmware.xml:289
 #, xml-text
 msgid ""
 "For an Tigerlake mobile (described as Intel(R) Core(TM) i5-11300H CPU) the "
@@ -507,13 +564,13 @@ msgstr ""
 "prossiga para <xref linkend='early-microcode'/>."
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/config/firmware.xml:268
+#: blfs-en/postlfs/config/firmware.xml:301
 #, xml-text
 msgid "AMD Microcode for the CPU"
 msgstr "Microcódigo AMD para a CPU"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:271
+#: blfs-en/postlfs/config/firmware.xml:304
 #, xml-text
 msgid ""
 "Begin by downloading a container of firmware for your CPU family from <ulink"
@@ -543,7 +600,7 @@ msgstr ""
 "quais processadores tem atualizações."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:286
+#: blfs-en/postlfs/config/firmware.xml:319
 #, xml-text
 msgid ""
 "For the very old Athlon(tm) II X2 in these examples the values were cpu "
@@ -559,7 +616,7 @@ msgstr ""
 "ele:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:293
+#: blfs-en/postlfs/config/firmware.xml:326
 #, no-wrap, xml-text
 msgid ""
 "<computeroutput>Family=0x10 Model=0x05 Stepping=0x03: Patch=0x010000c8 "
@@ -569,7 +626,7 @@ msgstr ""
 "Length=960 bytes</computeroutput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:296
+#: blfs-en/postlfs/config/firmware.xml:329
 #, xml-text
 msgid ""
 "If the value of the <quote>microcode</quote> field in "
@@ -583,13 +640,13 @@ msgstr ""
 " para <xref linkend='early-microcode'/>."
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/config/firmware.xml:304
+#: blfs-en/postlfs/config/firmware.xml:337
 #, xml-text
 msgid "Early loading of microcode"
 msgstr "Carregamento antecipado do microcódigo"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:307
+#: blfs-en/postlfs/config/firmware.xml:340
 #, xml-text
 msgid ""
 "If you have established that updated microcode is available for your system,"
@@ -603,7 +660,7 @@ msgstr ""
 "initrd que precisará ser adicionado ao grub.cfg."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:314
+#: blfs-en/postlfs/config/firmware.xml:347
 #, xml-text
 msgid ""
 "It does not matter where you prepare the initrd, and once it is working you "
@@ -617,7 +674,7 @@ msgstr ""
 "recente seja liberado. Use os seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:320
+#: blfs-en/postlfs/config/firmware.xml:353
 #, no-wrap, xml-text
 msgid ""
 "<userinput>mkdir -p initrd/kernel/x86/microcode\n"
@@ -627,7 +684,7 @@ msgstr ""
 "cd initrd</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:324
+#: blfs-en/postlfs/config/firmware.xml:357
 #, xml-text
 msgid ""
 "For an AMD machine, use the following command (replace &lt;MYCONTAINER&gt; "
@@ -637,7 +694,7 @@ msgstr ""
 " pelo nome do contêiner para a família da sua CPU):"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:329
+#: blfs-en/postlfs/config/firmware.xml:362
 #, no-wrap, xml-text
 msgid ""
 "<userinput>cp -v ../&lt;MYCONTAINER&gt; "
@@ -647,14 +704,14 @@ msgstr ""
 "kernel/x86/microcode/AuthenticAMD.bin</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:332
+#: blfs-en/postlfs/config/firmware.xml:365
 #, xml-text
 msgid "Or for an Intel machine copy the appropriate blob using this command:"
 msgstr ""
 "Ou, para uma máquina Intel, copie o blob apropriado usando este comando:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:335
+#: blfs-en/postlfs/config/firmware.xml:368
 #, no-wrap, xml-text
 msgid ""
 "<userinput>cp -v ../intel-ucode/&lt;XX-YY-ZZ&gt; "
@@ -664,13 +721,13 @@ msgstr ""
 "kernel/x86/microcode/GenuineIntel.bin</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:361
+#: blfs-en/postlfs/config/firmware.xml:394
 #, xml-text
 msgid "Now prepare the initrd:"
 msgstr "Agora, prepare o initrd:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:364
+#: blfs-en/postlfs/config/firmware.xml:397
 #, no-wrap, xml-text
 msgid ""
 "<userinput>find . | cpio -o -H newc &gt; /boot/microcode.img</userinput>"
@@ -678,7 +735,7 @@ msgstr ""
 "<userinput>find . | cpio -o -H newc &gt; /boot/microcode.img</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:367
+#: blfs-en/postlfs/config/firmware.xml:400
 #, xml-text
 msgid ""
 "You now need to add a new entry to /boot/grub/grub.cfg and here you should "
@@ -690,54 +747,54 @@ msgstr ""
 "estância. Se /boot for um ponto de montagem separado:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:372
+#: blfs-en/postlfs/config/firmware.xml:405
 #, no-wrap, xml-text
 msgid "<userinput>initrd /microcode.img</userinput>"
 msgstr "<userinput>initrd /microcode.img</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:375
+#: blfs-en/postlfs/config/firmware.xml:408
 #, xml-text
 msgid "or this if it is not:"
 msgstr "ou isto, se ele não for:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:378
+#: blfs-en/postlfs/config/firmware.xml:411
 #, no-wrap, xml-text
 msgid "<userinput>initrd /boot/microcode.img</userinput>"
 msgstr "<userinput>initrd /boot/microcode.img</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:381
+#: blfs-en/postlfs/config/firmware.xml:414
 #, xml-text
 msgid ""
 "If you are already booting with an initrd (see <xref "
 "linkend=\"initramfs\"/>), you should run <command>mkinitramfs</command> "
 "again after putting the appropriate blob or container into <filename "
-"class=\"directory\">/lib/firmware</filename>. More precisely, put an intel "
-"blob in a <filename class=\"directory\">/lib/firmware/intel-ucode</filename>"
-" directory or an AMD container in a <filename "
-"class=\"directory\">/lib/firmware/amd-ucode</filename> directory before "
+"class=\"directory\">/usr/lib/firmware</filename>. More precisely, put an "
+"intel blob in a <filename class=\"directory\">/usr/lib/firmware/intel-"
+"ucode</filename> directory or an AMD container in a <filename "
+"class=\"directory\">/usr/lib/firmware/amd-ucode</filename> directory before "
 "running <command>mkinitramfs</command>.  Alternatively, you can have both "
 "initrd on the same line, such as <userinput>initrd /microcode.img /other-"
 "initrd.img</userinput> (adapt that as above if /boot is not a separate "
 "mountpoint)."
 msgstr ""
-"Se já estiver inicializando com um \"initrd\" (veja-se <xref "
-"linkend=\"initramfs\"/>), [então] você deveria executar "
-"<command>mkinitramfs</command> novamente depois de colocar o \"blob\" ou "
-"contêiner apropriado no <filename "
-"class=\"directory\">/lib/firmware</filename>. Mais precisamente, coloque um "
-"\"blob\" \"Intel\" em um diretório <filename "
-"class=\"directory\">/lib/firmware/intel-ucode</filename> ou um contêiner "
-"\"AMD\" em um diretório <filename class=\"directory\">/lib/firmware/amd-"
+"Se já estiver inicializando com um initrd (veja-se <xref "
+"linkend=\"initramfs\"/>), você deveria executar "
+"<command>mkinitramfs</command> novamente depois de colocar o blob ou "
+"contêiner apropriado em <filename "
+"class=\"directory\">/usr/lib/firmware</filename>. Mais precisamente, coloque"
+" um blob da Intel em um diretório <filename "
+"class=\"directory\">/usr/lib/firmware/intel-ucode</filename> ou um contêiner"
+" da AMD em um diretório <filename class=\"directory\">/usr/lib/firmware/amd-"
 "ucode</filename> antes de executar <command>mkinitramfs</command>. "
-"Alternativamente, você pode ter ambos os \"initrd\" na mesma linha, tal como"
-" <userinput>initrd /microcode.img /outro-initrd.img</userinput> (adapte isso"
-" conforme acima se \"/boot\" não for um ponto de montagem separado)."
+"Alternativamente, você pode ter ambos os initrd na mesma linha, como "
+"<userinput>initrd /microcode.img /other-initrd.img</userinput> (adapte isso "
+"como acima se /boot não for um ponto de montagem separado)."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:396
+#: blfs-en/postlfs/config/firmware.xml:429
 #, xml-text
 msgid ""
 "You can now reboot with the added initrd, and then use the following command"
@@ -747,7 +804,7 @@ msgstr ""
 "seguinte comando para verificar se o carregamento antecipado funcionou:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:400
+#: blfs-en/postlfs/config/firmware.xml:433
 #, no-wrap, xml-text
 msgid ""
 "<userinput>dmesg | grep -e 'microcode' -e 'Linux version' -e 'Command "
@@ -757,7 +814,7 @@ msgstr ""
 "line'</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:403
+#: blfs-en/postlfs/config/firmware.xml:436
 #, xml-text
 msgid ""
 "If you updated to address vulnerabilities, you can look at the output of the"
@@ -768,7 +825,7 @@ msgstr ""
 "agora."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:409
+#: blfs-en/postlfs/config/firmware.xml:442
 #, xml-text
 msgid ""
 "The places and times where early loading happens are very different in AMD "
@@ -780,7 +837,7 @@ msgstr ""
 "(dispositivo móvel Tigerlake) com carregamento antecipado:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:414
+#: blfs-en/postlfs/config/firmware.xml:447
 #, no-wrap, xml-text
 msgid ""
 "<literal>[    0.000000] Linux version 6.10.4 (xry111@stargazer) (gcc (GCC) 14.2.0, GNU ld (GNU Binutils) 2.43) #4 SMP PREEMPT_DYNAMIC Tue Aug 15 18:04:11 CST 2024\n"
@@ -794,13 +851,13 @@ msgstr ""
 "[    0.585611] microcode: Updated early from: 0x00000086</literal>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:420
+#: blfs-en/postlfs/config/firmware.xml:453
 #, xml-text
 msgid "A historic AMD example:"
 msgstr "Um exemplo histórico AMD:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:423
+#: blfs-en/postlfs/config/firmware.xml:456
 #, no-wrap, xml-text
 msgid ""
 "<literal>[    0.000000] Linux version 4.15.3 (ken@testserver) (gcc version 7.3.0 (GCC))\n"
@@ -820,35 +877,19 @@ msgstr ""
 "[    0.307795] microcode: Microcode Update Driver: v2.2.</literal>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:436
+#: blfs-en/postlfs/config/firmware.xml:469
 #, xml-text
 msgid "Firmware for Video Cards"
 msgstr "Firmware para Placas de Vídeo"
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/config/firmware.xml:439
+#: blfs-en/postlfs/config/firmware.xml:472
 #, xml-text
-msgid "Firmware for ATI video chips (R600 and later)"
-msgstr "Firmware para chips de vídeo ATI (R600 e posteriores)"
+msgid "Firmware for ATI Radeon video chips"
+msgstr "Firmware para chips de vídeo ATI Radeon"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:442
-#, xml-text
-msgid ""
-"These instructions do NOT apply to old radeons before the R600 family. For "
-"those, the firmware is in the kernel's <filename "
-"class='directory'>/lib/firmware/</filename> directory. Nor do they apply if "
-"you intend to avoid a graphical setup such as Xorg and are content to use "
-"the default 80x25 display rather than a framebuffer."
-msgstr ""
-"Estas instruções NÃO se aplicam aos antigos Radeons antes da família R600. "
-"Para aqueles, o firmware está no diretório do núcleo <filename "
-"class='directory'>/lib/firmware/</filename>. Nem se aplicam se você "
-"pretender evitar uma configuração gráfica como o Xorg e estiver contente em "
-"usar a exibição padrão de 80x25 em vez de um framebuffer."
-
-#. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:450
+#: blfs-en/postlfs/config/firmware.xml:475
 #, xml-text
 msgid ""
 "Early radeon devices only needed a single 2K blob of firmware. Recent "
@@ -865,7 +906,7 @@ msgstr ""
 "cada vez que construir um sistema."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:459
+#: blfs-en/postlfs/config/firmware.xml:484
 #, xml-text
 msgid ""
 "A better approach is to install <xref linkend='pciutils'/> and then use "
@@ -876,7 +917,7 @@ msgstr ""
 "está instalado."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:465
+#: blfs-en/postlfs/config/firmware.xml:490
 #, xml-text
 msgid ""
 "With that information, check the RadeonFeature page of the Xorg wiki for "
@@ -894,7 +935,7 @@ msgstr ""
 "modelo específico."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:474
+#: blfs-en/postlfs/config/firmware.xml:499
 #, xml-text
 msgid ""
 "Now that you know which controller you are using, consult the <ulink "
@@ -912,18 +953,18 @@ msgstr ""
 "núcleos anteriores. Identifique e baixe os blobs exigidos; então instale-os:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:483
+#: blfs-en/postlfs/config/firmware.xml:508
 #, no-wrap, xml-text
 msgid ""
-"<userinput>mkdir -pv /lib/firmware/radeon\n"
-"cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/radeon</userinput>"
+"<userinput>mkdir -pv /usr/lib/firmware/radeon\n"
+"cp -v &lt;YOUR_BLOBS&gt; /usr/lib/firmware/radeon</userinput>"
 msgstr ""
-"<userinput>mkdir -pv /lib/firmware/radeon\n"
-"cp -v &lt;TEUS_BLOBS&gt; /lib/firmware/radeon</userinput>"
+"<userinput>mkdir -pv /usr/lib/firmware/radeon\n"
+"cp -v &lt;YOUR_BLOBS&gt; /usr/lib/firmware/radeon</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:487
-#: blfs-en/postlfs/config/firmware.xml:538
+#: blfs-en/postlfs/config/firmware.xml:512
+#: blfs-en/postlfs/config/firmware.xml:563
 #, xml-text
 msgid ""
 "Building the kernel amdgpu driver as a module is recommended because the "
@@ -942,13 +983,13 @@ msgstr ""
 " para detalhes)."
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/config/firmware.xml:499
+#: blfs-en/postlfs/config/firmware.xml:524
 #, xml-text
 msgid "Firmware for AMD/ATI amdgpu video chips"
 msgstr "\"Firmware\" para chips de vídeo \"amdgpu\" \"AMD\"/\"ATI\""
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:502
+#: blfs-en/postlfs/config/firmware.xml:527
 #, xml-text
 msgid ""
 "All video controllers using the amdgpu kernel driver require firmware, "
@@ -963,7 +1004,7 @@ msgstr ""
 " \"80x25\"."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:509
+#: blfs-en/postlfs/config/firmware.xml:534
 #, xml-text
 msgid ""
 "Install <xref linkend=\"pciutils\"/> and use that to check the model name "
@@ -991,7 +1032,7 @@ msgstr ""
 "AMDGPU</ulink> do \"wiki\" do \"Gentoo\"."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:522
+#: blfs-en/postlfs/config/firmware.xml:547
 #, xml-text
 msgid ""
 "Once you have identified the firmware name, install all the relevant files "
@@ -1008,17 +1049,17 @@ msgstr ""
 "terceiro (13º) arquivo, \"raven_ta.bin\")."
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:529
+#: blfs-en/postlfs/config/firmware.xml:554
 #, no-wrap, xml-text
 msgid ""
-"<userinput>mkdir -pv /lib/firmware/amdgpu\n"
-"cp -v &lt;YOUR_BLOBS&gt; /lib/firmware/amdgpu</userinput>"
+"<userinput>mkdir -pv /usr/lib/firmware/amdgpu\n"
+"cp -v &lt;YOUR_BLOBS&gt; /usr/lib/firmware/amdgpu</userinput>"
 msgstr ""
-"<userinput>mkdir -pv /lib/firmware/amdgpu\n"
-"cp -v &lt;TEUS_BLOBS&gt; /lib/firmware/amdgpu</userinput>"
+"<userinput>mkdir -pv /usr/lib/firmware/amdgpu\n"
+"cp -v &lt;YOUR_BLOBS&gt; /usr/lib/firmware/amdgpu</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:533
+#: blfs-en/postlfs/config/firmware.xml:558
 #, xml-text
 msgid ""
 "If disk space is not a problem, you could install all the current amdgpu "
@@ -1029,117 +1070,146 @@ msgstr ""
 "com qual \"chipset\" está instalado."
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/config/firmware.xml:550
+#: blfs-en/postlfs/config/firmware.xml:575
 #, xml-text
-msgid "Firmware for Nvidia video chips"
-msgstr "Firmware para chips de vídeo Nvidia"
+msgid "Firmware for NVIDIA video chips"
+msgstr "Firmware para chips de vídeo NVIDIA"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:553
+#: blfs-en/postlfs/config/firmware.xml:578
 #, xml-text
 msgid ""
-"Nvidia has released basic signed firmware for recent graphics chips, but "
-"significantly after the chips and its own binary drivers were first "
-"available. For other chips it has been necessary to extract the firmware "
-"from the binary driver."
+"Some NVIDIA GPUs from Kepler onwards (including all NVIDIA GeForce RTX GPUs "
+"and GTX 9xx series onwards) require firmware signed by NVIDIA to work.  For "
+"the Nouveau driver, NVIDIA has released the signed firmware files in the "
+"<filename class=\"directory\">nvidia/</filename> directory of linux-"
+"firmware.  Read <ulink "
+"url='https://nouveau.freedesktop.org/CodeNames.html'>the CodeNames page of "
+"the Nouveau wiki</ulink> to figure out the code name of your NVIDIA GPU (for"
+" example, the code name of GeForce RTX 4060 Ti is AD106).  The directory for"
+" the firmware files you need is named as the result converting the code name"
+" to lower case (<filename class='directory'>ad106</filename> for the "
+"example).  The directory (or some of its contents) may be actually a symlink"
+" to another directory (or some files in another directory) and you'll then "
+"need to <xref linkend='linux-firmware-symlink'/> yourself (for example, "
+"<filename class='directory'>ad106</filename> is a symlink to <filename "
+"class='directory'>ad102</filename>)."
 msgstr ""
-"A \"Nvidia\" lançou \"firmware\" básico assinado para chips gráficos "
-"recentes, mas significativamente depois que os chips e os próprios "
-"controladores binários deles foram disponibilizados pela primeira vez. Para "
-"outros chips tem sido necessário extrair o \"firmware\" a partir do "
-"controlador binário."
+"Algumas GPUs NVIDIA a partir da Kepler em diante (incluindo todas as GPUs "
+"NVIDIA GeForce RTX e séries GTX 9xx em diante) exigem firmware assinado pela"
+" NVIDIA para funcionar. Para o controlador Nouveau, a NVIDIA lançou os "
+"arquivos assinados de firmware no diretório <filename "
+"class=\"directory\">nvidia/</filename> do linux-firmware. Leia-se <ulink "
+"url='https://nouveau.freedesktop.org/CodeNames.html'>a página CodeNames do "
+"wiki Nouveau</ulink> para descobrir o nome do código da tua GPU NVIDIA (por "
+"exemplo, o nome do código da GeForce RTX 4060 Ti é AD106). O diretório para "
+"os arquivos de firmware que você precisa é nomeado como resultado da "
+"conversão do nome do código para letras minúsculas (<filename "
+"class='directory'>ad106</filename> para o exemplo). O diretório (ou parte do"
+" conteúdo dele) pode ser, na verdade, um link simbólico para outro diretório"
+" (ou alguns arquivos em outro diretório) e você precisará então <xref "
+"linkend='linux-firmware-symlink'/> você mesmo(a) (por exemplo, <filename "
+"class='directory'>ad106</filename> é um link simbólico para <filename "
+"class='directory'>ad102</filename>)."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:559
+#: blfs-en/postlfs/config/firmware.xml:598
 #, xml-text
 msgid ""
-"For more exact information about which chips need extracted firmware, see "
-"<ulink url= \"https://nouveau.freedesktop.org/VideoAcceleration.html\"/>."
+"If you can find the directory for your GPU in neither the linux-firmware "
+"tree nor the <filename>WHENCE</filename> file (as a symlink), it means "
+"either your GPU does not need any firmware, or it's newer than Ada Lovelace "
+"(RTX 40xx series) and the firmware for it isn't released yet (as at late "
+"2024)."
 msgstr ""
-"Para informações mais exatas relativas a quais chips precisam de "
-"\"firmware\" extraído, veja-se <ulink url= "
-"\"https://nouveau.freedesktop.org/VideoAcceleration.html\"/>."
+"Se você não conseguir encontrar o diretório da tua GPU nem na árvore linux-"
+"firmware nem no arquivo <filename>WHENCE</filename> (como um link "
+"simbólico), isso significa que, ou tua GPU não precisa de nenhum firmware, "
+"ou ela é mais recente que a Ada Lovelace (série RTX 40xx) e o firmware para "
+"ela ainda não foi lançado (no final de 2024)."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:565
+#: blfs-en/postlfs/config/firmware.xml:606
 #, xml-text
 msgid ""
-"If the necessary firmware is available in the <filename "
-"class=\"directory\">nvidia/</filename> directory of linux-firmware, copy it "
-"to <filename class=\"directory\">/lib/firmware/nouveau</filename>."
+"For the NVIDIA GPUs from Tesla to Kepler, the Nouveau driver requires some "
+"extra firmware to support video decoding acceleration.  These firmware files"
+" are not released by NVIDIA but they can be extracted from the NVIDIA binary"
+" driver.  For more exact information about which chips need extracted "
+"firmware, see <ulink url= "
+"\"https://nouveau.freedesktop.org/VideoAcceleration.html\">the the "
+"VideoAcceleration of the Nouveau wiki</ulink>.  To extract and install these"
+" firmware files, issue:"
 msgstr ""
-"Se o \"firmware\" necessário estiver disponível no diretório <filename "
-"class=\"directory\">nvidia/</filename> de \"linux-firmware\", [então] "
-"copie-o <filename class=\"directory\">/lib/firmware/nouveau</filename>."
-
-#. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/config/firmware.xml:571
-#, xml-text
-msgid ""
-"If the firmware has not been made available in linux-firmware, for the old "
-"chips mentioned in the nouveau wiki link above run the following commands:"
-msgstr ""
-"Se o \"firmware\" não tiver sido disponibilizado em \"linux-firmware\", para"
-" os chips antigos mencionados no link \"nouveau\" do \"wiki\" acima, execute"
-" os seguintes comandos:"
+"Para as GPUs NVIDIA a partir da Tesla até a Kepler, o controlador Nouveau "
+"exige algum firmware extra para suportar aceleração de decodificação de "
+"vídeo. Esses arquivos de firmware não são lançados pela NVIDIA, mas eles "
+"podem ser extraídos a partir do controlador binário da NVIDIA. Para "
+"informações mais exatas acerca de quais chips precisam de firmware extraído,"
+" veja-se <ulink url= "
+"\"https://nouveau.freedesktop.org/VideoAcceleration.html\">o "
+"VideoAcceleration do wiki Nouveau</ulink>. Para extrair e instalar esses "
+"arquivos de firmware, emita:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/config/firmware.xml:576
+#: blfs-en/postlfs/config/firmware.xml:618
 #, no-wrap, xml-text
 msgid ""
 "<userinput>wget https://anduin.linuxfromscratch.org/BLFS/nvidia-firmware/extract_firmware.py\n"
 "wget https://us.download.nvidia.com/XFree86/Linux-x86/340.32/NVIDIA-Linux-x86-340.32.run\n"
 "sh NVIDIA-Linux-x86-340.32.run --extract-only\n"
 "python3 extract_firmware.py\n"
-"mkdir -p /lib/firmware/nouveau\n"
-"cp -d nv* vuc-* /lib/firmware/nouveau/</userinput>"
+"mkdir -p /usr/lib/firmware/nouveau\n"
+"cp -d nv* vuc-* /usr/lib/firmware/nouveau/</userinput>"
 msgstr ""
 "<userinput>wget https://anduin.linuxfromscratch.org/BLFS/nvidia-firmware/extract_firmware.py\n"
 "wget https://us.download.nvidia.com/XFree86/Linux-x86/340.32/NVIDIA-Linux-x86-340.32.run\n"
 "sh NVIDIA-Linux-x86-340.32.run --extract-only\n"
 "python3 extract_firmware.py\n"
-"mkdir -p /lib/firmware/nouveau\n"
-"cp -d nv* vuc-* /lib/firmware/nouveau/</userinput>"
+"mkdir -p /usr/lib/firmware/nouveau\n"
+"cp -d nv* vuc-* /usr/lib/firmware/nouveau/</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:587
+#: blfs-en/postlfs/config/firmware.xml:629
 #, xml-text
 msgid "Firmware for Network Interfaces"
 msgstr "Firmware para Interfaces de Rede de Comunicação"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:590
+#: blfs-en/postlfs/config/firmware.xml:632
 #, xml-text
 msgid ""
 "The kernel likes to load firmware for some network drivers, particularly "
-"those from Realtek (the /lib/linux-firmware/rtl_nic/) directory, but they "
-"generally appear to work without it. Therefore, you can boot the kernel, "
-"check dmesg for messages about this missing firmware, and if necessary "
-"download the firmware and put it in the specified directory in <filename "
-"class=\"directory\">/lib/firmware</filename> so that it will be found on "
-"subsequent boots. Note that with current kernels this works whether or not "
+"those from Realtek (the <filename class='directory'>/usr/lib/linux-"
+"firmware/rtl_nic/</filename> directory), but they generally appear to work "
+"without it. Therefore, you can boot the kernel, check dmesg for messages "
+"about this missing firmware, and if necessary download the firmware and put "
+"it in the specified directory in <filename "
+"class=\"directory\">/usr/lib/firmware</filename> so that it will be found on"
+" subsequent boots. Note that with current kernels this works whether or not "
 "the driver is compiled in or built as a module, there is no need to build "
 "this firmware into the kernel.  Here is an example where the R8169 driver "
 "has been compiled in but the firmware was not made available. Once the "
 "firmware had been provided, there was no mention of it on later boots."
 msgstr ""
 "O núcleo gosta de carregar firmware para alguns controladores de rede de "
-"comunicação, particularmente aqueles originários do diretório da Realtek (o "
-"/lib/linux-firmware/rtl_nic/), porém geralmente eles aparentam funcionar sem"
-" isso. Sendo assim, você pode inicializar o núcleo; verificar dmesg para "
-"mensagens acerca desse firmware ausente; e, se necessário, baixar o firmware"
-" e colocá-lo no diretório especificado no <filename "
-"class=\"directory\">/lib/firmware</filename>, de forma que ele será "
-"encontrado nas inicializações subsequentes. Observe que, com os núcleos "
-"atuais, isso funciona se ou não o controlador for compilado internamente ou "
-"construído como um módulo; não existe necessidade de construir esse firmware"
-" internamente ao núcleo. Aqui está um exemplo onde o controlador R8169 foi "
-"compilado internamente, porém o firmware não foi tornado disponível. Tão "
-"logo o firmware tenha sido fornecido, não existiu menção dele nas "
+"intercomunicação, particularmente aqueles provenientes da Realtek (o "
+"diretório <filename class='directory'>/usr/lib/linux-"
+"firmware/rtl_nic/</filename>), mas eles geralmente parecem funcionar sem "
+"ele. Portanto, você pode inicializar o núcleo, verificar o dmesg para "
+"mensagens acerca desse firmware ausente e, se necessário, baixar o firmware "
+"e colocá-lo no diretório especificado em <filename "
+"class=\"directory\">/usr/lib/firmware</filename>, de forma que ele seja "
+"encontrado em inicializações subsequentes. Observe que com os núcleos atuais"
+" isso funciona independentemente de o controlador ser compilado internamente"
+" ou construído como um módulo; não existe necessidade de construir esse "
+"firmware internamente no núcleo. Aqui está um exemplo onde o controlador "
+"R8169 foi compilado internamente, mas o firmware não foi disponibilizado. "
+"Uma vez que o firmware tenha sido fornecido, não existiu menção a ele em "
 "inicializações posteriores."
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/firmware.xml:604
+#: blfs-en/postlfs/config/firmware.xml:648
 #, no-wrap, xml-text
 msgid ""
 "<literal>dmesg | grep firmware | grep r8169\n"
@@ -1151,13 +1221,13 @@ msgstr ""
 "[    7.018036] r8169 0000:01:00.0 eth0: unable to load firmware patch rtl_nic/rtl8168g-2.fw (-2)</literal>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:611
+#: blfs-en/postlfs/config/firmware.xml:655
 #, xml-text
 msgid "Firmware for Regulatory Database of Wireless Devices"
 msgstr "Firmware para Base de Dados Regulatória de Dispositivos Sem Fio"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:614
+#: blfs-en/postlfs/config/firmware.xml:658
 #, xml-text
 msgid ""
 "Different countries have different regulations on the radio spectrum usage "
@@ -1169,30 +1239,30 @@ msgid ""
 "'https://kernel.org/pub/software/network/wireless-regdb/'/>.  To install it,"
 " simply extract <filename>regulatory.db</filename> and "
 "<filename>regulatory.db.p7s</filename> from the tarball into <filename "
-"class=\"directory\">/lib/firmware</filename>. Note that either the "
+"class=\"directory\">/usr/lib/firmware</filename>. Note that either the "
 "<option>cfg80211</option> driver needs to be selected as a module for the "
 "<filename>regulatory.*</filename> files to be loaded, or those files need to"
 " be included as firmware into the kernel, as explained above in <xref "
 "linkend=\"video-firmware\"/>."
 msgstr ""
-"Países diferentes tem regulações diferentes acerca do uso do espectro de "
-"rádio dos dispositivos sem fios. Você pode instalar um firmware para fazer "
-"com que os dispositivos sem fios obedeçam às regulações locais de espectro, "
-"de forma que você não seria questionado(a) pela autoridade local ou não "
-"encontraria tua NIC sem fios atrapalhando as frequências de outros "
-"dispositivos (por exemplo, controles remotos). O firmware da base de dados "
-"regulatória pode ser baixado a partir de <ulink url = "
+"Diferentes países tem diferentes regulamentações acerca do uso do espectro "
+"de rádio de dispositivos sem fio. Você pode instalar um firmware para fazer "
+"os dispositivos sem fio obedecerem às regulamentações locais do espectro, de"
+" forma que você não seja questionado(a) por autoridades locais ou encontre "
+"tua placa de rede sem fio bloqueando as frequências de outros dispositivos "
+"(por exemplo, controles remotos). O firmware da base de dados regulatória "
+"pode ser baixado a partir de <ulink url = "
 "'https://kernel.org/pub/software/network/wireless-regdb/'/>. Para instalá-"
-"lo, simplesmente extraia o <filename>regulatory.db</filename> e o "
-"<filename>regulatory.db.p7s</filename> a partir do tarball no <filename "
-"class=\"directory\">/lib/firmware</filename>. Observe que ou o controlador "
-"<option>cfg80211</option> precisa ser selecionado como um médulo para os "
-"arquivos <filename>regulatory.*</filename> serem carregados ou esses "
-"arquivos precisam serem incluídos como firmware no núcleo, conforme "
-"explicado acima em <xref linkend=\"video-firmware\"/>."
+"lo, basta extrair <filename>regulatory.db</filename> e "
+"<filename>regulatory.db.p7s</filename> a partir do tarball em <filename "
+"class=\"directory\">/usr/lib/firmware</filename>. Observe que ou o "
+"controlador <option>cfg80211</option> precisa estar selecionado como um "
+"módulo para que os arquivos <filename>regulatory.*</filename> sejam "
+"carregados, ou esses arquivos precisam estar incluídos como firmware no "
+"núcleo, conforme explicado acima em <xref linkend=\"video-firmware\"/>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:631
+#: blfs-en/postlfs/config/firmware.xml:675
 #, xml-text
 msgid ""
 "The access point (AP) would send a country code to your wireless NIC, and "
@@ -1210,13 +1280,13 @@ msgstr ""
 "(especialmente se quiser usar tua interface como um AP)."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:641
+#: blfs-en/postlfs/config/firmware.xml:685
 #, xml-text
 msgid "Sound Open Firmware"
 msgstr "Firmware Aberto de Som"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:644
+#: blfs-en/postlfs/config/firmware.xml:688
 #, xml-text
 msgid ""
 "Some systems (especially budget laptops) utilize a DSP shipped with the CPU "
@@ -1235,7 +1305,7 @@ msgstr ""
 " instale o firmware:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/firmware.xml:653
+#: blfs-en/postlfs/config/firmware.xml:697
 #, no-wrap, xml-text
 msgid ""
 "<userinput>install -vdm755 /usr/lib/firmware/intel    &amp;&amp;\n"
@@ -1251,7 +1321,7 @@ msgstr ""
 "   /usr/lib/firmware/intel/sof-tplg</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:660
+#: blfs-en/postlfs/config/firmware.xml:704
 #, xml-text
 msgid ""
 "<xref linkend=\"alsa-lib\"/> needs Use Case Manager configuration files for "
@@ -1270,13 +1340,13 @@ msgstr ""
 "para configurar tua placa de som para ALSA corretamente."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:671
+#: blfs-en/postlfs/config/firmware.xml:715
 #, xml-text
 msgid "Firmware for Other Devices"
 msgstr "Firmware para Outros Dispositivos"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:674
+#: blfs-en/postlfs/config/firmware.xml:718
 #, xml-text
 msgid ""
 "Identifying the correct firmware will typically require you to install <xref"
@@ -1292,7 +1362,7 @@ msgstr ""
 "todos eles estão no linux-firmware."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:682
+#: blfs-en/postlfs/config/firmware.xml:726
 #, xml-text
 msgid ""
 "If possible, you should begin by using a wired connection when you first "
@@ -1307,7 +1377,7 @@ msgstr ""
 "linkend='wpa_supplicant'/>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:689
+#: blfs-en/postlfs/config/firmware.xml:733
 #, xml-text
 msgid ""
 "Firmware may also be needed for other devices such as some SCSI controllers,"
@@ -1318,13 +1388,13 @@ msgstr ""
 " Os mesmos princípios se aplicam."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/firmware.xml:697
+#: blfs-en/postlfs/config/firmware.xml:741
 #, xml-text
 msgid "Include Firmware Blobs in the Kernel Image"
 msgstr "Incluir Blobs de Firmware na Imagem do Núcleo"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:700
+#: blfs-en/postlfs/config/firmware.xml:744
 #, xml-text
 msgid ""
 "Some drivers, notably the drivers for ATI or AMD GPU, requires the firmware "
@@ -1334,8 +1404,8 @@ msgid ""
 "including the firmware files.  If you don't want to use either methods, you "
 "may include the firmware files in the kernel image itself.  Install the "
 "needed firmware files into <filename "
-"class='directory'>/lib/firmware</filename> first, then set the following "
-"kernel configuration and rebuild the kernel:"
+"class='directory'>/usr/lib/firmware</filename> first, then set the following"
+" kernel configuration and rebuild the kernel:"
 msgstr ""
 "Alguns controladores, principalmente os controladores para GPU ATI ou AMD, "
 "exigem os arquivos de firmware acessíveis no momento em que são carregados. "
@@ -1344,38 +1414,38 @@ msgstr ""
 "(leia-se <xref linkend='initramfs'/> para detalhes) incluindo os arquivos de"
 " firmware. Se não quiser usar nenhum dos métodos, você pode incluir os "
 "arquivos de firmware na própria imagem do núcleo. Instale os arquivos de "
-"firmware necessários em <filename class='directory'>/lib/firmware</filename>"
-" primeiro, depois configure a seguinte configuração do núcleo e reconstrua o"
-" núcleo:"
+"firmware necessários em <filename "
+"class='directory'>/usr/lib/firmware</filename> primeiro, depois configure a "
+"seguinte configuração do núcleo e reconstrua o núcleo:"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:715
+#: blfs-en/postlfs/config/firmware.xml:759
 #, xml-text
 msgid ""
 "Replace <replaceable>xx/aa.bin xx/bb.bin</replaceable> with a whitespace-"
 "separated list of paths to the needed firmware files, relative to <filename "
-"class='directory'>/lib/firmware</filename>.  A method easier than manually "
-"typing the list (it may be long) is running the following command:"
+"class='directory'>/usr/lib/firmware</filename>.  A method easier than "
+"manually typing the list (it may be long) is running the following command:"
 msgstr ""
 "Substitua <replaceable>xx/aa.bin xx/bb.bin</replaceable> por uma lista de "
 "caminhos separados por espaços em branco para os arquivos de firmware "
 "necessários, relativos a <filename "
-"class='directory'>/lib/firmware</filename>. Um método mais fácil que digitar"
-" manualmente a lista (ele possivelmente seja longa) é o de executar o "
-"seguinte comando:"
+"class='directory'>/usr/lib/firmware</filename>. Um método mais fácil que "
+"digitar manualmente a lista (ele possivelmente seja longa) é o de executar o"
+" seguinte comando:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/firmware.xml:723
+#: blfs-en/postlfs/config/firmware.xml:767
 #, no-wrap, xml-text
 msgid ""
-"<userinput>echo CONFIG_EXTRA_FIRMWARE='\"'$({ cd /lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'\"' &gt;&gt; .config\n"
+"<userinput>echo CONFIG_EXTRA_FIRMWARE='\"'$({ cd /usr/lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'\"' &gt;&gt; .config\n"
 "make oldconfig</userinput>"
 msgstr ""
-"<userinput>echo CONFIG_EXTRA_FIRMWARE='\"'$({ cd /lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'\"' &gt;&gt; .config\n"
+"<userinput>echo CONFIG_EXTRA_FIRMWARE='\"'$({ cd /usr/lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'\"' &gt;&gt; .config\n"
 "make oldconfig</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/firmware.xml:727
+#: blfs-en/postlfs/config/firmware.xml:771
 #, xml-text
 msgid ""
 "Replace <replaceable>amdgpu/*</replaceable> with a shell pattern matching "
@@ -1385,7 +1455,7 @@ msgstr ""
 "corresponda aos arquivos de firmware necessários."
 
 #. type: Content of: <sect1><sect2><warning><para>
-#: blfs-en/postlfs/config/firmware.xml:733
+#: blfs-en/postlfs/config/firmware.xml:777
 #, xml-text
 msgid ""
 "Do not distribute a kernel image containing the firmware to others or you "
@@ -1393,6 +1463,72 @@ msgid ""
 msgstr ""
 "Não distribua uma imagem do núcleo contendo o firmware para terceiros(as) ou"
 " você possivelmente viole a GPL."
+
+#, xml-text
+#~ msgid ""
+#~ "Nvidia has released basic signed firmware for recent graphics chips, but "
+#~ "significantly after the chips and its own binary drivers were first "
+#~ "available. For other chips it has been necessary to extract the firmware "
+#~ "from the binary driver."
+#~ msgstr ""
+#~ "A \"Nvidia\" lançou \"firmware\" básico assinado para chips gráficos "
+#~ "recentes, mas significativamente depois que os chips e os próprios "
+#~ "controladores binários deles foram disponibilizados pela primeira vez. Para "
+#~ "outros chips tem sido necessário extrair o \"firmware\" a partir do "
+#~ "controlador binário."
+
+#, xml-text
+#~ msgid ""
+#~ "For more exact information about which chips need extracted firmware, see "
+#~ "<ulink url= \"https://nouveau.freedesktop.org/VideoAcceleration.html\"/>."
+#~ msgstr ""
+#~ "Para informações mais exatas relativas a quais chips precisam de "
+#~ "\"firmware\" extraído, veja-se <ulink url= "
+#~ "\"https://nouveau.freedesktop.org/VideoAcceleration.html\"/>."
+
+#, xml-text
+#~ msgid ""
+#~ "If the necessary firmware is available in the <filename "
+#~ "class=\"directory\">nvidia/</filename> directory of linux-firmware, copy it "
+#~ "to <filename class=\"directory\">/usr/lib/firmware/nouveau</filename>.  Note"
+#~ " that the required firmware file may be a symlink (for example, the GSP "
+#~ "firmware for RTX 4060 is just a symlink to the GSP firmware directory for "
+#~ "RTX 4090) and you'll need to <xref linkend='linux-firmware-symlink'/>."
+#~ msgstr ""
+#~ "Se o firmware necessário estiver disponível no diretório <filename "
+#~ "class=\"directory\">nvidia/</filename> do linux-firmware, copie-o para "
+#~ "<filename class=\"directory\">/usr/lib/firmware/nouveau</filename>. Observe "
+#~ "que o arquivo de firmware exigido pode ser um link simbólico (por exemplo, o"
+#~ " firmware GSP para RTX 4060 é apenas um link simbólico para o diretório de "
+#~ "firmware GSP para RTX 4090) e você precisará <xref linkend='linux-firmware-"
+#~ "symlink'/>."
+
+#, xml-text
+#~ msgid ""
+#~ "If the firmware has not been made available in linux-firmware, for the old "
+#~ "chips mentioned in the nouveau wiki link above run the following commands:"
+#~ msgstr ""
+#~ "Se o \"firmware\" não tiver sido disponibilizado em \"linux-firmware\", para"
+#~ " os chips antigos mencionados no link \"nouveau\" do \"wiki\" acima, execute"
+#~ " os seguintes comandos:"
+
+#, xml-text
+#~ msgid "Firmware for ATI video chips (R600 and later)"
+#~ msgstr "Firmware para chips de vídeo ATI (R600 e posteriores)"
+
+#, xml-text
+#~ msgid ""
+#~ "These instructions do NOT apply to old radeons before the R600 family. For "
+#~ "those, the firmware is in the kernel's <filename "
+#~ "class='directory'>/lib/firmware/</filename> directory. Nor do they apply if "
+#~ "you intend to avoid a graphical setup such as Xorg and are content to use "
+#~ "the default 80x25 display rather than a framebuffer."
+#~ msgstr ""
+#~ "Estas instruções NÃO se aplicam aos antigos Radeons antes da família R600. "
+#~ "Para aqueles, o firmware está no diretório do núcleo <filename "
+#~ "class='directory'>/lib/firmware/</filename>. Nem se aplicam se você "
+#~ "pretender evitar uma configuração gráfica como o Xorg e estiver contente em "
+#~ "usar a exibição padrão de 80x25 em vez de um framebuffer."
 
 #, xml-text
 #~ msgid ""
