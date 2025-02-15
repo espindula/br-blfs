@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY gnome-online-accounts-download-http
-           "&gnome-download-http;/gnome-online-accounts/&gnome-minor-50;/gnome-online-accounts-&gnome-online-accounts-version;.tar.xz">
+           "&gnome-download-http;/gnome-online-accounts/&gnome-minor-52;/gnome-online-accounts-&gnome-online-accounts-version;.tar.xz">
   <!ENTITY gnome-online-accounts-download-ftp  "">
-  <!ENTITY gnome-online-accounts-md5sum        "93cc587f17ad9c14f03bcd0b9c124f8b">
-  <!ENTITY gnome-online-accounts-size          "400 KB">
-  <!ENTITY gnome-online-accounts-buildsize     "14 MB">
+  <!ENTITY gnome-online-accounts-md5sum        "f14d6d5be4b0af4458bba52f6ffb95d7">
+  <!ENTITY gnome-online-accounts-size          "464 KB">
+  <!ENTITY gnome-online-accounts-buildsize     "24 MB">
   <!ENTITY gnome-online-accounts-time          "0,2 UPC">
 ]>
 
@@ -85,7 +85,7 @@ linkend="libadwaita1"/>, <xref linkend="rest"/> e <xref linkend="vala"/>
       <!-- <ulink url="https://gitlab.com/accounts-sso/libaccounts-glib">
 libaccounts-glib</ulink>, and
       <ulink url="https://launchpad.net/account-plugins">account-plugins</ulink> -->
-<xref linkend="gtk-doc"/>, <xref linkend="mitkrb"/> e <xref
+<xref linkend="gi-docgen"/>, <xref linkend="mitkrb"/> e <xref
 linkend="valgrind"/>
       
 
@@ -124,10 +124,21 @@ cd    build &amp;&amp;
 meson setup                                            \
       --prefix=/usr                                    \
       --buildtype=release                              \
+      -D documentation=false                           \
       -D kerberos=false                                \
       -D google_client_secret=5ntt6GbbkjnTVXx-MSxbmx5e \
       -D google_client_id=595013732528-llk8trb03f0ldpqq6nprjp1s79596646.apps.googleusercontent.com \
       .. &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Se você tiver instalado <xref linkend='gi-docgen'/> e desejar construir e
+instalar a documentação da API desse pacote, emita:
+    </para>
+
+<screen remap='doc'><userinput>meson configure -D documentation=true &amp;&amp;
+sed "s/project_name()/&amp; + '-' + meson.project_version()/" \
+    -i ../doc/meson.build &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -154,12 +165,6 @@ do OAuth do BLFS para os serviços do Google.
     </para>
 
     <para>
-      <option>-D gtk_doc=true</option>: Use essa chave se você tiver o <xref
-linkend="gtk-doc" role="nodep"/> instalado e desejar gerar a documentação da
-API.
-    </para>
-
-    <para>
       <option>-D kerberos=true</option>: Use essa chave se você tiver instalado o
 <xref linkend="mitkrb" role="nodep"/> e deseja usá-lo com o
 <application>GNOME Online Accounts</application>.
@@ -177,7 +182,11 @@ API.
 
       <seglistitem>
         <seg>
-          goa-daemon e goa-identity-service (executáveis de biblioteca)
+          <!-- Let'snot include library executables for consistency -->
+<!--goa-daemon and goa-identity-service (library executables)-->
+None
+          
+          
         </seg>
         <seg>
           libgoa-1.0.so e libgoa-backend-1.0.so
@@ -191,20 +200,23 @@ API.
 
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
-      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
-
+      <!-- library executable, so let's not include it
       <varlistentry id="goa-daemon">
+
         <term><command>goa-daemon</command></term>
         <listitem>
           <para>
-            é o Processo de Segundo Plano do <application>GNOME Online
-Accounts</application>
+            is the <application>GNOME Online Accounts</application> Daemon
           </para>
           <indexterm zone="gnome-online-accounts goa-daemon">
             <primary sortas="b-goa-daemon">goa-daemon</primary>
           </indexterm>
         </listitem>
       </varlistentry>
+ -->
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+ 
 
       <varlistentry id="libgoa-1">
         <term><filename class="libraryfile">libgoa-1.0.so</filename></term>

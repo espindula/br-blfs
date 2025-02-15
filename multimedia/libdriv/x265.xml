@@ -6,10 +6,10 @@
 
   <!ENTITY x265-download-http "https://bitbucket.org/multicoreware/x265_git/downloads/x265_&x265-version;.tar.gz">
   <!ENTITY x265-download-ftp  "">
-  <!ENTITY x265-md5sum        "99997ecc8ee4d3575ba7715c759ad3bb">
+  <!ENTITY x265-md5sum        "f1c3c80248d8574378a4aac8f374f6de">
   <!ENTITY x265-size          "1,6 MB">
-  <!ENTITY x265-buildsize     "45 MB">
-  <!ENTITY x265-time          "0,5 UPC (usando paralelismo=4)">
+  <!ENTITY x265-buildsize     "39 MB">
+  <!ENTITY x265-time          "0,4 UPC (usando paralelismo = 4)">
 ]>
 
 <sect1 id="x265" xreflabel="x265-&x265-version;">
@@ -98,7 +98,9 @@ codificação de fluxos de vídeo no formato H.265/HEVC.
 cd    bld &amp;&amp;
 
 cmake -D CMAKE_INSTALL_PREFIX=/usr \
-      -W no-dev ../source          &amp;&amp;
+      -D GIT_ARCHETYPE=1           \
+      -W no-dev                    \
+      ../source                    &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -106,31 +108,32 @@ make</userinput></screen>
     </para>
 
     
+
     <!-- To editors: hard coded versions "209", "212", and "3.6" are not a
          bug.  This <important>
  block should be removed when we update x265
          to 3.7 (or 4.0 or whatever new version).  The problem only happens
          when we downgrade libx265.so, upgrading is OK (as long as following
-         the LFS package management page).  -->
-<important>
+         the LFS package management page). 
+    <important>
       <para>
-        Se desatualizar do x265-20240812 de última geração (ele esteve sendo usado
-por engano no livro de desenvolvimento do BLFS por vários dias), remova a
-biblioteca compartilhada do x265-20240812 como o(a) usuário(a) &root;:
+        If downgrading from the bleeding-edge x265-20240812 (it had been
+        mistakenly used in the BLFS development book for several days),
+        remove the shared library from x265-20240812 as the &root; user:
       </para>
 
       <screen role='root'><userinput>rm -fv /usr/lib/libx265.so.212</userinput></screen>
 
       <para>
-        Isso é para evitar que <command>ldconfig</command> recrie o link simbólico
-<filename>libx265.so</filename> com o alvo
-<filename>/usr/lib/libx265.so.212</filename>, que parece ser <quote>uma
-versão mais recente</quote> de <filename>libx265.so.209</filename> oriundo
-do x265-3.6.
+        This is for preventing <command>ldconfig</command> from recreating
+        the symlink <filename>libx265.so</filename> with the target
+        <filename>/usr/lib/libx265.so.212</filename> which seems to be
+        <quote>a newer version</quote> of <filename>libx265.so.209</filename>
+        from x265-3.6.
       </para>
     </important>
-
-    <para>
+    -->
+<para>
       Para instalar o pacote, primeiro remova quaisquer versões antigas da
 biblioteca. Depois da instalação, remova uma biblioteca estática. Como o(a)
 usuário(a) &root;:
@@ -147,6 +150,15 @@ rm -vf /usr/lib/libx265.a</userinput></screen>
       <para>
         <parameter>-W no-dev</parameter>: Essa chave é usada para suprimir avisos
 destinados para os(as) desenvolvedores(as) do pacote.
+      </para>
+
+      <para>
+        <parameter>-D GIT_ARCHETYPE=1</parameter>: Essa chave é necessária porque o
+sistema de construção não gerará um arquivo de pkg-config ou instalará uma
+biblioteca compartilhada, a menos que <xref linkend="git"/> esteja
+instalado. O Git não é exigido para mais nada nesse pacote, de forma que
+essa chave é usada para contornar isso para usuários(as) que não queiram
+instalar o Git como uma dependência de construção.
       </para>
 
       <para>

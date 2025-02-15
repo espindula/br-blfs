@@ -6,10 +6,10 @@
 
   <!ENTITY dbus-download-http "https://dbus.freedesktop.org/releases/dbus/dbus-&dbus-version;.tar.xz">
   <!ENTITY dbus-download-ftp  "">
-  <!ENTITY dbus-md5sum        "46070a3487817ff690981f8cd2ba9376">
+  <!ENTITY dbus-md5sum        "66bfcf1f42d4ebc634ca558d14335e92">
   <!ENTITY dbus-size          "1,3 MB">
-  <!ENTITY dbus-buildsize     "23 MB (adicionar 25 MB para testes)">
-  <!ENTITY dbus-time          "0,2 UPC (adicionar 1,5 UPC para testes)">
+  <!ENTITY dbus-buildsize     "110 MB (adicionar 6 MB para os testes)">
+  <!ENTITY dbus-time          "0,2 UPC (adicionar 0,4 UPC para testes)">
   <!-- The former value was 0.8 SBU, which was far more sensible. -->
   <!-- I got 'real  0m14.355s' for make check at -j1; bdubbs dbus-1.14.2 -->
   <!-- Now 'real 2m51.642ss' for make check at -j1; bdubbs dbus-1.14.6
@@ -126,100 +126,33 @@ url="https://pypi.python.org/pypi/mallard-ducktype">Ducktype</ulink> e
 
   <sect2 role="installation">
     <title>Instalação do &quot;D-Bus&quot;</title>
-    
 
-    <!--
-    <para revision="sysv">
-
-      If they do not already exist,
-      as the <systemitem class="username">root</systemitem> user, create a
-      system user and group to handle the system message bus activity:
-    </para>
-
-<screen role="root" revision="sysv"><userinput>groupadd -g 18 messagebus &amp;&amp;
-useradd -c "D-Bus Message Daemon User" -d /var/run/dbus \
-        -u 18 -g messagebus -s /bin/false messagebus</userinput></screen>
-    -->
-<para>
+    <para>
       Instale o <application>D-Bus</application> executando os seguintes comandos
-(você possivelmente revise a saída gerada a partir de <command>./configure
---help</command> primeiro e adicione quaisquer parâmetros desejados ao
-comando <command>configure </command> mostrado abaixo):
+(você possivelmente deseje revisar o arquivo meson_options.txt primeiro e
+adicionar quaisquer opções adicionais desejadas à linha setup do meson
+abaixo):
     </para>
 
-    
-<screen revision="sysv"><!-- Only useful for systemd: it installs the services files in the
-    systemd/user
-    - -enable-user-session                \ -->
-<userinput>./configure --prefix=/usr                        \
-            --sysconfdir=/etc                    \
-            --localstatedir=/var                 \
-            --runstatedir=/run                   \
-            --disable-doxygen-docs               \
-            --disable-xml-docs                   \
-            --disable-static                     \
-            --with-systemduserunitdir=no         \
-            --with-systemdsystemunitdir=no       \
-            --docdir=/usr/share/doc/dbus-&dbus-version;  \
-            --with-system-socket=/run/dbus/system_bus_socket &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-<screen revision="systemd"><userinput>./configure --prefix=/usr                       \
-            --sysconfdir=/etc                    \
-            --localstatedir=/var                 \
-            --runstatedir=/run                   \
-            --enable-user-session                \
-            --disable-doxygen-docs               \
-            --disable-xml-docs                   \
-            --disable-static                     \
-            --docdir=/usr/share/doc/dbus-&dbus-version;  \
-            --with-system-socket=/run/dbus/system_bus_socket &amp;&amp;
-make</userinput></screen>
+meson setup --prefix=/usr          \
+            --buildtype=release    \
+            --wrap-mode=nofallback \</userinput><userinput revision='sysv'>
+            -D systemd=disabled    \</userinput><userinput>
+            .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Veja-se abaixo para instruções de teste.
     </para>
 
-
-
-    <!--
-    <warning revision="systemd">
-
-      <para>
-        Installing the package will override all files installed by
-        <application>D-Bus</application> in LFS. It is critical that
-        nothing uses <application>D-Bus</application> libraries or
-        programs during the installation. The best way to ensure that these
-        libraries are not being used is to run the installation in rescue mode.
-        To switch to rescue mode, run the following command as the
-        <systemitem class="username">root</systemitem> user (from a TTY):
-      </para>
-
-<screen role="root"><userinput>systemctl start rescue.target</userinput></screen>
-
-    </warning>
--->
-<para>
+    <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<!-- FIXME: No longer needed with usr merge
-    <para>
-
-      The shared library needs to be moved to
-      <filename class="directory">/lib</filename>, and as a result the
-      <filename class="extension">.so</filename> file in
-      <filename class="directory">/usr/lib</filename> will need to be
-      recreated. Run the following command as the
-      <systemitem class="username">root</systemitem> user:
-    </para>
-
-<screen role="root"><userinput>mv -v /usr/lib/libdbus-1.so.* /lib &amp;&amp;
-ln -sfv ../../lib/$(readlink /usr/lib/libdbus-1.so) /usr/lib/libdbus-1.so</userinput></screen>
--->
-<screen role="root"><userinput>make install</userinput></screen>
-
-
+<screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
       Se você estiver usando uma instalação &quot;DESTDIR&quot;, [então] o
@@ -247,32 +180,30 @@ compilar alguns pacotes, com o seguinte comando como o(a) usuário(a)
 arquivo <filename>/var/lib/dbus/machine-id</filename>:
     </para>
 
-<!--
-    <para revision="systemd">
+<screen role="root" revision="sysv"><userinput>ln -sfv /var/lib/dbus/machine-id /etc</userinput></screen>
 
-      If not in chroot, at this point, you should reload the systemd daemon,
-      and reenter multi-user mode with the following commands (as the
-      <systemitem class="username">root</systemitem> user):
+    <para>
+      Finalmente, ainda como o(a) usuário(a) &root;, renomeie o diretório da
+documentação (ele só existe se as dependências opcionais forem satisfeitas
+para pelo menos um formato de documentação) para torná-lo versionado:
     </para>
 
-<screen role="root" revision="systemd"><userinput>systemctl daemon-reload
-systemctl start multi-user.target</userinput></screen>
--->
 <!-- Without dbus-python and pygobject3, only 39 tests are run and
          11 out of 39 are skipped.  With dbus-python and pygobject3
          installed, 238 tests are run and 37 out of 238 are skipped.  -->
-<screen role="root" revision="sysv"><userinput>ln -sfv /var/lib/dbus/machine-id /etc</userinput></screen>
-
-
+<screen role='root'><userinput>if [ -e /usr/share/doc/dbus ]; then
+  rm -rf /usr/share/doc/dbus-&dbus-version;    &amp;&amp;
+  mv -v  /usr/share/doc/dbus{,-&dbus-version;}
+fi</userinput></screen>
 
     
 
     <para>
-      Muitos testes são desabilitados, a menos que <xref linkend="dbus-python"/> e
-<xref linkend="pygobject3"/> tenham sido instalados. Eles precisam ser
+      Muitos testes estão desabilitados, a menos que <xref linkend="dbus-python"/>
+e <xref linkend="pygobject3"/> tenham sido instalados. Eles precisam ser
 executados como um(a) usuário(a) sem privilégios a partir de uma sessão
 local com endereço de barramento. Para executar os testes padrão, emita
-<command>make check</command>.
+<command>ninja test</command>.
     </para>
 
     
@@ -281,95 +212,54 @@ local com endereço de barramento. Para executar os testes padrão, emita
          Additionally,  217 tests in the "name-test" directory are run
          and none is skipped.  -->
 <para>
-      Se você deseja executar os testes de regressão de unidade, [então] o
-&quot;configure&quot; exige parâmetros adicionais os quais expõem
-funcionalidades adicionais nos binários que não se destinam a serem usadas
-em uma construção de produção do <application>D-Bus</application>. Se você
-gostaria de executar os testes, [então] emita os seguintes comandos (para os
-testes, você não precisa construir os documentos):
+      Se você deseja executar os testes de regressão de unidade, o meson exige
+parâmetros adicionais os quais expõem funcionalidades adicionais nos
+binários que não se destinam a serem usadas em uma construção de produção do
+<application>D-Bus</application>. Se você gostaria de executar os testes,
+emita os seguintes comandos (para os testes, você não precisa construir os
+documentos):
     </para>
 
-<screen remap="test"><userinput>make distclean                                   &amp;&amp;
-PYTHON=python3 ./configure --enable-tests         \
-                           --enable-asserts       \
-                           --disable-doxygen-docs \
-                           --disable-xml-docs     &amp;&amp;
-make                                              &amp;&amp;
-make check</userinput></screen>
-
+<!-- Doesn't seem to be the case anymore (on systemd, unknown on SysV)
     <para>
-      Um teste, test-autolaunch, é conhecido por falhar. Também existiram informes
-de que os testes possivelmente falhem se executados dentro de um shell do
-Midnight Commander. Você possivelmente receba mensagens de erro de falta de
-memória ao executar os testes. Elas são normais e podem ser seguramente
-ignoradas.
+      One test, test-autolaunch, is known to fail.
+      There have also been reports that the tests may fail if running inside a
+      Midnight Commander shell. You may get out-of-memory error messages when
+      running the tests. These are normal and can be safely ignored.
     </para>
+-->
+<screen remap="test"><userinput>meson configure -D asserts=true -D intrusive_tests=true &amp;&amp;
+ninja test</userinput></screen>
+
+
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <parameter>--disable-doxygen-docs</parameter>: Essa chave desabilita a
-construção e instalação da documentação do &quot;doxygen&quot;, se você
-tiver o <application>doxygen</application> instalado. Se
-<application>doxygen</application> estiver instalado e você desejar
-construí-la, [então] remova esse parâmetro.
-    </para>
-
-    <para>
-      <parameter>--disable-xml-docs</parameter>: Essa chave desabilita a
-construção e instalação da documentação &quot;HTML&quot;, se você tiver o
-<application>xmlto</application> instalado. Se
-<application>xmlto</application> estiver instalado e você desejar
-construí-la, [então] remova esse parâmetro.
-    </para>
-
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
+      href="../../xincludes/meson-wrap-nofallback.xml"/>
 
-    <para revision="systemd">
-      <parameter>--enable-user-session</parameter>: Esse parâmetro habilita
-sessões do DBus por usuário(a) com <application>systemd</application>.
-    </para>
-
-    <para revision="sysv">
-      <parameter>--with-systemd{user,system}unitdir=no</parameter>: Essas chaves
-desabilitam a instalação de unidades do &quot;systemd&quot; em sistemas
-baseados em &quot;elogind&quot;.
-    </para>
-
-    <!-- not in instructions anymore
-    <para>
-
-      <parameter>- -with-system-pid-file=/run/dbus/pid</parameter>: This
-      parameter specifies the location of the PID file.
-    </para>
--->
-<para>
-      <parameter>--with-system-socket=/run/dbus/system_bus_socket</parameter>:
-Esse parâmetro especifica o local do soquete do barramento do sistema.
+    <para revision='sysv'>
+      <parameter>-D systemd=disabled</parameter>: Não instale arquivos de suporte
+do systemd mesmo que <systemitem class='library'>libsystemd</systemitem>
+exista (ou seja, o pacote <xref linkend='elogind'/> esteja instalado).
     </para>
 
     <para>
-      <parameter>--enable-tests</parameter>: Constrói partes extras do código para
-suportar todos os testes. Não use em uma construção de produção.
+      <parameter>-D intrusive_tests=true</parameter>: Constrói partes extras do
+código para suportar todos os testes. Não use em uma construção de produção.
     </para>
 
     <para>
-      <option>--enable-embedded-tests</option>: Constrói partes extras do código
-para suportar somente testes de unidade. Não use em uma construção de
-produção.
-    </para>
-
-    <para>
-      <parameter>--enable-asserts</parameter>: Habilita código de depuração para
+      <parameter>-D asserts=true</parameter>: Habilita código de depuração para
 executar asserções para declarações normalmente presumidas serem
-verdadeiras. Isso evita um aviso que '<parameter>--enable-tests</parameter>'
-por si só é útil somente para perfilamento e pode não fornecer resultados
-verdadeiros para todos os testes, mas adiciona a própria OBSERVAÇÃO dele de
-que isso não deveria ser usado em uma construção de produção.
+verdadeiras. Isso evita um aviso de que '<parameter>-D
+asserts=true</parameter>' por si só é útil somente para perfilamento e pode
+não fornecer resultados verdadeiros para todos os testes, mas adiciona a
+própria OBSERVAÇÃO dele de que isso não deveria ser usado em uma construção
+de produção.
     </para>
 
   </sect2>
@@ -525,20 +415,7 @@ linha ao seu arquivo <filename>~/.bash_logout</filename>:
 kill $DBUS_SESSION_BUS_PID</literal></userinput></screen>
         </listitem>
 
-        
-
-      <!-- KDM is no longer usable, SDDM is it's replacement
-        <listitem>
-          <para>
-            A hint has been written that provides ways to start scripts
-            using the KDM session manager of KDE. The concepts in this hint could
-            possibly be used with other session managers as well. The hint is
-            located at <ulink
-            url="&hints-root;/downloads/files/execute-session-scripts-using-kdm.txt"/>.
-          </para>
-        </listitem>
-        -->
-</itemizedlist>
+      </itemizedlist>
 
     </sect3>
 

@@ -6,10 +6,10 @@
 
   <!ENTITY gpgme-download-http "&gnupg-http;/gpgme/gpgme-&gpgme-version;.tar.bz2">
   <!ENTITY gpgme-download-ftp  "">
-  <!ENTITY gpgme-md5sum        "01a8c05b409847e87daf0543e91f8c37">
+  <!ENTITY gpgme-md5sum        "2e0cc1df9f3da8c2a7d7c9dc33b7f0bf">
   <!ENTITY gpgme-size          "1,8 MB">
-  <!ENTITY gpgme-buildsize     "260 MB (com testes)">
-  <!ENTITY gpgme-time          "1,0 UPC (com todas as ligações e testes; com paralelismo=4)">
+  <!ENTITY gpgme-buildsize     "404 MB (com testes)">
+  <!ENTITY gpgme-time          "1,5 UPC (com todas as ligações e testes; com paralelismo=4)">
 ]>
 
 <sect1 id="gpgme" xreflabel="GPGME-&gpgme-version;">
@@ -94,7 +94,7 @@ Additional Downloads</bridgehead>
     <para role="optional">
       <xref linkend="doxygen"/> e <xref linkend="graphviz"/> (para documentação da
 API), <xref linkend="gnupg2"/> (exigido se Qt ou SWIG estiverem instalados;
-usado durante a suíte de teste), <xref linkend="clisp"/>, &qt5-deps; e <xref
+usado durante a suíte de teste), <xref linkend="clisp"/> e <xref
 linkend="swig"/> (para ligações de idioma)
     </para>
 
@@ -103,7 +103,23 @@ linkend="swig"/> (para ligações de idioma)
   <sect2 role="installation">
     <title>Instalação do GPGME</title>
 
+
+
+    <!-- No longer needed with 1.24.2
     <para>
+
+      First, allow the build system to detect Python-&python3-majorver;.
+      Also, prevent the build system from attaching the
+      <literal>-unknown</literal> suffix to the version string when it's
+      regenerated outside of a Git repository. After this, regenerate the build
+      system:
+    </para>
+
+<screen><userinput>sed 's/\[3.12\]/&amp;,[&python3-majorver;]/' -i configure.ac &amp;&amp;
+sed 's/-unknown//' -i autogen.sh           &amp;&amp;
+autoconf</userinput></screen>
+-->
+<para>
       Instale <application>GPGME</application> executando os seguintes comandos:
     </para>
 
@@ -130,13 +146,9 @@ fi</userinput></screen>
 
     <para>
       Para testar os resultados, você deveria ter <xref linkend="gnupg2"/>
-instalado e remover o <option>--disable-gpg-test</option> acima. Se <xref
-linkend='swig'/> estiver instalado, é necessário adaptar a suíte de teste
-para usar a ligação do Python 3 recém-construída como uma wheel
-também. Emita:
+instalado e remover o <option>--disable-gpg-test</option> acima. Emita:
     </para>
 
-<!-- https://dev.gnupg.org/T6778 -->
 <screen remap='test'><userinput>if swig -version > /dev/null; then
   python3 -m venv testenv                                              &amp;&amp;
   testenv/bin/pip3 install --no-index --find-links=dist --no-cache-dir \
@@ -147,11 +159,6 @@ fi &amp;&amp;
 
 make -k check PYTHONS= PYTHON=$PWD/testenv/bin/python3</userinput></screen>
 
-    
-    <para>
-      Um teste chamado <filename>t-quick-key-manipulation.py</filename> é
-conhecido por falhar.
-    </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:

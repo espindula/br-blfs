@@ -3,15 +3,15 @@
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
-  <!ENTITY inkscape-download-http "https://inkscape.org/gallery/item/44615/inkscape-&inkscape-minor-version;.tar.xz">
+  <!ENTITY inkscape-download-http "https://inkscape.org/gallery/item/53679/inkscape-&inkscape-minor-version;.tar.xz">
 
   <!-- When updating, remember to change the numeric part of the URL -->
 
   <!ENTITY inkscape-download-ftp  "">
-  <!ENTITY inkscape-md5sum        "76ed1f4b13065e80de8b2d77b6427b83">
-  <!ENTITY inkscape-size          "43 MB">
-  <!ENTITY inkscape-buildsize     "817 MB (189 MB instalado)">
-  <!ENTITY inkscape-time          "4,6 UPC (com paralelismo=8)">
+  <!ENTITY inkscape-md5sum        "a93f3a8eab82ef3d610f426bfe58e3df">
+  <!ENTITY inkscape-size          "44 MB">
+  <!ENTITY inkscape-buildsize     "784 MB (197 MB instalado)">
+  <!ENTITY inkscape-time          "2,6 UPC (com paralelismo=8)">
 
   <!-- To find newer tarballs, look here:
        https://inkscape.org/release/all/source/archive/?pre=0
@@ -78,7 +78,7 @@ mudar imagens SVG.
       <listitem>
         <para>
           Remendo exigido: <ulink
-url="&patch-root;/inkscape-&inkscape-minor-version;-upstream_fixes-2.patch"/>
+url="&patch-root;/inkscape-&inkscape-minor-version;-poppler_fixes-2.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -161,24 +161,16 @@ Optional Runtime Dependencies
     <title>Instalação do Inkscape</title>
 
     <para>
-      Primeiro, corrija o Inkscape para construir com poppler-24.05.0:
+      Primeiro, corrija falhas de construção com versões recentes do poppler:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-minor-version;-upstream_fixes-2.patch</userinput></screen>
-
-    <para>
-      A seguir, corrija uma falha de construção causada por libxml2-2.12.0:
-    </para>
-
-<screen><userinput remap="pre">sed -i '/uri.h/a #include &lt;libxml/xmlmemory.h&gt;' src/object/uri.h</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-minor-version;-poppler_fixes-2.patch</userinput></screen>
 
     <para>
       Instale o <application>Inkscape</application> executando os seguintes
 comandos:
     </para>
 
-<!-- A race condition has been observed with inkscape-1.2.2, cmake-3.25.1,
-     and make-4.4. Reported by "Dragan" on the blfs-dev list -->
 <!--
     <para>
 
@@ -195,13 +187,10 @@ comandos:
 <screen><userinput>mkdir build                       &amp;&amp;
 cd    build                       &amp;&amp;
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr \
-      -D CMAKE_BUILD_TYPE=Release  \
+cmake -D CMAKE_INSTALL_PREFIX=/usr  \
+      -D CMAKE_BUILD_TYPE=Release   \
       ..                          &amp;&amp;
 make</userinput></screen>
-
-
-&parallel_issues;
 
 
 

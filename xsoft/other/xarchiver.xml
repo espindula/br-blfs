@@ -97,15 +97,36 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais (Tempo de execução)</bridgehead>
     <para role="optional">
-      <xref role="runtime" linkend="cpio"/>, <xref role="runtime" linkend="lzo"/>,
-<xref role="runtime" linkend="p7zip"/>, <xref role="runtime"
-linkend="unrar"/>, <xref role="runtime" linkend="unzip"/> e <xref
-role="runtime" linkend="zip"/>
+      <xref role="runtime" linkend="seven-zip"/>, <xref role="runtime"
+linkend="cpio"/>, <xref role="runtime" linkend="lzo"/>, <xref role="runtime"
+linkend="unrar"/>, <xref role="runtime" linkend="zip"/> e <ulink
+url='https://sourceforge.net/projects/infozip/files/UnZip%206.x%20%28latest%29/'>unzip</ulink>
     </para>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do xarchiver</title>
+
+    <para>
+      O BLFS fornece <command>unzip</command> como um link simbólico para
+<command>bsdunzip</command> proveniente de <xref linkend='libarchive'/>, mas
+não funciona para o xarchiver. Adapte o xarchiver para usar <xref
+linkend='seven-zip'/> para manusear arquivos <filename
+class='extension'>.zip</filename> por padrão:
+    </para>
+
+<screen><userinput>sed '/TOGGLE.*prefer_unzip/s/TRUE/FALSE/' -i src/pref_dialog.c</userinput></screen>
+
+    <note>
+      <para>
+        Se você já tiver instalado e executou esse pacote antes (talvez em outra
+distribuição, se seu <filename class='directory'>/home</filename> for uma
+partição compartilhada com essa distribuição), ele provavelmente já está
+configurado para preferir <command>unzip</command>. Desconfigure a caixa de
+seleção <quote>Preferir unzip para arquivos zip</quote> na caixa de diálogo
+<quote>Ação => Preferências</quote> para mudar a configuração.
+      </para>
+    </note>
 
     <para>
       Instale o <application>xarchiver</application> executando os seguintes

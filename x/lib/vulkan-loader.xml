@@ -6,9 +6,9 @@
 
   <!ENTITY vulkan-loader-download-http "https://github.com/KhronosGroup/Vulkan-Loader/archive/v&vulkan-loader-version;/Vulkan-Loader-&vulkan-loader-version;.tar.gz">
   <!ENTITY vulkan-loader-download-ftp  "">
-  <!ENTITY vulkan-loader-md5sum        "31432bec5926f78a5e302e8c0530d284">
-  <!ENTITY vulkan-loader-size          "1,6 MB">
-  <!ENTITY vulkan-loader-buildsize     "9,3 MB">
+  <!ENTITY vulkan-loader-md5sum        "bda057142f094da44dfa8efbf342f503">
+  <!ENTITY vulkan-loader-size          "1,7 MB">
+  <!ENTITY vulkan-loader-buildsize     "11 MB">
   <!ENTITY vulkan-loader-time          "menos que 0,1 UPC">
 ]>
 
@@ -70,14 +70,26 @@ para Vulkan.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cmake"/>, <xref linkend="vulkan-headers"/>, <xref
-linkend="wayland"/> e <xref linkend="xorg7-lib"/>
+      <xref linkend="cmake"/>, <xref linkend="vulkan-headers"/> e <xref
+linkend="xorg7-lib"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="wayland"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas (tempo de execução)</bridgehead>
     <para role="runtime">
       <xref linkend="mesa"/> (para controladores Vulkan)
     </para>
+
+    <bridgehead renderas="sect4">Opcionais (para testagem)</bridgehead>
+    <para role="optional">
+      <xref linkend="git"/>
+    </para>
+
+    &test-use-internet;
 
   </sect2>
 
@@ -107,11 +119,16 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr   \
 ninja</userinput></screen>
 
     <para>
-      <!-- To run the tests, we need to follow a complex process to download a
-      customized copy of googletest.-->
-Esse pacote não vem com uma suíte de teste funcional.
-      
+      Para executar a suíte de teste, emita (observe que o comando usará <xref
+linkend='git'/> para baixar uma cópia do GoogleTest para construir a suíte
+de teste):
     </para>
+
+<screen remap='test'><userinput>sed "s/'git', 'clone'/&amp;, '--depth=1', '-b', self.commit/" \
+    -i ../scripts/update_deps.py &amp;&amp;
+cmake -D BUILD_TESTS=ON -D UPDATE_DEPS=ON .. &amp;&amp;
+ninja &amp;&amp;
+ninja test</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -126,6 +143,12 @@ Esse pacote não vem com uma suíte de teste funcional.
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/cmake-skip-install-rpath.xml"/>
+
+    <para>
+      <option>-D BUILD_WSI_WAYLAND_SUPPORT=OFF</option>: Essa opção permite
+construir sem suporte a <xref linkend="wayland"/>.
+    </para>
+
   </sect2>
 
   <sect2 role="content">

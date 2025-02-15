@@ -39,10 +39,7 @@ de ferramentas <application>GTK</application> e
 <application>Qt</application>.
     </para>
 
-    <!-- For testing this package, use: "echo GETPIN | pinentry-qt5" -->
-&lfs122_checked;
-
-    
+    &lfs122_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -87,16 +84,10 @@ de ferramentas <application>GTK</application> e
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--<xref linkend="gtk 2"/>
-, We don't wan to reference this any more -->
-<!-- <xref linkend="libcap-pam"/>
-, This is in LFS already. PAM is not
-      necessary. -->
-<!-- If Qt5 is present, it will look for KWayland for Wayland support.-->
-<xref linkend="emacs"/>, <xref linkend="fltk"/>, <xref linkend="gcr4"/> (ou
-<xref role="nodep" linkend="gcr"/>), <xref linkend="kf6-frameworks"/> (ou
-<xref linkend="lxqt-kwayland"/>), <xref linkend="libsecret"/>, &qt5-deps; e
-<ulink url="https://www.enlightenment.org/about-efl">efl</ulink>
+      <xref linkend="emacs"/>, <xref linkend="fltk"/>, <xref linkend="gcr4"/> (ou
+<xref role="nodep" linkend="gcr"/>), <xref linkend="kf6-frameworks"/>, <xref
+linkend="libsecret"/> e <ulink
+url="https://www.enlightenment.org/about-efl">efl</ulink>
     </para>
 
   </sect2>
@@ -105,13 +96,18 @@ de ferramentas <application>GTK</application> e
     <title>Instalação do PIN-Entry</title>
 
     <para>
+      Primeiro, torne <command>configure</command> consistente com fltk-1.4.1:</para>
+
+<screen><userinput>sed -i "/FLTK 1/s/3/4/" configure   &amp;&amp;
+sed -i '14462 s/1.3/1.4/' configure</userinput></screen>
+
+    <para>
       Instale <application>PIN-Entry</application> executando os seguintes
 comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr          \
-            --enable-pinentry-tty  \
-            --disable-pinentry-qt5 &amp;&amp;
+            --enable-pinentry-tty  &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -128,11 +124,6 @@ make</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-    <para>
-      <option>--disable-pinentry-qt5</option>: Não use qt5 mesmo se ele estiver
-disponível. Qt5 está obsoleto.
-    </para>
 
     <para>
       <option>--enable-inside-emacs=yes/no</option>: Padrão é "no".

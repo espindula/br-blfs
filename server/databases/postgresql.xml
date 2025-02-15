@@ -6,10 +6,10 @@
 
   <!ENTITY postgresql-download-http "https://ftp.postgresql.org/pub/source/v&postgresql-version;/postgresql-&postgresql-version;.tar.bz2">
   <!ENTITY postgresql-download-ftp  "">
-  <!ENTITY postgresql-md5sum        "bdcc1e350b473c13d132d190c0c18499">
-  <!ENTITY postgresql-size          "24 MB">
-  <!ENTITY postgresql-buildsize     "225 MB (adicionar 43 MB para os testes)">
-  <!ENTITY postgresql-time          "0,8 UPC (com paralelismo=4, adicionar 0,2 UPC para testes)">
+  <!ENTITY postgresql-md5sum        "09113b33865a873443aca6feda634b0f">
+  <!ENTITY postgresql-size          "20 MB">
+  <!ENTITY postgresql-buildsize     "247 MB (Adicionar 86 MB para testes)">
+  <!ENTITY postgresql-time          "0,7 UPC (com paralelismo=4, adicionar 0,1 UPC para testes)">
 ]>
 
 <sect1 id="postgresql" xreflabel="PostgreSQL-&postgresql-version;">
@@ -118,8 +118,7 @@ comandos:
 
 <screen><userinput>sed -i '/DEFAULT_PGSOCKET_DIR/s@/tmp@/run/postgresql@' src/include/pg_config_manual.h &amp;&amp;
 
-./configure --prefix=/usr         \
-            --enable-thread-safety \
+./configure --prefix=/usr \
             --docdir=/usr/share/doc/postgresql-&postgresql-version; &amp;&amp;
 make</userinput></screen>
 
@@ -292,15 +291,18 @@ do servidor de &quot;<filename class="directory">/tmp</filename>&quot; para
 &quot;<filename class="directory">/run/postgresql</filename>&quot;.
     </para>
 
-    <para>
-      <parameter>--enable-thread-safety</parameter>: Essa chave torna as
-bibliotecas cliente seguras em camadas, permitindo que camadas simultâneas
-em aplicativos &quot;<filename class="libraryfile">libpq</filename>&quot; e
-&quot;ECPG&quot; controlem com segurança os manuseadores privados de conexão
-deles.
-    </para>
+ 
 
+    <!-- Removed in 17.0
     <para>
+
+      <parameter>- -enable-thread-safety</parameter>: This switch makes the
+      client libraries thread-safe by allowing concurrent threads in
+      <filename class="libraryfile">libpq</filename> and ECPG programs to
+      safely control their private connection handles.
+    </para>
+-->
+<para>
       <option>--with-openssl</option>: constrói o pacote com suporte para conexões
 encriptadas &quot;<application>OpenSSL</application>&quot;.
     </para>

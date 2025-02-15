@@ -6,17 +6,14 @@
 
   <!ENTITY linux-pam-download-http "https://github.com/linux-pam/linux-pam/releases/download/v&linux-pam-version;/Linux-PAM-&linux-pam-version;.tar.xz">
   <!ENTITY linux-pam-download-ftp  "">
-  <!ENTITY linux-pam-md5sum        "8ad1e72d1ff6480d8e0af658e2d7b768">
-  <!ENTITY linux-pam-size          "1,0 MB">
-  <!ENTITY linux-pam-buildsize     "39 MB (com testes)">
-  <!ENTITY linux-pam-time          "0,4 UPC (com testes)">
+  <!ENTITY linux-pam-md5sum        "c1e41d59d6852e45d0f953c8c8f869d6">
+  <!ENTITY linux-pam-size          "496 KB">
+  <!ENTITY linux-pam-buildsize     "16 MB (com testes)">
+  <!ENTITY linux-pam-time          "0,3 UPC (com testes)">
 
-  <!ENTITY linux-pam-docs-download "https://github.com/linux-pam/linux-pam/releases/download/v&linux-pam-version;/Linux-PAM-&linux-pam-docs-version;-docs.tar.xz">
-  <!ENTITY linux-pam-docs-md5sum   "46dc9f9a27ef73a2fbe3b667877e88da">
-  <!ENTITY linux-pam-docs-size     "455 KB">
-  <!--
-  <!ENTITY debian-pam-docs         "http://debian.securedservers.com/kernel/pub/linux/libs/pam">
-  -->
+  <!ENTITY linux-pam-docs-download "&sources-anduin-http;/Linux-PAM/Linux-PAM-&linux-pam-docs-version;-docs.tar.xz">
+  <!ENTITY linux-pam-docs-md5sum   "dba9e555df98004fe9cea233c927a551">
+  <!ENTITY linux-pam-docs-size     "495 KB">
 ]>
 
 <sect1 id="linux-pam" xreflabel="Linux-PAM-&linux-pam-version;">
@@ -100,26 +97,18 @@ como os aplicativos autenticam usuários(as).
     <para role="optional">
       <xref linkend="libnsl"/>, <xref linkend="libtirpc"/>, <xref
 linkend="rpcsvc-proto"/>, &berkeley-db;, <ulink
-url="https://github.com/linux-audit/audit-userspace">libaudit</ulink>,
-<ulink url="https://github.com/openSUSE/libeconf">libeconf</ulink> e <ulink
-url="https://www.prelude-siem.org">Prelude</ulink>
+url="https://github.com/linux-audit/audit-userspace">libaudit</ulink> e
+<ulink url="https://github.com/openSUSE/libeconf">libeconf</ulink>
     </para>
 
-    <!-- With 1.5.3, building the doc requires the namespaced version of
-     docbook-xsl, which is beyond BLFS.
-
-    <bridgehead renderas="sect4">
-Optional (To Rebuild the Documentation)</bridgehead>
+    <bridgehead renderas="sect4">Opcionais (Para construir a Documentação e Páginas de Manual)</bridgehead>
     <para role="optional">
-      <xref linkend="DocBook"/>,
-      <xref linkend="docbook-xsl"/>,
-      <xref linkend="fop"/>,
-      <xref linkend="libxslt"/> and either
-      <xref linkend="lynx"/> or
-      <ulink url="&w3m-url;">W3m</ulink>
+      <xref linkend="docbook5"/>, <xref linkend="docbook-xsl-ns"/>, <xref
+linkend="fop"/> (para o formato PDF), <xref linkend="libxslt"/> e <xref
+linkend='lynx'/> (para o formato de texto simples)
     </para>
--->
-<note>
+
+    <note>
       <para role="required">
         <xref role="runtime" linkend="shadow"/> <phrase revision="systemd"> e <xref
 role="runtime" linkend="systemd"/> precisa</phrase><phrase
@@ -161,56 +150,33 @@ ser configurado ou o módulo simplesmente não fará nada:
   <sect2 role="installation">
     <title>Instalação do Linux PAM</title>
 
-    <para revision="sysv">
-      Primeiro, evite a instalação de um arquivo desnecessário do systemd:
-    </para>
-
-<!-- https://github.com/linux-pam/linux-pam/issues/809 -->
-<screen revision="sysv"><userinput>sed -e /service_DATA/d \
-    -i modules/pam_namespace/Makefile.am</userinput></screen>
-
-    
     <para>
-      O arquivo <filename>libtool.m4</filename> enviado tem uma configuração
-inconsistente com a hierarquia <filename class='directory'>/usr</filename>
-do LFS. Esse problema causaria <filename
-class='libraryfile'>libpam_misc.so</filename> lincada com um sinalizador
-rpath que às vezes pode causar problemas ou até mesmo problemas de
-segurança. Regenere o sistema de construção para corrigir a inconsistência:
+      Se você tiver instalado <xref linkend='docbook5'/>, <xref
+linkend='docbook-xsl-ns'/>, <xref linkend='libxslt'/> e <xref
+linkend='lynx'/> e desejar gerar o formato de texto simples das
+documentações, modifique <filename>meson.build</filename> para usar <xref
+linkend='lynx'/> em vez de W3m ou Elinks que o BLFS não fornece:
     </para>
 
-<screen><userinput>autoreconf -fi</userinput></screen>
-
-    <para>
-      Se você baixou a documentação, [então] desempacote o tarball emitindo o
-seguinte comando.
-    </para>
-
-<!--
-    <para>
-
-      If you want to regenerate the documentation yourself, fix the
-      <command>configure</command> script so it will detect lynx:
-    </para>
-
-<screen><userinput>sed -e 's/dummy elinks/dummy lynx/'                                    \
-    -e 's/-no-numbering -no-references/-force-html -nonumbers -stdin/' \
-    -i configure</userinput></screen>
--->
-<screen><userinput>tar -xf ../Linux-PAM-&linux-pam-docs-version;-docs.tar.xz --strip-components=1</userinput></screen>
+    <screen><userinput>sed -e "s/'elinks'/'lynx'/"                       \
+    -e "s/'-no-numbering', '-no-references'/      \
+          '-force-html', '-nonumbers', '-stdin'/" \
+    -i meson.build</userinput></screen>
 
     <para>
       Compile e vincule o <application>Linux PAM</application> executando os
 seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr                       \
-            --sbindir=/usr/sbin                  \
-            --sysconfdir=/etc                    \
-            --libdir=/usr/lib                    \
-            --enable-securedir=/usr/lib/security \
-            --docdir=/usr/share/doc/Linux-PAM-&linux-pam-version; &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..        \
+  --prefix=/usr       \
+  --buildtype=release \
+  -D docdir=/usr/share/doc/Linux-PAM-&linux-pam-version; &amp;&amp;
+
+ninja</userinput></screen>
 
     <para>
       Para testar os resultados, um arquivo de configuração adequado
@@ -229,11 +195,11 @@ arquivo existente pode ser usado para os testes.
       </para>
 
       <para>
-         Você também deveria estar ciente de que <command>make install</command>
+         Você também deveria estar ciente de que <command>ninja install</command>
 sobrescreve os arquivos de configuração em <filename
 class="directory">/etc/security</filename>, assim como em
-<filename>/etc/environment</filename> . Se você tiver modificado esses
-arquivos, [então] certifique-se de produzir uma cópia de segurança deles.
+<filename>/etc/environment</filename>. Se você tiver modificado esses
+arquivos, certifique-se de produzir uma cópia de segurança deles.
       </para>
     </caution>
 
@@ -253,11 +219,9 @@ session  required       pam_deny.so</literal>
 EOF</userinput></screen>
 
     <para>
-      Agora execute os testes emitindo <command>make
-check</command>. Certifique-se de que os testes não produziram erros antes
-de continuar a instalação. Observe que os testes são muito
-longos. Redirecione a saída gerada para um arquivo de registro, de forma que
-você possa inspecioná-lo completamente.
+      Agora execute os testes emitindo <command>ninja
+test</command>. Certifique-se de que os testes não produziram erros antes de
+continuar a instalação. 
     </para>
 
     <para>
@@ -269,46 +233,33 @@ class="username">root</systemitem>:
 <screen role="root"><userinput>rm -fv /etc/pam.d/other</userinput></screen>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>make install &amp;&amp;
+<screen role="root"><userinput>ninja install &amp;&amp;
 chmod -v 4755 /usr/sbin/unix_chkpwd</userinput></screen>
 
+    <para revision="sysv">Agora remova um diretório desnecessário como &root;:</para>
+
+<screen role="root" revision="sysv"><userinput>rm -rf /usr/lib/systemd</userinput></screen>    
+
+    <para>Se você não tiver as dependências opcionais instaladas para construir a
+documentação e baixou a documentação opcional pré construída, novamente como
+o(a) usuário(a) &root;:</para>
+
+<screen role="root"><userinput>tar -C / -xvf ../../Linux-PAM-&linux-pam-docs-version;-docs.tar.xz</userinput></screen>
+
   </sect2>
 
+  <!--
   <sect2 role="commands">
-    <title>Explicações do Comando</title>
 
-    <para>
-      <parameter>--enable-securedir=/usr/lib/security</parameter>: Essa chave
-configura o local de instalação para os módulos
-<application>PAM</application>.
-    </para>
+    <title>Command Explanations</title>
 
-    <!--
-    <para>
-
-      <option>- -disable-regenerate-docu</option> : If the needed dependencies
-      (<xref linkend="DocBook"/>, <xref linkend="docbook-xsl"/>, <xref
-      linkend="libxslt"/>, and <xref linkend="lynx"/> or <ulink
-      url="&w3m-url;">W3m</ulink>) are installed, the manual pages, and the
-      html and text documentation files, are generated and installed.
-      Furthermore, if <xref linkend="fop"/> is installed, the PDF
-      documentation is generated and installed. Use this switch if you do not
-      want to rebuild the documentation.
-    </para>
--->
-<para>
-      <command>chmod -v 4755 /usr/sbin/unix_chkpwd</command>: O bit setuid para o
-aplicativo auxiliar <command>unix_chkpwd</command> precisa ser ativado, de
-forma que processos não <systemitem class="username">root</systemitem>
-possam acessar o arquivo de sombra.
-    </para>
 
   </sect2>
-
-  <sect2 role="configuration">
+-->
+<sect2 role="configuration">
     <title>Configurando Linux-PAM</title>
 
     <sect3 id="pam-config">
@@ -416,14 +367,12 @@ session     required        pam_deny.so
 EOF</userinput></screen>
 
       <para>
-        <!-- not accessible 2022-09-08 -->
-<!-- it's available at a different address 2022-10-23-->
-A página de manual do <application>PAM</application> (<command>man
+        A página de manual do <application>PAM</application> (<command>man
 pam</command>) fornece um bom ponto de partida para aprender a respeito dos
-diversos campos e entradas permitidas. O <ulink
-url="https://www.docs4dev.com/docs/en/linux-pam/1.1.2/reference/Linux-PAM_SAG.html">Guia
-do(a) Administrador(a) do Sistema Linux-PAM</ulink> é recomendado para
-informação adicional.
+diversos campos e entradas permissíveis. O Guia Linux-PAM do(a)
+Administrador(a) do Sistema em
+<filename>/usr/share/doc/Linux-PAM-1.7.0/Linux-PAM_SAG.txt</filename> é
+recomendado para informações adicionais.
       </para>
 
       <important>

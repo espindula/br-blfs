@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-46;/mutter-&mutter-version;.tar.xz">
+  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-47;/mutter-&mutter-version;.tar.xz">
   <!ENTITY mutter-download-ftp  "">
-  <!ENTITY mutter-md5sum        "022716bf531a4953a74910fef09019ed">
-  <!ENTITY mutter-size          "6,4 MB">
-  <!ENTITY mutter-buildsize     "83 MB (com testes)">
+  <!ENTITY mutter-md5sum        "c899a4fed30ce1a99f0e17567b59cfb9">
+  <!ENTITY mutter-size          "6,5 MB">
+  <!ENTITY mutter-buildsize     "72 MB (com testes)">
   <!ENTITY mutter-time          "0,5 UPC (Usando paralelismo=4; adicionar 1,4 UPC para testes)">
 ]>
 
@@ -79,8 +79,8 @@ e <xref linkend="pipewire"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="desktop-file-utils"/>, &gobject-introspection; e <xref
-linkend="startup-notification"/>
+      <xref linkend="desktop-file-utils"/>, &gobject-introspection;, <xref
+linkend="libdisplay-info"/> e <xref linkend="startup-notification"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas (exigidas para construir o compositor Wayland)</bridgehead>
@@ -102,8 +102,12 @@ linkend="wayland-protocols"/> e <xref linkend="xwayland"/>
 <!--<xref linkend="sysprof"/>
 ,-->
 <xref linkend="python-dbusmock"/> (exigido para testes), <xref
-linkend="libdisplay-info"/>, <xref linkend="xorg-server"/> (para sessões do
-X11) e <ulink url="&sysprof-url;">sysprof</ulink>
+linkend="xorg-server"/> (para sessões do X11), <ulink
+url="&sysprof-url;">sysprof</ulink>, <command>Xvfb</command> (proveniente de
+<xref linkend='xorg-server'/> ou <xref linkend='xwayland'/>), <ulink
+url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink>, e <ulink
+url='https://gitlab.gnome.org/GNOME/zenity'>zenity</ulink> (os testes X11
+somente executariam com todos os três últimos)
     </para>
 
     
@@ -149,7 +153,7 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -D tests=false      \
+            -D tests=disabled   \
             -D profiler=false   \
             ..                  &amp;&amp;
 ninja</userinput></screen>
@@ -158,25 +162,24 @@ ninja</userinput></screen>
     
 
     <para>
-      A suíte de teste exige um aplicativo externo chamado
-<command>xvfb-run</command>. Se desejar executar os testes, você deveria
-baixá-lo e instalá-lo antes de executar o <command>meson</command>. Você
-pode obtê-lo a partir de <ulink
-url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink> e instalá-lo
-com permissões executáveis em <filename
-class="directory">/usr/bin</filename>. <command>xvfb-run</command> precisa
-de <command>Xvfb</command> em tempo de execução, e <command>Xvfb</command>
-pode ser instalado a partir de <xref linkend='xorg-server'/> ou <xref
-linkend='xwayland'/>. Você também deveria substituir <parameter>-D
-tests=false</parameter> no comando <command>meson</command> por
-<parameter>-D tests=true -D clutter_tests=false</parameter>. A suíte de
-teste exige que o esquema mutter esteja instalado no sistema, de forma que é
-melhor executar os testes depois de instalar o pacote.
+      Se você quiser executar a suíte de teste, certifique-se de que <xref
+linkend='python-dbusmock'/> esteja instalado e emita:
     </para>
 
+<screen role='test'><userinput>meson configure -D tests=enabled -D clutter_tests=false &amp;&amp;
+ninja test</userinput></screen>
+
     <para>
-      Você também pode testar funções básicas do <application>Mutter</application>
-seguindo <xref linkend='mutter-starting'/>, depois de instalá-lo.
+      Os testes exigem uma sessão ativa do X ou do wayland. Alguns testes são
+instáveis (especialmente sob uma carga alta do sistema), de forma que se um
+teste falhar, você pode tentar executá-lo novamente sozinho com o comando
+<command>meson test <replaceable>&lt;nome
+teste&gt;</replaceable></command>. Alguns testes possivelmente falhem
+dependendo de alguma configuração do sistema. Não faça nenhuma entrada de
+mouse ou de teclado enquanto a suíte de teste estiver executando ou alguns
+testes possivelmente falhem. Você também consegue testar funções básicas do
+<application>Mutter</application> seguindo <xref linkend='mutter-starting'
+role=','/> depois de instalá-lo.
     </para>
 
     <para>
@@ -184,30 +187,6 @@ seguindo <xref linkend='mutter-starting'/>, depois de instalá-lo.
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
-
-    <para>
-      Se você deseja executar os testes, remova a referência ao
-<application>Zenity</application>, que não faz parte do BLFS, de um teste:
-    </para>
-
-<screen role='test'><userinput>sed 's/zenity --[a-z]*/gtk4-demo/' -i ../src/tests/x11-test.sh</userinput></screen>
-
-    <para>
-      Agora execute a suíte de teste:
-    </para>
-
-<screen role='test'><userinput>ninja test</userinput></screen>
-
-    <para>
-      Os testes exigem uma sessão ativa do X ou do wayland. Alguns testes são
-instáveis (especialmente sob alta carga do sistema), de forma que se um
-teste falhar, você pode tentar executá-lo novamente sozinho com o comando
-<command>meson test <replaceable>&lt;nome do
-teste&gt;</replaceable></command>. Uns poucos testes possivelmente falhem
-dependendo de alguma configuração do sistema. Não faça nenhuma entrada de
-mouse ou de teclado enquanto a suíte de teste estiver executando ou alguns
-testes possivelmente falhem.
-    </para>
 
   </sect2>
 
@@ -218,8 +197,16 @@ testes possivelmente falhem.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-D tests=false</parameter>: Impede a construção dos testes e
-remove um requisito difícil em <command>xvfb-run</command>.
+      <parameter>-D tests=disabled</parameter>: Permite construir o pacote sem
+<xref linkend='python-dbusmock'/> instalado. Ele será substituído por
+<command>meson configure</command> se executar a suíte de teste.
+    </para>
+
+    <para>
+      <parameter>-D clutter_tests=false</parameter>: Desabilita os testes para a
+biblioteca <application>Clutter</application> enviada. Os testes
+<application>Clutter</application> são conhecidos por falharem com
+<parameter>--buildtype=release</parameter>.
     </para>
 
     <para>
@@ -230,11 +217,8 @@ desempenho de renderização do <application>Mutter</application>.
     </para>
 
     <para>
-      <option>-D tests=true -D clutter_tests=false</option>: Isso constrói todos
-os testes, exceto os testes para a biblioteca enviada do
-<application>Clutter</application>. Os testes do
-<application>Clutter</application> são conhecidos por falharem com
-<parameter>--buildtype=release</parameter>.
+      <option>-D libdisplay_info=disabled</option>: Isso permite construir esse
+pacote sem <xref linkend='libdisplay-info'/> instalado.
     </para>
 
   </sect2>
@@ -290,10 +274,10 @@ para a sessão aninhada do Wayland.
           mutter
         </seg>
         <seg>
-          libmutter-14.so e libmutter-test-14.so (opcional)
+          libmutter-15.so e libmutter-test-15.so (opcional)
         </seg>
         <seg>
-          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-14
+          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-15
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -316,28 +300,28 @@ baseado em <application>Clutter</application>
       </varlistentry>
 
       <varlistentry id="libmutter">
-        <term><filename class="libraryfile">libmutter-14.so</filename></term>
+        <term><filename class="libraryfile">libmutter-15.so</filename></term>
         <listitem>
           <para>
             contém as funções da API do <application>Mutter</application>
           </para>
           <indexterm zone="mutter libmutter">
-            <primary sortas="c-libmutter">libmutter-14.so</primary>
+            <primary sortas="c-libmutter">libmutter-15.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
       <varlistentry id="libmutter-test">
-        <term><filename class="libraryfile">libmutter-test-14.so</filename></term>
+        <term><filename class="libraryfile">libmutter-test-15.so</filename></term>
         <listitem>
           <para>
             contém as funções de API da suíte de teste do
 <application>Mutter</application>; essa biblioteca só é instalada se a suíte
-de teste desse pacote estiver habilitada e for necessária para a suíte de
-teste do <application>gnome-shell</application>
+de teste desse pacote for executada e for necessária para a suíte de teste
+do <application>gnome-shell</application>
           </para>
           <indexterm zone="mutter libmutter-test">
-            <primary sortas="c-libmutter-test">libmutter-test-14.so</primary>
+            <primary sortas="c-libmutter-test">libmutter-test-15.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

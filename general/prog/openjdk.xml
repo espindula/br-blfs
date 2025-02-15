@@ -5,21 +5,21 @@
   %general-entities;
 
   <!ENTITY ojdk-tarball              "jdk-&openjdk-version;-ga.tar.gz">
-  <!ENTITY ojdk-repo                 "https://github.com/openjdk/jdk22u">
+  <!ENTITY ojdk-repo                 "https://github.com/openjdk/jdk23u">
   <!ENTITY ojdk-download             "&ojdk-repo;/archive/&ojdk-tarball;">
 
   <!ENTITY anduin-download           "&sources-anduin-http;/OpenJDK/OpenJDK-&openjdk-version;">
 
-  <!ENTITY ojdk-md5sum               "13b4e71252055e6d78ae12b8db5021d4">
-  <!ENTITY ojdk-size                 "107 MB">
+  <!ENTITY ojdk-md5sum               "31ff1e9a086626610591efdff44cb7b3">
+  <!ENTITY ojdk-size                 "112 MB">
 
   <!ENTITY jtreg-version             "7.3.1+1">
   <!ENTITY jtreg-download            "&anduin-download;/jtreg-&jtreg-version;.tar.gz">
   <!ENTITY jtreg-md5sum              "0038551ecaf37d0cd99832217f79e56d">
   <!ENTITY jtreg-size                "9,0 MB">
 
-  <!ENTITY ojdk-bdsize               "3,7 GB (adicionar 625 MB para os testes)">
-  <!ENTITY ojdk-time                 "5,2 UPC com quatro (04) tarefas (adicionar 34 UPC para testes com quatro
+  <!ENTITY ojdk-bdsize               "3,7 GB (adicionar 515 MB para os testes)">
+  <!ENTITY ojdk-time                 "4,8 UPC com quatro (04) tarefas (adicionar 33 UPC para testes com quatro
 (04) tarefas)">
 ]>
 
@@ -173,8 +173,8 @@ Required patch</bridgehead>
       Um binário existente (<xref linkend="java"/> ou uma versão construída
 anterior desse pacote. As instruções abaixo assumem que você está usando
 <xref linkend="ojdk-conf"/>), <xref linkend="alsa-lib"/>, <xref
-linkend="cpio"/>, <xref linkend="cups"/>, <xref linkend="unzip"/>, <xref
-linkend="which"/>, <xref linkend="xorg7-lib"/> e <xref linkend="zip"/>
+linkend="cpio"/>, <xref linkend="cups"/>, <xref linkend="libarchive"/>,
+<xref linkend="which"/>, <xref linkend="xorg7-lib"/> e <xref linkend="zip"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -226,14 +226,12 @@ url="https://zlib.net/pigz">pigz</ulink>
     <note>
       <para>
         Antes de continuar, você deveria garantir que sua variável de ambiente
-&quot;<envar>PATH</envar>&quot; contenha o local do compilador
-&quot;Java&quot; usado para inicializar o
-&quot;<application>OpenJDK</application>&quot;. Essa é a única exigência
-para o ambiente. Instalações modernas &quot;Java&quot; não precisam de
-&quot;<envar>JAVA_HOME</envar>&quot;; e &quot;<envar>CLASSPATH</envar>&quot;
-não é usado aqui. Além disso, os(as) desenvolvedores(as) do
-&quot;OpenJDK&quot; recomendam desconfigurar
-&quot;<envar>JAVA_HOME</envar>&quot;.
+<envar>PATH</envar> contenha o local do compilador Java usado para
+inicializar o <application>OpenJDK</application>. Essa é a única exigência
+para o ambiente. Instalações modernas Java não precisam de
+<envar>JAVA_HOME</envar>; e <envar>CLASSPATH</envar> não é usado aqui. Além
+disso, os(as) desenvolvedores(as) do OpenJDK recomendam desconfigurar
+<envar>JAVA_HOME</envar> e <envar>CLASSPATH</envar>.
       </para>
 
       <para>
@@ -249,6 +247,8 @@ relativas a personalizar a paralelização.
     </para>
 
 <screen><userinput>unset JAVA_HOME                             &amp;&amp;
+unset CLASSPATH                             &amp;&amp;
+unset MAKEFLAGS                             &amp;&amp;
 bash configure --enable-unlimited-crypto    \
                --disable-warnings-as-errors \
                --with-stdc++lib=dynamic     \
@@ -262,6 +262,7 @@ bash configure --enable-unlimited-crypto    \
                --with-version-build="&openjdk-build;"     \
                --with-version-pre=""        \
                --with-version-opt=""        \
+               --with-jobs=<replaceable>$(nproc)</replaceable>         \
                --with-cacerts-file=/etc/pki/tls/java/cacerts &amp;&amp;
 make images</userinput></screen>
 
@@ -280,12 +281,11 @@ unset JT_JAVA</userinput></screen>
 
     <para>
       Para mais controle sobre a suíte de teste, revise a documentação disponível
-em &quot;<filename>jtreg/doc/jtreg/usage.txt</filename>&quot;. Para revisar
-os resultados, vejam-se os arquivos
-&quot;<filename>JTreport/test_{jdk,langtools}/text/stats.txt</filename>&quot;
-e
-&quot;<filename>JTreport/test_{jdk,langtools}/text/summary.txt</filename>&quot;.
-Você deveria esperar ver cerca de sessenta (60) falhas e dez (10) erros.
+em <filename>jtreg/doc/jtreg/usage.txt</filename>. Para revisar os
+resultados, vejam-se os arquivos
+<filename>JTreport/test_{jdk,langtools}/text/stats.txt</filename> e
+<filename>JTreport/test_{jdk,langtools}/text/summary.txt</filename>. Você
+deveria esperar ver cerca de oitenta (80) falhas e dez (10) erros.
     </para>
     
 
@@ -331,6 +331,12 @@ Você deveria esperar ver cerca de sessenta (60) falhas e dez (10) erros.
          22.0.2+9:
          for x86_64: passed: 6,772; failed: 82; error: 15
          for i686:   passed: 6,704; failed: 79; error: 17
+         23.0.1+11:
+         for x86_64: passed: 6,859; failed: 84; error: 15
+         for i686:   passed: 6,790; failed: 81; error: 16
+         23.0.2+7:
+         for x86_64: passed: 6,863; failed: 84; error: 15
+         for i686:   passed: 6,794; failed: 81; error: 16
     -->
 <para>
       Instale o pacote com os seguintes comandos como o(a) usuário(a)
@@ -439,10 +445,10 @@ de construção a vincular-se a &quot;<filename>libstdc++.so</filename>&quot;
     </para>
 
     <para>
-      <option>--with-jobs=<replaceable>&lt;X&gt;</replaceable></option>: O
-&quot;<parameter>-j</parameter>&quot; passado para &quot;make&quot; não
-funciona com &quot;make&quot; como invocado aqui. Por padrão, o sistema de
-construção usará o número de &quot;CPUs&quot; – 1.
+      <parameter>--with-jobs=<replaceable>$(nproc)</replaceable></parameter>: O
+<parameter>-j</parameter> passado para make não funciona com make como
+invocado aqui. Por padrão, o sistema de construção usará o número de CPUs –
+1.
     </para>
 
     <para>
@@ -572,7 +578,7 @@ um. Caso contrário, você precisa reinstalá-los.
 jdeps, jfr, jhsdb, jimage, jinfo, jlink, jmap, jmod, jpackage, jps,
 jrunscript, jshell, jstack, jstat, jstatd, jwebserver, keytool, rmiregistry
 e serialver</seg>
-        <seg>38 bibliotecas em /opt/jdk-&openjdk-version;+&openjdk-build;/lib/</seg>
+        <seg>37 bibliotecas em /opt/jdk-&openjdk-version;+&openjdk-build;/lib/</seg>
         <seg>/opt/jdk-&openjdk-version;+&openjdk-build;</seg>
       </seglistitem>
     </segmentedlist>

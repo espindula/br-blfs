@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY iso-codes-download-http "https://ftp.debian.org/debian/pool/main/i/iso-codes/iso-codes_&iso-codes-version;.orig.tar.xz">
+  <!ENTITY iso-codes-download-http "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v&iso-codes-version;/iso-codes-v&iso-codes-version;.tar.gz">
   <!ENTITY iso-codes-download-ftp  "">
-  <!ENTITY iso-codes-md5sum        "5760b5a359301397cc3ab2baa165c31c">
-  <!ENTITY iso-codes-size          "3,7 MB">
-  <!ENTITY iso-codes-buildsize     "95 MB">
+  <!ENTITY iso-codes-md5sum        "f4b460577728ba331e078ad8bd246c98">
+  <!ENTITY iso-codes-size          "15 MB">
+  <!ENTITY iso-codes-buildsize     "97 MB">
   <!ENTITY iso-codes-time          "0,1 UPC (com testes)">
 ]>
 
@@ -73,10 +73,6 @@ acessar esses dados.
     <title>Instalação do ISO Codes</title>
 
     <para>
-      O diretório é chamado iso-codes-&iso-codes-version;.
-    </para>
-
-    <para>
       Instale <application>ISO Codes</application> executando os seguintes
 comandos:
     </para>
@@ -88,23 +84,23 @@ make</userinput></screen>
       Para testar os resultados, emita: <command>make check</command>.
     </para>
 
-    <note>
-      <para>
-        Se você instalar <application>ISO Codes</application> sobre uma versão
-instalada anterior, [então] a etapa de instalação falhará ao criar alguns
-links simbólicos. Para a finalidade de atualizá-los corretamente, execute:
-      </para>
-
-<screen><userinput>sed -i '/^LN_S/s/s/sfvn/' */Makefile</userinput></screen>
-
-    </note>
-
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>make install LN_S='ln -sfn'</userinput></screen>
 
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>LN_S='ln -sfn'</parameter>: Essa substituição garante os links
+simbólicos instalados recriados corretamente caso nós estejamos atualizando
+ou reinstalando o pacote. Ela é desnecessária, mas inofensiva, ao instalar o
+pacote no sistema pela primeira vez.
+    </para>
   </sect2>
 
   <sect2 role="content">

@@ -7,10 +7,10 @@
   <!--  <!ENTITY systemd-download-http "https://anduin.linuxfromscratch.org/LFS/systemd-&systemd-version;-&systemd-stable;.tar.xz"> For whenever we move to a stable snapshot for backports -->
   <!ENTITY systemd-download-http "https://github.com/systemd/systemd/archive/v&systemd-version;/systemd-&systemd-version;.tar.gz">
   <!ENTITY systemd-download-ftp  "">
-  <!ENTITY systemd-md5sum        "03bd1ff158ec0bc55428c77a8f8495bd">
+  <!ENTITY systemd-md5sum        "a51c7f9ab0d8b0a08dcf14bea2b6a5cb">
   <!ENTITY systemd-size          "15 MB">
-  <!ENTITY systemd-buildsize     "328 MB (com testes)">
-  <!ENTITY systemd-time          "1,5 UPC (com testes usando quatro núcleos)">
+  <!ENTITY systemd-buildsize     "355 MB (com testes)">
+  <!ENTITY systemd-time          "1,6 UPC (com testes usando quatro núcleos)">
 
 ]>
 
@@ -94,15 +94,15 @@ Additional Downloads</bridgehead>
 
     <note>
       <para>
-        <xref linkend='linux-pam'/> não é estritamente necessário para construir o
-<application>systemd</application>, mas é o principal motivo para
-reconstruir o <application>systemd</application> no BLFS (ele já está
-construído no LFS de qualquer maneira) é para o processo de segundo plano
+        <xref linkend='linux-pam'/> não é estritamente exigido para construir o
+<application>systemd</application>, mas o principal motivo para reconstruir
+o <application>systemd</application> no BLFS (ele já está construído no LFS
+de qualquer maneira) é para o processo de segundo plano
 <command>systemd-logind</command> e o módulo PAM <filename
 class='libraryfile'>pam_systemd.so</filename>. <xref linkend='linux-pam'/> é
 exigido para eles. Todos os pacotes no livro BLFS com dependência do
-<application>systemd</application> esperam que tenham sido reconstruídos com
-<xref linkend='linux-pam'/>.
+<application>systemd</application> esperam que ele tenha sido reconstruído
+com <xref linkend='linux-pam'/>.
       </para>
     </note>
 
@@ -116,14 +116,14 @@ de execução)
       <!-- homed may support it, see the C.E.-->
 <xref linkend="btrfs-progs"/>, <xref linkend="curl"/>, <xref
 linkend="cryptsetup"/>, <xref linkend="git"/>, <xref linkend="gnutls"/>,
-<xref linkend="iptables"/>, <xref linkend="libgcrypt"/>, <xref
-linkend="libidn2"/>, <xref linkend="libpwquality"/>, <xref
-linkend="libseccomp"/>, <xref linkend="libxkbcommon"/>, <xref
-linkend="make-ca"/>, <xref linkend="p11-kit"/>, <xref linkend="pcre2"/>,
-<xref linkend="qemu"/>, <xref linkend="qrencode"/>, <xref linkend="rsync"/>,
-<xref linkend="sphinx"/>, <xref linkend="valgrind"/>, <xref linkend="zsh"/>
-(para as completações do zsh), <ulink
-url="https://www.apparmor.net/">AppArmor</ulink>, <ulink
+<xref linkend="iptables"/>, <xref linkend="libarchive"/>, <xref
+linkend="libgcrypt"/>, <xref linkend="libidn2"/>, <xref
+linkend="libpwquality"/>, <xref linkend="libseccomp"/>, <xref
+linkend="libxkbcommon"/>, <xref linkend="make-ca"/>, <xref
+linkend="p11-kit"/>, <xref linkend="pcre2"/>, <xref linkend="qemu"/>, <xref
+linkend="qrencode"/>, <xref linkend="rsync"/>, <xref linkend="sphinx"/>,
+<xref linkend="valgrind"/>, <xref linkend="zsh"/> (para as completações do
+zsh), <ulink url="https://www.apparmor.net/">AppArmor</ulink>, <ulink
 url="https://github.com/linux-audit/audit-userspace">audit-userspace</ulink>,
 <ulink
 url="https://github.com/scop/bash-completion">bash-completion</ulink>,
@@ -262,7 +262,7 @@ inicializar um sistema BLFS com UEFI se seguir-se <xref
 linkend='grub-setup'/>. E ele exige o módulo
 <application>pefile</application> do Python em tempo de execução, de forma
 que, se estiver habilitado, mas <application>pefile</application> não
-estiver instalado, na suíte de teste um teste para ele falhará. Para
+estiver instalado, um teste para ele falhará na suíte de teste. Para
 habilitar o <command>systemd-ukify</command>, instale o módulo
 <application>pefile</application> e, então, mude <quote>disabled</quote>
 para <quote>enabled</quote> no comando <command>meson setup</command> acima.
@@ -362,20 +362,21 @@ pelo executável <command>systemd</command> recém-construído e instalado:
       <para>
         Agora certifique-se de que <xref linkend='shadow'/> já tenha sido
 reconstruído com suporte <xref linkend='linux-pam'/> primeiro, depois
-deslogue-se e logue-se novamente. Isso garante a sessão de login em execução
-registrada com <command>systemd-logind</command> e uma instância do systemd
-por usuário(a) executando para cada usuário(a) titularizando uma sessão de
-login. Muitos pacotes do BLFS que listam o Systemd como uma dependência
-precisam da integração <command>systemd-logind</command> e (ou) de uma
-instância do systemd em execução por usuário(a).
+deslogue-se e logue-se novamente. Isso garantirá que a sessão de login em
+execução seja registrada com <command>systemd-logind</command> e que uma
+instância do systemd por usuário(a) esteja executando para cada usuário(a)
+titularizando uma sessão de login. Muitos pacotes do BLFS que listam o
+systemd como uma dependência precisam da integração do
+<command>systemd-logind</command> e (ou) de uma instância do systemd em
+execução por usuário(a) em tempo de execução.
       </para>
     </important>
 
     <warning>
       <para>
-        Se atualizar a partir de uma versão anterior do "systemd" e um "initrd" for
-usado para inicialização do sistema, [então] você deveria gerar um novo
-"initrd" antes de reinicializar o sistema.
+        Se estiver atualizando a partir de uma versão anterior do systemd e um
+initrd for usado para inicialização do sistema, você deveria gerar um novo
+initrd antes de reinicializar o sistema.
       </para>
     </warning>
 
@@ -403,7 +404,8 @@ descrições curtas.
           
           <!-- maybe userdbd/userdbctl can go in LFS, try at next time -->
 homectl (opcional), systemd-cryptenroll (se <xref linkend="cryptsetup"/>
-estiver instalado) e userdbctl (opcional)
+estiver instalado), systemd-cryptsetup (se <xref linkend="cryptsetup"/>
+estiver instalado), e userdbctl (opcional)
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -437,6 +439,18 @@ recuperação
           </para>
           <indexterm zone="systemd systemd-cryptenroll">
             <primary sortas="b-systemd-cryptenroll">systemd-cryptenroll</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="systemd-cryptsetup">
+        <term><command>systemd-cryptsetup</command></term>
+        <listitem>
+          <para>
+            Anexa ou remove um dispositivo de bloco criptografado
+          </para>
+          <indexterm zone="systemd systemd-cryptsetup">
+            <primary sortas="b-systemd-cryptsetup">systemd-cryptsetup</primary>
           </indexterm>
         </listitem>
       </varlistentry>

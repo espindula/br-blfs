@@ -4,15 +4,14 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY qt6-major "6,7">
   <!ENTITY qt6-url   "https://download.qt.io/archive/qt/&qt6-major;/&qt6-version;/single">
 
   <!ENTITY qt6-download-http "&qt6-url;/qt-everywhere-src-&qt6-version;.tar.xz">
   <!ENTITY qt6-download-ftp  "">
-  <!ENTITY qt6-md5sum        "06d35b47349c7c0a45710daad359e07b">
-  <!ENTITY qt6-size          "892 MB">
-  <!ENTITY qt6-buildsize     "37 GB (376 MB instalado)">
-  <!ENTITY qt6-time          "12UPC (usando paralelismo = 8)">
+  <!ENTITY qt6-md5sum        "ccc7100bc687005c167a8a43a4f99050">
+  <!ENTITY qt6-size          "948 MB">
+  <!ENTITY qt6-buildsize     "45 GB (429 MB instalado)">
+  <!ENTITY qt6-time          "22 UPC (usando paralelismo = 8)">
 ]>
 
 <sect1 id="qt6" xreflabel="Qt-&qt6-version;">
@@ -93,22 +92,21 @@ linkend="libwebp"/>, <xref linkend="libxkbcommon"/>, <xref linkend="mesa"/>,
 <xref linkend="mtdev"/>, <xref linkend="pcre2"/>, <xref linkend="sqlite"/>,
 <xref linkend="wayland"/> (<application>Mesa</application> precisa ser
 construído com estrutura de retaguarda EGL do
-<application>Wayland</application>), <xref linkend="xcb-util-cursor"/>,
-<xref linkend="xcb-util-image"/>, <xref linkend="xcb-util-keysyms"/>, <xref
-linkend="xcb-util-renderutil"/> e <xref linkend="xcb-util-wm"/>
+<application>Wayland</application>) e <xref linkend="xcb-utilities"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <!--<ulink url="https://vulkan.lunarg.com/sdk/home/">
 Vulkan</ulink>-->
-<xref role="runtime" linkend="bluez"/> (para sdpscanner e, em tempo de
-execução, para módulo QtConnectivity), <xref linkend="gtk3"/>, <xref
-linkend="ibus"/>, <xref linkend="mariadb"/> ou <ulink
-url="https://www.mysql.com/">MySQL</ulink>, <xref linkend="mitkrb"/>, <xref
-linkend="pciutils"/>, <xref linkend="postgresql"/>, <xref
-linkend="pulseaudio"/>, <xref linkend="sdl2"/>, <xref linkend="unixodbc"/>,
-<ulink url="https://www.assimp.org/">assimp</ulink>, <ulink
+<xref role="runtime" linkend="bluez"/> (para sdpscanner, e em tempo de
+execução para o modulo QtConnectivity), <xref linkend="gtk3"/>, <xref
+linkend="ibus"/>, <xref linkend="llvm"/> (com Clang), <xref
+linkend="mariadb"/> ou <ulink url="https://www.mysql.com/">MySQL</ulink>,
+<xref linkend="mitkrb"/>, <xref linkend="pciutils"/>, <xref
+linkend="postgresql"/>, <xref linkend="pulseaudio"/>, <xref
+linkend="sdl2"/>, <xref linkend="unixodbc"/>, <ulink
+url="https://www.assimp.org/">assimp</ulink>, <ulink
 url="https://github.com/festvox/flite">Flite</ulink>, <ulink
 url="https://www.firebirdsql.org/">Firebird</ulink>, <ulink
 url="https://www.freetds.org/">FreeTDS</ulink>, <ulink
@@ -135,9 +133,8 @@ url="http://www.tslib.org/">tslib</ulink>
       Os(As) editores(as) do BLFS recomendam instalar o
 <application>Qt6</application> em um diretório diferente de <filename
 class="directory">/usr</filename>, ou seja, <filename
-class="directory">/opt/qt6</filename>. Isso é necessário para evitar
-conflitos com o Qt5. Para fazer isso, configure a seguinte variável de
-ambiente:
+class="directory">/opt/qt6</filename>. Para fazer isso, configure a seguinte
+variável de ambiente:
     </para>
 
 <screen><userinput>export QT6PREFIX=/opt/qt6</userinput></screen>
@@ -167,9 +164,9 @@ depende somente de onde o link simbólico aponta.
 
     <note>
       <para>
-        Se <xref linkend="qca"/> tiver sido instalado e você estiver reinstalando ou
-atualizando esse pacote, então <application>qca</application> precisará ser
-reinstalado.
+        Se <xref linkend="qca"/> ou <xref linkend="qcoro"/> tiverem sido instalados
+e você estiver reinstalando ou atualizando esse pacote, então aqueles
+pacotes precisarão ser reinstalados.
       </para>
     </note>
 
@@ -208,27 +205,9 @@ abaixo não constroem os tutoriais e exemplos. Remover a linha
 
     <note>
       <para>
-        <!--If you do want to install
-        <application>
-Qt5</application> in /usr, the directories need to
-        be specified explicitly.  In this case, set QT5PREFIX=/usr and add
-        the following to the configure arguments below:
-      </para>
-
-<screen role="nodump"><userinput>            -archdatadir    /usr/lib/qt6                \
-            -bindir         /usr/bin                    \
-            -plugindir      /usr/lib/qt6/plugins        \
-            -importdir      /usr/lib/qt6/imports        \
-            -headerdir      /usr/include/qt6            \
-            -datadir        /usr/share/qt6              \
-            -docdir         /usr/share/doc/qt6          \
-            -translationdir /usr/share/qt6/translations \
-            -examplesdir    /usr/share/doc/qt6/examples</userinput></screen>-->
-Os(As) editores(as) do BLFS não recomendam instalar o
+        Os(As) editores(as) do BLFS não recomendam instalar o
 <application>Qt6</application> na hierarquia /usr porque se torna difícil
-encontrar componentes e atualizar para uma nova versão. Existem também
-alguns programas que conflitam com aqueles instalados pelo Qt5.
-        
+encontrar componentes e atualizar para uma nova versão.
       </para>
     </note>
 
@@ -255,8 +234,7 @@ fi</userinput></screen>
             -syslog                 \
             -skip qt3d              \
             -skip qtquick3dphysics  \
-            -skip qtwebengine       \
-            -W no-dev               &amp;&amp;
+            -skip qtwebengine       &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>./configure -prefix $QT6PREFIX      \
@@ -269,8 +247,7 @@ ninja</userinput></screen>
             -journald               \
             -skip qt3d              \
             -skip qtquick3dphysics  \
-            -skip qtwebengine       \
-            -W no-dev               &amp;&amp;
+            -skip qtwebengine       &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -503,61 +480,81 @@ EOF</userinput></screen>
 
       <seglistitem>
         <seg>
-          androiddeployqt (link rígido para androiddeployqt6), androiddeployqt6,
-androidtestrunner, assistant, balsam, balsamui, canbusutil, cooker,
-designer, instancer, lconvert, linguist, lrelease, lupdate, materialeditor,
-meshdebug, pixeltool, qdbus, qdbuscpp2xml, qdbusviewer, qdbusxml2cpp,
+          <!--cooker,-->
+androiddeployqt (link rígido para androiddeployqt6), androiddeployqt6,
+androidtestrunner, assistant, balsam, balsamui, canbusutil, designer,
+instancer, lconvert, linguist, lrelease, lupdate, materialeditor, meshdebug,
+pixeltool, qdbus, qdbuscpp2xml, qdbusviewer, qdbusxml2cpp,
 qdistancefieldgenerator, qdoc, qmake (link rígido para qmake6), qmake6, qml,
 qmldom, qmleasing, qmlformat, qmllint, qmlls, qmlplugindump, qmlpreview,
-qmlprofiler, qmlscene, qmltc, qmltestrunner, qmltime, qqem, qsb, qtdiag
-(link rígido para qtdiag6), qtdiag6, qtpaths (link rígido para qtpaths6),
-qtpaths6, qtplugininfo, qt-cmake, qt-cmake-create, qt-configure-module,
-shadergen e shapegen
-
+qmlprofiler, qmlscene, qmltc, qmltestrunner, qmltime,
+qopcuaxmldatatypes2cpp, qqem, qsb, qtdiag (link rígido para qtdiag6),
+qtdiag6, qtpaths (link rígido para qtpaths6), qtpaths6, qtplugininfo,
+qt-cmake, qt-cmake-create, qt-configure-module, shadergen, shapegen e
+svg2xml
         </seg>
         <seg>
-          libQt6Bluetooth.so, libQt6Bodymovin.so, libQt6BundledEmbree.a,
-libQt6BundledPhysX.a, libQt6BundledResonanceAudio.a, libQt6Charts.so,
+          <!--libQt6BundledPhysX.a,-->
+<!--libQt6Quick3DPhysics.so,-->
+<!--libQt6Quick3DPhysicsHelpers.so,-->
+libQt6Bluetooth.so, libQt6Bodymovin.so, libQt6BundledEmbree.a,
+libQt6BundledOpenXR.a, libQt6BundledResonanceAudio.a, libQt6Charts.so,
 libQt6ChartsQml.so, libQt6Coap.so, libQt6Concurrent.so, libQt6Core.so,
 libQt6Core5Compat.so, libQt6DBus.so, libQt6DataVisualization.so,
 libQt6DataVisualizationQml.so, libQt6DeclarativeOpcua.so, libQt6Designer.so,
 libQt6DesignerComponents.so, libQt6DeviceDiscoverySupport.a,
 libQt6EglFSDeviceIntegration.so, libQt6EglFsKmsGbmSupport.so,
-libQt6EglFsKmsSupport.so, libQt6ExampleIcons.a, libQt6FbSupport.a,
-libQt6Graphs.so, libQt6Grpc.so, libQt6Gui.so, libQt6Help.so,
-libQt6HttpServer.so, libQt6InputSupport.a, libQt6JsonRpc.so,
+libQt6EglFsKmsSupport.so, libQt6ExampleIcons.a,
+libQt6ExamplesAssetDownloader.a, libQt6FbSupport.a, libQt6Graphs.so,
+libQt6GraphsWidgets.so, libQt6Grpc.so, libQt6GrpcQuick.so, libQt6Gui.so,
+libQt6Help.so, libQt6HttpServer.so, libQt6InputSupport.a, libQt6JsonRpc.so,
 libQt6KmsSupport.a, libQt6LabsAnimation.so, libQt6LabsFolderListModel.so,
-libQt6LabsQmlModels.so, libQt6LabsSettings.so, libQt6LabsSharedImage.so,
-libQt6LabsWavefrontMesh.so, libQt6LanguageServer.so, libQt6Location.so,
-libQt6Mqtt.so, libQt6Multimedia.so, libQt6MultimediaQuick.so,
+libQt6LabsPlatform.so, libQt6LabsQmlModels.so, libQt6LabsSettings.so,
+libQt6LabsSharedImage.so, libQt6LabsWavefrontMesh.so,
+libQt6LanguageServer.a, libQt6Location.so, libQt6Mqtt.so,
+libQt6Multimedia.so, libQt6MultimediaQuick.so, libQt6MultimediaTestLib.a,
 libQt6MultimediaWidgets.so, libQt6Network.so, libQt6NetworkAuth.so,
 libQt6Nfc.so, libQt6OpcUa.so, libQt6OpenGL.so, libQt6OpenGLWidgets.so,
 libQt6PacketProtocol.a, libQt6Positioning.so, libQt6PositioningQuick.so,
-libQt6PrintSupport.so, libQt6Protobuf.so, libQt6Qml.so,
-libQt6QmlCompiler.so, libQt6QmlCore.so, libQt6QmlDebug.a, libQt6QmlDom.a,
-libQt6QmlLocalStorage.so, libQt6QmlLS.a, libQt6QmlModels.so,
-libQt6QmlToolingSettings.a, libQt6QmlTypeRegistrar.a,
-libQt6QmlWorkerScript.so, libQt6QmlXmlListModel.so, libQt6Quick.so,
-libQt6Quick3D.so, libQt6Quick3DAssetImport.so, libQt6Quick3DAssetUtils.so,
+libQt6PrintSupport.so, libQt6Protobuf.so, libQt6ProtobufQtCoreTypes.so,
+libQt6ProtobufQtGuiTypes.so, libQt6ProtobufQuick.so,
+libQt6ProtobufWellKnownTypes.so, libQt6QGstreamerMediaPluginImpl.a,
+libQt6Qml.so, libQt6QmlAssetDownloader.a, libQt6QmlCompiler.so,
+libQt6QmlCore.so, libQt6QmlDebug.a, libQt6QmlDom.a,
+libQt6QmlLocalStorage.so, libQt6QmlLS.a, libQt6QmlMeta.so,
+libQt6QmlModels.so, libQt6QmlNetwork.so, libQt6QmlToolingSettings.a,
+libQt6QmlTypeRegistrar.a, libQt6QmlWorkerScript.so,
+libQt6QmlXmlListModel.so, libQt6Quick.so, libQt6Quick3D.so,
+libQt6Quick3DAssetImport.so, libQt6Quick3DAssetUtils.so,
 libQt6Quick3DEffects.so, libQt6Quick3DGlslParser.so,
 libQt6Quick3DHelpers.so, libQt6Quick3DHelpersImpl.so,
 libQt6Quick3DIblBaker.so, libQt6Quick3DParticleEffects.so,
-libQt6Quick3DParticles.so, libQt6Quick3DPhysics.so,
-libQt6Quick3DPhysicsHelpers.so, libQt6Quick3DRuntimeRender.so,
-libQt6Quick3DSpatialAudio.so, libQt6Quick3DUtils.so,
-libQt6QuickControls2.so, libQt6QuickControls2Impl.so,
+libQt6Quick3DParticles.so, libQt6Quick3DRuntimeRender.so,
+libQt6Quick3DSpatialAudio.so, libQt6Quick3DUtils.so, libQt6Quick3DXr.so,
+libQt6QuickControls2.so, libQt6QuickControls2Basic.so,
+libQt6QuickControls2BasicStyleImpl.so,
+libQt6QuickControls2FluentWinUI3StyleImpl.so, libQt6QuickControls2Fusion.so,
+libQt6QuickControls2FusionStyleImpl.so, libQt6QuickControls2Imagine.so,
+libQt6QuickControls2ImagineStyleImpl.so, libQt6QuickControls2Impl.so,
+libQt6QuickControls2Material.so, libQt6QuickControls2MaterialStyleImpl.so,
+libQt6QuickControls2Universal.so, libQt6QuickControls2UniversalStyleImpl.so,
 libQt6QuickControlsTestUtils.a, libQt6QuickDialogs2.so,
 libQt6QuickDialogs2QuickImpl.so, libQt6QuickDialogs2Utils.so,
 libQt6QuickEffects.so, libQt6QuickLayouts.so, libQt6QuickParticles.so,
-libQt6QuickShapes.so, libQt6QuickTemplates2.so, libQt6QuickTest.so,
-libQt6QuickTestUtils.a, libQt6QuickTimeline.so, libQt6QuickWidgets.so,
-libQt6RemoteObjects.so, libQt6RemoteObjectsQml.so, libQt6Scxml.so,
-libQt6ScxmlQml.so, libQt6Sensors.so, libQt6SensorsQuick.so,
+libQt6QuickShapes.so, libQt6QuickTemplates2.so,
+libQt6QuickTimelineBlendTrees.so, libQt6QuickTest.so,
+libQt6QuickTestUtils.a, libQt6QuickTimeline.so,
+libQt6QuickVectorImageGenerator.so, libQt6QuickVectorImage.so,
+libQt6QuickWidgets.so, libQt6RemoteObjects.so, libQt6RemoteObjectsQml.so,
+libQt6Scxml.so, libQt6ScxmlQml.so, libQt6Sensors.so, libQt6SensorsQuick.so,
 libQt6SerialBus.so, libQt6SerialPort.so, libQt6ShaderTools.so,
 libQt6SpatialAudio.so, libQt6Sql.so, libQt6StateMachine.so,
-libQt6StateMachineQml.so, libQt6Svg.so, libQt6SvgWidgets.so,
+libQt6StateMachineQml.so, libQt6Svg.so, libQt6SvgWidgets.so, libQt6Test.so,
 libQt6TextToSpeech.so, libQt6UiTools.so, libQt6VirtualKeyboard.so,
-libQt6WaylandClient.so, libQt6WaylandCompositor.so,
+libQt6VirtualKeyboardSettings.so, libQt6WaylandClient.so,
+libQt6WaylandCompositor.so, libQt6WaylandCompositorIviapplication.so,
+libQt6WaylandCompositorPresentationTime.so,
+libQt6WaylandCompositorWLShell.so, libQt6WaylandCompositorXdgShell.so,
 libQt6WaylandEglClientHwIntegration.so,
 libQt6WaylandEglCompositorHwIntegration.so, libQt6WebChannel.so,
 libQt6WebChannelQuick.so, libQt6WebSockets.so, libQt6WebView.so,

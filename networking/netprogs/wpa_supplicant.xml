@@ -10,7 +10,7 @@
   <!ENTITY wpa_supplicant-md5sum        "72a4a00eddb7a499a58113c3361ab094">
   <!ENTITY wpa_supplicant-size          "3,7 MB">
   <!ENTITY wpa_supplicant-buildsize     "35 MB">
-  <!ENTITY wpa_supplicant-time          "0,3 UPC (sem GUI opcional)">
+  <!ENTITY wpa_supplicant-time          "0,3 UPC">
 ]>
 
 <sect1 id="wpa_supplicant" xreflabel="wpa_supplicant-&wpa_supplicant-version;">
@@ -38,7 +38,7 @@ autenticação/associação &quot;IEEE 802.11&quot; do controlador de
 sem fio protegido por senha.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -95,14 +95,17 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="desktop-file-utils"/> (para executar
-<command>update-desktop-database</command>) e <xref linkend="libnl"/>
+      
+      <!--<xref linkend="desktop-file-utils"/>
+ (for running
+        <command>update-desktop-database</command>) and-->
+<xref linkend="libnl"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <phrase revision="sysv"><xref linkend="dbus"/>,</phrase> <xref
-linkend="libxml2"/> e &qt5-deps;
+      <phrase revision="sysv"><xref linkend="dbus"/> e</phrase> <xref
+linkend="libxml2"/>
     </para>
 
 
@@ -164,12 +167,11 @@ CFLAGS += -I/usr/include/libnl3</literal>
 EOF</userinput></screen>
 
     <para>
-      Se você deseja usar o &quot;<application>WPA Supplicant</application>&quot;
-com o &quot;<xref linkend="NetworkManager"/>&quot;, [então] certifique-se de
-ter instalado o &quot;<xref linkend="dbus"/>&quot; e o &quot;<xref
-linkend="libxml2"/>&quot; então adicione as seguintes opções ao arquivo de
-configuração da construção do &quot;<application>WPA
-Supplicant</application>&quot; executando o seguinte comando:
+      Se você deseja usar o <application>WPA Supplicant</application> com o <xref
+linkend="NetworkManager"/>, <phrase revision='sysv'>certifique-se de ter
+instalado o <xref linkend="dbus"/>, </phrase>então adicione as seguintes
+opções ao arquivo de configuração de construção do <application>WPA
+Supplicant</application> executando o seguinte comando:
     </para>
 
 <!-- Fixed in version 2.11
@@ -196,23 +198,6 @@ comandos:
 
 <screen><userinput>cd wpa_supplicant &amp;&amp;
 make BINDIR=/usr/sbin LIBDIR=/usr/lib</userinput></screen>
-
-    <para>
-      Se você tiver instalado o &qt5-deps; e desejar construir o aplicativo GUI do
-<application>WPA Supplicant</application>, execute os seguintes comandos:
-    </para>
-
-    <note>
-      <para>
-        O seguinte nome de diretório é rotulado como qt4, mas é compatível com
-&qt5-deps;.
-      </para>
-    </note>
-
-<screen><userinput>pushd wpa_gui-qt4 &amp;&amp;
-qmake wpa_gui.pro &amp;&amp;
-make &amp;&amp;
-popd</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -251,18 +236,6 @@ class="username">root</systemitem>&quot;:
 install -v -d -m755 /etc/dbus-1/system.d &amp;&amp;
 install -v -m644 dbus/dbus-wpa_supplicant.conf \
                  /etc/dbus-1/system.d/wpa_supplicant.conf</userinput></screen>
-
-    <para>
-      Se você tiver construído o aplicativo &quot;GUI&quot; do
-&quot;<application>WPA Supplicant</application>&quot;, [então] instale-o
-executando os seguintes comandos como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
-    </para>
-
-<screen role="root"><userinput>install -v -m755 wpa_gui-qt4/wpa_gui /usr/bin/ &amp;&amp;
-install -v -m644 doc/docbook/wpa_gui.8 /usr/share/man/man8/ &amp;&amp;
-install -v -m644 wpa_gui-qt4/wpa_gui.desktop /usr/share/applications/ &amp;&amp;
-install -v -m644 wpa_gui-qt4/icons/wpa_gui.svg /usr/share/pixmaps/</userinput></screen>
 
     <note>
       <para>
@@ -360,11 +333,10 @@ acesso/roteador.
 }</screen>
 
       <para>
-        Conetar-se a um novo ponto de acesso que não esteja no arquivo de
-configuração pode ser realizada manualmente por meio da linha de comando ou
-da &quot;GUI&quot;, mas precisa ser feito por meio de um(a) usuário(a)
-privilegiado(a). Para fazer isso, adicione o seguinte ao arquivo de
-configuração:
+        Conectar-se a um novo ponto de acesso que não esteja no arquivo de
+configuração pode ser realizado manualmente por meio da linha de comando,
+mas precisa ser feito por meio de um(a) usuário(a) privilegiado(a). Para
+fazer isso, adicione o seguinte ao arquivo de configuração:
       </para>
 
 <screen>ctrl_interface=DIR=/run/wpa_supplicant GROUP=&lt;grupo privilegiado&gt;
@@ -532,7 +504,7 @@ Intercomunicação</ulink> no LFS.
 
       <seglistitem>
         <seg>
-          wpa_gui, wpa_supplicant, wpa_passphrase e wpa_cli
+          wpa_supplicant, wpa_passphrase e wpa_cli
         </seg>
         <seg>
           Nenhum(a)
@@ -546,19 +518,6 @@ Intercomunicação</ulink> no LFS.
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
-
-      <varlistentry id="wpa_gui">
-        <term><command>wpa_gui</command></term>
-        <listitem>
-          <para>
-            é um aplicativo gráfico de estrutura de interação direta com o(a) usuário(a)
-para interagir com o &quot;<application>wpa_supplicant</application>&quot;
-          </para>
-          <indexterm zone="wpa_supplicant wpa_gui">
-            <primary sortas="b-wpa_gui">wpa_gui</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
 
       <varlistentry id="wpa_supplicant-prog">
         <term><command>wpa_supplicant</command></term>

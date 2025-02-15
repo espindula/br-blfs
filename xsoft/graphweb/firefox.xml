@@ -6,16 +6,15 @@
 
   <!ENTITY firefox-download-http "&mozilla-http;/firefox/releases/&firefox-version;esr/source/firefox-&firefox-version;esr.source.tar.xz">
   <!ENTITY firefox-download-ftp  "">
-  <!ENTITY firefox-md5sum        "efbf349f0b7442fc6f2995bef4d32785">
-  <!ENTITY firefox-size          "536 MB">
+  <!-- size and md5sum are in packages.ent -->
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "6,7 GB (223 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "6,6 GB (217 MB instalado) sem testes">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "15 UPC usando -j8, sem testes">
+  <!ENTITY firefox-time          "14 UPC usando -j8, sem testes">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -79,22 +78,18 @@ de código <application>Mozilla</application>.
 
 
 
-    <!--<bridgehead renderas="sect3">
+    <!--
+    <bridgehead renderas="sect3">
 Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
           Required patch:
-          <ulink url="&patch-root;/firefox-&firefox-version;-consolidated-1.patch"/>
+          <ulink url="&patch-root;/firefox-&firefox-version;esr-upstream_fixes-1.patch"/>
         </para>
       </listitem>
-      <listitem>
-        <para>
-          Required patch for new <xref linkend="ffmpeg"/> API:
-          <ulink url="&patch-root;/firefox-&firefox-version;-ffmpeg_6-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>-->
+    </itemizedlist>
+-->
 <note>
       <para>
         O nome do diretório é firefox-&firefox-version;
@@ -139,13 +134,13 @@ precisem de configuração de tempo de execução para que o som funcione.
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref
-linkend="libnotify"/>, <xref linkend="llvm"/> (com clang, usado para bindgen
-mesmo se usar gcc), <xref linkend="nodejs"/>, <xref linkend="pulseaudio"/>
-(ou <xref linkend="alsa-lib"/> se você editar o mozconfig; agora obsoleto
-pela Mozilla), em qualquer caso, por favor, leiam-se as Informações de
+linkend="libnotify"/>, <xref linkend="libarchive"/>, <xref linkend="llvm"/>
+(com clang, usado para bindgen mesmo se usar-se gcc), <xref
+linkend="nodejs"/>, <xref linkend="pulseaudio"/> (ou <xref
+linkend="alsa-lib"/> se você editar o mozconfig; agora obsoleto pela
+mozilla), em ambos os cassos, por favor, leiam-se a Informações de
 Configuração, <xref linkend="python3"/> (depois de instalar <xref
-linkend="sqlite"/>), <xref linkend="startup-notification"/> e <xref
-linkend="unzip"/>
+linkend="sqlite"/>) e <xref linkend="startup-notification"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -193,6 +188,18 @@ seguinte comando:
     </para>
 
 <!-- https://phabricator.services.mozilla.com/D219025 -->
+<!--
+    <para>
+
+      Adapt two files for compatibility with cbindgen-0.27.0 or later:
+    </para>
+
+    <screen><userinput>sed 's/input.try/&amp;_parse/' \
+    -i servo/components/style_traits/values.rs &amp;&amp;
+sed '0,/"Keyframe"/{//d}' -i servo/ports/geckolib/cbindgen.toml</userinput></screen>
+    -->
+<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
+         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
 
@@ -281,26 +288,25 @@ mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir</literal>
 EOF</userinput></screen>
 
     
-    <para>
-      Adapte dois arquivos para compatibilidade com cbindgen-0.27.0 ou posterior:
-    </para>
-
-    <!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
-         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
-<screen><userinput>sed 's/input.try/&amp;_parse/' \
-    -i servo/components/style_traits/values.rs &amp;&amp;
-sed '0,/"Keyframe"/{//d}' -i servo/ports/geckolib/cbindgen.toml</userinput></screen>
+    
 
     
     <para>
-      Se construir com o ICU do sistema, adapte o mapeamento de quebra de linha
-para ICU 74 ou posterior. Esta construção adiciona cinco entradas para um
-vetor c++.
+      Se você estiver construindo com o ICU do sistema, adapte o mapeamento de
+quebra de linha para ICU 74 ou posterior. Esta construção adiciona cinco
+entradas para um vetor c++.
     </para>
 
 <screen><userinput>for i in {43..47}; do
    sed -i '/ZWJ/s/}/,CLASS_CHARACTER&amp;/' intl/lwbrk/LineBreaker.cpp 
 done</userinput></screen>
+
+    <para>
+      Se você estiver construindo com o ICU do sistema, adapte o sistema de
+construção para usar a biblioteca correta:
+    </para>
+
+<screen><userinput remap="pre">sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
 
     <para>
       Compile o <application>Firefox</application> emitindo os seguintes comandos:
@@ -619,7 +625,7 @@ também pode verificar qual perfil está em uso no momento a partir de
 
       <para>
         Embora o WebRender (usando a GPU para composição) não seja usado por padrão,
-agora parece funcionar bem em hardware compatível (GPUs ATI, Nvidia e Intel
+agora parece funcionar bem em hardware suportado (GPUs ATI, NVIDIA e Intel
 com Mesa-18 ou posterior). Para uma explicação, por favor, veja-se <ulink
 url="https://hacks.mozilla.org/2017/10/the-whole-web-at-maximum-fps-how-webrender-gets-rid-of-jank/">hacks.mozilla.org</ulink>.
 A única desvantagem parece ser que, em uma máquina com RAM limitada, ele

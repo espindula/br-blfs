@@ -6,10 +6,10 @@
 
   <!ENTITY seamonkey-download-http "https://archive.seamonkey-project.org/releases/&seamonkey-version;/source/seamonkey-&seamonkey-version;.source.tar.xz">
   <!ENTITY seamonkey-download-ftp  "">
-  <!ENTITY seamonkey-md5sum        "266a86651348e21934707a7ccb3abef3">
-  <!ENTITY seamonkey-size          "241 MB">
-  <!ENTITY seamonkey-buildsize     "3,0 GB (148 MB instalado)">
-  <!ENTITY seamonkey-time          "3,5 UPC (com paralelismo=8)">
+  <!ENTITY seamonkey-md5sum        "1b506ff751f39b2480ba4e16afb86d6d">
+  <!ENTITY seamonkey-size          "237 MB">
+  <!ENTITY seamonkey-buildsize     "4,4 GB (150 MB instalado)">
+  <!ENTITY seamonkey-time          "6,8 UPC (com paralelismo=8)">
 ]>
 
 <sect1 id="seamonkey" xreflabel="seamonkey-&seamonkey-version;">
@@ -83,21 +83,7 @@ recente): <ulink
 url="&patch-root;/seamonkey-&seamonkey-version;-cxx17-1.patch"/>
         </para>
       </listitem>
-    
-    <!--
-      <listitem>
-
-        <para>
-          Required Python module:
-          <ulink url="&pymodules-dl;/s/setuptools/setuptools-&setuptools-version;.tar.gz"/>
-        </para>
-        <para>
-          This module has already been installed in LFS, but now we need
-          to rebuild its wheel package for the SeaMonkey build system.
-        </para>
-      </listitem>
-    -->
-</itemizedlist>
+    </itemizedlist>
 
     <note>
       <para>
@@ -111,35 +97,22 @@ desempacotará para o diretório
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      
-      <!--xref linkend="autoconf213"/-->
-<xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref
-linkend="nodejs"/>, <xref linkend="python311"/>, <xref linkend="unzip"/>,
-<xref linkend="yasm"/> e <xref linkend="zip"/>
+      <xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref
+linkend="libarchive"/>, <xref linkend="nodejs"/>, <xref
+linkend="python311"/>, <xref linkend="yasm"/> e <xref linkend="zip"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <!--<xref linkend="libvpx"/>
 , Causes build failures similar to Firefox -->
-<!-- <xref linkend="sqlite"/>
- system version no longer supported -->
 <xref linkend="icu"/>, <xref linkend="libevent"/>, <xref
 linkend="libwebp"/>, <xref linkend="llvm"/> (com clang), <xref
 linkend="nasm"/>, <xref linkend="nspr"/>, <xref linkend="nss"/> e <xref
 linkend="pulseaudio"/>
-      
     </para>
 
-    <!--
-    <bridgehead renderas="sect4">
-Optional</bridgehead>
-    <para role="optional">
-      <xref linkend="sqlite"/> (not recommended due to potential
-      security concerns)
-    </para>
--->
-<note>
+    <note>
       <para>
         Se você não instalar as dependências recomendadas, então cópias internas
 desses pacotes serão usadas. Elas podem ter sido testadas para funcionar,
@@ -150,10 +123,9 @@ mas podem estar desatualizadas ou conter falhas de segurança.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="alsa-lib"/>, <xref linkend="dbus-glib"/>, <xref
-linkend="startup-notification"/>, <xref linkend="valgrind"/>, <xref
-linkend="wget"/>, <xref linkend="wireless_tools"/>, <ulink
-url="https://hunspell.sourceforge.net/">Hunspell</ulink>, <ulink
-url="https://gitlab.gnome.org/Archive/gconf">Gconf</ulink> e <ulink
+linkend="valgrind"/>, <xref linkend="wget"/>, <xref
+linkend="wireless_tools"/>, <ulink
+url="https://hunspell.sourceforge.net/">Hunspell</ulink> e <ulink
 url="https://facebook.github.io/watchman/">Watchman</ulink>
     </para>
 
@@ -167,67 +139,65 @@ url="https://facebook.github.io/watchman/">Watchman</ulink>
 criando-se um arquivo <filename>mozconfig</filename> contendo as opções
 desejadas de configuração. Um arquivo <filename>mozconfig</filename> padrão
 é criado abaixo. Para ver a lista completa de opções disponíveis de
-configuração (e uma descrição abreviada de cada uma), emita
-<command>./configure --help</command>. Você também possivelmente revise o
-arquivo inteiro e descomente quaisquer outras opções desejadas. Crie o
-arquivo emitindo o seguinte comando:
+configuração (e uma descrição abreviada de cada uma), emita <command>python3
+configure.py --help</command>. Você também possivelmente revise o arquivo
+inteiro e descomente quaisquer outras opções desejadas. Crie o arquivo
+emitindo o seguinte comando:
     </para>
 
 <screen><!-- With Firefox ESR 128 we'd replace the following part with
 "- -enable-elf-hack=relr", or remove it if relr becomes the default.
 But I've no idea if SeaMonkey will have this change backported.  -->
 <?dbfo keep-together="auto"?><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
-<literal># Se você tiver uma máquina multi cores, todos os cores serão usados
+<literal># If you have a multicore machine, all cores will be used
 
-# Se você tiver instalado o DBus-Glib, comente esta linha:
+# If you have installed DBus-Glib comment out this line:
 ac_add_options --disable-dbus
 
-# Se você tiver instalado o dbus-glib e tiver instalado (ou instalará)
-# o "wireless-tools" e deseja usar serviços de geolocalização da web,
-# comente esta linha
+# If you have installed dbus-glib, and you have installed (or will install)
+# wireless-tools, and you wish to use geolocation web services, comment out
+# this line
 ac_add_options --disable-necko-wifi
 
-# Descomente estas linhas se você tiver instalado dependências opcionais:
+# Uncomment these lines if you have installed optional dependencies:
 #ac_add_options --enable-system-hunspell
-#ac_add_options --enable-startup-notification
 
-# Descomente a seguinte opção se você não tiver instalado o PulseAudio:
+# Uncomment the following option if you have not installed PulseAudio
 #ac_add_options --disable-pulseaudio
-# e descomente esta se você instalou alsa-lib em vez de PulseAudio:
+# and uncomment this if you installed alsa-lib instead of PulseAudio
 #ac_add_options --enable-alsa
 
-# Comente a seguinte opção se você tiver o gconf instalado:
-ac_add_options --disable-gconf
+# Comment out the following option
 
-# Comente as seguintes opções se você não tiver instalado
-# as dependências recomendadas:
+# Comment out following options if you have not installed
+# recommended dependencies:
 ac_add_options --with-system-icu
 ac_add_options --with-system-libevent
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-webp
 
-# Desabilitar símbolos de depuração torna a construção muito menor e um pouco
-# mais rápida. Comente isto se você precisar executar um depurador.
+# Disabling debug symbols makes the build much smaller and a little
+# faster. Comment this if you need to run a debugger.
 ac_add_options --disable-debug-symbols
 
-# Foi informado que o elf-hack causa instalações falhas (depois de construções bem-sucedidas)
-# em algumas máquinas. Supõe-se que melhore o tempo de inicialização e reduza
-# a libxul.so em alguns MB. Com os lançamentos recentes do Binutils, o vinculador já suporta
-# uma maneira muito mais segura e genérica para isso.
+# The elf-hack is reported to cause failed installs (after successful builds)
+# on some machines. It is supposed to improve startup time and it shrinks
+# libxul.so by a few MB.  With recent Binutils releases the linker already
+# supports a much safer and generic way for this.
 ac_add_options --disable-elf-hack
 ac_add_options --enable-linker=bfd
 export LDFLAGS="$LDFLAGS -Wl,-z,pack-relative-relocs"
 
-# Seamonkey tem alguns recursos adicionais que não estão ativados por padrão,
-# como cliente IRC, calendário e Inspetor DOM. O Inspetor DOM auxilia no
-# projeto de páginas da web. Comente estas opções se você não deseja
-# esses recursos.
+# Seamonkey has some additional features that are not turned on by default,
+# such as an IRC client, calendar, and DOM Inspector. The DOM Inspector
+# aids with designing web pages. Comment these options if you do not
+# desire these features.
 ac_add_options --enable-calendar
 ac_add_options --enable-dominspector
 ac_add_options --enable-irc
 
-# Os(as) editores(as) do BLFS recomendam não mudar nada abaixo desta linha:
+# The BLFS editors recommend not changing anything below this line:
 ac_add_options --prefix=/usr
 ac_add_options --enable-application=comm/suite
 
@@ -235,22 +205,19 @@ ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-tests
 
-# O código SIMD depende da caixa pack_simd não mantida que falha para 
-# construir com Rustc >= 1.78.0. Nós podemos reabilitá-lo assim que a 
-# Mozilla portar o código para usar std::simd e std::simd estiver estabilizado.
+# The SIMD code relies on the unmaintained packed_simd crate which
+# fails to build with Rustc >= 1.78.0.  We may re-enable it once
+# Mozilla ports the code to use std::simd and std::simd is stabilized.
 ac_add_options --disable-rust-simd
 
 ac_add_options --enable-strip
 ac_add_options --enable-install-strip
 
-# Você não pode distribuir o binário se fizer isso.
+# You cannot distribute the binary if you do this.
 ac_add_options --enable-official-branding
 
-# A opção de usar o Cairo do sistema foi removida em 2.53.9.
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
-
-ac_add_options --with-system-bz2
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
@@ -263,43 +230,31 @@ EOF</userinput></screen>
        href="../../xincludes/mozshm.xml"/>
     </note>
 
-
-
-    <!-- Restore when no longer using Python 3.11. We may want to restore the patch
-     at that point as well, which includes the 'distro' and 'ICU' changes. -renodr
     <para>
-
-      First, fix several problems that occur with Python-3.12 and ICU-74.
-      If you are not using ICU-74 and Python-3.12, do not apply this patch.
-    </para>
-
-<screen><userinput>patch -Np1 -i ../seamonkey-&seamonkey-version;-consolidated_fixes-1.patch</userinput></screen>
-
-    <para>
-      Next, if you are using Python-3.12, reinstall the setuptools package for
-      Seamonkey, and update it's vendored copy of pip:
-    </para>
-
-<screen><userinput>ln -sv /usr/lib/python&python3-majorver;/ensurepip/_bundled/pip-*.whl \
-       third_party/python/virtualenv/virtualenv_support &amp;&amp;
-
-tar xf ../setuptools-&setuptools-version;.tar.gz                             &amp;&amp;
-pip3 wheel - -no-build-isolation - -no-deps - -no-cache-dir       \
-           $PWD/setuptools-&setuptools-version;                              \
-           -w third_party/python/virtualenv/virtualenv_support</userinput></screen>
--->
-<para>
       Primeiro, se você estiver construindo com o ICU do sistema, adapte o
-mapeamento de quebra de linha para ICU-74 ou posterior e aplique um remendo
-para construir esse pacote com o padrão C++17, porque os cabeçalhos de
-ICU-75 ou posterior exigem alguns recursos da C++17:
+mapeamento de quebra de linha para o ICU-74 ou posterior, aplique um remendo
+para construir esse pacote com o C++17 padrão porque os cabeçalhos do ICU-75
+ou posterior exigem alguns recursos do C++17 e adapte o sistema de
+construção para usar a biblioteca correta com o ICU-76 ou posterior:
     </para>
 
+<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1894423 -->
 <screen><userinput remap="pre">(for i in {43..47}; do
    sed '/ZWJ/s/$/,CLASS_CHARACTER/' -i intl/lwbrk/LineBreaker.cpp || exit $?
 done) &amp;&amp;
 
-patch -Np1 -i ../seamonkey-&seamonkey-version;-cxx17-1.patch</userinput></screen>
+patch -Np1 -i ../seamonkey-&seamonkey-version;-cxx17-1.patch &amp;&amp;
+
+sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
+
+    
+    <para>
+      Em seguida, remova um pedaço de código não usado que viola o padrão C++. O
+Clang começou a rejeitá-lo, embora não seja usado desde o lançamento 19.1.0:
+    </para>
+
+<screen><userinput>sed '/ExclusiveData(ExclusiveData&amp;&amp;/,/^ *}/d' \
+    -i js/src/threading/ExclusiveData.h</userinput></screen>
 
     <para>
       A seguir, corrija um problema com o módulo incluído 'distro' do python:
@@ -315,7 +270,7 @@ comandos:
     </para>
 
 <screen><userinput>export PATH_PY311=/opt/python3.11/bin:$PATH &amp;&amp;
-PATH=$PATH_PY311 AUTOCONF=true ./mach build</userinput></screen>
+PATH=$PATH_PY311 AUTOCONF=true MACH_USE_SYSTEM_PYTHON=1 ./mach build</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -338,8 +293,8 @@ falhará. Para <command>sudo</command>, use a opção
       </para>
     </note>
 
-<screen role="root"><userinput>PATH=$PATH_PY311 ./mach install &amp;&amp;
-chown -R 0:0 /usr/lib/seamonkey &amp;&amp;
+<screen role="root"><userinput>PATH=$PATH_PY311 MACH_USE_SYSTEM_PYTHON=1 ./mach install &amp;&amp;
+chown -R 0:0 /usr/lib/seamonkey                          &amp;&amp;
 
 cp -v $(find -name seamonkey.1 | head -n1) /usr/share/man/man1</userinput></screen>
 

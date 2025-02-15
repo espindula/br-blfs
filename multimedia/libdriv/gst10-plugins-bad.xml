@@ -7,10 +7,10 @@
   <!ENTITY gst10-plugins-bad-download-http
            "&gstreamer-dl;/gst-plugins-bad/gst-plugins-bad-&gst10-plugins-bad-version;.tar.xz">
   <!ENTITY gst10-plugins-bad-download-ftp  "">
-  <!ENTITY gst10-plugins-bad-md5sum        "a0a2771d1ae1203004d58d80bc6fcd16">
-  <!ENTITY gst10-plugins-bad-size          "6,7 MB">
-  <!ENTITY gst10-plugins-bad-buildsize     "171 MB (com testes)">
-  <!ENTITY gst10-plugins-bad-time          "0,7 UPC (Usando paralelismo=4; com testes)">
+  <!ENTITY gst10-plugins-bad-md5sum        "f2e4b24dca97397158e496059ec65ce6">
+  <!ENTITY gst10-plugins-bad-size          "6,8 MB">
+  <!ENTITY gst10-plugins-bad-buildsize     "273 MB (com testes)">
+  <!ENTITY gst10-plugins-bad-time          "0,9 UPC (Usando paralelismo=4; com testes)">
 ]>
 
 <sect1 id="gst10-plugins-bad" xreflabel="gst-plugins-bad-&gst10-plugins-bad-version;">
@@ -70,7 +70,21 @@ mantenedor(a) real ao vivo ou algum uso realmente amplo.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do GStreamer Bad Plug-ins</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Optional patch:
+          <ulink url="&patch-root;/gst-plugins-bad-&gst10-plugins-bad-version;-x265_4.1-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do GStreamer Bad Plug-ins</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -106,12 +120,11 @@ linkend="neon"/>, <xref linkend="nettle"/> ou <xref linkend="libgcrypt"/>
 OpenSSL será usado), <xref linkend="opencv"/> (com módulos adicionais),
 <xref linkend="openjpeg2"/>, <xref linkend="opus"/>, <xref
 linkend="qrencode"/>, <xref linkend="sbc"/>, <xref linkend="sdl"/>, <xref
-linkend="valgrind"/>, both <xref linkend="vulkan-loader"/> e <ulink
-url='https://github.com/google/shaderc'>glslc</ulink> (para plugin do
-Vulkan), <xref linkend="wayland"/> (<xref linkend="gtk3"/> precisa ter sido
-compilado com suporte a wayland), <xref linkend="x265"/>, <ulink
-url="https://bs2b.sourceforge.net/">bs2b</ulink>, <ulink
-url="https://acoustid.org/chromaprint">Chromaprint</ulink>, <ulink
+linkend="valgrind"/>, both <xref linkend="vulkan-loader"/> e <xref
+linkend="glslc"/> (para plugin do Vulkan), <xref linkend="wayland"/> (<xref
+linkend="gtk3"/> precisa ter sido compilado com suporte a wayland), <xref
+linkend="x265"/>, <ulink url="https://bs2b.sourceforge.net/">bs2b</ulink>,
+<ulink url="https://acoustid.org/chromaprint">Chromaprint</ulink>, <ulink
 url="https://github.com/kornelski/dssim">dssim</ulink>, <ulink
 url="https://github.com/festvox/flite">Flite</ulink>, <ulink
 url="https://www.fluidsynth.org/">FluidSynth</ulink>, <ulink
@@ -167,16 +180,22 @@ url="https://github.com/zxing/zxing">zxing</ulink>
 
   <sect2 role="installation">
     <title>Instalação do GStreamer Bad Plug-ins</title>
-    
-    <!--
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/gst10-objc-error.xml"/>
 
-    -->
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/gst10-plugins.xml"/>
 
+
+
+    <!-- Not needed in 1.24.10
     <para>
+
+      If you installed the optional <xref linkend="x265"/> package, apply the
+      following patch:
+    </para>
+
+    <screen><userinput remap="pre">patch -Np1 -i ../gst-plugins-bad-&gst10-plugins-bad-version;-x265_4.1-1.patch</userinput></screen>
+-->
+<para>
       Instale o <application>GStreamer Bad Plug-ins</application> executando os
 seguintes comandos:
     </para>
@@ -194,10 +213,9 @@ ninja</userinput></screen>
       <!-- Upstream issue is https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3124 -->
 <!-- Upstream issue gst-plugins-bad/#1426 -->
 Para testar os resultados, emita: <command>ninja test</command>. Vários
-testes necessitam de um emulador de terminal em uma sessão gráfica. Dois
-testes, <emphasis>elements_vapostproc</emphasis> e
-<emphasis>elements_dash_mpd</emphasis>, são conhecidos por falharem. Se
-<xref linkend='gst10-plugins-good'/> não estiver instalado, dois testes,
+testes precisam de um emulador de terminal em uma sessão gráfica. Um teste,
+<emphasis>elements_dash_mpd</emphasis>, é conhecido por falhar. Se <xref
+linkend='gst10-plugins-good'/> não estiver instalado, dois testes,
 <emphasis>elements_rtpsrc</emphasis> e
 <emphasis>elements_rtpsink</emphasis>, falharão.
     </para>

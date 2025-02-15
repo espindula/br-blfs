@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY gnome-shell-download-http
-           "&gnome-download-http;/gnome-shell/&gnome-46;/gnome-shell-&gnome-shell-version;.tar.xz">
+           "&gnome-download-http;/gnome-shell/&gnome-47;/gnome-shell-&gnome-shell-version;.tar.xz">
   <!ENTITY gnome-shell-download-ftp  "">
-  <!ENTITY gnome-shell-md5sum        "44b69588f138be1e70fbe307eff3346f">
+  <!ENTITY gnome-shell-md5sum        "d6d7e371c2eef21ffc55f1259fbaecba">
   <!ENTITY gnome-shell-size          "2,0 MB">
-  <!ENTITY gnome-shell-buildsize     "62 MB (com testes)">
-  <!ENTITY gnome-shell-time          "0,3 UPC (Usando paralelismo=4; com testes)">
+  <!ENTITY gnome-shell-buildsize     "57 MB (com testes)">
+  <!ENTITY gnome-shell-time          "0,1 UPC (Usando paralelismo=4; com testes)">
 ]>
 
 <sect1 id="gnome-shell" xreflabel="gnome-shell-&gnome-shell-version;">
@@ -73,8 +73,8 @@ do ambiente de área de trabalho do <application>GNOME</application>.
     <para role="required">
       <xref linkend="evolution-data-server"/>, <xref linkend="gcr4"/>, <xref
 linkend="gjs"/>, <xref linkend="gnome-desktop"/>, <xref linkend="ibus"/>,
-<xref linkend="mutter"/>, <xref linkend="polkit"/>, <xref linkend="sassc"/>
-e <xref linkend="startup-notification"/>
+<xref linkend="mutter"/>, <xref linkend="polkit"/> e <xref
+linkend="startup-notification"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -95,18 +95,16 @@ url="https://github.com/scop/bash-completion">bash-completion</ulink>
       <xref role="runtime" linkend="adwaita-icon-theme"/>, <xref role="runtime"
 linkend="dconf"/>, <phrase revision="sysv"> <xref role='runtime'
 linkend="elogind"/>, </phrase> <xref role="runtime" linkend="gdm"/>, <xref
-role="runtime" linkend="gnome-backgrounds"/>, <xref role="runtime"
-linkend="gnome-control-center"/>, <xref role="runtime"
-linkend="gnome-menus"/> <phrase revision="sysv">e</phrase> <xref
-role="runtime" linkend="libgweather"/> <phrase revision="systemd">e</phrase>
-<phrase revision="systemd"> <xref role='runtime' linkend="systemd"/>
-</phrase>
+role="runtime" linkend="gnome-control-center"/>, <phrase
+revision="sysv">e</phrase> <xref role="runtime" linkend="libgweather"/>
+<phrase revision="systemd">, e</phrase> <phrase revision="systemd"> <xref
+role='runtime' linkend="systemd"/> </phrase>
     </para>
 
-    <bridgehead renderas="sect4"
-                revision="sysv">Dependência Recomendada de Tempo de Execução</bridgehead>
-    <para role="recommended" revision="sysv">
-      <xref linkend="blocaled" role="runtime"/>
+    <bridgehead renderas="sect4">Dependências do Recommended Runtime</bridgehead>
+    <para role="recommended">
+      <phrase revision='sysv'><xref linkend="blocaled" role="runtime"/> e
+</phrase><xref role="runtime" linkend="gnome-menus"/>
     </para>
 
   </sect2>
@@ -114,18 +112,7 @@ role="runtime" linkend="libgweather"/> <phrase revision="systemd">e</phrase>
   <sect2 role="installation">
     <title>Instalação do GNOME Shell</title>
 
-
-
-    <!--
     <para>
-
-      First, fix a regression that appears when using glib-2.80.2 or later:
-    </para>
-
-<screen><userinput remap="pre">sed -i 's/gnome.ScreenCast.Stream/gnome.Mutter.Screencast/' \
-        js/dbusServices/screencast/screencastService.js</userinput></screen>
--->
-<para>
       Instale o <application>GNOME Shell</application> executando os seguintes
 comandos:
     </para>
@@ -162,15 +149,15 @@ ninja</userinput></screen>
            DO NOT REMOVE unless you've tested with a "complex multi-monitor
            configuration" (with mixed scaling settings and "strange"
            positions of monitors). -->
-Para testar os resultados, você precisa remover a chave <parameter>-D
-tests=false</parameter> e ter o <xref linkend="mutter"/> compilado e
-instalado com testes também. Para executar os testes, emita: <command>ninja
-test</command>. Você precisa estar executando uma sessão do X para executar
-os testes. Alguns falharão se o <xref linkend="gdm"/> não estiver
-instalado. <phrase revision="sysv">Vários outros testes possivelmente falhem
-no ambiente Sysv.</phrase> Um teste chamado <filename>CSS styling
-support</filename> é conhecido por falhar com algumas configurações de
-vários monitores.
+Para executar os testes, certifique-se de que
+<application>Mutter</application> esteja instalado depois de executar a
+suíte de teste dele e emita: <command>meson configure -D tests=true
+&amp;&amp; ninja test</command>. Você precisa estar executando uma sessão do
+X para executar os testes. Alguns falharão se <xref linkend="gdm"/> não
+estiver instalado. <phrase revision="sysv">Vários outros testes
+possivelmente falhem no ambiente Sysv.</phrase> Um teste chamado
+<filename>Suporte a estilo CSS</filename> é conhecido por falhar com algumas
+configurações de vários monitores.
     </para>
 
     <para>
@@ -199,12 +186,6 @@ vários monitores.
 <para revision="sysv">
       <parameter>-D systemd=false</parameter>: Impede a instalação de arquivos
 systemd, que não são necessários nesta versão do BLFS.
-    </para>
-
-    <para>
-      <parameter>-D tests=false</parameter>: Remova essa chave se você quiser
-construir os testes. Entretanto, <command>meson</command> falhará se os
-testes <xref linkend="mutter"/> não estiverem instalados.
     </para>
 
     <para>

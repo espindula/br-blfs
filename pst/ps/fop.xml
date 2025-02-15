@@ -6,9 +6,9 @@
 
   <!ENTITY fop-download-http "https://archive.apache.org/dist/xmlgraphics/fop/source/fop-&fop-version;-src.tar.gz">
   <!ENTITY fop-download-ftp  "">
-  <!ENTITY fop-md5sum        "f7537ca7f2e16971fa99c8bb0dad62c7">
+  <!ENTITY fop-md5sum        "0815e845757c527e2617aca1ca2d82d1">
   <!ENTITY fop-size          "20 MB">
-  <!ENTITY fop-buildsize     "333 MB (incluindo arquivos baixados para o diretório do(a) usuário(a))">
+  <!ENTITY fop-buildsize     "342 MB (incluindo arquivos baixados para o diretório do(a) usuário(a))">
   <!ENTITY fop-time          "0,9 UPC">
 <!--
   <!ENTITY pdfbox-version    "2.0.27">
@@ -125,6 +125,12 @@ url="&maven-download;"/></member> <member>&maven-md5sum;</member>
 <member>&maven-size;</member> </simplelist>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/fop-&fop-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <itemizedlist spacing="compact">
@@ -202,6 +208,12 @@ binário fornecido pelo Apache, que instalamos em um local temporário:
       <title>Instalando Componentes fop</title>
 
       <para>
+        Primeiro, corrija um erro de construção causado pelo Java-23:
+      </para>
+
+<screen><userinput>patch -Np1 -i ../fop-&fop-version;-upstream_fixes-1.patch</userinput></screen>
+
+      <para>
         O comando <command>javadoc</command> fornecido com o OpenJDK 10 e posterior
 tornou-se muito mais rigoroso que as versões anteriores em relação à
 conformidade dos comentários Javadoc no código-fonte para HTML. A
@@ -255,7 +267,7 @@ chmod a+x /opt/fop-&fop-version;/fop                                &amp;&amp;
 ln -v -sfn fop-&fop-version; /opt/fop</userinput></screen>
 
       <para>
-        A última coisa a fazer é limpar o que fizemos:
+        Por fim, remova a cópia temporária do Apache Maven:
       </para>
 
 <screen><userinput>rm -rf /tmp/apache-maven-&maven-version;</userinput></screen>

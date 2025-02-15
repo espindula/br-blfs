@@ -4,16 +4,16 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libinput-version "1.26.1">
+  <!ENTITY libinput-version "1.27.1">
 
 <!--  <!ENTITY libinput-download-http "https://www.freedesktop.org/software/libinput/libinput-&libinput-version;.tar.xz">-->
   <!ENTITY libinput-download-http "https://gitlab.freedesktop.org/libinput/libinput/-/archive/&libinput-version;/libinput-&libinput-version;.tar.gz"
 >
   <!ENTITY libinput-download-ftp  "">
-  <!ENTITY libinput-md5sum        "aae34911d662f77c1cd9be60c8502664">
-  <!ENTITY libinput-size          "1,0 MB">
-  <!ENTITY libinput-buildsize     "11 MB (adicionar 23 MB para documentação e 9,6 MB para testes)">
-  <!ENTITY libinput-time          "0,1 UPC (adicionar 0,1 UPC para documentação e 4,9 UPC para testes)">
+  <!ENTITY libinput-md5sum        "3b311d8953f8717f711a78b60087997e">
+  <!ENTITY libinput-size          "1,1 MB">
+  <!ENTITY libinput-buildsize     "14 MB (adicionar 35 MB para documentação)">
+  <!ENTITY libinput-time          "0,1 UPC (adicionar 0,1 UPC para documentação e 0,1 UPC para testes pequenos)">
 ]>
 
   <sect2 id="libinput" xreflabel="libinput-&libinput-version;">
@@ -85,8 +85,10 @@ precisam lidar diretamente com dispositivos de entrada.
         <xref linkend="valgrind"/> (para executar os testes), <xref linkend="gtk3"/>
 (para construir o visualizador de eventos da GUI), <xref
 linkend="libunwind"/> (exigido para testes), <xref linkend="libwacom"/>,
-<xref linkend="sphinx"/> (exigido para construir documentação) e <xref
-linkend="pyparsing"/> (para um teste não root)
+<xref linkend="doxygen"/>, <xref linkend="graphviz"/>, <xref
+linkend="recommonmark"/> e <xref linkend="sphinx_rtd_theme"/> (exigido para
+construir documentação), <xref linkend="pyparsing"/> (para um teste de não
+root), e <xref linkend="pytest"/> (para outro teste de não root)
       </para>
 
     </sect3>
@@ -95,15 +97,15 @@ linkend="pyparsing"/> (para um teste não root)
       <title>Configuração do Núcleo para Executar a Suíte de Teste do Libinput</title>
 
       <para>
-        Embora libinput funcione com a mesma configuração de núcleo usada por <xref
-linkend="libevdev"/>, a extenso suíte de teste exige a presença de
-<filename>/dev/uinput</filename> (assim como ambos <xref
+        Embora a libinput funcione com a mesma configuração de núcleo usada pela
+<xref linkend="libevdev"/>, a suíte de teste padrão e mais abrangente dela
+exige a presença de <filename>/dev/uinput</filename> (assim como <xref
 linkend="valgrind"/> e <xref linkend="libunwind"/>).
       </para>
 
       <para>
-        Se você desejar executar os testes completos, habilite a seguinte opção na
-configuração do núcleo e recompile o núcleo se necessário:
+        Se você desejar executar a suíte padrão de teste, habilite a seguinte opção
+na configuração do núcleo e recompile o núcleo se necessário:
       </para>
 
       
@@ -117,18 +119,24 @@ configuração do núcleo e recompile o núcleo se necessário:
 a suíte de teste execute.
       </para>
 
-      <para>
-        Em um sistema Xorg você também precisará evitar que os eventos gerados
-durante a suíte de teste interfiram em tua área de trabalho. Copie o arquivo
-<filename>test/50-litest.conf</filename> para <filename
-class="directory">${XORG_PREFIX}/share/X11/xorg.conf.d</filename> e reinicie
-o X. Para mais informações, veja-se <ulink
-url="https://wayland.freedesktop.org/libinput/doc/&libinput-version;/test-suite.html">suíte
-de teste do libinput</ulink>.
-      </para>
+
+
 
       <indexterm zone="libinput libinput-kernel">
-        <primary sortas="d-libinput">libinput</primary>
+        <!-- This part doesn't appear to be necessary as libinput overhauled their test
+     suite system in 1.27.0 and above. Commenting it out. - Zeckma -->
+<!--
+      <para>
+
+        On an Xorg system you will also need to prevent the events generated
+        during the test suite from interfering with your desktop.  Copy the
+        file <filename>test/50-litest.conf</filename> into
+        <filename class="directory">${XORG_PREFIX}/share/X11/xorg.conf.d</filename>
+        and restart X. For further information see
+        <ulink url="https://wayland.freedesktop.org/libinput/doc/&libinput-version;/test-suite.html">libinput test suite</ulink>.
+      </para>
+-->
+<primary sortas="d-libinput">libinput</primary>
       </indexterm>
     </sect3>
 
@@ -154,16 +162,19 @@ ninja</userinput></screen>
 
       <note>
         <para>
-          Se você quiser executar os testes completos, remova -D tests do comando
-<command>meson</command> acima. Por favor, leia "configuração do núcleo para
-executar a suíte de teste do libinput" (acima).
+          Se você quiser executar a suíte de teste padrão, remova -D tests do comando
+<command>meson</command> acima. Por favor, leia <quote>Configuração do
+Núcleo para Executar a Suíte de Teste da Libinput</quote> (acima).
         </para>
 
         <para>
-          Se você tiver habilitado os testes completos, você pode executar os testes
-principais <emphasis>como o(a) usuário(a) root</emphasis> executando:
-<command>ninja test</command>. Um número muito grande de testes será
-executado. Um teste falha no Wayland.
+          Se tiver decidido executar a suíte de teste padrão, você pode executar os
+testes <emphasis>como o(a) usuário(a) root</emphasis> executando:
+<command>ninja test</command>. Existem mais de 30 testes e todos deveriam
+passar se você instalou as dependências opcionais. No entanto, você consegue
+executar 6 testes menores como o(a) usuário(a) regular executando o mesmo
+comando, embora você não precise remover o parâmetro -D tests. As medições
+de teste são baseadas somente nesses testes.
         </para>
       </note>
 
@@ -202,11 +213,11 @@ tiver o <xref linkend="gtk3"/> instalado.
       </para>
 
       <para>
-        <parameter>-D tests=false</parameter>: Essa chave desabilita a compilação
-dos testes principais. Mesmo com os testes definidos como false, você ainda
-consegue executar os primeiros quatro testes secundários, como um(a)
-usuário(a) normal, mas um será ignorado se o <xref linkend="pyparsing"/> não
-estiver instalado.
+        <parameter>-D tests=false</parameter>: Essa chave desabilita a compilação da
+suíte de teste padrão. Mesmo com os testes definidos como false, você ainda
+consegue executar os seis primeiros testes menores como um(a) usuário(a)
+regular, mas um será ignorado se <xref linkend="pyparsing"/> não estiver
+instalado, e outro se <xref linkend="pytest"/> não estiver instalado.
       </para>
 
       <para>

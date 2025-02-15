@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY nautilus-download-http
-           "&gnome-download-http;/nautilus/&gnome-46;/nautilus-&nautilus-version;.tar.xz">
+           "&gnome-download-http;/nautilus/&gnome-47;/nautilus-&nautilus-version;.tar.xz">
   <!ENTITY nautilus-download-ftp  "">
-  <!ENTITY nautilus-md5sum        "88acd6bd9c5d01fb02c8827222c07bc5">
+  <!ENTITY nautilus-md5sum        "731bc0b5189c8ea9853d51c10c8764f7">
   <!ENTITY nautilus-size          "3,1 MB">
-  <!ENTITY nautilus-buildsize     "88 MB (com testes)">
+  <!ENTITY nautilus-buildsize     "93 MB (com testes)">
   <!ENTITY nautilus-time          "0,5 UPC (com testes, ambos usando paralelismo=4)">
 ]>
 
@@ -75,7 +75,7 @@ arquivos do <application>GNOME</application>.
 linkend="gnome-autoar"/>, <xref linkend="gnome-desktop"/>, <xref
 linkend="libadwaita1"/>, <xref linkend="libnotify"/>, <xref
 linkend="libportal"/>, <xref linkend="libseccomp"/> e <xref
-linkend="tracker3"/>
+linkend="tinysparql"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -85,7 +85,7 @@ linkend="tracker3"/>
 linkend="libcloudproviders"/> e <xref linkend="libexif"/>
     </para>
 
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <bridgehead renderas="sect4">Opcionais (para gerar documentação)</bridgehead>
     <para role="optional">
       <xref linkend="gi-docgen"/>
     </para>
@@ -103,23 +103,6 @@ funcionem)
     <title>Instalação do Nautilus</title>
 
     <para>
-      Corrija o local para instalar a documentação da API:
-    </para>
-
-<!--
-    <para>
-
-      Fix an inverted test that may lead to crashes, and also prevents
-      building with GCC-13:
-    </para>
-
-<screen><userinput>sed "/assert (basename ==/s/==/!=/" -i src/nautilus-file-operations.c</userinput></screen>
--->
-<screen><userinput>sed "/docdir =/s@\$@ / 'nautilus-&nautilus-version;'@" -i meson.build</userinput></screen>
-
-
-
-    <para>
       Instale o <application>Nautilus</application> executando os seguintes
 comandos:
     </para>
@@ -129,18 +112,25 @@ cd    build &amp;&amp;
 
 meson setup --prefix=/usr       \
             --buildtype=release \
-            -D selinux=false    \
-            -D packagekit=false \
             ..                  &amp;&amp;
 
 ninja</userinput></screen>
 
     <para>
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar gerar e
+instalar a documentação da API, emita os seguintes comandos:
+    </para>
+
+<screen remap='doc'><userinput>sed "/docdir =/s@\$@ / 'nautilus-&nautilus-version;'@" -i ../meson.build &amp;&amp;
+meson configure -D docs=true &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
       Para testar os resultados, emita: <command>ninja test</command>. Os testes
 precisam ser executados em um ambiente gráfico. Um teste é conhecido por
-falhar se o <xref linkend='tracker3-miners'/> não estiver instalado. Um
-teste também é conhecido por atingir o tempo limite se o(a) usuário(a)
-executando os testes tiver um diretório inicial grande.
+falhar se o <xref linkend="localsearch"/> não estiver instalado. Um teste
+também é conhecido por atingir o tempo limite se o(a) usuário(a) executando
+os testes tiver um diretório inicial grande.
     </para>
 
     <para>
@@ -159,16 +149,6 @@ executando os testes tiver um diretório inicial grande.
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
-
-    <para>
-      <parameter>-D selinux=false</parameter>: Essa chave desabilita o uso do
-selinux que não é suportado pelo BLFS.
-    </para>
-
-    <para>
-      <parameter>-D packagekit=false</parameter>: Essa chave desabilita o uso do
-PackageKit que não é adequado para o BLFS.
-    </para>
 
     <para>
       <option>-D cloudproviders=false</option>: Use essa chave se você não tiver
@@ -194,7 +174,7 @@ PackageKit que não é adequado para o BLFS.
         </seg>
         <seg>
           /usr/{include,lib,share}/nautilus e
-/usr/share/gtk-doc/html/libnautilus-extension (opcional)
+/usr/share/doc/nautilus-&nautilus-version; (opcional)
         </seg>
       </seglistitem>
     </segmentedlist>

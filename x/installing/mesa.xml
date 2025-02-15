@@ -6,10 +6,10 @@
 
   <!ENTITY mesa-download-http "https://mesa.freedesktop.org/archive/mesa-&mesa-version;.tar.xz">
   <!ENTITY mesa-download-ftp  "">
-  <!ENTITY mesa-md5sum        "0f4de2192e63b438637b98937ac85a10">
-  <!ENTITY mesa-size          "28 MB">
-  <!ENTITY mesa-buildsize     "825 MB (com documentos, adicionar 496 MB para testes)">
-  <!ENTITY mesa-time          "4,1 UPC (com documentos; adicionar 1,4 UPC para testes; ambos com
+  <!ENTITY mesa-md5sum        "c64b7e2b4f1c7782c41bf022edbb365c">
+  <!ENTITY mesa-size          "30 MB">
+  <!ENTITY mesa-buildsize     "1,3 GB (com documentos, adicionar 569 MB para testes)">
+  <!ENTITY mesa-time          "3,8 UPC (com documentos; adicionar 1,2 UPC para testes; ambos com
 paralelismo=4)">
 ]>
 
@@ -80,20 +80,33 @@ mais recente disponível.
       <!-- 9 Apr 23.  Change to unversioned patch since it never changes. -->
 <listitem>
         <para>
-          Remendo recomendado: <ulink url="&patch-root;/mesa-add_xdemos-2.patch"/>
-(instala dois aplicativos de demonstração para testagem do Mesa - não
+          Remendo recomendado: <ulink url="&patch-root;/mesa-add_xdemos-4.patch"/>
+(instala dois programas de demonstração para testagem do Mesa - não
 necessário se você instalar o pacote <ulink
 url="https://archive.mesa3d.org/demos/"> mesa-demos</ulink>)
         </para>
       </listitem>
-    </itemizedlist>
+      
+    <!--
+      <listitem>
+
+        <para>
+          Recommended patch:
+          <ulink url="&patch-root;/mesa-&mesa-version;-seizure_prevention-1.patch"/>
+          (prevents severe flashing when using
+          <application>Firefox</application> and
+          <application>Thunderbird</application> with the Zink gallium driver)
+        </para>
+      </listitem>
+      -->
+</itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do Mesa</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="xorg7-lib"/>, <xref linkend="libdrm"/> e <xref
-linkend="Mako"/>
+      <xref linkend="xorg7-lib"/>, <xref linkend="libdrm"/>, <xref
+linkend="Mako"/> e <xref linkend="PyYAML"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -121,9 +134,8 @@ e GLX do mesa, instalar esse pacote e reconstruir
         </listitem>
         <listitem>
           <para>
-            <xref linkend="llvm"/> (exigido para os controladores r300, r600 e radeonsi
-e para o rasterizador de software LLVMpipe, que pode tornar o controlador
-swrast muito mais rápido)
+            <xref linkend="llvm"/> (exigido para o llvmpipe, r300, r600, e controladores
+radeonsi)
           </para>
         </listitem>
         <listitem>
@@ -150,12 +162,19 @@ linkend='gtk3'/>)
         </listitem>
         <listitem>
           <para>
-            <xref linkend="cbindgen"/> e <xref linkend="rust-bindgen"/> (exigido para o
-controlador Vulkan da Nouveau)
+            <xref linkend="cbindgen"/>, <xref linkend="make-ca"/> e <xref
+linkend="rust-bindgen"/> (exigido para o controlador Nouveau Vulkan)
           </para>
         </listitem>
       </itemizedlist>
     </para>
+
+    <note>
+      <para>
+        Uma conexão de Internet é necessária para construir o controlador Nouveau
+Vulkan.
+      </para>
+    </note>
 
     <note>
       <para>
@@ -180,11 +199,11 @@ vídeo tem instalando <xref linkend='pciutils'/> e executando:
 
       <para>
         O dispositivo de vídeo é provavelmente uma das três famílias: AMD, Intel ou
-Nvidia. Vejam-se as Explicações do Comando para <parameter>-D
+NVIDIA. Vejam-se as Explicações do Comando para <parameter>-D
 gallium-drivers=auto</parameter> abaixo para ver quais opções estão
 disponíveis para teu hardware de vídeo específico (ou hardware emulado de
-vídeo). Você provavelmente deveria adicionar a opção swrast como um
-controlador residual.
+vídeo). Você provavelmente deveria adicionar a opção softpipe ou llvmpipe
+como um controlador de apoio.
       </para>
 
       <para>
@@ -228,7 +247,7 @@ url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">lib
     </para>
 
 
-    <!--
+  <!--
     <note>
 
       <para>
@@ -241,9 +260,7 @@ url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">lib
       </para>
     </note>
 -->
-&build-use-internet;
-
-  </sect2>
+</sect2>
 
   <sect2 role="kernel" id="mesa-kernel"
          xreflabel='Configuração de Núcleo do Mesa'>
@@ -273,11 +290,11 @@ para detalhes.
       </para>
 
       <para>
-        Selecionar <option>CONFIG_DRM_RADEON</option> ou
-<option>CONFIG_DRM_AMDGPU</option> como <quote><literal>y</literal></quote>
-não é recomendado. Se for, qualquer firmware exigido precisa ser construído
-como parte da imagem do núcleo ou do initramfs para o controlador funcionar
-corretamente.
+        Selecionar <option>CONFIG_DRM_RADEON</option>,
+<option>CONFIG_DRM_AMDGPU</option> ou <option>CONFIG_DRM_NOUVEAU</option>
+como <quote><literal>y</literal></quote> não é recomendado. Se for, qualquer
+firmware exigido precisa ser construído como parte da imagem do núcleo ou do
+initramfs para o controlador funcionar corretamente.
       </para>
 
       <para>
@@ -289,8 +306,13 @@ possivelmente sejam desnecessárias para alguns modelos de GPU.
       </para>
 
       <para>
-        Para <literal>swrast</literal>, <option>CONFIG_DRM_VGEM</option> não é
-estritamente necessária, mas recomendada como uma otimização.
+        Para <literal>llvmpipe</literal> ou <literal>softpipe</literal>,
+<option>CONFIG_DRM_VGEM</option> é exigido ou os clientes do X podem falhar
+ao iniciar com uma mensagem enigmática <computeroutput>Error: couldn't get
+an RGB, Double-buffered visual</computeroutput>. Falando estritamente, ele
+pode ser compilado como um módulo. Mas o módulo não será carregado
+automaticamente, de forma que é mais conveniente construí-lo como parte da
+imagem do núcleo.
       </para>
     </note>
     <indexterm zone="mesa mesa-kernel">
@@ -307,6 +329,15 @@ comando:
     </para>
 
 
+<!--
+    <para>
+
+      If you have downloaded the seizure prevention patch, apply it by running
+      the following command:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../mesa-&mesa-version;-seizure_prevention-1.patch</userinput></screen>
+-->
 <!-- Note that freedreno, vc4, and virgl all need special support from
         libdrm - renodr
         For me, libdrm does not mention virgl, but mesa accepts it. AFAICS
@@ -376,7 +407,7 @@ DRI_DRIVERS="i965,nouveau"</userinput></screen>
 -->
 <screen><!--<screen>
 <userinput>patch -Np1 -i ../mesa-&mesa-version;-add_xdemos-1.patch</userinput></screen>-->
-<userinput>patch -Np1 -i ../mesa-add_xdemos-2.patch</userinput></screen>
+<userinput>patch -Np1 -i ../mesa-add_xdemos-4.patch</userinput></screen>
 
    
 
@@ -400,9 +431,18 @@ meson setup ..                 \
       -D gallium-drivers=auto  \
       -D vulkan-drivers=auto   \
       -D valgrind=disabled     \
+      -D video-codecs=all      \
       -D libunwind=disabled    &amp;&amp;
 
 ninja</userinput></screen>
+
+    <warning>
+      <para>
+        Por favor, consulte teu(tua) advogado(a) ou remova a opção <parameter>-D
+video-codecs=all</parameter> se você distribuirá as bibliotecas e
+controladores compiladas do Mesa para outros(as).
+      </para>
+    </warning>
 
     <para>
       Para testar os resultados, emita: <command>meson configure -D
@@ -414,6 +454,7 @@ build-tests=true &amp;&amp; ninja test</command>.
      All 90 tests passed for me for 23.1.0 [bdubbs]
      89 Tests passed for me, 1 timeout on 23.1.8 [rahul]
      All 98 tests passed for me for 23.3.1 [bdubbs]
+     All 106 tests passed for me for 24.3.1 [zeckma]
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -455,7 +496,7 @@ quais controladores Gallium3D deveriam ser construídos:
 disponíveis para x86. Com uma lista separada por vírgulas, somente um
 subconjunto desses controladores será construído. Se você souber exatamente
 quais controladores precisa, poderá selecioná-los explicitamente. Por
-exemplo, <option>-D gallium-drivers=radeonsi,iris,swrast</option>.
+exemplo, <option>-D gallium-drivers=radeonsi,iris,llvmpipe</option>.
           </para>
         </listitem>
         <listitem>
@@ -497,10 +538,17 @@ do BLFS não é construído com <application>virglrender</application>)
         </listitem>
         <listitem>
           <para>
-             <literal>swrast</literal> (usar CPU para rasterização 3D. Observe que ele é
-muito mais lento que usar uma GPU moderna com capacidade 3D, de forma que
+             <literal>llvmpipe</literal> (usar CPU para rasterização 3D. Observe que ele
+é muito mais lento que usar uma GPU moderna com capacidade 3D, de forma que
 ele deveria ser usado somente se a GPU não for suportada por outros
-controladores), 
+controladores)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+             <literal>softpipe</literal> (também usa CPU para rasterização 3D, porém mais
+lento que llvmpipe. Não existe muita razão para usá-lo, a menos que LLVM não
+esteja disponível)
           </para>
         </listitem>
         <listitem>
@@ -524,9 +572,9 @@ fornecidas com chipsets ou CPUs Atom D/N 4xx/5xx)
         </listitem>
         <listitem>
           <para>
-             <literal>zink</literal> (usar Vulkan para implementar OpenGL, não é muito
-útil em x86 como no momento, mas pode substituir outros controladores para
-modelos modernos de GPU no futuro)
+             <literal>zink</literal> (usa Vulkan para implementar OpenGL e, embora
+instável às vezes, pode ser um substituto decente para controladores Gallium
+de baixo desempenho, como o Nouveau)
           </para>
         </listitem>
       </itemizedlist>
@@ -607,6 +655,12 @@ tiver o Valgrind instalado e desejar verificar vazamentos de memória.
     </para>
 
     <para>
+      <parameter>-D video-codecs=all</parameter>: Esse parâmetro habilita
+construir codificadores/decodificadores para formatos de vídeo cobertos por
+patentes de terceiros(as).
+    </para>
+
+    <para>
       <parameter>-D libunwind=disabled</parameter>: Esse parâmetro desabilita o
 uso da libunwind.
     </para>
@@ -625,6 +679,12 @@ suporte da Biblioteca de Gráficos Incorporados será construído. As opções d
 Linux disponíveis são auto (padrão), x11, wayland, surfaceless e drm.
     </para>
 
+    <para>
+      <option>-D legacy-x11="..."</option> Esse parâmetro controla quais recursos
+legados do X11 recebem suporte integrado. As opções disponíveis do Linux são
+none (padrão) e dri2. Esses recursos raramente são mais necessários.
+    </para>
+
   </sect2>
 
   <sect2 role="content">
@@ -634,8 +694,12 @@ Linux disponíveis são auto (padrão), x11, wayland, surfaceless e drm.
       <segtitle>Aplicativos Instalados</segtitle>
       <segtitle>Bibliotecas Instaladas</segtitle>
       <!-- in /usr/lib -->
-<segtitle>Controladores DRI Instalados</segtitle>
+<segtitle>Sobras Instaladas de Controlador DRI</segtitle>
       <!-- in /usr/lib/dri -->
+<segtitle>Controladores VA-API Instalados</segtitle>
+      <!-- in /usr/lib/dri -->
+<segtitle>Estruturas GBM de Retaguarda Instaladas</segtitle>
+      <!-- in /usr/lib/gbm -->
 <segtitle>Controladores VDPAU Instalados</segtitle>
       <!-- in /usr/lib/vdpau -->
 <segtitle>Controladores Vulkan Instalados</segtitle>
@@ -647,30 +711,38 @@ Linux disponíveis são auto (padrão), x11, wayland, surfaceless e drm.
           glxgears, glxinfo, mme_fermi_sim_hw_test e mme_tu104_sim_hw_test
         </seg>
         <seg>
-          libEGL.so, libGL.so, libGLESv1_CM.so, libGLESv2.so, libgbm.so, libglapi.so e
-libxatracker.so
+          libEGL.so, libGL.so, libGLESv1_CM.so, libGLESv2.so, libgbm.so, libglapi.so,
+libgallium-&mesa-version;.so e libxatracker.so
         </seg>
         <seg>
           
+          <!-- Begin DRI driver stubs -->
+<!-- End DRI driver stubs -->
+libdril_dri.so e links simbólicos para ela: crocus_dri.so, i915_dri.so,
+iris_dri.so, kms_swrast_dri.so, nouveau_dri.so, r300_dri.so, r600_dri.so,
+r600_drv_video.so, radeonsi_dri.so, swrast_dri.so, virtio_gpu_dri.so,
+vmwgfx_dri.so e zink_dri.so
           
-          <!-- d3dadapter9.so (optional)
-               I guess this is useless today, Wine applications use Vulkan
-               through libvkd3d, and new games with native Linux support
-               likely uses Vulkan directly.  -->
-<!-- Begin gallium DRI drivers (*_dri.so) and VA-API drivers
-               (*_drv_video.so): this is the full set -->
-<!-- End DRI Drivers -->
-crocus_dri.so, i915_dri.so, iris_dri.so, kms_swrast_dri.so, nouveau_dri.so,
-nouveau_drv_video.so, r300_dri.so, r600_dri.so, r600_drv_video.so,
-radeonsi_dri.so, radeonsi_drv_video.so, swrast_dri.so, virtio_gpu_dri.so,
-virtio_gpu_drv_video.so, vmwgfx_dri.so e zink_dri.so
+        </seg>
+        <seg>
+          
+          <!-- Begin VA-API drivers -->
+<!-- End VA-API drivers -->
+nouveau_drv_video.so, radeonsi_drv_video.so e virtio_gpu_drv_video.so,
+          
+        </seg>
+        <seg>
+          
+          <!-- Begin GBM backends -->
+<!-- End GBM backends -->
+dri_gbm.so
           
         </seg>
         <seg>
           
           <!-- Begin VDPAU drivers -->
 <!-- End VDPAU drivers -->
-libvdpau_nouveau.so, libvdpau_r600.so e libvdpau_radeonsi.so
+libvdpau_nouveau.so, libvdpau_r600.so, libvdpau_radeonsi.so e
 libvdpau_virtio_gpu.so (Muitos desses controladores estão rigidamente
 lincados).
         </seg>
@@ -682,9 +754,9 @@ libvulkan_nouveau.so e libvulkan_radeon.so
           
           <!-- $XORG_PREFIX/include/GL is installed by xorg-protos -->
 $XORG_PREFIX/{include/{EGL,GLES,GLES2,GLES3,KHR},
-$XORG_PREFIX/lib/{dri,vdpau}}, $XORG_PREFIX/share/drirc.d (contém soluções
-alternativas para vários aplicativos, particularmente navegadores e jogos),
-$XORG_PREFIX/share/vulkan e /usr/share/doc/mesa-&mesa-version;
+$XORG_PREFIX/lib/{dri,gbm,vdpau}}, $XORG_PREFIX/share/drirc.d (contém
+soluções alternativas para vários aplicativos, particularmente navegadores e
+jogos), $XORG_PREFIX/share/vulkan e /usr/share/doc/mesa-&mesa-version;
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -718,6 +790,27 @@ gráfico e bibliotecas GL instaladas
         </listitem>
       </varlistentry>
 
+      <varlistentry id="dri_gbm">
+        <term><filename class='libraryfile'>dri_gbm.so</filename></term>
+        <listitem>
+          <para>
+            implementa funções de Graphics Buffer Management necessitadas pela
+<systemitem class='library'>libgbm</systemitem> em cima da <systemitem
+class='library'>libdrm</systemitem>
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libdril_dri">
+        <term><filename class='libraryfile'>libdril_dri.so</filename></term>
+        <listitem>
+          <para>
+            é uma sobra que permite que o servidor Xorg coopere com os controladores
+Gallium3D
+          </para>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="libEGL">
         <term><filename class="libraryfile">libEGL.so</filename></term>
         <listitem>
@@ -731,6 +824,15 @@ especificação EGL-1.4
         </listitem>
       </varlistentry>
 
+      <varlistentry id="libgallium">
+        <term><filename class='libraryfile'>libgallium-&mesa-version;.so</filename></term>
+        <listitem>
+          <para>
+            contém todos os controladores Gallium3D
+          </para>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="libgbm">
         <term><filename class="libraryfile">libgbm.so</filename></term>
         <listitem>
@@ -739,6 +841,18 @@ especificação EGL-1.4
           </para>
           <indexterm zone="mesa libgbm">
             <primary sortas="c-libgbm">libgbm.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libglapi">
+        <term><filename class="libraryfile">libglapi.so</filename></term>
+        <listitem>
+          <para>
+            é a implementação <application>Mesa</application> da API OpenGL
+          </para>
+          <indexterm zone="mesa libglapi">
+            <primary sortas="c-libglapi">libglapi.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -775,6 +889,18 @@ especificação EGL-1.4
           </para>
           <indexterm zone="mesa libGL">
             <primary sortas="c-libGL">libGL.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libxatracker">
+        <term><filename class="libraryfile">libxatracker.so</filename></term>
+        <listitem>
+          <para>
+            é o rastreador de estado XA para o controlador VMWare vmwgfx
+          </para>
+          <indexterm zone="mesa libxatracker">
+            <primary sortas="c-libxatracker">libxatracker.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

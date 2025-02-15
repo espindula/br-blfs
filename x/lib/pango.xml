@@ -6,9 +6,9 @@
 
   <!ENTITY pango-download-http "&gnome-download-http;/pango/&pango-minor;/pango-&pango-version;.tar.xz">
   <!ENTITY pango-download-ftp  "">
-  <!ENTITY pango-md5sum        "7ad89b03f6850e0be28f91522b793842">
-  <!ENTITY pango-size          "1,9 MB">
-  <!ENTITY pango-buildsize     "27 MB (com testes)">
+  <!ENTITY pango-md5sum        "57656aefa189a5b24f3b1e67df7216b6">
+  <!ENTITY pango-size          "1,8 MB">
+  <!ENTITY pango-buildsize     "22 MB (com testes)">
   <!ENTITY pango-time          "0,1 UPC (Usando paralelismo=4; com testes)">
 ]>
 
@@ -89,12 +89,13 @@ para GNOME)
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
+  
+  
       <!--<xref linkend="gtk-doc"/>
 ,-->
 <!--<xref linkend="sysprof"/>
 ,-->
-<xref linkend="cantarell-fonts"/> (para testes), <xref linkend="gi-docgen"/>
-(para gerar documentação), <ulink
+<xref linkend="gi-docgen"/> (para gerar documentação), <ulink
 url="https://ftpmirror.gnu.org/gnu/help2man">help2man</ulink>, <ulink
 url="https://linux.thai.net/projects/libthai">libthai</ulink> e <ulink
 url="&sysprof-url;">sysprof</ulink>
@@ -113,10 +114,11 @@ seguintes comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr          \
-            --buildtype=release    \
-            --wrap-mode=nofallback \
-            ..                     &amp;&amp;
+meson setup --prefix=/usr            \
+            --buildtype=release      \
+            --wrap-mode=nofallback   \
+            -D introspection=enabled \
+            ..                       &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -129,24 +131,13 @@ meson configure -D documentation=true                            &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      <!-- One test,
-      <filename>
-test-font</filename> is known to fail.  Some tests may
-      fail if no Opentype or Truetype fonts are installed in
-      <filename class='directory'>/usr/share/fonts</filename>.
-      -->
-<!--<filename>
-test-itemize</filename>, are are known to fail. if
-      <xref linkend="cantarell-fonts"/> are not installed.-->
-<!-- the other problematic tests get skipped now -->
-<!-- Even with cantarell-fonts, pango-1.50.9 test-font fails again. -->
-Para testar os resultados, emita: <command>ninja test</command>. Dois
-testes, testiter e test-font, são conhecidos por falharem por motivo
-desconhecido.
-      
-      
-      
-      
+      <!-- Related discussion:
+           https://gitlab.gnome.org/GNOME/glib/-/issues/3518
+           Setting LD_LIBRARY_PATH to a Glib build at revision b180a8ec7032
+           makes the test pass.  -->
+Para testar os resultados, emita: <command>ninja test</command>. Um teste
+chamado testboundaries_ucd é conhecido por falhar porque espera suporte
+Unicode 16.0 originário da Glib 2.83 ou mais recente.
     </para>
 
     <para>

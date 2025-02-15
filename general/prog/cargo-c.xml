@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY cargoc-download-http "https://github.com/lu-zero/cargo-c/archive/v&cargo-c-version;/cargo-c-&cargo-c-version;.tar.gz">
+  <!ENTITY cargoc-download-ftp  "">
+  <!ENTITY cargoc-md5sum        "b575016cff52e74516bd2ec0c795e3ac">
+  <!ENTITY cargoc-size          "36 KB">
+  <!ENTITY cargoc-buildsize     "722 MB">
+  <!ENTITY cargoc-time          "0,5 UPC">
+
+  <!ENTITY cargoc-lock-md5sum   "231d9bf424e5a65adc73f26317c3ef94">
+]>
+
+<sect1 id="cargo-c" xreflabel="cargo-c-&cargo-c-version;">
+  <?dbhtml filename="cargo-c.html"?>
+
+
+  <title>cargo-c-&cargo-c-version;</title>
+
+  <indexterm zone="cargo-c">
+    <primary sortas="a-cargo-c">cargo-c</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduo ao cargo-c</title>
+
+    <para>
+      O pacote <application>cargo-c</application> cria um sub comando cargo para
+construir e instalar bibliotecas dinâmicas e estáticas compatíveis com
+C-ABI.
+    </para>
+
+    &lfs122_checked;
+
+    <bridgehead renderas="sect3">Informao do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferncia (HTTP): <ulink url="&cargoc-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferncia (FTP): <ulink url="&cargoc-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificao MD5 da transferncia: &cargoc-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferncia: &cargoc-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espao em disco estimado exigido: &cargoc-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construo estimado: &cargoc-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    
+
+    <!-- Moved to an explicit curl command.  See the note below the
+         curl command for reason.
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required download: <ulink url="https://github.com/lu-zero/cargo-c/releases/download/v&cargo-c-version;/Cargo.lock"/>
+        </para>
+        <para>
+          Cargo.lock md5sum: &Cargo.lock-md5sum;
+        </para>
+      </listitem>
+
+    </itemizedlist>-->
+<bridgehead renderas="sect3">Dependncias do cargo-c</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="rust"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="libssh2"/> e <xref linkend="sqlite"/>
+    </para>
+
+    &build-use-internet;
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalao do cargo-c</title>
+
+    <para>
+      Primeiro, baixe um arquivo para garantir que <command>cargo</command> use as
+versões de dependência especificadas pelos(as) desenvolvedores(as) do fluxo
+de desenvolvimento quando essa versão cargo-c (&cargo-c-version;) foi
+lançada. Sem isso, as versões mais recentes das dependências seriam usadas e
+elas poderiam causar quebras:
+    </para>
+
+    <screen><userinput>curl -LO https://github.com/lu-zero/cargo-c/releases/download/v&cargo-c-version;/Cargo.lock</userinput></screen>
+
+    <note>
+      <para>
+        Normalmente, nós colocaríamos essa transferência em uma seção
+<quote>Transferências Adicionais</quote>. Mas, nesse caso, não podemos dizer
+o nome e a versão do pacote a partir do nome do arquivo
+<filename>Cargo.lock</filename>, de forma que é melhor não colocar o arquivo
+ambiguamente nomeado fora do diretório <filename
+class='directory'>cargo-c-&cargo-c-version;</filename>. Nós usamos
+<command>curl</command> aqui porque o pacote <xref linkend='curl'/> deveria
+ter sido instalado como uma dependência exigida do <xref linkend='rust'/>.
+      </para>
+
+      <para>
+        A soma de verificação MD5 do arquivo deveria ser
+<literal>&cargoc-lock-md5sum;</literal>.
+      </para>
+    </note>
+
+    <para>
+      Instale <application>cargo-c</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1    &amp;&amp;
+[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1 &amp;&amp;
+
+cargo build --release</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>cargo test --release</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usurio(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>install -vm755 target/release/cargo-{capi,cbuild,cinstall,ctest} /usr/bin/</userinput></screen>
+
+  </sect2>
+
+  <!--
+  <sect2 role="commands">
+
+    <title>Command Explanations</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+  </sect2>
+-->
+<sect2 role="content">
+    <title>Contedo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretrios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          cargo-capi, cargo-cbuild, cargo-cinstall e cargo-ctest
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          None
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+  </sect2>
+
+</sect1>

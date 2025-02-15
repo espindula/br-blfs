@@ -260,15 +260,14 @@ tarefas estiverem realizando operações de E/S.
     <para>
       Observe que as chaves <option>-j</option> somente limitam as tarefas
 paralelas iniciadas por <command>make</command> ou <command>ninja</command>,
-mas cada tarefa ainda pode gerar os próprios processos ou camadas dela. Por
-exemplo, <command>ld.gold</command> usará várias camadas para vinculação, e
-alguns testes de pacotes podem gerar várias camadas para testar propriedades
-de segurança de camadas. Não existe uma maneira genérica de o sistema de
-construção saber o número de processos ou camadas gerados por uma
-tarefa. Portanto, geralmente nós não deveríamos considerar o valor passado
-com <option>-j</option> como um limite rígido do número de núcleos lógicos a
-serem usados. Leia-se <xref linkend='build-in-cgroup'/> se quiser configurar
-tal limite tão rígido.
+mas cada tarefa possivelmente ainda gere os próprios processos ou camadas
+dela. Por exemplo, alguns testes de pacotes podem gerar várias camadas para
+testar propriedades de segurança de camadas. Não existe uma maneira genérica
+de o sistema de construção saber o número de processos ou camadas gerados
+por uma tarefa. Portanto, geralmente nós não deveríamos considerar o valor
+passado com <option>-j</option> como um limite rígido do número de núcleos
+lógicos a serem usados. Leia-se <xref linkend='build-in-cgroup'/> se você
+quiser configurar tal limite tão rígido.
     </para>
 
     <para>Geralmente o número de processos não deveria exceder muito o número de
@@ -390,15 +389,15 @@ memória do sistema, emita:
 EOF</userinput></screen>
 
     <para>
-      Com <phrase revision='systemd'> <parameter>MemoryHigh=8G</parameter>
+      Com <phrase revision='systemd'> <parameter>MemoryHigh=8G</parameter>,
 </phrase> <phrase revision='sysv'> <literal>8589934592</literal> (a saída
 gerada de <userinput>bc -e '8*2^30'</userinput>, 2^30 representa
 2<superscript>30</superscript>, ou seja, um Gigabyte) na entrada
-<filename>memory.high</filename> </phrase>, um limite flexível de uso de
+<filename>memory.high</filename>, </phrase> um limite flexível de uso de
 memória está configurado. Se os processos no cgroup (<command>make</command>
-e todos os descendentes dele) usarem mais de 8 GB de memória do sistema no
+e todos os descendentes dele) usarem mais que 8 GB de memória do sistema no
 total, o núcleo irá desacelerar os processos e tentará recuperar a memória
-do sistema proveniente deles. Mas eles ainda podem usar mais de 8 GB de
+do sistema proveniente deles. Mas eles ainda podem usar mais que 8 GB de
 memória do sistema. Se você quiser definir um limite rígido, substitua
 <phrase revision='systemd'> <parameter>MemoryHigh</parameter> por
 <parameter>MemoryMax</parameter>. </phrase> <phrase revision='sysv'>
@@ -666,13 +665,21 @@ do pacote alvo.
       </listitem>
       <listitem>
         <para><emphasis>Recomendada</emphasis> significa que o BLFS sugere fortemente que
-esse pacote seja instalado primeiro (exceto se for considerada <quote>tempo
-de execução</quote>, veja-se abaixo) para uma construção limpa e livre de
-problemas, que não terá problemas durante o processo de construção ou em
-tempo de execução. As instruções no livro assumem que esses pacotes estão
-instalados. Algumas mudanças ou soluções alternativas possivelmente sejam
-exigidas se esses pacotes não estiverem instalados. Se uma dependência
-recomendada for considerada <quote>tempo de execução</quote>, isso significa
+esse pacote seja instalado primeiro (exceto se for dito ser <quote>tempo de
+execução,</quote> veja-se abaixo) para uma construção limpa e sem problemas,
+que não terá problemas nem durante o processo de construção nem em tempo de
+execução. As instruções no livro pressupõem que esses pacotes estejam
+instalados. Em muitos casos, se uma dependência recomendada (não apenas
+<quote>tempo de execução</quote>) não estiver instalada, o pacote construído
+pode carecer algumas funcionalidades importantes (por exemplo, um reprodutor
+de vídeo pode reproduzir somente áudio). Às vezes, é necessário modificar as
+instruções do livro para desabilitar essas funcionalidades importantes. Em
+outros casos, o sistema de construção do pacote pode construir uma cópia da
+dependência (frequentemente desatualizada e às vezes com vulnerabilidades
+conhecidas de segurança) enviada na árvore do fonte ou pode ser baixada da a
+partir da Internet durante o processo de construção. Isso aumenta o tempo de
+construção e o uso do disco. Isso poderia causar outros problemas. Se uma
+dependência recomendada for <quote>tempo de execução,</quote> isso significa
 que o BLFS sugere fortemente que essa dependência seja instalada antes de
 usar o pacote, para obter funcionalidade completa.</para>
       </listitem>
@@ -1311,12 +1318,12 @@ antiga) era forçado a usar o reforçamento (com opções para desativar parte
 dele na base do por pacote). Os livros atuais do LFS e BLFS estão levando
 adiante uma parte do espírito dele ao habilitar PIE (<option>-fPIE
 -pie</option>) e SSP (<option>-fstack-protector-strong</option>) como
-padrões para GCC e clang. E os lincadores (<command>ld.bfd</command> e
-<command>ld.gold</command>) também habilitaram
-<option>-Wl,-z,relro</option>, o que torna uma parte da Global Offset Table
-(GOT) imutável, por padrão desde Binutils 2.27. O que está sendo abordado
-aqui é diferente - primeiro você tem que ter certeza de que o pacote está
-realmente usando teus sinalizadores adicionados e não os substituindo-os.
+padrões para GCC e clang. E o lincador (<command>ld</command>) também
+habilitou <option>-Wl,-z,relro</option>, o que torna uma parte da Global
+Offset Table (GOT) imutável, por padrão desde Binutils 2.27. O que está
+sendo coberto aqui é diferente - primeiro você tem que ter certeza de que o
+pacote está realmente usando teus sinalizadores adicionados e não os
+substituindo.
       </para>
 
       <para>

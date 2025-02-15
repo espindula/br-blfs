@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY sysmon-qt-download-http "https://github.com/lfs-book/sysmond/releases/download/sysmond-&sysmond-version;/sysmond-&sysmond-version;.tar.xz">
+  <!ENTITY sysmon-qt-download-ftp  "">
+  <!ENTITY sysmon-qt-md5sum        "ef7bf090b835c3265e9b602b4a297fcd">
+  <!ENTITY sysmon-qt-size          "22 KB">
+  <!ENTITY sysmon-qt-buildsize     "196 KB">
+  <!ENTITY sysmon-qt-time          "menos que 0,1 UPC">
+]>
+
+<sect1 id="sysmond" xreflabel="sysmond-&sysmond-version;">
+  <?dbhtml filename="sysmond.html"?>
+
+  <title>sysmond-&sysmond-version;</title>
+
+  <indexterm zone="sysmond">
+    <primary sortas="a-sysmond">sysmond</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduo ao sysmond</title>
+
+    <para>
+      O pacote <application>sysmond</application> (pronuncia-se sys-mon-d) é a
+parte de processo de segundo plano do aplicativo cliente/servidor
+sysmond/sysmon3 que monitora valores do sistema, incluindo uso de CPU, uso
+de memória e temperaturas do sistema em uma janela de tela compacta.
+    </para>
+
+    &lfs123_checked;
+
+    <bridgehead renderas="sect3">Informao do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferncia (HTTP): <ulink url="&sysmon-qt-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferncia (FTP): <ulink url="&sysmon-qt-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificao MD5 da transferncia: &sysmon-qt-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferncia: &sysmon-qt-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espao em disco estimado exigido: &sysmon-qt-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construo estimado: &sysmon-qt-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect2>
+
+  <sect2 role="kernel" id='sysmond-kernel'>
+    <title>Configurao do Ncleo</title>
+
+     <para>
+        Existem muitos dispositivos de hardware que detectam temperaturas. As
+leituras de temperatura são atualizadas por controladores do núcleo que
+suportam dispositivos específicos. Para determinar quais dispositivos estão
+presentes em um sistema, o pacote <xref linkend="lm_sensors"/> tem um
+conjunto de comandos sequenciais Perl, <command>sensors-detect</command>,
+que consegue procurar por dispositivos específicos que estão no sistema
+atual.
+     </para>
+
+     <para>
+        Após os dispositivos sensores serem conhecidos, o controlador apropriado de
+núcleo precisa ser habilitado. Em muitas perseguições, mas não em todas, os
+controladores apropriados serão selecionados por padrão. Os parâmetros de
+configuração do núcleo estão localizados em:
+     </para>
+
+<screen><emphasis role='blue'>D</emphasis>evice Drivers ---&gt;                                    
+  N<emphasis role='blue'>e</emphasis>tworking options ---&gt;
+    [*] H<emphasis role='blue'>a</emphasis>rdware Monitoring support ---&gt;        [CONFIG_HWMON]</screen>
+
+     <para>
+        Na maioria dos casos, pelo menos o sensor de temperatura Intel
+Core/Core2/Atom (SENSORS_CORETEMP) deveria estar habilitado para sistemas
+baseados em Intel ou CONFIG_SENSORS_K10TEMP (AMD) deveria estar habilitado
+para sistemas baseados em AMD.
+     </para>
+        
+     <indexterm zone="sysmond sysmond-kernel">
+        <primary sortas="d-sysmond">sysmond</primary>
+     </indexterm>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalao do sysmond</title>
+
+    <para>
+      Instale <application>sysmond</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>make</userinput></screen>
+
+    <para>
+      Esse pacote no vem com uma sute de teste.
+    </para>
+
+    <para>
+      Agora, como o(a) usurio(a) &root;:
+    </para>
+
+<screen role="root"><userinput>make install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configurando sysmond</title>
+
+    <sect3 id="sysmond-init">
+      <title><phrase revision="sysv">Script de Inicializao</phrase> <phrase
+revision="systemd">Unidade do systemd</phrase></title>
+
+      <indexterm zone="sysmond sysmond-init">
+        <primary sortas="f-sysmond-init">sysmond</primary>
+      </indexterm>
+
+      <para revision="sysv">
+        Instale o conjunto de comandos sequenciais de iniciação
+<filename>/etc/rc.d/init.d/sysmond</filename> incluído no pacote <xref
+linkend="bootscripts"/>.
+      </para>
+
+      <para revision="systemd">
+        Para iniciar o processo de segundo plano <command>sysmond</command> na
+inicialização, instale a unidade do systemd a partir do pacote <xref
+linkend="systemd-units"/> executando o seguinte comando como o(a) usuário(a)
+<systemitem class="username">root</systemitem>:
+      </para>
+
+<screen role="root"><userinput>make install-sysmond</userinput></screen>
+
+    </sect3>
+
+    <sect3 id="sysmond-config">
+      <title>Arquivo de Configurao</title>
+
+      <para>
+        Por padrão, o arquivo de configuração é
+<filename>/etc/sysmond.conf</filename>, mas ele pode ser mudado passando-se
+--config-file &lt;nomearquivo&gt; na linha de comando. Inicialmente, todos
+os itens de configuração estão comentados e os padrões especificados ali
+serão usados.
+      </para>
+    </sect3>
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contedo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretrios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          sysmond
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          None
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+  </sect2>
+
+</sect1>

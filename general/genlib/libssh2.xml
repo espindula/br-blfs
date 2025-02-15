@@ -6,9 +6,9 @@
 
   <!ENTITY libssh2-download-http "https://www.libssh2.org/download/libssh2-&libssh2-version;.tar.gz">
   <!ENTITY libssh2-download-ftp  "">
-  <!ENTITY libssh2-md5sum        "a01d543fd891ca48fe47726540d50b17">
-  <!ENTITY libssh2-size          "1,1 MB">
-  <!ENTITY libssh2-buildsize     "13 MB (com testes)">
+  <!ENTITY libssh2-md5sum        "38857d10b5c5deb198d6989dacace2e6">
+  <!ENTITY libssh2-size          "1,0 MB">
+  <!ENTITY libssh2-buildsize     "15 MB (com testes)">
   <!ENTITY libssh2-time          "0,2 UPC (com testes)">
 ]>
 
@@ -67,17 +67,19 @@ cliente que implementa o protocolo "SSH2".
     </itemizedlist>
 
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/libssh2-&libssh2-version;-security_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/libssh2-&libssh2-version;-security_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do libssh2</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do libssh2</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -92,26 +94,27 @@ e <ulink url='https://www.docker.com'>Docker</ulink> (para alguns testes)
   <sect2 role="installation">
     <title>Instalação do libssh2</title>
 
+    <!--
     <para>
-      
-      <!-- the Terrapin attack -->
-Primeiro, corrija uma vulnerabilidade crítica de segurança na libssh2:
+
+      <!- - the Terrapin attack - ->
+      First, fix a critical security vulnerability in libssh2:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../libssh2-&libssh2-version;-security_fixes-1.patch</userinput></screen>
 
     <para>
-      Se você quiser testar o pacote, exclua os testes que exigem uma biblioteca
-estática e remova a referência para um algoritmo inseguro removido desde
-OpenSSH 9.8:
+      If you want to test the package, exclude the tests requiring a static
+      library, and remove the reference to an insecure algorithm removed
+      since OpenSSH 9.8:
     </para>
 
 <screen><userinput>sed -E '/^DOCKER_TEST/,/^SSHD_TEST/s/test_(auth_keyboard_info.* |hostkey |simple)/$(NOTHING)/' \
     -i tests/Makefile.inc &amp;&amp;
 autoreconf -fi &amp;&amp;
 sed 's/ssh-dss,//' -i tests/openssh_server/sshd_config</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>libssh2</application> executando os seguintes comandos:
     </para>
 

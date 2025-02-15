@@ -6,10 +6,10 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "77dedc2267784055d1bdc27916660177">
-  <!ENTITY thunderbird-size          "646 MB">
-  <!ENTITY thunderbird-buildsize     "7,8 GB (256 MB instalado)">
-  <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito elementos de processamento)">
+  <!ENTITY thunderbird-md5sum        "5c25b03ab6d3994999f19ad727c615c6">
+  <!ENTITY thunderbird-size          "643 MB">
+  <!ENTITY thunderbird-buildsize     "7,8 GB (257 MB instalado)">
+  <!ENTITY thunderbird-time          "13 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
        the C/C++ code appears to obey it.
 
@@ -73,7 +73,6 @@ Gecko para o habilitar a exibir e compor mensagens eletrônicas em HTML.
       </listitem>
     </itemizedlist>
 
-
     <bridgehead renderas="sect3">Dependências do Thunderbird</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -81,12 +80,12 @@ Gecko para o habilitar a exibir e compor mensagens eletrônicas em HTML.
       <!-- used by default if found -->
 <!--<xref linkend="yasm"/>
 -->
-<xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref linkend="llvm"/>
-incluindo clang, <xref linkend="nodejs"/>, <xref linkend="pulseaudio"/> (ou
-<xref linkend="alsa-lib"/> se você editar o mozconfig; embora ele esteja
-agora obsoleto pela mozilla), <xref linkend="python3"/> (reconstruído com
-módulo sqlite), <xref linkend="startup-notification"/> e <xref
-linkend="unzip"/>
+<xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref
+linkend="libarchive"/>, <xref linkend="llvm"/> incluindo clang, <xref
+linkend="nodejs"/>, <xref linkend="pulseaudio"/> (ou <xref
+linkend="alsa-lib"/> se você editar o mozconfig; embora ele esteja obsoleto
+agora pela mozilla), <xref linkend="python3"/> (reconstruído com o módulo
+sqlite) e <xref linkend="startup-notification"/>
       
     </para>
 
@@ -133,52 +132,7 @@ adequados antes de continuar.
       </para>
     </note>
 
- 
-
-    <!-- Restore after Python 3.12 is usable for this package again
     <para>
-
-      The building system ships several internal copies of the Python 3
-      modules <application>setuptools</application> and
-      <filename>six.py</filename>.  The shipped copies are too old
-      to work well with Python 3.12 or later.  Replace them with the
-      symlinks to the LFS <application>setuptools</application> package and
-      <xref linkend='six'/> already installed on the system, and adapt the
-      building system for these updated Python modules.  We also need to
-      rewrite the code based on the <filename>imp</filename> module removed
-      in Python 3.12 and later using the <filename>importlib</filename>
-      module:
-    </para>
-
-<screen><userinput>(for i in $(find -name six.py); do
-   ln -sfv /usr/lib/python&python3-majorver;/site-packages/six.py $i
-   [ $? = 0 ] || exit $?
- done) &amp;&amp;
-
-sed '/ConfigParser/s/Safe//'                          \
-    -i testing/mozbase/mozprofile/mozprofile/prefs.py &amp;&amp;
-
-(for i in setuptools distutils-precedence.pth  \
-          pkg_resources _distutils_hack; do
-   rm -rf third_party/python/setuptools/$i     &amp;&amp;
-   ln -sv /usr/lib/python&python3-majorver;/site-packages/$i \
-          third_party/python/setuptools
-   [ $? = 0 ] || exit $?
- done) &amp;&amp;
-
-sed 's/distutils/setuptools._&amp;/'            \
-    -i python/mozbuild/mozbuild/nodeutil.py &amp;&amp;
-
-sed -e '/^import/s/imp$/importlib.util/'             \
-    -e 's/imp.new_module/__import__/'                \
-    -e "s/imp.load_source\(.*\)/spec =               \
-        importlib.util.spec_from_file_location\1;    \
-        mod = importlib.util.module_from_spec(spec); \
-        spec.loader.exec_module(mod)/" -i python/mach/mach/main.py &amp;&amp;
-sed '/import imp/d' -i netwerk/dns/prepare_tlds.py
-</userinput></screen>
--->
-<para>
       A configuração do <application>Thunderbird</application> é realizada
 criando-se um arquivo <filename>mozconfig</filename> contendo as opções de
 configuração desejadas. Um <filename>mozconfig</filename> padrão é criado
@@ -187,7 +141,6 @@ uma breve descrição de cada uma), emita <command>./mach configure -- --help
 | less</command>. Crie o arquivo com o seguinte comando:
     </para>
 
-<!-- https://phabricator.services.mozilla.com/D219025 -->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used.
 
@@ -236,15 +189,6 @@ ac_add_options --with-system-zlib
 # and was reported to seriously slow the build. Disable it.
 ac_add_options --without-wasm-sandboxed-libraries</literal>
 EOF</userinput></screen>
-
-    
-    <para>
-      Adapte dois arquivos para compatibilidade com cbindgen-0.27.0 ou posterior:
-    </para>
-
-    <screen><userinput>sed 's/input.try/&amp;_parse/' \
-    -i servo/components/style_traits/values.rs &amp;&amp;
-sed '0,/"Keyframe"/{//d}' -i servo/ports/geckolib/cbindgen.toml</userinput></screen>
 
     <para>
       Agora invoque o conjunto de comandos sequenciais Python

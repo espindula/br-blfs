@@ -6,10 +6,10 @@
 
   <!ENTITY qemu-download-http "https://download.qemu.org/qemu-&qemu-version;.tar.xz">
   <!ENTITY qemu-download-ftp  "">
-  <!ENTITY qemu-md5sum        "f7f0462262d2571f146c6a8adda33b29">
-  <!ENTITY qemu-size          "126 MB">
-  <!ENTITY qemu-buildsize     "2,2 GB (374 MB instalado)">
-  <!ENTITY qemu-time          "1,6 UPC (adicionar 1,0 UPC para testes, ambos usando paralelismo=4)">
+  <!ENTITY qemu-md5sum        "c33f4ef002f3d8d73f07079c9b4a157b">
+  <!ENTITY qemu-size          "129 MB">
+  <!ENTITY qemu-buildsize     "2,8 GB (488 MB instalado)">
+  <!ENTITY qemu-time          "1,8 UPC (adicionar 0,5 UPC para testes, ambos usando paralelismo=4)">
 ]>
 
 <sect1 id="qemu" xreflabel="qemu-&qemu-version;">
@@ -202,18 +202,7 @@ habilitadas:
   <sect2 role="installation">
     <title>Instalação do qemu</title>
 
-    <!-- group kvm is created in lfs chapter 7 even for sysv
-    <para revision="sysv">
-
-      You will need a dedicated group that will contain users (other than root)
-      allowed to access the KVM device.  Create this group by running the
-      following command as the
-      <systemitem class="username">root</systemitem> user:
-    </para>
-
-<screen role="root" revision="sysv"><userinput>groupadd -g 61 kvm</userinput></screen>
--->
-<para>
+    <para>
       A regra de udev do LFS permite somente que o(a) usuário(a) &root;, os(as)
 usuários(as) proprietários(as) de uma sessão local de login suportada pela
 dependência opcional de tempo de execução &logind; ou os(as) usuários(as) no
@@ -267,7 +256,8 @@ make</userinput></screen>
     <para>
       <application>qemu</application> usa <command>ninja</command> como um
 subprocesso ao construir. Para executar os testes, emita: <command>ninja
-test</command>. Um teste, bios-tables-test, é conhecido por falhar.
+test</command>. Um teste, qtest-x86_64/bios-tables-test, é conhecido por
+falhar em alguns sistemas.
     </para>
 
     <para>
@@ -342,13 +332,13 @@ suporte para ambos, ALSA e pulseaudio, use
     <para>
       Como usar o qemu significa usar um computador virtual, as etapas para
 configurar a máquina virtual estão em estreita analogia com aquelas para
-configurar um computador real. Você precisará decidir a respeito de CPU,
-memória, disco, dispositivos USB, placa(s) de rede de comunicação, tamanho
-da tela, etc. Assim que o <quote>hardware</quote> estiver decidido, você
-terá, por exemplo, de escolher como conectar a máquina à internet e(ou)
-instalar um sistema operacional. A seguir, mostramos maneiras básicas de
-realizar essas etapas. Porém, o qemu é muito mais que isso, e é fortemente
-aconselhado ler-se a documentação do qemu em
+configurar um computador real. Você precisará tomar decisões a respeito de
+CPU, memória, disco, dispositivos USB, placa(s) de rede de intercomunicação,
+tamanho da tela, etc. Assim que o <quote>hardware</quote> estiver decidido,
+você terá, por exemplo, de escolher como conectar a máquina à internet e(ou)
+instalar um sistema operacional. Na seção seguinte, nós mostramos maneiras
+básicas de realizar essas etapas. Porém, o qemu é muito mais poderoso que
+isso, e é fortemente aconselhado ler-se a documentação do qemu em
 <filename>/usr/share/doc/qemu-&qemu-version;/qemu-doc.html</filename>.
     </para>
 
@@ -356,16 +346,16 @@ aconselhado ler-se a documentação do qemu em
       <para>
         É uma prática padrão nomear o computador executando qemu como
 <quote>anfitrião</quote> e a máquina emulada executando sob qemu como
-<quote>convidada</quote>. Nós usaremos essas notações a seguir.
+<quote>convidada</quote>. Nós usaremos essas notações no texto seguinte.
       </para>
     </note>
 
     <note>
       <para>
-        As instruções a seguir assumem que o link simbólico opcional,
+        As instruções seguintes assumem que o link simbólico opcional,
 <filename>qemu</filename>, tenha sido criado. Além disso, o
-<command>qemu</command> deveria ser executado em um ambiente gráfico. Mas é
-possível usar o qemu <quote>sem uma parte superior</quote> ou via
+<command>qemu</command> deveria ser executado em um ambiente gráfico. Também
+é possível usar-se o qemu <quote>sem uma parte superior</quote> ou via
 SSH. Veja-se a documentação para as várias possibilidades.
       </para>
     </note>
@@ -404,10 +394,10 @@ atual. Execute o seguinte:
       Siga os procedimentos normais de instalação para a distribuição escolhida. A
 opção <parameter>-boot</parameter> especifica a ordem de inicialização das
 unidades como uma sequência de caracteres de letras de unidades. As letras
-de unidade válidas são: a, b (disquete 1 e 2), c (primeiro disco rígido), d
-(primeiro CD-ROM). A opção <parameter>-m</parameter> é a quantidade de
-memória a usar para a máquina virtual. A escolha depende da carga do
-anfitrião. As distribuições modernas deveriam estar confortáveis com 1 GB. A
+de unidade válidas são: a, b (disquete 1 e 2), c (primeiro disco rígido), e
+d (primeiro CD-ROM). A opção <parameter>-m</parameter> é a quantidade de
+memória a usar-se para a máquina virtual. A escolha depende da carga do
+anfitrião. As distribuições modernas deveriam estar confortáveis com 4 GB. A
 opção <parameter>-enable-kvm</parameter> permite a aceleração de
 hardware. Sem essa chave, a emulação é muito mais lenta.
     </para>
@@ -458,8 +448,8 @@ virtual cuja imagem está armazenada em
 
     <para>
       <parameter>-cdrom grub-img.iso</parameter>: define um arquivo em formato ISO
-para usar como um CDROM. Aqui usamos um disco de resgate do GRUB, que pode
-ser útil quando algo der errado no momento da inicialização.
+para usar-se como um CDROM. Aqui nós usamos um disco de resgate do GRUB, que
+possivelmente seja útil se algo der errado em tempo de inicialização.
     </para>
 
     <para>
@@ -521,28 +511,28 @@ convidado com UEFI.
     </para>
 
     <para>
-      <option>-drive file=&lt;nome_do_arquivo&gt;,if=virtio</option>: Fornece
+      <option>-drive file=&lt;nome_do_arquivo&gt;,if=virtio</option>: fornece uma
 interface Virtio para o núcleo do convidado para acessar a imagem do disco,
 em vez de simular um hardware real de disco. Isso pode melhorar o desempenho
 de Entrada/Saída do disco, mas exige um controlador Virtio no núcleo do
 convidado. Use-o em vez de um <option>-drive</option> simples se o núcleo do
-convidado suportar o Virtio. Para construir um núcleo Linux com suporte
-Virtio para o convidado, use <command>make defconfig &amp;&amp; make
+convidado suportar Virtio. Para construir um núcleo Linux com suporte Virtio
+para o convidado, use <command>make defconfig &amp;&amp; make
 kvm_guest.config</command> para criar uma configuração inicial do núcleo com
-os controladores Virtio habilitados, então faça sua personalização. E, se o
-núcleo do convidado for Linux, [então] os discos virtuais usando a interface
-Virtio serão nomeados <filename>vdx</filename> no devtmpfs, em vez de
+as unidades Virtio habilitadas, então faça tua personalização. E, se o
+núcleo do convidado for Linux, os discos virtuais usando a interface Virtio
+serão nomeados <filename>vdx</filename> no devtmpfs, em vez de
 <filename>sdx</filename>.
     </para>
 
     <para>
-      <option>-net nic,netdev=net0,model=virtio-net-pci</option>: Fornece
+      <option>-net nic,netdev=net0,model=virtio-net-pci</option>: fornece uma
 interface Virtio para o núcleo do convidado para acessar a interface de rede
-de comunicação, em vez de simular uma placa real de interface de rede de
-comunicação. Isso pode melhorar o desempenho de Entrada/Saída da rede de
-comunicação, mas exige um controlador Virtio no núcleo do convidado. Use-o
-em vez de um <option>-net</option> simples se o núcleo do convidado suportar
-o Virtio.
+de intercomunicação, em vez de simular uma placa real de interface de rede
+de intercomunicação. Isso pode melhorar o desempenho de Entrada/Saída da
+rede de intercomunicação, mas exige um controlador Virtio no núcleo do
+convidado. Use-o em vez de um <option>-net</option> simples se o núcleo do
+convidado suportar Virtio.
     </para>
 
     <bridgehead renderas="sect3">Controlando a Tela Emulada</bridgehead>
@@ -553,20 +543,20 @@ no sistema Linux convidado, leia-se <xref linkend='xdisplay'/>.
 
     <bridgehead renderas="sect3">Rede de comunicação</bridgehead>
     <para>
-      A solução acima para rede de comunicação permite que o convidado acesse a
-rede local de comunicação por meio do anfitrião (e possivelmente acesse a
-Internet por meio de roteadores locais), mas o inverso não é verdadeiro. Nem
-mesmo o anfitrião consegue acessar o convidado, a menos que o encaminhamento
-de porta esteja habilitado. E, no caso de vários convidados estiverem
-executando, eles não conseguirão se comunicarem uns com os outros. Outros
-dispositivos de rede de comunicação podem ser usados para esse
-propósito. Por exemplo, existe o dispositivo <quote>socket</quote>, que
-permite que vários convidados compartilhem uma rede virtual de comunicação
-comum. A seguir, descrevemos em mais detalhes como configurar o dispositivo
-<quote>bridge</quote>, que permite que os convidados apareçam como se
-estivessem conectados à rede local de comunicação. Todos os comandos abaixo
-deveriam ser executados como o(a) usuário(a) <systemitem
-class="username">root</systemitem>.
+      A solução acima para rede de intercomunicação permite que o convidado acesse
+a rede local de intercomunicação por meio do anfitrião (e possivelmente
+acesse a Internet por meio de roteadores locais), mas o inverso não é
+verdadeiro. Nem mesmo o anfitrião consegue acessar o convidado, a menos que
+o encaminhamento de porta esteja habilitado. E, no caso de vários convidados
+estarem executando, eles não conseguirão se comunicarem uns com os
+outros. Outros dispositivos de rede de intercomunicação podem ser usados
+para esse propósito. Por exemplo, existe o dispositivo
+<quote>socket</quote>, que permite que vários convidados compartilhem uma
+rede virtual de intercomunicação comum. Na seção seguinte, nós descrevemos
+em mais detalhes como configurar o dispositivo <quote>bridge</quote>, que
+permite que os convidados apareçam como se estivessem conectados à rede
+local de intercomunicação. Todos os comandos abaixo deveriam ser executados
+como o(a) usuário(a) &root;.
     </para>
 
     <para revision="sysv">
@@ -622,8 +612,8 @@ user,...</parameter> por <parameter>-netdev bridge,...</parameter>.
       <seglistitem>
         <seg>
           elf2dmp, qemu (link simbólico), qemu-edid, qemu-ga, qemu-img, qemu-io,
-qemu-keymap, qemu-nbd, qemu-pr-helper, qemu-storage-daemon e
-qemu-system-&lt;arch&gt;
+qemu-keymap, qemu-nbd, qemu-pr-helper, qemu-storage-daemon,
+qemu-system-&lt;arch&gt; e qemu-vmsr-helper
         </seg>
         <seg>Nenhum(a)</seg>
         <seg>
@@ -640,7 +630,7 @@ qemu-system-&lt;arch&gt;
         <term><command>elf2dmp</command></term>
         <listitem>
           <para>
-            Converte arquivos do formato elf para dmp
+            converte arquivos do formato elf para dmp
           </para>
           <indexterm zone="qemu elf2dmp">
             <primary sortas="b-elf2dmp">elf2dmp</primary>
@@ -730,7 +720,7 @@ Device (NBD)
         <term><command>qemu-pr-helper</command></term>
         <listitem>
           <para>
-            Implementa o auxiliar de reserva persistente para o QEMU
+            implementa o auxiliar persistente de reserva para QEMU
           </para>
           <indexterm zone="qemu qemu-pr-helper">
             <primary sortas="b-qemu-pr-helper">qemu-pr-helper</primary>
@@ -742,8 +732,8 @@ Device (NBD)
         <term><command>qemu-storage-daemon</command></term>
         <listitem>
           <para>
-            permite modificar imagens de disco usando o QEMU Monitor Protocol (QMP) sem
-executar uma "VM"
+            permite que um(a) usuário(a) modifique imagens de disco usando o QEMU
+Monitor Protocol (QMP) sem executar uma MV
           </para>
           <indexterm zone="qemu qemu-storage-daemon">
             <primary sortas="b-qemu-storage-daemon">qemu-storage-daemon</primary>
@@ -763,6 +753,17 @@ executar uma "VM"
         </listitem>
       </varlistentry>
 
+      <varlistentry id="qemu-vmsr-helper">
+         <term><command>qemu-vmsr-helper</command></term>
+         <listitem>
+           <para>
+             é um auxiliar virtual RAPL MSR para qemu
+           </para>
+           <indexterm zone="qemu qemu-vmsr-helper">
+             <primary sortas="b-qemu-vmsr-helper">qemu-vmsr-helper</primary>
+           </indexterm>
+         </listitem>
+       </varlistentry>
     </variablelist>
 
   </sect2>

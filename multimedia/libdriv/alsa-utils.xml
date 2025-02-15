@@ -6,10 +6,10 @@
 
   <!ENTITY alsa-utils-download-http "&alsa-download-http;/utils/alsa-utils-&alsa-utils-version;.tar.bz2">
   <!ENTITY alsa-utils-download-ftp  "">
-  <!ENTITY alsa-utils-md5sum        "80b71081f0bd2bb688e2f04311f142c5">
-  <!ENTITY alsa-utils-size          "1,6 MB">
-  <!ENTITY alsa-utils-buildsize     "16 MB">
-  <!ENTITY alsa-utils-time          "0,3UPC">
+  <!ENTITY alsa-utils-md5sum        "c04cdabee211a88bf3c6c2f45b2a4f3e">
+  <!ENTITY alsa-utils-size          "1,7 MB">
+  <!ENTITY alsa-utils-buildsize     "21 MB">
+  <!ENTITY alsa-utils-time          "0,1 UPC">
 ]>
 
 <sect1 id="alsa-utils" xreflabel="alsa-utils-&alsa-utils-version;">
@@ -86,19 +86,17 @@ url="https://hightek.org/projects/dialog/">Dialog</ulink>
     <title>Instalação do ALSA Utilities</title>
 
 
-
-    <!-- Fixed in 1.2.10
     <para>
-
-      This package provides its own implementation of
-      <literal>strlcpy</literal> and <literal>strlcat</literal> functions.
-      But they are provided by Glibc-2.38 now, so we need to remove the
-      custom implementation to avoid a conflict with the Glibc header:
+      Primeiro corrija um problema nas regras do udev distribuído:
     </para>
 
-    <screen><userinput>echo '' > alsactl/init_sysdeps.c</userinput></screen>
--->
-<para>
+<screen><userinput>sed -e 's/acp-pdm-dmic/acp-dmic-codec/'                   \
+    -e '/LABEL="alsa_restore_go"/s/go/std/'               \
+    -e '/^ENV.ALSA_CARD_NUMBER/i LABEL="alsa_restore_go"' \
+    -i alsactl/90-alsa-restore.rules.in</userinput></screen>
+
+
+    <para>
       Instale o <application>ALSA Utilities</application> executando os seguintes
 comandos:
     </para>

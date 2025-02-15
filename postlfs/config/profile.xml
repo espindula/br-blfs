@@ -93,39 +93,32 @@ url="&blfs-wiki;/bash-shell-startup-files"/></para>
     </indexterm>
 
     <para>
-      Aqui está um <filename>/etc/profile</filename> de base. Esse arquivo inicia
+      Aqui está um <filename>/etc/profile</filename> base. Esse arquivo começa
 configurando algumas funções auxiliares e alguns parâmetros básicos. Ele
-especifica alguns parâmetros do histórico do <command>bash</command> e, para
-propósitos de segurança, desabilita a manutenção de um arquivo permanente do
+especifica alguns parâmetros de histórico do <command>bash</command> e, para
+propósitos de segurança, desabilita a manutenção de um arquivo permanente de
 histórico para o(a) usuário(a) <systemitem
-class="username">root</systemitem>. Também configura um prompt padrão do(a)
-usuário(a). Então chama scripts pequenos e de propósito único no diretório
-<filename class='directory'>/etc/profile.d</filename> para fornecer a maior
-parte da inicialização.
-    </para>
-
-    <para>
-      Para mais informação acerca das sequências de escape que você pode usar para
-o seu prompt (isto é, a variável de ambiente <envar>PS1</envar>), veja-se
-<command>info bash</command> -- <emphasis role="strong">Nó: Imprimindo um
-Prompt</emphasis>.
+class="username">root</systemitem>. Em seguida, ele chama conjuntos de
+comandos sequenciais pequenos e de propósito único no diretório <filename
+class='directory'>/etc/profile.d</filename> para fornecer a maior parte da
+inicialização.
     </para>
 
 <screen role="root"><?dbfo keep-together="auto"?><userinput>cat &gt; /etc/profile &lt;&lt; "EOF"
-<literal># Inicia /etc/profile
-# Escrito para o Beyond Linux From Scratch
-# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
-# modificações por Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;
+<literal># Begin /etc/profile
+# Written for Beyond Linux From Scratch
+# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
+# modifications by Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;
 
-# Aplicativos da inicialização e variáveis de ambiente abrangentes ao sistema.
+# System wide environment variables and startup programs.
 
-# Alias e funções abrangentes ao sistema deveriam estar em /etc/bashrc.  Os aplicativos 
-# da inicialização e as variáveis de ambiente pessoais deveriam estar no 
-# ~/.bash_profile.  Alias e funções pessoais deveriam estar no 
+# System wide aliases and functions should go in /etc/bashrc.  Personal
+# environment variables and startup programs should go into
+# ~/.bash_profile.  Personal aliases and functions should go into
 # ~/.bashrc.
 
-# Funções para nos auxiliar a gerenciar "paths". O segundo argumento é o nome da
-# variável "path" a ser modificada (default: PATH)
+# Functions to help us manage paths.  Second argument is the name of the
+# path variable to be modified (default: PATH)
 pathremove () {
         local IFS=':'
         local NEWPATH
@@ -153,10 +146,10 @@ pathappend () {
 
 export -f pathremove pathprepend pathappend
 
-# Configura o caminho inicial
+# Set the initial path
 export PATH=/usr/bin
 
-# Tenta fornecer retrocompatibilidade com o LFS anterior a 11
+# Attempt to provide backward compatibility with LFS earlier than 11
 if [ ! -L /bin ]; then
         pathappend /bin
 fi
@@ -169,24 +162,14 @@ if [ $EUID -eq 0 ] ; then
         unset HISTFILE
 fi
 
-# Configura algumas variáveis de ambiente.
+# Set up some environment variables.
 export HISTSIZE=1000
 export HISTIGNORE="&amp;:[bf]g:exit"
 
-# Configura alguns padrões para os sistemas gráficos
+# Set some defaults for graphical systems
 export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share}
 export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}
-
-# Configura um prompt vermelho para o(a) root e um verde para os(as) usuários(as).
-NORMAL="\[\e[0m\]"
-RED="\[\e[1;31m\]"
-GREEN="\[\e[1;32m\]"
-if [[ $EUID == 0 ]] ; then
-  PS1="$RED\u [ $NORMAL\w$RED ]# $NORMAL"
-else
-  PS1="$GREEN\u [ $NORMAL\w$GREEN ]\$ $NORMAL"
-fi
 
 for script in /etc/profile.d/*.sh ; do
         if [ -r $script ] ; then
@@ -194,9 +177,9 @@ for script in /etc/profile.d/*.sh ; do
         fi
 done
 
-unset script RED GREEN NORMAL
+unset script
 
-# Termina /etc/profile</literal>
+# End /etc/profile</literal>
 EOF</userinput></screen>
 
     <sect3 id="etc-profile.d">
@@ -275,6 +258,7 @@ fi
 
 # Fim /etc/profile.d/bash_completion.sh</literal>
 EOF</userinput></screen>
+
       <para>
         Tenha certeza de que o diretório existe:
       </para>
@@ -304,17 +288,14 @@ inicializar esses arquivos está ao final desta seção.
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/dircolors.sh &lt;&lt; "EOF"
-<literal># Configuração para /bin/ls e /bin/grep suportarem cor; o alias está em /etc/bashrc.
+<literal># Setup for /bin/ls and /bin/grep to support color, the alias is in /etc/bashrc.
 if [ -f "/etc/dircolors" ] ; then
         eval $(dircolors -b /etc/dircolors)
 fi
 
 if [ -f "$HOME/.dircolors" ] ; then
         eval $(dircolors -b $HOME/.dircolors)
-fi
-
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'</literal>
+fi</literal>
 EOF</userinput></screen>
 
     </sect3>
@@ -358,13 +339,13 @@ EOF</userinput></screen>
 pesquisa para páginas de manual examinando o conteúdo da variável
 <envar>PATH</envar>; veja-se <ulink role='man'
 url='&man;manpath.5'>manpath(5)</ulink> para detalhes. Configurar a variável
-<envar>MANPATH</envar> pode substituir a dedução automática, de forma que
-os(as) editores(as) do BLFS não recomendam configurá-la. Se você precisar
-configurá-la por qualquer motivo, é melhor iniciar o valor dela com dois
-pontos (<literal>:</literal>), por exemplo
-<command>MANPATH=:/opt/somepkg/share/man:/opt/otherpkg /share/man</command>,
+<envar>MANPATH</envar> possivelmente substitua a dedução automática, de
+forma que os(as) editores(as) do BLFS não recomendam configurá-la. Se você
+precisar configurá-la por qualquer motivo, é melhor iniciar o valor dela com
+dois pontos (<literal>:</literal>), por exemplo
+<command>MANPATH=:/opt/somepkg/share/man:/opt/otherpkg/share/man</command>,
 de forma que os caminhos listados na variável <envar>MANPATH</envar> sejam
-anexados ao valor deduzido automaticamente em vez de substituí-lo.
+pospostos ao valor deduzido automaticamente em vez de substituí-lo.
         </para>
       </note>
 
@@ -524,28 +505,28 @@ arquivo deveriam explicar tudo o que você precisa.
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/bashrc &lt;&lt; "EOF"
-<literal># Início /etc/bashrc
-# Escrito para o Beyond Linux From Scratch
-# por James Robertson &lt;jameswrobertson@earthlink.net&gt;
-# atualização por Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
+<literal># Begin /etc/bashrc
+# Written for Beyond Linux From Scratch
+# by James Robertson &lt;jameswrobertson@earthlink.net&gt;
+# updated by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
 
-# Alias e funções abrangentes ao sistema.
+# System wide aliases and functions.
 
-# Variáveis de ambiente e aplicativos de inicialização abrangentes ao sistema
-# deveriam ir para /etc/profile. Variáveis de ambiente e aplicativos de inicialização pesoais
-# deveriam ir para ~/.bash_profile. Alias e funções pessoais deveriam
-# ir para ~/.bashrc
+# System wide environment variables and startup programs should go into
+# /etc/profile.  Personal environment variables and startup programs
+# should go into ~/.bash_profile.  Personal aliases and functions should
+# go into ~/.bashrc
 
-# Fornece comandos coloridos /bin/ls e /bin/grep. Usado junto
-# com o código em /etc/profile.
+# Provides colored /bin/ls and /bin/grep commands.  Used in conjunction
+# with code in /etc/profile.
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
-# Fornece prompt para shells que não são de login, especificamente shells iniciados
-# no ambiente do X. [Reveja-se o tópico do arquivamento do LFS intitulado
-# "PS1 Environment Variable" para um grande estudo de caso por traz deste
-# adendo de script].
+# Provides prompt for interactive shells, specifically shells started
+# in the X environment. [Review the LFS archive thread titled
+# PS1 Environment Variable for a great case study behind this script
+# addendum.]
 
 NORMAL="\[\e[0m\]"
 RED="\[\e[1;31m\]"
@@ -558,8 +539,19 @@ fi
 
 unset RED GREEN NORMAL
 
-# Fim /etc/bashrc</literal>
+# GnuPG wants this or it'll fail with pinentry-curses under some
+# circumstances (for example signing a Git commit)
+tty -s &amp;&amp; export GPG_TTY=$(tty)
+
+# End /etc/bashrc</literal>
 EOF</userinput></screen>
+
+    <para>
+      Para mais informação acerca das sequências de escape que você pode usar para
+o seu prompt (isto é, a variável de ambiente <envar>PS1</envar>), veja-se
+<command>info bash</command> -- <emphasis role="strong">Nó: Imprimindo um
+Prompt</emphasis>.
+    </para>
 
   </sect2>
 
@@ -738,8 +730,8 @@ instruções para configurar as cores estão embutidas no arquivo.
 
     <para>
       Finalmente, Ian Macdonald escreveu uma excelente coleção de dicas e de
-truques para melhorar o seu ambiente de "shell". Você consegue lê-la online
-em <ulink url="https://www.caliban.org/bash/index.shtml"/>.
+truques para melhorar o teu ambiente de shell. Você consegue lê-la online em
+<ulink url="https://caliban.org/bash/index.shtml"/>.
     </para>
 
   </sect2>

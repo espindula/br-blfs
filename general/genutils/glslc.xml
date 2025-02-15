@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY glslc-download-http "https://github.com/google/shaderc/archive/v&shaderc-version;/shaderc-&shaderc-version;.tar.gz">
+  <!ENTITY glslc-download-ftp  "">
+  <!ENTITY glslc-md5sum        "31c4120c5bba0f79ad3bb6491be69d5a">
+  <!ENTITY glslc-size          "224 KB">
+  <!ENTITY glslc-buildsize     "4,0 MB">
+  <!ENTITY glslc-time          "menos que 0,1 UPC">
+]>
+
+<sect1 id="glslc" xreflabel="glslc originário de shaderc-&shaderc-version;">
+  <?dbhtml filename="glslc.html"?>
+
+  <title>glslc originário de shaderc-&shaderc-version;</title>
+
+  <indexterm zone="glslc">
+    <primary sortas="a-glslc">glslc</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduo ao glslc</title>
+
+    <para>
+      O programa <application>glslc</application> é o compilador de linha de
+comando do Google para OpenGL Shading Language/High Level Shading Language
+(GLSL/HLSL) para Standard Portable Intermediate Representation (SPIR-V).
+    </para>
+
+    &lfs122_checked;
+
+    <bridgehead renderas="sect3">Informao do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferncia (HTTP): <ulink url="&glslc-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferncia (FTP): <ulink url="&glslc-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificao MD5 da transferncia: &glslc-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferncia: &glslc-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espao em disco estimado exigido: &glslc-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construo estimado: &glslc-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependncias do Glslc</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="cmake"/>, <xref linkend="glslang"/> e <xref
+linkend="spirv-tools"/>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalao do glslc</title>
+
+    <para>
+      Primeiro, permita construir com <xref linkend="glslang"/> e <xref
+linkend="spirv-tools"/> do sistema:
+    </para>
+
+<screen><userinput>sed '/build-version/d'   -i glslc/CMakeLists.txt            &amp;&amp;
+sed '/third_party/d'     -i CMakeLists.txt                  &amp;&amp;
+sed 's|SPIRV|glslang/&amp;|' -i libshaderc_util/src/compiler.cc &amp;&amp;
+
+echo '"&shaderc-version;"' > glslc/src/build-version.inc</userinput></screen>
+
+    <para>
+      Agora instale <application>glslc</application> executando os seguintes
+comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D SHADERC_SKIP_TESTS=ON     \
+      -G Ninja ..
+ninja</userinput></screen>
+
+    <para>
+      Agora, como o(a) usurio(a) &root;:
+    </para>
+
+<screen role="root"><userinput>install -vm755 glslc/glslc /usr/bin</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contedo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretrios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          glslc
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          None
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descries Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="glslc-prog">
+        <term><command>glslc</command></term>
+        <listitem>
+          <para>
+            compila sombreadores OpenGL Shading Language/High Level Shading Language
+(GLSL/HLSL) para SPIR-V
+          </para>
+          <indexterm zone="glslc glslc-prog">
+            <primary sortas="b-glslc">glslc</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+  </sect2>
+</sect1>

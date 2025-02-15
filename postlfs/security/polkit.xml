@@ -6,10 +6,10 @@
 
   <!ENTITY polkit-download-http "https://github.com/polkit-org/polkit/archive/&polkit-version;/polkit-&polkit-version;.tar.gz">
   <!ENTITY polkit-download-ftp  "">
-  <!ENTITY polkit-md5sum        "8e9f2377fc7b4010bd29b97d2e288b4f">
-  <!ENTITY polkit-size          "444 KB">
-  <!ENTITY polkit-buildsize     "7,2 MB (com testes)">
-  <!ENTITY polkit-time          "0,3 UPC (com testes; usando paralelismo=4)">
+  <!ENTITY polkit-md5sum        "db4ce0a42d5bf8002061f8e34ee9bdd0">
+  <!ENTITY polkit-size          "448 KB">
+  <!ENTITY polkit-buildsize     "7,4 MB (com testes)">
+  <!ENTITY polkit-time          "0,2 UPC (com testes; usando paralelismo=4)">
 ]>
 
 <sect1 id="polkit" xreflabel="Polkit-&polkit-version;">
@@ -91,16 +91,15 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/> (GObject Introspection recomendado)
+      <xref linkend="duktape"/> e <xref linkend="glib2"/> (GObject Introspection
+recomendado)
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      
-      <!-- For jhalfs just make it required to avoid over-complexity. -->
-<xref role="required" linkend="duktape"/>, <xref linkend="libxslt"/><phrase
-revision="systemd"> e</phrase>, <xref linkend="linux-pam"/><phrase
-revision="sysv"> e <xref linkend="elogind"/> </phrase>
+      <xref linkend="libxslt"/>,<phrase revision="systemd"> e</phrase> <xref
+linkend="linux-pam"/><phrase revision="sysv"> e <xref linkend="elogind"/>
+</phrase>
     </para>
 
     <note>
@@ -117,9 +116,8 @@ rastrear sessões <application>Polkit</application>.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/>, <xref linkend="python-dbusmock"/> (exigido para
-testes) e <xref linkend="spidermonkey"/> (pode ser usado no lugar do
-duktape)
+      <xref linkend="gtk-doc"/> e <xref linkend="python-dbusmock"/> (exigido para
+testes)
     </para>
 
     <bridgehead renderas="sect4" revision="systemd">Dependências Exigidas de Tempo de Execução</bridgehead>
@@ -155,8 +153,9 @@ man=false</option> nas instruções abaixo.
     <title>Configuração do Núcleo</title>
 
     <para>
-      Alguns testes precisam de espaço de nomes de usuário(a). Se executar a suíte
-de testes, habilite-o:
+      Alguns testes precisam de suporte a espaços de nome de usuário(a). Se você
+for executar a suíte de teste, habilite o suporte e recompile o núcleo se
+necessário:
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -181,12 +180,6 @@ ele for iniciado. Emita os seguintes comandos como o(a) usuário(a)
 useradd -c "Dono(a) do Processo de Segundo Plano do PolicyKit" -d /etc/polkit-1 -u 27 \
         -g polkitd -s /bin/false polkitd</userinput></screen>
 
-    <para revision='sysv'>
-      Primeiro, corrija um problema de construção para sistemas baseados em sysV:
-    </para>
-
-<screen revision="sysv"><userinput>sed -i '/systemd_sysusers_dir/s/^/#/' meson.build</userinput></screen>
-
     <para>
       Instale o <application>Polkit</application> executando os seguintes
 comandos:
@@ -205,11 +198,12 @@ meson setup ..                   \
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                    \
-      --prefix=/usr               \
-      --buildtype=release         \
-      -D man=true                 \
-      -D session_tracking=elogind \
+meson setup ..                     \
+      --prefix=/usr                \
+      --buildtype=release          \
+      -D man=true                  \
+      -D session_tracking=elogind  \
+      -D systemdsystemunitdir=/tmp \
       -D tests=true</userinput></screen>
 
     <para>
@@ -226,10 +220,18 @@ estejam instalados. Em seguida, execute <command>ninja test</command>.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para revision="sysv">
+      Remova alguns arquivos que não são úteis em um sistema SysV como o(a)
+usuário(a) &root;:
+    </para>
+
+<screen role="root" revision="sysv"><userinput>rm -v /tmp/*.service                 &amp;&amp;
+rm -rf /usr/lib/{sysusers,tmpfiles}.d </userinput></screen>
 
   </sect2>
 
@@ -245,12 +247,6 @@ teste deste pacote. Como <application>Polkit</application> é usado para
 autorizações, a integridade dele pode afetar a segurança do
 sistema. Portanto, é recomendado executar a suíte de teste construindo este
 pacote.
-    </para>
-
-    <para>
-      <option>-D js_engine=mozjs</option>: Essa chave permite usar o mecanismo
-JavaScript <xref linkend="spidermonkey"/> em vez do mecanismo JavaScript
-<xref linkend='duktape'/>.
     </para>
 
     <para>
@@ -302,7 +298,8 @@ e a instalação da documentação da API.
       <seglistitem>
         <seg>
           <!--pk-example-frobnicate,-->
-pkaction, pkcheck, pkexec, pkttyagent e polkitd
+<!-- in /usr/lib/polkit-1 -->
+pkaction, pkcheck, pkexec, pkttyagent e polkitd 
         </seg>
         <seg>
           libpolkit-agent-1.so e libpolkit-gobject-1.so

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY tinysparql-download-http
+           "&gnome-download-http;/tinysparql/3.8/tinysparql-&tinysparql-version;.tar.xz">
+  <!ENTITY tinysparql-download-ftp  "">
+  <!ENTITY tinysparql-md5sum        "9c3ab085fe15b55acfd956c039819a00">
+  <!ENTITY tinysparql-size          "2,0 MB">
+  <!ENTITY tinysparql-buildsize     "53 MB (com testes)">
+  <!ENTITY tinysparql-time          "0,4 UPC (com testes)">
+]>
+
+<sect1 id="tinysparql" xreflabel="tinysparql-&tinysparql-version;">
+  <?dbhtml filename="tinysparql.html"?>
+
+
+  <title>tinysparql-&tinysparql-version;</title>
+
+  <indexterm zone="tinysparql">
+    <primary sortas="a-tinysparql">tinysparql</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao Tinysparql</title>
+
+    <para>
+      <application>Tinysparql</application> é um armazenamento triplo RDF de baixo
+custo com uma interface SPARQL 1.1.
+    </para>
+
+    &lfs122_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&tinysparql-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&tinysparql-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &tinysparql-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &tinysparql-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &tinysparql-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &tinysparql-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do Tinysparql</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="json-glib"/> e <xref linkend="vala"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      &gobject-introspection;, <xref linkend="icu"/>, <xref linkend="libsoup3"/>,
+<xref linkend="localsearch"/> (tempo de execução), <xref
+linkend="pygobject3"/> e <xref linkend="sqlite"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <!--  It looks like not used even if docs=true,
+      the pre-built doc is shipped in tarball and will be installed
+      <xref linkend="gi-docgen"/>
+
+-->
+<xref linkend="asciidoc"/>, <xref linkend="avahi"/>, <xref
+linkend="graphviz"/> e <ulink
+url="https://github.com/scop/bash-completion/">bash-completion</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do Tinysparql</title>
+
+    <warning revision="systemd">
+      <para>
+        Se você estiver atualizando esse pacote a partir de uma versão de quando
+esse pacote era conhecido como <application>Tracker</application>, remova um
+arquivo que causará um conflito como o(a) usuário(a) &root;:
+      </para>
+    </warning>
+
+<screen revision="systemd"><userinput>rm -fv /usr/lib/systemd/user/tracker-xdg-portal-3.service</userinput></screen>
+
+    <para>
+      Corrija o local para instalar a documentação:
+    </para>
+
+<screen><userinput>mv docs/reference/libtracker-sparql/doc/{Tsparql-3.0,tinysparql-&tinysparql-version;} &amp;&amp;
+sed '/docs_name/s/Tsparql-3.0/tinysparql-&tinysparql-version;/' \
+    -i docs/reference/libtracker-sparql/meson.build</userinput></screen>
+
+    <para>
+      Instale <application>Tinysparql</application> executando os seguintes
+comandos:
+    </para>
+
+<screen revision="systemd"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -D man=false        \
+            ..                  &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision="sysv"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr                  \
+            --buildtype=release            \
+            -D man=false                   \
+            -D systemd_user_services=false \
+            ..                            &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>meson configure -D debug=true
+&amp;&amp; LC_ALL=C ninja test</command>. A suíte de teste deveria ser
+executada a partir de uma sessão gráfica. Um teste é conhecido por falhar
+devido às páginas de manual não serem geradas.
+    </para>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para>
+      <parameter>-D man=false</parameter>: Essa chave impede o processo de
+construção de gerar páginas de manual. Omita essa chave se você tiver <xref
+linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
+páginas de manual.
+    </para>
+
+    <para revision="sysv">
+      <parameter>-D systemd_user_services=false</parameter>: Essa chave impede o
+processo de construção de instalar serviços de usuário(a) do systemd, pois
+eles são inúteis em sistemas SysV.
+    </para>
+
+    <para>
+      <command>meson configure -D debug=true</command>: Esse comando habilita
+algumas verificações de depuração necessárias para a suíte de teste. Nós não
+queremos habilitá-las para as bibliotecas e programas tinysparql instaladas,
+de forma que executamos a suíte de teste depois da instalação.
+    </para>
+
+  </sect2>
+
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          tinysparql
+        </seg>
+        <seg>
+          libtinysparql-3.0.so e libtracker-sparql-3.0.so
+        </seg>
+        <seg>
+          /usr/{include,lib}/tinysparql-3.0 e
+/usr/share/doc/tinysparql-&tinysparql-version; (opcional)
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="tinysparql-prog">
+        <term><command>tinysparql</command></term>
+        <listitem>
+          <para>
+            é um programa de controle para bases de dados TinySPARQL
+          </para>
+          <indexterm zone="tinysparql tinysparql-prog">
+            <primary sortas="b-tinysparql">tinysparql</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libtinysparql">
+        <term><filename class="libraryfile">libtinysparql-3.0.so</filename></term>
+        <listitem>
+          <para>
+            contém funções para administrar bases de dados TinySPARQL
+          </para>
+          <indexterm zone="tinysparql libtinysparql">
+            <primary sortas="c-libtinysparql">libtinysparql-3.0.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libtracker3-sparql">
+        <term><filename class="libraryfile">libtracker-sparql-3.0.so</filename></term>
+        <listitem>
+          <para>
+            contém funções de gerenciamento de recursos e de base de dados
+          </para>
+          <indexterm zone="tinysparql libtracker3-sparql">
+            <primary sortas="c-libtracker3-sparql">libtracker-sparql-3.0.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

@@ -5,10 +5,10 @@
   %general-entities;
 
   <!ENTITY dtc-download-http "https://kernel.org/pub/software/utils/dtc/dtc-&dtc-version;.tar.xz">
-  <!ENTITY dtc-md5sum        "8dc1c58c84ca19f825f6939801b44c52">
+  <!ENTITY dtc-md5sum        "0f193be84172556027da22d4fe3464e0">
   <!ENTITY dtc-size          "168 KB">
-  <!ENTITY dtc-buildsize     "15 MB">
-  <!ENTITY dtc-time          "0,3 UPC">
+  <!ENTITY dtc-buildsize     "13 MB (com testes)">
+  <!ENTITY dtc-time          "0,2 UPC (com testes)">
 ]>
 
 
@@ -90,15 +90,8 @@ meson setup --prefix=/usr         \
 ninja</userinput></screen>
 
     <para>
-      <!-- https://github.com/dgibson/dtc/commit/32174a66efa4 -->
-<!--
-      Two tests named <filename>
-cell-overflow.dts</filename> and
-      <filename>cell-overflow-results.dts</filename> are known to fail.
-      -->
-Para testar os resultados, emita: <command>meson test -v</command>.
-      
-      
+      Para testar os resultados, emita: <command>CC='gcc -Wl,-z,noexecstack' meson
+test -v</command>.
     </para>
 
     <para>
@@ -131,11 +124,11 @@ comando:
     <screen role="root"><userinput>cp -R ../Documentation -T /usr/share/doc/dtc-&dtc-version;</userinput></screen>
 
     <para>
-      Se você tiver instalado <xref linkend='swig'/> e desejar instalar a ligação
-Python 3 desse pacote, construa o módulo Python 3:
+      Se você tiver instalado <xref linkend='swig'/> e desejar instalar as
+ligações Python 3 desse pacote, construa o módulo Python 3:
     </para>
- 
-<screen role="nodump"><userinput>&build-wheel-cmd; ..</userinput></screen>
+
+    <screen role="nodump"><userinput>&build-wheel-cmd; ..</userinput></screen>
 
     <para>
       Como o(a) usuário(a) &root;, instale o módulo Python 3:
@@ -156,6 +149,24 @@ ligação do Python 3 com o método obsoleto (executando
 <command>setup.py</command> diretamente). Nós construiremos a ligação do
 Python 3 com o comando <command>pip3 wheel</command> separadamente, se
 desejado.
+    </para>
+
+    
+    <!-- https://github.com/dgibson/dtc/issues/163 -->
+<para>
+      <envar>CC='gcc -Wl,-z,noexecstack'</envar>: Essa variável impede marcar as
+bibliotecas compartilhadas na suíte de teste como exigindo pilha
+executável. A Glibc 2.41 ou posterior parou de permitir abrir com
+<function>dlopen</function> tal biblioteca compartilhada, de forma que a
+suíte de teste falharia. Mas essas bibliotecas compartilhadas não precisam
+realmente de uma pilha executável, de modo que nós podemos usar
+<parameter>-Wl,-z,noexecstack</parameter> para consertar a suíte de teste. É
+necessário no ambiente <envar>CC</envar> para o <command>meson
+test</command> porque essas bibliotecas compartilhadas são construídas por
+um conjunto de comandos sequenciais de teste em vez do sistema de construção
+<command>meson</command>/<command>ninja</command>, e o conjunto de comandos
+sequenciais de teste não reconhece outras variáveis de ambiente
+<quote>comuns</quote> como <envar>LDFLAGS</envar>.
     </para>
 
   </sect2>

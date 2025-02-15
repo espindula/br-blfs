@@ -6,9 +6,9 @@
 
   <!ENTITY shadow-download-http "https://github.com/shadow-maint/shadow/releases/download/&shadow-version;/shadow-&shadow-version;.tar.xz">
   <!ENTITY shadow-download-ftp  "">
-  <!ENTITY shadow-md5sum        "eb70bad3316d08f0d3bb3d4bbeccb3b4">
-  <!ENTITY shadow-size          "2,1 MB">
-  <!ENTITY shadow-buildsize     "100 MB">
+  <!ENTITY shadow-md5sum        "d9b6b8028ebb5971857b7f6b10ffba0e">
+  <!ENTITY shadow-size          "2,3 MB">
+  <!ENTITY shadow-buildsize     "102 MB">
   <!ENTITY shadow-time          "0,2 UPC">
 ]>
 
@@ -26,15 +26,11 @@
     <title>Introdução ao Shadow</title>
 
     <para>
-      O <application>Shadow</application> foi realmente instalado no LFS e não
-existe razão para reinstalá-lo, a menos que você tenha instalado o
-<application>CrackLib</application> ou o
-<application>Linux-PAM</application> depois que seu sistema LFS foi
-concluído. Se você tiver instalado <application>CrackLib</application>
-depois do LFS, então reinstalar o <application>Shadow</application>
-habilitará o suporte a senha forte. Se você tiver instalado o
-<application>Linux-PAM</application>, [então] reinstalar o
-<application>Shadow</application> permitirá que aplicativos como
+      <application>Shadow</application> foi realmente instalado no LFS e não
+existe razão para reinstalá-lo, a menos que você instalou
+<application>Linux-PAM</application> depois que teu sistema LFS foi
+concluído. Com <application>Linux-PAM</application> instalado, reinstalar
+<application>Shadow</application> permitirá que programas como
 <command>login</command> e <command>su</command> utilizem o PAM.
     </para>
 
@@ -90,7 +86,7 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="linux-pam"/> ou <xref role="nodep" linkend="cracklib"/>
+      <xref linkend="linux-pam"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -111,29 +107,20 @@ url="https://www.openwall.com/tcb/">tcb</ulink>
 <application>Shadow</application> esteja sendo reinstalado para suportar a
 instalação do <application>Linux-PAM</application>.
       </para>
-
-      <para>
-        Se você estiver reinstalando <application>Shadow</application> para fornecer
-suporte de senha forte usando a biblioteca
-<application>CrackLib</application> sem usar
-<application>Linux-PAM</application>, [então] certifique-se de adicionar o
-parâmetro <parameter>--with-libcrack</parameter> ao script
-<command>configure</command> abaixo e também emita o seguinte comando:
-      </para>
-
-<screen role="nodump"><userinput>sed -i 's@DICTPATH.*@DICTPATH\t/lib/cracklib/pw_dict@' etc/login.defs</userinput></screen>
     </important>
 
+    <!--
     <warning>
+
       <para>
-        Se reinstalar o shadow para uma atualização de versão, certifique-se de
-realizar novamente a configuração do Linux-PAM abaixo. A instalação do
-shadow sobrescreve muitos dos arquivos em <filename
-class="directory">/etc/pam.d/</filename>.
+        If reinstalling shadow for a version update, be sure to 
+        reaccomplish the Linux-PAM configuration below.  The installation
+        of shadow overwrites many of the files in 
+        <filename class="directory">/etc/pam.d/</filename>.
       </para>
     </warning>
-
-    <para>
+-->
+<para>
       Reinstale <application>Shadow</application> executando os seguintes
 comandos:
     </para>
@@ -275,13 +262,9 @@ criaremos esses arquivos de configuração explicitamente.
 
     <note>
       <para>
-        O restante desta página é dedicado à configurar o
-<application>Shadow</application> para funcionar adequadamente com o
-<application>Linux-PAM</application>. Se você não tiver o
-<application>Linux-PAM</application> instalado e reinstalou o
-<application>Shadow</application> para suportar senhas fortes por meio da
-biblioteca <application>CrackLib</application>, [então] nenhuma configuração
-adicional é necessária.
+        O restante desta página é dedicado para configurar o
+<application>Shadow</application> para funcionar corretamente com o
+<application>Linux-PAM</application>.
       </para>
     </note>
 
@@ -355,7 +338,7 @@ usuário(a) <systemitem class="username">root</systemitem>:
         </indexterm>
 
 <screen role="root"><userinput>install -v -m644 /etc/login.defs /etc/login.defs.orig &amp;&amp;
-for FUNCTION in FAIL_DELAY              \
+for FUNCTION in FAIL_DELAY               \
                 FAILLOG_ENAB             \
                 LASTLOG_ENAB             \
                 MAIL_CHECK_ENAB          \
@@ -366,7 +349,6 @@ for FUNCTION in FAIL_DELAY              \
                 FTMP_FILE NOLOGINS_FILE  \
                 ENV_HZ PASS_MIN_LEN      \
                 SU_WHEEL_ONLY            \
-                CRACKLIB_DICTPATH        \
                 PASS_CHANGE_TRIES        \
                 PASS_ALWAYS_WARN         \
                 CHFN_AUTH ENCRYPT_METHOD \

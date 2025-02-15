@@ -13,14 +13,17 @@
   <title>Acerca de Firmware</title>
 
   <indexterm zone="postlfs-firmware">
-    <primary sortas="e-lib-firmware">/lib/firmware</primary>
+    <primary sortas="e-usr-lib-firmware">/usr/lib/firmware</primary>
   </indexterm>
 
   <para>
     Em alguns PCs recentes, pode ser necessário, ou desejável, carregar firmware
-para fazer com que trabalhem no melhor deles. Existe um diretório, <filename
-class="directory">/lib/firmware</filename>, onde o núcleo ou os
-controladores de núcleo procuram por imagens de firmware.
+para fazê-los funcionar da melhor forma possível. O núcleo ou os
+controladores de núcleo procuram imagens de firmware em
+<filename>/lib/firmware</filename>. Mas no LFS <filename>/lib</filename> é
+um link simbólico para <filename>usr/lib</filename>, de forma que o
+diretório que contém os arquivos de firmware é, na verdade, <filename
+class='directory'>/usr/lib/firmware</filename>.
   </para>
 
   <para>
@@ -40,6 +43,26 @@ vários sistemas de hardware), ou instale <xref linkend="git"/> e clone
 <ulink url='&linux-firmware-git;'/>, ou abra essa URL em um navegador e
 baixe o instantâneo mais recente listado na tabela <literal>Tag</literal>.
   </para>
+
+  <important>
+    <para>
+      <anchor id='linux-firmware-symlink' xreflabel='criar o link simbólico e
+baixar o alvo dele'/> Observe que alguns arquivos de firmware exigidos (e
+diretórios) são, na verdade, links simbólicos para outros arquivos (ou
+diretórios). Esses links simbólicos não são armazenados no repositório Git;
+em vez disso, eles estão documentados no arquivo
+<filename>WHENCE</filename>. Cada linha começando com
+<literal>Link:</literal> descreve um link simbólico. Se você estiver
+baixando um item que precisa e ele for um link simbólico (ou em um diretório
+que seja um link simbólico), você precisa criar o link simbólico manualmente
+e baixar o alvo. Por outro lado, se você quiser todos os arquivos de
+firmware, use o comando <command>./copy-firmware.sh
+/usr/lib/firmware</command> que copiará os arquivos de firmware e criará
+todos os links simbólicos no arquivo <filename>WHENCE</filename>, em vez de
+um comando de cópia simples como <command>cp -r *
+/usr/lib/firmware/</command>.
+    </para>
+  </important>
 
   <para>
     Para algum outro firmware, particularmente para microcódigo da Intel e
@@ -70,14 +93,13 @@ microcódigo.
       <para>
         Firmware para controladores de vídeo. Em máquinas x86, isso é exigido para
 dispositivos ATI (chips Radeon e AMDGPU); e possivelmente seja útil para
-GPUs Intel (Skylake e posteriores) e Nvidia (Kepler e posteriores).
+GPUs Intel (Skylake e posteriores) e NVIDIA (Kepler e posteriores).
       </para>
 
       <para>
-        Os dispositivos "ATI Radeon" e "AMGPU" todos exigem "firmware" para estarem
-aptos a usar o "KMS" (kernel modesetting - a opção preferida), bem como para
-"Xorg". Para os antigos chips "Radeon" (antes do "R600"), o "firmware" ainda
-está no fonte do núcleo.
+        Dispositivos ATI Radeon e AMDGPU todos exigem firmware para estarem aptos
+para usar KMS (kernel modesetting - a opção preferida), bem como para o
+Xorg.
       </para>
 
       <para>
@@ -94,11 +116,10 @@ linux</ulink>.
       </para>
 
       <para>
-        "GPUs" "Nvidia" a partir do "Kepler" em diante exigem "firmware" assinado,
-do contrário o controlador "nouveau" será incapaz de fornecer aceleração de
-"hardware". "Nvidia" agora lançou "firmware" até o "Ampere" (série
-"GeForce30") para o "linux-firmware". Observe que os relógios mais rápidos
-que o padrão não são habilitados pelo "firmware" lançado.
+        GPUs NVIDIA a partir do Kepler em diante exigem firmware assinado, caso
+contrário o controlador nouveau estará inapto para fornecer aceleração de
+hardware. A NVIDIA agora lançou firmware até Ada Lovelace (série GeForce 40)
+para linux-firmware.
       </para>
     </listitem>
     <listitem>
@@ -145,6 +166,20 @@ posterior (Pentium4, Core, etc), se microcódigo atualizado tiver sido
 lançado. Essas atualizações duram somente até que a máquina seja desligada,
 de forma que elas precisam ser aplicadas a cada inicialização.
     </para>
+
+    <note>
+      <para>
+        <!-- deliberate hard coded version, not a bug -->
+Em alguns casos raros, uma atualização de microcódigo oriunda do núcleo pode
+ser inefetiva. Por exemplo, apesar de intel-microcode-20241029 conter a
+revisão de microcódigo Raptor Lake 0x12b, que visa a corrigir um problema
+notório de voltagem excessiva que causa problemas de estabilidade e até
+mesmo danos permanentes para a CPU, quando o núcleo inicializa, já é <ulink
+url='https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/issues/78#issuecomment-2286857023'>tarde
+demais</ulink> para o microcódigo corrigir o problema. A única maneira de
+corrigir esse problema é a de atualizar o BIOS.
+      </para>
+    </note>
 
     <para>
       A "Intel" fornece atualizações do microcódigo dela para os processadores
@@ -383,19 +418,18 @@ estância. Se /boot for um ponto de montagem separado:
 <screen><userinput>initrd /boot/microcode.img</userinput></screen>
 
       <para>
-        Se já estiver inicializando com um "initrd" (veja-se <xref
-linkend="initramfs"/>), [então] você deveria executar
-<command>mkinitramfs</command> novamente depois de colocar o "blob" ou
-contêiner apropriado no <filename
-class="directory">/lib/firmware</filename>. Mais precisamente, coloque um
-"blob" "Intel" em um diretório <filename
-class="directory">/lib/firmware/intel-ucode</filename> ou um contêiner "AMD"
-em um diretório <filename
-class="directory">/lib/firmware/amd-ucode</filename> antes de executar
+        Se já estiver inicializando com um initrd (veja-se <xref
+linkend="initramfs"/>), você deveria executar <command>mkinitramfs</command>
+novamente depois de colocar o blob ou contêiner apropriado em <filename
+class="directory">/usr/lib/firmware</filename>. Mais precisamente, coloque
+um blob da Intel em um diretório <filename
+class="directory">/usr/lib/firmware/intel-ucode</filename> ou um contêiner
+da AMD em um diretório <filename
+class="directory">/usr/lib/firmware/amd-ucode</filename> antes de executar
 <command>mkinitramfs</command>. Alternativamente, você pode ter ambos os
-"initrd" na mesma linha, tal como <userinput>initrd /microcode.img
-/outro-initrd.img</userinput> (adapte isso conforme acima se "/boot" não for
-um ponto de montagem separado).
+initrd na mesma linha, como <userinput>initrd /microcode.img
+/other-initrd.img</userinput> (adapte isso como acima se /boot não for um
+ponto de montagem separado).
       </para>
 
       <para>
@@ -442,15 +476,7 @@ diferentes em máquinas AMD e Intel. Primeiro, um exemplo de uma Intel
     <title>Firmware para Placas de Vídeo</title>
 
     <sect3 id="ati-video-firmware">
-      <title>Firmware para chips de vídeo ATI (R600 e posteriores)</title>
-
-      <para>
-        Estas instruções NÃO se aplicam aos antigos Radeons antes da família
-R600. Para aqueles, o firmware está no diretório do núcleo <filename
-class='directory'>/lib/firmware/</filename>. Nem se aplicam se você
-pretender evitar uma configuração gráfica como o Xorg e estiver contente em
-usar a exibição padrão de 80x25 em vez de um framebuffer.
-      </para>
+      <title>Firmware para chips de vídeo ATI Radeon</title>
 
       <para>
         Os dispositivos iniciais Radeon precisavam somente de um blob de firmware de
@@ -485,8 +511,8 @@ usam firmware diferente para o núcleo 3.17 e posteriores comparados a
 núcleos anteriores. Identifique e baixe os blobs exigidos; então instale-os:
       </para>
 
-<screen><userinput>mkdir -pv /lib/firmware/radeon
-cp -v &lt;TEUS_BLOBS&gt; /lib/firmware/radeon</userinput></screen>
+<screen><userinput>mkdir -pv /usr/lib/firmware/radeon
+cp -v &lt;YOUR_BLOBS&gt; /usr/lib/firmware/radeon</userinput></screen>
 
     <para>
       Construir o controlador amdgpu do núcleo como um módulo é recomendado porque
@@ -533,8 +559,8 @@ futuras (por exemplo, a "APU" "raven" agora tem um décimo terceiro (13º)
 arquivo, "raven_ta.bin").
     </para>
 
-<screen><userinput>mkdir -pv /lib/firmware/amdgpu
-cp -v &lt;TEUS_BLOBS&gt; /lib/firmware/amdgpu</userinput></screen>
+<screen><userinput>mkdir -pv /usr/lib/firmware/amdgpu
+cp -v &lt;YOUR_BLOBS&gt; /usr/lib/firmware/amdgpu</userinput></screen>
 
     <para>
       Se espaço em disco não for um problema, [então] você poderá instalar todos
@@ -555,37 +581,53 @@ detalhes).
     </sect3>
 
     <sect3 id="nvidia-video-firmware">
-      <title>Firmware para chips de vídeo Nvidia</title>
+      <title>Firmware para chips de vídeo NVIDIA</title>
 
       <para>
-        A "Nvidia" lançou "firmware" básico assinado para chips gráficos recentes,
-mas significativamente depois que os chips e os próprios controladores
-binários deles foram disponibilizados pela primeira vez. Para outros chips
-tem sido necessário extrair o "firmware" a partir do controlador binário.
-      </para>
-      <para>
-        Para informações mais exatas relativas a quais chips precisam de "firmware"
-extraído, veja-se <ulink url=
-"https://nouveau.freedesktop.org/VideoAcceleration.html"/>.
+        Algumas GPUs NVIDIA a partir da Kepler em diante (incluindo todas as GPUs
+NVIDIA GeForce RTX e séries GTX 9xx em diante) exigem firmware assinado pela
+NVIDIA para funcionar. Para o controlador Nouveau, a NVIDIA lançou os
+arquivos assinados de firmware no diretório <filename
+class="directory">nvidia/</filename> do linux-firmware. Leia-se <ulink
+url='https://nouveau.freedesktop.org/CodeNames.html'>a página CodeNames do
+wiki Nouveau</ulink> para descobrir o nome do código da tua GPU NVIDIA (por
+exemplo, o nome do código da GeForce RTX 4060 Ti é AD106). O diretório para
+os arquivos de firmware que você precisa é nomeado como resultado da
+conversão do nome do código para letras minúsculas (<filename
+class='directory'>ad106</filename> para o exemplo). O diretório (ou parte do
+conteúdo dele) pode ser, na verdade, um link simbólico para outro diretório
+(ou alguns arquivos em outro diretório) e você precisará então <xref
+linkend='linux-firmware-symlink'/> você mesmo(a) (por exemplo, <filename
+class='directory'>ad106</filename> é um link simbólico para <filename
+class='directory'>ad102</filename>).
       </para>
 
       <para>
-        Se o "firmware" necessário estiver disponível no diretório <filename
-class="directory">nvidia/</filename> de "linux-firmware", [então] copie-o
-<filename class="directory">/lib/firmware/nouveau</filename>.
+        Se você não conseguir encontrar o diretório da tua GPU nem na árvore
+linux-firmware nem no arquivo <filename>WHENCE</filename> (como um link
+simbólico), isso significa que, ou tua GPU não precisa de nenhum firmware,
+ou ela é mais recente que a Ada Lovelace (série RTX 40xx) e o firmware para
+ela ainda não foi lançado (no final de 2024).
       </para>
+
       <para>
-        Se o "firmware" não tiver sido disponibilizado em "linux-firmware", para os
-chips antigos mencionados no link "nouveau" do "wiki" acima, execute os
-seguintes comandos:
+        Para as GPUs NVIDIA a partir da Tesla até a Kepler, o controlador Nouveau
+exige algum firmware extra para suportar aceleração de decodificação de
+vídeo. Esses arquivos de firmware não são lançados pela NVIDIA, mas eles
+podem ser extraídos a partir do controlador binário da NVIDIA. Para
+informações mais exatas acerca de quais chips precisam de firmware extraído,
+veja-se <ulink url=
+"https://nouveau.freedesktop.org/VideoAcceleration.html">o VideoAcceleration
+do wiki Nouveau</ulink>. Para extrair e instalar esses arquivos de firmware,
+emita:
       </para>
 
 <screen><userinput>wget https://anduin.linuxfromscratch.org/BLFS/nvidia-firmware/extract_firmware.py
 wget https://us.download.nvidia.com/XFree86/Linux-x86/340.32/NVIDIA-Linux-x86-340.32.run
 sh NVIDIA-Linux-x86-340.32.run --extract-only
 python3 extract_firmware.py
-mkdir -p /lib/firmware/nouveau
-cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
+mkdir -p /usr/lib/firmware/nouveau
+cp -d nv* vuc-* /usr/lib/firmware/nouveau/</userinput></screen>
 
     </sect3>
   </sect2>
@@ -595,19 +637,20 @@ cp -d nv* vuc-* /lib/firmware/nouveau/</userinput></screen>
 
     <para>
       O núcleo gosta de carregar firmware para alguns controladores de rede de
-comunicação, particularmente aqueles originários do diretório da Realtek (o
-/lib/linux-firmware/rtl_nic/), porém geralmente eles aparentam funcionar sem
-isso. Sendo assim, você pode inicializar o núcleo; verificar dmesg para
-mensagens acerca desse firmware ausente; e, se necessário, baixar o firmware
-e colocá-lo no diretório especificado no <filename
-class="directory">/lib/firmware</filename>, de forma que ele será encontrado
-nas inicializações subsequentes. Observe que, com os núcleos atuais, isso
-funciona se ou não o controlador for compilado internamente ou construído
-como um módulo; não existe necessidade de construir esse firmware
-internamente ao núcleo. Aqui está um exemplo onde o controlador R8169 foi
-compilado internamente, porém o firmware não foi tornado disponível. Tão
-logo o firmware tenha sido fornecido, não existiu menção dele nas
-inicializações posteriores.
+intercomunicação, particularmente aqueles provenientes da Realtek (o
+diretório <filename
+class='directory'>/usr/lib/linux-firmware/rtl_nic/</filename>), mas eles
+geralmente parecem funcionar sem ele. Portanto, você pode inicializar o
+núcleo, verificar o dmesg para mensagens acerca desse firmware ausente e, se
+necessário, baixar o firmware e colocá-lo no diretório especificado em
+<filename class="directory">/usr/lib/firmware</filename>, de forma que ele
+seja encontrado em inicializações subsequentes. Observe que com os núcleos
+atuais isso funciona independentemente de o controlador ser compilado
+internamente ou construído como um módulo; não existe necessidade de
+construir esse firmware internamente no núcleo. Aqui está um exemplo onde o
+controlador R8169 foi compilado internamente, mas o firmware não foi
+disponibilizado. Uma vez que o firmware tenha sido fornecido, não existiu
+menção a ele em inicializações posteriores.
     </para>
 
 <screen><literal>dmesg | grep firmware | grep r8169
@@ -620,20 +663,20 @@ inicializações posteriores.
     <title>Firmware para Base de Dados Regulatória de Dispositivos Sem Fio</title>
 
     <para>
-      Países diferentes tem regulações diferentes acerca do uso do espectro de
-rádio dos dispositivos sem fios. Você pode instalar um firmware para fazer
-com que os dispositivos sem fios obedeçam às regulações locais de espectro,
-de forma que você não seria questionado(a) pela autoridade local ou não
-encontraria tua NIC sem fios atrapalhando as frequências de outros
-dispositivos (por exemplo, controles remotos). O firmware da base de dados
-regulatória pode ser baixado a partir de <ulink url =
+      Diferentes países tem diferentes regulamentações acerca do uso do espectro
+de rádio de dispositivos sem fio. Você pode instalar um firmware para fazer
+os dispositivos sem fio obedecerem às regulamentações locais do espectro, de
+forma que você não seja questionado(a) por autoridades locais ou encontre
+tua placa de rede sem fio bloqueando as frequências de outros dispositivos
+(por exemplo, controles remotos). O firmware da base de dados regulatória
+pode ser baixado a partir de <ulink url =
 'https://kernel.org/pub/software/network/wireless-regdb/'/>. Para
-instalá-lo, simplesmente extraia o <filename>regulatory.db</filename> e o
-<filename>regulatory.db.p7s</filename> a partir do tarball no <filename
-class="directory">/lib/firmware</filename>. Observe que ou o controlador
-<option>cfg80211</option> precisa ser selecionado como um médulo para os
-arquivos <filename>regulatory.*</filename> serem carregados ou esses
-arquivos precisam serem incluídos como firmware no núcleo, conforme
+instalá-lo, basta extrair <filename>regulatory.db</filename> e
+<filename>regulatory.db.p7s</filename> a partir do tarball em <filename
+class="directory">/usr/lib/firmware</filename>. Observe que ou o controlador
+<option>cfg80211</option> precisa estar selecionado como um módulo para que
+os arquivos <filename>regulatory.*</filename> sejam carregados, ou esses
+arquivos precisam estar incluídos como firmware no núcleo, conforme
 explicado acima em <xref linkend="video-firmware"/>.
     </para>
 
@@ -716,7 +759,7 @@ initramfs (leia-se <xref linkend='initramfs'/> para detalhes) incluindo os
 arquivos de firmware. Se não quiser usar nenhum dos métodos, você pode
 incluir os arquivos de firmware na própria imagem do núcleo. Instale os
 arquivos de firmware necessários em <filename
-class='directory'>/lib/firmware</filename> primeiro, depois configure a
+class='directory'>/usr/lib/firmware</filename> primeiro, depois configure a
 seguinte configuração do núcleo e reconstrua o núcleo:
     </para>
 
@@ -727,12 +770,12 @@ seguinte configuração do núcleo e reconstrua o núcleo:
       Substitua <replaceable>xx/aa.bin xx/bb.bin</replaceable> por uma lista de
 caminhos separados por espaços em branco para os arquivos de firmware
 necessários, relativos a <filename
-class='directory'>/lib/firmware</filename>. Um método mais fácil que digitar
-manualmente a lista (ele possivelmente seja longa) é o de executar o
+class='directory'>/usr/lib/firmware</filename>. Um método mais fácil que
+digitar manualmente a lista (ele possivelmente seja longa) é o de executar o
 seguinte comando:
     </para>
 
-    <screen><userinput>echo CONFIG_EXTRA_FIRMWARE='"'$({ cd /lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'"' &gt;&gt; .config
+    <screen><userinput>echo CONFIG_EXTRA_FIRMWARE='"'$({ cd /usr/lib/firmware; echo <replaceable>amdgpu/*</replaceable> })'"' &gt;&gt; .config
 make oldconfig</userinput></screen>
 
     <para>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.8/localsearch-&localsearch-version;.tar.xz">
+  <!ENTITY localsearch-download-ftp  "">
+  <!ENTITY localsearch-md5sum        "56dfb5a30b3ab5ba33939d9f6bc21016">
+  <!ENTITY localsearch-size          "4,3 MB">
+  <!ENTITY localsearch-buildsize     "31 MB (com testes)">
+  <!ENTITY localsearch-time          "0,4 UPC (com paralelismo=4; adicionar o equivalente a 1,0 UPC para testes,
+dependente da velocidade do disco)">
+]>
+
+<sect1 id="localsearch" xreflabel="localsearch-&localsearch-version;">
+  <?dbhtml filename="localsearch.html"?>
+
+
+  <title>localsearch-&localsearch-version;</title>
+
+  <indexterm zone="localsearch">
+    <primary sortas="a-localsearch">localsearch</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduo ao Localsearch</title>
+
+    <para>
+      O pacote <application>Localsearch</application> contém um indexador de
+sistema de arquivos, bem como um extrator de metadados.
+    </para>
+
+    &lfs122_checked;
+
+    <bridgehead renderas="sect3">Informao do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferncia (HTTP): <ulink url="&localsearch-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferncia (FTP): <ulink url="&localsearch-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificao MD5 da transferncia: &localsearch-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferncia: &localsearch-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espao em disco estimado exigido: &localsearch-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construo estimado: &localsearch-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependncias do Localsearch</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="exempi"/>, <xref linkend="gexiv2"/>, <xref
+linkend="gst10-plugins-base"/> e <xref linkend="tinysparql"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="giflib"/>, <xref role='runtime'
+linkend="gst10-plugins-good"/> (tempo de execução), <xref role='runtime'
+linkend="gst10-libav"/> (tempo de execução), <xref linkend="icu"/>, <xref
+linkend="libexif"/>, <xref linkend="libgxps"/>, <xref
+linkend="libseccomp"/>, <xref linkend="poppler"/> e <xref linkend="upower"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="asciidoc"/>, <xref linkend="cmake"/>, <xref
+linkend="dconf"/>, <xref linkend="ffmpeg"/>, <xref linkend="libgsf"/>, <xref
+linkend="NetworkManager"/>, <xref linkend="taglib"/>, <xref
+linkend="totem-pl-parser"/>, <ulink
+url="https://github.com/lipnitsk/libcue">libcue</ulink>, <ulink
+url="https://gitlab.gnome.org/GNOME/libgrss">libgrss</ulink>, <ulink
+url="https://libiptcdata.sourceforge.net/">libitpcdata</ulink>, <ulink
+url="https://libosinfo.org">libosinfo</ulink> e <ulink
+url="https://gitlab.gnome.org/GNOME/gupnp">gupnp</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="kernel" id="localsearch-kernel">
+    <title>Configurao do Ncleo</title>
+
+    <para>
+      Habilite as seguintes opções na configuração do núcleo, em seguida recompile
+o núcleo e reinicialize se necessário:
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="localsearch-kernel.xml"/>
+
+    <indexterm zone="localsearch localsearch-kernel">
+      <primary sortas="d-localsearch">localsearch</primary>
+    </indexterm>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalao do Localsearch</title>
+
+    <warning>
+      <para>
+        Se você estiver atualizando esse pacote a partir de uma versão onde ele era
+conhecido como <application>tracker-miners</application>, existem vários
+arquivos que causarão conflitos. Antes de instalar esse pacote, remova esses
+arquivos como o(a) usuário(a) &root;:
+      </para>
+    </warning>
+
+<screen role="root"><userinput remap="pre">rm -fv /etc/xdg/autostart/tracker-miner-fs-3.desktop                           &amp;&amp;
+rm -fv /usr/lib/systemd/user/tracker-miner-fs-3.service                        &amp;&amp;
+rm -fv /usr/lib/systemd/user/tracker-miner-fs-control-3.service                &amp;&amp;
+rm -fv /usr/share/dbus-1/services/org.freedesktop.Tracker3.Miner.Files.service &amp;&amp;
+rm -fv /usr/share/dbus-1/services/org.freedesktop.Tracker3.Writeback.service   &amp;&amp;
+rm -fv /usr/share/dbus-1/services/org.freedesktop.Tracker3.Miner.Files.Control.service</userinput></screen>
+
+    <note>
+      <para>
+        Se você planeja executar os testes, alguns tempos limite são muito curtos ao
+usar discos giratórios. Existem dois lugares onde os tempos limite são
+usados: primeiro, testes individuais dentro de um grupo de testes tem um
+tempo limite padrão de 10s. Isso pode ser mudado configurando-se a variável
+de ambiente <envar>TRACKER_TESTS_AWAIT_TIMEOUT</envar> para o valor desejado
+ao executar os testes (veja-se abaixo). Segundo, um tempo limite global para
+um grupo de testes é fixado em tempo de configuração. O valor padrão no
+diretório <filename class="directory">functional-tests</filename> (outros
+diretórios tem somente testes de curta duração) pode ser aumentado com o
+seguinte comando (substitua 200 por um valor adequado para tua máquina):
+      </para>
+
+<screen remap="test"><userinput>sed -i s/120/<replaceable>200</replaceable>/ tests/functional-tests/meson.build</userinput></screen>
+    </note>
+
+    <para>
+      Instale <application>Localsearch</application> executando os seguintes
+comandos:
+    </para>
+
+
+<screen revision="systemd"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -D man=false        \
+            -D miner_rss=false  \
+            ..                  &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision="sysv"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr                  \
+            --buildtype=release            \
+            -D systemd_user_services=false \
+            -D man=false                   \
+            -D miner_rss=false             \
+            ..                             &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita (ajuste o tempo limite do teste individual
+para um valor adequado para a tua máquina; veja-se a nota acima):
+    </para>
+
+<screen remap="test"><userinput>dbus-run-session env LC_ALL=C.UTF-8 TRACKER_TESTS_AWAIT_TIMEOUT=<replaceable>20</replaceable> \
+                 ninja test &amp;&amp;
+rm -rf ~/tracker-tests</userinput></screen>
+
+    <para>
+      Agora, como o(a) usurio(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+    <screen role="root"><userinput>ninja install</userinput></screen>
+
+    <note>
+      <para>
+        Os testes criam arquivos no diretório do(a) usuário(a) (até 24 MB), de forma
+que eles tem de ser removidos posteriormente.
+      </para>
+    </note>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicaes do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para>
+      <parameter>-D man=false</parameter>: Essa chave impede o processo de
+construção de gerar páginas de manual. Omita essa chave se você tiver <xref
+linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
+páginas de manual.
+    </para>
+
+    <para>
+      <parameter>-D miner_rss=false</parameter>: Essa chave impede usar libgrss
+para indexar feeds RSS porque libgrss é insegura e não mais está no BLFS.
+    </para>
+
+    <para revision="sysv">
+      <parameter>-D systemd_user_services=false</parameter>: Essa chave impede o
+processo de construção de instalar unidades do systemd, pois elas são
+inúteis em sistemas SysV.
+    </para>
+
+    <para>
+      <option>-D seccomp=false</option>: Essa opção desabilita o filtro de chamada
+de sistema seccomp. Em algumas arquiteturas, como i686 e ARM, as funções que
+o tracker-miners usa não são protegidas corretamente, e o tracker-miners
+será morto com um SIGSYS como resultado. Observe que desabilitar o seccomp
+pode fazer com que o sistema seja comprometido ainda mais no caso de uma
+vulnerabilidade de segurança no localsearch ou nas dependências dele ser
+explorada.
+    </para>
+
+    <para>
+      <option>-D landlock=disabled</option>: Essa chave desabilita o sandbox de
+acesso a arquivos Landlock. Use-a se você não quiser construir o núcleo com
+suporte a Landlock. Observe que desabilitar Landlock pode fazer com que o
+sistema seja comprometido ainda mais no caso de uma vulnerabilidade de
+segurança no localsearch ou nas dependências dele ser explorada.
+    </para>
+
+    <para>
+      <option>-D battery_detection=none</option>: Use essa opção se você não tiver
+instalado a dependência recomendada upower. Não use essa opção se teu
+sistema tiver uma bateria (bateria de laptop ou UPS), ou então o localsearch
+possivelmente desperdice a vida útil da bateria quando a eletricidade CA
+estiver indisponível.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contedo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretrios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          localsearch
+        </seg>
+        <seg>
+          Vários módulos sob /usr/lib/localsearch-3.0
+        </seg>
+        <seg>
+          /usr/lib/localsearch-3.0 e /usr/share/localsearch
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descries Curtas</bridgehead>
+      <?dbfo list-presnetation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="localsearch-prog">
+        <term><command>localsearch</command></term>
+        <listitem>
+          <para>
+            inicia, para, reinicia e lista processos de segundo plano responsáveis pela
+indexação de conteúdo
+          </para>
+          <indexterm zone="localsearch localsearch-prog">
+            <primary sortas="b-localsearch">localsearch</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+  </sect2>
+
+</sect1>

@@ -6,10 +6,10 @@
 
   <!ENTITY ibus-download-http "https://github.com/ibus/ibus/archive/&ibus-version;/ibus-&ibus-version;.tar.gz">
   <!ENTITY ibus-download-ftp  "">
-  <!ENTITY ibus-md5sum        "a7facee0030e0e6adb41ecfd94be9e61">
+  <!ENTITY ibus-md5sum        "3d685af1010d871bb858dc8a8aabb5c4">
   <!ENTITY ibus-size          "1,5 MB">
-  <!ENTITY ibus-buildsize     "55 MB (adicionar 3 MB para os testes)">
-  <!ENTITY ibus-time          "0,4 UPC (Usando paralelismo=4; adicionar 0,8 UPC para testes)">
+  <!ENTITY ibus-buildsize     "55 MB (adicionar 1 MB para os testes)">
+  <!ENTITY ibus-time          "0,3 UPC (Usando paralelismo=4; adicionar 1,0 UPC para testes)">
 <!-- Since UCD.zip can be used by gucharmap too, let's use the same version:
      This prevents version mismatches, since UCD.zip filename is not versioned.
 -->
@@ -87,15 +87,15 @@ amigável e com todos os recursos.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
+      
       <!-- needed since we're using autogen.sh -->
-<xref linkend="dconf"/>, <xref linkend="iso-codes"/> e <xref
-linkend="vala"/>
+<xref linkend="iso-codes"/> e <xref linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      &gobject-introspection;, <xref linkend="gtk3"/> e <xref
-linkend="libnotify"/>
+      <xref linkend="dconf"/>, &gobject-introspection;, <xref linkend="gtk3"/>,
+<xref linkend="gtk4"/> e <xref linkend="libnotify"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -104,11 +104,10 @@ linkend="libnotify"/>
 
       (runtime, for the <command>ibus-setup</command>), and
       NOTE: The reference to the 'xdg' python module is commented out in the source -->
-<xref linkend="gtk4"/> (para construir módulo IM para ele), <xref
-linkend="gtk-doc"/> (para gerar documentação da API), <xref
+<xref linkend="gtk-doc"/> (para gerar documentação da API), <xref
 linkend="dbus-python"/> e <xref linkend="pygobject3"/> (ambos para construir
-a biblioteca de suporte do Python), <xref linkend="libxkbcommon"/>, <xref
-linkend="wayland"/> (ambos para construir os programas de suporte do
+a biblioteca de suporte a Python), <xref linkend="libxkbcommon"/>, <xref
+linkend="wayland"/> (ambos para construir os programas de suporte a
 Wayland), <ulink url="https://www.joypixels.com/">EmojiOne</ulink> e <ulink
 url="https://github.com/AyatanaIndicators/libdbusmenu">libdbusmenu</ulink>
     </para>
@@ -118,32 +117,13 @@ url="https://github.com/AyatanaIndicators/libdbusmenu">libdbusmenu</ulink>
   <sect2 role="installation">
     <title>Instalação do ibus</title>
 
-
-
-    <!--
     <para>
-
-      If the optional Unicode Character Database was downloaded, install it
-      now as the <systemitem class="username">root</systemitem> user:
-    </para>
--->
-<para>
       Primeiro, instale a base de dados de caracteres Unicode como o(a) usuário(a)
 &root;:
     </para>
 
-<!--
-    <note>
-
-      <para>
-        Be sure to also remove the - -disable-unicode-dict in
-        the configure step below.
-      </para>
-    </note>
--->
 <screen role="root"><userinput>mkdir -p               /usr/share/unicode/ucd &amp;&amp;
 unzip -o ../UCD.zip -d /usr/share/unicode/ucd</userinput></screen>
-
 
     <para>
       Corrija um problema com entradas de esquema obsoletas:
@@ -195,7 +175,8 @@ make</userinput></screen>
 Para testar os resultados, emita: <command>make -k check</command>. O teste
 chamado ibus-compose falha porque usa algumas localidades não instaladas no
 LFS. O teste chamado ibus-keypress falhará se executar em uma sessão do
-Wayland.
+Wayland. O teste xkb-latin-layouts também é conhecido por falhar em alguns
+sistemas.
     </para>
 
     <para>
@@ -225,8 +206,8 @@ dicionários de emoticons. Omita se você instalou o pacote opcional.
     </para>
 
     <para>
-      <option>--enable-gtk4</option>: Essa chave habilita construir o módulo "IM"
-<application>GTK 4</application>. Use-a se você tiver instalado o
+      <option>--disable-gtk4</option>: Essa chave desabilita construir o immodule
+do <application>GTK 4</application>. Use-a se você não quiser instalar o
 <application>GTK 4</application>.
     </para>
 

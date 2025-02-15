@@ -6,11 +6,11 @@
 
   <!ENTITY curl-download-http "https://curl.se/download/curl-&curl-version;.tar.xz">
   <!ENTITY curl-download-ftp  "">
-  <!ENTITY curl-md5sum        "5882f056460240d98cdb5b7f86a06153">
-  <!ENTITY curl-size          "2,7 MB">
-  <!ENTITY curl-buildsize     "42 MB (adicionar 18 MB para testes)">
+  <!ENTITY curl-md5sum        "7940975dd510399c4b27831165ab62e0">
+  <!ENTITY curl-size          "2,6 MB">
+  <!ENTITY curl-buildsize     "53 MB (adicionar 15 MB para os testes)">
   <!ENTITY curl-time          "0,2 UPC (com paralelismo=4; adicionar 4,9 UPC para testes (sem valgrind,
-adicionar 17 UPC com valgrind))">
+adicionar 14 UPC com valgrind))">
 ]>
 
 <sect1 id="curl" xreflabel="cURL-&curl-version;">
@@ -40,7 +40,7 @@ ser incorporada a outros aplicativos para suportar funções como mídia em
 transmissão.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -115,10 +115,6 @@ graves implicações de segurança.
       <!-- cURL implements the SMB client with own code.  Samba is only
            used for /usr/bin/ntlm_auth helper.  The path is correctly
            guessed even if Samba is not installed, so "runtime".  -->
-<!--<ulink url="https://tls.mbed.org/">
-mbed TLS</ulink> (formerly known as
-      PolarSSL), and -->
-<!-- mbedTLS/PolarSSL support was removed in 7.65.1 -->
 <xref linkend="brotli"/>, <xref linkend="c-ares"/>, <xref
 linkend="gnutls"/>, <xref linkend="libidn2"/>, <xref linkend="libssh2"/>,
 <xref linkend="mitkrb"/>, <xref linkend="nghttp2"/>, <xref
@@ -182,10 +178,9 @@ seguintes comandos:
     all of the optional deps, but right now, it isn't a priority - rather
     the security fix is.
 -->
-<screen><userinput>./configure --prefix=/usr                          \
+<screen><userinput>./configure --prefix=/usr                           \
             --disable-static                        \
             --with-openssl                          \
-            --enable-threaded-resolver              \
             --with-ca-path=/etc/ssl/certs &amp;&amp;
 make</userinput></screen>
 
@@ -439,6 +434,16 @@ Run with Valgrind and all dependencies in the book installed.
 TESTDONE: 1713 tests were considered during 2034 seconds.
 TESTDONE: 1392 tests out of 1392 reported OK: 100%
 Run with valgrind and all dependencies in the book installed.
+
+[renodr] - Test results for 8.11.0 (2024-11-07)
+TESTDONE: 1739 tests were considered during 2402 seconds.
+TESTDONE: 1514 tests out of 1514 reported OK: 100%
+Run with valgrind and all dependencies in the book installed.
+
+[renodr] - Test results for 8.12.0 (2025-02-06)
+TESTDONE: 1769 tests were considered during 2231 seconds.
+TESTDONE: 1542 tests out of 1542 reported OK: 100%
+Run with valgrind and all dependencies in the book installed.
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -475,20 +480,14 @@ dos arquivos baixados, etc. Um arquivo tem a hora para cada ação registrada.
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>--enable-threaded-resolver</parameter>: Essa chave ativa o
-resolvedor &quot;DNS&quot; encadeado integrado do
-&quot;<application>cURL</application>&quot;.
-    </para>
-
-    <para>
       <parameter>--with-ca-path=/etc/ssl/certs</parameter>: Essa chave define o
 local do armazenamento da Autoridade Certificadora do BLFS.
     </para>
 
     <para>
-      <parameter>--with-openssl</parameter>: Esse parâmetro escolhe o
-&quot;<application>OpenSSL</application>&quot; como implementação
-&quot;SSL&quot;/&quot;TLS&quot;. Isso parece obrigatório agora.
+      <parameter>--with-openssl</parameter>: Esse parâmetro escolhe
+<application>OpenSSL</application> como implementação SSL/TLS. Essa opção
+não é necessária se <option>--with-gnutls</option> for selecionada.
     </para>
 
     <para>
@@ -498,8 +497,8 @@ class="libraryfile">libcurl</filename>&quot;.
     </para>
 
     <para>
-      <option>--without-ssl --with-gnutls</option>: Use essa chave para construir
-com suporte <application>GnuTLS</application> em vez de
+      <option>--with-gnutls</option>: Use essa chave para construir com suporte
+<application>GnuTLS</application> em vez de
 <application>OpenSSL</application> para SSL/TLS.
     </para>
 
@@ -519,9 +518,7 @@ desabilitado por padrão.
 
     <para>
       <option>--enable-ares</option>: Esse parâmetro adiciona suporte para
-resolução &quot;DNS&quot; por meio da biblioteca &quot;c-ares&quot;. Ele
-substitui &quot;<parameter>--enable-threaded-resolver</parameter>&quot; e
-não é amplamente testado pelos(as) Editores(as).
+resolução DNS por meio da biblioteca c-ares.
     </para>
 
     <para>

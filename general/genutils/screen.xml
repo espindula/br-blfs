@@ -6,9 +6,9 @@
 
   <!ENTITY screen-download-http "&gnu-http;/screen/screen-&screen-version;.tar.gz">
   <!ENTITY screen-download-ftp  "">
-  <!ENTITY screen-md5sum        "9a9bdc956bd93e4f0cb9e48678889e26">
-  <!ENTITY screen-size          "1020 KB">
-  <!ENTITY screen-buildsize     "9,5 MB">
+  <!ENTITY screen-md5sum        "befc115989242ed4bceeff8d8bfeb4e6">
+  <!ENTITY screen-size          "876 KB">
+  <!ENTITY screen-buildsize     "7,7 MB">
   <!ENTITY screen-time          "0,1 UPC">
 ]>
 
@@ -36,7 +36,7 @@ incluindo "UTF-8". As sessões do "Screen" podem ser desanexadas e retomadas
 posteriormente em um terminal diferente.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -108,13 +108,13 @@ Additional Downloads</bridgehead>
       Instale <application>Screen</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>sh autogen.sh                                &amp;&amp;
-./configure --prefix=/usr                     \
-            --infodir=/usr/share/info         \
-            --mandir=/usr/share/man           \
-            --with-socket-dir=/run/screen     \
-            --with-pty-group=5                \
-            --with-sys-screenrc=/etc/screenrc &amp;&amp;
+<screen><userinput>./configure --prefix=/usr                        \
+            --infodir=/usr/share/info            \
+            --mandir=/usr/share/man              \
+            --disable-pam                        \
+            --enable-socket-dir=/run/screen      \
+            --with-pty-group=5                   \
+            --with-system_screenrc=/etc/screenrc &amp;&amp;
 
 sed -i -e "s%/usr/local/etc/screenrc%/etc/screenrc%" {etc,doc}/* &amp;&amp;
 make</userinput></screen>
@@ -136,13 +136,19 @@ install -m 644 etc/etcscreenrc /etc/screenrc</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--with-socket-dir=/run/screen</parameter>: Essa opção coloca os
-soquetes por usuário em um local padrão.
+      <parameter>--disable-pam</parameter>: Essa opção remove uma dependência de
+construção de Linux-PAM. Remova essa opção se você quiser suporte a PAM.
     </para>
 
     <para>
-      <parameter>--with-sys-screenrc=/etc/screenrc</parameter>: Essa opção coloca
-o arquivo global "screenrc" <filename class='directory'>/etc</filename>.
+      <parameter>--enable-socket-dir=/run/screen</parameter>: Essa opção coloca os
+soquetes por usuário(a) em um local padrão.
+    </para>
+
+    <para>
+      <parameter>--with-system_screenrc=/etc/screenrc</parameter>: Essa opção
+coloca o arquivo global screenrc em <filename
+class='directory'>/etc</filename>.
     </para>
 
     <para>

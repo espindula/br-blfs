@@ -5,10 +5,10 @@
   %general-entities;
 
   <!ENTITY protobuf-download-http "https://github.com/protocolbuffers/protobuf/releases/download/v&protobuf-version;/protobuf-&protobuf-version;.tar.gz">
-  <!ENTITY protobuf-md5sum        "c7feee9c4a6856d39e2b9d6876a487f5">
-  <!ENTITY protobuf-size          "6,0 MB">
-  <!ENTITY protobuf-buildsize     "79 MB">
-  <!ENTITY protobuf-time          "1,6 UPC (com paralelismo=4)">
+  <!ENTITY protobuf-md5sum        "4bc7da60038e4b10de416415c7988ec7">
+  <!ENTITY protobuf-size          "8,9 MB">
+  <!ENTITY protobuf-buildsize     "137 MB">
+  <!ENTITY protobuf-time          "1,4 UPC (com paralelismo=4)">
 ]>
 
 <sect1 id="protobuf" xreflabel="Protobuf-&protobuf-version;">
@@ -92,7 +92,6 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr      \
       -D protobuf_ABSL_PROVIDER=package \
       -D protobuf_BUILD_LIBUPB=OFF      \
       -D protobuf_BUILD_SHARED_LIBS=ON  \
-      -D utf8_range_ENABLE_INSTALL=OFF  \
       -G Ninja ..                       &amp;&amp;
 ninja</userinput></screen>
 
@@ -106,8 +105,7 @@ BLFS.
       Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>sed 's/utf8_range//' -i *.pc &amp;&amp;
-ninja install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
@@ -116,12 +114,6 @@ ninja install</userinput></screen>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/cmake-skip-install-rpath.xml"/>
-
-    <para>
-      <command>sed 's/utf8_range//' -i *.pc</command>: Esse comando remove uma
-referência restante ao libutf8_range dos arquivos pkg-config instalados por
-esse pacote.
-    </para>
 
     <para>
       <parameter>-D protobuf_BUILD_TESTS=OFF</parameter>: Esse parâmetro impede os
@@ -142,15 +134,6 @@ habilita construir versões compartilhadas das bibliotecas fornecidas por
 esse pacote em vez das versões estáticas.
     </para>
 
-    <para>
-      <parameter>-D utf8_range_ENABLE_INSTALL=OFF</parameter>: Esse parâmetro
-desabilita instalar a biblioteca estática utf8_range. As funções fornecidas
-por essa biblioteca e usadas pelo protobuf já estão incorporadas na
-<filename class='libraryfile'>libprotobuf.so</filename>, de forma que
-instalar uma cópia completa da biblioteca estática é apenas desperdiçar o
-espaço em disco.
-    </para>
-
   </sect2>
 
   <sect2 role="content">
@@ -163,14 +146,16 @@ espaço em disco.
 
       <seglistitem>
         <seg>
-          protoc-26.1.0 e protoc (um link simbólico para protoc-26.1.0)
+          protoc-&protobuf-version;.0 e protoc (um link simbólico para
+protoc-&protobuf-version;.0)
         </seg>
         <seg>
-          libprotobuf.so, libprotobuf-lite.so e libprotoc.so
+          libprotobuf.so, libprotobuf-lite.so, libprotoc.so, libutf8_range.so e
+libutf8_validity.so
         </seg>
         <seg>
-          /usr/include/google, /usr/include/java, /usr/include/upb_generator e
-/usr/lib/cmake/protobuf
+          /usr/include/google, /usr/include/java, /usr/include/upb_generator,
+/usr/lib/cmake/protobuf e /usr/lib/cmake/utf8_range
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -227,6 +212,33 @@ para diversas linguagens de programação e formatos
           </para>
           <indexterm zone="protobuf libprotoc">
             <primary sortas="c-libprotoc">libprotoc.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libutf8_range">
+        <term><filename class="libraryfile">libutf8_range.so</filename></term>
+        <listitem>
+          <para>
+            contém funções que permitem que um programa determine se uma sequência de
+caracteres é uma sequência válida UTF-8
+          </para>
+          <indexterm zone="protobuf libutf8_range">
+            <primary sortas="c-libutf8_range">libutf8_range.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libutf8_validity">
+        <term><filename class="libraryfile">libutf8_validity.so</filename></term>
+        <listitem>
+          <para>
+            contém funções que permitem que um programa determine se uma sequência de
+bytes é uma sequência UTF-8 válida e descubra qual é o maior prefixo válido
+da sequência
+          </para>
+          <indexterm zone="protobuf libutf8_validity">
+            <primary sortas="c-libutf8_validity">libutf8_validity.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

@@ -6,9 +6,9 @@
 
   <!ENTITY gspell-download-http "&gnome-download-http;/gspell/&gspell-minor;/gspell-&gspell-version;.tar.xz">
   <!ENTITY gspell-download-ftp  "">
-  <!ENTITY gspell-md5sum        "f1e5f02695aee20ba543352889c28ff5">
-  <!ENTITY gspell-size          "436 KB">
-  <!ENTITY gspell-buildsize     "11 MB (com testes)">
+  <!ENTITY gspell-md5sum        "282c1ed7213a657e47de663fd2a081db">
+  <!ENTITY gspell-size          "116 KB">
+  <!ENTITY gspell-buildsize     "6,7 MB (com testes)">
   <!ENTITY gspell-time          "0,1 UPC (com testes)">
 ]>
 
@@ -89,12 +89,15 @@ url="https://hunspell.github.io/">Hunspell</ulink> (para testes)
       Instale <application>gspell</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir gspell-build &amp;&amp;
+cd    gspell-build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release -D gtk_doc=false .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>. Os testes
-precisam ser executados em uma sessão do X. Um teste, "test-checker", é
+      Para testar os resultados, emita: <command>ninja test</command>. Os testes
+precisam ser executados em uma sessão do X. Um teste, test-checker, é
 conhecido por falhar se o pacote externo <ulink
 url="https://hunspell.github.io/">Hunspell</ulink> não estiver instalado.
     </para>
@@ -103,14 +106,27 @@ url="https://hunspell.github.io/">Hunspell</ulink> não estiver instalado.
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
-
+<!-- not needed because of meson
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/rm-la-file-referring-icu.xml"/>
 
+
 <screen role="root"><userinput>rm -v /usr/lib/libgspell-1.la</userinput></screen>
+-->
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+
  </sect2>
 
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D gtk_doc=false</parameter>: Impede construir a
+documentação. Remova isso se você tiver <application>GTK-Doc</application>
+instalado e desejar construir a documentação.
+    </para>
+  </sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>

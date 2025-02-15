@@ -72,6 +72,12 @@ ifconfig, free e outras.
         </listitem>
       </itemizedlist>
 
+      <bridgehead renderas="sect4">Dependências do Packaging</bridgehead>
+
+      <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
+      <para role="optional">
+        <xref linkend="pytest"/>
+      </para>
     </sect3>
 
     <sect3 role="installation">
@@ -90,19 +96,19 @@ ifconfig, free e outras.
 <screen role="root"><userinput>&install-wheel; psutil</userinput></screen>
 
       <para>
-        Para testar os resultados, emita:
+        Para testar os resultados, emita: <command>make test</command>.
       </para>
 
-      <!-- https://github.com/giampaolo/psutil/pull/2097
-           Also mentions some other failures but it seems on BLFS only
-           these two fail.  -->
-<screen remap="test"><userinput>mkdir empty &amp;&amp;
-(cd empty; python3 -m psutil.tests)</userinput></screen>
-
-      
       <para>
-        Dois testes chamados <literal>test_disk_usage</literal> e
-<literal>test_io_counters</literal> são conhecidos por falharem.
+        Dois testes, <literal>TestSystemAPIs::test_disk_usage</literal> e
+<literal>TestNetAPIs::test_net_if_addrs</literal>, são conhecidos por
+falharem. E um teste chamado
+<literal>TestAvailProcessAPIs::test_io_counters</literal> é conhecido por
+falhar se o núcleo não tiver <option>CONFIG_TASK_IO_ACCOUNTING</option>
+habilitado. <literal>TestScripts.test_who</literal> é conhecido por falhar
+se o gerenciador de login não escrever em <filename>/run/utmp</filename>
+(observe que devido ao potencial problema do ano 2037, o Shadow já parou de
+escrever nele).
       </para>
 
     </sect3>

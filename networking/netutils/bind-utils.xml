@@ -7,7 +7,7 @@
   <!ENTITY bind-download-http   "https://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
   <!ENTITY bind-download-ftp    "">
   <!ENTITY bind-md5sum          "&bind-md5;">
-  <!ENTITY bind-size            "5,5 MB">
+  <!ENTITY bind-size            "5,4 MB">
   <!ENTITY bind-utils-buildsize "117 MB">
   <!ENTITY bind-utils-time      "0,5 UPC (usando paralelismo = 4)">
 ]>
@@ -39,7 +39,7 @@ para aqueles(as) usuários(as) que não precisam do servidor
 aplicativos do lado cliente.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -97,11 +97,14 @@ linkend="sphinx"/>
 executando os seguintes comandos:</para>
 
 <screen><userinput>./configure --prefix=/usr &amp;&amp;
-make -C lib/isc    &amp;&amp;
-make -C lib/dns    &amp;&amp;
-make -C lib/ns     &amp;&amp;
-make -C lib/isccfg &amp;&amp;
-make -C bin/dig    &amp;&amp;
+make -C lib/isc      &amp;&amp;
+make -C lib/dns      &amp;&amp;
+make -C lib/ns       &amp;&amp;
+make -C lib/isccfg   &amp;&amp;
+make -C lib/isccc    &amp;&amp;
+make -C bin/dig      &amp;&amp;
+make -C bin/nsupdate &amp;&amp;
+make -C bin/rndc     &amp;&amp;
 make -C doc</userinput></screen>
 
     <para>
@@ -111,12 +114,16 @@ make -C doc</userinput></screen>
       Agora, como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:</para>
 
-<screen role='root'><userinput>make -C lib/isc    install &amp;&amp;
-make -C lib/dns    install &amp;&amp;
-make -C lib/ns     install &amp;&amp;
-make -C lib/isccfg install &amp;&amp;
-make -C bin/dig    install &amp;&amp;
-cp -v doc/man/{dig.1,host.1,nslookup.1} /usr/share/man/man1</userinput></screen>
+<screen role='root'><userinput>make -C lib/isc      install &amp;&amp;
+make -C lib/dns      install &amp;&amp;
+make -C lib/ns       install &amp;&amp;
+make -C lib/isccfg   install &amp;&amp;
+make -C lib/isccc    install &amp;&amp;
+make -C bin/dig      install &amp;&amp;
+make -C bin/nsupdate install &amp;&amp;
+make -C bin/rndc     install &amp;&amp;
+cp -v doc/man/{dig.1,host.1,nslookup.1,nsupdate.1} /usr/share/man/man1 &amp;&amp;
+cp -v doc/man/rndc.8 /usr/share/man/man8</userinput></screen>
 
   </sect2>
 
@@ -135,7 +142,7 @@ que são necessárias para os aplicativos clientes.
     </para>
 
     <para>
-      <command>make -C bin/dig</command>: Esse comando constrói os aplicativos
+      <command>make -C bin/...</command>: Esse comando constrói os programas
 clientes.
     </para>
 
@@ -146,9 +153,8 @@ se o módulo opcional &quot;<xref linkend="sphinx"/>&quot; do
     </para>
 
     <para>
-      Use <command>cp -v doc/man/{dig.1,host.1,nslookup.1}
-/usr/share/man/man1</command> para instalar as páginas de manual se elas
-tiverem sido construídas.
+      Use <command>cp -v doc/man/... /usr/share/man/man...</command> para instalar
+as páginas de manual se elas tiverem sido construídas.
     </para>
 
   </sect2>
@@ -162,7 +168,7 @@ tiverem sido construídas.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>dig, host e nslookup</seg>
+        <seg>dig, host, nslookup, nsupdate e rndc</seg>
         <seg>Nenhum(a)</seg>
         <seg>Nenhum(a)</seg>
       </seglistitem>

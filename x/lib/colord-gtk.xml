@@ -81,7 +81,9 @@
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="docbook-utils"/> e <xref linkend="gtk-doc"/>
+      <xref linkend="docbook5"/>, <xref linkend="docbook-xsl-ns"/>, <xref
+linkend="libxslt"/> (para construir a página de manual) e <xref
+linkend="gtk-doc"/>
     </para>
 
   </sect2>
@@ -101,6 +103,7 @@
 seguintes comandos:
     </para>
 
+<!-- See https://github.com/hughsie/colord-gtk/pull/31 for the sed -->
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
@@ -111,6 +114,18 @@ meson setup --prefix=/usr       \
             -D docs=false       \
             -D man=false        \
             ..                  &amp;&amp;
+ninja</userinput></screen>
+
+    
+    <para>
+      Se <xref linkend='docbook5'/>, <xref linkend='docbook-xsl-ns'/> e <xref
+linkend='libxslt'/> estiverem instalados, construa a página de manual:
+    </para>
+
+    <screen role='nodump'><userinput>sed '/class="manual"/i \
+     &lt;refmiscinfo class="source"&gt;colord-gtk&lt;/refmiscinfo&gt;' \
+    -i ../man/*.xml &amp;&amp;
+meson configure -D man=true &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -156,12 +171,6 @@ tiver o <xref linkend="gtk4" role="nodep"/> instalado.
 documentação baseada em gtk-doc. Mesmo se o gtk-doc estiver instalado, você
 precisará das versões com nomes de espaço das folhas de estilo XSL do
 Docbook.
-    </para>
-
-    <para>
-      <parameter>-D man=false</parameter>: Essa chave desabilita a geração de
-páginas de manual para esse pacote. Remova essa chave se você tiver versões
-com nomes de espaço das folhas de estilo XSL do Docbook instaladas.
     </para>
 
     

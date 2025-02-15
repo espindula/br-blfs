@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY snapshot-download-http "&gnome-download-http;/snapshot/&gnome-46;/snapshot-&snapshot-version;.tar.xz">
+  <!ENTITY snapshot-download-http "&gnome-download-http;/snapshot/&gnome-47;/snapshot-&snapshot-version;.tar.xz">
   <!ENTITY snapshot-download-ftp  "">
-  <!ENTITY snapshot-md5sum        "25f97e88005b933c382e5a0c2193599c">
-  <!ENTITY snapshot-size          "22 MB">
-  <!ENTITY snapshot-buildsize     "1,1 GB (2,9 MB instalado)">
+  <!ENTITY snapshot-md5sum        "cfae2acf42f18677e6cd7bd716571bd7">
+  <!ENTITY snapshot-size          "8,3 MB">
+  <!ENTITY snapshot-buildsize     "1,2 GB (6,1 MB instalado)">
   <!ENTITY snapshot-time          "4,5 UPC">
 ]>
 
@@ -69,13 +69,14 @@ fotos e vídeos a partir de uma web câmera.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libadwaita1"/>, <xref linkend="gst10-plugins-bad"/> e <xref
-linkend="rust"/>
+      <xref linkend="libadwaita1"/>, <xref linkend="libgstgtk4"/>, <xref
+linkend="gst10-plugins-bad"/> e <xref linkend="rust"/>
     </para>
 
     <bridgehead renderas="sect4">Exigidas em tempo de execução</bridgehead>
     <para role="required">
-      <xref role="runtime" linkend="pipewire"/>
+      <xref role="runtime" linkend="pipewire"/> e <xref role="runtime"
+linkend="xdg-desktop-portal-gnome"/>
     </para>
 
   </sect2>
@@ -90,23 +91,7 @@ passagem do LTO não é paralelizada.
       </para>
     </note>
 
-
-
-    <!-- No longer needed with pango-1.51.0
     <para>
-
-      First, remove a check against the system <application>Pango</application>
-      version that is too strict:
-    </para>
-    
-<screen><userinput remap="pre">sed '/pango.v1_52/,+1d' -i vendor/pango-sys/Cargo.toml &amp;&amp;
-
-cat &gt;&gt; Cargo.toml &lt;&lt; EOF
-<literal>[patch.crates-io.pango-sys]
-path = "vendor/pango-sys"</literal>
-EOF</userinput></screen>
--->
-<para>
       Instale <application>Snapshot</application> executando os seguintes
 comandos:
     </para>
@@ -118,10 +103,7 @@ meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      <!--One test is known to fail due to deprecated constructs in
-      appstream-1.0+-->
-Para testar os resultados, emita: <command>ninja test</command>.
-      
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>

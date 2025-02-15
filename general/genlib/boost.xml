@@ -6,10 +6,10 @@
 
   <!ENTITY boost-download-http "https://github.com/boostorg/boost/releases/download/boost-&boost-version;/boost-&boost-dl-version;.tar.xz">
   <!ENTITY boost-download-ftp  "">
-  <!ENTITY boost-md5sum        "7ad40a9d9d1db59ee2ed62e8fa7134ed">
-  <!ENTITY boost-size          "45 MB">
-  <!ENTITY boost-buildsize     "899 MB (197 MB instalado)">
-  <!ENTITY boost-time          "1,8 UPC (Usando paralelismo=4; adicionar 0,1 UPC para testes)">
+  <!ENTITY boost-md5sum        "c2ffeab30889999f55cf72e1107611aa">
+  <!ENTITY boost-size          "48 MB">
+  <!ENTITY boost-buildsize     "692 MB (197 MB instalado)">
+  <!ENTITY boost-time          "1,5 UPC (Usando paralelismo=4; adicionar 0,1 UPC para testes)">
 ]>
 
 <sect1 id="boost" xreflabel="Boost-&boost-version;">
@@ -32,7 +32,7 @@ encadeamento, processamento de imagens, expressões regulares e testes de
 unidade.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <note>
       <para>
@@ -75,17 +75,19 @@ unidade.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/boost-&boost-version;-upstream_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/boost-&boost-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências de Boost</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências de Boost</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
@@ -105,15 +107,17 @@ url="https://www.open-mpi.org/">Open MPI</ulink>
   <sect2 role="installation">
     <title>Instalação do Boost</title>
 
+    <!--
     <para>
-      Primeiro, corrija um problema com Boost e <xref linkend="numpy"/> que faz
-com que a construção falhe:
+
+      First, fix a problem with Boost and <xref linkend="numpy"/> that causes
+      the build to fail:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../boost-&boost-version;-upstream_fixes-1.patch</userinput></screen>
-
-    <para>
-      Em seguida, corrija um problema de construção que ocorre na biblioteca
+-->
+<para>
+      Primeiro, corrija um problema de construção que ocorre na biblioteca
 stacktrace. Esse problema é específico para sistemas i686.
     </para>
 
@@ -124,15 +128,16 @@ stacktrace. Esse problema é específico para sistemas i686.
 esac</userinput></screen>
 
     <para>
-      Esse pacote pode ser construído com vários trabalhos executando em
-paralelo. Nas instruções abaixo, <parameter>&lt;N&gt;</parameter> representa
-o número de trabalhos. Instale o <application>Boost</application> executando
-os seguintes comandos:
+      Esse pacote pode ser construído com várias tarefas executando em
+paralelo. Nas instruções abaixo, todos os núcleos lógicos disponíveis são
+usados. Substitua <replaceable>$(nproc)</replaceable> pelo número de núcleos
+lógicos que você deseja usar se não quiser usar todos. Instale
+<application>Boost</application> executando os seguintes comandos:
     </para>
 
 
 <screen><userinput>./bootstrap.sh --prefix=/usr --with-python=python3 &amp;&amp;
-./b2 stage -j<replaceable>&lt;N&gt;</replaceable> threading=multi link=shared</userinput></screen>
+./b2 stage -j<replaceable>$(nproc)</replaceable> threading=multi link=shared</userinput></screen>
 
     <para>
       Para executar os testes de regressão do Boost.Build, emita <command>pushd
@@ -140,11 +145,10 @@ tools/build/test; python3 test_all.py; popd</command>.
     </para>
 
     <para>
-      Para executar cada um dos testes de regressão da biblioteca, emita
-<command>pushd status; ../b2; popd</command>. Uns poucos testes
-possivelmente falhem. Eles tomam um tempo muito longo (mais que 119 UPC em
--j4) e usam uma quantidade muito grande de espaço em disco (46 GB). Você
-deveria usar a chave <parameter>-jN</parameter> para acelerá-los.
+      Para executar os testes de regressão de cada biblioteca, emita
+<command>pushd status; ../b2 -j$(nproc); popd</command>. Alguns testes
+possivelmente falhem. Eles levam um tempo muito longo (mais de 119 UPC em
+-j4) e usam uma quantidade muito grande de espaço em disco (46 GB).
     </para>
 
     <note>
@@ -205,12 +209,6 @@ esse parâmetro se precisar das bibliotecas estáticas.
       <parameter>--with-python=python3</parameter>: Essa chave garante que o
 "Python3" seja usado se o "Python2" estiver instalado.
     </para>
-
-    <para>
-       <option>-jN</option>: Essa chave pode ser adicionada às linhas de comando
-<command>b2</command>, para executar até N processos em paralelo.
-    </para>
-
   </sect2>
 
   <sect2 role="content">
@@ -249,6 +247,26 @@ libboost_wave.so e libboost_wserialization.so
       </seglistitem>
     </segmentedlist>
 
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libboost">
+        <term><filename class="libraryfile">libboost_*.so</filename></term>
+        <listitem>
+          <para>
+            contém bibliotecas que fornecem uma variedade de funções, incluindo
+envolucradores para NumPy, álgebra linear, geração de números
+pseudoaleatórios, multi camadeamento, processamento de imagens, expressões
+regulares, testes de unidade, localidades, JSON, registro, gráficos e
+depuração
+          </para>
+          <indexterm zone="boost libboost">
+            <primary sortas="c-libboost">libboost_*.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </sect2>
 
 </sect1>

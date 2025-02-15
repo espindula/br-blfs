@@ -6,13 +6,14 @@
 
   <!ENTITY poppler-download-http "https://poppler.freedesktop.org/poppler-&poppler-version;.tar.xz">
   <!ENTITY poppler-download-ftp  "">
-  <!ENTITY poppler-md5sum        "5edd19a7ef270793374a3a5599bf872f">
-  <!ENTITY poppler-size          "1,8 MB">
-  <!ENTITY poppler-buildsize     "76 MB (com biblioteca Qt6; adicionar 13 MB para testes)">
-  <!ENTITY poppler-time          "0,9 UPC (com paralelismo=4, testes e biblioteca Qt6)">
+  <!ENTITY poppler-md5sum        "feae5e0715ed7738fcb4220730a3ff4c">
+  <!ENTITY poppler-size          "1,9 MB">
+  <!ENTITY poppler-buildsize     "77 MB (com biblioteca Qt6 e testes)">
+  <!ENTITY poppler-time          "1,0 UPC (com paralelismo=4, testes e biblioteca Qt6)">
   <!-- For poppler 24.05.0 All 65 tests passed in 1.8 seconds -->
   <!-- For poppler 24.06.0 One test, check_qt6_signature_basics, out of 65 tests 
        passed in 42 seconds -->
+  <!-- For poppler 25.02.0 All 65 tests passed in 3.9 seconds -->
 
   <!ENTITY poppler-data-version       "0.4.12">
 
@@ -139,8 +140,8 @@ linkend="openjpeg2"/> e <xref linkend="qt6"/> (exigido para suporte PDF no
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="curl"/>, <xref linkend="gdk-pixbuf"/>, <xref linkend="git"/>
-(para baixar arquivos de teste), <xref linkend="gtk-doc"/>, <xref
-linkend="gtk3"/> e &qt5-deps;
+(para baixar arquivos de teste), <xref linkend="gtk-doc"/> e <xref
+linkend="gtk3"/>
     </para>
 
   </sect2>
@@ -148,18 +149,7 @@ linkend="gtk3"/> e &qt5-deps;
   <sect2 role="installation">
     <title>Instalação do Poppler</title>
 
-    <!--
     <para>
-
-      First, conditionalize C++20 only code to fix non C++20 builds that 
-      don't use the affected methods.
-    </para>
-
-<screen><userinput>sed -e '/::starts/i #if __cplusplus >= 202002L'\
-    -e '/::ends/a #endif'                      \
-    -i goo/GooString.h</userinput></screen>
--->
-<para>
       Agora, Instale <application>Poppler</application> executando os seguintes
 comandos:
     </para>
@@ -180,8 +170,7 @@ ninja</userinput></screen>
 necessários e podem ser obtidos somente a partir de um repositório git. O
 comando para baixá-los é: <command>git clone --depth 1
 https://gitlab.freedesktop.org/poppler/test.git testfiles</command>. Em
-seguida, emita: <command>LC_ALL=en_US.UTF-8 ninja test</command>. Um sub
-teste do check_qt6_signature_basics é conhecido por falhar.
+seguida, emita: <command>LC_ALL=en_US.UTF-8 ninja test</command>.
     </para>
 
     <para>
@@ -233,8 +222,7 @@ aplicativos de teste onde os arquivos auxiliares estão localizados.
 
     <para>
       <parameter>-D ENABLE_QT5=OFF</parameter>: Essa chave é necessária para
-evitar um erro quando o Qt5 não estiver instalado. Remova-a se você tiver
-instalado &qt5-deps;.
+evitar um erro quando o Qt5 não estiver instalado. 
     </para>
 
     <para>
@@ -261,7 +249,7 @@ linkend='qt6'/> não estiver instalado.
     <para>
       <option>-D ENABLE_BOOST=OFF</option>: Use esse parâmetro se você não tiver
 instalado o <application>boost</application> (a estrutura de retaguarda
-Splash para Qt5 recomenda o boost).
+Splash para Qt6 recomenda o boost).
     </para>
 
     <para>
@@ -301,8 +289,8 @@ localidade padrão não incluir UTF-8.
 pdftocairo, pdftohtml, pdftoppm, pdftops, pdftotext e pdfunite
         </seg>
         <seg>
-          libpoppler.so, libpoppler-cpp.so, libpoppler-glib.so, libpoppler-qt5.so e
-(opcionalmente) libpoppler-qt6.so
+          libpoppler.so, libpoppler-cpp.so, libpoppler-glib.so e (opcionalmente)
+libpoppler-qt6.so
         </seg>
         <seg>
           /usr/include/poppler, /usr/share/poppler e
@@ -510,19 +498,6 @@ de "PDF" com <application>GTK+</application>
           </para>
           <indexterm zone="poppler libpoppler-glib">
             <primary sortas="c-libpoppler-glib">libpoppler-glib.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="libpoppler-qt5">
-        <term><filename class="libraryfile">libpoppler-qt5.so</filename></term>
-        <listitem>
-          <para>
-            é uma biblioteca invólucro usada para interfacear as funções de renderização
-de "PDF" com <application>Qt</application>5
-          </para>
-          <indexterm zone="poppler libpoppler-qt5">
-            <primary sortas="c-libpoppler-qt5">libpoppler-qt5.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

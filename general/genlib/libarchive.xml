@@ -6,10 +6,10 @@
 
   <!ENTITY libarchive-download-http "https://github.com/libarchive/libarchive/releases/download/v&libarchive-version;/libarchive-&libarchive-version;.tar.xz">
   <!ENTITY libarchive-download-ftp  "">
-  <!ENTITY libarchive-md5sum        "1bab4c1b443ecf4f23ff9881665e680a">
+  <!ENTITY libarchive-md5sum        "50c4dea9eba9a0add25ac1cfc9ba2cdb">
   <!ENTITY libarchive-size          "5,2 MB">
-  <!ENTITY libarchive-buildsize     "42 MB (adicionar 32 MB para os testes)">
-  <!ENTITY libarchive-time          "0,4UPC (adicionar 0,6UPC para os testes)">
+  <!ENTITY libarchive-buildsize     "43 MB (adicionar 32 MB para os testes)">
+  <!ENTITY libarchive-time          "0,4 UPC (adicionar 0,8 UPC para testes)">
 ]>
 
 <sect1 id="libarchive" xreflabel="libarchive-&libarchive-version;">
@@ -30,7 +30,7 @@
 para leitura/gravação de vários formatos de compressão.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -81,14 +81,10 @@ Additional Downloads</bridgehead>
 -->
 <bridgehead renderas="sect3">Dependências do libarchive</bridgehead>
 
-    <bridgehead renderas="sect4">Recomendadas</bridgehead>
-    <para role="recommended">
-      <xref linkend="libxml2"/>
-    </para>
-
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="lzo"/>, <xref linkend="nettle"/> e <xref linkend="pcre2"/>
+      <xref linkend="libxml2"/>, <xref linkend="lzo"/>, <xref linkend="nettle"/> e
+<xref linkend="pcre2"/>
     </para>
   </sect2>
 
@@ -100,12 +96,11 @@ Additional Downloads</bridgehead>
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-static --without-expat &amp;&amp;
+<screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>LC_ALL=C.UTF-8 make
-check</command>.
+      Para testar os resultados, emita: <command>make check</command>.
     </para>
 
     <para>
@@ -113,6 +108,29 @@ check</command>.
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
+
+    <para>
+      Ainda como o(a) usuário(a) &root;, crie um link simbólico de forma que nós
+consigamos usar <command>bsdunzip</command> como <command>unzip</command>,
+em vez de depender do pacote Unzip não mantido:
+    </para>
+
+<screen role="root"><userinput>ln -sfv bsdunzip /usr/bin/unzip</userinput></screen>
+
+    <note>
+      <para>
+        Conforme discutido em <xref linkend='locale-wrong-filename-encoding'/>, se o
+arquivamento Zip a ser extraído contiver qualquer arquivo com um nome
+contendo caracteres não latinos, você precisará especificar manualmente a
+codificação desses caracteres ou eles serão transformados em sequências
+ilegíveis no nome do arquivo extraído. Por exemplo, se um arquivamento Zip
+criado com o WinZip, <filename>archive.zip</filename>, contiver um arquivo
+nomeado com caracteres chineses simplificados, a codificação deverá ser
+CP936 e a opção <parameter>-I cp936</parameter> deverá ser usada. Ou seja, o
+comando para se extrair o arquivamento deverá ser <command>unzip -I cp936
+archive.zip</command>.
+      </para>
+    </note>
 
   </sect2>
 
@@ -122,26 +140,15 @@ check</command>.
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
-    
-    <!-- https://github.com/libarchive/libarchive/issues/2146 -->
-<para>
-      <parameter>--without-expat</parameter>: Essa chave desabilita usar expat
-para suporte ao formato xar. Devido a um defeito, o leitor xar circulará
-infinitamente se expat for usado. O fluxo de desenvolvimento prefere libxml2
-para suporte ao xar de qualquer maneira.
-    </para>
-
-    <!--
     <para>
-
-      <option>- -without-xml2</option>: This switch sets expat for xar archive
-      format support instead of preferred libxml2 if both packages are installed.
+      <option>--without-xml2</option>: Essa chave configura "expat" para suporte
+ao formato de arquivamento "xar" em vez do preferido "libxml2" se ambos os
+pacotes estiverem instalados.
     </para>
--->
-<para>
-      <option>--without-nettle</option>: Essa chave configura o "OpenSSL" para
-suporte de criptografia em vez do preferido "Nettle" se ambos os pacotes
-estiverem instalados.
+
+    <para>
+      <option>--with-nettle</option>: Essa chave configura Nettle para suporte a
+criptografia em vez do OpenSSL.
     </para>
 
   </sect2>

@@ -6,8 +6,8 @@
 
   <!ENTITY subversion-download-http "https://archive.apache.org/dist/subversion/subversion-&subversion-version;.tar.bz2">
   <!ENTITY subversion-download-ftp  "">
-  <!ENTITY subversion-md5sum        "19756a5ceb32a022698a66e48616ef6b">
-  <!ENTITY subversion-size          "8,2 MB">
+  <!ENTITY subversion-md5sum        "af6001dc7af2f1242a4f72e8a5c565d2">
+  <!ENTITY subversion-size          "8,3 MB">
   <!-- for 1.12.0                    1.12.2         1.13.0
        make javahl: 0.5 SBU  28 MB; not avail
        swig-pl:     0.8      42 MB; 0.7 SBU  43 MB; 0.6 SBU 44 MB
@@ -15,15 +15,14 @@
        swig-rb:     0.4      22 MB; 0.4      21 MB; 0.3     21 MB
        docs:        2 secs   26 MB; 2 sec    27 MB; 2 sec   26 MB
        tests       46 min  1104 MB  46:52  1103 MB  47 min   -->
-  <!ENTITY subversion-buildsize     "193 MB (adicionar 189 MB para ligações, 54 MB para documentos, 1,3 GB para
+  <!ENTITY subversion-buildsize     "260 MB (adicionar 189 MB para ligações, 54 MB para documentos, 1,3 GB para
 testes)">
-  <!ENTITY subversion-time          "0,5 UPC (Usando paralelismo=4; adicionar 2,0 UPC para ligações, 30 UPC para
+  <!ENTITY subversion-time          "1,5 UPC (Usando paralelismo=4; adicionar 2,0 UPC para ligações, 30 UPC para
 testes)">
 ]>
 
 <sect1 id="subversion" xreflabel="Subversion-&subversion-version;">
   <?dbhtml filename="subversion.html"?>
-
 
   <title>Subversion-&subversion-version;</title>
 
@@ -83,16 +82,6 @@ repositório é abordada em <xref linkend="svnserver"/>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Remendo exigido: <ulink
-url="&patch-root;/subversion-&subversion-version;-upstream_fixes-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
-
     <bridgehead renderas="sect3">Dependências do Subversion</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -102,34 +91,18 @@ url="&patch-root;/subversion-&subversion-version;-upstream_fixes-1.patch"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="serf"/> (para manusear &quot;URLs&quot; &quot;http://&quot; e
-&quot;https://&quot;)
+      <xref linkend="serf"/> (para manusear URLs http:// e https://) e <xref
+linkend="swig"/> (para regenerar o sistema de construção)
     </para>
 
-
-
-    <!-- support for berkeley db is deprecated since 1.8
-    <note>
-
-      <para>
-        If you require the <application>Berkeley DB</application> back-end hooks
-        in <application>Subversion</application> to build or support BDB based
-        repositories, you must have <application>APR-util</application> linked to
-        the <application>Berkeley DB</application> library.
-      </para>
-    </note>
--->
-<bridgehead renderas="sect4">Opcionais</bridgehead>
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--      <xref linkend="kdelibs"/>
- (for <ulink url="http://utils.kde.org/projects/kwalletmanager/">KWallet</ulink> support), -->
-<xref linkend="apache"/>, <xref linkend="boost"/>, <xref
+      <xref linkend="apache"/>, <xref linkend="boost"/>, <xref
 linkend="cyrus-sasl"/>, <xref linkend="dbus"/>, <xref linkend="doxygen"/>
 (para gerar documentação HTML), <xref linkend="gnome-keyring"/>, <xref
-linkend="libsecret"/>, <xref linkend="py3c"/> (para as ligações Python e
-testes), <xref linkend="python3"/> (com suporte sqlite para os testes),
-<xref linkend="ruby"/>, <xref linkend="swig"/> (para construir ligações
-Perl, Python e Ruby) e <ulink
+linkend="libsecret"/>, <xref linkend="py3c"/> (para as ligações Python, e
+testes), <xref linkend="python3"/> (com suporte a sqlite para os testes),
+<xref linkend="ruby"/>, <xref linkend="swig"/> e <ulink
 url="https://git.netsurf-browser.org/libutf8proc.git/">UTF8proc</ulink>
     </para>
 
@@ -147,50 +120,14 @@ url="https://junit.org/junit4/">JUnit 4</ulink> (para testar as ligações
   <sect2 role="installation">
     <title>Instalação do Subversion</title>
 
-
-    <!--
-      <note>
-
-        <para>
-          This package may fail during the make phase when using multiple
-          processors.  If this occurs try continuing with
-          <emphasis>make -j1</emphasis> or redo the entire build process with
-          fresh sources using <emphasis>-j1</emphasis>.
-        </para>
-      </note>
--->
-<para>
-      Primeiro, adapte alguns &quot;scripts&quot; &quot;Python&quot; para usar
-&quot;python3&quot;:
-    </para>
-
-<screen><userinput remap="pre">grep -rl '^#!.*python$' | xargs sed -i '1s/python/&amp;3/'</userinput></screen>
-
-    <para>
-      A seguir, corrija construir esse pacote com GCC 14:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../subversion-&subversion-version;-upstream_fixes-1.patch</userinput></screen>
-
-    <para>
-      Depois de modificar as ligações SWIG como nós fizemos com o remendo, o
-sistema de construção precisa ser regenerado de forma que as ligações
-absorvam as mudanças:
-    </para>
-
-<screen><userinput remap="pre">touch build/generator/swig/*.py &amp;&amp;
-mv -v build-outputs.mk{,.old}   &amp;&amp;
-./autogen.sh --release</userinput></screen>
-
     <para>
       Instale <application>Subversion</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>PYTHON=python3                        \
-./configure --prefix=/usr             \
-            --disable-static          \
-            --with-apache-libexecdir  \
+<screen><userinput>./configure --prefix=/usr            \
+            --disable-static         \
+            --with-apache-libexecdir \
             --with-utf8proc=internal &amp;&amp;
 make</userinput></screen>
 
@@ -215,6 +152,7 @@ do &quot;JUnit&quot; não mais está incluído em &quot;<xref
 linkend="apache-ant"/>&quot; e precisa ser baixado separadamente. Para
 construir as ligações &quot;Java&quot;, emita o seguinte comando:
     </para>
+
     <para>
       <screen><command>make -j1 javahl</command></screen>
     </para>
@@ -225,21 +163,22 @@ construir as ligações &quot;Java&quot;, emita o seguinte comando:
 &quot;<application>Ruby</application>&quot;, [então] emita algum dos
 seguintes comandos:
     </para>
-    <para>
-      <screen><command>make swig-pl</command> # para <application>Perl</application>
+
+<screen><command>make swig-pl</command> # para <application>Perl</application>
 <command>make swig-py \
      swig_pydir=/usr/lib/python&python3-majorver;/site-packages/libsvn \
      swig_pydir_extra=/usr/lib/python&python3-majorver;/site-packages/svn</command> # para <application>Python</application>
 <command>make swig-rb</command> # para <application>Ruby</application></screen>
-    </para>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>. Quatro
-testes nas suítes <filename>commit_tests.py</filename>,
-<filename>prop_tests.py</filename> e <filename>update_tests.py</filename>
-são conhecidos por falharem. Devido às mudanças no Python-3.12, você pode
-esperar ver cerca de 200 avisos de sintaxe durante a suíte de teste devido a
-sequências inválidas de escape.
+      <!-- Four tests in
+      the <filename>
+commit_tests.py</filename>,
+      <filename>prop_tests.py</filename>, and
+      <filename>update_tests.py</filename> suites are known to fail. Due to
+      changes in Python-3.12, you can expect to see around 200 Syntax Warnings
+      during the test suite due to invalid escape sequences.-->
+Para testar os resultados, emita: <command>make check</command>. 
     </para>
 
     <para>

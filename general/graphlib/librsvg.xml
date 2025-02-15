@@ -6,10 +6,10 @@
 
   <!ENTITY librsvg-download-http "&gnome-download-http;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
   <!ENTITY librsvg-download-ftp  "">
-  <!ENTITY librsvg-md5sum        "8f954b5c25ffff602b4e62813c98c8c9">
-  <!ENTITY librsvg-size          "5,9 MB">
-  <!ENTITY librsvg-buildsize     "723 MB (17 MB instalado), adicionar 545 MB para testes">
-  <!ENTITY librsvg-time          "0,7 UPC (adicionar 0,7 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY librsvg-md5sum        "6d495c8bb2ee0cb0a62856c790a67298">
+  <!ENTITY librsvg-size          "6,3 MB">
+  <!ENTITY librsvg-buildsize     "1,2 GB (17 MB instalado), adicionar 492 MB para testes">
+  <!ENTITY librsvg-time          "0,6 UPC (adicionar 0,4 UPC para testes; ambos usando paralelismo=4)">
 ]>
 
 <sect1 id="librsvg" xreflabel="librsvg-&librsvg-version;">
@@ -71,8 +71,8 @@ Vector Graphic" ("SVG").
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cairo"/>, <xref linkend="gdk-pixbuf"/>, <xref
-linkend="pango"/> e <xref linkend="rust"/>
+      <xref linkend="cairo"/>, <xref linkend="cargo-c"/>, <xref
+linkend="gdk-pixbuf"/>, <xref linkend="pango"/> e <xref linkend="rust"/>
     </para>
 
     &build-use-internet;
@@ -95,21 +95,28 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
     <title>Instalação do librsvg</title>
 
     <para>
+      Primeiro, corrija o caminho de instalação da documentação da API:
+    </para>
+
+<screen><userinput>sed -e "/OUTDIR/s|,| / 'librsvg-&librsvg-version;', '--no-namespace-dir',|" \
+    -e '/output/s|Rsvg-2.0|librsvg-&librsvg-version;|'                      \
+    -i doc/meson.build</userinput></screen>
+
+    <para>
       Instale <application>librsvg</application> executando os seguintes comandos:
     </para>
 
-<!-- With some locales (zh_CN.UTF-8) 31 tests fail.  With LC_ALL=C only
-         one failure.
-         https://gitlab.gnome.org/GNOME/librsvg/-/issues/1021 -->
 <!-- Be sure to unset GLIB_LOG_LEVEL.  If set, it interferes with the 
-         tests. -->
-<screen><userinput>./configure --prefix=/usr   \
-            --enable-vala    \
-            --disable-static \
-            --docdir=/usr/share/doc/librsvg-&librsvg-version; &amp;&amp;
-make</userinput></screen>
+         tests. 
 
-    
+         With 2.59.1 one test of 5 fails. (I cannot see any failures here,
+         but using rustc-1.82.0.)
+     -->
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+ninja</userinput></screen>
 
     
 
@@ -117,72 +124,75 @@ make</userinput></screen>
       Para testar os resultados, emita:
     </para>
 
-    <screen remap='test'><userinput>cargo update --precise 0.3.36 time &amp;&amp;
-LC_ALL=C make check -k</userinput></screen>
+    <screen remap='test'><userinput>ninja test</userinput></screen>
 
     <para>
-      Todos os 68 testes deveriam passar.
+      Um teste, Rust tests (rsvg), é conhecido por falhar.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>make DOC_INSTALL_DIR='$(docdir)' install</userinput></screen>
-
+<!--
     <note>
+
       <para>
-        Se você instalou o pacote em seu sistema usando um método
-<quote>DESTDIR</quote>, [então] um arquivo importante não foi instalado e
-deveria ser copiado e(ou) gerado. Gere-o usando o seguinte comando como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+        If you installed the package on to your system using a
+        <quote>DESTDIR</quote> method, an important file was not installed and
+        should be copied and/or generated. Generate it using the following
+        command as the <systemitem class="username">root</systemitem> user:
       </para>
 
-<screen role="root"><userinput>gdk-pixbuf-query-loaders --update-cache</userinput></screen>
+<screen role="root"><userinput>gdk-pixbuf-query-loaders - -update-cache</userinput></screen>
     </note>
+-->
+<screen role="root"><userinput>ninja install</userinput></screen>
 
 
   </sect2>
 
+  <!--
   <sect2 role="commands">
-    <title>Explicações do Comando</title>
+
+    <title>Command Explanations</title>
 
     <para>
-      <parameter>--enable-vala</parameter>: Essa chave habilita a construção das
-ligações "Vala". Remova essa chave se você não tiver <xref linkend="vala"/>
-instalado.
+      <parameter>- -enable-vala</parameter>: This switch enables
+      building of the Vala bindings. Remove this switch if you don't have
+      <xref linkend="vala"/> installed.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
     <para>
-      <parameter>DOC_INSTALL_DIR='$(docdir)'</parameter>: Essa substituição
-garante instalar a documentação da API no local esperado se <xref
-linkend='gi-docgen'/> estiver instalado.
+      <parameter>DOC_INSTALL_DIR='$(docdir)'</parameter>: This override
+      ensures installing the API documentation into the expected location
+      if <xref linkend='gi-docgen'/> is installed.
     </para>
 
     <para>
-      <command>cargo update --precise=0.3.36 time</command>: Isso atualiza o
-arquivo <filename>Cargo.lock</filename> para se referir à versão 0.3.36 da
-caixa de tempo para a suíte de teste. Originalmente, ele se refere à versão
-0.3.34, que falha para construir com Rustc-1.80.0 ou posterior.
+      <command>cargo update - -precise=0.3.36 time</command>: This updates
+      the <filename>Cargo.lock</filename> file to refer to version 0.3.36
+      of the time crate for the test suite.  Originally it refers to
+      version 0.3.34, which fails to build with Rustc-1.80.0 or later.
     </para>
 
     <para>
-      <option>--disable-introspection</option>: Use essa chave se você não tiver
-instalado <application>Gobject Introspection</application>.
+      <option>- -disable-introspection</option>: Use this switch if you have
+      not installed <application>Gobject Introspection</application>.
     </para>
 
     <para>
-      <option>--disable-gtk-doc</option>: Essa chave evita construir a
-documentação da API, mesmo se <xref linkend="gi-docgen"/> (apesar do nome da
-opção) estiver disponível.
+      <option>- -disable-gtk-doc</option>: This switch prevents building
+      the API documentation, even if <xref linkend="gi-docgen"/> (despite
+      the name of the option) is available.
     </para>
 
   </sect2>
-
-  <sect2 role="content">
+-->
+<sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>
@@ -199,10 +209,7 @@ opção) estiver disponível.
 /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders)
         </seg>
         <seg>
-          <!--      /usr/share/gtk-doc/html/rsvg-2.0 not built with
-               current instructions (needs gi-docgen)-->
-/usr/include/librsvg-2.0 e /usr/share/doc/librsvg-&librsvg-version;
-
+          /usr/include/librsvg-2.0 e /usr/share/doc/librsvg-&librsvg-version;
         </seg>
       </seglistitem>
     </segmentedlist>

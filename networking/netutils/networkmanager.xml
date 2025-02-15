@@ -7,8 +7,8 @@
   <!ENTITY NetworkManager-download-http
 "&gnome-download-http;/NetworkManager/&NetworkManager-minor;/NetworkManager-&NetworkManager-version;.tar.xz">
   <!ENTITY NetworkManager-download-ftp  "">
-  <!ENTITY NetworkManager-md5sum        "716942df6afa53f8dad0902f4a3497b4">
-  <!ENTITY NetworkManager-size          "5,8 MB">
+  <!ENTITY NetworkManager-md5sum        "3a95e6ddade18d9a1abb0b86d2b14a36">
+  <!ENTITY NetworkManager-size          "5,9 MB">
   <!ENTITY NetworkManager-buildsize     "299 MB (com testes e documentação)">
   <!ENTITY NetworkManager-time          "0,9 UPC (com testes, usando paralelismo=4)">
 ]>
@@ -108,10 +108,10 @@ construído com suporte a D-Bus)
 <xref linkend="bluez"/>, <xref linkend="dbus-python"/> (para a suíte de
 teste), <xref linkend="gnutls"/> (pode ser usado em vez de <xref
 linkend="nss"/>), <xref linkend="gtk-doc"/>, <xref linkend="jansson"/>,
-<xref linkend="ModemManager"/>, <xref linkend="qt5-components"/> com qtdoc
-(para exemplos), <xref linkend="upower"/>, <xref linkend="valgrind"/>,
-<ulink url="https://thekelleys.org.uk/dnsmasq/doc.html">dnsmasq</ulink>,
-<ulink url="https://firewalld.org/">firewalld</ulink>, <ulink
+<xref linkend="ModemManager"/>, <xref linkend="upower"/>, <xref
+linkend="valgrind"/>, <ulink
+url="https://thekelleys.org.uk/dnsmasq/doc.html">dnsmasq</ulink>, <ulink
+url="https://firewalld.org/">firewalld</ulink>, <ulink
 url="https://github.com/Distrotech/libaudit">libaudit</ulink>, <ulink
 url="https://github.com/jpirko/libteam">libteam</ulink>, <ulink
 url="&gnome-download-http;/mobile-broadband-provider-info/">mobile-broadband-provider-info</ulink>,
@@ -157,28 +157,6 @@ se necessário:
     <title>Instalação do NetworkManager</title>
 
     <para>
-      Se <xref linkend="qt5-components"/> estiver instalado e os exemplos baseados
-em Qt forem desejados, corrija dois arquivos meson.build:
-    </para>
-
-<!--
-    <para>
-
-      Fix a missing meson.build file for initrd hooks (not used in BLFS):
-    </para>
-
-<screen><userinput>sed '/initrd/d' -i src/core/meson.build</userinput></screen>
--->
-<screen><userinput>sed -e 's/-qt4/-qt5/'             \
-    -e 's/moc_location/host_bins/' \
-    -i examples/C/qt/meson.build   &amp;&amp;
-
-sed -e 's/Qt/&amp;5/'                  \
-    -i meson.build</userinput></screen>
-
-
-
-    <para>
       Corrija os conjuntos sequenciais de comandos &quot;Python&quot;, de forma
 que eles usem &quot;<application>Python 3</application>&quot;:
     </para>
@@ -193,7 +171,6 @@ comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-CXXFLAGS+="-O2 -fPIC"             \
 meson setup ..                    \
       --prefix=/usr               \
       --buildtype=release         \
@@ -212,7 +189,6 @@ ninja</userinput></screen>
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-CXXFLAGS+="-O2 -fPIC"             \
 meson setup ..                    \
       --prefix=/usr               \
       --buildtype=release         \
@@ -270,10 +246,6 @@ pré gerada também pode ser instalada com (como o(a) usuário(a) &root;):
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <envar>CXXFLAGS="-O2 -fPIC"</envar>: Essas opções do compilador são
-necessárias para construir exemplos baseados em &quot;Qt5&quot;.
-    </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
@@ -336,9 +308,8 @@ SELinux, vez que ele(a) não é usado(a) no BLFS.
     </para>
 
     <para>
-      <parameter>-D qt=false</parameter>: Essa chave desabilita os exemplos
-<application>QT</application>. Omita se você tiver o
-<application>Qt</application> disponível e desejar instalar os exemplos.
+      <parameter>-D qt=false</parameter>: Essa chave desabilita os exemplos do
+<application>Qt 5</application>.
     </para>
 
     <para>

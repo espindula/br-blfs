@@ -38,14 +38,14 @@ configuração mais simples, mas torna mais difícil testar múltiplas versões
 do <application>KDE Frameworks</application>.
     </para>
 
-<screen><userinput>export KF6_PREFIX=/usr</userinput></screen>
+<screen role="nodump"><userinput>export KF6_PREFIX=/usr</userinput></screen>
 
     <para>
       É uma boa ideia adicionar as seguintes variáveis aos teus perfis de sistema
 ou pessoal:
     </para>
 
-<screen role="root"><userinput>cat &gt;&gt; /etc/profile.d/qt6.sh &lt;&lt; "EOF"
+<screen role="nodump"><userinput>cat &gt;&gt; /etc/profile.d/qt6.sh &lt;&lt; "EOF"
 <literal># Begin kf6 extension for /etc/profile.d/qt6.sh
 
 pathappend /usr/lib/plugins        QT_PLUGIN_PATH
@@ -111,7 +111,8 @@ mudanças adicionais de configuração. A melhor prática é a de adicioná-las 
 teu perfil de sistema ou pessoal:
     </para>
 
-<screen role="root"><userinput>cat &gt; /etc/profile.d/kf6.sh &lt;&lt; "EOF"
+<screen role="root"><!-- Don't set MANPATH, see why on the bash startup files page -->
+<userinput>cat &gt; /etc/profile.d/kf6.sh &lt;&lt; "EOF"
 <literal># Begin /etc/profile.d/kf6.sh
 
 export KF6_PREFIX=/opt/kf6
@@ -128,8 +129,6 @@ pathappend $KF6_PREFIX/lib/plugins/kcms QT_PLUGIN_PATH
 pathappend $KF6_PREFIX/lib/qml          QML2_IMPORT_PATH
 
 pathappend $KF6_PREFIX/lib/python&python3-majorver;/site-packages PYTHONPATH
-
-pathappend $KF6_PREFIX/share/man        MANPATH
 
 pathappend $KF6_PREFIX/include          CPLUS_INCLUDE_PATH
 # End /etc/profile.d/kf6.sh</literal>

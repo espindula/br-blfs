@@ -34,7 +34,7 @@ que você pode agendar via "cron" para coletar e historizar dados de
 desempenho e atividades.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -70,9 +70,9 @@ desempenho e atividades.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do "Sysstat"</bridgehead>
+    <bridgehead renderas="sect3" revision="sysv">Dependências do "Sysstat"</bridgehead>
 
-    <para role="recommended">
+    <para role="recommended" revision="sysv">
       Não existem requisitos de tempo de construção para esse pacote; entretanto,
 ele foi projetado para ser controlado por um processo de segundo plano
 "cron", como o <xref linkend="fcron" role="runtime"/>.
@@ -105,8 +105,9 @@ make</userinput></screen>
 <screen role="root"><userinput>make install</userinput></screen>
 
     <para revision="systemd">
-      Instale a unidade do "systemd" executando os seguintes comandos como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+      Instale as unidades e temporizadores do systemd executando os seguintes
+comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root" revision="systemd"><userinput>install -v -m644 sysstat.service /usr/lib/systemd/system/sysstat.service                      &amp;&amp;
@@ -118,7 +119,7 @@ install -v -m644 cron/sysstat-summary.service /usr/lib/systemd/system/sysstat-su
 install -v -m644 cron/sysstat-summary.timer /usr/lib/systemd/system/sysstat-summary.timer</userinput></screen>
 
     <para revision="systemd">
-      Corrija a unidade do "systemd" executando o seguinte comando como o(a)
+      Corrija uma das unidades do systemd executando o seguinte comando como o(a)
 usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
@@ -184,7 +185,7 @@ quantidade de arquivos de dados mantidos no sistema.
 
     </sect3>
 
-    <sect3>
+    <sect3 revision="sysv">
      <title>Informações do "cron"</title>
 
       <para>
@@ -229,26 +230,31 @@ para atender às suas necessidades. Use <command>man sa1</command> e
       </indexterm>
 
       <para revision="sysv">
-        Na inicialização do sistema, uma mensagem "LINUX RESTART" precisa ser
-inserida no arquivo de dados diários para reinicializar os contadores do
-núcleo. Isso pode ser automatizado instalando o script de iniciação
-<filename>/etc/rc.d/init.d/sysstat</filename> incluído no pacote <xref
-linkend="bootscripts"/> usando o seguinte comando como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
+        Na inicialização do sistema, uma mensagem LINUX RESTART precisa ser inserida
+no arquivo diário de dados para reinicializar os contadores do núcleo. Isso
+pode ser automatizado instalando-se o conjunto de comandos sequenciais de
+iniciação <filename>/etc/rc.d/init.d/sysstat</filename> incluído no pacote
+<xref linkend="bootscripts"/> usando-se o seguinte comando como o(a)
+usuário(a) <systemitem class="username">root</systemitem>:
       </para>
 
 <screen role="root" revision="sysv"><userinput>make install-sysstat</userinput></screen>
 
       <para revision="systemd">
-        Na inicialização do sistema, uma mensagem "LINUX RESTART" precisa ser
-inserida no arquivo de dados diários para reinicializar os contadores do
-núcleo. Isso pode ser automatizado habilitando a unidade do "systemd"
-instalada anteriormente executando o seguinte comando como o(a) usuário(a)
+        Na inicialização do sistema, uma mensagem LINUX RESTART precisa ser inserida
+no arquivo diário de dados para reinicializar os contadores do núcleo. Isso
+pode ser automatizado habilitando-se a unidade do systemd instalada
+anteriormente executando-se o seguinte comando como o(a) usuário(a)
 <systemitem class="username">root</systemitem>:
       </para>
 
 <screen role="root" revision="systemd"><userinput>systemctl enable sysstat</userinput></screen>
 
+      <para revision="systemd">
+        Além de colocar a mensagem LINUX RESTART no arquivo diário de dados, existem
+temporizadores do systemd instalados que capturarão automaticamente as
+informações exigidas de histórico para o comando <command>sar</command>.
+      </para>
     </sect3>
 
   </sect2>

@@ -6,11 +6,11 @@
 
   <!ENTITY gtk4-download-http "&gnome-download-http;/gtk/&gtk4-minor;/gtk-&gtk4-version;.tar.xz">
   <!ENTITY gtk4-download-ftp  "">
-  <!ENTITY gtk4-md5sum        "4d7c8edbdd0aed4048053ca9f805ade4">
-  <!ENTITY gtk4-size          "17 MB">
-  <!ENTITY gtk4-buildsize     "711 MB (com documentos; adicionar 66 MB para testes)">
-  <!ENTITY gtk4-time          "1,3 UPC (usando paralelismo=4; com documentos; adicionar 1,3 UPC para
-testes)">
+  <!ENTITY gtk4-md5sum        "0f2b154a0b05e4ca94a05aaeb7e1f3fb">
+  <!ENTITY gtk4-size          "18 MB">
+  <!ENTITY gtk4-buildsize     "1,1 GB (com documentos; adicionar 157 MB para testes)">
+  <!ENTITY gtk4-time          "1,7 UPC (usando paralelismo=4; com documentos; adicionar 1,1 UPC para testes
+ou 3,7 UPC para NVIDIA)">
 ]>
 
 <sect1 id="gtk4" xreflabel="GTK-&gtk4-version;">
@@ -66,6 +66,17 @@ usadas para criar interfaces gráficas de usuário(a) para aplicativos.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo recomendado (para corrigir a quebra de desserialização do espaço de
+cores de PNG com libpng-1.6.45 ou posterior): <ulink
+url="&patch-root;/gtk-&gtk4-version;-libpng_1_6_45-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do &quot;GTK 4&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -81,10 +92,10 @@ linkend="wayland-protocols"/>
     <para role="recommended">
       <xref linkend="adwaita-icon-theme"/> (padrão para algumas chaves de
 configurações do gtk4), <xref linkend="gst10-plugins-bad"/>, <xref
-role='runtime' linkend="gst10-plugins-good"/> (tempo de execução, construído
-com <xref role='nodep' linkend='libvpx'/>), <xref
-linkend="hicolor-icon-theme"/> (necessário para testes e para padrões) e
-<xref linkend="librsvg"/>
+linkend="glslc"/>, <xref role='runtime' linkend="gst10-plugins-good"/>
+(tempo de execução, construído com <xref role='nodep' linkend='libvpx'/>),
+<xref linkend="hicolor-icon-theme"/> (necessário para testes e para
+padrões), <xref linkend="librsvg"/> e <xref linkend="vulkan-loader"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas (Exigidas se construir o &quot;GNOME&quot;)</bridgehead>
@@ -94,24 +105,29 @@ linkend="hicolor-icon-theme"/> (necessário para testes e para padrões) e
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--<ulink url="https://vulkan.lunarg.com/sdk/home">
-vulkan</ulink>-->
-<xref linkend="colord"/>, <xref linkend="cups"/>, <xref
-linkend="docutils"/>, <xref linkend="gi-docgen"/>, <xref role="runtime"
-linkend="highlight"/> (tempo de execução, usado somente por
-<command>gtk4-demo</command> para realce de sintaxe de código fonte de
-demostração), <xref linkend="libcloudproviders"/>, <xref linkend="sassc"/>,
-<xref linkend="tracker3"/>, <xref linkend="vulkan-loader"/>, <ulink
+      <xref linkend="avahi"/> (para alguns testes), <xref linkend="colord"/>,
+<xref linkend="cups"/>, <xref linkend="docutils"/>, <xref
+linkend="gi-docgen"/>, <xref role="runtime" linkend="highlight"/> (tempo de
+execução, usado somente por <command>gtk4-demo</command> para realce de
+sintaxe de código fonte de demonstração), <xref
+linkend="libcloudproviders"/>, <xref linkend="sassc"/>, <xref
+linkend="tinysparql"/>, <ulink
 url="https://github.com/OpenPrinting/cpdb-libs">cpdb</ulink>, <ulink
-url="https://github.com/google/shaderc">glslc</ulink> e <ulink
-url="&sysprof-url;">sysprof</ulink>
-      
+url="https://pypi.org/project/pydbus/">pydbus</ulink> (para alguns testes) e
+<ulink url="&sysprof-url;">sysprof</ulink>
     </para>
 
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do GTK 4</title>
+
+    <para>
+      Corrija a quebra de desserialização do espaço de cores de PNG com
+libpng-1.6.45 ou posterior:
+    </para>
+
+    <screen><userinput>patch -Np1 -i ../gtk-&gtk4-version;-libpng_1_6_45-1.patch</userinput></screen>
 
     <para>
       Instale o &quot;<application>GTK 4</application>&quot; executando os
@@ -125,7 +141,7 @@ meson setup --prefix=/usr            \
             --buildtype=release      \
             -D broadway-backend=true \
             -D introspection=enabled \
-            -D vulkan=disabled       \
+            -D vulkan=enabled        \
             .. &amp;&amp;
 ninja</userinput></screen>
 
@@ -139,44 +155,53 @@ meson configure -D documentation=true                            &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para executar os testes, emita: <command>dbus-run-session meson test --setup
-x11</command>. Se você estiver em uma sessão do Wayland, substitua x11 por
-wayland. Nove testes são conhecidos por falharem se as <ulink
-url="https://gitlab.gnome.org/GNOME/cantarell-fonts">fontes Cantrell</ulink>
-não estiverem instaladas. Muitos testes falharão se
-<filename>~/.config/gtk-4.0/settings.ini</filename> existir e a linha
-gtk-modules não estiver comentada. Em sistemas com placas gráficas NVIDIA,
-os testes possivelmente demorem significativamente mais que o tempo de teste
-acima.
+      Para executar os testes, emita:
+    </para>
+
+    <screen remap='test'><userinput>env -u{GALLIUM_DRIVER,MESA_LOADER_DRIVER_OVERRIDE}          \
+    LIBGL_ALWAYS_SOFTWARE=1 VK_LOADER_DRIVERS_SELECT='lvp*' \
+    dbus-run-session meson test --setup x11                 \
+                                --no-suite={headless,needs-udmabuf}</userinput></screen>
+
+    <para>
+      <!--
+      On some systems as many as 212 tests may fail (out of over 6100) for 
+      unknown reasons.
+
+      I hope this is gone with LIBGL_ALWAYS_SOFTWARE and -\-no-suite dmabuf.
+      If not please restore them.  - xry111
+      -->
+Se você estiver em uma sessão do Wayland, substitua a ocorrência de
+<literal>x11</literal> por <literal>wayland</literal>. Muitos testes
+falharão se <filename>~/.config/gtk-4.0/settings.ini</filename> existir e a
+linha gtk-modules não estiver comentada. Vários outros testes possivelmente
+falhem por motivo desconhecido. Em sistemas com placas de vídeo NVIDIA, os
+testes possivelmente levem significativamente mais tempo.
+      
     </para>
 
 
-    <!-- [pierre]: 4.6.0, wayland: 727 ok; 2 Expected Fail;  1 Fail; 1 Skipped
-     [bdubbs]: 4.6.3, x11,     724 OK, 2 Expected Fail, 12 Fail. 1 Skipped
-     [pierre]: 4.6.6, wayland, 738 OK, 2 Expected Fail,  1 Fail. 1 Skipped
-     [pierre]: 4.6.7, wayland, 737 OK, 2 Expected Fail,  1 Fail. 1 Skipped. 1 Timeout
-     [bdubbs]: 4.6.7, x11,     758 OK, 2 Expected Fail,  9 Fail. 1 Skipped. 1 Timeout
-     [pierre]: 4.8.1, wayland, 765 OK, 2 Expected Fail,  2 Fail. 1 Skipped
-     [bdubbs]: 4.8.2, x11,     753 OK, 2 Expected Fail, 14 Fail. 1 Skipped
-     [pierre]: 4.8.3, wayland, 760 OK, 2 Expected Fail,  5 Fail. 3 Skipped
-     [bdubbs]: 4.10.0, x11,    701 OK, 0 Expected Fail, 15 Fail. 1 Skipped, 2 Timeout
-               above over ssh
-     [bdubbs]: 4.10.0, x11,    712 OK, 0 Expected Fail,  6 Fail. 1 Skipped, 0 Timeout
-               above on native x11
-     [bdubbs]: 4.12.0, x11,   1453 OK, 0 Expected Fail,  9 Fail. 5 Skipped, 0 Timeout
-               above on native x11
-     [bdubbs]: 4.12.1, x11,   1455 OK, 0 Expected Fail,  7 Fail. 5 Skipped, 0 Timeout
-               above on native x11
-     [renodr]: 4.12.4, x11,   1535 OK, 0 Expected Fail,  8 Fail, 5 Skipped, 0 Timeout
-               above on native X11
-     [rahul]: 4.14.1, wayland,   4174 OK, 0 Expected Fail,  81 Fail, 2 Skipped, 0 Timeout
-               above on native wayland (Plasma 6)
-     [renodr]: 4.14.2, wayland,  4211 OK, 0 Expected Fail, 43 Fail, 2 Skipped, 0 Timeout
+    <!-- [bdubbs]: 4.16.0, x11,     5896 OK, 0 Expected Fail, 212 Fail, 16 Skipped, 0 Timeout
+               above on X11 in XFCE.  Over ssh there were 24 Timeouts
+     [xry111]: 4.16.1, x11,     6121 OK, 0 Expected Fail, 14 Fail, 16 Skipped, 0 Timeout
+               above on X11 (Xwayland) in GNOME
+     [xry111]: 4.16.1, wayland, 6120 OK, 0 Expected Fail, 15 Fail, 16 Skipped, 0 Timeout
                above on wayland in GNOME
-     [renodr]: 4.14.3, wayland,  4250 OK, 0 Expected Fail, 42 Fail, 2 Skipped, 0 Timeout
-               above on wayland in GNOME
-    [renodr]: 4.14.5, x11,   4252 OK, 0 Expected Fail, 37 Fail, 13 Skipped, 0 Timeout
-               above on X11 in IceWM
+     [xry111]: 4.16.1, x11,     6119 OK, 0 Expected Fail, 16 Fail, 16 Skipped, 0 Timeout
+               above on X11 (Xwayland) in Weston
+     [xry111]: 4.16.1, x11,     6106 OK, 0 Expected Fail, 18 Fail, 25 Skipped, 2 Timeout
+               above on wayland in Weston
+     [bdubbs]: 4.16.1, x11,     5909 OK, 0 Expected Fail, 203 Fail, 16 Skipped, 26 Timeout
+               Over ssh there were 26 Timeouts.
+               On a direct xfce run (same system) I now get 204 fail and 10 Timeouts. 
+     [bdubbs]: 4.16.5, x11,     5940 OK, 0 Expected Fail, 197 Fail, 16 Skipped, 0 Timeout
+               Over ssh there were 28 Timeouts.
+     [zeckma]: 4.16.7, wayland, 5991 OK, 0 Expected Fail, 190 Fail, 2 Skipped, 1 Timeout
+               above on wayland in Hyprland
+     [xry111]: 4.16.12, wayland,     6201 OK, 0 Expected Fail, 8 Fail, 2 Skipped
+               above on wayland in Weston
+     [xry111]: 4.16.12, wayland,     6186 OK, 0 Expected Fail, 9 Fail, 16 Skipped
+               above on X11 (Xwayland) in Weston
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -212,7 +237,7 @@ arquivos.
 
     <para>
       <option>-D tracker=enabled</option>: Use essa chave se você tiver o <xref
-linkend="tracker3"/> instalado e desejar usar a funcionalidade de pesquisa
+linkend="tinysparql"/> instalado e desejar usar a funcionalidade de pesquisa
 ao executar um seletor de arquivos.
     </para>
 
@@ -234,13 +259,36 @@ de rastreamento para aplicativos baseados em GTK4.
     </para>
 
     <para>
-      <option>-D vulkan=enabled</option>: Use essa chave se você tiver <xref
-linkend="vulkan-loader"/> instalado e desejar construir a estrutura de
-retaguarda experimental do Vulkan. Observe que você precisa ter o <ulink
-url="https://github.com/google/shaderc/blob/main/downloads.md">glslc</ulink>
-instalado se decidir habilitar essa opção.
+      <option>-D vulkan=disabled</option>: Use essa chave em vez de <parameter>-D
+vulkan=enabled</parameter> se você não tiver <xref linkend="vulkan-loader"/>
+ou <xref linkend="glslc"/> instalado. Ela desabilitará a estrutura de
+retaguarda do Vulkan que o fluxo de desenvolvimento prefere usar em
+ambientes gráficos baseados em Wayland.
     </para>
 
+    <para>
+      <envar>LIBGL_ALWAYS_SOFTWARE=1</envar> e
+<envar>VK_LOADER_DRIVERS_SELECT='lvp*'</envar>: Força a suíte de teste a
+usar o controlador Gallium softpipe ou llvmpipe e o controlador Vulkan
+lavapipe originário do Mesa. A suíte de teste é tão sensível que as pequenas
+diferenças causadas por um controlador Mesa diferente podem deflagrar falhas
+de teste.
+    </para>
+
+    <para>
+      <command>env -u{GALLIUM_DRIVER,MESA_LOADER_DRIVER_OVERRIDE}</command>:
+Desconfigura variáveis que possam conflitar com
+<envar>LIBGL_ALWAYS_SOFTWARE=1</envar>.
+    </para>
+
+    <para>
+      <parameter>--no-suite={headless,needs-udmabuf}</parameter>: Desabilita os
+testes que exigem a dependência externa pydbus e os testes que exigem o nó
+do dispositivo <filename class='devicefile'>/dev/udmabuf</filename>. O nó do
+dispositivo não existe se o recurso não estiver habilitado na configuração
+do núcleo<phrase revision='sysv'>e, mesmo que exista, não pode ser acessado
+como usuários(as) sem privilégios</phrase>.
+    </para>
   </sect2>
 
   <sect2 role="configuration">

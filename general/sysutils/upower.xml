@@ -6,10 +6,10 @@
 
   <!ENTITY upower-download-http "https://gitlab.freedesktop.org/upower/upower/-/archive/v&upower-version;/upower-v&upower-version;.tar.bz2">
   <!ENTITY upower-download-ftp  "">
-  <!ENTITY upower-md5sum        "2399845217a9c6e4510f66033fcd7cf6">
-  <!ENTITY upower-size          "140 KB">
-  <!ENTITY upower-buildsize     "5,5 MB (adicionar 2,6 MB para os testes)">
-  <!ENTITY upower-time          "menos que 0,1 UPC (adicionar 0,6 UPC para testes)">
+  <!ENTITY upower-md5sum        "d5eeb9af086f696bb55bb979a7fb06ca">
+  <!ENTITY upower-size          "149 KB">
+  <!ENTITY upower-buildsize     "5,9 MB (adicionar 2,7 MB para os testes)">
+  <!ENTITY upower-time          "menos que 0,1 UPC (adicionar 0,5 UPC para testes)">
 ]>
 
 <sect1 id="upower" xreflabel="UPower-&upower-version;">
@@ -29,8 +29,8 @@
       O pacote <application>UPower</application> fornece uma interface para
 enumerar dispositivos de eletricidade, ouvir eventos de dispositivos e
 consultar histórico e estatísticas. Qualquer aplicativo ou serviço no
-sistema pode acessar o serviço org.freedesktop.UPower por meio do barramento
-de mensagens do sistema.
+sistema consegue acessar o serviço org.freedesktop.UPower por meio do
+barramento de mensagens do sistema.
     </para>
 
     &lfs122_checked;
@@ -69,7 +69,21 @@ de mensagens do sistema.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do "UPower"</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/upower-&upower-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do "UPower"</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -115,7 +129,17 @@ se necessário:
   <sect2 role="installation">
     <title>Instalação do "UPower"</title>
 
+
+
+    <!--
     <para>
+
+      First, apply some fixes made upstream:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../upower-&upower-version;-upstream_fixes-1.patch</userinput></screen>
+-->
+<para>
       Instale <application>UPower</application> executando os seguintes comandos:
     </para>
 
@@ -152,8 +176,9 @@ meson setup ..                   \
       -D udevrulesdir=/usr/lib/udev/rules.d &amp;&amp;
 ninja</userinput></screen>
 
-<screen revision="systemd"><userinput>mkdir build                         &amp;&amp;
-cd    build                         &amp;&amp;
+<screen revision="systemd"><userinput>mkdir build               &amp;&amp;
+cd    build               &amp;&amp;
+
 meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
@@ -219,22 +244,13 @@ sistema de construção onde instalar as regras do
     <title>Conteúdo</title>
 
     <segmentedlist>
-      <segtitle><!--
-See below... <phrase revision="systemd">
-s</phrase>-->
-Aplicativo Instalado</segtitle>
+      <segtitle>Aplicativos Instalados</segtitle>
       <segtitle>Bibliotecas Instaladas</segtitle>
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
         <seg>
-          <!-- <phrase revision="systemd">
- and upowerd</phrase>
-Upowerd should not be listed, as it is in /usr/libexec, and is not supposed
-to be run by a user. Furthermore, upowerd is also in sysv, and there is no
-reason so single out systemd here. -->
-upower
-
+          upower
         </seg>
         <seg>
           libupower-glib.so
@@ -261,22 +277,7 @@ upower
         </listitem>
       </varlistentry>
 
-
-      <!-- See above
-      <varlistentry id="upowerd" revision="systemd">
-
-        <term><command>upowerd</command></term>
-        <listitem>
-          <para>
-            is the <application>UPower</application> Daemon. It provides the
-            org.freedesktop.UPower service on the system message bus.
-          </para>
-          <indexterm zone="upower upowerd">
-            <primary sortas="b-upowerd">upowerd</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>-->
-<varlistentry id="libupower-glib">
+      <varlistentry id="libupower-glib">
         <term><filename class="libraryfile">libupower-glib.so</filename></term>
         <listitem>
           <para>

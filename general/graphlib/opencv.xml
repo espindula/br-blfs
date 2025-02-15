@@ -6,13 +6,13 @@
 
   <!ENTITY opencv-download-http     "https://github.com/opencv/opencv/archive/&opencv-version;/opencv-&opencv-version;.tar.gz">
   <!ENTITY opencv-download-ftp      "">
-  <!ENTITY opencv-md5sum            "adaf23e87339e6df6d50d68001138ccc">
+  <!ENTITY opencv-md5sum            "f35fbd46350cc677af13e198805b58f7">
   <!ENTITY opencv-size              "91 MB">
-  <!ENTITY opencv-buildsize         "698 MB (com opencv-contrib)">
-  <!ENTITY opencv-time              "3,0UPC (usando paralelismo = 8)">
+  <!ENTITY opencv-buildsize         "832 MB (com opencv-contrib)">
+  <!ENTITY opencv-time              "3,6 UPC (usando paralelismo = 8)">
 
   <!ENTITY opencv-contrib-download "https://github.com/opencv/opencv_contrib/archive/&opencv-version;/opencv_contrib-&opencv-contrib-version;.tar.gz">
-  <!ENTITY opencv-contrib-md5sum   "5a4bc09177b74813c72648c117783dba">
+  <!ENTITY opencv-contrib-md5sum   "7dd4bc67eb67faff96ce71745a5e3abe">
   <!ENTITY opencv-contrib-size     "53 MB">
 ]>
 
@@ -103,7 +103,7 @@ arquitetura do sistema.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cmake"/> e <xref linkend="unzip"/>
+      <xref linkend="cmake"/> e <xref linkend="libarchive"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -159,6 +159,7 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr      \
       -D ENABLE_PRECOMPILED_HEADERS=OFF \
       -D CMAKE_SKIP_INSTALL_RPATH=ON    \
       -D BUILD_WITH_DEBUG_INFO=OFF      \
+      -D OPENCV_GENERATE_PKGCONFIG=ON   \
       -W no-dev  ..                     &amp;&amp;
 make</userinput></screen>
 
@@ -181,19 +182,28 @@ make</userinput></screen>
       href="../../xincludes/cmake-skip-install-rpath.xml"/>
 
     <para>
-      <parameter>-D WITH_XINE=ON</parameter>: Essa opção instrui o procedimento
+      <parameter>-D WITH_XINE=ON</parameter>: Essa chave instrui o procedimento
 make a usar <xref linkend="xine-lib"/>.
     </para>
 
     <para>
-      <parameter>-D ENABLE_PRECOMPILED_HEADERS=OFF</parameter>: Essa opção é
-necessária para compatibilidade com "gcc-6.1" e posteriores.
+      <parameter>-D ENABLE_PRECOMPILED_HEADERS=OFF</parameter>: Essa chave é
+necessária para compatibilidade com gcc-6.1 e posteriores.
+    </para>
+
+    <para>
+      <parameter>-D OPENCV_GENERATE_PKGCONFIG=ON</parameter>: Essa chave informa
+ao sistema de construção para gerar um arquivo pkg-config para outros
+pacotes detectarem e se vincularem às bibliotecas instaladas por este
+pacote.
     </para>
 
     <para>
       <option>-D
 OPENCV_EXTRA_MODULES_PATH=../opencv_contrib-&opencv-version;/modules</option>:
-instrui o sistema de construção a construir módulos adicionais.
+instrui o sistema de construção a construir módulos adicionais. Alguns
+pacotes no BLFS (como <xref linkend="gst10-plugins-bad" role="nodep"/>)
+precisam desses módulos para construir componentes que usam OpenCV.
     </para>
 
   </sect2>

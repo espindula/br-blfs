@@ -6,11 +6,11 @@
 
   <!ENTITY ruby-download-http "https://cache.ruby-lang.org/pub/ruby/&ruby-minor-version;/ruby-&ruby-version;.tar.xz">
   <!ENTITY ruby-download-ftp  "">
-  <!ENTITY ruby-md5sum        "e696a878d05867a4d28e62fe9afb7862">
+  <!ENTITY ruby-md5sum        "45bf4f2706ee6d07133f3355e581f920">
   <!ENTITY ruby-size          "16 MB">
-  <!ENTITY ruby-buildsize     "1,4 GB (com documentos de API da C e testes)">
-  <!ENTITY ruby-time          "2,4 UPC (usando paralelismo=4; com documentos de API da C; adicionar 0,4 UPC
-para testes)">
+  <!ENTITY ruby-buildsize     "1,6 GB (com documentos de API da C e testes)">
+  <!ENTITY ruby-time          "1,7 UPC (com documentos da API C; adicionar 1,0 UPC para testes; todos
+usando paralelismo=4)">
 ]>
 
 <sect1 id="ruby" xreflabel="Ruby-&ruby-version;">
@@ -89,6 +89,14 @@ linkend="rust"/>, <xref linkend="tk"/>, <xref linkend="valgrind"/>,
   <sect2 role="installation">
     <title>Instalação do Ruby</title>
 
+    <note>
+      <para>
+        Se tiver instalado um pacote que fornece uma gema de Ruby, como <xref
+linkend="asciidoctor"/>, você precisa reinstalar esses pacotes ao atualizar
+para uma nova versão secundária do Ruby.
+      </para>
+    </note>
+
     <para>
       Instale &quot;<application>Ruby</application>&quot; executando o seguinte
 comando:
@@ -111,20 +119,13 @@ executando os seguintes comandos:
 <screen><userinput>make capi</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make -j1 -k
-check</command>. Observe que a suíte de teste com tarefas paralelas
-possivelmente cause falha do teste, informada como mensagens enigmáticas de
-<computeroutput>unknown object</computeroutput>, resultando em um resumo
-alegando falsamente <quote>all tests passed</quote>. Se o ambiente tiver
-variáveis relacionadas a configurações de proxy (<envar>all_proxy</envar>,
-<envar>ALL_PROXY</envar>, <envar>http_proxy</envar> e etc.) definidas, a
-suíte de teste será resgatada antecipadamente com mensagens como
-<computeroutput>net/ftp is not found</computeroutput>. Certifique-se de que
-você desconfigurou essas variáveis para a suíte de teste. Existem mais de
-26.000 testes. Alguns testes relacionados ao ipv6 possivelmente indiquem
-erros. Se os testes forem executados em um diretório que tenha um componente
-escrevível mundialmente (por exemplo, /tmp), então vários testes adicionais
-possivelmente falhem.
+      Para testar os resultados, emita: <command>make -k check</command>. Se o
+ambiente tiver variáveis relacionadas às configurações de proxy
+(<envar>all_proxy</envar>, <envar>ALL_PROXY</envar>,
+<envar>http_proxy</envar> e etc.) configuradas, a suíte de teste sairá mais
+cedo com mensagens como <computeroutput>net/ftp is not
+found</computeroutput>. Certifique-se de que você desconfigurou essas
+variáveis para a suíte de teste. Existem mais de 26.000 testes.
     </para>
 
     <para>

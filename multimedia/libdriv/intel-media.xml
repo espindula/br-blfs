@@ -8,10 +8,10 @@
 
   <!ENTITY intel-media-download-http "https://github.com/intel/media-driver/archive/intel-media-&intel-media-version;.tar.gz">
   <!ENTITY intel-media-download-ftp  "">
-  <!ENTITY intel-media-md5sum        "c602d9a3ebebb2ad8a5239dc5951c65b">
-  <!ENTITY intel-media-size          "25 MB">
-  <!ENTITY intel-media-buildsize     "2,1 GB (360 MB instalado com um modelo de GPU)">
-  <!ENTITY intel-media-time          "3,8 UPC (com paralelismo=4 e um modelo de GPU)">
+  <!ENTITY intel-media-md5sum        "ece31cc84b5736d770b2b2b9253ea2bc">
+  <!ENTITY intel-media-size          "26 MB">
+  <!ENTITY intel-media-buildsize     "1,4 GB (211 MB instalado com um modelo de GPU)">
+  <!ENTITY intel-media-time          "3,1 UPC (com paralelismo=4 e um modelo de GPU)">
 
 ]>
 
@@ -142,32 +142,33 @@ codificadores de mídia.
              complete the build -->
 <para>
           Se conhecer o modelo da tua GPU Intel, você pode passar a opção
-<option>-D{GEN{8,9,11,12},MTL,ARL}=OFF</option> para o comando
-<command>cmake</command>, mas deixando a opção para tua GPU de fora. Observe
-que o número <quote>GEN</quote> aqui é a geração da GPU, não da CPU. Por
-exemplo, com uma CPU Intel Core i7-1065G7 que envia uma GPU Intel de 11ª
-geração, a opção <option>-D{GEN{8,9,12},MTL,ARL}=OFF</option> pode ser
-usada, de forma que o código específico para as outras gerações de GPUs
-Intel não seria construído.
+<option>-D{GEN{8,9,11,12},MTL,ARL,LNL,BMG,XE2_HPG}=OFF</option> para o
+comando <command>cmake</command>, mas deixando a opção para tua GPU de
+fora. Observe que o número <quote>GEN</quote> aqui é a geração da GPU, não
+da CPU. Por exemplo, com uma CPU Intel Core i7-1065G7 que envia uma GPU
+Intel de 11ª geração, a opção
+<option>-D{GEN{8,9,12},MTL,ARL,LNG,BMG,XE2_HPG}=OFF</option> pode ser usada,
+de forma que o código específico para as outras gerações de GPUs Intel não
+seria construído.
         </para>
 
         <para>
           Para determinar o modelo da GPU Intel, instale <xref linkend='pciutils'/> e
 execute <command>lspci -nn | grep -Ei 'VGA|DISPLAY'</command> primeiro. Ele
-produzirá algumas informações acerca da GPU. Se a saída gerada contiver
-<literal>Meteor Lake</literal>, o modelo da GPU será
-<literal>MTL</literal>. Caso contrário, siga <ulink
-url='https://dgpu-docs.intel.com/devices/hardware-table.html'/> para
-encontrar a entrada para tua GPU e o modelo da GPU deveria estar na coluna
-<quote>Architecture</quote>. As arquiteturas Xe e Xe-HPG são cobertas pelo
-modelo <literal>GEN12</literal>.
+exibirá algumas informações acerca da GPU, incluindo o ID do fornecedor PCI
+(<literal>8086</literal> para Intel) e o ID do dispositivo PCI. Por exemplo,
+com uma CPU Intel Core i5-11300H, a saída gerada é
+<literal>8086:9a49</literal>. Agora, procurando pelo registro desse ID de
+dispositivo na árvore do fonte intel-media:
         </para>
-        
-      <!-- TODO: The info about MTL is my best guess, the referred Intel
-        page does not contain Meteor Lake GPU PCI devicd ID as at Feb 2024.
-        XeHPC is not enabled by default but they are some data center GPUs.
-        Not sure if anyone will run LFS in a data center. -->
-</note>
+        <screen role='nodump'><userinput>grep -ri 'RegisterDevice(0x<replaceable>9a49</replaceable>'</userinput></screen>
+        <para>
+          E determine o modelo de GPU a partir do nome do arquivo que contém o
+registro. Para o exemplo acima, o nome do arquivo é
+<filename>media_sysinfo_g12.cpp</filename>, indicando que o modelo é
+<literal>GEN12</literal>.
+        </para>
+      </note>
 
       <!--
       <para>
