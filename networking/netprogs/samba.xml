@@ -6,7 +6,7 @@
 
   <!ENTITY samba-download-http "https://download.samba.org/pub/samba/stable/samba-&samba-version;.tar.gz">
   <!ENTITY samba-download-ftp  "">
-  <!ENTITY samba-md5sum        "8ac48b021d559ba8ba4ba13862c59296">
+  <!ENTITY samba-md5sum        "6d0b330364e05fed58cc63fbb43037fe">
   <!ENTITY samba-size          "41 MB">
   <!ENTITY samba-buildsize     "683 MB (adicionar 64 MB para teste rápido)">
   <!ENTITY samba-time          "2,1 UPC (usando paralelismo=4; adicionar 0,4 UPC para quicktest)">
@@ -37,7 +37,7 @@ Directory&quot; e um servidor de nomes &quot;NetBIOS&quot; (&quot;RFC&quot;
 &quot;LAN&quot;).
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -73,6 +73,15 @@ Directory&quot; e um servidor de nomes &quot;NetBIOS&quot; (&quot;RFC&quot;
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo opcional (Exigido para executar a suíte de teste): <ulink
+url="&patch-root;/samba-&samba-version;-testsuite_linux_6_13-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
     <bridgehead renderas="sect3">Dependências do &quot;Samba&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -138,13 +147,15 @@ url="&pypi;/python-subunit/">python-subunit</ulink>
     <title>Instalação do Samba</title>
 
     <para>
-      Para suportar a suíte de teste, configure um ambiente virtual
-&quot;Python&quot; para alguns módulos &quot;Python&quot; fora do escopo do
-BLFS:
+      Para suportar a suíte de teste, configure um ambiente virtual Python para
+alguns módulos Python fora do escopo do BLFS e corrija um problema na
+estrutura de teste que faz com que todos os testes falhem em cima do núcleo
+Linux 6.13 ou mais recente:
     </para>
 
 <screen><userinput remap="pre">python3 -m venv pyvenv &amp;&amp;
-./pyvenv/bin/pip3 install cryptography pyasn1 iso8601</userinput></screen>
+./pyvenv/bin/pip3 install cryptography pyasn1 iso8601 &amp;&amp;
+patch -Np1 -i ../samba-&samba-version;-testsuite_linux_6_13-1.patch</userinput></screen>
 
     <para>
       Instale o &quot;<application>Samba</application>&quot; executando os
@@ -413,24 +424,22 @@ seguintes três parâmetros é suficiente:
         </para>
 
 <screen role='root'><literal>[global]
-    workgroup = <replaceable>GRUPO_DE_TRABALHO</replaceable>
+    workgroup = <replaceable>WORKGROUP</replaceable>
     dos charset = <replaceable>cp850</replaceable>
-    unix charset = <replaceable>ISO-8859-1</replaceable></literal></screen>
+    unix charset = <replaceable>UTF-8</replaceable></literal></screen>
 
         <para>
-          Os valores nesse exemplo especificam que o computador pertence a um grupo de
-trabalho do Windows chamado
-<literal><replaceable>GRUPO_DE_TRABALHO</replaceable></literal>, que usa o
-conjunto de caracteres <literal><replaceable>cp850</replaceable></literal>
-na rede ao conversar com MS-DOS e MS Windows 9x, e que os nomes dos arquivos
-são armazenados na codificação
-<literal><replaceable>ISO-8859-1</replaceable></literal> no disco. Ajuste
-esses valores adequadamente para a tua instalação. O valor <literal>unix
-charset</literal> precisa ser o mesmo que a saída gerada de <command>locale
-charmap</command> quando executado com a variável <envar>LANG</envar>
-configurada para a tua localidade preferida, caso contrário o comando
-<command>ls</command> possivelmente não exiba nomes de arquivos corretos dos
-arquivos baixados.
+          The values in this example specify that the computer belongs to a Windows
+workgroup named <literal><replaceable>WORKGROUP</replaceable></literal>,
+uses the <literal><replaceable>cp850</replaceable></literal> character set
+on the wire when talking to MS-DOS and MS Windows 9x, and that the filenames
+are stored in the <literal><replaceable>UTF-8</replaceable></literal>
+encoding on the disk. Adjust these values appropriately for your
+installation. The <literal>unix charset</literal> value must be the same as
+the output of <command>locale charmap</command> when executed with the
+<envar>LANG</envar> variable set to your preferred locale, otherwise the
+<command>ls</command> command may not display correct filenames of
+downloaded files.
         </para>
 
         <para>
@@ -479,17 +488,17 @@ disponíveis para máquinas Windows:
         </para>
 
 <screen role='root'><literal>[global]
-    workgroup = <replaceable>GRUPO_DE_TRABALHO</replaceable>
+    workgroup = <replaceable>WORKGROUP</replaceable>
     dos charset = <replaceable>cp850</replaceable>
-    unix charset = <replaceable>ISO-8859-1</replaceable>
+    unix charset = <replaceable>UTF-8</replaceable>
 
 [homes]
-    comment = Diretórios Home
+    comment = Home Directories
     browseable = no
     writable = yes
 
 [printers]
-    comment = Todas Impressoras
+    comment = All Printers
     path = /var/spool/samba
     browseable = no
     guest ok = no

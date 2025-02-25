@@ -50,7 +50,7 @@ url="https://www.nongnu.org/cvs/">CVS</ulink>,
 Server</application>.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -196,9 +196,13 @@ One test named <literal>start and stop
       support, or it's a SSH session but the SSH server is not configured
       with <option>UsePAM</option> enabled.</phrase-->
 A suíte de teste pode ser executada em modo paralelo. Para executar a suíte
-de teste, emita: <command>make test -k &amp; tee test.log</command>. Se
-algum teste falhar, a lista dos testes falhos pode ser mostrada via
-<command>grep '^not ok' test.log | grep -v TODO</command>.
+de teste, emita: <command>GIT_UNZIP=nonexist make test -k |&amp; tee
+test.log</command>. A configuração <envar>GIT_UNZIP</envar> impede que a
+suíte de teste use <command>unzip</command>; nós precisamos dela porque no
+BLFS <command>unzip</command> é um link simbólico para
+<command>bsdunzip</command> que não satisfaz a suposição de alguns casos de
+teste. Se algum caso de teste falhar, a lista de testes falhos pode ser
+mostrada via <command>grep '^not ok' test.log | grep -v TODO</command>.
       
       
     </para>

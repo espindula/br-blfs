@@ -8,9 +8,9 @@
   <!ENTITY kf6-download-http "&kf6-download-http;"> -->
   <!ENTITY kf6-download-ftp  "">
   <!ENTITY kf6-md5sum        "Veja-se Abaixo">
-  <!ENTITY kf6-size          "658 MB">
-  <!ENTITY kf6-buildsize     "2,8 GB (184 MB instalado)">
-  <!ENTITY kf6-time          "15 UPC (usando paralelismo = 8)">
+  <!ENTITY kf6-size          "108 MB">
+  <!ENTITY kf6-buildsize     "2,9 GB (188 MB instalado)">
+  <!ENTITY kf6-time          "12 UPC (usando paralelismo = 8)">
 ]>
 
 <sect1 id="kf6-frameworks" xreflabel="KDE Frameworks-&kf6-version;">
@@ -28,7 +28,7 @@ a partir de bibliotecas anteriores do KDE. Elas podem ser usadas
 independentemente do ambiente de exibição do KDE (Plasma 6).
   </para>
 
-  &lfs122_checked;
+  &lfs123_checked;
 
   <para>
     As instruções abaixo constroem todos os pacotes do KDE Frameworks em uma
@@ -103,8 +103,10 @@ Sonnet), <xref linkend="avahi"/> (estrutura de retaguarda de DNS-SD para
 KDNSSD), <xref linkend="ModemManager"/> (necessário para construir
 ModemManager-Qt), <xref linkend="NetworkManager"/> (necessário para
 construir NetworkManager-Qt), <xref linkend="polkit-qt"/> (estrutura de
-retaguarda de autenticação para KAuth) e <xref linkend="vulkan-loader"/>
-(adiciona suporte para controladores gráficos do Vulkan)
+retaguarda de autenticação para KAuth), <xref linkend="vulkan-loader"/>
+(adiciona suporte para controladores gráficos do Vulkan) e <xref
+linkend="zxing-cpp"/> (adicionar suporte necessário para construir
+spectacle)
   </para>
 
   <para role="recommended">
@@ -114,11 +116,9 @@ configurado conforme descrito em <xref linkend="kf6-intro"/>.
 
   <bridgehead renderas="sect4">Opcionais</bridgehead>
   <para role="optional">
-    <xref linkend="bluez"/> (necessário para construir Bluez-Qt), <ulink
+    <xref linkend="bluez"/> (necessário para construir Bluez-Qt) e <ulink
 url="https://libdmtx.sourceforge.net/">Datamatrix</ulink> (considerado
-recomendado para Prison pelo fluxo de desenvolvimento) e <ulink
-url="https://github.com/zxing-cpp/zxing-cpp">zxing-cpp</ulink> (também
-considerado recomendado para Prison pelo fluxo de desenvolvimento)
+recomendado para Prison pelo fluxo de desenvolvimento)
   </para>
 
   <bridgehead renderas="sect4">Dependência de tempo de execução para FrameworkIntegration</bridgehead>
@@ -186,79 +186,78 @@ internas. Crie a lista de arquivos na ordem correta conforme segue:
     </para>
 
 <screen><userinput>cat &gt; frameworks-&kf6-version;.md5 &lt;&lt; "EOF"
-<literal>1284908164349599c949e753de5a6d6d  attica-6.9.0.tar.xz
-#00a4cc351b7afd3b3b07c0126169e2e1  extra-cmake-modules-6.9.0.tar.xz
-b0ebbba9a9dadd0e650c9ce23e1c432f  kapidox-6.9.0.tar.xz
-275bf8f81ca2f262be42f7961b268661  karchive-6.9.0.tar.xz
-3585bec3e70c52cccef7933bd7049181  kcodecs-6.9.0.tar.xz
-76532887baaa2e71f2664dcf1aa93a1f  kconfig-6.9.0.tar.xz
-602d06cf7d08288508030b21f3ad4d16  kcoreaddons-6.9.0.tar.xz
-f191c8a34877abd844a8339cabdfdd85  kdbusaddons-6.9.0.tar.xz
-8e09d864edea99280fbcaecab3f677ac  kdnssd-6.9.0.tar.xz
-61b916ad258f3300b7ac22b74722a465  kguiaddons-6.9.0.tar.xz
-3f25a1194975d2a230897baf0c8bc1a9  ki18n-6.9.0.tar.xz
-66b947e46d49cd20afdf06f915944b24  kidletime-6.9.0.tar.xz
-25b6d8ae40363e34678ea462b00e81cf  kimageformats-6.9.0.tar.xz
-c820dda0e6e5ed0e7c844dba49f8490e  kitemmodels-6.9.0.tar.xz
-cc27422fa66aee13edaf24950d2512be  kitemviews-6.9.0.tar.xz
-12f538cae926f90c2a48be1a084fc232  kplotting-6.9.0.tar.xz
-36129d8a2593c107eeb5345b0a5c23df  kwidgetsaddons-6.9.0.tar.xz
-a801e9e90e55f8f711b8ec60c5e11927  kwindowsystem-6.9.0.tar.xz
-a711e22e0ec601665df090198c9070b9  networkmanager-qt-6.9.0.tar.xz
-#34907a72aabb12938a8c8a800c76386f  solid-6.9.0.tar.xz
-a7bb41720c68c99d5cbdbc897f92adcb  solid-6.9.1.tar.xz
-7c4bfa13beb9d5da152d4e3873912c06  sonnet-6.9.0.tar.xz
-36f9482fcb0a8fd9472f1477e86dd22e  threadweaver-6.9.0.tar.xz
-947db8522af3194b79a0e0990f4c3fb2  kauth-6.9.0.tar.xz
-1d9d4ab3913d01c0530a943d46ffd3ca  kcompletion-6.9.0.tar.xz
-c553ffe92701e1ac633bc0f1a4ed72b6  kcrash-6.9.0.tar.xz
-9355d1d08b080a8639578ddf1d4ecd50  kdoctools-6.9.0.tar.xz
-3f4f5bb5d9c5c8dcd720db6de1374919  kpty-6.9.0.tar.xz
-d6412fb879b9922977a1a1bea435025c  kunitconversion-6.9.0.tar.xz
-a1f718b0fd5faf41cc5617402a906dfa  kcolorscheme-6.9.0.tar.xz
-3a413d4e1cd22e3a80e0f653cba7def1  kconfigwidgets-6.9.0.tar.xz
-2500cedd04d6e592f5d4e0cb57b8e49c  kservice-6.9.0.tar.xz
-acf36c1fe26bc2e0b6b26d286ba140dd  kglobalaccel-6.9.0.tar.xz
-4dad1e73f5252d22087e3de83da0e470  kpackage-6.9.0.tar.xz
-8b0788cbd802e949c80033ddb5f8b364  kdesu-6.9.0.tar.xz
-718e07ca8214a229de38eb27e4560a4e  kiconthemes-6.9.0.tar.xz
-bfd86fa2b0bfc16b7429022ac2f8686a  knotifications-6.9.0.tar.xz
-f11e2091224fbcd2d2ca95c62dabeda5  kjobwidgets-6.9.0.tar.xz
-26d6e3d1f1e8a03b3aa4a8ca81d86138  ktextwidgets-6.9.0.tar.xz
-9dc1eba92e27e79a32e755496bf0fdf5  kxmlgui-6.9.0.tar.xz
-1827b538317bafda4ac7caf73ad00634  kbookmarks-6.9.0.tar.xz
-0963b1826e513942ecd02a2093ba160b  kwallet-6.9.0.tar.xz
-4fe3615ad2486f242a89a622aba38b1e  kded-6.9.0.tar.xz
-491ca7098ab93c572ab83684cd60765b  kio-6.9.0.tar.xz
-99771d46badb6e049402464d6123877e  kdeclarative-6.9.0.tar.xz
-73a0058e48764b5480e8ec237433d5a3  kcmutils-6.9.0.tar.xz
-bc47bffe9cc73e737cc8fe69413c5d1e  kirigami-6.9.0.tar.xz
-dd820209e12b6175191ba8509c74332f  syndication-6.9.0.tar.xz
-f7457a27689e058b3b622a49cdafea69  knewstuff-6.9.0.tar.xz
-7ff3a5b883167f46fba596bea8d2ed16  frameworkintegration-6.9.0.tar.xz
-83a2e4abbb432d910f0e646fd6dda70b  kparts-6.9.0.tar.xz
-1c57f4041924bfb0a007ea50ed0389bd  syntax-highlighting-6.9.0.tar.xz
-f74d680ebf93be5bc49acc26ddd2b15c  ktexteditor-6.9.0.tar.xz
-61c04052ceb54d90581d0b4d99579034  modemmanager-qt-6.9.0.tar.xz
-0991036bd6744b6ae2182c523dfe20b6  kcontacts-6.9.0.tar.xz
-08bcba782e7881bba2e3edce4104e82d  kpeople-6.9.0.tar.xz
-309074d9163a67888c6768d502283ca2  bluez-qt-6.9.0.tar.xz
-4ed593f44f5d88511fcaf09cbd79002a  kfilemetadata-6.9.0.tar.xz
-4dced99e9936d878a8b7d7e991148ed1  baloo-6.9.0.tar.xz
-#bb8695140746485f0356724c20e567d6  breeze-icons-6.9.0.tar.xz
-e0b22d5ad601c21da658182ed94d0252  krunner-6.9.0.tar.xz
-96ebc74cc951d17dc765dc82324d9c53  prison-6.9.0.tar.xz
-4e69194596a3b482b46b828f833e0b1a  qqc2-desktop-style-6.9.0.tar.xz
-a79b2468003674484c32be9bbc17fe66  kholidays-6.9.0.tar.xz
-e6e75c72051127278b515f1551dcb7f2  purpose-6.9.0.tar.xz
-3cab6f7e09660ec088dfa3dca8f0126f  kcalendarcore-6.9.0.tar.xz
-a278856e690e6dcde1e322e8bacc7fa0  kquickcharts-6.9.0.tar.xz
-c49c2433b6dec144f659d201436adedc  knotifyconfig-6.9.0.tar.xz
-db4d737f094f12533132100a426f89fb  kdav-6.9.0.tar.xz
-a73a6ce52be97b76303eac82b8a03dd4  kstatusnotifieritem-6.9.0.tar.xz
-56ccf59e0c517b007dfab58473f037e6  ksvg-6.9.0.tar.xz
-e11d0d565c8f1ea35aaf87b0c0a93538  ktexttemplate-6.9.0.tar.xz
-0c735c3a4b07b38d5aef8d79b8727b68  kuserfeedback-6.9.0.tar.xz</literal>
+<literal>9359cfb89031abeeff8616d73e161415  attica-6.11.0.tar.xz
+#22bce8bd85c1ead07bda8a00518d1120  extra-cmake-modules-6.11.0.tar.xz
+647b2f9cfd55930e86ebb8c1734df140  kapidox-6.11.0.tar.xz
+20c3fbf44d196d578bf9b76d0631a1ad  karchive-6.11.0.tar.xz
+4b4af41ab285dda00a660b34e21e2f8c  kcodecs-6.11.0.tar.xz
+b0e4142ee55abf3cb38fe6cdf5a0fe71  kconfig-6.11.0.tar.xz
+6fa75ef6c2e9ce2fc9b7fb7f77e8db53  kcoreaddons-6.11.0.tar.xz
+2ee71003f7887b6ac6646abd134e23ba  kdbusaddons-6.11.0.tar.xz
+ead6114916c7aa01a8f6c3965315e9ec  kdnssd-6.11.0.tar.xz
+7679bb9a2a0e817f9660ec775f93dc04  kguiaddons-6.11.0.tar.xz
+27a6809407ea64c9db9bbb595cfe1282  ki18n-6.11.0.tar.xz
+16d30e56e423668c27bfcbd2425a19da  kidletime-6.11.0.tar.xz
+4f035f9b0466e297bd95ee57eb53f820  kimageformats-6.11.0.tar.xz
+7e48fb5e56bcedff3281d64115d85699  kitemmodels-6.11.0.tar.xz
+df934558aaa739a50b16677a3cdc97f7  kitemviews-6.11.0.tar.xz
+cbe17f3ad215492a6d3d60d1b161a056  kplotting-6.11.0.tar.xz
+85234f0053b4cf6ac5492ba92db2d648  kwidgetsaddons-6.11.0.tar.xz
+0fe4524579013c8e9fcf7adf43ea844e  kwindowsystem-6.11.0.tar.xz
+72fbceb5e5b990d501a1ba3684c78ad0  networkmanager-qt-6.11.0.tar.xz
+05d5c3b1277129f4e5fa1e3db9077e10  solid-6.11.0.tar.xz
+cc92475aacad8a29de2029e6483ff0b2  sonnet-6.11.0.tar.xz
+5236898e85ea7b2b8124ffe21e2e8a51  threadweaver-6.11.0.tar.xz
+efe35421eb54433599bb5724bd4b2312  kauth-6.11.0.tar.xz
+33067f4f53c2e0e0da9d1324f01af19a  kcompletion-6.11.0.tar.xz
+1562644115cb4a3d8f5e847c196a6e1b  kcrash-6.11.0.tar.xz
+52d5e6b18613fd23ba09d05459812062  kdoctools-6.11.0.tar.xz
+0cadf6b126b5ed62393b99146bbdaec9  kpty-6.11.0.tar.xz
+6d306e6f78769cb8405f909e26db3d76  kunitconversion-6.11.0.tar.xz
+b0a6afbdee57b249771017be13b5e9cf  kcolorscheme-6.11.0.tar.xz
+b2c09a5d3fdcfa3c7fc88617590ac694  kconfigwidgets-6.11.0.tar.xz
+71abec8311c27c7b3f8652da220011b8  kservice-6.11.0.tar.xz
+357c4a01badb564c4a66ce3503bb7493  kglobalaccel-6.11.0.tar.xz
+772720c4f1b51589abd1964750ef96e6  kpackage-6.11.0.tar.xz
+6de72206275db095889d5ef02ecfeaae  kdesu-6.11.0.tar.xz
+f7c14bb2f32943060553c517956bcd36  kiconthemes-6.11.0.tar.xz
+3a502ab55f0ca2f1a5e5ab69de951932  knotifications-6.11.0.tar.xz
+e3056aadf29ca9a09f015632f5c851d8  kjobwidgets-6.11.0.tar.xz
+fe6ac2b10dcadad94e2b54dfd8788fc1  ktextwidgets-6.11.0.tar.xz
+cbecf5de939fa3c2340abf4c1c34a550  kxmlgui-6.11.0.tar.xz
+83d780dba76ffdb59b119513a94cfaa0  kbookmarks-6.11.0.tar.xz
+c69002e34487b8182a7b248265846a8f  kwallet-6.11.0.tar.xz
+e68dc289e81b20bf781ca7920133ae37  kded-6.11.0.tar.xz
+76a597b191d8a1ff103dec70137635a7  kio-6.11.0.tar.xz
+092619893a0c6e0e9e735e2396f9518b  kdeclarative-6.11.0.tar.xz
+90434f367fce9f8ea1cfaccc4642efef  kcmutils-6.11.0.tar.xz
+c12b36fecb8f26b48d793fe7e3a29405  kirigami-6.11.0.tar.xz
+3227ac57ecdaed4c0d4c6b6b48b81ac4  syndication-6.11.0.tar.xz
+096b9d761ee2997f34de83a9cee5062d  knewstuff-6.11.0.tar.xz
+e5ba9f692c12dc7f3f4e2291aca802d7  frameworkintegration-6.11.0.tar.xz
+138bf9e51cadd7381a9de428345c78c2  kparts-6.11.0.tar.xz
+f75164871c6e7594f81c71d0849f90d3  syntax-highlighting-6.11.0.tar.xz
+5ece9440ecedae18706884501e8deae4  ktexteditor-6.11.0.tar.xz
+cc4b04c3c42a54259d704534b083f991  modemmanager-qt-6.11.0.tar.xz
+fb993807e86e8f1679a6ea59aed71c1e  kcontacts-6.11.0.tar.xz
+1545793a6da6d4b67f42959dc49d4cef  kpeople-6.11.0.tar.xz
+e55224a99439e7bb1abf7eab2cd2ef75  bluez-qt-6.11.0.tar.xz
+43e1dba98100aebf27297815a0fb8296  kfilemetadata-6.11.0.tar.xz
+5e4b41a45872794d45038ca66125cbf8  baloo-6.11.0.tar.xz
+#8989043ad5c6bae49cb2abb3e88490aa  breeze-icons-6.11.0.tar.xz
+d336f55f2747377d0b8f388263749fe4  krunner-6.11.0.tar.xz
+5291071632d3296b6d1201622fe1f54e  prison-6.11.0.tar.xz
+eb72c496e3e6ba0ea66aa96a81683491  qqc2-desktop-style-6.11.0.tar.xz
+89a6c13f89e6ac7ae5cd36c28ea51ba4  kholidays-6.11.0.tar.xz
+0f72d877a62f5697c08c3649d0dc61cc  purpose-6.11.0.tar.xz
+268c7ca1ba88d7cd544914760d1862a6  kcalendarcore-6.11.0.tar.xz
+3b5c13512812315c913e936d8c14298d  kquickcharts-6.11.0.tar.xz
+29c0bab2e75f093cbfb1630f349959a3  knotifyconfig-6.11.0.tar.xz
+eb41b80c24a0768b915dab171d3db5c3  kdav-6.11.0.tar.xz
+56e50e418a25fd981a11553f0e313800  kstatusnotifieritem-6.11.0.tar.xz
+1e757bef30a30391eafe34ac06b5d281  ksvg-6.11.0.tar.xz
+cdb940239552ee0c70fab32f496bc592  ktexttemplate-6.11.0.tar.xz
+ee50bf09b87548e416b60826b6086041  kuserfeedback-6.11.0.tar.xz</literal>
 EOF</userinput></screen>
 
   <para>
@@ -279,15 +278,17 @@ linkend="breeze-icons"/>.
         </para>
       </listitem>
 
+    <!--
       <listitem>
+
         <para>
-          Existe um pacote baixado que foi substituído por uma versão posterior:
-solid-6.9.1. Esse lançamento corrige uma falha que pode ocorrer ao inserir
-ou remover uma unidade USB ou outro dispositivo removível.
+          There is one package downloaded that is superseded by a later version:
+          solid-6.9.1. This release fixes a crash that can occur when inserting
+          or removing a USB drive or other removable device.
         </para>
       </listitem>
-
-    </itemizedlist>
+-->
+</itemizedlist>
   </para>
 
   </sect2>
