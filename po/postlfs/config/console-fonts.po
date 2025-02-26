@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-20 04:18+0000\n"
-"PO-Revision-Date: 2024-09-21 16:18+0000\n"
+"POT-Creation-Date: 2025-02-25 20:45-0300\n"
+"PO-Revision-Date: 2025-02-25 22:54+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/postlfs_config_console-fonts/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #. type: Content of: <sect1><title>
 #: blfs-en/postlfs/config/console-fonts.xml:8
@@ -52,8 +52,8 @@ msgstr ""
 #. type: Content of: <sect1><sect2><title>
 #: blfs-en/postlfs/config/console-fonts.xml:28
 #, xml-text
-msgid "Setting a smaller screen size in grub"
-msgstr "Configurando um tamanho menor de tela no GRUB"
+msgid "Setting a smaller screen resolution in grub"
+msgstr "Configurando uma resolução menor de tela no grub"
 
 #. type: Content of: <sect1><sect2><indexterm><primary>
 #: blfs-en/postlfs/config/console-fonts.xml:31
@@ -68,35 +68,96 @@ msgid ""
 "Modern screens often have a lot more pixels than the screens used in the "
 "past. If your screen is 1600 pixels wide, an 8x16 font will give you 200 "
 "columns of text - unless your monitor is enormous, the text will be tiny.  "
-"One of the ways to work around this is to tell grub to use a smaller size, "
-"such as 1024x768 or 800x600 or even 640x480. Even if your screen does not "
-"have a 4:3 aspect ratio, this should work."
+"One of the ways to work around this is to tell GRUB and the kernel to use a "
+"smaller resolution, such as 1024x768 or 800x600 or even 640x480.  Even if "
+"your screen does not have a 4:3 aspect ratio, this should work."
 msgstr ""
 "As telas modernas frequentemente tem muito mais pixeis que as telas usadas "
 "no passado. Se a tua tela for da largura de mil e seiscentos (1.600) pixeis,"
 " uma fonte 8x16 te dará duzentas (200) colunas de texto - a menos que o teu "
 "monitor seja enorme, o texto será pequeno. Uma das maneiras de se contornar "
-"isso é a de se dizer ao GRUB para usar um tamanho menor, tal como 1.024x768 "
-"ou 800x600; ou mesmo 640x480. Mesmo se a tua tela não tiver uma proporção de"
-" aspecto de 4:3, isso deveria funcionar."
+"isso é a de se dizer ao GRUB e ao núcleo para usar uma resolução menor, tal "
+"como 1.024x768 ou 800x600; ou mesmo 640x480. Mesmo se a tua tela não tiver "
+"uma proporção de aspecto de 4:3, isso deveria funcionar."
 
 #. type: Content of: <sect1><sect2><para>
 #: blfs-en/postlfs/config/console-fonts.xml:44
 #, xml-text
 msgid ""
-"To try this, you can reboot and edit grub's command-line to insert a "
-"'video=' parameter between the 'root=/dev/sdXn' and 'ro', for example "
-"<literal>root=/dev/sda2 video=1024x768 ro</literal> based on the example in "
-"LFS section 10.4.4 : <ulink url=\"&lfs-root;/chapter10/grub.html\"/>."
+"If you've followed the LFS book to configure your kernel with SimpleDRM "
+"enabled and the kernel driver dedicated for your GPU (for example i915 or "
+"AMDGPU) is built as a kernel module, before the dedicated driver is loaded, "
+"the SimpleDRM driver will be used for displaying.  The SimpleDRM driver "
+"itself cannot change the resolution, so you need to tell GRUB to set the "
+"suitable resolution before loading the kernel by modifying the <literal>set "
+"gfxpayload=1024x768x32</literal> line in <ulink url=\"&lfs-"
+"root;/chapter10/grub.html\">the <filename>grub.cfg</filename> file</ulink>."
 msgstr ""
-"Para tentar isso, você pode reinicializar e editar a linha de comando do "
-"GRUB para inserir um parâmetro 'video=' entre o 'root=/dev/sdXn' e o 'ro'; "
-"por exemplo, <literal>root=/dev/sda2 video=1024x768 ro</literal>, baseado no"
-" exemplo da seção 10.4.4 do LFS: <ulink url=\"&lfs-"
-"root;/chapter10/grub.html\"/>."
+"Se você tiver seguido o livro LFS para configurar teu núcleo com SimpleDRM "
+"habilitado e o controlador dedicado de núcleo para tua GPU (por exemplo, "
+"i915 ou AMDGPU) for construído como um módulo de núcleo, antes que o "
+"controlador dedicado seja carregado, o controlador SimpleDRM será usado para"
+" exibição. O controlador SimpleDRM em si não consegue mudar a resolução, de "
+"forma que você precisa dizer ao GRUB para configurar a resolução adequada "
+"antes de carregar o núcleo modificando a linha <literal>set "
+"gfxpayload=1024x768x32</literal> no <ulink url=\"&lfs-"
+"root;/chapter10/grub.html\"> arquivo <filename>grub.cfg</filename></ulink>."
+
+#.  TODO: it'll be a part of v4l-utils-1.30,
+#.            update the text when upgrading v4l-utils
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/postlfs/config/console-fonts.xml:57
+#, xml-text
+msgid ""
+"When the dedicated GPU driver starts to work (once the kernel or the module "
+"is loaded depending on if you've built it as a part of the kernel image or a"
+" module), it takes the display control away from the SimpleDRM driver and "
+"changes the display resolution.  To make it use the resolution you want, "
+"again edit the <filename>grub.cfg</filename> file to insert a "
+"<literal>video=</literal> parameter into the kernel command line, for "
+"example <literal>root=/dev/sda2 video=DP-1:800x600 ro</literal>.  Note that "
+"it's necessary to explicitly specify the output name like "
+"<literal>DP-1</literal> here: a <literal>video=</literal> parameter without "
+"an output name is only recognized by GRUB (as a deprecated alias of "
+"<literal>set gfxpayload=</literal>) and completely ignored by the kernel. "
+"The content of <filename class='directory'>/sys/class/drm/</filename> can be"
+" helpful for figuring out the output name, for example the <filename "
+"class='directory'>card1-DP-1</filename> subdirectory indicates an output "
+"named <literal>DP-1</literal>.  To align the output name with your monitor, "
+"install the <ulink url='&sources-anduin-http;/edid-decode.tar.gz'>edid-"
+"decode</ulink> utility and run the <command>edid-decode "
+"/sys/class/drm/card<replaceable>&lt;card "
+"ID&gt;</replaceable>-<replaceable>&lt;output "
+"name&gt;</replaceable>/edid</command> command to show the info (including "
+"the model name and the supported resolutions) about the the monitor "
+"connected on the output."
+msgstr ""
+"Quando o controlador dedicado da GPU começa a funcionar (tão logo que o "
+"núcleo ou o módulo seja carregado, dependendo se você o tiver construído "
+"como parte da imagem do núcleo ou como um módulo), ele tira o controle de "
+"exibição do controlador SimpleDRM e muda a resolução de exibição. Para fazê-"
+"lo usar a resolução que você quer, edite novamente o arquivo "
+"<filename>grub.cfg</filename> para inserir um parâmetro "
+"<literal>video=</literal> na linha de comando do núcleo, por exemplo "
+"<literal>root=/dev/sda2 video=DP-1:800x600 ro</literal>. Observe que é "
+"necessário especificar explicitamente o nome de saída como "
+"<literal>DP-1</literal> aqui: um parâmetro <literal>video=</literal> sem um "
+"nome de saída é reconhecido somente pelo GRUB (como um apelido obsoleto de "
+"<literal>set gfxpayload=</literal>) e completamente ignorado pelo núcleo. O "
+"conteúdo de <filename class='directory'>/sys/class/drm/</filename> pode ser "
+"útil para descobrir o nome da saída gerada; por exemplo, o subdiretório "
+"<filename class='directory'>card1-DP-1</filename> indica uma saída gerada "
+"chamada <literal>DP-1</literal>. Para alinhar o nome da saída gerada com teu"
+" monitor, instale o utilitário <ulink url='&sources-anduin-http;/edid-"
+"decode.tar.gz'>edid-decode</ulink> e execute o comando <command>edid-decode "
+"/sys/class/drm/card<replaceable>&lt;ID da "
+"placa&gt;</replaceable>-<replaceable>&lt;nome da saída "
+"gerada&gt;</replaceable>/edid</command> para mostrar as informações "
+"(incluindo o nome do modelo e as resoluções suportadas) acerca do monitor "
+"conectado na saída."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:52
+#: blfs-en/postlfs/config/console-fonts.xml:87
 #, xml-text
 msgid ""
 "If you decide that you wish to do this, you can then (as the <systemitem "
@@ -108,19 +169,19 @@ msgstr ""
 "<filename>/boot/grub/grub.cfg</filename>."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/console-fonts.xml:60
+#: blfs-en/postlfs/config/console-fonts.xml:95
 #, xml-text
 msgid "Using the standard psf fonts"
 msgstr "Usando as fontes psf padrão"
 
 #. type: Content of: <sect1><sect2><indexterm><primary>
-#: blfs-en/postlfs/config/console-fonts.xml:63
+#: blfs-en/postlfs/config/console-fonts.xml:98
 #, xml-text
 msgid "/usr/share/consolefonts"
 msgstr "/usr/share/consolefonts"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:67
+#: blfs-en/postlfs/config/console-fonts.xml:102
 #, xml-text
 msgid ""
 "In LFS the <application>kbd</application> package is used. The fonts it "
@@ -142,7 +203,7 @@ msgstr ""
 "espaço, porém isso não é essencial."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:78
+#: blfs-en/postlfs/config/console-fonts.xml:113
 #, xml-text
 msgid ""
 "The initial PC text screens had 8 colours, or 16 colours if the bright "
@@ -162,7 +223,7 @@ msgstr ""
 "disponíveis."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:87
+#: blfs-en/postlfs/config/console-fonts.xml:122
 #, xml-text
 msgid ""
 "Some fonts in <application>kbd</application> can cover more than 512 "
@@ -196,7 +257,7 @@ msgstr ""
 "vXXn do terminus fazerem isso bem."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:103
+#: blfs-en/postlfs/config/console-fonts.xml:138
 #, xml-text
 msgid ""
 "There are over 120 combinations of font and size in "
@@ -219,13 +280,13 @@ msgstr ""
 "mais fácil de ler em uma tela grande."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/console-fonts.xml:116
+#: blfs-en/postlfs/config/console-fonts.xml:151
 #, xml-text
 msgid "Testing different fonts"
 msgstr "Testando fontes diferentes"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:119
+#: blfs-en/postlfs/config/console-fonts.xml:154
 #, xml-text
 msgid ""
 "You can test fonts as a normal user. If you have a font which has not been "
@@ -235,13 +296,13 @@ msgstr ""
 "fonte que não tenha sido instalada, [então] você consegue carregá-la com:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/console-fonts.xml:123
+#: blfs-en/postlfs/config/console-fonts.xml:158
 #, no-wrap, xml-text
 msgid "<userinput>setfont /path/to/yourfont.ext</userinput>"
 msgstr "<userinput>setfont /caminho/para/sua_fonte.ext</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:126
+#: blfs-en/postlfs/config/console-fonts.xml:161
 #, xml-text
 msgid ""
 "For the fonts already installed you only need the name, so using "
@@ -251,25 +312,25 @@ msgstr ""
 "<filename>gr737a-9x16.psfu.gz</filename> como um exemplo:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/console-fonts.xml:130
+#: blfs-en/postlfs/config/console-fonts.xml:165
 #, no-wrap, xml-text
 msgid "<userinput>setfont gr737a-9x16</userinput>"
 msgstr "<userinput>setfont gr737a-9x16</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:133
+#: blfs-en/postlfs/config/console-fonts.xml:168
 #, xml-text
 msgid "To see the glyphs in the font, use:"
 msgstr "Para ver os glifos na fonte, use:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/console-fonts.xml:136
+#: blfs-en/postlfs/config/console-fonts.xml:171
 #, no-wrap, xml-text
 msgid "<userinput>showconsolefont</userinput>"
 msgstr "<userinput>showconsolefont</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:139
+#: blfs-en/postlfs/config/console-fonts.xml:174
 #, xml-text
 msgid ""
 "If the font looks as if it might be useful, you can then go on to test it "
@@ -279,7 +340,7 @@ msgstr ""
 "para testá-la mais minuciosamente."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:144
+#: blfs-en/postlfs/config/console-fonts.xml:179
 #, xml-text
 msgid ""
 "When you find a font which you wish to use, as the <systemitem "
@@ -300,7 +361,7 @@ msgstr ""
 "root;/chapter09/console.html\"/></phrase>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:157
+#: blfs-en/postlfs/config/console-fonts.xml:192
 #, xml-text
 msgid ""
 "For fonts not supplied with the <application>kbd</application> package you "
@@ -314,19 +375,19 @@ msgstr ""
 "class=\"username\">root</systemitem>."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/console-fonts.xml:168
+#: blfs-en/postlfs/config/console-fonts.xml:203
 #, xml-text
 msgid "Editing fonts using psf-tools"
 msgstr "Editando fontes usando o psf-tools"
 
 #. type: Content of: <sect1><sect2><indexterm><primary>
-#: blfs-en/postlfs/config/console-fonts.xml:171
+#: blfs-en/postlfs/config/console-fonts.xml:206
 #, xml-text
 msgid "psftools"
 msgstr "psftools"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:175
+#: blfs-en/postlfs/config/console-fonts.xml:210
 #, xml-text
 msgid ""
 "Although some console fonts are created from BDF files, which is a text "
@@ -351,19 +412,19 @@ msgstr ""
 "mudanças."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/config/console-fonts.xml:190
+#: blfs-en/postlfs/config/console-fonts.xml:225
 #, xml-text
 msgid "Using fonts from Terminus-font"
 msgstr "Usando fontes a partir da fonte Terminus"
 
 #. type: Content of: <sect1><sect2><indexterm><primary>
-#: blfs-en/postlfs/config/console-fonts.xml:193
+#: blfs-en/postlfs/config/console-fonts.xml:228
 #, xml-text
 msgid "terminus-font"
 msgstr "fonte-terminus"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:197
+#: blfs-en/postlfs/config/console-fonts.xml:232
 #, xml-text
 msgid ""
 "The <ulink url=\"https://terminus-font.sourceforge.net/\">Terminus "
@@ -384,7 +445,7 @@ msgstr ""
 "visivelmente diferente de \"i\" e \"1\"."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:208
+#: blfs-en/postlfs/config/console-fonts.xml:243
 #, xml-text
 msgid ""
 "By default <application>terminus-fonts</application> will try to create "
@@ -403,13 +464,13 @@ msgstr ""
 "fontes PSF e as dependências delas, execute:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/console-fonts.xml:217
+#: blfs-en/postlfs/config/console-fonts.xml:252
 #, no-wrap, xml-text
 msgid "<userinput>make psf</userinput>"
 msgstr "<userinput>make psf</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:220
+#: blfs-en/postlfs/config/console-fonts.xml:255
 #, xml-text
 msgid ""
 "This will create more than 240 ter-*.psf fonts.  The 'b' suffix indicates "
@@ -423,7 +484,7 @@ msgstr ""
 "distribuição, parece não fazer sentido instalá-las todas."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/postlfs/config/console-fonts.xml:227
+#: blfs-en/postlfs/config/console-fonts.xml:262
 #, xml-text
 msgid ""
 "As an example, to install the last of these fonts, you can gzip it and then "
@@ -434,7 +495,7 @@ msgstr ""
 "class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/postlfs/config/console-fonts.xml:232
+#: blfs-en/postlfs/config/console-fonts.xml:267
 #, no-wrap, xml-text
 msgid ""
 "<userinput>install -v -m644 ter-v32n.psf.gz "
@@ -442,6 +503,19 @@ msgid ""
 msgstr ""
 "<userinput>install -v -m644 ter-v32n.psf.gz "
 "/usr/share/consolefonts</userinput>"
+
+#, xml-text
+#~ msgid ""
+#~ "To try this, you can reboot and edit grub's command-line to insert a "
+#~ "'video=' parameter between the 'root=/dev/sdXn' and 'ro', for example "
+#~ "<literal>root=/dev/sda2 video=1024x768 ro</literal> based on the example in "
+#~ "LFS section 10.4.4 : <ulink url=\"&lfs-root;/chapter10/grub.html\"/>."
+#~ msgstr ""
+#~ "Para tentar isso, você pode reinicializar e editar a linha de comando do "
+#~ "GRUB para inserir um parâmetro 'video=' entre o 'root=/dev/sdXn' e o 'ro'; "
+#~ "por exemplo, <literal>root=/dev/sda2 video=1024x768 ro</literal>, baseado no"
+#~ " exemplo da seção 10.4.4 do LFS: <ulink url=\"&lfs-"
+#~ "root;/chapter10/grub.html\"/>."
 
 #, xml-text
 #~ msgid "User Notes: <ulink url=\"&blfs-wiki;/aboutconsolefonts\"/>"
