@@ -10,7 +10,7 @@
   <!ENTITY tl-installer-md5sum          "cec36f23d7d4e1a4a2a90f77bad8e667">
   <!ENTITY tl-installer-date             "20230313"> <!-- in the directory name -->
   <!ENTITY tl-installer-size            "5,5 MB">
-  <!ENTITY tl-installer-buildsize        "85 MB para TeX simples, normalmente 2 a 4 MB para latex e mecanismos
+  <!ENTITY tl-installer-buildsize        "85 MB para TeX simples, normalmente 320 MB para latex e mecanismos
 posteriores, 8,6 GB se tudo estiver incluído">
   <!ENTITY tl-installer-time            "varia, dependendo da velocidade e do tráfego da rede de intercomunicação">
 <!-- The following commit will change future installs so that the scripts in
@@ -36,7 +36,6 @@ and it might have been removed by next year. -->
 
 <sect1 id="tl-installer" xreflabel="install-tl-unx">
   <?dbhtml filename="tl-installer.html"?>
-
 
   <title>install-tl-unx</title>
 
@@ -277,40 +276,73 @@ x86_64 do <command>asy</command> executa muito lentamente ao criar diagramas
 
     <para>
       Esse comando é interativo e permite seleção ou modificação de plataforma,
-pacotes, diretórios e outras opções. O esquema completo de instalação
-exigirá cerca de 4,9 gigabytes de espaço em disco. O tempo para concluir a
-transferência dependerá da velocidade da tua conexão de Internet e do número
-de pacotes selecionados.
+pacotes, diretórios e outras opções. O tempo para concluir a transferência
+dependerá da velocidade da tua conexão de Internet e do número de pacotes
+selecionados.
     </para>
 
     <para>
-      Foi estabelecido pelo Debian que os conjuntos de comandos sequenciais do
-<command>python</command> em <filename
-class="directory">latex-make</filename> funcionarão com
-<command>python3</command>, de forma que atualize-os para invocar isso
-executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      Para uma instalação mínima que construirá documentação que seja referenciada
+no BLFS, as únicas coleções de instalação necessárias são '[a] Programas e
+arquivos essenciais' e '[D] Pacotes fundamentais do LaTeX'. Isso baixará
+cerca de 130 arquivos e usará cerca de 320 MB. Usuários(as) conseguem
+selecionar outras coleções conforme necessário, mas uma instalação completa
+baixará vários milhares de arquivos e usará mais de 8 GB.
+    </para>
+
+
+    <!--  This is no longer needed
+    <para>
+
+      It has been established by Debian that the <command>python</command>
+      scripts in <filename class="directory">latex-make</filename> will work
+      with <command>python3</command>, so update them to invoke that by running
+      the following command as the <systemitem class="username">root</systemitem>
+      user:
     </para>
 
 <screen role="root"><userinput>for F in /opt/texlive/&texlive-year;/texmf-dist/scripts/latex-make/*.py ; do
   test -f $F &amp;&amp; sed -i 's%/usr/bin/env python%/usr/bin/python3%' $F || true
 done
 </userinput></screen>
+-->
+<note>
+      <para>
+        Depois da instalação, a variável de ambiente PATH precisará ser
+atualizada. Se o caminho estiver no local especificado acima, execute como
+o(a) usuário(a) &root;:
+      </para>
+<screen role="root"><userinput>cat > /etc/profile.d/texlive.sh &lt;&lt; EOF
+# Begin texlive setup
+TEXLIVE_PREFIX=/opt/texlive/2024
+export TEXLIVE_PREFIX
+
+pathappend $TEXLIVE_PREFIX/bin/x86_64-linux
+# End texlive setup
+EOF</userinput></screen>
+
+      <para>
+        Imediatamente depois da instalação, atualize o PATH atual para teu shell
+atual como um(a) usuário(a) normal:
+      </para>
+
+<screen><userinput>source /etc/profile.d/texlive.sh</userinput></screen>
+    </note>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+    <!--
     <para>
-      <command>test -f $F &amp;&amp; sed ...</command>: em uma instalação pequena
-esses arquivos podem não estar presentes, de forma que teste se eles existem
-e se não retornam 'true' para evitar qualquer erro se esse comando tiver
-sido copiado em um de teus próprios conjuntos de comandos sequenciais de
-instalação.
-    </para>
 
-    <para>
+      <command>test -f $F &amp;&amp; sed ...</command>: in a small install these
+      files might not be present, so test if they exist and if not return 'true'
+      to avoid any error if this command has been copied into one of your own install scripts.
+    </para>
+-->
+<para>
       <option>./install-tl --location
 http://mirror.aut.ac.nz/CTAN/systems/texlive/tlnet/</option>: use uma
 variação disso se você desejar usar um espelho diferente, por exemplo,

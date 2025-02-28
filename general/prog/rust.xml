@@ -6,11 +6,11 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "11a9b245449ddafc08168e84c26c19f7">
-  <!ENTITY rust-size          "339 MB">
-  <!ENTITY rust-buildsize     "8,9 GB (298 MB instalado); adicionar 6,4 GB se executar os testes">
-  <!ENTITY rust-time          "6,7 UPC (incluindo o tempo de transferência; adicionar 6,2 UPC para os
-testes, ambos usando paralelismo=8)">
+  <!ENTITY rust-md5sum        "a0193e0a4925f772bd50f8d12e47860c">
+  <!ENTITY rust-size          "261 MB">
+  <!ENTITY rust-buildsize     "9.4 GB (252 MB installed); add 7.4 GB if running the tests">
+  <!ENTITY rust-time          "9.0 SBU (including download time; add 15 SBU for tests, both using
+parallelism=8)">
 ]>
 
 <sect1 id="rust" xreflabel="rustc-&rust-version;">
@@ -31,13 +31,12 @@ para ser uma linguagem segura, simultânea e prática.
     </para>
 
     <para>
-      Esse pacote é atualizado em um ciclo de lançamento de seis semanas. Por ser
-um pacote tão grande e lento de construir, no momento exigido somente por
-uns poucos pacotes neste livro, e particularmente porque as versões mais
-recentes tendem a quebrar pacotes Mozilla mais antigos, os(as) editores(as)
-do BLFS consideram que ele somente deveria ser atualizado quando isso for
-necessário (seja para corrigir problemas ou para permitir a construção de
-uma nova versão de um pacote).
+      This package is updated on a six-week release cycle. Because it is such a
+large and slow package to build, is at the moment only required by a few
+packages in this book, and particularly because newer versions tend to break
+older mozilla packages, the BLFS editors take the view that it should only
+be updated when that is necessary (either to fix problems, or to allow a new
+version of a package to build).
     </para>
 
     <para>
@@ -263,7 +262,7 @@ configurará a construção.
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 133207
+change-id = 134650
 
 [llvm]
 # When using system llvm prefer shared libraries
@@ -290,11 +289,6 @@ locked-deps = true
 # Specify which extended tools (those from the default install).
 tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 
-# Use the source code shipped in the tarball for the dependencies.
-# The combination of this and the "locked-deps" entry avoids downloading
-# many crates from Internet, and makes the Rustc build more stable.
-vendor = true
-
 [install]
 prefix = "/opt/rustc-&rust-version;"
 docdir = "share/doc/rustc-&rust-version;"
@@ -306,11 +300,6 @@ description = "for BLFS &version;"
 # Enable the same optimizations as the official upstream build.
 lto = "thin"
 codegen-units = 1
-
-# Don't download compiler components from the upstream CI:
-# it's only intended for developers working on standard library
-# and tools, and it only works with the Rust Git repository.
-download-rustc = false
 
 [target.x86_64-unknown-linux-gnu]
 llvm-config = "/usr/bin/llvm-config"
@@ -600,8 +589,8 @@ pathprepend /opt/rustc/bin           PATH
 EOF</userinput></screen>
 
       <para>
-        Imediatamente depois da instalação, atualize o &quot;PATH&quot; atual para o
-seu &quot;shell&quot; atual como um(a) usuário(a) normal:
+        Imediatamente depois da instalação, atualize o PATH atual para teu shell
+atual como um(a) usuário(a) normal:
       </para>
 
 <screen><userinput>source /etc/profile.d/rustc.sh</userinput></screen>
