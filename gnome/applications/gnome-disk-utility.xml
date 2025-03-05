@@ -31,7 +31,7 @@
 usados para lidar com dispositivos de armazenamento.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -92,7 +92,13 @@ linkend="udisks2"/>
 seguintes comandos:
     </para>
 
-<screen><userinput>mkdir build &amp;&amp;
+<screen revision="sysv"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release -Dlogind=libelogind .. &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
@@ -107,6 +113,18 @@ ninja</userinput></screen>
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+   <sect2 role="commands" revision="sysv">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-Dlogind=libelogind</parameter>: Informa ao sistema de construção
+que a biblioteca usada para o serviço <application>login</application> é
+<filename class="libraryfile">libelogind.so</filename> em vez de <filename
+class="libraryfile">libsystemd.so</filename>.
+    </para>
 
   </sect2>
 

@@ -6,10 +6,10 @@
 
   <!ENTITY xdg-desktop-portal-download-http "https://github.com/flatpak/xdg-desktop-portal/releases/download/&xdg-desktop-portal-version;/xdg-desktop-portal-&xdg-desktop-portal-version;.tar.xz">
   <!ENTITY xdg-desktop-portal-download-ftp  "">
-  <!ENTITY xdg-desktop-portal-md5sum        "4ebe7be08961456544d0ceeca22a03ea">
-  <!ENTITY xdg-desktop-portal-size          "684 KB">
-  <!ENTITY xdg-desktop-portal-buildsize     "34 MB (com testes)">
-  <!ENTITY xdg-desktop-portal-time          "0,1 UPC (adicionar 0,3 UPC para testes; com paralelismo=4)">
+  <!ENTITY xdg-desktop-portal-md5sum        "9f6450322a359a95018b57960d1ca4fd">
+  <!ENTITY xdg-desktop-portal-size          "1,1 MB">
+  <!ENTITY xdg-desktop-portal-buildsize     "21 MB (adicionar 2 MB para os testes)">
+  <!ENTITY xdg-desktop-portal-time          "0,1 UPC (adicionar 0,2 UPC para testes; com paralelismo=4)">
 ]>
 
 <sect1 id="xdg-desktop-portal" xreflabel="xdg-desktop-portal-&xdg-desktop-portal-version;">
@@ -38,7 +38,7 @@ usuário(a). Esse serviço precisa de uma estrutura de retaguarda que
 implemente interfaces de portal específicas de área de trabalho.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -104,9 +104,10 @@ usar essa possibilidade, pois isso criará um grande problema de segurança.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="geoclue2"/> (para o portal <quote>location</quote>), e <xref
-linkend="pytest"/> com <xref linkend="libportal"/> e <xref
-linkend="python-dbusmock"/> (para executar testes)
+      <xref linkend="geoclue2"/> (para o portal do <quote>local</quote>), e <xref
+linkend="pytest"/> com <xref linkend="libportal"/>, <xref
+linkend="python-dbusmock"/> e <xref linkend="umockdev"/> (para executar
+testes)
     </para>
 
     <bridgehead renderas="sect4">Opcional (para construir a documentação)</bridgehead>
@@ -132,14 +133,20 @@ seguintes comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup --prefix=/usr --buildtype=release -D tests=disabled .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Se tiver instalado as dependências necessárias, você pode testar os
-resultados executando <command>ninja test</command>.<phrase
-revision="systemd"> Seis testes são conhecidos por falharem se você não
-estiver usando <xref linkend="gnome-terminal"/> e estão no GNOME.</phrase>
+      Se as dependências opcionais estiverem instaladas, você consegue testar os
+resultados executando:
+    </para>
+
+<screen remap="test"><userinput>meson configure -D tests=enabled &amp;&amp;
+ninja test</userinput></screen>
+
+    <para>
+      Sem as dependências externas, um teste, integration/dynamiclauncher, é
+conhecido por falhar.
     </para>
 
     <para>
@@ -156,6 +163,15 @@ estiver usando <xref linkend="gnome-terminal"/> e estão no GNOME.</phrase>
 
   </sect2>
 
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D tests=disabled</parameter>: Evita exigir diversas dependências
+opcionais que são necessárias somente para testes.
+    </para>
+
+  </sect2>
   <sect2 role="configuration">
     <title>Configurando xdg-desktop-portal</title>
 

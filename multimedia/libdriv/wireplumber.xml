@@ -29,7 +29,7 @@
 sessões e políticas para <application>Pipewire</application>.
     </para>
 
-    &lfs122_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -145,37 +145,69 @@ versão dele.
 
       <para>
         Para a finalidade de que o Wireplumber seja usado pelo Pipewire, o
-Wireplumber precisa ser configurado para iniciar quando um ambiente de área
-de trabalho for iniciado.
+Wireplumber e o Pipewire precisam ser configurados para iniciar quando um
+ambiente de área de trabalho for iniciado.
       </para>
 
+      <para>
+        O Pipewire agora fornece a própria implementação dele de servidor
+Pulseaudio, o que causa conflitos de tempo de execução com o servidor
+fornecido pelo próprio Pulseaudio. Isso geralmente se apresenta por
+aplicativos travando ou com mau funcionamento ao tentar reproduzir ou gravar
+áudio e vídeo. Primeiro, evite que o Pulseaudio inicie a própria
+implementação dele de servidor executando os seguintes comandos como o(a)
+usuário(a) &root;:
+      </para>
+
+<screen role="root"><userinput>rm -vf /etc/xdg/autostart/pulseaudio.desktop         &amp;&amp;
+rm -vf /etc/xdg/Xwayland-session.d/00-pulseaudio-x11 &amp;&amp;
+sed -e '$a autospawn = no' -i /etc/pulse/client.conf</userinput></screen>
+
       <para revision="systemd">
-        Para configurar o Wireplumber para iniciar quando um ambiente de área de
-trabalho for iniciado, execute os seguintes comandos como o(a) usuário(a)
+        A seguir, configure o Wireplumber para iniciar quando um ambiente de área de
+trabalho for iniciado. Execute os seguintes comandos como o(a) usuário(a)
 &root; para habilitar as unidades de usuário(a) do systemd:
       </para>
 
-<screen role="root" revision="systemd"><userinput>systemctl enable --global pipewire.socket &amp;&amp;
+<screen role="root" revision="systemd"><userinput>systemctl enable --global pipewire.socket       &amp;&amp;
+systemctl enable --global pipewire-pulse.socket &amp;&amp;
 systemctl enable --global wireplumber</userinput></screen>
 
       <para revision="sysv">
-        Primeiro, crie um conjunto de comandos sequenciais de shell que iniciará o
+        A seguir, crie um conjunto de comandos sequenciais de shell que iniciará o
 Wireplumber e o Pipewire, na ordem correta, como o(a) usuário(a) &root;:
       </para>
 
 <screen role="root" revision="sysv"><userinput>cat &gt; /usr/bin/pipewire-launcher.sh &lt;&lt; "EOF"
 <literal>#!/bin/sh
-# Inicia /usr/bin/pipewire-launcher.sh
+# Begin /usr/bin/pipewire-launcher.sh
 
-# Inicia Pipewire primeiro.
+# First, kill any previous instances of pipewire, wireplumber, or pipewire-pulse
+# that are running. Multiple instances of the daemon can not be run at the same
+# time, and this helps prevent possible errors if a user logs out or logs in
+# too fast, and restores audio if Pipewire hangs and needs to be reset.
+
+pkill -u ${USER} -fx /usr/bin/pipewire-pulse
+pkill -u ${USER} -fx /usr/bin/wireplumber
+pkill -u ${USER} -fx /usr/bin/pipewire
+
+# Start Pipewire first.
 exec /usr/bin/pipewire &amp;
 
-# Espera por um segundo para Pipewire iniciar.
-sleep 1
+# Next, we need to wait until pipewire is up before starting wireplumber.
+# This prevents a possible race condition where pipewire takes too long
+# to start, as some users have run into.
+while [ $(pgrep -f /usr/bin/pipewire) = "" ]; do
+   sleep 1
+done
 
-# Inicia Wireplumber agora que Pipewire tenha sido iniciado.
+# Start Wireplumber now that Pipewire has been started.
 exec /usr/bin/wireplumber &amp;
-# Termina /usr/bin/pipewire-launcher.sh</literal>
+
+# Start the Pulseaudio server included with Pipewire.
+exec /usr/bin/pipewire-pulse &amp;
+
+# End /usr/bin/pipewire-launcher.sh</literal>
 EOF</userinput></screen>
 
     <para revision="sysv">

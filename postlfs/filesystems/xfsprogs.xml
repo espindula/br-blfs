@@ -100,7 +100,7 @@ administração e de depuração para o sistema de arquivos XFS.
     <title>Instalação do xfsprogs</title>
 
     <para>
-      Primeiro, adapte o conjunto de comandos sequenciais configure para ICU-76::
+      Primeiro, adapte o conjunto de comandos sequenciais configure para ICU-76:
     </para>
 
 <screen><userinput remap="pre">sed -i 's/icu-i18n/icu-uc &amp;/' configure</userinput></screen>
@@ -110,7 +110,10 @@ administração e de depuração para o sistema de arquivos XFS.
 comandos:
     </para>
 
-<screen><userinput>make DEBUG=-DNDEBUG     \
+<screen><userinput>case "$(uname -m)" in
+  i?86) sed -e "s/static long filesize/static off_t filesize/" -i mkfs/proto.c ;;
+esac &amp;&amp;
+make DEBUG=-DNDEBUG     \
      INSTALL_USER=root  \
      INSTALL_GROUP=root \
      LOCAL_CONFIGURE_OPTIONS="--localstatedir=/var"</userinput></screen>
@@ -132,6 +135,13 @@ rm -rfv /usr/lib/libhandle.{a,la}</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>sed ... static long filesize...</parameter>: Esse sed corrige um
+problema que aparece ao se construir em sistemas de 32 bits, somente. Existe
+uma descorrespondência no protótipo e no cabeçalho da função, o que resulta
+em erro nessa arquitetura.
+    </para>
 
     <para>
       <parameter>DEBUG=-DNDEBUG</parameter>: Desliga os símbolos de depuração.
