@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-28 18:11+0000\n"
-"PO-Revision-Date: 2024-12-04 12:38+0000\n"
+"PO-Revision-Date: 2025-03-05 04:04+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/multimedia_libdriv_wireplumber/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #. type: Content of the wireplumber-download-http entity
 #: blfs-en/multimedia/libdriv/wireplumber.xml:7
@@ -283,80 +283,148 @@ msgstr "Informação de Configuração"
 #: blfs-en/multimedia/libdriv/wireplumber.xml:150
 #, xml-text
 msgid ""
-"In order for Wireplumber to be used by Pipewire, Wireplumber must be "
-"configured to start when a desktop environment is started."
+"In order for Wireplumber to be used by Pipewire, Wireplumber and Pipewire "
+"must be configured to start when a desktop environment is started."
 msgstr ""
 "Para a finalidade de que o Wireplumber seja usado pelo Pipewire, o "
-"Wireplumber precisa ser configurado para iniciar quando um ambiente de área "
-"de trabalho for iniciado."
+"Wireplumber e o Pipewire precisam ser configurados para iniciar quando um "
+"ambiente de área de trabalho for iniciado."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:155
+#: blfs-en/multimedia/libdriv/wireplumber.xml:156
 #, xml-text
 msgid ""
-"To configure Wireplumber to start when a desktop environment is started, run"
-" the following commands as the &root; user to enable the systemd user units:"
+"Pipewire now provides it's own Pulseaudio server implementation, which "
+"causes runtime conflicts with the server provided by Pulseaudio itself.  "
+"This generally presents itself by applications hanging or malfunctioning "
+"when trying to play or record audio and video. First, prevent Pulseaudio "
+"from starting it's own server implementation by running the following "
+"commands as the &root; user:"
 msgstr ""
-"Para configurar o Wireplumber para iniciar quando um ambiente de área de "
-"trabalho for iniciado, execute os seguintes comandos como o(a) usuário(a) "
+"O Pipewire agora fornece a própria implementação dele de servidor "
+"Pulseaudio, o que causa conflitos de tempo de execução com o servidor "
+"fornecido pelo próprio Pulseaudio. Isso geralmente se apresenta por "
+"aplicativos travando ou com mau funcionamento ao tentar reproduzir ou gravar"
+" áudio e vídeo. Primeiro, evite que o Pulseaudio inicie a própria "
+"implementação dele de servidor executando os seguintes comandos como o(a) "
+"usuário(a) &root;:"
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/multimedia/libdriv/wireplumber.xml:164
+#, no-wrap, xml-text
+msgid ""
+"<userinput>rm -vf /etc/xdg/autostart/pulseaudio.desktop         &amp;&amp;\n"
+"rm -vf /etc/xdg/Xwayland-session.d/00-pulseaudio-x11 &amp;&amp;\n"
+"sed -e '$a autospawn = no' -i /etc/pulse/client.conf</userinput>"
+msgstr ""
+"<userinput>rm -vf /etc/xdg/autostart/pulseaudio.desktop         &amp;&amp;\n"
+"rm -vf /etc/xdg/Xwayland-session.d/00-pulseaudio-x11 &amp;&amp;\n"
+"sed -e '$a autospawn = no' -i /etc/pulse/client.conf</userinput>"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/multimedia/libdriv/wireplumber.xml:169
+#, xml-text
+msgid ""
+"Next, configure Wireplumber to start when a desktop environment is started. "
+"Run the following commands as the &root; user to enable the systemd user "
+"units:"
+msgstr ""
+"A seguir, configure o Wireplumber para iniciar quando um ambiente de área de"
+" trabalho for iniciado. Execute os seguintes comandos como o(a) usuário(a) "
 "&root; para habilitar as unidades de usuário(a) do systemd:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:160
+#: blfs-en/multimedia/libdriv/wireplumber.xml:174
 #, no-wrap, xml-text
 msgid ""
-"<userinput>systemctl enable --global pipewire.socket &amp;&amp;\n"
+"<userinput>systemctl enable --global pipewire.socket       &amp;&amp;\n"
+"systemctl enable --global pipewire-pulse.socket &amp;&amp;\n"
 "systemctl enable --global wireplumber</userinput>"
 msgstr ""
-"<userinput>systemctl enable --global pipewire.socket &amp;&amp;\n"
+"<userinput>systemctl enable --global pipewire.socket       &amp;&amp;\n"
+"systemctl enable --global pipewire-pulse.socket &amp;&amp;\n"
 "systemctl enable --global wireplumber</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:164
+#: blfs-en/multimedia/libdriv/wireplumber.xml:179
 #, xml-text
 msgid ""
-"First, create a shell script that will start Wireplumber and Pipewire in the"
-" correct order as the &root; user:"
+"Next, create a shell script that will start Wireplumber and Pipewire in the "
+"correct order as the &root; user:"
 msgstr ""
-"Primeiro, crie um conjunto de comandos sequenciais de shell que iniciará o "
+"A seguir, crie um conjunto de comandos sequenciais de shell que iniciará o "
 "Wireplumber e o Pipewire, na ordem correta, como o(a) usuário(a) &root;:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:168
+#: blfs-en/multimedia/libdriv/wireplumber.xml:183
 #, no-wrap, xml-text
 msgid ""
 "<userinput>cat &gt; /usr/bin/pipewire-launcher.sh &lt;&lt; \"EOF\"\n"
 "<literal>#!/bin/sh\n"
 "# Begin /usr/bin/pipewire-launcher.sh\n"
 "\n"
+"# First, kill any previous instances of pipewire, wireplumber, or pipewire-pulse\n"
+"# that are running. Multiple instances of the daemon can not be run at the same\n"
+"# time, and this helps prevent possible errors if a user logs out or logs in\n"
+"# too fast, and restores audio if Pipewire hangs and needs to be reset.\n"
+"\n"
+"pkill -u ${USER} -fx /usr/bin/pipewire-pulse\n"
+"pkill -u ${USER} -fx /usr/bin/wireplumber\n"
+"pkill -u ${USER} -fx /usr/bin/pipewire\n"
+"\n"
 "# Start Pipewire first.\n"
 "exec /usr/bin/pipewire &amp;\n"
 "\n"
-"# Wait for a second for Pipewire to launch.\n"
-"sleep 1\n"
+"# Next, we need to wait until pipewire is up before starting wireplumber.\n"
+"# This prevents a possible race condition where pipewire takes too long\n"
+"# to start, as some users have run into.\n"
+"while [ $(pgrep -f /usr/bin/pipewire) = \"\" ]; do\n"
+"   sleep 1\n"
+"done\n"
 "\n"
 "# Start Wireplumber now that Pipewire has been started.\n"
 "exec /usr/bin/wireplumber &amp;\n"
+"\n"
+"# Start the Pulseaudio server included with Pipewire.\n"
+"exec /usr/bin/pipewire-pulse &amp;\n"
+"\n"
 "# End /usr/bin/pipewire-launcher.sh</literal>\n"
 "EOF</userinput>"
 msgstr ""
 "<userinput>cat &gt; /usr/bin/pipewire-launcher.sh &lt;&lt; \"EOF\"\n"
 "<literal>#!/bin/sh\n"
-"# Inicia /usr/bin/pipewire-launcher.sh\n"
+"# Begin /usr/bin/pipewire-launcher.sh\n"
 "\n"
-"# Inicia Pipewire primeiro.\n"
+"# First, kill any previous instances of pipewire, wireplumber, or pipewire-pulse\n"
+"# that are running. Multiple instances of the daemon can not be run at the same\n"
+"# time, and this helps prevent possible errors if a user logs out or logs in\n"
+"# too fast, and restores audio if Pipewire hangs and needs to be reset.\n"
+"\n"
+"pkill -u ${USER} -fx /usr/bin/pipewire-pulse\n"
+"pkill -u ${USER} -fx /usr/bin/wireplumber\n"
+"pkill -u ${USER} -fx /usr/bin/pipewire\n"
+"\n"
+"# Start Pipewire first.\n"
 "exec /usr/bin/pipewire &amp;\n"
 "\n"
-"# Espera por um segundo para Pipewire iniciar.\n"
-"sleep 1\n"
+"# Next, we need to wait until pipewire is up before starting wireplumber.\n"
+"# This prevents a possible race condition where pipewire takes too long\n"
+"# to start, as some users have run into.\n"
+"while [ $(pgrep -f /usr/bin/pipewire) = \"\" ]; do\n"
+"   sleep 1\n"
+"done\n"
 "\n"
-"# Inicia Wireplumber agora que Pipewire tenha sido iniciado.\n"
+"# Start Wireplumber now that Pipewire has been started.\n"
 "exec /usr/bin/wireplumber &amp;\n"
-"# Termina /usr/bin/pipewire-launcher.sh</literal>\n"
+"\n"
+"# Start the Pulseaudio server included with Pipewire.\n"
+"exec /usr/bin/pipewire-pulse &amp;\n"
+"\n"
+"# End /usr/bin/pipewire-launcher.sh</literal>\n"
 "EOF</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:184
+#: blfs-en/multimedia/libdriv/wireplumber.xml:216
 #, xml-text
 msgid "Next, make this shell script executable as the &root; user:"
 msgstr ""
@@ -364,13 +432,13 @@ msgstr ""
 "como o(a) usuário(a) &root;:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:187
+#: blfs-en/multimedia/libdriv/wireplumber.xml:219
 #, no-wrap, xml-text
 msgid "<userinput>chmod +x /usr/bin/pipewire-launcher.sh</userinput>"
 msgstr "<userinput>chmod +x /usr/bin/pipewire-launcher.sh</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:190
+#: blfs-en/multimedia/libdriv/wireplumber.xml:222
 #, xml-text
 msgid ""
 "Finally, create an XDG Autostart file that will run "
@@ -382,7 +450,7 @@ msgstr ""
 "de trabalho for iniciado; como o(a) usuário(a) &root;:"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:195
+#: blfs-en/multimedia/libdriv/wireplumber.xml:227
 #, no-wrap, xml-text
 msgid ""
 "<userinput>cat &gt; /etc/xdg/autostart/pipewire.desktop &lt;&lt; \"EOF\"\n"
@@ -406,7 +474,7 @@ msgstr ""
 "EOF</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:206
+#: blfs-en/multimedia/libdriv/wireplumber.xml:238
 #, xml-text
 msgid ""
 "Now that Wireplumber is configured to start when a desktop environment is "
@@ -418,45 +486,45 @@ msgstr ""
 "sessão e se logue novamente."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:215
+#: blfs-en/multimedia/libdriv/wireplumber.xml:247
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:218
+#: blfs-en/multimedia/libdriv/wireplumber.xml:250
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:219
+#: blfs-en/multimedia/libdriv/wireplumber.xml:251
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:220
+#: blfs-en/multimedia/libdriv/wireplumber.xml:252
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:224
+#: blfs-en/multimedia/libdriv/wireplumber.xml:256
 #, xml-text
 msgid "wireplumber, wpctl, and wpexec"
 msgstr "wireplumber, wpctl e wpexec"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:229
-#: blfs-en/multimedia/libdriv/wireplumber.xml:288
+#: blfs-en/multimedia/libdriv/wireplumber.xml:261
+#: blfs-en/multimedia/libdriv/wireplumber.xml:320
 #, xml-text
 msgid "libwireplumber-0.5.so"
 msgstr "libwireplumber-0.5.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:232
+#: blfs-en/multimedia/libdriv/wireplumber.xml:264
 #, xml-text
 msgid ""
 "/usr/include/wireplumber-0.5, /usr/lib/wireplumber-0.5, "
@@ -466,66 +534,66 @@ msgstr ""
 "/usr/share/wireplumber e /usr/share/doc/wireplumber-&wireplumber-version;"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:241
+#: blfs-en/multimedia/libdriv/wireplumber.xml:273
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:242
+#: blfs-en/multimedia/libdriv/wireplumber.xml:274
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:246
+#: blfs-en/multimedia/libdriv/wireplumber.xml:278
 #, xml-text
 msgid "<command>wireplumber</command>"
 msgstr "<command>wireplumber</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:249
+#: blfs-en/multimedia/libdriv/wireplumber.xml:281
 #, xml-text
 msgid "is a session and policy manager for Pipewire"
 msgstr "é um gerenciador de sessões e políticas para o Pipewire"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:252
+#: blfs-en/multimedia/libdriv/wireplumber.xml:284
 #, xml-text
 msgid "wireplumber"
 msgstr "wireplumber"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:258
+#: blfs-en/multimedia/libdriv/wireplumber.xml:290
 #, xml-text
 msgid "<command>wpctl</command>"
 msgstr "<command>wpctl</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:261
+#: blfs-en/multimedia/libdriv/wireplumber.xml:293
 #, xml-text
 msgid "controls and queries information from Wireplumber"
 msgstr "controla e consulta informações originárias do Wireplumber"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:264
+#: blfs-en/multimedia/libdriv/wireplumber.xml:296
 #, xml-text
 msgid "wpctl"
 msgstr "wpctl"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:270
+#: blfs-en/multimedia/libdriv/wireplumber.xml:302
 #, xml-text
 msgid "<command>wpexec</command>"
 msgstr "<command>wpexec</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:273
+#: blfs-en/multimedia/libdriv/wireplumber.xml:305
 #, xml-text
 msgid "executes Wireplumber scripts, which are often written in Lua"
 msgstr ""
@@ -534,24 +602,56 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:276
+#: blfs-en/multimedia/libdriv/wireplumber.xml:308
 #, xml-text
 msgid "wpexec"
 msgstr "wpexec"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:282
+#: blfs-en/multimedia/libdriv/wireplumber.xml:314
 #, xml-text
 msgid "<filename class=\"libraryfile\">libwireplumber-0.5.so</filename>"
 msgstr "<filename class=\"libraryfile\">libwireplumber-0.5.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/multimedia/libdriv/wireplumber.xml:285
+#: blfs-en/multimedia/libdriv/wireplumber.xml:317
 #, xml-text
 msgid "contains functions that allow other programs to control Wireplumber"
 msgstr ""
 "contém funções que permitem que outros programas controlem o Wireplumber"
+
+#, no-wrap, xml-text
+#~ msgid ""
+#~ "<userinput>cat &gt; /usr/bin/pipewire-launcher.sh &lt;&lt; \"EOF\"\n"
+#~ "<literal>#!/bin/sh\n"
+#~ "# Begin /usr/bin/pipewire-launcher.sh\n"
+#~ "\n"
+#~ "# Start Pipewire first.\n"
+#~ "exec /usr/bin/pipewire &amp;\n"
+#~ "\n"
+#~ "# Wait for a second for Pipewire to launch.\n"
+#~ "sleep 1\n"
+#~ "\n"
+#~ "# Start Wireplumber now that Pipewire has been started.\n"
+#~ "exec /usr/bin/wireplumber &amp;\n"
+#~ "# End /usr/bin/pipewire-launcher.sh</literal>\n"
+#~ "EOF</userinput>"
+#~ msgstr ""
+#~ "<userinput>cat &gt; /usr/bin/pipewire-launcher.sh &lt;&lt; \"EOF\"\n"
+#~ "<literal>#!/bin/sh\n"
+#~ "# Inicia /usr/bin/pipewire-launcher.sh\n"
+#~ "\n"
+#~ "# Inicia Pipewire primeiro.\n"
+#~ "exec /usr/bin/pipewire &amp;\n"
+#~ "\n"
+#~ "# Espera por um segundo para Pipewire iniciar.\n"
+#~ "sleep 1\n"
+#~ "\n"
+#~ "# Inicia Wireplumber agora que Pipewire tenha sido iniciado.\n"
+#~ "exec /usr/bin/wireplumber &amp;\n"
+#~ "# Termina /usr/bin/pipewire-launcher.sh</literal>\n"
+#~ "EOF</userinput>"
 
 #, xml-text
 #~ msgid "2082a70139325eb009c6df3ae56d1ecc"
