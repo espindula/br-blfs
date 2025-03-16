@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libqmi-download-http "https://www.freedesktop.org/software/libqmi/libqmi-&libqmi-version;.tar.xz">
+  <!ENTITY libqmi-download-http "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/&libqmi-version;/libqmi-1.34.0.tar.gz">
   <!ENTITY libqmi-download-ftp  "">
-  <!ENTITY libqmi-md5sum        "5ec8838914f80e1dfa4d2fa8cc2f186d">
-  <!ENTITY libqmi-size          "1,2 MB">
-  <!ENTITY libqmi-buildsize     "151 MB (com testes)">
-  <!ENTITY libqmi-time          "0,3 UPC (Usando paralelismo=4; com testes)">
+  <!ENTITY libqmi-md5sum        "34d4b54b0b8819d8f0844ceac47635df">
+  <!ENTITY libqmi-size          "4,2 MB">
+  <!ENTITY libqmi-buildsize     "76 MB (com testes)">
+  <!ENTITY libqmi-time          "0,2 UPC (Usando paralelismo=4; com testes)">
 ]>
 
 <sect1 id="libqmi" xreflabel="libqmi-&libqmi-version;">
@@ -96,18 +96,27 @@ url="https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib">libqrtr-glib<
       Instale <application>libqmi</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>PYTHON=python3 ./configure --prefix=/usr --disable-static &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -D bash_completion=false \
+      -D qrtr=false            \
+      -D man=false             &amp;&amp;
+
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
@@ -116,15 +125,25 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/gtk-doc-rebuild.xml"/>
+      href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <option>--disable-mbim-qmux</option>: Essa chave desabilita o suporte para
-usar um dispositivo de controle MBIM para mensagens QMI. Use essa chave se
-você não instalou o <application>libmbim</application>.
+      <parameter>-D bash_completion=false</parameter>: Use essa opção se o pacote
+externo <ulink
+url="https://github.com/scop/bash-completion">bash-completion</ulink> não
+estiver instalado.
+    </para>
+
+    <para>
+      <parameter>-D man=false</parameter>: Use essa opção se o pacote externo
+<ulink url="https://ftpmirror.gnu.org/gnu/help2man/">help2man</ulink> não
+estiver instalado.
+    </para>
+
+    <para>
+      <parameter>-D qrtr=false</parameter>: Essa chave desabilita suporte para o
+protocolo QRTR, que precisa do pacote externo <ulink
+url="https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib">libqrtr-glib</ulink>.
     </para>
 
   </sect2>
@@ -145,7 +164,7 @@ você não instalou o <application>libmbim</application>.
           libqmi-glib.so
         </seg>
         <seg>
-          /usr/include/libqmi-glib e /usr/share/gtk-doc/html/libqmi-glib
+          /usr/include/libqmi-glib 
         </seg>
       </seglistitem>
     </segmentedlist>

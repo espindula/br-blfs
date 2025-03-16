@@ -7,7 +7,7 @@
   <!ENTITY spidermonkey-download-http "&mozilla-http;/firefox/releases/&spidermonkey-version;esr/source/firefox-&spidermonkey-version;esr.source.tar.xz">
   <!ENTITY spidermonkey-download-ftp  "">
   <!-- size and md5sum are in packages.ent -->
-  <!ENTITY spidermonkey-buildsize     "3,6 GB (40 MB instalado depois de remover 36 MB de bibliotecas estáticas;
+  <!ENTITY spidermonkey-buildsize     "4,4 GB (49 MB instalado depois de remover 36 MB de bibliotecas estáticas;
 adicionar 34 MB para os testes principais e 37 MB para os testes jit)">
   <!ENTITY spidermonkey-time          "1,9 UPC (com paralelismo=4; adicionar 1,1 UPC para testes principais e 3,7
 UPC para os testes jit)">
@@ -175,6 +175,15 @@ rust usará todos os processadores.
       </para>
     </note>
 
+<!-- No longer needed with 128.8.0
+    <para>
+
+      If you wish to run the test suite, adapt it to be compatible with Python
+      3.13.0 or newer:
+    </para>
+
+    <screen remap='test'><userinput>sed 's/pipes/shlex/' -i ../js/src/tests/lib/results.py</userinput></screen>
+-->
 <screen><userinput>mkdir obj &amp;&amp;
 cd    obj &amp;&amp;
 
@@ -188,12 +197,7 @@ cd    obj &amp;&amp;
                     --with-system-zlib       &amp;&amp;
 make</userinput></screen>
 
-    <para>
-      Se você desejar executar a suíte de teste, adapte-a para ser compatível com
-Python 3.13.0 ou mais recente:
-    </para>
 
-    <screen remap='test'><userinput>sed 's/pipes/shlex/' -i ../js/src/tests/lib/results.py</userinput></screen>
 
     <para>
       Para executar a suíte de teste SpiderMonkey, emita:
@@ -203,7 +207,7 @@ Python 3.13.0 ou mais recente:
      JSTESTS_EXTRA_ARGS="--timeout 300 --wpt=disabled" | tee jstest.log</userinput></screen>
 
     <para>
-      Como nós estamos construindo com o ICU do sistema, 155 testes (de um total
+      Como nós estamos construindo com o ICU do sistema, 151 testes (de um total
 de mais de 50.000) são conhecidos por falharem. A lista de testes falhos
 pode ser extraída via <command>grep 'UNEXPECTED-FAIL'
 jstest.log</command>. Passe a opção <option>-c</option> para
@@ -220,8 +224,7 @@ não atribuídos ao cgroup, de forma que o uso da CPU ainda é controlado.
     </para>
 
     <para>
-      Para executar a suíte de teste JIT, emita o comando a seguir. Observe que 6
-testes na suíte 'timezone.js' são conhecidos por falharem devido ao ICU-76.
+      Para executar a suíte de teste JIT, emita o seguinte comando:
     </para>
 
     <screen remap='test'><userinput>make -C js/src check-jit-test</userinput></screen>

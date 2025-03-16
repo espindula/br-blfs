@@ -8,10 +8,10 @@
 
   <!ENTITY tl-installer-download-ftp    "">
   <!ENTITY tl-installer-md5sum          "cec36f23d7d4e1a4a2a90f77bad8e667">
-  <!ENTITY tl-installer-date             "20230313"> <!-- in the directory name -->
+  <!ENTITY tl-installer-date            "20250312"> <!-- in the directory name -->
   <!ENTITY tl-installer-size            "5,5 MB">
-  <!ENTITY tl-installer-buildsize        "85 MB para TeX simples, normalmente 320 MB para latex e mecanismos
-posteriores, 8,6 GB se tudo estiver incluído">
+  <!ENTITY tl-installer-buildsize       "90 MB para TeX simples, tipicamente 323 MB para latex e mecanismos
+posteriores, 9,0 GB se tudo estiver incluído">
   <!ENTITY tl-installer-time            "varia, dependendo da velocidade e do tráfego da rede de intercomunicação">
 <!-- The following commit will change future installs so that the scripts in
 texmf-dist linked from bin/ are copied instead of symlinks.
@@ -89,7 +89,7 @@ os comentários 1 a 5 de <ulink url="&blfs-ticket-root;17823">#17823</ulink>.
 
     
 
-    <!-- editors: latex-test-20240320.tar.xz at ~/ken/tex-testfiles and the
+    <!-- editors: latex-test-20250109.tar.xz at ~/ken/tex-testfiles and the
     ABOUT.pdf now deal with specifying which collections are needed when using
     binary texlive. Please do not sign off this package without at least
     testing asy to ensure that the symlinks are as needed. Please also be aware
@@ -161,36 +161,33 @@ xdvi-xaw. Mas, se você estiver usando o asy, ou usando um mecanismo do
 para suportar um visualizador de PDF da tua escolha, por exemplo <xref
 role="nodep" linkend="epdfview"/>).
     </para>
-
-    <!-- seems to not be needed in 2021
     <para role="recommended">
-
-      the optional non-wide-character ncurses library (for "some binary-only
-      application") from the bottom of the <application>Ncurses</application>
-      page in LFS is needed
-      for xindy.run which is used by <application>xindy</application>
-    </para> -->
-<para role="recommended">
       A versão binária do <application>asy</application> precisa do <xref
 linkend="freeglut"/>.
     </para>
-    <para> 
-      <!-- needed, but cannot recommend :-) -->
-A versão binária do asy está vinculada à libGLX.so.0 originária de <ulink
-url="https://gitlab.freedesktop.org/glvnd/libglvnd/">libglvnd</ulink>, mas
-instalar isso quebrará atualizações futuras dos pacotes do BLFS, como <xref
-linkend="mesa"/>. Contorne isso criando um link simbólico como o(a)
-usuário(a) <systemitem class="username">root</systemitem>:
+
+
+
+    <!-- Not needed in TL2025
+    <para>
+
+      The binary version of asy is linked to libGLX.so.0 from
+      <ulink url="https://gitlab.freedesktop.org/glvnd/libglvnd/">libglvnd</ulink>,
+      but installing that will break future updates of BLFS packages such as
+      <xref linkend="mesa"/>. Work around that by creating a symlink as the
+      <systemitem class="username">root</systemitem> user:
     </para>
     <screen role="nodump"><userinput>ln -sv libGL.so.1 /usr/lib/libGLX.so.0</userinput></screen>
-    <para role="recommended">
-    As versões binárias de <application>biber</application> e
-<application>xindy</application> estão vinculadas a <filename
-class='libraryfile'>libcrypt.so.1</filename> proveniente de versões antigas
-da <application>glibc</application>. Para usar esses dois aplicativos, siga
-a Observação acerca de aplicativos somente binários em
-<application>libxcrypt</application> no LFS para instalar a biblioteca crypt
-da ABI versão 1.
+-->
+<!-- This was rechecked in TL2025. Running 'readelf -a biber | grep NEEDED'
+     does *not* report needing libcrypt.so.1, but xindy does. -renodr -->
+<para role="recommended">
+      A versão binária de <application>xindy</application> está vinculada a
+<filename class='libraryfile'>libcrypt.so.1</filename> originária de versões
+antigas da <application>glibc</application>. Para usar o aplicativo, siga a
+Observação acerca de aplicativos somente binários em
+<application>libxcrypt</application> no LFS para instalar a versão 1 da ABI
+da biblioteca crypt.
     </para>
     <note>
       <para>
@@ -210,27 +207,23 @@ particular, essas dependências só foram verificadas em x86_64.
     <title>Instalação Binária do TeX Live</title>
 
     <para>
-      O conjunto de aplicativos do <application>TeX Live</application> com os
-documentos de suporte deles, fontes e utilitários é muito grande. Os(As)
-mantenedores(as) originais recomendam colocar todos os arquivos em uma
-estrutura de diretórios única. O BLFS recomenda <filename
-class='directory'>/opt/texlive</filename>.
+      O conjunto de programas do <application>TeX Live</application> com os
+documentos de suporte, fontes e utilitários deles é muito grande. Os(As)
+mantenedores(as) do fluxo de desenvolvimento recomendam colocar todos os
+arquivos em uma estrutura de diretórios única. A equipe do BLFS recomenda
+<filename class='directory'>/opt/texlive</filename>.
     </para>
 
     <note>
      <para>
-       <!-- Problem was reported on
-       texlive list, at least ls-R was involved and maybe other files,
-       suggestion was to remove, chown prefix, reinstall. -->
-Se você tiver escolhido instalar o binário como um(a) usuário(a) normal, o
+       Se você tiver escolhido instalar o binário como um(a) usuário(a) normal, o
 diretório para o prefixo precisa ser escrevível por esse(a) usuário(a). O(A)
-usuário(a) <systemitem class="username">root</systemitem> pode mudar a
-titularidade de propriedade do <filename
-class="directory">/opt/texlive/2024</filename> para esse(a) usuário(a) antes
-que o(a) usuário(a) inicie a instalação. Se qualquer mudança posterior nesse
-diretório for feita pelo(a) usuário(a) <systemitem
-class="username">root</systemitem>, <emphasis>isso mudará a titularidade de
-propriedade</emphasis>, o que quebra o uso por usuários(as) normais.
+usuário(a) &root; pode executar chown em <filename
+class="directory">/opt/texlive/&texlive-year;</filename> para esse(a)
+usuário(a) antes que ele(a) inicie a instalação. Se qualquer mudança
+posterior nesse diretório for feita pelo(a) usuário(a) &root;,
+<emphasis>isso mudará a titularidade da propriedade</emphasis>, o que
+interrompe o uso por usuários(as) normais.
      </para>
     </note>
 
@@ -285,48 +278,17 @@ selecionados.
       Para uma instalação mínima que construirá documentação que seja referenciada
 no BLFS, as únicas coleções de instalação necessárias são '[a] Programas e
 arquivos essenciais' e '[D] Pacotes fundamentais do LaTeX'. Isso baixará
-cerca de 130 arquivos e usará cerca de 320 MB. Usuários(as) conseguem
+cerca de 132 arquivos e usará cerca de 323 MB. Usuários(as) conseguem
 selecionar outras coleções conforme necessário, mas uma instalação completa
 baixará vários milhares de arquivos e usará mais de 8 GB.
     </para>
 
-
-    <!--  This is no longer needed
-    <para>
-
-      It has been established by Debian that the <command>python</command>
-      scripts in <filename class="directory">latex-make</filename> will work
-      with <command>python3</command>, so update them to invoke that by running
-      the following command as the <systemitem class="username">root</systemitem>
-      user:
-    </para>
-
-<screen role="root"><userinput>for F in /opt/texlive/&texlive-year;/texmf-dist/scripts/latex-make/*.py ; do
-  test -f $F &amp;&amp; sed -i 's%/usr/bin/env python%/usr/bin/python3%' $F || true
-done
-</userinput></screen>
--->
-<note>
+    <note>
       <para>
-        Depois da instalação, a variável de ambiente PATH precisará ser
-atualizada. Se o caminho estiver no local especificado acima, execute como
-o(a) usuário(a) &root;:
+        Depois da instalação, a variável de ambiente PATH precisará ser atualizada,
+e outras variáveis precisarão ser configuradas. Por favor, refira-se a <xref
+linkend="tex-path"/> para configurar essas variáveis de ambiente.
       </para>
-<screen role="root"><userinput>cat > /etc/profile.d/texlive.sh &lt;&lt; EOF
-# Begin texlive setup
-TEXLIVE_PREFIX=/opt/texlive/2024
-export TEXLIVE_PREFIX
-
-pathappend $TEXLIVE_PREFIX/bin/x86_64-linux
-# End texlive setup
-EOF</userinput></screen>
-
-      <para>
-        Imediatamente depois da instalação, atualize o PATH atual para teu shell
-atual como um(a) usuário(a) normal:
-      </para>
-
-<screen><userinput>source /etc/profile.d/texlive.sh</userinput></screen>
     </note>
 
   </sect2>
@@ -334,15 +296,7 @@ atual como um(a) usuário(a) normal:
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <!--
     <para>
-
-      <command>test -f $F &amp;&amp; sed ...</command>: in a small install these
-      files might not be present, so test if they exist and if not return 'true'
-      to avoid any error if this command has been copied into one of your own install scripts.
-    </para>
--->
-<para>
       <option>./install-tl --location
 http://mirror.aut.ac.nz/CTAN/systems/texlive/tlnet/</option>: use uma
 variação disso se você desejar usar um espelho diferente, por exemplo,

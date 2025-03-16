@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY ncftp-download-http "https://www.ncftp.com/downloads/ncftp/ncftp-&ncftp-version;-src.tar.xz">
+  <!ENTITY ncftp-download-http "https://www.ncftp.com/public_ftp/ncftp/ncftp-&ncftp-version;-src.tar.gz">
   <!ENTITY ncftp-download-ftp  "">
-  <!ENTITY ncftp-md5sum        "bbcb048d2412f4d62bc798818e703680">
-  <!ENTITY ncftp-size          "416 KB">
-  <!ENTITY ncftp-buildsize     "6,9 MB">
+  <!ENTITY ncftp-md5sum        "0a97a925d55efe44509a7bd4f14761fe">
+  <!ENTITY ncftp-size          "676 KB">
+  <!ENTITY ncftp-buildsize     "7,0 MB">
   <!ENTITY ncftp-time          "0,2 UPC">
 ]>
 
@@ -92,33 +92,33 @@ Additional Downloads</bridgehead>
   <sect2 role="installation">
     <title>Instalação do NcFTP</title>
 
+    <!--
     <para>
-      Existem duas maneiras de construir o
-&quot;<application>NcFTP</application>&quot;. A primeira (e ideal) maneira
-constrói a maior parte da funcionalidade como uma biblioteca compartilhada e
-depois constrói e instala o programa vinculado a essa biblioteca. O segundo
-método simplesmente vincula todas as funcionalidades ao binário
-estaticamente. Isso não disponibiliza a biblioteca dinâmica para vinculação
-por outros aplicativos. Você precisa escolher o método que melhor se adapta
-a você. Observe que o segundo método <emphasis>não</emphasis> cria um
-binário totalmente vinculado estaticamente; apenas as partes da
-&quot;<filename class="libraryfile">libncftp</filename>&quot; estão
-vinculadas estaticamente, nesse caso. Esteja ciente de que a construção e
-uso da biblioteca compartilhada são cobertas pela Licença Artística
-Esclarecida; entretanto, o desenvolvimento de aplicativos que utilizam a
-biblioteca compartilhada está sujeito a uma licença diferente.
+
+      There are two ways to build <application>NcFTP</application>.  The first
+      (and optimal) way builds most of the functionality as a shared library
+      and then builds and installs the program linked against this library.
+      The second method simply links all of the functionality into the binary
+      statically.  This doesn't make the dynamic library available for linking
+      by other applications.  You need to choose which method best suits you.
+      Note that the second method does <emphasis>not</emphasis> create an
+      entirely statically linked binary; only the <filename
+      class="libraryfile">libncftp</filename> parts are statically linked in,
+      in this case. Be aware that building and using the shared library is
+      covered by the Clarified Artistic License; however, developing
+      applications that utilize the shared library is subject to a different
+      license.
     </para>
 
     <para>
-      Primeiro, corrija um problema com o conjunto de comandos sequenciais de
-configuração introduzido pelo gcc-14:
+      First, fix an issue with the configure script introduced by gcc-14:
     </para>
 
 <screen><userinput remap="pre">sed -i 's/def HAVE_STDLIB_H/ 1/;s/extern select/extern int select/' configure</userinput></screen>
-
-    <para>
-      Para instalar o &quot;<application>NcFTP</application>&quot; usando o
-primeiro (e ideal) método, execute os seguintes comandos:
+-->
+<para>
+      Para instalar o <application>NcFTP</application>, execute os seguintes
+comandos:
     </para>
 
 <screen><userinput>CC=/usr/bin/gcc \
@@ -135,29 +135,29 @@ make</userinput></screen>
 class="username">root</systemitem>&quot;:
     </para>
 
-<screen role='root'><userinput>make -C libncftp soinstall &amp;&amp;
-make install</userinput></screen>
-
+<!--
     <para>
-      Para instalar o &quot;<application>NcFTP</application>&quot; usando o
-segundo método (com a funcionalidade da &quot;<filename
-class="libraryfile">libncftp</filename>&quot; vinculada estaticamente)
-execute os seguintes comandos:
+
+      To install <application>NcFTP</application> using the
+      second method (with the <filename class="libraryfile">libncftp</filename>
+      functionality linked in statically) run the following commands:
     </para>
 
-<screen role="nodump"><userinput>./configure --prefix=/usr --sysconfdir=/etc &amp;&amp;
+<screen role="nodump"><userinput>./configure - -prefix=/usr - -sysconfdir=/etc &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Esse pacote não vem com uma suíte de teste.
+      This package does not come with a test suite.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Now, as the <systemitem class="username">root</systemitem> user:
     </para>
 
 <screen role="nodump"><userinput>make install</userinput></screen>
+-->
+<screen role='root'><userinput>make -C libncftp soinstall &amp;&amp;
+make install</userinput></screen>
 
   </sect2>
 
@@ -165,17 +165,19 @@ class="username">root</systemitem>&quot;:
     <title>Explicações do Comando</title>
 
     <para>
-      <envar>CC=/usr/bin/gcc</envar>. Essa variável de ambiente garante que
+      <!--The build procedure is broken if <command>
+gcc</command>
+      is not used.-->
+<envar>CC=/usr/bin/gcc</envar>. Essa variável de ambiente garante que
 <command>gcc</command> seja usado se <xref linkend="llvm"/> estiver
-instalado. O procedimento de construção é quebrado se <command>gcc</command>
-não for usado.
+instalado.  
     </para>
 
     <para>
-      <command>make -C ... &amp;&amp; make -C ...</command>: Esses comandos criam
-e instalam a biblioteca dinâmica &quot;<filename
-class="libraryfile">libncftp</filename>&quot; que é então usada para
-vincular ao compilar o programa principal.
+      <command>make -C ... &amp;&amp; make ...</command>: Esses comandos criam e
+instalam a biblioteca dinâmica <filename
+class="libraryfile">libncftp</filename> que é então usada para vincular ao
+compilar o programa principal.
     </para>
 
   </sect2>
@@ -243,8 +245,7 @@ vincular ao compilar o programa principal.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>ncftp, ncftpbatch, ncftpbookmarks, ncftpget, ncftpls, ncftpput e
-ncftpspooler</seg>
+        <seg>ncftp, ncftpbatch, ncftpget, ncftpls, ncftpput e ncftpspooler</seg>
         <seg>libncftp.so</seg>
         <seg>Nenhum(a)</seg>
       </seglistitem>
@@ -278,20 +279,22 @@ ncftpspooler</seg>
         </listitem>
       </varlistentry>
 
+      <!--
       <varlistentry id="ncftpbookmarks">
+
         <term><command>ncftpbookmarks</command></term>
         <listitem>
           <para>
-            é o editor de marcadores do &quot;<application>NcFTP</application>&quot;
-(baseado em &quot;<application>NCurses</application>&quot;)
+            is the <application>NcFTP</application> Bookmark Editor
+            (<application>NCurses</application>-based)
           </para>
           <indexterm zone="ncftp ncftpbookmarks">
             <primary sortas="b-ncftpbookmarks">ncftpbookmarks</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="ncftpget">
+-->
+<varlistentry id="ncftpget">
         <term><command>ncftpget</command></term>
         <listitem>
           <para>

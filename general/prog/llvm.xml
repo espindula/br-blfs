@@ -337,13 +337,16 @@ ninja</userinput></screen>
 
     
     <para>
-      Se você deseja executar a suíte de teste e tiver baixado o compiler-rt,
-contorne um problema que causa falhas de testes ao construir o LLVM com GCC
-e <parameter>-D CLANG_CONFIG_FILE_SYSTEM_DIR</parameter>:
+      Se você desejar executar a suíte de teste e tiver baixado o compiler-rt,
+contorne um problema que causa falhas de teste ao construir o LLVM com GCC e
+<parameter>-D CLANG_CONFIG_FILE_SYSTEM_DIR</parameter> e evite que algumas
+suítes de teste usem <command>ld.gold</command> que o pacote Binutils do LFS
+não mais fornece:
     </para>
 
     <!-- The excessive core dump made my system irresponsive.  -->
 <screen remap="test"><userinput>sed -e 's/config.has_no_default_config_flag/True/' \
+    -e 's/"-fuse-ld=gold"//'                       \
     -i ../projects/compiler-rt/test/lit.common.cfg.py</userinput></screen>
 
     
@@ -403,12 +406,14 @@ Se <option>-jN</option> (N substituído por um número) for passado para
 mas executados usando todos os núcleos lógicos disponíveis. Execute o
 comando de teste em um cgroup (<phrase revision='systemd'>passe a opção
 <option>-p AllowedCPUs=...</option> para o comando
-<command>systemd-run</command>, </phrase> leia <xref
+<command>systemd-run</command>, </phrase> leia-se <xref
 linkend='build-in-cgroup'/> para detalhes) para limitar o número de núcleos
-lógicos para executar os testes. Um teste chamado
-<filename>Linux/clone_setns.cpp</filename> falhará se
-<option>CONFIG_USER_NS</option> não estiver habilitada na configuração do
-núcleo.
+lógicos para executar os testes. 23 testes cfi são conhecidos por falharem
+porque a suposição deles acerca do vinculador não é verdadeira com o
+vinculador BFD e nós tivemos que impedi-los de usar o vinculador Gold
+removido. Um teste chamado <filename>Linux/clone_setns.cpp</filename>
+falhará se <option>CONFIG_USER_NS</option> não estiver habilitada na
+configuração do núcleo.
       
 
       

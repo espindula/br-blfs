@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY ModemManager-download-http "https://www.freedesktop.org/software/ModemManager/ModemManager-&ModemManager-version;.tar.xz">
+  <!ENTITY ModemManager-download-http "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/archive/&ModemManager-version;/ModemManager-&ModemManager-version;.tar.gz">
   <!ENTITY ModemManager-download-ftp  "">
-  <!ENTITY ModemManager-md5sum        "9f014dfc59f1bd8bc230bb2c2974d104">
-  <!ENTITY ModemManager-size          "2,5 MB">
-  <!ENTITY ModemManager-buildsize     "155 MB (com testes)">
-  <!ENTITY ModemManager-time          "0,7 UPC (Usando paralelismo=4; com testes)">
+  <!ENTITY ModemManager-md5sum        "8fb368594cd41fc43ddb42b694db90d4">
+  <!ENTITY ModemManager-size          "1,9 MB">
+  <!ENTITY ModemManager-buildsize     "62 MB (com testes)">
+  <!ENTITY ModemManager-time          "0,3 UPC (Usando paralelismo=4; com testes)">
 ]>
 
 <sect1 id="ModemManager" xreflabel="ModemManager-&ModemManager-version;">
@@ -98,33 +98,38 @@ linkend="libqmi"/>, <xref linkend="polkit"/> e <xref linkend="vala"/>
 comandos:
     </para>
 
-<screen revision="sysv"><userinput>./configure --prefix=/usr                \
-            --sysconfdir=/etc             \
-            --localstatedir=/var          \
-            --disable-static              \
-            --disable-maintainer-mode     \
-            --with-systemd-journal=no     \
-            --with-systemd-suspend-resume &amp;&amp;
-make</userinput></screen>
+<screen revision="sysv"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-<screen revision="systemd"><userinput>./configure --prefix=/usr                \
-            --sysconfdir=/etc             \
-            --localstatedir=/var          \
-            --disable-static              \
-            --disable-maintainer-mode     \
-            --with-systemd-journal        \
-            --with-systemd-suspend-resume &amp;&amp;
-make</userinput></screen>
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -D bash_completion=false \
+      -D man=false             \
+      -D qrtr=false            \
+      -D systemdsystemunitdir=no &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision="systemd"><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -D bash_completion=false \
+      -D man=false             \
+      -D qrtr=false            &amp;&amp;
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
@@ -132,30 +137,36 @@ make</userinput></screen>
 
     <title>Explicações do Comando</title>
 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
     <para>
-      <parameter>--with-systemd-suspend-resume</parameter>: Essa chave força o
-<application>ModemManager</application> a usar os recursos de gerenciamento
-de energia do <phrase
-revision="sysv"><application>elogind</application></phrase> <phrase
-revision="systemd"><application>systemd</application></phrase>.
+      <parameter>-D bash_completion=false</parameter>: Use essa opção se o pacote
+externo <ulink
+url="https://github.com/scop/bash-completion">bash-completion</ulink> não
+estiver instalado.
     </para>
 
     <para>
-      <phrase
-revision="systemd"><parameter>--with-systemd-journal</parameter></phrase>
-<phrase
-revision="sysv"><parameter>--with-systemd-journal=no</parameter></phrase> :
-Essa chave força o <application>ModemManager</application> a <phrase
-revision="sysv">não</phrase> usar o diário do "systemd" para registro.
+      <parameter>-D man=false</parameter>: Use essa opção se o pacote externo
+<ulink url="https://ftpmirror.gnu.org/gnu/help2man/">help2man</ulink> não
+estiver instalado.
     </para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
+    <para>
+      <parameter>-D qrtr=false</parameter>: Essa chave desabilita suporte para o
+protocolo QRTR, que precisa do pacote externo <ulink
+url="https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib">libqrtr-glib</ulink>.
+    </para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/gtk-doc-rebuild.xml"/>
+    <para revision="sysv">
+      <parameter>-D systemdsystemunitdir=no</parameter>: Essa chave evita que
+<application>meson</application> procure o diretório de unidades do systemd
+e falhe, pois ele não está disponível em sistemas SysV.
+    </para>
 
   </sect2>
+
   <sect2 role="configuration" revision="systemd">
     <title>Configurando o "ModemManager"</title>
 

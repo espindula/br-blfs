@@ -48,17 +48,28 @@ regressões nos documentos delas).
 <para>Agora, crie o conjunto de comandos sequenciais texlive.sh como o(a)
 usuário(a) &root;:</para>
 
+<!--
+  <note>
+
+    <para>
+      The backslashes before the dollar signs in the script above are to
+      facilitate a copy/paste operation. The backslashes should not
+      appear in the actual script.
+    </para>
+  </note>
+-->
 <screen role="root"><userinput>TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/')
+TEXLIVE_PREFIX=/opt/texlive/&texlive-year;
 
 cat &gt; /etc/profile.d/texlive.sh &lt;&lt; EOF
 <literal># Begin texlive setup
 TEXLIVE_PREFIX=/opt/texlive/&texlive-year;
 export TEXLIVE_PREFIX
 
-pathappend \$TEXLIVE_PREFIX/texmf-dist/doc/info INFOPATH
-pathappend \$TEXLIVE_PREFIX/bin/$TEXARCH
+pathappend $TEXLIVE_PREFIX/texmf-dist/doc/info INFOPATH
+pathappend $TEXLIVE_PREFIX/bin/$TEXARCH
 
-TEXMFCNF=\$TEXLIVE_PREFIX/texmf-dist/web2c
+TEXMFCNF=$TEXLIVE_PREFIX/texmf-dist/web2c
 export TEXMFCNF
 
 # End texlive setup</literal>
@@ -66,13 +77,7 @@ EOF
 
 unset TEXARCH</userinput></screen>
 
-  <note>
-    <para>
-      As barras invertidas antes dos cifrões no conjunto de comandos sequenciais
-acima são para facilitar a operação de copiar/colar. As barras invertidas
-não deveriam aparecer no conjunto de comandos sequenciais atual.
-    </para>
-  </note>
+
 
   <para>
     Os novos caminhos podem ser ativados imediatamente executando-se:
