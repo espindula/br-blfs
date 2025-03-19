@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY at-spi2-core-download-http
-           "&gnome-download-http;/at-spi2-core/2.54/at-spi2-core-&at-spi2-core-version;.tar.xz">
+           "&gnome-download-http;/at-spi2-core/2.56/at-spi2-core-&at-spi2-core-version;.tar.xz">
   <!ENTITY at-spi2-core-download-ftp  "">
-  <!ENTITY at-spi2-core-md5sum        "a05ad6cf4a49b19964cc5eec363d2310">
-  <!ENTITY at-spi2-core-size          "564 KB">
-  <!ENTITY at-spi2-core-buildsize     "24 MB (com testes)">
+  <!ENTITY at-spi2-core-md5sum        "064139d18c59b5e792302784593f9f17">
+  <!ENTITY at-spi2-core-size          "572 KB">
+  <!ENTITY at-spi2-core-buildsize     "16 MB (com testes)">
   <!ENTITY at-spi2-core-time          "0,2 UPC (com testes)">
 ]>
 
@@ -100,16 +100,20 @@ seguintes comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -D systemd_user_dir=/tmp &amp;&amp;
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -D gtk2_atk_adaptor=false \
+      -D systemd_user_dir=/tmp  &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -D gtk2_atk_adaptor=false &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -148,16 +152,12 @@ documentação. Observe que você precisa ter <xref role="nodep"
 linkend="gi-docgen"/> e <xref linkend='sphinx'/> instalados em teu sistema.
     </para>
 
-    
-
-  <!-- For when we remove gtk2 from the book:
     <para>
-
-      <parameter>-D gtk2_atk_adaptor=false</parameter>: This switch disables
-      building the GTK+-2 module for this package.
+      <parameter>-D gtk2_atk_adaptor=false</parameter>: Essa chave desabilita
+construir o módulo GTK+-2 para esse pacote.
     </para>
-    -->
-</sect2>
+
+  </sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>
@@ -168,17 +168,11 @@ linkend="gi-docgen"/> e <xref linkend='sphinx'/> instalados em teu sistema.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        
-        <!-- <seg>
- No user executable programs
-          at-spi-bus-launcher and at-spi2-registryd in /usr/libexec
-        </seg> -->
-<seg>
+        <seg>
           Nenhum(a)
         </seg>
         <seg>
-          libatk-1.0.so, libatk-bridge-2.0.so, libatspi.so e
-/usr/lib/gtk-2.0/modules/libatk-bridge.so
+          libatk-1.0.so, libatk-bridge-2.0.so e libatspi.so
         </seg>
         <seg>
           /usr/include/atk-1.0, /usr/include/at-spi-2.0, /usr/include/at-spi2-atk,
@@ -190,23 +184,7 @@ linkend="gi-docgen"/> e <xref linkend='sphinx'/> instalados em teu sistema.
 
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
-      <!-- Not user executable programs
-      <varlistentry id="at-spi2-registryd">
-
-        <term><command>at-spi2-registryd</command></term>
-        <listitem>
-          <para>
-            is the <application>At-Spi2</application> registry daemon.
-          </para>
-          <indexterm zone="at-spi2-core at-spi2-registryd">
-            <primary sortas="b-at-spi2-registryd">at-spi2-registryd</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-    -->
-<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
-
-    
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
 
       <varlistentry id="libatk-1.0">
         <term><filename class="libraryfile">libatk-1.0.so</filename></term>
@@ -221,19 +199,23 @@ aplicativos de área de trabalho
         </listitem>
       </varlistentry>
 
+
+
+      <!-- BLFS does not support GTK+-2 anymore.
       <varlistentry id="libatk-bridge">
+
         <term><filename class="libraryfile">libatk-bridge.so</filename></term>
         <listitem>
           <para>
-            contém a ponte &quot;GTK+-2&quot; do Kit de Ferramentas de Acessibilidade
+            contains the Accessibility Toolkit GTK+-2 bridge
           </para>
           <indexterm zone="at-spi2-core libatk-bridge">
             <primary sortas="c-libatk-bridge">libatk-bridge.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="libatk-bridge-2.0">
+-->
+<varlistentry id="libatk-bridge-2.0">
         <term><filename class="libraryfile">libatk-bridge-2.0.so</filename></term>
         <listitem>
           <para>

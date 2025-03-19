@@ -6,33 +6,14 @@
 
   <!ENTITY gimp-download-http "https://download.gimp.org/gimp/v&gimp-majmin;/gimp-&gimp-version;.tar.xz">
   <!ENTITY gimp-download-ftp  "">
-  <!ENTITY gimp-md5sum        "5fd4dc345ee39af23b2f74e37e86bd6b">
+  <!ENTITY gimp-md5sum        "afc666f095a9cb05b3e7a7c682d0a6a9">
   <!ENTITY gimp-size          "26 MB">
-  <!ENTITY gimp-buildsize     "631 MB (164 MB instalado)">
-  <!ENTITY gimp-time          "1,5 UPC (Usando paralelismo=4)">
+  <!ENTITY gimp-buildsize     "768 MB (183 MB instalado)">
+  <!ENTITY gimp-time          "1,7 UPC (Usando paralelismo=4)">
 
-  <!-- pro-tem, a pull of gimp-help, https://gitlab.gnome.org/GNOME/gimp-help.git
-  git archive - -format=tar - -prefix=${DIRNAME}/ HEAD | xz >../${DIRNAME}.tar.xz -->
-
-  <!-- renodr: I generated the git tarball using the following instructions:
-       cd /tmp &&
-       mkdir gimp-help &&
-       cd gimp-help &&
-       git clone https://gitlab.gnome.org/GNOME/gimp-help.git &&
-       cd gimp-help &&
-       git checkout gimp-help-2-10 &&
-       cd .. &&
-       rm -rv gimp-help/.git &&
-       mv -v gimp-help gimp-help-<DATE>
-       tar -cJvf gimp-help-<DATE>.tar.xz gimp-help-<DATE>
-
-       After you've completed this, run a test build, and upload the tarball to
-       anduin.-->
-
-  <!ENTITY gimp-help-download   "&sources-anduin-http;/gimp/gimp3-help-&gimp-help-version;.tar.xz">
-<!--  <!ENTITY gimp-help-download   "https://download.gimp.org/pub/gimp/help/gimp-help-&gimp-help-version;.tar.bz2">-->
-  <!ENTITY gimp-help-md5sum     "162d57a67ff737ed221a8d7f274d119f">
-  <!ENTITY gimp-help-size       "129 MB">
+  <!ENTITY gimp-help-download   "https://download.gimp.org/pub/gimp/help/gimp-help-&gimp-help-version;.tar.bz2">
+  <!ENTITY gimp-help-md5sum     "6a45a29097c69d5cf0d86e5c9b6e5f9e">
+  <!ENTITY gimp-help-size       "126 MB">
   <!ENTITY gimp-help-buildsize  "From 351 MB (74 MB installed) for en only to 1.5 GB for all
                                  languages">
   <!ENTITY gimp-help-time       "0,4 UPC (somente en), 5,1 UPC para todos os idiomas; usando paralelismo=4">
@@ -94,23 +75,12 @@ imagens.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
 
-    <!--
     <note>
-
       <para>
-       The creation of local html files with recent versions of the necessary
-       packages is somewhat broken (some png images are not sourced by the
-       generated HTML, only their captions are visible).
+        A versão em inglês dos arquivos de ajuda está completa, mas algumas partes
+do texto para outros idiomas possivelmente ainda não estejam traduzidas.
       </para>
     </note>
--->
-<note>
-      <para>
-        A versão em inglês dos arquivos de ajuda está completa, mas grandes partes
-do texto para muitos outros idiomas ainda não estão traduzidas.
-      </para>
-    </note>
-
 
     <itemizedlist spacing="compact">
       <listitem>
@@ -156,14 +126,7 @@ linkend="poppler"/> (incluindo poppler-data)
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <!-- These do not seem to be needed anymore.-->
-<!--<xref role='runtime' linkend="gvfs"/>
- and
-      <xref role='runtime' linkend='glib-networking'/>
-      (both runtime, to access the online help, open images from a HTTP
-      or HTTPS URL, drag and drop images from an external application,
-      etc.),-->
-<xref linkend="graphviz"/>, <xref linkend="gs"/> (com libgs instalada),
+      <xref linkend="graphviz"/>, <xref linkend="gs"/> (com libgs instalada),
 <xref linkend="iso-codes"/>, <xref linkend="libgudev"/>, <xref
 linkend="pygobject3"/> e <xref linkend="xdg-utils"/>
     </para>
@@ -203,22 +166,14 @@ acima
   <sect2 role="installation">
     <title>Instalação do Gimp</title>
 
-    
-    <!-- Maybe only /usr/lib/libgimp*-3.0.so* need to be removed.
-         I lately noticed those files installed by Gimp-20240711 has a
-         **larger** version number than the files from Gimp-3.0.0-RC1,
-         causing a well known "downgrade" issue: see LFS package management
-         page.  But I don't want to install 20240711 all over again just
-         to see if it's unnecessary to remove the other files, so simply
-         purge everything I've purged in my build.  -->
-<para>
+    <para>
       Se atualizar a partir de uma instalação anterior do Gimp-3, como o(a)
 usuário(a) &root;, remova alguns arquivos e diretórios da instalação antiga
 ou o sistema de construção pode pegá-los erroneamente, causando uma falha de
 construção:
     </para>
 
-    <screen><userinput>rm -rf /usr/{lib,share}/gimp/3.0 &amp;&amp;
+<screen role="root"><userinput>rm -rf /usr/{lib,share}/gimp/3.0 &amp;&amp;
 rm -f  /usr/share/gir-1.0/Gimp-3.0.gir &amp;&amp;
 rm -f  /usr/lib/girepository-1.0/Gimp-3.0.typelib &amp;&amp;
 rm -f  /usr/lib/libgimp*-3.0.so*</userinput></screen>
@@ -232,17 +187,16 @@ rm -f  /usr/lib/libgimp*-3.0.so*</userinput></screen>
 <screen><userinput>mkdir gimp-build &amp;&amp;
 cd    gimp-build &amp;&amp;
 
-meson setup --prefix=/usr              \
-            --buildtype=release        \
-            -D headless-tests=disabled ..  &amp;&amp;
+meson setup ..                   \
+      --prefix=/usr              \
+      --buildtype=release        \
+      -D headless-tests=disabled &amp;&amp;
 ninja</userinput></screen>
 
     
     <para>
-      Para testar os resultados (exige um terminal em um ambiente gráfico), emita:
-<command>ninja test</command>. Se executar os testes em uma sessão do
-Wayland, um sub teste chamado <literal>keyboard_zoom_focus</literal> no
-teste <literal>ui</literal> é conhecido por falhar.
+      Para testar os resultados (exige um terminal em um ambiente gráfico) emita:
+<command>ninja test</command>.
     </para>
 
     <para>
@@ -260,29 +214,14 @@ teste <literal>ui</literal> é conhecido por falhar.
     <title>Instalação do Gimp-Help</title>
 
     <para>
-      <!--
-      The documentation generated by gimp-help-2.10.34 and online help have
-      the same contents, so I comment this out. [pierre Nov. 2023]
-      Because of the
-      issues mentioned in the note above, you are recommended to use the online
-      help, either by building against <xref linkend="gvfs"/>
- so that 'help'
-      can open the latest XML files in your browser, or else you can manually
-      open the html in your browser by going to <ulink
-      url="https://docs.gimp.org/2.10/en/">https://docs.gimp.org/2.10/en</ulink>
-     (change the language code if desired).-->
-O tarball <filename>gimp-help</filename> contém imagens e texto de ajuda em
+      O tarball <filename>gimp-help</filename> contém imagens e texto de ajuda em
 inglês para arquivos de ajuda, juntamente com traduções. Se você desejar
 instalar cópias locais dos arquivos de ajuda para ler offline, desempacote o
 tarball gimp-help e mude para a raiz da árvore do fonte recém-criada. 
-
-      
     </para>
 
 <screen><userinput>tar -xf ../../gimp3-help-&gimp-help-version;.tar.xz &amp;&amp;
 cd gimp3-help-&gimp-help-version;
-
-automake --add-missing
 
 ALL_LINGUAS=&quot;ca cs da de en en_GB es fa fr hr ko lt nl nn pt pt_BR ro sl sv uk zh_CN&quot; \
 ./configure --prefix=/usr</userinput></screen>
