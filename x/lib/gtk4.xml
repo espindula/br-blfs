@@ -6,11 +6,11 @@
 
   <!ENTITY gtk4-download-http "&gnome-download-http;/gtk/&gtk4-minor;/gtk-&gtk4-version;.tar.xz">
   <!ENTITY gtk4-download-ftp  "">
-  <!ENTITY gtk4-md5sum        "0f2b154a0b05e4ca94a05aaeb7e1f3fb">
-  <!ENTITY gtk4-size          "18 MB">
-  <!ENTITY gtk4-buildsize     "1,1 GB (com documentos; adicionar 157 MB para testes)">
-  <!ENTITY gtk4-time          "1,7 UPC (usando paralelismo=4; com documentos; adicionar 1,1 UPC para testes
-ou 3,7 UPC para NVIDIA)">
+  <!ENTITY gtk4-md5sum        "33df21caa24671bbf315b53065c78055">
+  <!ENTITY gtk4-size          "17 MB">
+  <!ENTITY gtk4-buildsize     "890 MB (com documentos; adicionar 132 MB para testes)">
+  <!ENTITY gtk4-time          "1,4 UPC (usando paralelismo=4; com documentos; adicionar 3,6 UPC para
+testes)">
 ]>
 
 <sect1 id="gtk4" xreflabel="GTK-&gtk4-version;">
@@ -66,18 +66,22 @@ usadas para criar interfaces gráficas de usuário(a) para aplicativos.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo recomendado (para corrigir a quebra de desserialização do espaço de
-cores de PNG com libpng-1.6.45 ou posterior): <ulink
-url="&patch-root;/gtk-&gtk4-version;-libpng_1_6_45-1.patch"/>
+          Recommended patch (for fixing PNG colorspace deserialization
+          breakage with libpng-1.6.45 or later): <ulink
+          url="&patch-root;/gtk-&gtk4-version;-libpng_1_6_45-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do &quot;GTK 4&quot;</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do &quot;GTK 4&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -90,12 +94,13 @@ linkend="wayland-protocols"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="adwaita-icon-theme"/> (padrão para algumas chaves de
-configurações do gtk4), <xref linkend="gst10-plugins-bad"/>, <xref
-linkend="glslc"/>, <xref role='runtime' linkend="gst10-plugins-good"/>
-(tempo de execução, construído com <xref role='nodep' linkend='libvpx'/>),
-<xref linkend="hicolor-icon-theme"/> (necessário para testes e para
-padrões), <xref linkend="librsvg"/> e <xref linkend="vulkan-loader"/>
+      <xref role='runtime' linkend="adwaita-icon-theme"/> (tempo de execução,
+padrão para algumas chaves de configurações do gtk4), <xref
+linkend="gst10-plugins-bad"/>, <xref linkend="glslc"/>, <xref role='runtime'
+linkend="gst10-plugins-good"/> (tempo de execução, construído com <xref
+role='nodep' linkend='libvpx'/>), <xref linkend="hicolor-icon-theme"/>
+(necessário para testes e para padrões), e <xref linkend="librsvg"/> e <xref
+linkend="vulkan-loader"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas (Exigidas se construir o &quot;GNOME&quot;)</bridgehead>
@@ -108,10 +113,11 @@ padrões), <xref linkend="librsvg"/> e <xref linkend="vulkan-loader"/>
       <xref linkend="avahi"/> (para alguns testes), <xref linkend="colord"/>,
 <xref linkend="cups"/>, <xref linkend="docutils"/>, <xref
 linkend="gi-docgen"/>, <xref role="runtime" linkend="highlight"/> (tempo de
-execução, usado somente por <command>gtk4-demo</command> para realce de
-sintaxe de código fonte de demonstração), <xref
+execução, usado somente por <command>gtk4-demo</command> para realçamento de
+sintaxe do código fonte de demonstração), <xref
 linkend="libcloudproviders"/>, <xref linkend="sassc"/>, <xref
 linkend="tinysparql"/>, <ulink
+url="https://github.com/AccessKit/accesskit-c">accesskit-c</ulink>, <ulink
 url="https://github.com/OpenPrinting/cpdb-libs">cpdb</ulink>, <ulink
 url="https://pypi.org/project/pydbus/">pydbus</ulink> (para alguns testes) e
 <ulink url="&sysprof-url;">sysprof</ulink>
@@ -122,14 +128,18 @@ url="https://pypi.org/project/pydbus/">pydbus</ulink> (para alguns testes) e
   <sect2 role="installation">
     <title>Instalação do GTK 4</title>
 
+
+
+    <!--
     <para>
-      Corrija a quebra de desserialização do espaço de cores de PNG com
-libpng-1.6.45 ou posterior:
+
+      Fix the PNG colorspace deserialization breakage with libpng-1.6.45
+      or later:
     </para>
 
     <screen><userinput>patch -Np1 -i ../gtk-&gtk4-version;-libpng_1_6_45-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale o &quot;<application>GTK 4</application>&quot; executando os
 seguintes comandos:
     </para>
@@ -202,6 +212,10 @@ testes possivelmente levem significativamente mais tempo.
                above on wayland in Weston
      [xry111]: 4.16.12, wayland,     6186 OK, 0 Expected Fail, 9 Fail, 16 Skipped
                above on X11 (Xwayland) in Weston
+     [renodr]: 4.18.2, X11,    5047 OK, 0 Expected Fail, 5 Fail, 16 Skipped
+               above on X11 in XFCE
+     [bdubbs]: gtk-4.18.4 there were 7 failures and 16 skipped out of of 5117 tests. 
+               There were 8 timeouts of 30 seconds. Running over ssh.
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -362,10 +376,11 @@ Manual de Referência do GTK 4</ulink>.
 
       <seglistitem>
         <seg>
-          gtk4-broadwayd, gtk4-builder-tool, gtk4-demo, gtk4-demo-application,
-gtk4-encode-symbolic-svg, gtk4-icon-browser, gtk4-launch, gtk4-node-editor,
-gtk4-print-editor, gtk4-query-settings, gtk4-update-icon-cache e
-gtk4-widget-factory
+          <!--gtk4-icon-browser,-->
+gtk4-broadwayd, gtk4-builder-tool, gtk4-demo, gtk4-demo-application,
+gtk4-encode-symbolic-svg, gtk4-image-tool, gtk4-launch, gtk4-node-editor,
+gtk4-path-editor, gtk4-print-editor, gtk4-query-settings,
+gtk4-rendernode-tool, gtk4-update-icon-cache e gtk4-widget-factory
         </seg>
         <seg>
           libgtk-4.so
@@ -447,16 +462,34 @@ feitas com o &quot;GTK 4&quot;
         </listitem>
       </varlistentry>
 
+ 
+
+      <!-- Not seen in 4.18.2
       <varlistentry id="gtk4-icon-browser">
+
         <term><command>gtk4-icon-browser</command></term>
         <listitem>
           <para>
-            é um utilitário para explorar os ícones no atual tema de ícones. Ele mostra
-ícones em vários tamanhos, as variantes simbólicas deles quando disponíveis,
-bem como uma descrição do ícone e do contexto dele
+            is a utility to explore the icons in the current icon theme. It
+            shows icons in various sizes, their symbolic variants when
+            available, as well as a description of the icon and its context
           </para>
           <indexterm zone="gtk4 gtk4-icon-browser">
             <primary sortas="b-gtk4-icon-browser">gtk4-icon-browser</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+-->
+<varlistentry id="gtk4-image-tool">
+        <term><command>gtk4-image-tool</command></term>
+        <listitem>
+          <para>
+            realiza várias operações sobre imagens, incluindo comparações, conversões,
+informações de listagem nas imagens, rerotulagem das imagens e exibição das
+imagens
+          </para>
+          <indexterm zone="gtk4 gtk4-image-tool">
+            <primary sortas="b-gtk4-image-tool">gtk4-image-tool</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -490,6 +523,20 @@ inspetor do &quot;GTK&quot;
         </listitem>
       </varlistentry>
 
+      <varlistentry id="gtk4-path-tool">
+        <term><command>gtk4-path-tool</command></term>
+        <listitem>
+          <para>
+            realiza várias tarefas sobre caminhos, incluindo decomposições, reversões,
+restrições, renderização, exibição do caminho e informações de listagem
+acerca dos caminhos
+          </para>
+          <indexterm zone="gtk4 gtk4-path-tool">
+            <primary sortas="b-gtk4-path-tool">gtk4-path-tool</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="gtk4-print-editor">
         <term><command>gtk4-print-editor</command></term>
         <listitem>
@@ -512,6 +559,20 @@ inspetor do &quot;GTK&quot;
           </para>
           <indexterm zone="gtk4 gtk4-query-settings">
             <primary sortas="b-gtk4-query-settings">gtk4-query-settings</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="gtk4-rendernode-tool">
+        <term><command>gtk4-rendernode-tool</command></term>
+        <listitem>
+          <para>
+            realiza várias tarefas sobre nós de renderização GTK, incluindo avaliações
+comparativas, comparações, extração de URLs de dados, exibição de
+informações acerca dos nós, exibição dos nós e captura de tela dos nós
+          </para>
+          <indexterm zone="gtk4 gtk4-rendernode-tool">
+            <primary sortas="b-gtk4-rendernode-tool">gtk4-rendernode-tool</primary>
           </indexterm>
         </listitem>
       </varlistentry>

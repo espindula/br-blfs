@@ -141,7 +141,19 @@ Toolkit</ulink>,
       Se você baixou os módulos opcionais, [então] desempacote-os agora:
     </para>
 
+<!-- Editors: This is needed because CMake gets run again once during the
+         build process to generate the pkg-config file, and it will fail even
+         when the CMake option gets passed to the main CMake because those
+         options aren't inherited by the instance of CMake called during
+         the build process. -->
 <screen><userinput>tar -xf ../opencv_contrib-&opencv-contrib-version;.tar.gz</userinput></screen>
+
+    
+    <para>
+      Corrija um problema de construção que ocorre com CMake 4.0:
+    </para>
+
+<screen><userinput remap="pre">sed -i 's/VERSION 2.8.12.2/VERSION 4.0.0/' cmake/OpenCVGenPkgconfig.cmake</userinput></screen>
 
     <para>
       Instale <application>opencv</application> executando os seguintes comandos:
@@ -150,17 +162,18 @@ Toolkit</ulink>,
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr      \
-      -D CMAKE_BUILD_TYPE=Release       \
-      -D ENABLE_CXX11=ON                \
-      -D BUILD_PERF_TESTS=OFF           \
-      -D WITH_XINE=ON                   \
-      -D BUILD_TESTS=OFF                \
-      -D ENABLE_PRECOMPILED_HEADERS=OFF \
-      -D CMAKE_SKIP_INSTALL_RPATH=ON    \
-      -D BUILD_WITH_DEBUG_INFO=OFF      \
-      -D OPENCV_GENERATE_PKGCONFIG=ON   \
-      -W no-dev  ..                     &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr        \
+      -D CMAKE_BUILD_TYPE=Release         \
+      -D ENABLE_CXX11=ON                  \
+      -D BUILD_PERF_TESTS=OFF             \
+      -D WITH_XINE=ON                     \
+      -D BUILD_TESTS=OFF                  \
+      -D ENABLE_PRECOMPILED_HEADERS=OFF   \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON      \
+      -D BUILD_WITH_DEBUG_INFO=OFF        \
+      -D OPENCV_GENERATE_PKGCONFIG=ON     \
+      -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
+      -W no-dev  ..                       &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -177,6 +190,9 @@ make</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-policy-version.xml"/>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/cmake-skip-install-rpath.xml"/>

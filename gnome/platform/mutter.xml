@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-47;/mutter-&mutter-version;.tar.xz">
+  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-48;/mutter-&mutter-version;.tar.xz">
   <!ENTITY mutter-download-ftp  "">
-  <!ENTITY mutter-md5sum        "b2d771f303214a5e7611a217ba42d9d1">
-  <!ENTITY mutter-size          "6,5 MB">
-  <!ENTITY mutter-buildsize     "72 MB (com testes)">
-  <!ENTITY mutter-time          "0,5 UPC (Usando paralelismo=4; adicionar 1,4 UPC para testes)">
+  <!ENTITY mutter-md5sum        "82ee44890fe297312f350bf80a6a2cae">
+  <!ENTITY mutter-size          "8,0 MB">
+  <!ENTITY mutter-buildsize     "103 MB (com testes)">
+  <!ENTITY mutter-time          "0,4 UPC (Usando paralelismo=4; adicionar 1,4 UPC para testes)">
 ]>
 
 <sect1 id="mutter" xreflabel="Mutter-&mutter-version;">
@@ -68,6 +68,16 @@ controlador de vídeo acelerado por hardware).
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/mutter-&mutter-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do Mutter</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -103,11 +113,13 @@ linkend="wayland-protocols"/> e <xref linkend="xwayland"/>
 ,-->
 <xref linkend="python-dbusmock"/> (exigido para testes), <xref
 linkend="xorg-server"/> (para sessões do X11), <ulink
-url="&sysprof-url;">sysprof</ulink>, <command>Xvfb</command> (proveniente de
-<xref linkend='xorg-server'/> ou <xref linkend='xwayland'/>), <ulink
-url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink>, e <ulink
-url='https://gitlab.gnome.org/GNOME/zenity'>zenity</ulink> (os testes X11
-somente executariam com todos os três últimos)
+url="https://github.com/scop/bash-completion/">bash-completion</ulink>,
+<ulink url="&sysprof-url;">sysprof</ulink>, <command>Xvfb</command>
+(proveniente de <xref linkend='xorg-server'/> ou <xref
+linkend='xwayland'/>), <ulink
+url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink> e <ulink
+url='https://gitlab.gnome.org/GNOME/zenity'>zenity</ulink> (os testes do X11
+só executariam com todos os últimos três)
     </para>
 
     
@@ -122,6 +134,21 @@ somente executariam com todos os três últimos)
 
   <sect2 role="installation">
     <title>Instalação do Mutter</title>
+
+    <para>
+      Primeiro, aplique um remendo para corrigir travamentos e congelamentos em
+tempo de execução:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../mutter-&mutter-version;-upstream_fixes-1.patch</userinput></screen>
+
+    <para>
+      Em seguida, corrija um problema com os testes que, de outra forma, exigiriam
+que o pacote fosse construído com informações de depuração:
+    </para>
+
+<screen><userinput remap="pre">sed "/tests_c_args =/s/$/ + ['-U', 'G_DISABLE_ASSERT']/" -i src/tests/meson.build &amp;&amp;
+sed "/c_args:/a '-U', 'G_DISABLE_ASSERT'," -i src/tests/cogl/unit/meson.build</userinput></screen>
 
     <para>
       Instale o <application>Mutter</application> executando os seguintes
@@ -151,11 +178,12 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr       \
-            --buildtype=release \
-            -D tests=disabled   \
-            -D profiler=false   \
-            ..                  &amp;&amp;
+meson setup --prefix=/usr            \
+            --buildtype=release      \
+            -D tests=disabled        \
+            -D profiler=false        \
+            -D bash_completion=false \
+            ..                       &amp;&amp;
 ninja</userinput></screen>
 
 
@@ -166,7 +194,7 @@ ninja</userinput></screen>
 linkend='python-dbusmock'/> esteja instalado e emita:
     </para>
 
-<screen remap='test'><userinput>meson configure -D tests=enabled -D clutter_tests=false &amp;&amp;
+<screen remap='test'><userinput>meson configure -D tests=enabled &amp;&amp;
 ninja test</userinput></screen>
 
     <para>
@@ -197,16 +225,16 @@ role=','/> depois de instalá-lo.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-D tests=disabled</parameter>: Permite construir o pacote sem
-<xref linkend='python-dbusmock'/> instalado. Ele será substituído por
-<command>meson configure</command> se executar a suíte de teste.
+      <parameter>-D bash_completion=false</parameter>: Permite construir o pacote
+sem o pacote <ulink
+url="https://github.com/scop/bash-completion/">bash-completion</ulink>
+instalado.
     </para>
 
     <para>
-      <parameter>-D clutter_tests=false</parameter>: Desabilita os testes para a
-biblioteca <application>Clutter</application> enviada. Os testes
-<application>Clutter</application> são conhecidos por falharem com
-<parameter>--buildtype=release</parameter>.
+      <parameter>-D tests=disabled</parameter>: Permite construir o pacote sem
+<xref linkend='python-dbusmock'/> instalado. Ele será substituído por
+<command>meson configure</command> se executar a suíte de teste.
     </para>
 
     <para>
@@ -271,13 +299,13 @@ para a sessão aninhada do Wayland.
 
       <seglistitem>
         <seg>
-          mutter
+          gdctl e mutter
         </seg>
         <seg>
-          libmutter-15.so e libmutter-test-15.so (opcional)
+          libmutter-16.so e libmutter-test-16.so (opcional)
         </seg>
         <seg>
-          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-15
+          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-16
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -285,6 +313,19 @@ para a sessão aninhada do Wayland.
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
       <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="gdctl">
+        <term><command>gdctl</command></term>
+        <listitem>
+          <para>
+            controla a configuração atual do monitor em sessões que usam Mutter como um
+gerenciador de janelas
+          </para>
+          <indexterm zone="mutter gdctl">
+            <primary sortas="b-gdctl">gdctl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
 
       <varlistentry id="mutter-prog">
         <term><command>mutter</command></term>
@@ -300,19 +341,19 @@ baseado em <application>Clutter</application>
       </varlistentry>
 
       <varlistentry id="libmutter">
-        <term><filename class="libraryfile">libmutter-15.so</filename></term>
+        <term><filename class="libraryfile">libmutter-16.so</filename></term>
         <listitem>
           <para>
             contém as funções da API do <application>Mutter</application>
           </para>
           <indexterm zone="mutter libmutter">
-            <primary sortas="c-libmutter">libmutter-15.so</primary>
+            <primary sortas="c-libmutter">libmutter-16.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
 
       <varlistentry id="libmutter-test">
-        <term><filename class="libraryfile">libmutter-test-15.so</filename></term>
+        <term><filename class="libraryfile">libmutter-test-16.so</filename></term>
         <listitem>
           <para>
             contém as funções de API da suíte de teste do
@@ -321,7 +362,7 @@ de teste desse pacote for executada e for necessária para a suíte de teste
 do <application>gnome-shell</application>
           </para>
           <indexterm zone="mutter libmutter-test">
-            <primary sortas="c-libmutter-test">libmutter-test-15.so</primary>
+            <primary sortas="c-libmutter-test">libmutter-test-16.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

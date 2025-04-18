@@ -6,10 +6,10 @@
 
   <!ENTITY qtwebengine-download-http "https://download.qt.io/official_releases/qt/&qtwebengine-major;/&qtwebengine-version;/submodules/qtwebengine-everywhere-src-&qtwebengine-version;.tar.xz">
   <!ENTITY qtwebengine-download-ftp  "">
-  <!ENTITY qtwebengine-md5sum        "9e81c46f237fdd8323c6fe07aa6a03b2">
-  <!ENTITY qtwebengine-size          "540 MB">
-  <!ENTITY qtwebengine-buildsize     "9,2 GB (336 MB instalado)">
-  <!ENTITY qtwebengine-time          "72 UPC (Usando paralelismo=8)">
+  <!ENTITY qtwebengine-md5sum        "3a029321d733cd4a420ab99bd0488013">
+  <!ENTITY qtwebengine-size          "541 MB">
+  <!ENTITY qtwebengine-buildsize     "9,7 GB (357 MB instalado)">
+  <!ENTITY qtwebengine-time          "46 UPC (Usando paralelismo=8)">
 ]>
 
 <sect1 id="qtwebengine" xreflabel="qtwebengine-&qtwebengine-version;">
@@ -191,13 +191,17 @@ url="https://github.com/open-source-parsers/jsoncpp/releases">jsoncpp</ulink>,
 <screen><userinput remap="pre">patch -Np1 -d src/3rdparty/chromium &lt; ../qtwebengine-&qtwebengine-version;-ffmpeg7_fixes-1.patch</userinput></screen>
 -->
 <para>
-      Primeiro, corrija uma falha de construção que ocorre porque a construção do
-BLFS do ffmpeg não usa OpenH264:
+      Primeiro, corrija uma falha de construção que ocorre com a versão mais
+recente do pipewire. Também contorne um caminho de arquivo muito longo:
     </para>
 
-<screen><userinput remap="pre">sed -e '189 s/=/&amp; false/' \
-    -e '190 d'            \
-    -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni</userinput></screen>
+<screen><userinput remap="pre">pushd src/3rdparty/chromium/third_party/webrtc/modules &amp;&amp;
+
+  sed -e "88 s/proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/"       \
+      -e "120s/that->proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/" \
+      -i video_capture/linux/pipewire_session.cc            &amp;&amp;
+
+popd</userinput></screen>
 
     <para>
       Instale o &quot;<application>qtwebengine</application>&quot; executando os
@@ -214,8 +218,7 @@ cmake -D CMAKE_MESSAGE_LOG_LEVEL=STATUS             \
       -D QT_FEATURE_webengine_proprietary_codecs=ON \
       -D QT_FEATURE_webengine_webrtc_pipewire=ON    \
       -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF           \
-      -G Ninja .. &amp;&amp;
-
+      -G Ninja ..                                   &amp;&amp;
 ninja</userinput></screen>
 
     <para>

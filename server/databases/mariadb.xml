@@ -129,6 +129,13 @@ usuário(a) e o grupo:
 useradd -c "MariaDB Server" -d /srv/mariadb -g mariadb -s /bin/false -u 40 mariadb</userinput></screen>
 
     <para>
+      Corrija um problema introduzido com
+<application>libxml2</application>-2.14.x:
+    </para>
+<screen><userinput>sed -e "s/BASE_BUFFER_SIZE/__XML_TREE_H__/" \
+    -i storage/connect/plgxml.h</userinput></screen>
+
+    <para>
       Instale o &quot;<application>MariaDB</application>&quot; executando os
 seguintes comandos:
     </para>
@@ -138,6 +145,7 @@ cd    build &amp;&amp;
 
 cmake -D CMAKE_BUILD_TYPE=Release                       \
       -D CMAKE_INSTALL_PREFIX=/usr                      \
+      -D CMAKE_POLICY_VERSION_MINIMUM=3.5               \
       -D GRN_LOG_PATH=/var/log/groonga.log              \
       -D INSTALL_DOCDIR=share/doc/mariadb-&mariadb-version;        \
       -D INSTALL_DOCREADMEDIR=share/doc/mariadb-&mariadb-version;  \
@@ -157,6 +165,7 @@ cmake -D CMAKE_BUILD_TYPE=Release                       \
       -D WITH_EMBEDDED_SERVER=ON                        \
       -D SKIP_TESTS=ON                                  \
       -D TOKUDB_OK=0                                    \
+      -W no-dev                                         \
       .. &amp;&amp;
 make</userinput></screen>
 
@@ -203,6 +212,14 @@ mv -v /usr/share/user_map.conf /etc/security</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
+      <!-- https://jira.mariadb.org/browse/MDEV-36422 -->
+<parameter>-D CMAKE_POLICY_VERSION_MINIMUM=3.5</parameter>: Essa chave
+permite que <application>MariaDB</application> construa com CMake 4.0 e
+posteriores, contornando alguns recursos removidos.
+      
+    </para>
+
+    <para>
       <parameter>-D WITH_EMBEDDED_SERVER=ON</parameter>: Essa chave habilita
 compilar a biblioteca incorporada do servidor necessária para determinados
 aplicativos, como o &quot;<application>Amarok</application>&quot;.
@@ -221,6 +238,11 @@ Connector/C do MariaDB que não são suportados sem configuração adicional.
     <para>
       <option>-D WITHOUT_SERVER=ON</option>: Use essa chave se você não quiser o
 servidor e gostaria de construir somente o cliente.
+    </para>
+
+    <para>
+      <parameter>-W no-dev</parameter>: Essa chave desliga alguns avisos que são
+úteis somente para desenvolvedores(as).
     </para>
 
     <note><para>

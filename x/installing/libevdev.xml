@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libevdev-version "1.13.3">
+  <!ENTITY libevdev-version "1.13.4">
 
   <!ENTITY libevdev-download-http "https://www.freedesktop.org/software/libevdev/libevdev-&libevdev-version;.tar.xz">
   <!ENTITY libevdev-download-ftp  "">
-  <!ENTITY libevdev-md5sum        "57ee77b7d4c480747e693779bb92fb84">
-  <!ENTITY libevdev-size          "452 KB">
+  <!ENTITY libevdev-md5sum        "2e8a4665e332699ccba7ee54a0dd189a">
+  <!ENTITY libevdev-size          "456 KB">
   <!ENTITY libevdev-buildsize     "6,2 MB (com testes)">
   <!ENTITY libevdev-time          "menos que 0,1 UPC (com testes)">
 ]>
@@ -75,7 +75,8 @@ controladores de entrada do Xorg.
 
       <bridgehead renderas="sect5">Opcionais</bridgehead>
       <para role="optional">
-        <xref linkend="doxygen"/> e <xref linkend="valgrind"/> (opcional para
+        <xref linkend="doxygen"/>, <xref linkend="valgrind"/> (opcional para testes)
+e <ulink url='https://libcheck.github.io/check/'>check</ulink> (exigido para
 testes)
       </para>
 
@@ -118,25 +119,34 @@ a suíte de teste execute.
 comandos:
       </para>
 
+<!--
+      <para>
+
+        The regression tests can be run as the <systemitem
+        class="username">root</systemitem> user with <command>ninja
+        test</command>, in a graphical session. You need to have enabled
+        the CONFIG_INPUT_UINPUT setting in the kernel for full test coverage.
+        If it is enabled as a module, the module is named
+        <command>uinput</command> and needs to be loaded before running the
+        tests. Note that on some systems, the
+        tests may cause a hard lockup and require a reboot. On laptops, the
+        system will go into Sleep and need to be woken up to finish the test
+        suites.
+      </para>
+-->
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 meson setup ..                  \
       --prefix=$XORG_PREFIX     \
       --buildtype=release       \
-      -D documentation=disabled &amp;&amp;
+      -D documentation=disabled \
+      -D tests=disabled         &amp;&amp;
 ninja</userinput></screen>
 
       <para>
-        Os testes de regressão podem ser executados como o(a) usuário(a) <systemitem
-class="username">root</systemitem>, com <command>ninja test</command>, em
-uma sessão gráfica. Você precisa ter habilitado a configuração
-CONFIG_INPUT_UINPUT no núcleo para cobertura completa do teste. Se estiver
-habilitado como um módulo, o módulo será chamado <command>uinput</command> e
-precisa ser carregado antes de se executar os testes. Observe que, em alguns
-sistemas, os testes possivelmente causem um travamento total e exijam uma
-reinicialização. Em laptops, o sistema entrará em suspensão e precisará ser
-despertado para finalizar as suítes de teste.
+        A suíte de teste exige <application>Check</application> que nós removemos do
+LFS.
       </para>
 
       <para>
@@ -144,6 +154,16 @@ despertado para finalizar as suítes de teste.
       </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+    </sect3>
+
+    <sect3 role="commands">
+      <title>Explicações do Comando</title>
+
+      <para>
+        <parameter>-D tests=disabled</parameter>: Isso permite que o pacote compile
+se <application>Check</application> não estiver instalado. Nós removemos
+<application>Check</application> do LFS.
+      </para>
     </sect3>
 
     <sect3 role="content">

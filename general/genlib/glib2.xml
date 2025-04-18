@@ -6,9 +6,9 @@
 
   <!ENTITY glib2-download-http "&gnome-download-http;/glib/&glib2-minor;/glib-&glib2-version;.tar.xz">
   <!ENTITY glib2-download-ftp  "">
-  <!ENTITY glib2-md5sum        "ed2676d7ea8094a151e0431f226343b8">
-  <!ENTITY glib2-size          "5,3 MB">
-  <!ENTITY glib2-buildsize     "184 MB (adicionar 19 MB para os testes)">
+  <!ENTITY glib2-md5sum        "7befc5809f28b092c662d00533b017c2">
+  <!ENTITY glib2-size          "5,4 MB">
+  <!ENTITY glib2-buildsize     "185 MB (adicionar 19 MB para os testes)">
   <!ENTITY glib2-time          "0,7 UPC (adicionar 0,5 UPC para testes; ambos usando paralelismo=4)">
 
   <!ENTITY gobject-introspection-download-http
@@ -108,19 +108,21 @@ um loop de eventos, camadas, carregamento dinâmico e um sistema de objetos.
       </listitem>
     </itemizedlist>
 
+    <!--
     <para>
-      Remendo exigido para corrigir problemas com gobject-introspection-1.84.x:
+
+      Required patch to fix issues with gobject-introspection-1.84.x:
     </para>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/glib-&glib2-version;-upstream_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/glib-&glib2-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências de GLib</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências de GLib</bridgehead>
 
     <!--
     <bridgehead renderas="sect4">
@@ -131,8 +133,9 @@ Required</bridgehead>
 -->
 <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend='docutils'/>, <xref linkend="libxslt"/> e <xref
-linkend="pcre2"/>
+      <xref linkend='docutils'/>, <xref linkend="libxslt"/>, e <xref
+linkend="pcre2"/> (uma cópia será baixada a partir da internet se ele não
+estiver instalado)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -208,14 +211,15 @@ fi</userinput></screen>
 
     </warning>
 
+    <!--
     <para>
-      Primeiro, corrija um problema de tempo de execução causado pelo
-gobject-introspection-1.84.x:
+
+      First, fix a runtime issue caused by gobject-introspection-1.84.x:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../glib-&glib2-version;-upstream_fixes-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>GLib</application> executando os seguintes comandos:
     </para>
 
@@ -288,18 +292,6 @@ documentação da API para esse pacote, emita:
 meson configure -D documentation=true                       &amp;&amp;
 ninja</userinput></screen>
 
-    <para>
-      Como o(a) usuário(a) &root;, instale esse pacote novamente para os dados de
-introspecção (e, opcionalmente, a documentação):
-    </para>
-
-    <screen role='root'><userinput>ninja install</userinput></screen>
-
-    <para>
-      Você deveria agora instalar <xref linkend="desktop-file-utils"/> e <xref
-linkend="shared-mime-info"/> e proceder à execução da suíte de teste.
-    </para>
-
     <warning>
       <para>
         Não execute a suíte de teste como &root; ou alguns testes falharão
@@ -320,15 +312,16 @@ hierarquia <filename class='directory'>/usr</filename>.
 
     -->
 <para>
-      Para testar os resultados, depois de ter instalado os pacotes, emita:
-<command>LC_ALL=C ninja test</command> como um(a) usuário(a) não-&root;.
+      Para testar os resultados, emita: <command>LC_ALL=C ninja test</command>
+como um(a) usuário(a) não-&root;.
     </para>
 
-    <note>
-      <para>
-        Se você tiver usado a opção -D glib_debug=disabled, 17 testes falharão.  
-      </para>
-    </note>
+    <para>
+      Como o(a) usuário(a) &root;, instale esse pacote novamente para os dados de
+introspecção (e, opcionalmente, a documentação):
+    </para>
+
+    <screen role='root'><userinput>ninja install</userinput></screen>
 
   </sect2>
 

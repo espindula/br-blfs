@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.8/localsearch-&localsearch-version;.tar.xz">
+  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.9/localsearch-&localsearch-version;.tar.xz">
   <!ENTITY localsearch-download-ftp  "">
-  <!ENTITY localsearch-md5sum        "56dfb5a30b3ab5ba33939d9f6bc21016">
+  <!ENTITY localsearch-md5sum        "6d29c941a4e10eb7fcc6e84d0d90053a">
   <!ENTITY localsearch-size          "4,3 MB">
-  <!ENTITY localsearch-buildsize     "31 MB (com testes)">
-  <!ENTITY localsearch-time          "0,4 UPC (com paralelismo=4; adicionar o equivalente a 1,0 UPC para testes,
+  <!ENTITY localsearch-buildsize     "35 MB (com testes)">
+  <!ENTITY localsearch-time          "0,2 UPC (com paralelismo=4; adicionar o equivalente a 1,0 UPC para testes,
 dependente da velocidade do disco)">
 ]>
 
@@ -67,6 +67,16 @@ sistema de arquivos, bem como um extrator de metadados.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo opcional (exigido se libxml2 estiver instalado): <ulink
+url="&patch-root;/localsearch-&localsearch-version;-libxml2_2_14-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do Localsearch</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -77,21 +87,18 @@ linkend="gst10-plugins-base"/> e <xref linkend="tinysparql"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="giflib"/>, <xref role='runtime'
-linkend="gst10-plugins-good"/> (tempo de execução), <xref role='runtime'
-linkend="gst10-libav"/> (tempo de execução), <xref linkend="icu"/>, <xref
-linkend="libexif"/>, <xref linkend="libgxps"/>, <xref
+      <xref linkend="giflib"/>, <xref linkend="ffmpeg"/>, <xref linkend="icu"/>,
+<xref linkend="libexif"/>, <xref linkend="libgxps"/>, <xref
 linkend="libseccomp"/>, <xref linkend="poppler"/> e <xref linkend="upower"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="asciidoc"/>, <xref linkend="cmake"/>, <xref
-linkend="dconf"/>, <xref linkend="ffmpeg"/>, <xref linkend="libgsf"/>, <xref
-linkend="NetworkManager"/>, <xref linkend="taglib"/>, <xref
+linkend="dconf"/>, <xref linkend="libgsf"/>, <xref linkend="libxml2"/>,
+<xref linkend="NetworkManager"/>, <xref linkend="taglib"/>, <xref
 linkend="totem-pl-parser"/>, <ulink
 url="https://github.com/lipnitsk/libcue">libcue</ulink>, <ulink
-url="https://gitlab.gnome.org/GNOME/libgrss">libgrss</ulink>, <ulink
 url="https://libiptcdata.sourceforge.net/">libitpcdata</ulink>, <ulink
 url="https://libosinfo.org">libosinfo</ulink> e <ulink
 url="https://gitlab.gnome.org/GNOME/gupnp">gupnp</ulink>
@@ -152,6 +159,13 @@ seguinte comando (substitua 200 por um valor adequado para tua máquina):
     </note>
 
     <para>
+      Se <xref linkend='libxml2'/> estiver instalado, aplique um remendo para
+tornar o extrator de HTML compatível com libxml2-2.14 ou mais recente:
+    </para>
+
+    <screen><userinput>patch -Np1 -i ../localsearch-&localsearch-version;-libxml2_2_14-1.patch</userinput></screen>
+
+    <para>
       Instale <application>Localsearch</application> executando os seguintes
 comandos:
     </para>
@@ -163,7 +177,6 @@ cd    build &amp;&amp;
 meson setup --prefix=/usr       \
             --buildtype=release \
             -D man=false        \
-            -D miner_rss=false  \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -174,7 +187,6 @@ meson setup --prefix=/usr                  \
             --buildtype=release            \
             -D systemd_user_services=false \
             -D man=false                   \
-            -D miner_rss=false             \
             ..                             &amp;&amp;
 ninja</userinput></screen>
 
@@ -214,11 +226,6 @@ linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
 páginas de manual.
     </para>
 
-    <para>
-      <parameter>-D miner_rss=false</parameter>: Essa chave impede usar libgrss
-para indexar feeds RSS porque libgrss é insegura e não mais está no BLFS.
-    </para>
-
     <para revision="sysv">
       <parameter>-D systemd_user_services=false</parameter>: Essa chave impede o
 processo de construção de instalar unidades do systemd, pois elas são
@@ -251,6 +258,12 @@ possivelmente desperdice a vida útil da bateria quando a eletricidade CA
 estiver indisponível.
     </para>
 
+    <para>
+      <option>-D libav=disabled</option>: Use essa opção se você não tiver
+instalado a dependência recomendada ffmpeg. Observe que usar isso causará 7
+falhas de teste e também prejudicará significativamente a funcionalidade
+deste pacote.
+    </para>
   </sect2>
 
   <sect2 role="content">
@@ -269,7 +282,7 @@ estiver indisponível.
           Vários módulos sob /usr/lib/localsearch-3.0
         </seg>
         <seg>
-          /usr/lib/localsearch-3.0 e /usr/share/localsearch
+          /usr/lib/localsearch-3.0 e /usr/share/localsearch3
         </seg>
       </seglistitem>
     </segmentedlist>

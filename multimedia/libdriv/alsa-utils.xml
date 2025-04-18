@@ -6,10 +6,10 @@
 
   <!ENTITY alsa-utils-download-http "&alsa-download-http;/utils/alsa-utils-&alsa-utils-version;.tar.bz2">
   <!ENTITY alsa-utils-download-ftp  "">
-  <!ENTITY alsa-utils-md5sum        "c04cdabee211a88bf3c6c2f45b2a4f3e">
-  <!ENTITY alsa-utils-size          "1,7 MB">
-  <!ENTITY alsa-utils-buildsize     "21 MB">
-  <!ENTITY alsa-utils-time          "0,1 UPC">
+  <!ENTITY alsa-utils-md5sum        "d098c3d677ee80cf3d9f87783cce2e53">
+  <!ENTITY alsa-utils-size          "1,6 MB">
+  <!ENTITY alsa-utils-buildsize     "22 MB">
+  <!ENTITY alsa-utils-time          "0,2 UPC">
 ]>
 
 <sect1 id="alsa-utils" xreflabel="alsa-utils-&alsa-utils-version;">
@@ -86,17 +86,19 @@ url="https://hightek.org/projects/dialog/">Dialog</ulink>
     <title>Instalação do ALSA Utilities</title>
 
 
+
+    <!--
     <para>
-      Primeiro corrija um problema nas regras do udev distribuído:
+
+      First correct a problem in the distributed udev rules:
     </para>
 
 <screen><userinput>sed -e 's/acp-pdm-dmic/acp-dmic-codec/'                   \
     -e '/LABEL="alsa_restore_go"/s/go/std/'               \
     -e '/^ENV.ALSA_CARD_NUMBER/i LABEL="alsa_restore_go"' \
     -i alsactl/90-alsa-restore.rules.in</userinput></screen>
-
-
-    <para>
+-->
+<para>
       Instale o <application>ALSA Utilities</application> executando os seguintes
 comandos:
     </para>
@@ -200,26 +202,7 @@ pelo <application>Udev</application> quando o dispositivo for detectado
 (durante a inicialização ou quando plugado para dispositivos USB).
       </para>
 
-      <!-- not needed with elogind or systemd-logind
       <para>
-
-        All sound devices are not accessible for any user except
-        <systemitem class="username">root</systemitem> and members of the
-        <systemitem class="groupname">audio</systemitem> group. Add any
-        users that might use the sound devices to that group:
-      </para>
-
-<screen role="root"><userinput>usermod -a -G audio <replaceable>&lt;username&gt;</replaceable></userinput></screen>
-
-      <note>
-        <para>
-          You may need to log out and back in again to refresh your group
-          memberships. '<command>su <replaceable>&lt;username&gt;</replaceable></command>'
-          should work as well.
-        </para>
-      </note>
--->
-<para>
         Em sistemas que tem múltiplas placas de som, você possivelmente necessite
 ajustar o dispositivo de áudio padrão, de forma que possa obter saída a
 partir dos teus alto-falantes. Para configurar o dispositivo padrão,
@@ -273,14 +256,15 @@ revision="systemd"/>.
       <seglistitem>
         <seg>
           aconnect, alsactl, alsaloop, alsamixer, alsatplg, alsaucm, alsa-info.sh,
-amidi, amixer, aplay, aplaymidi, arecord (link simbólico), arecordmidi,
-aseqdump, aseqnet, axfer, iecset e speaker-test
+amidi, amixer, aplay, aplaymidi, aplaymidi2, arecord (linque simbólico),
+arecordmidi, arecordmidi2, aseqdump, aseqnet, aseqsend, axfer, iecset,
+nhlt-dmic-info e speaker-test
         </seg>
         <seg>
           Nenhum(a)
         </seg>
         <seg>
-          /usr/share/sounds/alsa e /var/lib/alsa
+          /usr/lib/alsa-topology, /usr/share/sounds/alsa e /var/lib/alsa
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -418,6 +402,19 @@ especificado(s) MIDI em uma ou mais portas do sequenciador do ALSA
         </listitem>
       </varlistentry>
 
+      <varlistentry id="aplaymidi2">
+        <term><command>aplaymidi2</command></term>
+        <listitem>
+          <para>
+            é um utilitário de linha de comando que reproduz o(s) arquivo(s) de clipe
+MIDI especificado(s) em uma ou mais portas do sequenciador do ALSA
+          </para>
+          <indexterm zone="alsa-utils aplaymidi2">
+            <primary sortas="b-aplaymidi2">aplaymidi2</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="arecord">
         <term><command>arecord</command></term>
         <listitem>
@@ -440,6 +437,19 @@ partir de uma ou mais portas do sequenciador do ALSA
           </para>
           <indexterm zone="alsa-utils arecordmidi">
             <primary sortas="b-arecordmidi">arecordmidi</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="arecordmidi2">
+        <term><command>arecordmidi2</command></term>
+        <listitem>
+          <para>
+            é um utilitário de linha de comando que grava um arquivo de Clipe MIDI a
+partir de uma ou mais portas do sequenciador do ALSA
+          </para>
+          <indexterm zone="alsa-utils arecordmidi2">
+            <primary sortas="b-arecordmidi2">arecordmidi2</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -470,6 +480,19 @@ longo de uma rede de intercomunicação
         </listitem>
       </varlistentry>
 
+      <varlistentry id="aseqsend">
+        <term><command>aseqsend</command></term>
+        <listitem>
+          <para>
+            é um utilitário de linha de comando para enviar mensagens arbitrárias para
+portas do sequenciador MIDI do ALSA
+          </para>
+          <indexterm zone="alsa-utils aseqsend">
+            <primary sortas="b-aseqsend">aseqsend</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="axfer">
         <term><command>axfer</command></term>
         <listitem>
@@ -493,6 +516,19 @@ especificada por intermédio da API de controle do ALSA
           </para>
           <indexterm zone="alsa-utils iecset">
             <primary sortas="b-iecset">iecset</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="nhlt-dmic-info">
+        <term><command>nhlt-dmic-info</command></term>
+        <listitem>
+          <para>
+            é um utilitário de linha de comando que despeja informações do conjunto de
+microfones a partir da tabela NHLT do ACPI
+          </para>
+          <indexterm zone="alsa-utils nhlt-dmic-info">
+            <primary sortas="b-nhlt-dmic-info">nhlt-dmic-info</primary>
           </indexterm>
         </listitem>
       </varlistentry>

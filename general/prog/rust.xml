@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "a0193e0a4925f772bd50f8d12e47860c">
-  <!ENTITY rust-size          "261 MB">
+  <!ENTITY rust-md5sum        "ffe55dfd0e035e6bfc88060506cddf32">
+  <!ENTITY rust-size          "263 MB">
   <!ENTITY rust-buildsize     "9,4 GB (252 MB instalado); adicionar 7,4 GB se executar os testes">
   <!ENTITY rust-time          "9,0 UPC (incluindo o tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -151,15 +151,19 @@ valores discrepantes muito lentos.
         </para>
       </listitem>
     </itemizedlist>
+
     
-    <!-- only keep this here for reuse in case we need a patch
+    
+
+    <!--  keep this here for reuse in case we need a patch -->
+<!--
     <bridgehead renderas="sect3">
 Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Optional patch (recommended if running the test suite):
-          <ulink url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/rustc-&rust-version;-llvm_20-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -238,7 +242,7 @@ exige somente mudar o link simbólico
 configurará a construção.
     </para>
 
-<!-- It seems gone in 1.81.0 but not confirmed upstream
+<!-- It seems gone since 1.81.0 but not confirmed upstream
     <note>
 
       <para>
@@ -254,35 +258,43 @@ configurará a construção.
       </para>
     </note>
 -->
-<!-- https://github.com/rust-lang/rust/issues/128493 -->
+<!-- retain here in case we need a patch
+    <para>
+
+      Now fix build failures with LLVM 20:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-llvm_20-1.patch</userinput></screen>
+-->
 <screen><userinput>cat &lt;&lt; EOF &gt; config.toml
-<literal># see config.toml.example for more possible options
-# See the 8.4 book for an old example using shipped LLVM
-# e.g. if not installing clang, or using a version before 13.0
+<literal># See config.toml.example for more possible options,
+# and see src/bootstrap/defaults/config.dist.toml for a few options
+# automatically set when building from a release tarball
+# (unfortunately, we have to override many of them).
 
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 134650
+change-id = 136941
 
 [llvm]
 # When using system llvm prefer shared libraries
 link-shared = true
-
-# Do not download pre-built LLVM, instead either use the system
-# LLVM or build LLVM from the shipped source.
-download-ci-llvm = false
 
 # If building the shipped LLVM source, only enable the x86 target
 # instead of all the targets supported by LLVM.
 targets = "X86"
 
 [build]
-# omit docs to save time and space (default is to build them)
-docs = false
+# Do a 2-stage bootstrap instead of a 3-stage one to save time and space.
+# Note that the numbers "1" below mean to *run* the stage-*1* compiler and
+# build the stage-2 compiler.
+build-stage = 1
+test-stage = 1
+doc-stage = 1
 
-# install extended tools: cargo, clippy, etc
-extended = true
+# Omit docs to save time and space (default is to build them).
+docs = false
 
 # Do not query new versions of dependencies online.
 locked-deps = true
@@ -302,6 +314,15 @@ description = "for BLFS &version;"
 lto = "thin"
 codegen-units = 1
 
+# Don't build lld which does not belong to this package and seems not
+# so useful for BLFS.  Even if it turns out to be really useful we'd build
+# it as a part of the LLVM package instead.
+lld = false
+
+# Don't build llvm-bitcode-linker which is only useful for the NVPTX
+# backend that we don't enable.
+llvm-bitcode-linker = false
+
 [target.x86_64-unknown-linux-gnu]
 llvm-config = "/usr/bin/llvm-config"
 
@@ -309,19 +330,12 @@ llvm-config = "/usr/bin/llvm-config"
 llvm-config = "/usr/bin/llvm-config"</literal>
 EOF</userinput></screen>
 
-    
-    <para>
-      Agora remova alguns testes que deflagram uma reconstrução completa da
-biblioteca padrão e do compilador Rust:
-    </para>
 
-    <screen><userinput>sed '/MirOpt/d' -i src/bootstrap/src/core/builder/mod.rs</userinput></screen>
 
     <para>
       Compile &quot;<application>Rust</application>&quot; executando os seguintes
 comandos:
     </para>
-
 
 
 <screen><!-- fixed in 1.58.0, retain as a reminder that fixed crates can be used
@@ -351,9 +365,14 @@ disponíveis), emita:
 <screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
 
     <para>
-      Seis testes na suíte de teste de instruções de autoaprimoramento são
-conhecidos por falharem porque eles esperam executar no repositório Git da
-Rust.
+      Três testes na suíte de teste das instruções de autoaprimoramento são
+conhecidos por falharem porque esperam executar no repositório Git do
+Rust. O teste chamado
+<filename>tests/run-make/musl-default-linking</filename> é conhecido por
+falhar porque nós não habilitamos o alvo AArch64 no <xref
+linkend='llvm'/>. O teste chamado
+<filename>tests/run-make/linker-warning</filename> é conhecido por falhar
+devido a algum motivo ainda desconhecido.
     </para>
 
 
@@ -372,6 +391,27 @@ verifique se existem 'failures:' no registro e revise as linhas acima,
 especialmente as linhas 'stderr:'. Qualquer menção ao SIGSEGV ou ao sinal
 onze (11) em um teste falho é motivo de preocupação.
     </para>
+
+    <note>
+      <para>
+        Se você tiver despojado <filename
+class='libraryfile'>/usr/lib/libc.a</filename> com <command>strip
+--strip-unneeded</command>, todos os programas Rust lincados estaticamente
+travarão com o SIGSEGV na inicialização, fazendo com que vários testes (por
+exemplo, <filename>tests/ui/process/nofile-limit.rs</filename>) falhem com o
+SIGSEGV.
+      </para>
+      <para>
+        Nós ainda estamos investigando a causa raiz desse problema, mas, por
+enquanto, substituímos <parameter>--strip-unneeded</parameter> por
+<parameter>--strip-debug</parameter> tanto no livro do LFS quanto na <xref
+linkend='stripping'/> para contorná-lo. Se você encontrar esse problema,
+reconstrua a Glibc e substitua o arquivo <filename
+class='libraryfile'>/usr/lib/libc.a</filename> pela <filename
+class='libraryfile'>libc.a</filename> não despojada proveniente da nova
+construção.
+      </para>
+    </note>
 
     <para>
       Se você receber algum <emphasis>outro</emphasis> teste falho que informe um
@@ -465,12 +505,6 @@ exemplo, de <command>ls -l</command>.
 compiladores cruzados disponíveis do Linux (AArch64, MIPS, PowerPC, SystemZ,
 etc). Infelizmente, o Rust insiste em instalar os arquivos fonte para esses
 abaixo de <filename class="directory">/opt/rustc/lib/src</filename>.
-    </para>
-
-    <para>
-      <literal>extended = true</literal>: isso instala várias ferramentas
-(especificadas pela entrada <literal>tools</literal>) juntamente com o
-<command>rustc</command>.
     </para>
 
     <para>

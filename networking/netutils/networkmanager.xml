@@ -327,17 +327,24 @@ maneira. Essa chave fará com que NetworkManager careça de alguns recursos
 (por exemplo, 802.1X).
     </para>
 
-    <para>
-      <option>-D suspend_resume=upower</option>: Use essa chave se você tiver
-<xref linkend='upower'/> instalado e quiser usá-lo (em vez de &logind;) para
-suspender e retomar o suporte.
-    </para>
+
+    <!--
+    The values for this option have changed.  thsy are now 
+    "systemd", "elogind", "consolekit", "auto" with auto as
+    the default.  We really don't need to mention this.
 
     <para>
-      <option>-D nm_cloud_setup=false</option>: Use this switch if you have not
-installed <xref linkend='jansson'/>. This disables nm-cloud-setup which is
-used to automatically configure the network in a public cloud environment
-within a VM.
+      <option>-D suspend_resume=upower</option>: Use this switch if
+      you have <xref linkend='upower'/>
+ installed and want to use it
+      (instead of &logind;) for suspend and resume support.
+    </para>
+-->
+<para>
+      <option>-D nm_cloud_setup=false</option>: Use essa chave se você não tiver
+instalado <xref linkend='jansson'/>. Isso desabilita o nm-cloud-setup que é
+usado para configurar automaticamente a rede de intercomunicação em um
+ambiente de nuvem pública dentro de uma VM.
     </para>
   </sect2>
 
@@ -467,26 +474,25 @@ gerenciar uma interface, [então] qualquer configuração anterior para essa
 interface deveria ser removida e a interface ser desativada antes de iniciar
 o &quot;<application>Network Manager</application>&quot;.
         </para>
+       
+        <para revision="sysv">
+          A maneira mais fácil de fazer isso é a de remover o S20network de
+<filename>/etc/rc.d/rc3.d/</filename> e
+<filename>/etc/rc.d/rc5.d/</filename>.
+        </para>
+
+        <para revision="sysv">
+          Além disso, se usar <xref linkend="dhcpcd"/>, tenha cuidado com problemas de
+tempo se configurar aplicativos de rede de intercomunicação como ntpd, nfs
+ou sshd. Leva vários segundos para dhcpcd inicializar a interface de rede de
+intercomunicação e, se esses aplicativos iniciarem antes que a interface de
+rede de intercomunicação seja completamente inicializada, esses aplicativos
+podem ter que ser iniciados manualmente.
+        </para>
+
       </note>
 
-      <!-- The below instruction is obsolete. NetworkManager-wait-online is now
-     enabled by default when enabling NetworkManager. -->
-<!--
-      <para revision="systemd">
-
-        <application>NetworkManager</application> also ships a systemd unit
-        called <filename>NetworkManager-wait-online.service</filename> which
-        can be used to prevent services that require network connectivity
-        from starting until <application>NetworkManager</application> has
-        established the connection. To enable it, run the following command
-        as the <systemitem class="username">root</systemitem> user:
-      </para>
-
-<screen role="root" revision="systemd"><userinput>systemctl enable NetworkManager-wait-online</userinput></screen>
-   -->
-<!-- As such, let's now provide instructions on how to disable that
-           behavior, for those who wish to do so. -->
-<indexterm zone="NetworkManager NetworkManager-init">
+      <indexterm zone="NetworkManager NetworkManager-init">
         <primary sortas="f-NetworkManager">NetworkManager</primary>
       </indexterm>
 
@@ -494,8 +500,6 @@ o &quot;<application>Network Manager</application>&quot;.
 
 <screen role="root" revision="systemd"><userinput>systemctl enable NetworkManager</userinput></screen>
 
-
-      
       <para revision="systemd">
         Começando na versão 1.11.2 do
 &quot;<application>NetworkManager</application>&quot;, uma unidade do

@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY gnome-keyring-download-http
-           "&gnome-download-http;/gnome-keyring/&gnome-46;/gnome-keyring-&gnome-keyring-version;.tar.xz">
+           "&gnome-download-http;/gnome-keyring/&gnome-48;/gnome-keyring-&gnome-keyring-version;.tar.xz">
   <!ENTITY gnome-keyring-download-ftp  "">
-  <!ENTITY gnome-keyring-md5sum        "7a8ab16a87f03ca05fc176925fcce649">
-  <!ENTITY gnome-keyring-size          "1,3 MB">
-  <!ENTITY gnome-keyring-buildsize     "129 MB">
+  <!ENTITY gnome-keyring-md5sum        "d19a99eadeb5d92774b7960c51d1c5dc">
+  <!ENTITY gnome-keyring-size          "752 KB">
+  <!ENTITY gnome-keyring-buildsize     "44 MB">
   <!ENTITY gnome-keyring-time          "0,2 UPC (Usando paralelismo=4; adicionar 0,2 UPC para testes)">
 ]>
 
@@ -82,9 +82,13 @@ linkend="openssh"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gnupg2"/>, <xref linkend="valgrind"/>, <ulink
-url="https://github.com/linux-test-project/lcov">LCOV</ulink> e <ulink
-url="https://people.redhat.com/sgrubb/libcap-ng/">libcap-ng</ulink>
+      <!-- Meson doesn't mention any of these
+      <xref linkend="gnupg2"/>,
+      <xref linkend="valgrind"/>,
+      <ulink url="https://github.com/linux-test-project/lcov">LCOV</ulink>, and
+-->
+<ulink url="https://people.redhat.com/sgrubb/libcap-ng/">libcap-ng</ulink>
+
     </para>
 
   </sect2>
@@ -92,39 +96,41 @@ url="https://people.redhat.com/sgrubb/libcap-ng/">libcap-ng</ulink>
   <sect2 role="installation">
     <title>Instalação do GNOME Keyring</title>
 
-
-
-    <!--
     <para>
-
-      Regenerate the <command>configure</command> script to make it work
-      with libgcrypt-1.11 or newer:
-    </para>
-
-<screen><userinput>autoreconf</userinput></screen>
--->
-<para>
       Instale o <application>GNOME Keyring</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>sed -i 's:"/desktop:"/org:' schema/*.xml &amp;&amp;
+<screen revision='sysv'><userinput>sed -i 's:"/desktop:"/org:' schema/*.xml &amp;&amp;
 
-./configure --prefix=/usr      \
-            --sysconfdir=/etc  \
-            --enable-ssh-agent &amp;&amp;
-make</userinput></screen>
+mkdir build-gkr &amp;&amp;
+cd    build-gkr &amp;&amp;
+
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -D systemd=disabled \
+      -D ssh-agent=true   &amp;&amp;
+ninja</userinput></screen>
+
+<screen revision='systemd'><userinput>sed -i 's:"/desktop:"/org:' schema/*.xml &amp;&amp;
+
+mkdir build-gkr &amp;&amp;
+cd    build-gkr &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release -D ssh-agent=true .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Um endereço de barramento de sessão é necessário para executar os
-testes. Para testar os resultados, emita: <command>make check</command>.
+testes. Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
@@ -136,9 +142,15 @@ testes. Para testar os resultados, emita: <command>make check</command>.
 obsoleta no modelo de esquema.
     </para>
 
+    <para revision="sysv">
+      <parameter>-D systemd=disabled</parameter>: Essa chave evita uma falha
+devido ao sistema de construção exigir <application>systemd</application>
+por padrão.
+    </para>
+
     <para>
       <!--https://bugzilla.redhat.com/show_bug.cgi?id=2250704-->
-<parameter>--enable-ssh-agent</parameter>: Essa chave habilita o agente SSH
+<parameter>-D ssh-agent=true</parameter>: Essa chave habilita o agente SSH
 integrado ao gnome-keyring em vez daquele no GCR. Isso é feito devido a
 defeitos no gcr que fazem com que o agente não funcione corretamente.
       

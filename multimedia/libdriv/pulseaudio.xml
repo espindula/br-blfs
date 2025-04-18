@@ -95,7 +95,8 @@ XEN</ulink>-->
 linkend="gst10-plugins-base"/>, <xref linkend="gtk3"/>, <xref
 linkend="libsamplerate"/>, <xref linkend="sbc"/> (suporte a Bluetooth),
 <xref linkend="valgrind"/>, <ulink
-url="https://jackaudio.org/">JACK</ulink>, <ulink
+url="https://libcheck.github.io/check/">check</ulink> (para testagem),
+<ulink url="https://jackaudio.org/">JACK</ulink>, <ulink
 url="https://0pointer.de/lennart/projects/libasyncns/">libasyncns</ulink>,
 <ulink url="https://www.lirc.org/">LIRC</ulink>, <ulink
 url="https://gstreamer.freedesktop.org/src/orc/">ORC</ulink>, <ulink
@@ -133,13 +134,14 @@ meson setup --prefix=/usr       \
             -D database=gdbm    \
             -D doxygen=false    \
             -D bluez5=disabled  \
+            -D tests=false      \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>ninja test</command>. Um teste
-falha se os testes não forem executados como o(a) usuário(a) root, mas isso
-pode ser ignorado.
+      Para testar os resultados, emita: <command>ninja test</command>. Somente os
+arquivos XML enviados são validados porque outros testes precisam de
+<application>Check</application> que nós removemos do LFS.
     </para>
 
     <para>
@@ -189,6 +191,13 @@ se você tiver instalado todos os três pacotes.
 se <xref linkend="doxygen"/> não estiver instalado. Remova isso se você
 tiver instalado isso e desejar construir a documentação.
     </para>
+
+    <para>
+      <parameter>-D tests=false</parameter>: Isso permite que o pacote compile se
+<application>Check</application> não estiver instalado. Nós removemos
+<application>Check</application> do LFS.
+    </para>
+
 
 
   <!--

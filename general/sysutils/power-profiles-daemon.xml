@@ -174,6 +174,35 @@ de reinicialização:
 <userinput>install -vdm755 /var/lib/power-profiles-daemon</userinput>
 </screen>
 
+    <caution>
+      <para>
+        Em alguns sistemas mais antigos, o power-profiles-daemon parecerá instalar e
+indicar valores corretos, mas não funcionará de fato. Para verificar isso,
+execute <userinput>cat
+/sys/devices/system/cpu/cpufreq/policy0/scaling_driver</userinput>. Se o
+resultado não for "intel_pstate", mas sim "intel_cpufreq" (ou similar em
+sistemas AMD), então as mudanças de eletricidade precisam ser feitas
+manualmente.
+      </para>
+
+      <para>
+        Para mudar manualmente estados de eletricidade, primeiro verifique para ver
+quais governadores estão disponíveis com: <userinput>cat
+/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors</userinput>.
+Em seguida, configure o governador desejado como o(a) usuário(a) &root; com:
+      </para>
+
+<screen><userinput>for CPUFREQ in /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
+  echo -n ${gov} > ${CPUFREQ}"
+done</userinput></screen>
+
+      <para>
+        Se você estiver configurando o scaling_governor para "desempenho", tenha
+cuidado com problemas de calor e bateria com uso prolongado.
+      </para>
+
+    </caution>
+
   </sect2>
 
 

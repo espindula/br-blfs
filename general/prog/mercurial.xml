@@ -6,14 +6,14 @@
 
   <!ENTITY mercurial-download-http "https://www.mercurial-scm.org/release/mercurial-&mercurial-version;.tar.gz">
   <!ENTITY mercurial-download-ftp  "">
-  <!ENTITY mercurial-md5sum        "05cb7a265bf503c0b934e3591f3c66ac">
-  <!ENTITY mercurial-size          "8,3 MB">
-  <!ENTITY mercurial-buildsize     "83 MB (com documentos, adicionar 1,6 GB para testes)">
-  <!ENTITY mercurial-time          "0,3 UPC (com documentos; adicionar 15 UPC para testes; ambos usando
-paralelismo=8)">
+  <!ENTITY mercurial-md5sum        "a003be6ee306703d6699c4013c4441ec">
+  <!ENTITY mercurial-size          "8,6 MB">
+  <!ENTITY mercurial-buildsize     "88 MB (com documentos, adicionar 58 MB para testes)">
+  <!ENTITY mercurial-time          "0,3 UPC (com documentos; adicionar 25 UPC para testes; ambos usando
+paralelismo=4)">
 ]>
 
-<sect1 id="mercurial" xreflabel="Mercurial-&mercurial-version;">
+<sect1 id="mercurial" xreflabel="mercurial-&mercurial-version;">
   <?dbhtml filename="mercurial.html"?>
 
 
@@ -75,15 +75,14 @@ escrita em <application>Python</application> e é usada por projetos como
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="docutils"/> (exigido para construir a documentação), <xref
-linkend="git"/>, <xref linkend="gpgme"/> (com ligações &quot;Python&quot;),
-<xref role="runtime" linkend="openssh"/> (tempo de execução, para acessar
-repositórios &quot;ssh://...&quot;), <xref linkend="pygments"/>, <xref
-linkend="rust"/> (veja-se <filename>rust/README.rst</filename> e
+      <xref linkend="pypa-build"/>, <xref linkend="docutils"/> (exigido para
+construir a documentação), <xref linkend="git"/>, <xref linkend="gpgme"/>
+(com ligações Python), <xref role="runtime" linkend="openssh"/> (tempo de
+execução, para acessar repositórios ssh://...), <xref linkend="pygments"/>,
+<xref linkend="rust"/> (veja-se <filename>rust/README.rst</filename> e
 <filename>rust/rhg/README.md</filename>), <xref linkend="subversion"/> (com
-ligações &quot;Python&quot;), <ulink
-url="https://launchpad.net/bzr">Bazaar</ulink>, <ulink
-url="https://www.nongnu.org/cvs/">CVS</ulink>, <ulink
+ligações Python), <ulink url="https://launchpad.net/bzr">Bazaar</ulink>,
+<ulink url="https://www.nongnu.org/cvs/">CVS</ulink>, <ulink
 url="https://pypi.python.org/pypi/pyflakes">pyflakes</ulink>, <ulink
 url="https://www.pyopenssl.org/en/stable/">pyOpenSSL</ulink> e <ulink
 url="https://github.com/google/re2/">re2</ulink>
@@ -93,27 +92,23 @@ url="https://github.com/google/re2/">re2</ulink>
 
   <sect2 role="installation">
     <title>Instalação do &quot;Mercurial&quot;</title>
-    
-
-    <!-- Rust port is now part of the standard tests -->
-<para>
-      Construa <application>Mercurial</application> emitindo o seguinte comando:
-    </para>
-
-<screen><userinput>make build</userinput></screen>
 
     <para>
-      Para construir a documentação (exige <xref linkend="docutils"/>), emita:
+      <application>Mercurial</application> é construído e instalado em um comando
+único como o(a) usuário(a) &root;:
     </para>
 
-<!--
-    The tests do not hang.  Better to just report what failed.
+<screen role="root"><userinput>make PREFIX=/usr install</userinput></screen>
 
-    [renodr]: The tests do crash due to syntax errors and crash before they get
-    to the Python portion (which is where most of Mercurial is)
--->
-<screen remap="doc"><userinput>make doc</userinput></screen>
+    <para>
+      A documentação é construída pelo comando acima (nos formatos man e html),
+mas somente as páginas de manual são instaladas. Se você desejar instalar a
+documentação html, emita como o(a) usuário(a) &root;:
+    </para>
 
+<screen role="root"
+        remap="doc"><userinput>mkdir /usr/share/doc/mercurial-&mercurial-version; &amp;&amp;
+cp -R doc/html /usr/share/doc/mercurial-&mercurial-version;</userinput></screen>
 
     <para>
       Se você desejar executar os testes, os testes rust precisam ser removidos,
@@ -121,25 +116,21 @@ pois estão atualmente quebrados devido a erros de sintaxe. Para fazer isso,
 emita:
     </para>
 
-<screen><userinput>sed -i '138,142d' Makefile</userinput></screen>
+<screen><userinput>sed -i '152,155d' Makefile</userinput></screen>
 
     <para>
       Para executar a suíte de teste, emita:
     </para>
-<!-- The blacklists have to be checked every release of Mercurial, do a listing
-     of tests/blacklists, but do not include the README.
-     For 6.4.1 removing the -blacklist entries did not affect the test results
-     although blacklists/fsmonitor and blacklists/linux-vfat still exist. -->
-<screen remap="test"><userinput>TESTFLAGS="-j<replaceable>&lt;N&gt;</replaceable> --tmpdir tmp" make check</userinput></screen>
 
+<screen remap="test"><userinput>TESTFLAGS="-j<replaceable>&lt;N&gt;</replaceable> --with-hg /usr/bin/hg" make check</userinput></screen>
 
     <para>
-      onde <replaceable>&lt;N&gt;</replaceable> é um número inteiro entre um e o
-número de (camadas X do processador), inclusive. Testes possivelmente falhem
-porque algumas mensagens de erro foram mudadas no Python ou alguns avisos de
-descontinuação são impressos, que não estavam presentes quando o teste foi
-projetado. Dois testes são conhecidos por falharem: test-duplicateoptions.py
-e test-highlight.t.
+      onde <replaceable>&lt;N&gt;</replaceable> é um inteiro entre um e o número
+de (processador X camadas), inclusive (o padrão é o número total de
+processadores conforme retornado por <command>nproc</command>). Os testes
+possivelmente falhem porque algumas mensagens de erro foram mudadas no
+Python ou alguns avisos de descontinuação são impressos que não estavam
+presentes quando o teste foi projetado.
     </para>
       
     <!--
@@ -158,29 +149,32 @@ e test-highlight.t.
       # Ran 955 tests, 69 skipped, 2 failed. -zeckma 24 Nov 24 (mercurial-6.9).
       # Ran 929 tests, 95 skipped, 3 failed. -renodr 18 Jan 25 (mercurial-6.9.1).
       # Ran 954 tests, 70 skipped, 2 failed. -bdubbs 28 Feb 25 (mercurial-6.9.2).
+      # Ran 970 tests, 57 skipped, 1 failed. -pierre 28 Mar 25 (mercurial-7.0).
       -->
 <para>
       Para a finalidade de investigar quaisquer testes aparentemente falhos, você
-possivelmente use o conjunto de comandos sequenciais
-<command>run-tests.py</command>. Para ver as quase quarenta chaves, algumas
-delas muito úteis, emita <command>tests/run-tests.py
---help</command>. Executando os seguintes comandos, você executará somente
-os testes que falharam antes:
+pode usar o conjunto de comandos sequenciais <command>run-tests.py</command>
+no diretório <filename class="directory">tests</filename>. Para ver as quase
+quarenta chaves, algumas delas muito úteis, emita
+<command>tests/run-tests.py --help</command>. Executando os seguintes
+comandos, você executará somente os testes que falharam antes:
     </para>
 
-<screen remap="test"><userinput>pushd tests &amp;&amp;
-  rm -rf tmp &amp;&amp;
-  ./run-tests.py --tmpdir tmp test-gpg.t
-popd</userinput></screen>
-
+<!-- not tested for a very long time
     <para>
-      Normalmente, as falhas anteriores serão reproduzíveis. Porém, se você
-adicionar a chave <option>--debug</option> antes de
-<option>--tmpdir</option> e executar os testes novamente, [então] algumas
-falhas possivelmente desapareçam, o que é um problema com a suíte de
-teste. Se isso acontecer, [então] não mais existirão falhas, mesmo se você
-não passar a chave &quot;--debug&quot; novamente.
+
+      Normally, the previous failures will be reproducible. However, if
+      you add the switch <option>- -debug</option> before
+      <option>- -tmpdir</option>, and run the tests again, some failures may
+      disappear, which is a problem with the test suite. If this happens,
+      there will be no more of these failures even if you do not pass the
+      - -debug switch again.
     </para>
+    -->
+<screen remap="test"><userinput>pushd tests  &amp;&amp;
+  rm -rf tmp &amp;&amp;
+  ./run-tests.py --with-hg /usr/bin/hg <replaceable>test-gpg.t</replaceable>
+popd</userinput></screen>
 
     <para>
       Uma chave interessante é <option>--time</option>, que gerará uma tabela de
@@ -189,21 +183,6 @@ sistema e real assim que os testes estiverem completos. Observe que essas
 chaves possivelmente sejam usadas com <command>make check</command>
 incluindo-as na variável de ambiente <envar>TESTFLAGS</envar>.
     </para>
-
-    <para>
-      Instale o <application>Mercurial</application> executando o seguinte comando
-(como <systemitem class="username">root</systemitem>):
-    </para>
-
-<screen role="root"><userinput>make PREFIX=/usr install-bin</userinput></screen>
-
-    <para>
-      Se você construiu a documentação, [então] instale-a executando o seguinte
-comando (como <systemitem class="username">root</systemitem>):
-    </para>
-
-<screen role="root"
-        remap="doc"><userinput>make PREFIX=/usr install-doc</userinput></screen>
 
     <para>
       Depois da instalação, dois testes muito rápidos e simples deveriam executar
@@ -306,7 +285,7 @@ EOF</userinput></screen>
 /usr/lib/python&python3-majorver;/site-packages/hgext,
 /usr/lib/python&python3-majorver;/site-packages/hgext3rd,
 /usr/lib/python&python3-majorver;/site-packages/mercurial e
-/usr/lib/python&python3-majorver;/site-packages/mercurial-&mercurial-version;-py&python3-majorver;.egg-info
+/usr/lib/python&python3-majorver;/site-packages/mercurial-&mercurial-version;.dist-info
         </seg>
       </seglistitem>
     </segmentedlist>

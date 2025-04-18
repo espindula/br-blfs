@@ -5,19 +5,19 @@
   %general-entities;
 
   <!ENTITY mousepad-download-http
-           "https://archive.xfce.org/src/apps/mousepad/0.6/mousepad-&mousepad-version;.tar.bz2">
+           "https://archive.xfce.org/src/apps/mousepad/0.6/mousepad-&mousepad-version;.tar.xz">
   <!ENTITY mousepad-download-ftp  "">
-  <!ENTITY mousepad-md5sum        "6e46d6a22e0656fbddf2655d1e9dfc1f">
-  <!ENTITY mousepad-size          "1,4 MB">
-  <!ENTITY mousepad-buildsize     "16 MB">
-  <!ENTITY mousepad-time          "0,1 UPC">
+  <!ENTITY mousepad-md5sum        "53a9ddeb8481ed8cd17d795c3881599b">
+  <!ENTITY mousepad-size          "452 MB">
+  <!ENTITY mousepad-buildsize     "9,1 MB">
+  <!ENTITY mousepad-time          "menos que 0,1 UPC">
 ]>
 
-<sect1 id="mousepad" xreflabel="Mousepad-&mousepad-version;">
+<sect1 id="mousepad" xreflabel="mousepad-&mousepad-version;">
   <?dbhtml filename="mousepad.html"?>
 
 
-  <title>Mousepad-&mousepad-version;</title>
+  <title>mousepad-&mousepad-version;</title>
 
   <indexterm zone="mousepad">
     <primary sortas="a-Mousepad">Mousepad</primary>
@@ -27,9 +27,8 @@
     <title>Introdução ao Mousepad</title>
 
     <para>
-      <application>Mousepad</application> é um editor simples de texto
-<application>GTK+ 3</application> para o ambiente de área de trabalho
-<application>Xfce</application>.
+      <application>Mousepad</application> é um editor GTK de texto simples para o
+ambiente de área de trabalho <application>Xfce</application>.
     </para>
 
     &lfs123_checked;
@@ -80,13 +79,16 @@
       <xref linkend="gspell"/>
     </para>
 
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
-    <para role="optional">
-      <xref role="runtime" linkend='dconf'/> (tempo de execução) e <xref
-linkend="dbus-glib"/>
-    </para>
 
-  </sect2>
+  <!-- I can find no mention of these in version 0.8.4
+    <bridgehead renderas="sect4">
+Optional</bridgehead>
+    <para role="optional">
+      <xref role="runtime" linkend='dconf'/> (runtime) and
+      <xref linkend="dbus-glib"/>
+    </para>
+-->
+</sect2>
 
   <sect2 role="installation">
     <title>Instalação do Mousepad</title>
@@ -96,10 +98,14 @@ linkend="dbus-glib"/>
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr           \
-            --enable-gtksourceview4 \
-            --enable-keyfile-settings &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release &amp;&amp;
+
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -109,7 +115,7 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
@@ -117,14 +123,8 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--enable-keyfile-settings</parameter>: Use a estrutura de
-retaguarda do arquivo de chaves GSettings em vez do padrão <xref
-linkend='dconf'/>.
-    </para>
-
-    <para>
-      <option>--disable-plugin-gspell</option>: Use essa opção para desabilitar
-construir o plugin <xref linkend="gspell"/> se você não tiver instalado o
+      <option>-D gspell-plugin=no</option>: Use essa opção para desabilitar
+construir o plugin <xref linkend="gspell"/> se você não tiver instalado
 <application>gspell</application>.
     </para>
 
@@ -143,7 +143,7 @@ construir o plugin <xref linkend="gspell"/> se você não tiver instalado o
           mousepad
         </seg>
         <seg>
-          Nenhum(a)
+          libmousepad.so
         </seg>
         <seg>
           Nenhum(a)
@@ -159,7 +159,7 @@ construir o plugin <xref linkend="gspell"/> se você não tiver instalado o
         <term><command>mousepad</command></term>
         <listitem>
           <para>
-            é um editor simples <application>GTK+ 3</application> de texto
+            é um editor GTK de texto simples
           </para>
           <indexterm zone="mousepad mousepad-prog">
             <primary sortas="b-mousepad">mousepad</primary>

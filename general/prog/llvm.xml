@@ -8,30 +8,30 @@
 
   <!ENTITY llvm-download-http "&llvm-url;/llvm-&llvm-version;.src.tar.xz">
   <!ENTITY llvm-download-ftp  "">
-  <!ENTITY llvm-md5sum        "45229744809103ad151e3757a0f21d3d">
-  <!ENTITY llvm-size          "65 MB">
-  <!ENTITY llvm-buildsize     "3,5 GB (964 MB instalado; adicionar 20 GB para testes e 308 MB para
+  <!ENTITY llvm-md5sum        "4dded37d4e2a030793de925ed6894eb6">
+  <!ENTITY llvm-size          "69 MB">
+  <!ENTITY llvm-buildsize     "4,7 GB (1,1 GB instalado; adicionar 23 GB para testes e 2,3 GB para
 documentação)">
-  <!ENTITY llvm-time          "13 UPC (Adicionar 8 UPC para testes; ambos usando paralelismo=8)">
+  <!ENTITY llvm-time          "13 UPC (Adicionar 19 UPC para testes; ambos usando paralelismo=8)">
 
   <!ENTITY clang-download-http "&llvm-url;/clang-&llvm-version;.src.tar.xz">
-  <!ENTITY clang-md5sum        "8a29181acd27b9c03b0039b75f5fcaa0">
+  <!ENTITY clang-md5sum        "739e2a7a7fc7cca0767340be32f07754">
   <!ENTITY clang-size          "23 MB">
 
   <!ENTITY compiler-rt-download-http "&llvm-url;/compiler-rt-&llvm-version;.src.tar.xz">
-  <!ENTITY compiler-rt-md5sum        "0286b00ef3057362eb0636d3298999b1">
+  <!ENTITY compiler-rt-md5sum        "6e04c453ff3df173112e290e53580c2b">
   <!ENTITY compiler-rt-size          "2,5 MB">
 
   <!-- CMake modules and third party dependencies renamed and uploaded
        onto anduin to avoid stupid file names.  -->
 
   <!ENTITY cmake-llvm-download-http "&sources-anduin-http;/llvm/llvm-cmake-&llvm-version;.src.tar.xz">
-  <!ENTITY cmake-llvm-md5sum         "52b5249a06305e19c3bdae2e972c99c3">
+  <!ENTITY cmake-llvm-md5sum         "10dd36ab16d9e022fc8fd0e0a61f0dbc">
   <!ENTITY cmake-llvm-size           "12 KB">
 
   <!ENTITY llvm-3rdparty-download-http "&sources-anduin-http;/llvm/llvm-third-party-&llvm-version;.src.tar.xz">
-  <!ENTITY llvm-3rdparty-md5sum        "d950171ac5ea4a1a20cb8f6eb9f1c8eb">
-  <!ENTITY llvm-3rdparty-size          "448 KB">
+  <!ENTITY llvm-3rdparty-md5sum        "a3ba9494f84ac5e2bebd02a3cea31b6d">
+  <!ENTITY llvm-3rdparty-size          "444 KB">
 ]>
 
 <sect1 id="llvm" xreflabel="LLVM-&llvm-version;">
@@ -208,9 +208,9 @@ construção LLVM</emphasis>
       <xref linkend="doxygen"/>, <xref linkend="git"/>, <xref
 linkend="graphviz"/>, <xref linkend="libxml2"/>, <xref linkend="psutil"/>
 (para testes), <xref linkend="pygments"/>, <xref linkend="PyYAML"/> (para
-testes), <xref linkend="rsync"/> (para testes), <phrase
-revision="systemd"><xref linkend="systemd"/> (reconstruído com PAM, para
-testes),</phrase> <xref linkend="texlive"/> (ou <xref
+testes), <xref linkend="rsync"/> (para testes), <xref linkend="sphinx"/>,
+<phrase revision="systemd"><xref linkend="systemd"/> (reconstruído com PAM,
+para testes),</phrase> <xref linkend="texlive"/> (ou <xref
 linkend="tl-installer"/>), <xref linkend="valgrind"/>, <xref
 linkend="zip"/>, <ulink
 url="https://pypi.org/project/myst-parser">myst-parser</ulink> (para
@@ -544,10 +544,10 @@ compartilhadas em vez de estáticas.
     </para>
 
     <para>
-      <option>-D LLVM_ENABLE_DOXYGEN</option>: habilita a geração de documentação
-HTML navegável se você tiver instalado <xref linkend="doxygen"/>. Você
-deveria executar <command>make doxygen-html</command> depois e instalar a
-documentação gerada manualmente.
+      <option>-D LLVM_ENABLE_DOXYGEN=ON -D LLVM_ENABLE_DOCS=ON</option>: Habilita
+a geração de documentação HTML navegável se você tiver instalado <xref
+linkend="doxygen"/>. A documentação será construída no final do processo de
+construção.
     </para>
 
   </sect2>
@@ -586,29 +586,31 @@ done</userinput></screen>
           amdgpu-arch, analyze-build, bugpoint, c-index-test, clang, clang++ (links
 simbólicos para clang-&llvm-maj-version;), clang-&llvm-maj-version;,
 clang-check, clang-cl, clang-cpp (os últimos dois links simbólicos para
-clang), clang-extdef-mapping, clang-format, clang-linker-wrapper,
-clang-offload-bundler, clang-offload-packager, clang-refactor, clang-rename,
-clang-repl, clang-scan-deps, clang-tblgen, diagtool, dsymutil, FileCheck,
+clang), clang-extdef-mapping, clang-format, clang-installapi,
+clang-linker-wrapper, clang-nvlink-wrapper, clang-offload-bundler,
+clang-offload-packager, clang-refactor, clang-repl, clang-scan-deps,
+clang-sycl-linker, clang-tblgen, diagtool, dsymutil, FileCheck,
 git-clang-format, hmaptool, intercept-build, llc, lli, llvm-addr2line (link
 simbólico para llvm-symbolizer), llvm-ar, llvm-as, llvm-bcanalyzer,
 llvm-bitcode-strip (link simbólico para llvm-objcopy), llvm-cat,
-llvm-cfi-verify, llvm-config, llvm-cov, llvm-c-test, llvm-cvtres,
-llvm-cxxdump, llvm-cxxfilt, llvm-cxxmap, llvm-debuginfo-analyzer,
-llvm-debuginfod, llvm-debuginfod-find, llvm-diff, llvm-dis, llvm-dlltool
-(link simbólico para llvm-ar), llvm-dwarfdump, llvm-dwarfutil, llvm-dwp,
-llvm-exegesis, llvm-extract, llvm-gsymutil, llvm-ifs, llvm-install-name-tool
-(link simbólico para llvm-objcopy), llvm-jitlink, llvm-lib (link simbólico
-para llvm-ar), llvm-libtool-darwin, llvm-link, llvm-lipo, llvm-lto,
-llvm-lto2, llvm-mc, llvm-mca, llvm-ml, llvm-modextract, llvm-mt, llvm-nm,
-llvm-objcopy, llvm-objdump, llvm-opt-report, llvm-otool (link simbólico para
-llv-objdump), llvm-pdbutil, llvm-profdata, llvm-profgen, llvm-ranlib (link
-simbólico para llvm-ar), llvm-rc, llvm-readelf (link simbólico para
-llvm-readobj), llvm-readobj, llvm-readtapi, llvm-reduce, llvm-remarkutil,
-llvm-rtdyld, llvm-sim, llvm-size, llvm-split, llvm-stress, llvm-strings,
-llvm-strip (link simbólico para llvm-objcopy), llvm-symbolizer, llvm-tblgen,
-llvm-tli-checker, llvm-undname, llvm-windres (link simbólico para llvm-rc),
-llvm-xray, nvptx-arch, opt, sancov, sanstats, scan-build, scan-build-py,
-scan-view e verify-uselistorder
+llvm-cfi-verify, llvm-cgdata, llvm-config, llvm-cov, llvm-c-test,
+llvm-ctxprog-util, llvm-cvtres, llvm-cxxdump, llvm-cxxfilt, llvm-cxxmap,
+llvm-debuginfo-analyzer, llvm-debuginfod, llvm-debuginfod-find, llvm-diff,
+llvm-dis, llvm-dlltool (link simbólico para llvm-ar), llvm-dwarfdump,
+llvm-dwarfutil, llvm-dwp, llvm-exegesis, llvm-extract, llvm-gsymutil,
+llvm-ifs, llvm-install-name-tool (link simbólico para llvm-objcopy),
+llvm-jitlink, llvm-lib (link simbólico para llvm-ar), llvm-libtool-darwin,
+llvm-link, llvm-lipo, llvm-lto, llvm-lto2, llvm-mc, llvm-mca, llvm-ml,
+llvm-modextract, llvm-mt, llvm-nm, llvm-objcopy, llvm-objdump,
+llvm-opt-report, llvm-otool (link simbólico para llv-objdump), llvm-pdbutil,
+llvm-profdata, llvm-profgen, llvm-ranlib (link simbólico para llvm-ar),
+llvm-rc, llvm-readelf (link simbólico para llvm-readobj), llvm-readobj,
+llvm-readtapi, llvm-reduce, llvm-remarkutil, llvm-rtdyld, llvm-sim,
+llvm-size, llvm-split, llvm-stress, llvm-strings, llvm-strip (link simbólico
+para llvm-objcopy), llvm-symbolizer, llvm-tblgen, llvm-tli-checker,
+llvm-undname, llvm-windres (link simbólico para llvm-rc), llvm-xray,
+nvptx-arch, opt, sancov, sanstats, scan-build, scan-build-py, scan-view e
+verify-uselistorder
         </seg>
         <seg>
           libLLVM.so, libLLVM*.a (107 bibliotecas), libLTO.so, libRemarks.so,
@@ -778,19 +780,23 @@ várias arquiteturas de processador contendo código de descarregamento
         </listitem>
       </varlistentry>
 
+ 
+
+      <!-- Not present in 20.1.0
       <varlistentry id="clang-rename">
+
         <term><command>clang-rename</command></term>
         <listitem>
           <para>
-            é uma ferramenta para renomear símbolos em aplicativos C/C++
+            is a tool to rename symbols in C/C++ programs
           </para>
           <indexterm zone="llvm clang-rename">
             <primary sortas="b-clang-rename">clang-rename</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="clang-scan-deps">
+ -->
+<varlistentry id="clang-scan-deps">
         <term><command>clang-scan-deps</command></term>
         <listitem>
           <para>
@@ -1363,21 +1369,7 @@ desempenho do código de máquina
         </listitem>
       </varlistentry>
 
-
-
-      <!--  <varlistentry id="llvm-mcmarkup">
-
-        <term><command>llvm-mcmarkup</command></term>
-        <listitem>
-          <para>
-            is a parser for machine code markup.
-          </para>
-          <indexterm zone="llvm llvm-mcmarkup">
-            <primary sortas="b-llvm-mcmarkup">llvm-mcmarkup</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>-->
-<varlistentry id="llvm-ml">
+      <varlistentry id="llvm-ml">
         <term><command>llvm-ml</command></term>
         <listitem>
           <para>
@@ -1804,50 +1796,6 @@ lista de uso
           </indexterm>
         </listitem>
       </varlistentry>
-
-<!-- Removed in 12.0.0
-      <varlistentry id="yaml2obj">
-
-        <term><command>yaml2obj</command></term>
-        <listitem>
-          <para>
-            takes a YAML representation of an object file and converts it
-            to a binary file
-          </para>
-          <indexterm zone="llvm yaml2obj">
-            <primary sortas="b-yaml2obj">yaml2obj</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
--->
-<!--
-      <varlistentry id="libllvm">
-
-        <term><filename class="libraryfile">libLLVM-&llvm-version;.so</filename></term>
-        <listitem>
-          <para>
-            contains the <application>LLVM</application> API functions.
-          </para>
-          <indexterm zone="llvm libllvm">
-            <primary sortas="c-libllvm">libLLVM-&llvm-version;.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="libprofile_rt">
-        <term><filename class="libraryfile">libprofile_rt.so</filename></term>
-        <listitem>
-          <para>
-            is the C, C++ and Objective-C runtime library for
-            <application>Clang</application>.
-          </para>
-          <indexterm zone="llvm libprofile_rt">
-            <primary sortas="c-libprofile_rt">libprofile_rt.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>-->
-
-
 
     </variablelist>
 

@@ -6,10 +6,10 @@
 
   <!ENTITY webkitgtk-download-http "https://webkitgtk.org/releases/webkitgtk-&webkitgtk-version;.tar.xz">
   <!ENTITY webkitgtk-download-ftp  "">
-  <!ENTITY webkitgtk-md5sum        "10b5b88ffe8611202c45cfdc10a2bd72">
-  <!ENTITY webkitgtk-size          "41 MB">
-  <!ENTITY webkitgtk-buildsize     "1,4 GB (163 MB instalado; adicionar 157 MB para GTK-4)">
-  <!ENTITY webkitgtk-time          "32 UPC (para GTK-3, usando paralelismo = 8; adicionar 32 UPC para GTK-4)">
+  <!ENTITY webkitgtk-md5sum        "dce4acd27a743eb4be03ab4a7cd8353f">
+  <!ENTITY webkitgtk-size          "42 MB">
+  <!ENTITY webkitgtk-buildsize     "1,5 GB (182 MB instalado; adicionar 177 MB para GTK-4)">
+  <!ENTITY webkitgtk-time          "24 UPC (para GTK-3, usando paralelismo=8; adicionar 24 UPC para GTK-4)">
 
   <!ENTITY libbacktrace
     "<ulink url='https://github.com/ianlancetaylor/libbacktrace'>libbacktrace</ulink>">
@@ -80,9 +80,8 @@ Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          <phrase revision='sysv'>Required</phrase>
-          <phrase revision='systemd'>Optional</phrase> patch:
-          <ulink url="&patch-root;/webkitgtk-&webkitgtk-version;-upstream_fixes-2.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/webkitgtk-&webkitgtk-version;-build_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -104,10 +103,10 @@ e <xref linkend="which"/>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="bubblewrap"/>, <xref linkend="enchant"/>, <xref
-linkend="geoclue2"/>, &gobject-introspection;, <xref
-linkend="hicolor-icon-theme"/>, <xref linkend="libavif"/>, <xref
-linkend="libjxl"/>, <xref linkend="libseccomp"/> e <xref
-linkend="xdg-dbus-proxy"/>
+role='runtime' linkend="geoclue2"/> (tempo de execução),
+&gobject-introspection;, <xref linkend="hicolor-icon-theme"/>, <xref
+linkend="libavif"/>, <xref linkend="libjxl"/>, <xref linkend="libseccomp"/>
+e <xref linkend="xdg-dbus-proxy"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -115,9 +114,11 @@ linkend="xdg-dbus-proxy"/>
       <xref linkend="gi-docgen"/>, <xref linkend="harfbuzz"/>, <xref
 linkend="wayland"/>, <xref linkend="woff2"/>, <ulink
 url="https://ccache.dev/">ccache</ulink>, <ulink
+url="http://www.festvox.org/flite/">flite</ulink>, <ulink
 url="https://sourceforge.net/projects/hunspell/files/Hyphen/">Hyphen</ulink>,
 &libbacktrace;, <ulink
-url="https://gnome.pages.gitlab.gnome.org/libmanette/">libmanette</ulink> e
+url="https://gnome.pages.gitlab.gnome.org/libmanette/">libmanette</ulink>,
+<ulink url="https://github.com/project-spiel/libspiel">libspiel</ulink> e
 <ulink url="&sysprof-url;">sysprof</ulink>
     </para>
 
@@ -137,6 +138,15 @@ linkend="evolution"/>, requerem a versão GTK-3. Ambas as versões podem ser
 instaladas lado a lado no mesmo sistema. Nós fornecemos instruções de
 construção para ambos os casos abaixo, mas a única diferença é a
 configuração de <command>-D USE_GTK4</command>
+      </para>
+
+      <para>
+        If you are building this package on a 32-bit system, or a 64-bit system with
+less than 16GB of memory, you must add the <command>-D
+CMAKE_CXX_FLAGS_RELEASE="-O2 -DNDEBUG"</command> option to the CMake line to
+prevent build failures relating to running out of memory. Performance will
+be impacted slightly, but not at a level where it is noticeable during
+normal usage.
       </para>
     </important>
 
@@ -163,6 +173,7 @@ cmake -D CMAKE_BUILD_TYPE=Release      \
       -D USE_GTK4=OFF                  \
       -D ENABLE_BUBBLEWRAP_SANDBOX=ON  \
       -D USE_SYSPROF_CAPTURE=NO        \
+      -D ENABLE_SPEECH_SYNTHESIS=OFF   \
       -W no-dev -G Ninja ..            &amp;&amp;
 ninja</userinput></screen>
 
@@ -185,6 +196,7 @@ cmake -D CMAKE_BUILD_TYPE=Release      \
       -D ENABLE_JOURNALD_LOG=OFF       \
       -D ENABLE_BUBBLEWRAP_SANDBOX=ON  \
       -D USE_SYSPROF_CAPTURE=NO        \
+      -D ENABLE_SPEECH_SYNTHESIS=OFF   \
       -W no-dev -G Ninja ..            &amp;&amp;
 ninja</userinput></screen>
 
@@ -223,6 +235,7 @@ cmake -D CMAKE_BUILD_TYPE=Release         \
       -D USE_GTK4=ON                      \
       -D ENABLE_BUBBLEWRAP_SANDBOX=ON     \
       -D USE_SYSPROF_CAPTURE=NO           \
+      -D ENABLE_SPEECH_SYNTHESIS=OFF      \
       -W no-dev -G Ninja ..               &amp;&amp;
 ninja</userinput></screen>
 
@@ -243,6 +256,7 @@ cmake -D CMAKE_BUILD_TYPE=Release      \
       -D ENABLE_JOURNALD_LOG=OFF       \
       -D ENABLE_BUBBLEWRAP_SANDBOX=ON  \
       -D USE_SYSPROF_CAPTURE=NO        \
+      -D ENABLE_SPEECH_SYNTHESIS=OFF   \
       -W no-dev -G Ninja ..            &amp;&amp;
 ninja</userinput></screen>
 
@@ -269,14 +283,7 @@ cp -rv ../Documentation/* /usr/share/gtk-doc/html</userinput></screen>
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-
-
-    <!--    <para>
-
-      <command>sed ... TextCheckerEnchant.cpp</command>: This command
-      is needed to allow the build to complete with enchant-2.x.
-    </para> -->
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/cmake-skip-install-rpath.xml"/>
 
     <para>
@@ -322,16 +329,7 @@ maneira. Remova essa opção se você não planeja construir esse pacote com
 GTK-4.
     </para>
 
-
-    <!--
     <para>
-
-      <parameter>-D USE_JPEGXL=OFF</parameter>: This switch turns off support
-      for JPEG-XL images. Remove it if you have the optional package
-      <ulink url="https://github.com/libjxl/libjxl">libjxl</ulink> installed.
-    </para>
--->
-<para>
       <!-- Note: This works well on both i686 and x86_64. -renodr -->
 <parameter>-D ENABLE_BUBBLEWRAP_SANDBOX=ON</parameter>: Essa chave habilita
 o sandbox Bubblewrap, que ajuda a mitigar o impacto da maioria das
@@ -351,6 +349,15 @@ uma vez que ele não está disponível em sistemas SysV.
     <para>
       <parameter>-D USE_SYSPROF_CAPTURE=NO</parameter>: Essa chave desabilita uma
 dependência rígida de <ulink url="&sysprof-url;">sysprof</ulink>.
+    </para>
+
+    <para>
+      <parameter>-D ENABLE_SPEECH_SYNTHESIS=OFF</parameter>: Essa chave desabilita
+construir suporte à síntese de fala no WebKitGTK porque ele exige
+dependências externas adicionais. Você precisará de <ulink
+url="http://www.festvox.org/flite/">flite</ulink> e <ulink
+url="https://github.com/project-spiel/libspiel">libspiel</ulink> se desejar
+habilitar isso.
     </para>
 
     <para>

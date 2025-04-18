@@ -6,10 +6,10 @@
 
   <!ENTITY mesa-download-http "https://mesa.freedesktop.org/archive/mesa-&mesa-version;.tar.xz">
   <!ENTITY mesa-download-ftp  "">
-  <!ENTITY mesa-md5sum        "3c317f5e15f5b6f7dd07591a9544d1f9">
+  <!ENTITY mesa-md5sum        "42502c44e1e3e9ea9700c8c4e50b0f7c">
   <!ENTITY mesa-size          "45 MB">
   <!ENTITY mesa-buildsize     "1,2 GB (com documentos, adicionar 573 MB para testes)">
-  <!ENTITY mesa-time          "3,5 UPC (com documentos; adicionar 1 UPC para testes; ambos com
+  <!ENTITY mesa-time          "3,3 UPC (com documentos; adicionar 1,2 UPC para testes; ambos com
 paralelismo=4)">
 ]>
 
@@ -159,7 +159,9 @@ linkend="rust-bindgen"/> (exigido para o controlador Nouveau Vulkan)
     <note>
       <para>
         Uma conexão de Internet é necessária para construir o controlador Nouveau
-Vulkan.
+Vulkan. A loja de certificados do sistema possivelmente precise ser
+configurada com <xref role='recommended' linkend='make-ca'/> antes de
+construir-se esse pacote.
       </para>
     </note>
 
@@ -270,10 +272,26 @@ linkend="mesa-gallium-drivers"/> abaixo.
       </para>
 
       <para>
+        For the GPUs supported by the Iris Gallium3D driver, with
+<option>CONFIG_DRM_I915</option> enabled and
+<option>CONFIG_DRM_XE_FORCE_PROBE</option> set to the string
+<literal>*</literal>, the i915 driver will be used if it supports the GPU,
+and the Xe driver will be used if it supports the GPU but the i915 driver
+does not.  If you are sure your GPU is supported by the i915 driver, you can
+disable the Xe driver to save some build time.  If your GPU is supported by
+both drivers and you want to use the Xe driver, you can disable the i915
+driver, or make the i915 driver deny your GPU via the
+<option>CONFIG_DRM_I915_FORCE_PROBE</option> option, for example setting it
+to <literal>!7d55</literal> would make i915 deny the Meteor Lake integrated
+GPU (of which the PCI ID is <literal>8086:7d55</literal>), leaving it for
+the Xe driver.
+      </para>
+
+      <para>
         <option>CONFIG_DRM_RADEON</option>, <option>CONFIG_DRM_AMDGPU</option>,
-<option>CONFIG_DRM_NOUVEAU</option> e <option>CONFIG_DRM_I915</option>
-possivelmente exijam firmware. Veja-se <xref linkend='postlfs-firmware'/>
-para detalhes.
+<option>CONFIG_DRM_NOUVEAU</option>, <option>CONFIG_DRM_I915</option>, and
+<option>CONFIG_DRM_XE</option> may require firmware.  See <xref
+linkend='postlfs-firmware'/> for details.
       </para>
 
       <para>

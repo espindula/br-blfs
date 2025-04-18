@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY tinysparql-download-http
-           "&gnome-download-http;/tinysparql/3.8/tinysparql-&tinysparql-version;.tar.xz">
+           "&gnome-download-http;/tinysparql/3.9/tinysparql-&tinysparql-version;.tar.xz">
   <!ENTITY tinysparql-download-ftp  "">
-  <!ENTITY tinysparql-md5sum        "9c3ab085fe15b55acfd956c039819a00">
+  <!ENTITY tinysparql-md5sum        "9b5a0e4b2f8baeb19f7f57eaf08eee47">
   <!ENTITY tinysparql-size          "2,0 MB">
-  <!ENTITY tinysparql-buildsize     "53 MB (com testes)">
+  <!ENTITY tinysparql-buildsize     "62 MB (com testes)">
   <!ENTITY tinysparql-time          "0,4 UPC (com testes)">
 ]>
 
@@ -89,8 +89,9 @@ linkend="pygobject3"/> e <xref linkend="sqlite"/>
 
 -->
 <xref linkend="asciidoc"/>, <xref linkend="avahi"/>, <xref
-linkend="graphviz"/> e <ulink
-url="https://github.com/scop/bash-completion/">bash-completion</ulink>
+linkend="graphviz"/>, <ulink
+url="https://github.com/scop/bash-completion/">bash-completion</ulink> e
+<ulink url="https://snowballstem.org/">libstemmer</ulink>
     </para>
 
   </sect2>
@@ -112,9 +113,9 @@ arquivo que causará um conflito como o(a) usuário(a) &root;:
       Corrija o local para instalar a documentação:
     </para>
 
-<screen><userinput>mv docs/reference/libtracker-sparql/doc/{Tsparql-3.0,tinysparql-&tinysparql-version;} &amp;&amp;
-sed '/docs_name/s/Tsparql-3.0/tinysparql-&tinysparql-version;/' \
-    -i docs/reference/libtracker-sparql/meson.build</userinput></screen>
+<screen><userinput>sed -e "s/'generate'/&amp;, '--no-namespace-dir'/"         \
+    -e "/--output-dir/s/@OUTPUT@/&amp;\/tinysparql-&tinysparql-version;/" \
+    -i docs/reference/meson.build</userinput></screen>
 
     <para>
       Instale <application>Tinysparql</application> executando os seguintes
@@ -148,7 +149,7 @@ ninja</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>meson configure -D debug=true
-&amp;&amp; LC_ALL=C ninja test</command>. A suíte de teste deveria ser
+&amp;&amp; LC_ALL=C.UTF-8 ninja test</command>. A suíte de teste deveria ser
 executada a partir de uma sessão gráfica. Um teste é conhecido por falhar
 devido às páginas de manual não serem geradas.
     </para>

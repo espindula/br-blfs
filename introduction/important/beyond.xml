@@ -154,16 +154,15 @@ remendos. Nas versões .diff.gz, quaisquer remendos criam arquivos em
 o fonte do pacote para rpms está em <ulink
 url="https://src.fedoraproject.org/projects/rpms/%2A"/> e, a partir de lá,
 você pode tentar colocando um nome de pacote na caixa de busca. Se o pacote
-for encontrado, [então] você pode olhar nos arquivos ("specfile" para
-controlar a construção; vários remendos) ou nos commits. Se isso falhar,
-[então] você pode baixar um srpm (source rpm) e usar o
-<application>rpm2cpio</application> (veja-se a Dica ao final da
-página). Para rpms, vá para <ulink
+for encontrado, você pode olhar nos arquivos (specfile para controlar a
+construção; vários remendos) ou nas submissões. Se isso falhar, você pode
+baixar um srpm (source rpm) e usar o <application>rpmextract</application>
+(veja-se a Dica ao final da página). Para rpms, vá para <ulink
 url="https://dl.fedoraproject.org/pub/fedora/linux/"/> e, então, escolha
 qual repositório deseja olhar - development/rawhide é o desenvolvimento mais
-recente; ou, escolha "releases", para o que foi embarcado em um lançamento;
-"updates", para as atualizações para um lançamento; ou, "updates/testing",
-para as atualizações mais recentes, que poderiam funcionar ou poderiam ter
+recente; ou, escolha releases, para o que foi enviado em um lançamento;
+updates, para as atualizações para um lançamento; ou, updates/testing, para
+as atualizações mais recentes, que poderiam funcionar ou poderiam ter
 problemas.
           </para>
         </listitem>
@@ -217,22 +216,26 @@ observações Debian acima.</para>
   </itemizedlist>
 
   <tip>
-    <para>Se você tiver encontrado um pacote que está disponível somente no formato
-<filename class='extension'>.deb</filename> ou no <filename
-class='extension'>.rpm</filename>, [então] existem dois scripts pequenos,
-<command>rpm2targz</command> e <command>deb2targz</command>, que estão
-disponíveis em <ulink url="&sources-anduin-http;/extras/deb2targz.tar.bz2"/>
-e <ulink url="&sources-anduin-http;/extras/rpm2targz.tar.bz2"/>, para
-converter os arquivamentos em um formato simples
-<filename>tar.gz</filename>.</para>
-    <para>Você possivelmente ache também um script "rpm2cpio" útil. A versão "Perl"
-nos arquivamentos do núcleo Linux em <ulink
-url="https://lore.kernel.org/all/20021016121842.GA2292@ncsu.edu/2-rpm2cpio"/>
-funciona para a maioria dos "source rpms". O script "rpm2targz" usará um
-script ou binário "rpm2cpio" se um estiver no teu caminho. Observe que o
-"rpm2cpio" desempacotará um "source rpm" no diretório atual, dando um
-"tarball"; um arquivo de especificação; e, talvez, remendos ou outros
-arquivos.</para>
+    <para>Se você tiver encontrado um pacote que esteja disponível somente no formato
+<filename class='extension'>.deb</filename> ou <filename
+class='extension'>.rpm</filename>, existem diferentes métodos para
+extraí-los.</para>
+    <para>Os arquivos <filename class='extension'>.deb</filename> são apenas
+arquivamentos que são criados e extraídos pelo
+<application>ar</application>. Eles podem ser extraídos executando-se:
+<command>ar x $PACKAGE.deb</command>. Ele extrairá muitos arquivos; no
+entanto, o mais importante é <filename>data.tar.gz</filename>. Ele contém
+todos os arquivos que normalmente seriam instalados a partir dele.</para>
+    <para>Para arquivos <filename class='extension'>.rpm</filename>, você pode
+instalar <ulink
+url="https://archlinux.org/packages/extra/any/rpmextract/">rpmextract</ulink>
+(veja-se o <ulink
+url="https://gitlab.archlinux.org/archlinux/packaging/packages/rpmextract/-/blob/main/PKGBUILD?ref_type=heads">PKGBUILD</ulink>
+para como eles instalam o pacote) e usar <command>rpmextract.sh</command>
+oriundo do pacote para extrair o arquivo. Ele extrairá para vários
+diretórios, como <filename class="directory">app</filename> e <filename
+class="directory">usr</filename>. Você também pode usar <xref
+linkend="file-roller"/> ou <xref linkend="ark"/> para a extração.</para>
   </tip>
 
 </sect1>

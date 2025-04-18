@@ -89,6 +89,13 @@ codificação de fluxos de vídeo no formato H.265/HEVC.
     <title>Instalação do x265</title>
 
     <para>
+      First, remove some CMake policy settings that are no longer compatible with
+CMake-4.0 and later:
+    </para>
+
+<screen><userinput>sed -r '/cmake_policy.*(0025|0054)/d' -i source/CMakeLists.txt</userinput></screen>
+
+    <para>
       Instale o <application>x265</application> executando os seguintes comandos:
     </para>
 
@@ -97,10 +104,11 @@ codificação de fluxos de vídeo no formato H.265/HEVC.
 <userinput>mkdir bld &amp;&amp;
 cd    bld &amp;&amp;
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr \
-      -D GIT_ARCHETYPE=1           \
-      -W no-dev                    \
-      ../source                    &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr        \
+      -D GIT_ARCHETYPE=1                  \
+      -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
+      -W no-dev                           \
+      ../source                           &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -148,17 +156,20 @@ rm -vf /usr/lib/libx265.a</userinput></screen>
       <title>Explicações do Comando</title>
 
       <para>
-        <parameter>-W no-dev</parameter>: Essa chave é usada para suprimir avisos
-destinados para os(as) desenvolvedores(as) do pacote.
-      </para>
-
-      <para>
         <parameter>-D GIT_ARCHETYPE=1</parameter>: Essa chave é necessária porque o
 sistema de construção não gerará um arquivo de pkg-config ou instalará uma
 biblioteca compartilhada, a menos que <xref linkend="git"/> esteja
 instalado. O Git não é exigido para mais nada nesse pacote, de forma que
 essa chave é usada para contornar isso para usuários(as) que não queiram
 instalar o Git como uma dependência de construção.
+      </para>
+
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+        href="../../xincludes/cmake-policy-version.xml"/>
+
+      <para>
+        <parameter>-W no-dev</parameter>: Essa chave é usada para suprimir avisos
+destinados para os(as) desenvolvedores(as) do pacote.
       </para>
 
       <para>

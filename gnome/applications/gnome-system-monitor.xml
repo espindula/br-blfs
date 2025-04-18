@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY gnome-system-monitor-download-http
-           "&gnome-download-http;/gnome-system-monitor/&gnome-47;/gnome-system-monitor-&gnome-system-monitor-version;.tar.xz">
+           "&gnome-download-http;/gnome-system-monitor/&gnome-48;/gnome-system-monitor-&gnome-system-monitor-version;.tar.xz">
   <!ENTITY gnome-system-monitor-download-ftp  "">
-  <!ENTITY gnome-system-monitor-md5sum        "f6e69d246adc5445228c82011fac118a">
+  <!ENTITY gnome-system-monitor-md5sum        "7c56ba2c3b829e71a0d29c243337d9da">
   <!ENTITY gnome-system-monitor-size          "1,0 MB">
-  <!ENTITY gnome-system-monitor-buildsize     "33 MB">
+  <!ENTITY gnome-system-monitor-buildsize     "27 MB">
   <!ENTITY gnome-system-monitor-time          "0,2 UPC (com paralelismo=4)">
 ]>
 
@@ -78,14 +78,23 @@ linkend="libadwaita1"/> e <xref linkend="librsvg"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="appstream-glib"/>, <xref linkend="desktop-file-utils"/> e
-<ulink url="https://github.com/uncrustify/uncrustify">uncrustify</ulink>
+      <xref linkend="appstream-glib"/>, <xref linkend="desktop-file-utils"/>,
+<ulink url="https://github.com/catchorg/Catch2">Catch2</ulink> e <ulink
+url="https://github.com/uncrustify/uncrustify">uncrustify</ulink>
     </para>
 
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do GNOME System Monitor</title>
+
+    <para>
+      Primeiro, remova uma dependência rígida do Catch2, que só é usada se você
+estiver executando os testes de unidade:
+    </para>
+
+<screen><userinput remap="pre">find . -name meson.build | xargs sed -i -e '/catch2/d' &amp;&amp;
+sed -i '152,162d' src/meson.build</userinput></screen>
 
     <para>
       Instale o <application>GNOME System Monitor</application> executando os
@@ -108,7 +117,9 @@ meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Esse pacote não vem com uma suíte de teste.
+      Esse pacote vem com uma suíte de teste, mas ela exige a dependência externa
+Catch2. Se tiver o Catch2 instalado, você pode omitir os seds acima e então
+executar os testes com <command>ninja test</command>.
     </para>
 
     <para>

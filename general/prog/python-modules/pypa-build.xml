@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+   <!ENTITY % general-entities SYSTEM "../../../general.ent">
+  %general-entities;
+
+  <!ENTITY pypa-build-download-http "https://files.pythonhosted.org/packages/source/b/build/build-&pypa-build-version;.tar.gz">
+  <!ENTITY pypa-build-download-ftp  "">
+  <!ENTITY pypa-build-md5sum        "5492ba887b363f483d64a11bbec0c34a">
+  <!ENTITY pypa-build-size          "47 KB">
+  <!ENTITY pypa-build-buildsize     "772 KB (63 MB para testes)">
+  <!ENTITY pypa-build-time          "menos que 0,1 UPC (0,5 UPC para testes)">
+]>
+
+  
+  <!-- Begin pypa-build -->
+<sect2 id="pypa-build" xreflabel="build-&pypa-build-version;">
+
+    <title>build-&pypa-build-version;</title>
+
+    <indexterm zone="pypa-build">
+      <primary sortas="a-build">build</primary>
+    </indexterm>
+
+    <sect3 role="package">
+      <title>Introdução ao build</title>
+
+      <para>
+        <application>build</application> é uma estrutura Python de construção de
+interação direta com o(a) usuário(a) que implementa a resolução PEP-517.
+      </para>
+
+      &lfs123_checked;
+
+      <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Transferência (HTTP): <ulink url="&pypa-build-download-http;"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Transferência (FTP): <ulink url="&pypa-build-download-ftp;"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Soma de verificação MD5 da transferência: &pypa-build-md5sum;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Tamanho da transferência: &pypa-build-size;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Espaço em disco estimado exigido: &pypa-build-buildsize;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Tempo de construção estimado: &pypa-build-time;
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <bridgehead renderas="sect4">Dependências do build</bridgehead>
+
+      <bridgehead renderas="sect5">Exigidas</bridgehead>
+      <para role="required">
+        <xref linkend="packaging"/> e <xref linkend="pyproject-hooks"/>
+      </para>
+
+      <bridgehead renderas="sect5">Opcionais (para testes)</bridgehead>
+      <para role="optional">
+        <xref linkend="pytest"/>, <xref linkend="python3"/> (reconstruído com <xref
+role='nodep' linkend='sqlite'/>), <ulink
+url="https://pypi.org/project/filelock/">filelock</ulink>, <ulink
+url="https://pypi.org/project/pytest-cov/">pytest-cov</ulink>, <ulink
+url="https://pypi.org/project/pytest-mock/">pytest-mock</ulink>, <ulink
+url="https://pypi.org/project/pytest-rerunfailures/">pytest-rerunfailures</ulink>,
+<ulink url="https://pypi.org/project/pytest-xdist/">pytest-xdist</ulink> e
+<ulink url="https://pypi.org/project/uv/">uv</ulink>
+      </para>
+
+    </sect3>
+
+    <sect3 role="installation">
+      <title>Instalação do build</title>
+
+      <para>
+        Construa o pacote com:
+      </para>
+
+&build-wheel;
+
+      <para>
+        Para instalar o pacote execute o seguinte como o(a) usuário(a) &root;:
+      </para>
+
+<screen role="root"><userinput>&install-wheel; build</userinput></screen>
+
+      <para>
+        Assumindo que <xref linkend="pytest"/> esteja instalado e que <xref
+linkend='python3'/> tenha sido reconstruído com <xref linkend='sqlite'/>,
+mas as outras dependências opcionais não estejam, a instalação pode ser
+testada com os seguintes comandos:
+      </para>
+
+<screen remap="test"><!-- no && because of a possible error -->
+<userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
+source testenv/bin/activate                    &amp;&amp;
+pip3 install build[test]                       &amp;&amp;
+python3 -m pytest
+deactivate</userinput></screen>
+
+      <para>
+        Dois testes em <filename>test_self_packaging.py</filename> são conhecidos
+por falharem.
+      </para>
+
+    </sect3>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../../xincludes/pip3-cmd-explain.xml"/>
+
+    <sect3 role="content">
+      <title>Conteúdo</title>
+
+      <segmentedlist>
+        <segtitle>Aplicativos Instalados</segtitle>
+        <segtitle>Bibliotecas Instaladas</segtitle>
+        <segtitle>Diretórios Instalados</segtitle>
+
+        <seglistitem>
+          <seg>
+            pyproject-build
+          </seg>
+          <seg>
+            Nenhum(a)
+          </seg>
+          <seg>
+            /usr/lib/python&python3-majorver;/site-packages/build e
+/usr/lib/python&python3-majorver;/site-packages/build-&pypa-build-version;.dist-info
+          </seg>
+        </seglistitem>
+      </segmentedlist>
+
+      <variablelist>
+        <bridgehead renderas="sect5">Descrições Curtas</bridgehead>
+        <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+        <varlistentry id="pyproject-build">
+          <term><command>pyproject-build</command></term>
+          <listitem>
+            <para>
+              é uma estrutura simples <application>Python</application> de construção de
+interação direta com o(a) usuário(a)
+            </para>
+            <indexterm zone="pypa-build pyproject-build">
+              <primary sortas="b-pyproject-build">pyproject-build</primary>
+            </indexterm>
+          </listitem>
+        </varlistentry>
+
+      </variablelist>
+
+    </sect3>
+
+  </sect2>
