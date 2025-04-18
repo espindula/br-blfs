@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:58+0000\n"
-"PO-Revision-Date: 2025-03-13 17:54+0000\n"
+"PO-Revision-Date: 2025-04-03 10:17+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/x_lib_qtwebengine/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -29,26 +29,26 @@ msgstr ""
 #. type: Content of the qtwebengine-md5sum entity
 #: blfs-en/x/lib/qtwebengine.xml:9
 #, xml-text
-msgid "9e81c46f237fdd8323c6fe07aa6a03b2"
-msgstr "9e81c46f237fdd8323c6fe07aa6a03b2"
+msgid "3a029321d733cd4a420ab99bd0488013"
+msgstr "3a029321d733cd4a420ab99bd0488013"
 
 #. type: Content of the qtwebengine-size entity
 #: blfs-en/x/lib/qtwebengine.xml:10
 #, xml-text
-msgid "540 MB"
-msgstr "540 MB"
+msgid "541 MB"
+msgstr "541 MB"
 
 #. type: Content of the qtwebengine-buildsize entity
 #: blfs-en/x/lib/qtwebengine.xml:11
 #, xml-text
-msgid "9.2 GB (336 MB installed)"
-msgstr "9,2 GB (336 MB instalado)"
+msgid "9.7 GB (357 MB installed)"
+msgstr "9,7 GB (357 MB instalado)"
 
 #. type: Content of the qtwebengine-time entity
 #: blfs-en/x/lib/qtwebengine.xml:12
 #, xml-text
-msgid "72 SBU (Using parallelism=8)"
-msgstr "72 UPC (Usando paralelismo=8)"
+msgid "46 SBU (Using parallelism=8)"
+msgstr "46 UPC (Usando paralelismo=8)"
 
 #. type: Attribute 'xreflabel' of: <sect1>
 #: blfs-en/x/lib/qtwebengine.xml:15
@@ -63,7 +63,7 @@ msgid "QtWebEngine-&qtwebengine-version;"
 msgstr "QtWebEngine-&qtwebengine-version;"
 
 #. type: Content of: <sect1><sect2><indexterm><primary>
-#: blfs-en/x/lib/qtwebengine.xml:21 blfs-en/x/lib/qtwebengine.xml:340
+#: blfs-en/x/lib/qtwebengine.xml:21 blfs-en/x/lib/qtwebengine.xml:343
 #, xml-text
 msgid "qtwebengine"
 msgstr "qtwebengine"
@@ -309,26 +309,34 @@ msgstr "Instalação do qtwebengine"
 #: blfs-en/x/lib/qtwebengine.xml:187
 #, xml-text
 msgid ""
-"First, fix a build failure that occurs because the BLFS build of ffmpeg does"
-" not use OpenH264:"
+"First, fix a build failure that occurs with the latest version of pipewire. "
+"Also work around a very long file path:"
 msgstr ""
-"Primeiro, corrija uma falha de construção que ocorre porque a construção do "
-"BLFS do ffmpeg não usa OpenH264:"
+"Primeiro, corrija uma falha de construção que ocorre com a versão mais "
+"recente do pipewire. Também contorne um caminho de arquivo muito longo:"
 
 #. type: Content of: <sect1><sect2><screen>
 #: blfs-en/x/lib/qtwebengine.xml:191
 #, no-wrap, xml-text
 msgid ""
-"<userinput remap=\"pre\">sed -e '189 s/=/&amp; false/' \\\n"
-"    -e '190 d'            \\\n"
-"    -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni</userinput>"
+"<userinput remap=\"pre\">pushd src/3rdparty/chromium/third_party/webrtc/modules &amp;&amp;\n"
+"\n"
+"  sed -e \"88 s/proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/\"       \\\n"
+"      -e \"120s/that->proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/\" \\\n"
+"      -i video_capture/linux/pipewire_session.cc            &amp;&amp;\n"
+"\n"
+"popd</userinput>"
 msgstr ""
-"<userinput remap=\"pre\">sed -e '189 s/=/&amp; false/' \\\n"
-"    -e '190 d'            \\\n"
-"    -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni</userinput>"
+"<userinput remap=\"pre\">pushd src/3rdparty/chromium/third_party/webrtc/modules &amp;&amp;\n"
+"\n"
+"  sed -e \"88 s/proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/\"       \\\n"
+"      -e \"120s/that->proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/\" \\\n"
+"      -i video_capture/linux/pipewire_session.cc            &amp;&amp;\n"
+"\n"
+"popd</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:196
+#: blfs-en/x/lib/qtwebengine.xml:200
 #, xml-text
 msgid ""
 "Install <application>qtwebengine</application> by running the following "
@@ -338,7 +346,7 @@ msgstr ""
 "seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/x/lib/qtwebengine.xml:200
+#: blfs-en/x/lib/qtwebengine.xml:204
 #, no-wrap, xml-text
 msgid ""
 "<userinput>mkdir build &amp;&amp;\n"
@@ -351,8 +359,7 @@ msgid ""
 "      -D QT_FEATURE_webengine_proprietary_codecs=ON \\\n"
 "      -D QT_FEATURE_webengine_webrtc_pipewire=ON    \\\n"
 "      -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF           \\\n"
-"      -G Ninja .. &amp;&amp;\n"
-"\n"
+"      -G Ninja ..                                   &amp;&amp;\n"
 "ninja</userinput>"
 msgstr ""
 "<userinput>mkdir build &amp;&amp;\n"
@@ -365,18 +372,17 @@ msgstr ""
 "      -D QT_FEATURE_webengine_proprietary_codecs=ON \\\n"
 "      -D QT_FEATURE_webengine_webrtc_pipewire=ON    \\\n"
 "      -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF           \\\n"
-"      -G Ninja .. &amp;&amp;\n"
-"\n"
+"      -G Ninja ..                                   &amp;&amp;\n"
 "ninja</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:215
+#: blfs-en/x/lib/qtwebengine.xml:218
 #, xml-text
 msgid "This package does not come with a test suite."
 msgstr "Esse pacote não vem com uma suíte de teste."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:219
+#: blfs-en/x/lib/qtwebengine.xml:222
 #, xml-text
 msgid "Now, as the <systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
@@ -384,19 +390,19 @@ msgstr ""
 "class=\"username\">root</systemitem>&quot;:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/x/lib/qtwebengine.xml:222
+#: blfs-en/x/lib/qtwebengine.xml:225
 #, no-wrap, xml-text
 msgid "<userinput>ninja install</userinput>"
 msgstr "<userinput>ninja install</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/qtwebengine.xml:229
+#: blfs-en/x/lib/qtwebengine.xml:232
 #, xml-text
 msgid "Command Explanations"
 msgstr "Explicações do Comando"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:232
+#: blfs-en/x/lib/qtwebengine.xml:235
 #, xml-text
 msgid ""
 "<parameter>CMAKE_MESSAGE_LOG_LEVEL=STATUS</parameter>: Output interesting "
@@ -409,7 +415,7 @@ msgstr ""
 " porém ainda informativas."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:239
+#: blfs-en/x/lib/qtwebengine.xml:242
 #, xml-text
 msgid ""
 "<parameter>QT_FEATURE_webengine_system_*</parameter>: Specify what external "
@@ -419,7 +425,7 @@ msgstr ""
 "pacotes externos o sistema deveria usar."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:244
+#: blfs-en/x/lib/qtwebengine.xml:247
 #, xml-text
 msgid ""
 "<parameter>QT_BUILD_EXAMPLES_BY_DEFAULT=OFF</parameter>: Do not build "
@@ -429,7 +435,7 @@ msgstr ""
 "exemplos por padrão."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:249
+#: blfs-en/x/lib/qtwebengine.xml:252
 #, xml-text
 msgid ""
 "<option>NINJAJOBS=4 make</option>: If you patched system ninja in LFS to "
@@ -444,7 +450,7 @@ msgstr ""
 " você poderia querer usar opções como essa:"
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/x/lib/qtwebengine.xml:258
+#: blfs-en/x/lib/qtwebengine.xml:261
 #, xml-text
 msgid ""
 "Building on a subset of CPUs allows measuring the build time for a smaller "
@@ -464,7 +470,7 @@ msgstr ""
 "&quot;node&quot; executam)."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/x/lib/qtwebengine.xml:269
+#: blfs-en/x/lib/qtwebengine.xml:272
 #, xml-text
 msgid ""
 "On a machine with only 4 CPUs online, the default of scheduling N+2 jobs for"
@@ -480,7 +486,7 @@ msgstr ""
 "o número de &quot;CPUs&quot;."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/x/lib/qtwebengine.xml:277
+#: blfs-en/x/lib/qtwebengine.xml:280
 #, xml-text
 msgid ""
 "Reducing the number of cores being used on long running, CPU intensive "
@@ -491,7 +497,7 @@ msgstr ""
 "problemas de aquecimento."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/x/lib/qtwebengine.xml:283
+#: blfs-en/x/lib/qtwebengine.xml:286
 #, xml-text
 msgid ""
 "Reducing the number of cores will prevent potential out-of-memory problems "
@@ -506,19 +512,19 @@ msgstr ""
 " troca combinados."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/qtwebengine.xml:295
+#: blfs-en/x/lib/qtwebengine.xml:298
 #, xml-text
 msgid "Configuring QtWebEngine"
 msgstr "Configurando o QtWebEngine"
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/x/lib/qtwebengine.xml:298
+#: blfs-en/x/lib/qtwebengine.xml:301
 #, xml-text
 msgid "Configuration Information"
 msgstr "Informação de Configuração"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/x/lib/qtwebengine.xml:301
+#: blfs-en/x/lib/qtwebengine.xml:304
 #, xml-text
 msgid ""
 "If you are upgrading from an older minor version of this application, for "
@@ -543,7 +549,7 @@ msgstr ""
 " guia afetada."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/x/lib/qtwebengine.xml:314
+#: blfs-en/x/lib/qtwebengine.xml:317
 #, xml-text
 msgid ""
 "If a browser using this package fails to run and when run from a term it "
@@ -558,13 +564,13 @@ msgstr ""
 "seção, recompile o núcleo e reinicie para o novo núcleo."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/qtwebengine.xml:326
+#: blfs-en/x/lib/qtwebengine.xml:329
 #, xml-text
 msgid "Kernel Configuration"
 msgstr "Configuração do Núcleo"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/qtwebengine.xml:329
+#: blfs-en/x/lib/qtwebengine.xml:332
 #, xml-text
 msgid ""
 "This package does not require any of the optional kernel namespace items, "
@@ -581,31 +587,31 @@ msgstr ""
 "configuração do núcleo e recompile o núcleo se necessário:"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/qtwebengine.xml:345
+#: blfs-en/x/lib/qtwebengine.xml:348
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/x/lib/qtwebengine.xml:348
+#: blfs-en/x/lib/qtwebengine.xml:351
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/x/lib/qtwebengine.xml:349
+#: blfs-en/x/lib/qtwebengine.xml:352
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/x/lib/qtwebengine.xml:350
+#: blfs-en/x/lib/qtwebengine.xml:353
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/x/lib/qtwebengine.xml:354
+#: blfs-en/x/lib/qtwebengine.xml:357
 #, xml-text
 msgid ""
 "qtwebengine_convert_dict and QtWebEngineProcess (both in $QT6DIR/libexec)"
@@ -613,7 +619,7 @@ msgstr ""
 "qtwebengine_convert_dict e QtWebEngineProcess (ambos em $QT6DIR/libexec)"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/x/lib/qtwebengine.xml:358
+#: blfs-en/x/lib/qtwebengine.xml:361
 #, xml-text
 msgid ""
 "libQt6Pdf.so, libQt6PdfQuick.so, libQt6PdfWidgets.so, "
@@ -625,7 +631,7 @@ msgstr ""
 "libQt6WebEngineQuickDelegatesQml.so e libQt6WebEngineWidgets.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/x/lib/qtwebengine.xml:367
+#: blfs-en/x/lib/qtwebengine.xml:370
 #, xml-text
 msgid ""
 "$QT6DIR/include/QtPdf, $QT6DIR/include/QtPdfQuick, "
@@ -639,26 +645,26 @@ msgstr ""
 "$QT6DIR/qml/QtWebEngine e $QT6DIR/translations/qtwebengine_locales"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/x/lib/qtwebengine.xml:380
+#: blfs-en/x/lib/qtwebengine.xml:383
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/x/lib/qtwebengine.xml:381
+#: blfs-en/x/lib/qtwebengine.xml:384
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/x/lib/qtwebengine.xml:385
+#: blfs-en/x/lib/qtwebengine.xml:388
 #, xml-text
 msgid "<command>qtwebengine_convert_dict</command>"
 msgstr "<command>qtwebengine_convert_dict</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/x/lib/qtwebengine.xml:388
+#: blfs-en/x/lib/qtwebengine.xml:391
 #, xml-text
 msgid ""
 "converts hunspell dictionaries (<literal>.dic</literal>) to chromium format "
@@ -670,20 +676,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/x/lib/qtwebengine.xml:392
+#: blfs-en/x/lib/qtwebengine.xml:395
 #, xml-text
 msgid "qtwebengine_convert_dict"
 msgstr "qtwebengine_convert_dict"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/x/lib/qtwebengine.xml:398
+#: blfs-en/x/lib/qtwebengine.xml:401
 #, xml-text
 msgid "<command>QtWebEngineProcess</command>"
 msgstr "<command>QtWebEngineProcess</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/x/lib/qtwebengine.xml:401
+#: blfs-en/x/lib/qtwebengine.xml:404
 #, xml-text
 msgid ""
 "is a libexec program which runs a zygote process (one that listens for spawn"
@@ -695,10 +701,40 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/x/lib/qtwebengine.xml:406
+#: blfs-en/x/lib/qtwebengine.xml:409
 #, xml-text
 msgid "QtWebEngineProcess"
 msgstr "QtWebEngineProcess"
+
+#, xml-text
+#~ msgid "0c1c72b141b4ba24ce6ac9c1d149c3ce"
+#~ msgstr "0c1c72b141b4ba24ce6ac9c1d149c3ce"
+
+#, xml-text
+#~ msgid "540 MB"
+#~ msgstr "540 MB"
+
+#, xml-text
+#~ msgid ""
+#~ "First, fix a build failure that occurs because the BLFS build of ffmpeg does"
+#~ " not use OpenH264:"
+#~ msgstr ""
+#~ "Primeiro, corrija uma falha de construção que ocorre porque a construção do "
+#~ "BLFS do ffmpeg não usa OpenH264:"
+
+#, no-wrap, xml-text
+#~ msgid ""
+#~ "<userinput remap=\"pre\">sed -e '189 s/=/&amp; false/' \\\n"
+#~ "    -e '190 d'            \\\n"
+#~ "    -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni</userinput>"
+#~ msgstr ""
+#~ "<userinput remap=\"pre\">sed -e '189 s/=/&amp; false/' \\\n"
+#~ "    -e '190 d'            \\\n"
+#~ "    -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni</userinput>"
+
+#, xml-text
+#~ msgid "9e81c46f237fdd8323c6fe07aa6a03b2"
+#~ msgstr "9e81c46f237fdd8323c6fe07aa6a03b2"
 
 #, xml-text
 #~ msgid "32e2788e66f882bb13dea445d9127a13"

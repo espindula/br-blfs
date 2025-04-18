@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-03-19 18:39-0300\n"
-"PO-Revision-Date: 2025-03-01 02:42+0000\n"
+"POT-Creation-Date: 2025-04-17 21:44-0300\n"
+"PO-Revision-Date: 2025-04-16 16:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/introduction_important_building-notes/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -1605,25 +1605,24 @@ msgstr "Despojando Mais Uma Vez"
 #: blfs-en/introduction/important/building-notes.xml:729
 #, xml-text
 msgid ""
-"In LFS, stripping of debugging symbols and unneeded symbol table entries was"
-" discussed a couple of times.  When building BLFS packages, there are "
-"generally no special instructions that discuss stripping again. Stripping "
-"can be done while installing a package, or afterwards."
+"In LFS, stripping of debugging symbols was discussed a couple of times.  "
+"When building BLFS packages, there are generally no special instructions "
+"that discuss stripping again. Stripping can be done while installing a "
+"package, or afterwards."
 msgstr ""
-"No LFS, a remoção de símbolos de depuração e entradas desnecessárias na "
-"tabela de símbolos foi discutida algumas vezes. Ao construir pacotes BLFS, "
-"geralmente não existem instruções especiais que discutam a remoção "
-"novamente. A remoção pode ser feita durante a instalação de um pacote ou "
-"posteriormente."
+"No LFS, despojamento de símbolos de depuração foi discutido algumas vezes. "
+"Ao construir pacotes do BLFS, geralmente não existem instruções especiais "
+"que discutam despojamento novamente. Despojamento pode ser feito enquanto se"
+" instala um pacote ou posteriormente."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/introduction/important/building-notes.xml:736
+#: blfs-en/introduction/important/building-notes.xml:735
 #, xml-text
 msgid "Stripping while Installing a Package"
 msgstr "Despojando enquanto se Instala um Pacote"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:739
+#: blfs-en/introduction/important/building-notes.xml:738
 #, xml-text
 msgid ""
 "There are several ways to strip executables installed by a package. They "
@@ -1637,7 +1636,7 @@ msgstr ""
 "de modo que somente algumas generalidades podem ser listadas aqui:"
 
 #. type: Content of: <sect1><sect2><note><para>
-#: blfs-en/introduction/important/building-notes.xml:748
+#: blfs-en/introduction/important/building-notes.xml:747
 #, xml-text
 msgid ""
 "The following methods using the feature of a building system (autotools, "
@@ -1654,7 +1653,7 @@ msgstr ""
 " nela manualmente."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:759
+#: blfs-en/introduction/important/building-notes.xml:758
 #, xml-text
 msgid ""
 "The packages using autotools usually have an <parameter>install-"
@@ -1670,7 +1669,7 @@ msgstr ""
 "install</command>."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:769
+#: blfs-en/introduction/important/building-notes.xml:768
 #, xml-text
 msgid ""
 "The packages using the meson build system can accept <parameter>-D "
@@ -1686,7 +1685,7 @@ msgstr ""
 "install --strip</command> em vez de <command>ninja install</command>."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:779
+#: blfs-en/introduction/important/building-notes.xml:778
 #, xml-text
 msgid ""
 "<command>cmake</command> generates <parameter>install/strip</parameter> "
@@ -1704,7 +1703,7 @@ msgstr ""
 " contrapartes <command>install</command>."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:791
+#: blfs-en/introduction/important/building-notes.xml:790
 #, xml-text
 msgid ""
 "Removing (or not generating) debug symbols can also be achieved by removing "
@@ -1721,13 +1720,13 @@ msgstr ""
 "parágrafos acerca de otimização."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/introduction/important/building-notes.xml:802
+#: blfs-en/introduction/important/building-notes.xml:801
 #, xml-text
 msgid "Stripping Installed Executables"
 msgstr "Despojando Executáveis Instalados"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:805
+#: blfs-en/introduction/important/building-notes.xml:804
 #, xml-text
 msgid ""
 "The <command>strip</command> utility changes files in place, which may break"
@@ -1763,7 +1762,7 @@ msgstr ""
 "usuário(a) &root;:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/introduction/important/building-notes.xml:822
+#: blfs-en/introduction/important/building-notes.xml:821
 #, no-wrap, xml-text
 msgid ""
 "<userinput>cat &gt; /usr/sbin/strip-all.sh &lt;&lt; \"EOF\"\n"
@@ -1789,8 +1788,8 @@ msgid ""
 "         continue;\n"
 "       fi\n"
 "\n"
-"       cp --preserve $file    ${file}.tmp\n"
-"       strip --strip-unneeded ${file}.tmp\n"
+"       cp --preserve $file ${file}.tmp\n"
+"       strip --strip-debug ${file}.tmp\n"
 "       mv ${file}.tmp $file\n"
 "\n"
 "       last_fs_inode=\"$fs $inode\"\n"
@@ -1803,7 +1802,7 @@ msgstr ""
 "<literal>#!/usr/bin/bash\n"
 "\n"
 "if [ $EUID -ne 0 ]; then\n"
-"  echo \"Precisa ser root\"\n"
+"  echo \"Need to be root\"\n"
 "  exit 1\n"
 "fi\n"
 "\n"
@@ -1822,8 +1821,8 @@ msgstr ""
 "         continue;\n"
 "       fi\n"
 "\n"
-"       cp --preserve $file    ${file}.tmp\n"
-"       strip --strip-unneeded ${file}.tmp\n"
+"       cp --preserve $file ${file}.tmp\n"
+"       strip --strip-debug ${file}.tmp\n"
 "       mv ${file}.tmp $file\n"
 "\n"
 "       last_fs_inode=\"$fs $inode\"\n"
@@ -1833,7 +1832,7 @@ msgstr ""
 "chmod 744 /usr/sbin/strip-all.sh</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:856
+#: blfs-en/introduction/important/building-notes.xml:855
 #, xml-text
 msgid ""
 "If you install programs in other directories such as <filename "
@@ -1849,7 +1848,7 @@ msgstr ""
 "escanear na lista composta de comandos <command>find</command> entre chaves."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:864
+#: blfs-en/introduction/important/building-notes.xml:863
 #, xml-text
 msgid ""
 "For more information on stripping, see <ulink "
@@ -1859,13 +1858,13 @@ msgstr ""
 "url=\"https://www.technovelty.org/linux/stripping-shared-libraries.html\"/>."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/introduction/important/building-notes.xml:894
+#: blfs-en/introduction/important/building-notes.xml:893
 #, xml-text
 msgid "Working with different build systems"
 msgstr "Trabalhando com diferentes sistemas de construção"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:897
+#: blfs-en/introduction/important/building-notes.xml:896
 #, xml-text
 msgid ""
 "There are now three different build systems in common use for converting C "
@@ -1887,7 +1886,7 @@ msgstr ""
 "<envar>LDFLAGS</envar>. Também existem alguns aplicativos que usam Rust."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:909
+#: blfs-en/introduction/important/building-notes.xml:908
 #, xml-text
 msgid ""
 "Most LFS and BLFS builders are probably aware of the basics of "
@@ -1904,7 +1903,7 @@ msgstr ""
 " de símbolos de depuração (<option>-g</option>), como padrões."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:918
+#: blfs-en/introduction/important/building-notes.xml:917
 #, xml-text
 msgid ""
 "If there are contradictory flags (e.g. multiple different "
@@ -1923,7 +1922,7 @@ msgstr ""
 "<option>-O3</option>, a construção usará <option>-O3</option>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:928
+#: blfs-en/introduction/important/building-notes.xml:927
 #, xml-text
 msgid ""
 "There are various other things which can be passed in CFLAGS or CXXFLAGS, "
@@ -1959,13 +1958,13 @@ msgstr ""
 " vídeo de alta qualidade."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/introduction/important/building-notes.xml:945
+#: blfs-en/introduction/important/building-notes.xml:944
 #, xml-text
 msgid "Autotools with Make"
 msgstr "Autotools com Make"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:948
+#: blfs-en/introduction/important/building-notes.xml:947
 #, xml-text
 msgid ""
 "This combination is often described as <quote>CMMI</quote> (configure, make,"
@@ -1978,7 +1977,7 @@ msgstr ""
 "não seja gerado por autotools."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:955
+#: blfs-en/introduction/important/building-notes.xml:954
 #, xml-text
 msgid ""
 "Sometimes running <command>./configure --help</command> will produce useful "
@@ -1993,7 +1992,7 @@ msgstr ""
 "que ele estava procurando atualmente."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:963
+#: blfs-en/introduction/important/building-notes.xml:962
 #, xml-text
 msgid ""
 "Many configure scripts will pick up any CFLAGS or CXXFLAGS from the "
@@ -2010,7 +2009,7 @@ msgstr ""
 "programador(a); ou usados depois da sugestão do(a) programador(a))."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:971
+#: blfs-en/introduction/important/building-notes.xml:970
 #, xml-text
 msgid ""
 "In most CMMI packages, running <command>make</command> will list each "
@@ -2029,13 +2028,13 @@ msgstr ""
 "<option>V=1</option> à invocação do make possivelmente ajude."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/introduction/important/building-notes.xml:980
+#: blfs-en/introduction/important/building-notes.xml:979
 #, xml-text
 msgid "CMake"
 msgstr "CMake"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:983
+#: blfs-en/introduction/important/building-notes.xml:982
 #, xml-text
 msgid ""
 "CMake works in a very different way, and it has two backends which can be "
@@ -2056,7 +2055,7 @@ msgstr ""
 "Makefiles do Unix."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:994
+#: blfs-en/introduction/important/building-notes.xml:993
 #, xml-text
 msgid ""
 "The hardest part of using CMake is knowing what options you might wish to "
@@ -2070,7 +2069,7 @@ msgstr ""
 "gerada para esta configuração padrão."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1001
+#: blfs-en/introduction/important/building-notes.xml:1000
 #, xml-text
 msgid ""
 "Perhaps the most-important thing about CMake is that it has a variety of "
@@ -2093,67 +2092,67 @@ msgstr ""
 "portanto, terão precedência."
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><thead><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1017
+#: blfs-en/introduction/important/building-notes.xml:1016
 #, xml-text
 msgid "Value"
 msgstr "Valor"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><thead><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1017
+#: blfs-en/introduction/important/building-notes.xml:1016
 #, xml-text
 msgid "Flags"
 msgstr "Sinalizadores"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1021
+#: blfs-en/introduction/important/building-notes.xml:1020
 #, xml-text
 msgid "Debug"
 msgstr "Debug"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1021
+#: blfs-en/introduction/important/building-notes.xml:1020
 #, xml-text
 msgid "<option>-g</option>"
 msgstr "<option>-g</option>"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1024
+#: blfs-en/introduction/important/building-notes.xml:1023
 #, xml-text
 msgid "Release"
 msgstr "Release"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1024
+#: blfs-en/introduction/important/building-notes.xml:1023
 #, xml-text
 msgid "<option>-O3 -D NDEBUG</option>"
 msgstr "<option>-O3 -D NDEBUG</option>"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1027
+#: blfs-en/introduction/important/building-notes.xml:1026
 #, xml-text
 msgid "RelWithDebInfo"
 msgstr "RelWithDebInfo"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1027
+#: blfs-en/introduction/important/building-notes.xml:1026
 #, xml-text
 msgid "<option>-O2 -g -D NDEBUG</option>"
 msgstr "<option>-O2 -g -D NDEBUG</option>"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1030
+#: blfs-en/introduction/important/building-notes.xml:1029
 #, xml-text
 msgid "MinSizeRel"
 msgstr "MinSizeRel"
 
 #. type: Content of: <sect1><sect2><informaltable><tgroup><tbody><row><entry>
-#: blfs-en/introduction/important/building-notes.xml:1030
+#: blfs-en/introduction/important/building-notes.xml:1029
 #, xml-text
 msgid "<option>-Os -D NDEBUG</option>"
 msgstr "<option>-Os -D NDEBUG</option>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1037
+#: blfs-en/introduction/important/building-notes.xml:1036
 #, xml-text
 msgid ""
 "CMake tries to produce quiet builds. To see the details of the commands "
@@ -2165,7 +2164,7 @@ msgstr ""
 "ou <command>ninja -v</command>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1043
+#: blfs-en/introduction/important/building-notes.xml:1042
 #, xml-text
 msgid ""
 "By default, CMake treats file installation differently from the other build "
@@ -2189,13 +2188,13 @@ msgstr ""
 "<emphasis>ambiente</emphasis>, por exemplo, via <command>export</command>."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/introduction/important/building-notes.xml:1054
+#: blfs-en/introduction/important/building-notes.xml:1053
 #, xml-text
 msgid "Meson"
 msgstr "Meson"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1057
+#: blfs-en/introduction/important/building-notes.xml:1056
 #, xml-text
 msgid ""
 "Meson has some similarities to CMake, but many differences. To get details "
@@ -2209,7 +2208,7 @@ msgstr ""
 "está no diretório de nível de topo."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1064
+#: blfs-en/introduction/important/building-notes.xml:1063
 #, xml-text
 msgid ""
 "If you have already configured the package by running "
@@ -2225,13 +2224,13 @@ msgstr ""
 " exemplo, para configurar uma opção:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/introduction/important/building-notes.xml:1071
+#: blfs-en/introduction/important/building-notes.xml:1070
 #, no-wrap, xml-text
 msgid "<userinput>meson configure -D &lt;some_option&gt;=true</userinput>"
 msgstr "<userinput>meson configure -D &lt;some_option&gt;=true</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1074
+#: blfs-en/introduction/important/building-notes.xml:1073
 #, xml-text
 msgid ""
 "If you do that, the file <filename>meson-private/cmd_line.txt</filename> "
@@ -2242,7 +2241,7 @@ msgstr ""
 "comandos que foram usados."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1079
+#: blfs-en/introduction/important/building-notes.xml:1078
 #, xml-text
 msgid ""
 "Meson provides the following buildtype values, and the flags they enable "
@@ -2254,7 +2253,7 @@ msgstr ""
 "quaisquer sinalizadores fornecidos no ambiente e, portanto, tem precedência."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1086
+#: blfs-en/introduction/important/building-notes.xml:1085
 #, xml-text
 msgid ""
 "plain: no added flags. This is for distributors to supply their own "
@@ -2267,7 +2266,7 @@ msgstr ""
 " óbvia para usar isso no BLFS."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1092
+#: blfs-en/introduction/important/building-notes.xml:1091
 #, xml-text
 msgid ""
 "debug: <option>-g</option> - this is the default if nothing is specified in "
@@ -2280,7 +2279,7 @@ msgstr ""
 "deveríamos substitui-lo no BLFS."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1098
+#: blfs-en/introduction/important/building-notes.xml:1097
 #, xml-text
 msgid ""
 "debugoptimized: <option>-O2 -g</option> - this is the default specified in "
@@ -2290,7 +2289,7 @@ msgstr ""
 " no <filename>meson.build</filename>, de alguns pacotes."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1103
+#: blfs-en/introduction/important/building-notes.xml:1102
 #, xml-text
 msgid ""
 "release: <option>-O3</option> (occasionally a package will force "
@@ -2302,7 +2301,7 @@ msgstr ""
 "maioria dos pacotes com sistema de construção Meson no BLFS."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1114
+#: blfs-en/introduction/important/building-notes.xml:1113
 #, xml-text
 msgid ""
 "The <option>-D NDEBUG</option> flag is implied by the release buildtype for "
@@ -2315,7 +2314,7 @@ msgstr ""
 "<option>-D b_ndebug=true</option>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1121
+#: blfs-en/introduction/important/building-notes.xml:1120
 #, xml-text
 msgid ""
 "To see the details of the commands which are being run in a package using "
@@ -2325,13 +2324,13 @@ msgstr ""
 "usando o meson, use <command>ninja -v</command>."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/introduction/important/building-notes.xml:1125
+#: blfs-en/introduction/important/building-notes.xml:1124
 #, xml-text
 msgid "Rustc and Cargo"
 msgstr "Rustc e Cargo"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1128
+#: blfs-en/introduction/important/building-notes.xml:1127
 #, xml-text
 msgid ""
 "Most released rustc programs are provided as crates (source tarballs)  which"
@@ -2356,7 +2355,7 @@ msgstr ""
 "fazer uma diferença significante."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1141
+#: blfs-en/introduction/important/building-notes.xml:1140
 #, xml-text
 msgid ""
 "If you are compiling a standalone Rust program (as an unpackaged <filename "
@@ -2379,7 +2378,7 @@ msgstr ""
 " para produzir um programa não otimizado com informações de depuração."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1154
+#: blfs-en/introduction/important/building-notes.xml:1153
 #, xml-text
 msgid ""
 "Like <command>ninja</command>, by default <command>cargo</command> uses all "
@@ -2409,13 +2408,13 @@ msgstr ""
 "desde o rustc-1.42.0."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/introduction/important/building-notes.xml:1174
+#: blfs-en/introduction/important/building-notes.xml:1173
 #, xml-text
 msgid "Optimizing the build"
 msgstr "Otimizando a construção"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1177
+#: blfs-en/introduction/important/building-notes.xml:1176
 #, xml-text
 msgid ""
 "Many people will prefer to optimize compiles as they see fit, by providing "
@@ -2433,7 +2432,7 @@ msgstr ""
 "<command>info gcc</command>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1185
+#: blfs-en/introduction/important/building-notes.xml:1184
 #, xml-text
 msgid ""
 "Some packages default to <option>-O2 -g</option>, others to <option>-O3 "
@@ -2462,7 +2461,7 @@ msgstr ""
 " para confirmar o que está sendo usado."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1201
+#: blfs-en/introduction/important/building-notes.xml:1200
 #, xml-text
 msgid ""
 "Clearly, if you are optimizing your own program you can spend time to "
@@ -2492,7 +2491,7 @@ msgstr ""
 "tudo executará em um SandyBridge."
 
 #. type: Content of: <sect1><sect2><note><para>
-#: blfs-en/introduction/important/building-notes.xml:1218
+#: blfs-en/introduction/important/building-notes.xml:1217
 #, xml-text
 msgid ""
 "Be careful that the name of a <option>-march</option> setting does not "
@@ -2506,7 +2505,7 @@ msgstr ""
 "AVX, mas <option>-march=skylake</option> assume AVX e até mesmo AVX2."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1227
+#: blfs-en/introduction/important/building-notes.xml:1226
 #, xml-text
 msgid ""
 "When a shared library is built by GCC, a feature named <quote>semantic "
@@ -2544,7 +2543,7 @@ msgstr ""
 " (por exemplo <xref linkend='python3'/>) e também é o padrão do Clang."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1248
+#: blfs-en/introduction/important/building-notes.xml:1247
 #, xml-text
 msgid ""
 "There are also various other options which some people claim are beneficial."
@@ -2556,7 +2555,7 @@ msgstr ""
 "então, descobrir que, em seu uso, as opções não fornecem um benefício."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1254
+#: blfs-en/introduction/important/building-notes.xml:1253
 #, xml-text
 msgid ""
 "If building Perl or Python modules, in general the <envar>CFLAGS</envar> and"
@@ -2568,7 +2567,7 @@ msgstr ""
 "pacotes <quote>ancestrais</quote>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1261
+#: blfs-en/introduction/important/building-notes.xml:1260
 #, xml-text
 msgid ""
 "For <envar>LDFLAGS</envar>, three options can be used for optimization.  "
@@ -2580,7 +2579,7 @@ msgstr ""
 "pacotes usa algumas dessas opções como padrão."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1267
+#: blfs-en/introduction/important/building-notes.xml:1266
 #, xml-text
 msgid ""
 "With <option>-Wl,-O1</option>, the linker will optimize the hash table to "
@@ -2593,7 +2592,7 @@ msgstr ""
 "<option>-O1</option>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1274
+#: blfs-en/introduction/important/building-notes.xml:1273
 #, xml-text
 msgid ""
 "With <option>-Wl,--as-needed</option>, the linker will disregard unnecessary"
@@ -2618,7 +2617,7 @@ msgstr ""
 "<application>libtool</application>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1287
+#: blfs-en/introduction/important/building-notes.xml:1286
 #, xml-text
 msgid ""
 "With <option>-Wl,-z,pack-relative-relocs</option>, the linker generates a "
@@ -2633,7 +2632,7 @@ msgstr ""
 "compartilhada."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1295
+#: blfs-en/introduction/important/building-notes.xml:1294
 #, xml-text
 msgid ""
 "The <option>-Wl,</option> prefix is necessary because despite the variable "
@@ -2648,13 +2647,13 @@ msgstr ""
 "<command>ld</command>."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/introduction/important/building-notes.xml:1305
+#: blfs-en/introduction/important/building-notes.xml:1304
 #, xml-text
 msgid "Options for hardening the build"
 msgstr "Opções para fortalecer a construção"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1308
+#: blfs-en/introduction/important/building-notes.xml:1307
 #, xml-text
 msgid ""
 "Even on desktop systems, there are still a lot of exploitable "
@@ -2671,7 +2670,7 @@ msgstr ""
 "aplicará várias medidas de fortalecimento."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1317
+#: blfs-en/introduction/important/building-notes.xml:1316
 #, xml-text
 msgid ""
 "In the past, there was Hardened LFS where gcc (a much older version)  was "
@@ -2698,7 +2697,7 @@ msgstr ""
 "substituindo."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1333
+#: blfs-en/introduction/important/building-notes.xml:1332
 #, xml-text
 msgid ""
 "For hardening options which are reasonably cheap, there is some discussion "
@@ -2720,13 +2719,13 @@ msgstr ""
 "vezes, não serão perceptíveis."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1345
+#: blfs-en/introduction/important/building-notes.xml:1344
 #, xml-text
 msgid "The main distros use much more, such as:"
 msgstr "As principais distribuições usam muito mais, como:"
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1351
+#: blfs-en/introduction/important/building-notes.xml:1350
 #, xml-text
 msgid ""
 "<option>-Wl,-z,now</option>: disables lazy binding to enhance "
@@ -2738,7 +2737,7 @@ msgstr ""
 " possa se tornar imutável."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1358
+#: blfs-en/introduction/important/building-notes.xml:1357
 #, xml-text
 msgid ""
 "<option>-fstack-clash-protection</option>: prevents the attacker from using "
@@ -2754,7 +2753,7 @@ msgstr ""
 "a partir de um endereço de pilha, ou vice-versa."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1368
+#: blfs-en/introduction/important/building-notes.xml:1367
 #, xml-text
 msgid ""
 "<option>-ftrivial-auto-var-init=zero</option>: initializes some variables by"
@@ -2764,7 +2763,7 @@ msgstr ""
 "preenchendo zero bytes se elas não forem inicializadas por outros meios."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1375
+#: blfs-en/introduction/important/building-notes.xml:1374
 #, xml-text
 msgid ""
 "<option>-fcf-protection=full</option>: utilizes Intel and AMD CET technology"
@@ -2788,7 +2787,7 @@ msgstr ""
 "protegido pelo CET."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1390
+#: blfs-en/introduction/important/building-notes.xml:1389
 #, xml-text
 msgid ""
 "In GCC 14, the option <option>-fhardened</option> is a shorthand to enable "
@@ -2801,7 +2800,7 @@ msgstr ""
 "_FORTIFY_SOURCE=2</option>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1397
+#: blfs-en/introduction/important/building-notes.xml:1396
 #, xml-text
 msgid ""
 "You may also encounter the so-called <quote>userspace retpoline</quote> "
@@ -2820,7 +2819,7 @@ msgstr ""
 "o desempenho ainda é suficiente."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1408
+#: blfs-en/introduction/important/building-notes.xml:1407
 #, xml-text
 msgid ""
 "Whilst gcc has many hardening options, clang/LLVM's strengths lie elsewhere."
