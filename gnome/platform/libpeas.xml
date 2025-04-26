@@ -76,7 +76,10 @@ própria extensibilidade dele.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="libxml2"/> e <xref linkend="pygobject3"/>
+      <!-- and
+      <xref linkend="pygobject3"/>
+ -->
+<xref linkend="libxml2"/> 
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -105,6 +108,7 @@ cd    build &amp;&amp;
 meson setup --prefix=/usr          \
             --buildtype=release    \
             --wrap-mode=nofallback \
+            -D python3=false       \
             ..                     &amp;&amp;
 ninja</userinput></screen>
 
@@ -120,10 +124,14 @@ ninja</userinput></screen>
 
     <para>
       <!-- https://gitlab.gnome.org/GNOME/libpeas/-/merge_requests/55 -->
+<!--One test named <literal>
+test-extension-py</literal> is known to
+      fail with PyGObject-3.52 or newer.-->
 Para testar os resultados, emita: <command>ninja test</command>. Uma sessão
 gráfica ativa com endereço de barramento é necessária para executar os
-testes. Um teste chamado <literal>test-extension-py</literal> é conhecido
-por falhar com PyGObject-3.52 ou mais recente.
+testes.
+      
+      
     </para>
 
     <para>
@@ -144,6 +152,15 @@ por falhar com PyGObject-3.52 ou mais recente.
     <!-- gi-docgen can get installed without this, if deps exist -->
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-wrap-nofallback.xml"/>
+
+    
+    <!-- https://gitlab.gnome.org/GNOME/libpeas/-/issues/58 and
+         https://gitlab.archlinux.org/archlinux/packaging/packages/pygobject/-/issues/3 -->
+<para>
+      <parameter>-D python3=false</parameter>: Essa chave desabilita o carregador
+de plugins Python porque ele é incompatível com pygobject-3.52.x, e fará com
+que aplicativos que carreguem plugins Python travem indefinidamente.
+    </para>
 
     <para>
       <option>-D vapi=true</option>: Adicione essa chave se você desejar gerar
