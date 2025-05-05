@@ -6,10 +6,10 @@
 
   <!ENTITY valgrind-download-http "https://sourceware.org/pub/valgrind/valgrind-&valgrind-version;.tar.bz2">
   <!ENTITY valgrind-download-ftp  "">
-  <!ENTITY valgrind-md5sum        "7ae7ffc6b3cff48fe35076266c128226">
-  <!ENTITY valgrind-size          "16 MB">
-  <!ENTITY valgrind-buildsize     "396 MB (adicionar 85 MB para os testes)">
-  <!ENTITY valgrind-time          "0,4 UPC (adicionar 6,5 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY valgrind-md5sum        "c3da1f96462bc885ceaa528b171dc300">
+  <!ENTITY valgrind-size          "17 MB">
+  <!ENTITY valgrind-buildsize     "618 MB (adicionar 86 MB para os testes)">
+  <!ENTITY valgrind-time          "0,4 UPC (adicionar 5,7 UPC para testes; ambos usando paralelismo=4)">
 ]>
 
 <sect1 id="valgrind" xreflabel="Valgrind-&valgrind-version;">
@@ -84,11 +84,14 @@ Additional Downloads</bridgehead>
 -->
 <bridgehead renderas="sect3">Dependências do &quot;Valgrind&quot;</bridgehead>
 
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    
+    <!-- Boost appears in the configure script, but it's looking for an
+         extremely old version and is only used optionally in the tests.-->
+<bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="DocBook"/> (para testes), <xref linkend="gdb"/> (para
-testes), <xref linkend="llvm"/> (com Clang) e <xref linkend="which"/> (para
-testes)
+testes), <xref linkend="libaio"/>, <xref linkend="llvm"/> (com Clang) e
+<xref linkend="which"/> (para testes)
     </para>
 
 
@@ -163,11 +166,38 @@ problemáticos podem ser desabilitados mudando-se a linha
          valgrind-3.24.0 [bdubbs] valgrind-3.24.0
          837 tests, 1 stderr failure, 0 stdout failures, 0 stderrB failures, 
          0 stdoutB failures, 0 post failures
+
+         valgrind-3.25.0 [renodr]
+         845 tests, 5 stderr failures, 0 stdout failures, 1 stderrB failure,
+         2 stdoutB failures, 0 post failures
+           gdbserver_tests/mcinfcallWSRU            (stderrB)
+           gdbserver_tests/nlcontrolc               (stdoutB)
+           gdbserver_tests/nlvgdbsigqueue           (stdoutB)
+           helgrind/tests/getaddrinfo               (stderr)
+           drd/tests/fork-parallel                  (stderr)
+           drd/tests/fork-serial                    (stderr)
+           drd/tests/threaded-fork-vcs              (stderr)
+           drd/tests/threaded-fork                  (stderr)
      -->
 <screen role="nodump"><userinput>sed -e 's@prereq:.*@prereq: false@' \
    -i {helgrind,drd}/tests/pth_cond_destroy_busy.vgtest</userinput></screen>
 
     
+
+    <para>
+      Uma suíte de teste adicional agora está disponível que testa o Valgrind com
+cada chamada de sistema fornecida pelo núcleo. A suíte de teste foi
+projetada para testar não somente a glibc e a conformidade do núcleo com os
+padrões, mas também a capacidade do Valgrind de manusear diferentes chamadas
+de sistema. A suíte de teste exige uma conexão com a internet para baixar os
+testes e leva muito tempo para executar (20 UPCs adicionais e 1,3 GB de
+espaço em disco). Se desejar executar essa suíte de teste, emita o seguinte
+comando: <command>make ltpchecks</command>. Observe que a saída mostrará
+várias falhas onde o Valgrind atualmente não suportar determinadas chamadas
+de sistema, mas os registros para a suíte de teste podem ser encontrados no
+diretório <filename
+class="directory">auxprogs/auxchecks/ltp-full-20250130/valgrind-ltp-logs</filename>.
+    </para>
 
     <note>
       <para>

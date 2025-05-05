@@ -134,24 +134,24 @@ como o(a) usuário(a) <systemitem class="username">root</systemitem>:
 
 <screen role="root"><userinput>mv /etc/pam.d/system-password{,.orig} &amp;&amp;
 cat &gt; /etc/pam.d/system-password &lt;&lt; "EOF"
-<literal># Inicia /etc/pam.d/system-password
+<literal># Begin /etc/pam.d/system-password
 
-# verifique a força das novas senhas (man pam_pwquality)
+# check new passwords for strength (man pam_pwquality)
 password  required    pam_pwquality.so   authtok_type=UNIX retry=1 difok=1 \
-                                         minlen=8 dcredit=0 ucredit=0 \
-                                         lcredit=0 ocredit=0 minclass=1 \
-                                         maxrepeat=0 maxsequence=0 \
-                                         maxclassrepeat=0 gecoscheck=0 \
-                                         dictcheck=1 usercheck=1 \
-                                         enforcing=1 badwords="" \
+                                         minlen=8 dcredit=0 ucredit=0      \
+                                         lcredit=0 ocredit=0 minclass=1    \
+                                         maxrepeat=0 maxsequence=0         \
+                                         maxclassrepeat=0 gecoscheck=0     \
+                                         dictcheck=1 usercheck=1           \
+                                         enforcing=1 badwords=""           \
                                          dictpath=/usr/lib/cracklib/pw_dict
 
-# use resumo yescrypt para encriptação; use sombra e tente usar algum
-# token de autenticação previamente definido (senha escolhida) configurado
-# por algum módulo anterior.
+# use yescrypt hash for encryption, use shadow, and try to use any
+# previously defined authentication token (chosen password) set by any
+# prior module.
 password  required    pam_unix.so        yescrypt shadow try_first_pass
 
-# Termina /etc/pam.d/system-password</literal>
+# End /etc/pam.d/system-password</literal>
 EOF
 </userinput></screen>
 
