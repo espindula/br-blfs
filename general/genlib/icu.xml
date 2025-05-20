@@ -147,6 +147,15 @@ class='directory'>icu</filename>.
 <screen><userinput>patch -p1 -i ../icu4c-&icu-version;-fix_enumeration-1.patch</userinput></screen>
 -->
 <para>
+      Uma parte de um teste não pode ser executada sobre
+<literal>i686</literal>. Evite executá-la ao construir para essa plataforma:
+    </para>
+<screen><userinput>case $(uname -m) in
+  i?86) sed -e "s/U_PLATFORM_IS_LINUX_BASED/__X86_64__ \&amp;\&amp; &amp;/" \
+            -i source/test/intltest/ustrtest.cpp ;;
+esac</userinput></screen>
+
+    <para>
       Instale <application>ICU</application> executando os seguintes comandos:
     </para>
 
@@ -157,12 +166,13 @@ To see if the following prebuild command is appropriate for BLFS:
 sed '/fdef U_CHARSET_I/i#define U_CHARSET_IS_UTF8 1' -i common/unicode/platform.h
 -->
 <userinput>cd source                 &amp;&amp;
-
 ./configure --prefix=/usr &amp;&amp;
 make</userinput></screen>
 
-    <para>
-      Para testar os resultados, emita: <command>make check</command>.
+   <para>
+      Para testar os resultados, emita: <command>make check</command>. Um teste
+(intltest) ainda falha por motivos desconhecidos sobre
+<literal>i686</literal>, verificando algumas conversões tailandesas.
     </para>
 
     <para>

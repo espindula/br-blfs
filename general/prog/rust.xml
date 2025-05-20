@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "ffe55dfd0e035e6bfc88060506cddf32">
-  <!ENTITY rust-size          "263 MB">
+  <!ENTITY rust-md5sum        "dace019fa53452f321b93d34a37f995d">
+  <!ENTITY rust-size          "271 MB">
   <!ENTITY rust-buildsize     "9,4 GB (252 MB instalado); adicionar 7,4 GB se executar os testes">
   <!ENTITY rust-time          "9,0 UPC (incluindo o tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -238,8 +238,8 @@ exige somente mudar o link simbólico
     </note>
 
     <para>
-      Crie um arquivo &quot;<filename>config.toml</filename>&quot; adequado que
-configurará a construção.
+      Create a suitable <filename>bootstrap.toml</filename> file which will
+configure the build.
     </para>
 
 <!-- It seems gone since 1.81.0 but not confirmed upstream
@@ -266,16 +266,16 @@ configurará a construção.
 
 <screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-llvm_20-1.patch</userinput></screen>
 -->
-<screen><userinput>cat &lt;&lt; EOF &gt; config.toml
-<literal># See config.toml.example for more possible options,
-# and see src/bootstrap/defaults/config.dist.toml for a few options
+<screen><userinput>cat &lt;&lt; EOF &gt; bootstrap.toml
+<literal># See bootstrap.toml.example for more possible options,
+# and see src/bootstrap/defaults/bootstrap.dist.toml for a few options
 # automatically set when building from a release tarball
 # (unfortunately, we have to override many of them).
 
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 136941
+change-id = 138986
 
 [llvm]
 # When using system llvm prefer shared libraries
@@ -286,6 +286,8 @@ link-shared = true
 targets = "X86"
 
 [build]
+description = "for BLFS &version;"
+
 # Do a 2-stage bootstrap instead of a 3-stage one to save time and space.
 # Note that the numbers "1" below mean to *run* the stage-*1* compiler and
 # build the stage-2 compiler.
@@ -308,7 +310,6 @@ docdir = "share/doc/rustc-&rust-version;"
 
 [rust]
 channel = "stable"
-description = "for BLFS &version;"
 
 # Enable the same optimizations as the official upstream build.
 lto = "thin"
@@ -362,21 +363,7 @@ motivo de preocupação, apenas uma maneira do teste ser terminado.
 disponíveis), emita:
     </para>
 
-<screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
-
-    <para>
-      Três testes na suíte de teste das instruções de autoaprimoramento são
-conhecidos por falharem porque esperam executar no repositório Git do
-Rust. O teste chamado
-<filename>tests/run-make/musl-default-linking</filename> é conhecido por
-falhar porque nós não habilitamos o alvo AArch64 no <xref
-linkend='llvm'/>. O teste chamado
-<filename>tests/run-make/linker-warning</filename> é conhecido por falhar
-devido a algum motivo ainda desconhecido.
-    </para>
-
-
-    <!-- Let's just comment this out.  Nobody has tested on a system w/o
+<!-- Let's just comment this out.  Nobody has tested on a system w/o
      FileCheck for a long time.
     <para>
       If <command>FileCheck</command> from <application>LLVM</application> has
@@ -384,7 +371,10 @@ devido a algum motivo ainda desconhecido.
       will fail.
     </para>
 -->
-<para>
+<screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
+
+
+    <para>
       Tal como acontece com todas as grandes suítes de teste, alguns testes podem
 falhar em algumas máquinas - se o número de falhas adicionais for baixo,
 verifique se existem 'failures:' no registro e revise as linhas acima,
@@ -516,23 +506,22 @@ que se use analisadores (antigos) de código ou se edite a biblioteca padrão.
     </para>
 
     <para>
-      <literal>channel = "stable"</literal>: isso garante que somente recursos
-estáveis possam ser usados. O padrão no <filename>config.toml</filename> é o
-de usar recursos de desenvolvimento, o que não é apropriado para uma versão
-lançada.
+      <literal>channel = "stable"</literal>: this ensures only stable features can
+be used, the default in <filename>bootstrap.toml</filename> is to use
+development features, which is not appropriate for a released version.
     </para>
 
     
     <!-- comment while using shipped LLVM -->
 <para>
-      <literal>[target.x86_64-unknown-linux-gnu]</literal>: a sintaxe do
-<filename>config.toml</filename> exige uma entrada
-<literal>llvm-config</literal> para cada alvo para o qual o LLVM do sistema
-esteja para ser usado. Mude o alvo para
-<literal>[target.i686-unknown-linux-gnu]</literal> se você estiver
-construindo em x86 de 32 bits. Essa seção inteira pode ser omitida se você
-desejar construir contra o LLVM enviado ou não tiver clang, mas a construção
-resultante será maior e demorará mais.
+      <literal>[target.x86_64-unknown-linux-gnu]</literal>: the syntax of
+<filename>bootstrap.toml</filename> requires an
+<literal>llvm-config</literal> entry for each target for which system-llvm
+is to be used. Change the target to
+<literal>[target.i686-unknown-linux-gnu]</literal> if you are building on
+32-bit x86. This whole section may be omitted if you wish to build against
+the shipped llvm, or do not have clang, but the resulting build will be
+larger and take longer.
     </para>
 
 

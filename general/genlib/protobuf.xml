@@ -5,10 +5,10 @@
   %general-entities;
 
   <!ENTITY protobuf-download-http "https://github.com/protocolbuffers/protobuf/releases/download/v&protobuf-version;/protobuf-&protobuf-version;.tar.gz">
-  <!ENTITY protobuf-md5sum        "1f9277e737f2cad088a824e50723f495">
+  <!ENTITY protobuf-md5sum        "35a3c22b1974fd3a286085cf3e590c94">
   <!ENTITY protobuf-size          "9,1 MB">
-  <!ENTITY protobuf-buildsize     "127 MB">
-  <!ENTITY protobuf-time          "1,1 UPC (com paralelismo=4)">
+  <!ENTITY protobuf-buildsize     "147 MB">
+  <!ENTITY protobuf-time          "1,6 UPC (com paralelismo=4)">
 ]>
 
 <sect1 id="protobuf" xreflabel="Protobuf-&protobuf-version;">
@@ -89,7 +89,6 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr      \
       -D CMAKE_BUILD_TYPE=Release       \
       -D CMAKE_SKIP_INSTALL_RPATH=ON    \
       -D protobuf_BUILD_TESTS=OFF       \
-      -D protobuf_BUILD_LIBUPB=OFF      \
       -D protobuf_BUILD_SHARED_LIBS=ON  \
       -G Ninja ..                       &amp;&amp;
 ninja</userinput></screen>
@@ -104,7 +103,8 @@ BLFS.
       Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>ninja install</userinput></screen>
+<screen role="root"><userinput>ninja install &amp;&amp;
+rm /usr/lib/libupb.a</userinput></screen>
 
   </sect2>
 
@@ -149,16 +149,18 @@ esse pacote em vez das versões estáticas.
 
       <seglistitem>
         <seg>
-          protoc-&protobuf-version;.0 e protoc (um link simbólico para
-protoc-&protobuf-version;.0)
+          protoc (um linque simbólico para protoc-&protobuf-version;.0),
+protoc-&protobuf-version;.0, protoc-gen-upb (um linque simbólico para
+protoc-gen-upb-&protobuf-version;.0) e protoc-gen-upbdefs (um linque
+simbólico para protoc-gen-upbdefs-&protobuf-version;.0)
         </seg>
         <seg>
           libprotobuf.so, libprotobuf-lite.so, libprotoc.so, libutf8_range.so e
 libutf8_validity.so
         </seg>
         <seg>
-          /usr/include/google, /usr/include/java, /usr/include/upb_generator,
-/usr/lib/cmake/protobuf e /usr/lib/cmake/utf8_range
+          /usr/include/google, /usr/include/upb, /usr/lib/cmake/protobuf e
+/usr/lib/cmake/utf8_range
         </seg>
       </seglistitem>
     </segmentedlist>
