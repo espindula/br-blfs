@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2024-03-22 06:38+0000\n"
-"PO-Revision-Date: 2024-08-25 16:18+0000\n"
+"PO-Revision-Date: 2025-06-10 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/gnome_platform_gcr/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #. type: Content of the gcr-download-http entity
 #: blfs-en/gnome/platform/gcr.xml:7
@@ -139,8 +139,8 @@ msgid ""
 "<xref linkend=\"glib2\"/> (GObject Introspection recommended), <xref "
 "linkend=\"libgcrypt\"/>, and <xref linkend=\"p11-kit\"/>"
 msgstr ""
-"<xref linkend=\"glib2\"/> (recomendado GObject Introspection), <xref "
-"linkend=\"libgcrypt\"/> e <xref linkend=\"p11-kit\"/>"
+"<xref linkend=\"glib2\"/> ( recomendado para GObject Introspection), <xref "
+"linkend=\"libgcrypt\"/>, and <xref linkend=\"p11-kit\"/>"
 
 #. type: Content of: <sect1><sect2><bridgehead>
 #: blfs-en/gnome/platform/gcr.xml:80
@@ -179,7 +179,19 @@ msgid "Installation of Gcr"
 msgstr "Instalação do Gcr"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:120
+#: blfs-en/gnome/platform/gcr.xml:101
+#, xml-text
+msgid "First apply a fix for building without OpenSSH installed:"
+msgstr "Primeiro aplique uma correção para construir sem o OpenSSH instalado:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/gnome/platform/gcr.xml:104
+#, no-wrap, xml-text
+msgid "<userinput>sed '/ssh.add/d; /ssh.agent/d' -i meson.build</userinput>"
+msgstr "<userinput>sed '/ssh.add/d; /ssh.agent/d' -i meson.build</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/gnome/platform/gcr.xml:107
 #, xml-text
 msgid ""
 "Install <application>Gcr</application> by running the following commands:"
@@ -187,7 +199,7 @@ msgstr ""
 "Instale o <application>Gcr</application> executando os seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/gnome/platform/gcr.xml:124
+#: blfs-en/gnome/platform/gcr.xml:111
 #, no-wrap, xml-text
 msgid ""
 "<userinput>sed -i 's:\"/desktop:\"/org:' schema/*.xml &amp;&amp;\n"
@@ -215,7 +227,7 @@ msgstr ""
 "ninja</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:137
+#: blfs-en/gnome/platform/gcr.xml:124
 #, xml-text
 msgid ""
 "If you have <xref linkend='gi-docgen'/> installed and wish to build the API "
@@ -225,7 +237,7 @@ msgstr ""
 "documentação da API para esse pacote, emita:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/gnome/platform/gcr.xml:141
+#: blfs-en/gnome/platform/gcr.xml:128
 #, no-wrap, xml-text
 msgid ""
 "<userinput>sed -e \"/install_dir/s@,\\$@ / 'gcr-&gcr-version;'&amp;@\" \\\n"
@@ -241,7 +253,7 @@ msgstr ""
 #.  One test,
 #.       "test-openssl 3", is known to fail.
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:147
+#: blfs-en/gnome/platform/gcr.xml:134
 #, xml-text
 msgid ""
 "To test the results, issue: <command>ninja test</command>.  The tests must "
@@ -251,7 +263,7 @@ msgstr ""
 "precisam ser executados a partir de um Terminal do X ou similar."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:153
+#: blfs-en/gnome/platform/gcr.xml:140
 #, xml-text
 msgid "Now, as the <systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
@@ -259,31 +271,33 @@ msgstr ""
 "class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/gnome/platform/gcr.xml:156
+#: blfs-en/gnome/platform/gcr.xml:143
 #, no-wrap, xml-text
 msgid "<userinput>ninja install</userinput>"
 msgstr "<userinput>ninja install</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/gnome/platform/gcr.xml:160
+#: blfs-en/gnome/platform/gcr.xml:147
 #, xml-text
 msgid "Command Explanations"
 msgstr "Explicações do Comando"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:186
+#: blfs-en/gnome/platform/gcr.xml:182
 #, xml-text
 msgid ""
-"<parameter>-D ssh_agent=false</parameter>: Prevent a conflict with <xref "
-"linkend='gcr4'/>.  Omit this switch if you do not plan to install <xref "
-"linkend='gcr4'/> and you want to use <command>gcr-ssh-agent</command>."
+"<parameter>-D ssh_agent=false</parameter>: Disable the ssh-agent "
+"implementation of this package.  This implementation is intended to replace "
+"the ssh-agent implementation of <xref linkend='gnome-keyring'/>, but it "
+"turns out the replacement still has some unresolved issue."
 msgstr ""
-"<parameter>-D ssh_agent=false</parameter>: Evita um conflito com <xref "
-"linkend='gcr4'/>. Omita essa chave se você não planeja instalar o <xref "
-"linkend='gcr4'/> e deseja usar o <command>gcr-ssh-agent</command>."
+"<parameter>-D ssh_agent=false</parameter>: Desabilite a implementação ssh-"
+"agent deste pacote. Essa implementação é destinada a substituir a "
+"implementação ssh-agent do <xref linkend='gnome-keyring'/>, mas a "
+"substituição ainda tem alguns problemas não resolvidos."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:193
+#: blfs-en/gnome/platform/gcr.xml:190
 #, xml-text
 msgid ""
 "<option>-D gtk=false</option>: Use this switch if you haven't installed "
@@ -295,50 +309,50 @@ msgstr ""
 "viewer</application> não será instalado se isso for passado para o meson."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/gnome/platform/gcr.xml:200
+#: blfs-en/gnome/platform/gcr.xml:197
 #, xml-text
 msgid "<option>-D gtk_doc=true</option>: &gi-doc-disable;"
 msgstr "<option>-D gtk_doc=true</option>: &gi-doc-disable;"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/gnome/platform/gcr.xml:209
+#: blfs-en/gnome/platform/gcr.xml:206
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/gnome/platform/gcr.xml:212
+#: blfs-en/gnome/platform/gcr.xml:209
 #, xml-text
 msgid "Installed Program"
 msgstr "Aplicativo Instalado"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/gnome/platform/gcr.xml:213
+#: blfs-en/gnome/platform/gcr.xml:210
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/gnome/platform/gcr.xml:214
+#: blfs-en/gnome/platform/gcr.xml:211
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/gnome/platform/gcr.xml:218 blfs-en/gnome/platform/gcr.xml:243
+#: blfs-en/gnome/platform/gcr.xml:215 blfs-en/gnome/platform/gcr.xml:240
 #, xml-text
 msgid "gcr-viewer"
 msgstr "gcr-viewer"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/gnome/platform/gcr.xml:221
+#: blfs-en/gnome/platform/gcr.xml:218
 #, xml-text
 msgid "libgck-1.so, libgcr-base-3.so and libgcr-ui-3.so"
 msgstr "libgck-1.so, libgcr-base-3.so e libgcr-ui-3.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/gnome/platform/gcr.xml:224
+#: blfs-en/gnome/platform/gcr.xml:221
 #, xml-text
 msgid ""
 "/usr/include/gck-1, /usr/include/gcr-3, and /usr/share/gtk-"
@@ -347,49 +361,59 @@ msgstr ""
 "/usr/include/gck-1, /usr/include/gcr-3 e /usr/share/gtk-doc/html/{gcr,gck}"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/gnome/platform/gcr.xml:232
+#: blfs-en/gnome/platform/gcr.xml:229
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/gnome/platform/gcr.xml:233
+#: blfs-en/gnome/platform/gcr.xml:230
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/gnome/platform/gcr.xml:237
+#: blfs-en/gnome/platform/gcr.xml:234
 #, xml-text
 msgid "<command>gcr-viewer</command>"
 msgstr "<command>gcr-viewer</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/gnome/platform/gcr.xml:240
+#: blfs-en/gnome/platform/gcr.xml:237
 #, xml-text
 msgid "is used to view certificates and key files"
 msgstr "é usado para visualizar certificados e arquivos de chave"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/gnome/platform/gcr.xml:249
+#: blfs-en/gnome/platform/gcr.xml:246
 #, xml-text
 msgid "<filename class=\"libraryfile\">libgck-1.so</filename>"
 msgstr "<filename class=\"libraryfile\">libgck-1.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/gnome/platform/gcr.xml:252
+#: blfs-en/gnome/platform/gcr.xml:249
 #, xml-text
 msgid "contains GObject bindings for PKCS#11"
 msgstr "contém ligações GObject para PKCS#11"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/gnome/platform/gcr.xml:255
+#: blfs-en/gnome/platform/gcr.xml:252
 #, xml-text
 msgid "libgck-1.so"
 msgstr "libgck-1.so"
+
+#, xml-text
+#~ msgid ""
+#~ "<parameter>-D ssh_agent=false</parameter>: Prevent a conflict with <xref "
+#~ "linkend='gcr4'/>.  Omit this switch if you do not plan to install <xref "
+#~ "linkend='gcr4'/> and you want to use <command>gcr-ssh-agent</command>."
+#~ msgstr ""
+#~ "<parameter>-D ssh_agent=false</parameter>: Evita um conflito com <xref "
+#~ "linkend='gcr4'/>. Omita essa chave se você não planeja instalar o <xref "
+#~ "linkend='gcr4'/> e deseja usar o <command>gcr-ssh-agent</command>."
 
 #, xml-text
 #~ msgid "&gnome-download-ftp;/gcr/&gcr-minor;/gcr-&gcr-version;.tar.xz"
