@@ -72,8 +72,8 @@ visualizador para arquivos criptográficos na área de trabalho do
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="glib2"/> (recomendado GObject Introspection), <xref
-linkend="libgcrypt"/> e <xref linkend="p11-kit"/>
+      <xref linkend="glib2"/> ( recomendado para GObject Introspection), <xref
+linkend="libgcrypt"/>, and <xref linkend="p11-kit"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -92,30 +92,13 @@ linkend="libsecret"/>, <xref linkend="libxslt"/> e <xref linkend="vala"/>
   <sect2 role="installation">
     <title>Instalação do Gcr</title>
 
-    
-
-
-
-    <!--
-    <caution>
-
-      <para>
-        If you are upgrading from a version of gcr prior to 3.36.0, you must
-        run the <filename>remove-la-files.sh</filename> script from the
-        <xref linkend="la-files"/> after installing gcr.
-      </para>
-    </caution>
-    -->
-<!--
     <para>
-
-      First apply a fix for building with newer versions of
-      <application>meson</application>:
+      Primeiro aplique uma correção para construir sem o OpenSSH instalado:
     </para>
 
-<screen><userinput>find . -name meson.build | xargs sed -i /packages.\*deps/d</userinput></screen>
--->
-<para>
+<screen><userinput>sed '/ssh.add/d; /ssh.agent/d' -i meson.build</userinput></screen>
+
+    <para>
       Instale o <application>Gcr</application> executando os seguintes comandos:
     </para>
 
@@ -164,7 +147,7 @@ precisam ser executados a partir de um Terminal do X ou similar.
 
 
     
-
+    
     <!--
     <para>
 
@@ -185,10 +168,22 @@ precisam ser executados a partir de um Terminal do X ou similar.
       (usage of uninitialized value) identified by upstream.
     </para>
     -->
+<!-- Uncomment this and delete the <para>
+ below when we switch from
+         gnome-keyring ssh-agent to gcr4 ssh-agent.
+    <para>
+      <parameter>-D ssh_agent=false</parameter>: Prevent a conflict with
+      <xref linkend='gcr4'/>.  The ssh-agent of Gcr 3 is known
+      to be problematic, if you want to use
+      <command>gcr-ssh-agent</command> you need to install
+      <xref linkend='gcr4'/> instead.
+    </para>
+    -->
 <para>
-      <parameter>-D ssh_agent=false</parameter>: Evita um conflito com <xref
-linkend='gcr4'/>. Omita essa chave se você não planeja instalar o <xref
-linkend='gcr4'/> e deseja usar o <command>gcr-ssh-agent</command>.
+      <parameter>-D ssh_agent=false</parameter>: Desabilite a implementação
+ssh-agent deste pacote. Essa implementação é destinada a substituir a
+implementação ssh-agent do <xref linkend='gnome-keyring'/>, mas a
+substituição ainda tem alguns problemas não resolvidos.
     </para>
 
     <para>

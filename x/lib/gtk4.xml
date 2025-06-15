@@ -6,10 +6,10 @@
 
   <!ENTITY gtk4-download-http "&gnome-download-http;/gtk/&gtk4-minor;/gtk-&gtk4-version;.tar.xz">
   <!ENTITY gtk4-download-ftp  "">
-  <!ENTITY gtk4-md5sum        "2e37991b727bb295d67cc4b41201c057">
+  <!ENTITY gtk4-md5sum        "9ad89b1e6a71ac3a06ca8bbeed6fd466">
   <!ENTITY gtk4-size          "17 MB">
   <!ENTITY gtk4-buildsize     "890 MB (com documentos; adicionar 132 MB para testes)">
-  <!ENTITY gtk4-time          "1,3 UPC (usando paralelismo=4; com documentos; adicionar 3,6 UPC para
+  <!ENTITY gtk4-time          "1,4 UPC (usando paralelismo=4; com documentos; adicionar 3,6 UPC para
 testes)">
 ]>
 
@@ -129,17 +129,15 @@ url="https://pypi.org/project/pydbus/">pydbus</ulink> (para alguns testes) e
     <title>Instalação do GTK 4</title>
 
 
-
-    <!--
     <para>
-
-      Fix the PNG colorspace deserialization breakage with libpng-1.6.45
-      or later:
+      Primeiro, corrija um problema ao construir com gcc-15:
     </para>
 
-    <screen><userinput>patch -Np1 -i ../gtk-&gtk4-version;-libpng_1_6_45-1.patch</userinput></screen>
--->
-<para>
+    <screen><userinput role='pre'>sed -e '939 s/= { 0, }//'                                       \
+    -e '940 a memset (&amp;transform, 0, sizeof(GtkCssTransform));' \
+    -i gtk/gtkcsstransformvalue.c</userinput></screen>
+
+    <para>
       Instale o &quot;<application>GTK 4</application>&quot; executando os
 seguintes comandos:
     </para>

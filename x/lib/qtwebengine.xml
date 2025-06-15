@@ -6,10 +6,10 @@
 
   <!ENTITY qtwebengine-download-http "https://download.qt.io/official_releases/qt/&qtwebengine-major;/&qtwebengine-version;/submodules/qtwebengine-everywhere-src-&qtwebengine-version;.tar.xz">
   <!ENTITY qtwebengine-download-ftp  "">
-  <!ENTITY qtwebengine-md5sum        "3a029321d733cd4a420ab99bd0488013">
-  <!ENTITY qtwebengine-size          "541 MB">
-  <!ENTITY qtwebengine-buildsize     "9,7 GB (357 MB instalado)">
-  <!ENTITY qtwebengine-time          "46 UPC (Usando paralelismo=8)">
+  <!ENTITY qtwebengine-md5sum        "1a0c2016803fdd729e15887b66b9e710">
+  <!ENTITY qtwebengine-size          "641 MB">
+  <!ENTITY qtwebengine-buildsize     "9,6 GB (360 MB instalado)">
+  <!ENTITY qtwebengine-time          "45 UPC (Usando paralelismo=8)">
 ]>
 
 <sect1 id="qtwebengine" xreflabel="qtwebengine-&qtwebengine-version;">
@@ -119,25 +119,33 @@ e quatro (24) elementos de processamento e trinta e dois (32) GB de memória.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    
+          
+          
+    
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
-          
-          
-      <!-- keep links for releases and git versions as a reminder
+    -->
+<!-- keep links for releases and git versions as a reminder
                that the tarball names names differ
           <ulink url="&patch-root;/qtwebengine-everywhere-src-&qtwebengine-version;-ICU68-2.patch"/>
 -->
 <!--<ulink url="&patch-root;/qtwebengine-&qtwebengine-version;-5.15.7-1.patch"/>
 -->
-<listitem>
+<!--
+      <listitem>
+
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/qtwebengine-&qtwebengine-version;-fix_gpu_acceleration-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/qtwebengine-&qtwebengine-version;-fix_gpu_acceleration-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do &quot;qtwebengine&quot;</bridgehead>
+    -->
+<bridgehead renderas="sect3">Dependências do &quot;qtwebengine&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
 
@@ -177,29 +185,6 @@ url="https://github.com/open-source-parsers/jsoncpp/releases">jsoncpp</ulink>,
   <sect2 role="installation">
     <title>Instalação do qtwebengine</title>
 
-    
-    <!-- BLFS Ticket #21444 -->
-<para>
-      Primeiro, corrija problemas de aceleração de GPU no Falkon que podem
-conduzir a quebras quando o suporte à aceleração de hardware estiver
-habilitado:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../qtwebengine-&qtwebengine-version;-fix_gpu_acceleration-1.patch</userinput></screen>
-
-    <para>
-      Em seguida, corrija uma falha de construção que ocorre com a versão mais
-recente do pipewire. Também contorne um caminho de arquivo muito longo:
-    </para>
-
-<screen><userinput remap="pre">pushd src/3rdparty/chromium/third_party/webrtc/modules &amp;&amp;
-
-  sed -e "88 s/proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/"       \
-      -e "120s/that->proxy_/reinterpret_cast&lt;pw_node*&gt;(&amp;)/" \
-      -i video_capture/linux/pipewire_session.cc            &amp;&amp;
-
-popd</userinput></screen>
-
     <para>
       Instale o &quot;<application>qtwebengine</application>&quot; executando os
 seguintes comandos:
@@ -215,6 +200,7 @@ cmake -D CMAKE_MESSAGE_LOG_LEVEL=STATUS             \
       -D QT_FEATURE_webengine_proprietary_codecs=ON \
       -D QT_FEATURE_webengine_webrtc_pipewire=ON    \
       -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF           \
+      -D QT_GENERATE_SBOM=OFF                       \
       -G Ninja ..                                   &amp;&amp;
 ninja</userinput></screen>
 

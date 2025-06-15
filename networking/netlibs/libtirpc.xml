@@ -69,6 +69,16 @@ entradas da biblioteca &quot;NIS&quot; que costumavam estar na
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing='compact'>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/libtirpc-&libtirpc-version;-gcc15_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do &quot;libtirpc&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -88,22 +98,21 @@ versão existente de &quot;<xref linkend='rpcbind'/>&quot;
       </para>
     </note>
 
-<screen><!--  Looks like this is incorporated in version 1.0.3
     <para>
-
-      Fix a symbol name needed by NIS libraries:
+      Primeiro, aplique um remendo para tornar o pacote compatível com gcc-15:
     </para>
 
-<screen><userinput>sed '/key_secret_is/s/secret/secretkey/' -i src/libtirpc.map</userinput></screen>
+<screen><userinput role="pre">patch -Np1 -i ../libtirpc-&libtirpc-version;-gcc15_fixes-1.patch</userinput></screen>
+
     <para>
-      Install <application>libtirpc</application> by running the following
-      commands:
+      Instale <application>libtirpc</application> executando os seguintes
+comandos:
     </para>
--->
-<userinput>./configure --prefix=/usr                                  \
-            --sysconfdir=/etc                               \
-            --disable-static                                \
-            --disable-gssapi                                &amp;&amp;
+
+<screen><userinput>./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --disable-static  \
+            --disable-gssapi  &amp;&amp;
 make</userinput></screen>
 
     <para>

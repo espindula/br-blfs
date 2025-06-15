@@ -6,8 +6,8 @@
 
   <!ENTITY kea-download-http "https://downloads.isc.org/isc/kea/&kea-dhcp-version;/kea-&kea-dhcp-version;.tar.gz">
   <!ENTITY kea-download-ftp  "">
-  <!ENTITY kea-md5sum        "80c18994ce9a08f3391e145dd986fa39">
-  <!ENTITY kea-size          "9,9 MB">
+  <!ENTITY kea-md5sum        "abf8cb8bbc74fd7691883b837e9deec8">
+  <!ENTITY kea-size          "10 MB">
   <!ENTITY kea-buildsize     "1,5 GB (332 MB instalado; adicionar 4 GB para testes)">
   <!ENTITY kea-time          "4,1 UPC (com paralelismo=4; adicionar 12 UPC para testes)">
   <!ENTITY kea-arm-vers      "&kea-dhcp-version;">
@@ -67,17 +67,21 @@ fim de vida desde dezembro de 2022.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/kea-&kea-dhcp-version;-fix_boost_1_87-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/kea-&kea-dhcp-version;-fix_boost_1_87-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Kea</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Kea</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -125,13 +129,16 @@ Editor Notes:
   <sect2 role="installation">
     <title>Instalação do Servidor DHCP Kea do ISC</title>
 
+
+    <!-- not longer needed since 2.6.3
     <para>
-      Primeiro, aplique um remendo que corrige um problema com a versão mais
-recente do <application>boost</application>:
+
+      First, apply a patch which fixes an issue with the most recent
+      version of <application>boost</application>:
     </para>
 <screen><userinput>patch -Np1 -i ../kea-&kea-dhcp-version;-fix_boost_1_87-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale o <application>Servidor DHCP Kea do ISC</application> executando os
 seguintes comandos:
     </para>
@@ -160,6 +167,14 @@ class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make -j1 install</userinput></screen>
+
+    <para>
+      Crie alguns diretórios e corrija as configurações de permissão deles como
+o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>install -dm0750 /var/lib/kea
+install -dm0750 /var/log/kea</userinput></screen>
 
   </sect2>
 
@@ -396,25 +411,25 @@ class="directory">/tmp</filename>.
       </para>
 
 <screen role="nodump"><userinput>cat &gt; /etc/kea/kea-ctrl-agent.conf &lt;&lt; "EOF"
-<literal>// Inicia /etc/kea/kea-ctrl-agent.conf
+<literal>// Begin /etc/kea/kea-ctrl-agent.conf
 {
-  // Esta é uma configuração básica para o Agente de Controle do Kea.
-  // Interface RESTful para estar disponível em http://127.0.0.1:8000/
+  // This is a basic configuration for the Kea Control Agent.
+  // RESTful interface to be available at http://127.0.0.1:8000/
   "Control-agent": {
     "http-host": "127.0.0.1",
     "http-port": 8000,
     "control-sockets": {
       "dhcp4": {
         "socket-type": "unix",
-        "socket-name": "/run/kea4-ctrl-socket"
+        "socket-name": "/run/kea/kea4-ctrl-socket"
       },
       "dhcp6": {
         "socket-type": "unix",
-        "socket-name": "/run/kea6-ctrl-socket"
+        "socket-name": "/run/kea/kea6-ctrl-socket"
       },
       "d2": {
         "socket-type": "unix",
-        "socket-name": "/run/kea-ddns-ctrl-socket"
+        "socket-name": "/run/kea/kea-ddns-ctrl-socket"
       }
     },
 
@@ -423,7 +438,7 @@ class="directory">/tmp</filename>.
         "name": "kea-ctrl-agent",
         "output_options": [
           {
-            "output": "/var/log/kea-ctrl-agent.log",
+            "output": "/var/log/kea/kea-ctrl-agent.log",
             "pattern": "%D{%Y-%m-%d %H:%M:%S.%q} %-5p %m\n"
           }
         ],
@@ -433,7 +448,7 @@ class="directory">/tmp</filename>.
     ]
   }
 }
-// Termina /etc/kea/kea-ctrl-agent.conf</literal>
+// End /etc/kea/kea-ctrl-agent.conf</literal>
 EOF</userinput></screen>
 
     </sect3>
@@ -462,12 +477,13 @@ maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
 
     "control-socket": {
       "socket-type": "unix",
-      "socket-name": "/run/kea4-ctrl-socket"
+      "socket-name": "/run/kea/kea4-ctrl-socket"
     },
 
     "lease-database": {
       "type": "memfile",
-      "lfc-interval": 3600
+      "lfc-interval": 3600,
+      "name": "/var/lib/kea/kea-leases4.csv"
     },
 
     "expired-leases-processing": {
@@ -521,7 +537,7 @@ maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
         "name": "kea-dhcp4",
         "output_options": [
           {
-            "output": "/var/log/kea-dhcp4.log",
+            "output": "/var/log/kea/kea-dhcp4.log",
             "pattern": "%D{%Y-%m-%d %H:%M:%S.%q} %-5p %m\n"
           }
         ],
@@ -559,14 +575,14 @@ como o(a) usuário(a) &root;:
       </para>
 
 <screen role="nodump" ><userinput>cat &gt; /etc/kea/kea-dhcp-ddns.conf &lt;&lt; "EOF"
-<literal>// Inicia /etc/kea/kea-dhcp-ddns.conf
+<literal>// Begin /etc/kea/kea-dhcp-ddns.conf
 {
   "DhcpDdns": {
     "ip-address": "127.0.0.1",
     "port": 53001,
     "control-socket": {
       "socket-type": "unix",
-      "socket-name": "/run/kea-ddns-ctrl-socket"
+      "socket-name": "/run/kea/kea-ddns-ctrl-socket"
     },
 
     "tsig-keys": [
@@ -612,7 +628,7 @@ como o(a) usuário(a) &root;:
         "name": "kea-dhcp-ddns",
         "output_options": [
           {
-            "output": "/var/log/kea-ddns.log",
+            "output": "/var/log/kea/kea-ddns.log",
             "pattern": "%D{%Y-%m-%d %H:%M:%S.%q} %-5p %m\n"
           }
         ],
@@ -622,7 +638,7 @@ como o(a) usuário(a) &root;:
     ]
   }
 }
-// Termina /etc/kea/kea-dhcp-ddns.conf</literal>
+// End /etc/kea/kea-dhcp-ddns.conf</literal>
 EOF</userinput></screen>
 
       <note>
@@ -665,9 +681,9 @@ libkea-log.so, libkea-process.so, libkea-stats.so, libkea-tcp.so,
 libkea-util.so e libkea-util-io.so
         </seg>
         <seg>
-          /etc/kea, /usr/include/kea, /usr/lib/kea,
+          /etc/kea, /run/kea, /usr/include/kea, /usr/lib/kea,
 /usr/lib/python&python3-majorver;/site-packages/kea, /usr/share/kea,
-/usr/share/doc/kea-&kea-dhcp-version; e /var/lib/kea
+/usr/share/doc/kea-&kea-dhcp-version;, /var/lib/kea e /var/log/kea
         </seg>
       </seglistitem>
     </segmentedlist>

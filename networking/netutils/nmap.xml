@@ -122,11 +122,15 @@ linkend="pygobject3"/>
 
     <para>
       Faça o sistema de construção usar o módulo Python
-<application>Setuptools</application> originário do LFS em vez de baixar uma
-cópia a partir da Internet:
+<application>Setuptools</application> proveniente do LFS em vez de baixar
+uma cópia a partir da Internet e instale as rodas Python já criadas ao
+executar o <command>make</command> em vez de reconstruí-las novamente no
+<command>make install</command>:
     </para>
 
-<screen><userinput>sed 's/-m build/&amp; --no-isolation/' -i Makefile.in</userinput></screen>
+<screen><userinput>sed -ri Makefile.in \
+    -e 's#-m build#&amp; --no-isolation#'  \
+    -e '/pip install/s#(ZENMAP|NDIFF)DIR\)/#&amp;dist/*.whl#'</userinput></screen>
 
     <para>
       Instale o &quot;<application>Nmap</application>&quot; executando os

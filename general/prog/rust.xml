@@ -238,8 +238,8 @@ exige somente mudar o link simbólico
     </note>
 
     <para>
-      Create a suitable <filename>bootstrap.toml</filename> file which will
-configure the build.
+      Crie um arquivo <filename>bootstrap.toml</filename> adequado que configurará
+a construção.
     </para>
 
 <!-- It seems gone since 1.81.0 but not confirmed upstream
@@ -287,13 +287,6 @@ targets = "X86"
 
 [build]
 description = "for BLFS &version;"
-
-# Do a 2-stage bootstrap instead of a 3-stage one to save time and space.
-# Note that the numbers "1" below mean to *run* the stage-*1* compiler and
-# build the stage-2 compiler.
-build-stage = 1
-test-stage = 1
-doc-stage = 1
 
 # Omit docs to save time and space (default is to build them).
 docs = false
@@ -449,8 +442,7 @@ enviadas de libssh2 e sqlite. Para <command>sudo</command>, use a opção
       </para>
     </note>
 
-<screen role='root'><userinput>./x.py install rustc std &amp;&amp;
-./x.py install --stage=1 cargo clippy rustfmt</userinput></screen>
+<screen role='root'><userinput>./x.py install</userinput></screen>
 
     <para>
       Ainda como o(a) usuário(a) &root;, corrija a instalação da documentação,
@@ -491,13 +483,6 @@ exemplo, de <command>ls -l</command>.
     </para>
 
     <para>
-      <literal>targets = "X86"</literal>: isso evita construir todos os
-compiladores cruzados disponíveis do Linux (AArch64, MIPS, PowerPC, SystemZ,
-etc). Infelizmente, o Rust insiste em instalar os arquivos fonte para esses
-abaixo de <filename class="directory">/opt/rustc/lib/src</filename>.
-    </para>
-
-    <para>
       <literal>tools = ["cargo", "clippy", "rustdoc", "rustfmt"]</literal>:
 construa somente as ferramentas a partir do perfil 'padrão' no comando
 binário <command>rustup</command> que é recomendado para a maioria dos(as)
@@ -506,22 +491,23 @@ que se use analisadores (antigos) de código ou se edite a biblioteca padrão.
     </para>
 
     <para>
-      <literal>channel = "stable"</literal>: this ensures only stable features can
-be used, the default in <filename>bootstrap.toml</filename> is to use
-development features, which is not appropriate for a released version.
+      <literal>channel = "stable"</literal>: isso garante que somente recursos
+estáveis possam ser usados; o padrão no <filename>bootstrap.toml</filename>
+é o de usar recursos de desenvolvimento, o que não é apropriado para uma
+versão lançada.
     </para>
 
     
     <!-- comment while using shipped LLVM -->
 <para>
-      <literal>[target.x86_64-unknown-linux-gnu]</literal>: the syntax of
-<filename>bootstrap.toml</filename> requires an
-<literal>llvm-config</literal> entry for each target for which system-llvm
-is to be used. Change the target to
-<literal>[target.i686-unknown-linux-gnu]</literal> if you are building on
-32-bit x86. This whole section may be omitted if you wish to build against
-the shipped llvm, or do not have clang, but the resulting build will be
-larger and take longer.
+      <literal>[target.x86_64-unknown-linux-gnu]</literal>: a sintaxe do
+<filename>bootstrap.toml</filename> exige uma entrada
+<literal>llvm-config</literal> para cada alvo para o qual o LLVM do sistema
+esteja para ser usado. Mude o alvo para
+<literal>[target.i686-unknown-linux-gnu]</literal> se você estiver
+construindo em x86 de 32 bits. Esta seção inteira deveria ser omitida se
+você desejar construir contra o LLVM enviado, porém a construção resultante
+será maior e demorará mais.
     </para>
 
 
@@ -572,14 +558,6 @@ informações relativas a um teste que falhe.
     <para>
       <parameter>--no-fail-fast</parameter>: essa chave garante que a suíte de
 teste não parará no primeiro erro.
-    </para>
-
-    
-    <!-- https://github.com/rust-lang/rust/issues/94147 -->
-<para>
-      <parameter>--stage=1</parameter>: essa chave contorna um problema que faz
-com que alguns componentes do Rustc sejam reconstruídos desnecessariamente
-ao se executar <command>./x.py install</command>.
     </para>
 
   </sect2>

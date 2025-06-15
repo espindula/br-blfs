@@ -7,11 +7,11 @@
   <!ENTITY gcc-download-http  "&gnu-http;/gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.xz">
   <!ENTITY gcc-download-ftp   "">
   <!-- Update this also on the grub-uefi page -->
-  <!ENTITY gcc-md5sum         "2268420ba02dc01821960e274711bde0">
-  <!ENTITY gcc-size           "88 MB">
-  <!ENTITY gcc-buildsize      "11 GB (3,4 GB instalado com todas as linguagens listadas; adicionar 1,6 GB
+  <!ENTITY gcc-md5sum         "e55d13c55428bca27b4d2ea02f883135">
+  <!ENTITY gcc-size           "94 MB">
+  <!ENTITY gcc-buildsize      "12 GB (3,8 GB instalado com todas as linguagens listadas; adicionar 1,6 GB
 para testes)">
-  <!ENTITY gcc-time           "14 UPC (adicionar 34 UPC para testes; ambos com paralelismo=8)">
+  <!ENTITY gcc-time           "16 UPC (adicionar 30 UPC para testes; ambos com paralelismo=8)">
 ]>
 
 <sect1 id="gcc" xreflabel="GCC-&gcc-version;">
@@ -37,13 +37,15 @@ atualizar C e C++ quanto para instalar compiladores adicionais.
 
     <note>
       <para>
-        Linguagens adicionais, entre as quais D e Ada, estão disponíveis na
-coleção. D e Ada tem um requisito de instruções iniciais de carregamento de
-binário para a primeira instalação, de modo que a instalação deles não está
-descrita aqui. Para instalá-los, você pode proceder da mesma forma abaixo
-depois de instalar o compilador correspondente a partir de um pacote
-binário, adicionando <option>ada</option> ou <option>d</option> à linha
-<parameter>--enable-languages</parameter>.
+        Linguagens adicionais, entre elas COBOL, D e Ada, estão disponíveis na
+coleção. COBOL atualmente é suportada somente em sistemas x86-64. D e Ada
+tem uma exigência de instruções de autoaprimoramento de binário para a
+primeira instalação, de forma que a instalação delas não está descrita
+aqui. Para instalar D ou Ada, você pode prosseguir ao longo das mesmas
+linhas conforme abaixo depois de instalar o compilador correspondente a
+partir de um pacote binário. Finalmente, adicione <option>ada</option> ou
+<option>d</option> ou <option>cobol</option> à linha
+<parameter>--enable-languages</parameter>, conforme desejado.
       </para>
     </note>
 
@@ -160,6 +162,16 @@ opções <command>./configure</command> abaixo.
       Instale o <application>GCC</application> executando os seguintes comandos:
     </para>
 
+<!--
+    <para>
+If running tests, as in LFS, remove/fix several known test failures:</para>
+
+<screen><userinput>sed -e '/cpython/d'               -i ../gcc/testsuite/gcc.dg/plugin/plugin.exp
+sed -e 's/no-pic /&amp;-no-pie /'     -i ../gcc/testsuite/gcc.target/i386/pr113689-1.c
+sed -e 's/300000/(1|300000)/'     -i ../libgomp/testsuite/libgomp.c-c++-common/pr109062.c
+sed -e 's/{ target nonpic } //' \
+    -e '/GOTPCREL/d'              -i ../gcc/testsuite/gcc.target/i386/fentryname3.c</userinput></screen>
+-->
 <screen><userinput>case $(uname -m) in
   x86_64)
     sed -i.orig '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
@@ -180,25 +192,16 @@ cd    build               &amp;&amp;
     --enable-languages=c,c++,fortran,go,objc,obj-c++,m2 &amp;&amp;
 make</userinput></screen>
 
-    <para>Se executar testes, como no LFS, remova/corrija várias falhas de teste
-conhecidas:</para>
-
-<screen><userinput>sed -e '/cpython/d'               -i ../gcc/testsuite/gcc.dg/plugin/plugin.exp
-sed -e 's/no-pic /&amp;-no-pie /'     -i ../gcc/testsuite/gcc.target/i386/pr113689-1.c
-sed -e 's/300000/(1|300000)/'     -i ../libgomp/testsuite/libgomp.c-c++-common/pr109062.c
-sed -e 's/{ target nonpic } //' \
-    -e '/GOTPCREL/d'              -i ../gcc/testsuite/gcc.target/i386/fentryname3.c</userinput></screen>
-
 <para>
       Se você tiver instalado pacotes adicionais, como
 <application>valgrind</application> e <application>gdb</application>, a
 parte <application>gcc</application> da suíte de teste executará mais testes
-que no LFS. Alguns deles informarão FAIL e outros XPASS (aprovados quando
-esperado FAIL). A partir do gcc-14.1.0, cerca de setenta e quatro (74) FAIL
-ocorrem na suíte <quote>guality</quote>, bem como falhas diversas em todo o
-resto da suíte de teste. Se todos os compiladores acima forem construídos,
-existirão um pouco mais que cento e dez (110) falhas inesperadas em mais que
-seiscentos e dezessete mil (617.000) testes. Para executar os testes, emita:
+que no LFS. Alguns deles informarão FAIL e outros XPASS (passam quando
+esperado FAIL). A partir do gcc-15.1.0, cerca de 69 FAIL ocorrem na suíte
+<quote>guality</quote>, bem como falhas diversas em todo o resto da suíte de
+teste. Se todos os compiladores acima forem construídos, existirão cerca de
+107 falhas inesperadas em mais que 610.000 testes. Para executar os testes,
+emita:
     </para>
 
 
@@ -229,6 +232,14 @@ chown -v -R root:root \
 
 ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so \
         /usr/lib/bfd-plugins/</userinput></screen>
+
+    <important>
+      <para>
+        Agora você deveria atualizar readline para 8.3-rc1 ou mais recente seguindo
+o livro LFS, ou os pacotes que usam readline possivelmente falhem para
+construir.
+      </para>
+    </important>
 
   </sect2>
 

@@ -6,10 +6,10 @@
 
   <!ENTITY bluez-download-http "&kernel-dl;/linux/bluetooth/bluez-&bluez-version;.tar.xz">
   <!ENTITY bluez-download-ftp  "">
-  <!ENTITY bluez-md5sum        "a22d25ca60e89d211ac154dca3a84e61">
-  <!ENTITY bluez-size          "2,3 MB">
-  <!ENTITY bluez-buildsize     "170 MB (com testes)">
-  <!ENTITY bluez-time          "0,5 UPC (usando paralelismo=4; com testes)">
+  <!ENTITY bluez-md5sum        "59cf5b86dd008180503a159109bbfb9a">
+  <!ENTITY bluez-size          "2,4 MB">
+  <!ENTITY bluez-buildsize     "95 MB (com testes)">
+  <!ENTITY bluez-time          "0,4 UPC (usando paralelismo = 4; com os testes)">
 ]>
 
 <sect1 id="bluez" xreflabel="BlueZ-&bluez-version;">
@@ -117,18 +117,21 @@ recompile o núcleo, se necessário:
     <title>Instalação do "BlueZ"</title>
 
 
-    <!--
     <para>
-
-      At first, fix an issue building the package with Glibc-2.34 or later:
+      Primeiro, corrija um problema construindo o pacote com gcc-15 ou posterior:
     </para>
 
-<screen><userinput>sed 's/pause(/bluez_&amp;/' -i profiles/audio/media.c</userinput></screen>
 
-    <para revision="sysv">Now, make some changes needed for SystemV systems:</para>
 
-<screen revision="sysv"><userinput>patch -Np1 -i ../bluez-&bluez-version;-obexd_without_systemd-1.patch</userinput></screen>
 
+    <!-- Note below two backslashes are within single quotes and one is outside -->
+<!-- We should just upgrade readline instead of making changes to every
+     package using readline.
+<screen>
+<userinput>sed -e '/readline.h/i    \
+#define USE_VARARGS 1    \
+#define PREFER_STDARG 1' \
+    -i src/shared/shell.c</userinput></screen>
 -->
 <para>
       Instale <application>BlueZ</application> executando os seguintes comandos:

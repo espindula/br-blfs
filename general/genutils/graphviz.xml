@@ -6,10 +6,10 @@
 
   <!ENTITY graphviz-download-http "https://gitlab.com/graphviz/graphviz/-/archive/&graphviz-version;/graphviz-&graphviz-version;.tar.bz2">
   <!ENTITY graphviz-download-ftp  "">
-  <!ENTITY graphviz-md5sum        "4a4dbe47b00b07cd6ba01c75f7d02e6a">
-  <!ENTITY graphviz-size          "25 MB">
-  <!ENTITY graphviz-buildsize     "216 MB">
-  <!ENTITY graphviz-time          "0,6 UPC (usando paralelismo = 4)">
+  <!ENTITY graphviz-md5sum        "3f556337f64833cd1a26398ea76d53a6">
+  <!ENTITY graphviz-size          "32 MB">
+  <!ENTITY graphviz-buildsize     "154 MB">
+  <!ENTITY graphviz-time          "0,3 UPC (usando paralelismo = 4)">
 ]>
 
 <sect1 id="graphviz" xreflabel="Graphviz-&graphviz-version;">
@@ -92,11 +92,17 @@ construído pacotes suficientes para atender às tuas necessidades.
 
     <bridgehead renderas="sect4">Opcional, para várias saídas de "bitmap"</bridgehead>
     <para role="optional">
-      <xref linkend="pango"/>, com <xref linkend="cairo"/>, <xref
-linkend="xorg7-lib"/>, <xref linkend="fontconfig"/> e <xref
-linkend="libpng"/>, para gerar imagens nos formatos bitmap SVG, postscript,
-PNG e PDF ou para exibir a imagem na tela. A saída gerada PNG é exigida para
-construir <xref role="nodep" linkend="gegl"/>
+      <xref linkend="pango"/>, with <xref linkend="cairo"/>, <xref
+linkend="xorg7-lib"/>, <xref linkend="fontconfig"/>, <xref
+linkend="libpng"/>, to generate images in bitmap SVG, postscript, PNG, and
+PDF formats, or to display the image on screen. The PNG output is required
+for building <xref role="nodep" linkend="gegl"/>.
+    </para>
+
+    <para role="optional">
+      <xref linkend="aalib"/> (for outputting images in ASCII art), <xref
+linkend="cups"/> (for formatting graphs for printing), <xref
+linkend="qt6"/>, and <xref linkend="webkitgtk"/>
     </para>
 
     <para role="optional">
@@ -113,10 +119,9 @@ formatos e é necessário para exibir imagens
     </para>
 
     <para role="optional">
-      Outros formatos podem ser adicionados com <xref linkend="libwebp"/> (o
-suporte a "WebP" é considerado experimental), <ulink
+      Other formats may be added with <xref linkend="libwebp"/>, <ulink
 url="https://openil.sourceforge.net/projects.php">DevIL</ulink>, <ulink
-url="https://sourceforge.net/projects/lasi/">libLASi</ulink> e <ulink
+url="https://sourceforge.net/projects/lasi/">libLASi</ulink>, and <ulink
 url="https://www.freedesktop.org/wiki/Software/glitz">glitz</ulink>
     </para>
 
@@ -131,23 +136,21 @@ linkend="gs"/>, <xref linkend="librsvg"/> e <xref linkend="poppler"/>
     <bridgehead renderas="sect4">Opcional (para construir mais ferramentas)</bridgehead>
 
     <para role="optional">
-      <xref linkend="freeglut"/> (com <ulink
-url="https://sourceforge.net/projects/gtkglext/">GtkGLExt</ulink> e <ulink
-url="https://gts.sourceforge.net/">libGTS</ulink> para construir o
-visualizador de gráficos grandes <command>smyrna</command>, o qual é
-considerado experimental)
+      <ulink url="http://www.cs.umd.edu/~mount/ANN/">libANN</ulink> and <xref
+linkend="freeglut"/> (with <ulink
+url="https://sourceforge.net/projects/gtkglext/">GtkGLExt</ulink> and <ulink
+url="https://gts.sourceforge.net/">libGTS</ulink> for building the
+<command>smyrna</command> large graph viewer, which is considered
+experimental)
     </para>
 
     <bridgehead renderas="sect4">Opcional (para construir ligações de idioma)</bridgehead>
     <para role="optional">
-      <xref linkend="swig"/> (<application>SWIG</application> precisa estar
-instalado ou nenhuma ligação será construída), <xref linkend="gcc"/> (para o
-compilador "go"), <xref linkend="guile"/>, <xref linkend="openjdk"/>, <xref
-linkend="lua"/>, <xref linkend="php"/>, <xref linkend="ruby"/>, <xref
-linkend="tk"/>, <ulink url="https://iolanguage.org/">Io</ulink>, <ulink
-url="https://www.mono-project.com/Main_Page">Mono</ulink>, <ulink
-url="https://ocaml.org/">OCaml</ulink> e <ulink
-url="https://www.r-project.org/">R</ulink>
+      <xref linkend="swig"/> (<application>SWIG</application> must be installed or
+no bindings will be built), <xref linkend="gcc"/> (for the go compiler),
+<xref linkend="guile"/>, <xref linkend="openjdk"/>, <xref linkend="lua"/>,
+<xref linkend="php"/>, <xref linkend="ruby"/>, <xref linkend="tk"/>, and
+<ulink url="https://www.r-project.org/">R</ulink>
     </para>
 
     <bridgehead renderas="sect4">Opcional (ferramentas de construção)</bridgehead>
@@ -168,47 +171,21 @@ Fence</ulink>
   <sect2 role="installation">
     <title>Instalação do Graphviz</title>
 
-    
-    
-    
-    <!-- https://gitlab.com/graphviz/graphviz/-/merge_requests/3739 -->
-<!-- Removed in #20047 update to 12.0.0
     <para>
-
-      Remove a duplicated declaration causing some <xref linkend='vala'/>
-      tests to fail:
-    </para>
-
-    <screen><userinput>awk -i inplace '/aghtmlstr/ &amp;&amp; ++f == 2 {getline} 1' \
-    lib/cgraph/cgraph.h</userinput></screen>
-    -->
-<para>
       Instale <application>Graphviz</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>sed -i '/LIBPOSTFIX="64"/s/64//' configure.ac &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
 
-./autogen.sh             &amp;&amp;
-./configure --prefix=/usr \
-            --docdir=/usr/share/doc/graphviz-&graphviz-version;</userinput></screen>
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      ..                           &amp;&amp;
 
-    <note>
-      <para>
-        Um aviso é gerado por <command>autogen.sh</command> porque a árvore de
-construção não é um repositório "git". Como resultado, a data da construção
-é configurada para zero (0). Para obter uma data significativa na sequência
-de caracteres da versão, você pode executar:
-      </para>
+sed -i '/GZIP/s/:.*$/=/' CMakeCache.txt &amp;&amp;
 
-<screen><userinput>sed -i "s/0/$(date +%Y%m%d)/" builddate.h</userinput></screen>
-    </note>
-
-    <para>
-      Fixe ou não a data, prossiga para compilar o pacote:
-    </para>
-
-<screen><userinput>make</userinput></screen>
+make</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste que forneça resultados
@@ -216,7 +193,7 @@ significativos.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -227,48 +204,14 @@ significativos.
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed ... configure.ac</command>: Esse comando é necessário para
-evitar instalar arquivos em "/usr/lib64".
-    </para>
-
-    <para>
-      <option>--with-javaincludedir="$JAVA_HOME/include
--I$JAVA_HOME/include/linux"</option>: Se você tiver construído o <xref
-linkend="openjdk"/> em "/opt" e desejar construir as ligações "JAVA",
-[então] é necessário especificar o local dos arquivos de cabeçalho "JAVA" a
-configurar. A chave do "configure" é projetado para somente um diretório,
-mas dois diretórios precisam ser incluídos. Isso é possível, no entanto,
-usando-se a chave "-I" dentro da variável.
-    </para>
-
-    <para>
-      <option>--with-webp</option>: Mesmo se <xref linkend="libwebp"/> estiver
-instalado, ele não é incluído na construção sem essa opção.
-    </para>
-
-    <para>
-      <option>--with-smyrna</option>: Mesmo se as dependências necessárias
-estiverem instaladas, o visualizador gráfico interativo
-<command>smyrna</command> não é construído sem essa opção.
+      <command>sed ... CMakeCache.txt</command>: This command is needed to prevent
+compressing the packages's man pages.
     </para>
 
   </sect2>
 
   <sect2 role="configuration">
     <title>Configurando Graphviz</title>
-
-    <sect3 id="graphviz-config">
-      <title>Arquivos de Configuração</title>
-
-      <para>
-        <filename>/usr/lib/graphviz/config</filename>
-      </para>
-
-      <indexterm zone="graphviz graphviz-config">
-        <primary sortas="e-usr-share-graphviz-config">/usr/share/graphviz/config</primary>
-      </indexterm>
-
-    </sect3>
 
     <sect3>
       <title>Informação de Configuração</title>
@@ -300,21 +243,18 @@ class="directory">/usr/lib/graphviz</filename>.
       <seglistitem>
         <seg>
           acyclic, bcomps, ccomps, circo, cluster, dijkstra, dot, dot2gxl,
-dot_builtins, edgepaint, fdp, gc, gml2gv, graphml2gv, gv2gml, gv2gxl,
-gvcolor, gvedit, gvgen, gvmap, gvmap.sh, gvpack, gvpr, gxl2dot, gxl2gv,
-mm2gv, neato, nop, osage, patchwork, prune, sccmap, sfdp, tred, twopi,
-unflatten e vimdot
+dot_builtins, dot_sandbox, edgepaint, fdp, gc, gml2gv, graphml2gv, gv2gml,
+gv2gxl, gvcolor, gvedit, gvgen, gvmap, gvmap.sh, gvpack, gvpr, gxl2dot,
+gxl2gv, mm2gv, neato, nop, osage, patchwork, prune, sccmap, sfdp, tred,
+twopi, unflatten, and vimdot
         </seg>
         <seg>
-          libcdt.so, libcgraph.so, libgvc.so, libgvpr.so, liblab_gamut.so,
-libpathplan.so, libxdot.so e vários "plug-ins" em /usr/lib/graphviz. Existem
-também várias em subdiretórios de
-/usr/lib/{lua,perl5,php,python&python3-majorver;,tcl8.6}. Infelizmente,
-algumas bibliotecas são duplicadas.
+          libcdt.so, libcgraph.so, libgvc.so, libgvpr.so, libpathplan.so, libxdot.so,
+and several plugins in /usr/lib/graphviz/.
         </seg>
         <seg>
-          /usr/include/graphviz, /usr/lib/graphviz, /usr/lib/tcl8.6/graphviz,
-/usr/share/doc/graphviz-&graphviz-version; e /usr/share/graphviz
+          /usr/include/graphviz, /usr/lib/graphviz, /usr/lib/cmake/graphviz, and
+/usr/share/graphviz
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -387,21 +327,26 @@ então aumenta o gráfico com essa informação
         </listitem>
       </varlistentry>
 
+
+
+      <!--
       <varlistentry id="diffimg">
+
         <term><command>diffimg</command></term>
         <listitem>
           <para>
-            (precisa de <ulink url="https://www.libgd.org/">GD Library</ulink>) gera uma
-imagem onde cada pixel é a diferença entre o pixel correspondente em cada
-uma das duas imagens de origem
+            (needs <ulink url="https://www.libgd.org/">GD Library</ulink>)
+            generates an image where each pixel is the
+            difference between the corresponding pixel in
+            each of the two source images
           </para>
           <indexterm zone="graphviz diffimg">
             <primary sortas="b-diffimg">diffimg</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="dijkstra">
+-->
+<varlistentry id="dijkstra">
         <term><command>dijkstra</command></term>
         <listitem>
           <para>
@@ -445,24 +390,21 @@ class="extension">.gxl</filename> causa uma conversão de "GXL" para "DOT"
           </indexterm>
         </listitem>
       </varlistentry>
-      
-      <!--
-      <varlistentry id="dotty">
 
-        <term><command>dotty</command></term>
+      <varlistentry id="dot_sandbox">
+        <term><command>dot_sandbox</command></term>
         <listitem>
           <para>
-            is a graph editor for the X Window System. It may be run as a
-            standalone editor, or as a front end for applications that use
-            graphs. It can control multiple windows viewing different graphs
+            is a wrapper around graphviz. It aims to provide a safe environment for the
+processing of untrusted input graphs and command line options.
           </para>
-          <indexterm zone="graphviz dotty">
-            <primary sortas="b-dotty">dotty</primary>
+          <indexterm zone="graphviz dot_sandbox">
+            <primary sortas="b-dot_sandbox">dot_sandbox</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-      -->
-<varlistentry id="edgepaint">
+
+      <varlistentry id="edgepaint">
         <term><command>edgepaint</command></term>
         <listitem>
           <para>
@@ -489,22 +431,26 @@ espírito de "Fruchterman" e "Reingold"
         </listitem>
       </varlistentry>
 
+
+
+      <!--
       <varlistentry id="gc-graphviz">
+
         <term><command>gc</command></term>
         <listitem>
           <para>
-            é um gráfico análogo ao <command>wc</command>, pois imprime na saída padrão
-o número de nós, arestas, componentes conectados ou aglomerados contidos nos
-arquivos de entrada. Ele também imprime uma contagem total para todos os
-gráficos, se mais de um gráfico for fornecido
+            is a graph analogue to <command>wc</command> in that it prints
+            to standard output the number of nodes, edges, connected components
+            or clusters contained in the input files. It also prints a total
+            count for all graphs if more than one graph is given
           </para>
           <indexterm zone="graphviz gc-graphviz">
             <primary sortas="b-gc">gc</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="gml2gv">
+-->
+<varlistentry id="gml2gv">
         <term><command>gml2gv</command></term>
         <listitem>
           <para>
@@ -678,10 +624,8 @@ class="extension">.gxl</filename> causa uma conversão de "GXL" para "DOT"
           </indexterm>
         </listitem>
       </varlistentry>
-      
-      <!--
-      <varlistentry id="lefty">
 
+      <varlistentry id="lefty">
         <term><command>lefty</command></term>
         <listitem>
           <para>
@@ -697,17 +641,17 @@ class="extension">.gxl</filename> causa uma conversão de "GXL" para "DOT"
         <term><command>lneato</command></term>
         <listitem>
           <para>
-            is a graph editor for the X Window System. It may be run as a
-            standalone editor, or as a front end for applications that use
-            graphs. It can control multiple windows viewing different graphs
+            is a graph editor for the X Window System. It may be run as a standalone
+editor, or as a front end for applications that use graphs. It can control
+multiple windows viewing different graphs
           </para>
           <indexterm zone="graphviz lneato">
             <primary sortas="b-lneato">lneato</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-      -->
-<varlistentry id="mm2gv">
+
+      <varlistentry id="mm2gv">
         <term><command>mm2gv</command></term>
         <listitem>
           <para>

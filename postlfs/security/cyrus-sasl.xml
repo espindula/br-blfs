@@ -76,27 +76,17 @@ de segurança é inserida entre o protocolo e a conexão.
       </listitem>
     </itemizedlist>
 
-    
-
-    <!-- Not needed anymore
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/cyrus-sasl-&cyrus-sasl-version;-doc_fixes-1.patch"/>
-        </para>
-      </listitem>
-      <!- -<listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/cyrus-sasl-&cyrus-sasl-version;-openssl-1.1.0-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/cyrus-sasl-&cyrus-sasl-version;-gcc15_fixes-1.patch"/>
        </para>
-    </listitem>- ->
+      </listitem>
     </itemizedlist>
-    -->
-<bridgehead renderas="sect3">Dependências do Cyrus SASL</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do Cyrus SASL</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
@@ -125,23 +115,15 @@ url="https://metacpan.org/pod/Pod::POM::View::Restructured">Pod::POM::View::Rest
       </para>
     </note>
 
-    
-
-    <!-- Without this patch, having Sphinx and/or doctools (doctools not tested)
-         on the system causes an FTBFS when man pages are generated. The Sphinx
-         and Docutils API has changed significantly between Sphinx-{1,2} and
-         Sphinx-3.0.
-
     <para>
-
-      First, fix a build failure if Sphinx or
-      <xref role="nodep" linkend="docutils"/> is installed on the system:
+      Primeiro, corrija o pacote para que seja compatível com gcc-15:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../cyrus-sasl-2.1.27-doc_fixes-1.patch</userinput></screen>
-    -->
-<para>
-      Primeiro, corrija um problema revelado pelo gcc-14:
+<screen><userinput remap="pre">patch -Np1 -i ../cyrus-sasl-2.1.28-gcc15_fixes-1.patch &amp;&amp;
+autoreconf -fiv</userinput></screen>
+
+    <para>
+      Também, corrija um problema revelado pelo gcc-14 e posteriores:
     </para>
 
 <screen><userinput>sed '/saslint/a #include &lt;time.h&gt;'       -i lib/saslutil.c &amp;&amp;

@@ -7,17 +7,17 @@
   <!ENTITY python3-download-http
            "https://www.python.org/ftp/python/&python3-version;/Python-&python3-version;.tar.xz">
   <!ENTITY python3-download-ftp  "">
-  <!ENTITY python3-md5sum        "8bb5f0b8c9d9d7b87d7d98510e8d58e5">
+  <!ENTITY python3-md5sum        "dbaa8833aa736eddbb18a6a6ae0c10fa">
   <!ENTITY python3-size          "22 MB">
-  <!ENTITY python3-buildsize     "356 MB (adicionar 59 MB para os testes)">
-  <!ENTITY python3-time          "1,7 UPC (adicionar 1,5 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY python3-buildsize     "308 MB (adicionar 59 MB para os testes)">
+  <!ENTITY python3-time          "1.5 SBU (add 1.5 SBU for tests; both using parallelism=4)">
   <!--
   Note: Size does not reflect docs that were installed in LFS.
   Test time measured with 60 second timeout.
   -->
   <!ENTITY python3htmldoc-download-http
   "https://www.python.org/ftp/python/doc/&python3-version;/python-&python3-version;-docs-html.tar.bz2">
-  <!ENTITY python3-docs-md5sum "5b65ca5579dac14e425cd247af6fd043">
+  <!ENTITY python3-docs-md5sum "8f34b29779cc1d5d1e8c0a913c307129">
 ]>
 
 <sect1 id="python3" xreflabel="Python-&python3-version;">
@@ -117,7 +117,20 @@ url="&lfs-root;/chapter08/jinja2.html">Jinja2</ulink>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferência Adicional Opcional</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Required Additional Download</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch: <ulink url="&patch-root;/Python-&python3-version;-security_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Transferência Adicional Opcional</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -157,16 +170,26 @@ url="https://www.bytereef.org/mpdecimal/">libmpdec</ulink>
   <sect2 role="installation">
     <title>Instalação do Python 3</title>
 
+
+
+    <!--
     <para>
+
+      First, fix a security vulnerability in Python's Unicode support:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../Python-&python3-version;-security_fixes-1.patch</userinput></screen>
+-->
+<para>
       Instale o &quot;<application>Python 3</application>&quot; executando os
 seguintes comandos:
     </para>
 
-<screen><userinput>CXX="/usr/bin/g++"               \
-./configure --prefix=/usr        \
-            --enable-shared      \
-            --with-system-expat  \
-            --enable-optimizations &amp;&amp;
+<screen><userinput>./configure --prefix=/usr          \
+            --enable-shared        \
+            --with-system-expat    \
+            --enable-optimizations \
+            --without-static-libpython &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -200,6 +223,10 @@ teste:
          For Python-3.13.3
          Total tests: run=44,697 failures=2 skipped=1,870
          Total test files: run=482/480 failed=4 skipped=21 resource_denied=2 rerun=4
+
+         For Python-3.13.4
+         Total tests: run=45,204 failures=2 skipped=1,745
+         Total test files: run=481/480 failed=3 skipped=20 resource_denied=2 rerun=3
     -->
 <screen remap='test'><userinput>make test TESTOPTS="--timeout 120"</userinput></screen>
 

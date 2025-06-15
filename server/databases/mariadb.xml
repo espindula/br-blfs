@@ -7,8 +7,8 @@
 
   <!ENTITY mariadb-download-http "https://downloads.mariadb.org/interstitial/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
   <!ENTITY mariadb-download-ftp  "">
-  <!ENTITY mariadb-md5sum        "49a28cc68710e0e3b030e90579eec7db">
-  <!ENTITY mariadb-size          "107 MB">
+  <!ENTITY mariadb-md5sum        "10029b1fad463763e40dd1a7cc2bb38f">
+  <!ENTITY mariadb-size          "110 MB">
   <!ENTITY mariadb-buildsize     "2,8 GB (745 MB instalado)">
   <!ENTITY mariadb-time          "5,1 UPC (com paralelismo=8, adicionar 0,3 UPC para testes)">
 ]>
@@ -125,15 +125,18 @@ sem privilégios é altamente encorajado. Emita o seguinte (como
 usuário(a) e o grupo:
     </para>
 
-<screen role="root"><userinput>groupadd -g 40 mariadb &amp;&amp;
-useradd -c "MariaDB Server" -d /srv/mariadb -g mariadb -s /bin/false -u 40 mariadb</userinput></screen>
-
+<!-- Not needed with 11.4.7
     <para>
-      Corrija um problema introduzido com
-<application>libxml2</application>-2.14.x:
+
+      Fix an issue introduced with <application>libxml2</application>-2.14.x:
     </para>
 <screen><userinput>sed -e "s/BASE_BUFFER_SIZE/__XML_TREE_H__/" \
     -i storage/connect/plgxml.h</userinput></screen>
+-->
+<screen role="root"><userinput>groupadd -g 40 mariadb &amp;&amp;
+useradd -c "MariaDB Server" -d /srv/mariadb -g mariadb -s /bin/false -u 40 mariadb</userinput></screen>
+
+
 
     <para>
       Instale o &quot;<application>MariaDB</application>&quot; executando os
@@ -145,7 +148,6 @@ cd    build &amp;&amp;
 
 cmake -D CMAKE_BUILD_TYPE=Release                       \
       -D CMAKE_INSTALL_PREFIX=/usr                      \
-      -D CMAKE_POLICY_VERSION_MINIMUM=3.5               \
       -D GRN_LOG_PATH=/var/log/groonga.log              \
       -D INSTALL_DOCDIR=share/doc/mariadb-&mariadb-version;        \
       -D INSTALL_DOCREADMEDIR=share/doc/mariadb-&mariadb-version;  \
@@ -210,14 +212,6 @@ mv -v /usr/share/user_map.conf /etc/security</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-    <para>
-      <!-- https://jira.mariadb.org/browse/MDEV-36422 -->
-<parameter>-D CMAKE_POLICY_VERSION_MINIMUM=3.5</parameter>: Essa chave
-permite que <application>MariaDB</application> construa com CMake 4.0 e
-posteriores, contornando alguns recursos removidos.
-      
-    </para>
 
     <para>
       <parameter>-D WITH_EMBEDDED_SERVER=ON</parameter>: Essa chave habilita

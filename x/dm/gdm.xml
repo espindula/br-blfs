@@ -114,19 +114,16 @@ depois de ele ser iniciado. Emita os seguintes comandos como o(a) usuário(a)
 &quot;<systemitem class="username">root</systemitem>&quot;:
     </para>
 
-<!--
-    <para revision="sysv">
-
-      First, adapt GDM to build without systemd present:
-    </para>
-
-<screen revision="sysv"><userinput remap="pre">sed -i -r '/(^| )systemd_dep/d' meson.build</userinput></screen>
--->
 <screen role="root"><userinput>groupadd -g 21 gdm &amp;&amp;
 useradd -c "Proprietário(a) do Processo de Segundo Plano GDM" -d /var/lib/gdm -u 21 \
         -g gdm -s /bin/false gdm &amp;&amp;
 passwd -ql gdm</userinput></screen>
 
+    <para>
+      Primeiro, adapte GDM para construir com GCC 15:
+    </para>
+
+<screen><userinput remap="pre">sed -r 's/([(*])bool([) ])/\1boolval\2/' -i common/gdm-settings-utils.*</userinput></screen>
 
 
     <para>

@@ -6,11 +6,11 @@
 
   <!ENTITY curl-download-http "https://curl.se/download/curl-&curl-version;.tar.xz">
   <!ENTITY curl-download-ftp  "">
-  <!ENTITY curl-md5sum        "b94f85cf7c03fcc31b3750e45a424f26">
+  <!ENTITY curl-md5sum        "cba9ea54bccefed639a529b1b5b17405">
   <!ENTITY curl-size          "2,7 MB">
-  <!ENTITY curl-buildsize     "61 MB (adicionar 15 MB para os testes)">
-  <!ENTITY curl-time          "0,2 UPC (com paralelismo=4; adicionar 4,9 UPC para testes (sem valgrind,
-adicionar 14 UPC com valgrind))">
+  <!ENTITY curl-buildsize     "52 MB (adicionar 68 MB para os testes)">
+  <!ENTITY curl-time          "0,3 UPC (adicionar 4,9 UPC para testes (sem valgrind; adicionar 16 UPC com
+valgrind) todos usando paralelismo=4)">
 ]>
 
 <sect1 id="curl" xreflabel="cURL-&curl-version;">
@@ -84,7 +84,7 @@ Additional Downloads</bridgehead>
       <listitem>
         <para>
           Required patch:
-          <ulink url="&patch-root;/curl-&curl-version;-function_naming-1.patch"/>
+          <ulink url="&patch-root;/curl-&curl-version;-upstream_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -145,7 +145,15 @@ os testes e possivelmente cause falhas)
   <sect2 role="installation">
     <title>Instalação do cURL</title>
 
+    <!--
     <para>
+
+      First, apply a patch from upstream:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../curl-&curl-version;-upstream_fix-1.patch</userinput></screen>
+-->
+<para>
       Instale o &quot;<application>cURL</application>&quot; executando os
 seguintes comandos:
     </para>
@@ -178,9 +186,9 @@ seguintes comandos:
     all of the optional deps, but right now, it isn't a priority - rather
     the security fix is.
 -->
-<screen><userinput>./configure --prefix=/usr                           \
-            --disable-static                        \
-            --with-openssl                          \
+<screen><userinput>./configure --prefix=/usr    \
+            --disable-static \
+            --with-openssl   \
             --with-ca-path=/etc/ssl/certs &amp;&amp;
 make</userinput></screen>
 
