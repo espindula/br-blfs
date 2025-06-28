@@ -10,18 +10,16 @@
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "6,9 GB (218 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "7.7 GB (241 MB installed) without tests">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "11 UPC usando -j8, sem testes">
+  <!ENTITY firefox-time          "14 SBU using -j8, without tests">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
-  <!-- indicate this is the ESR variant,
-  The point is that the stable release differs slightly.
-  <title>
-Firefox-&firefox-version;</title>-->
+  <!-- Indicate this is the ESR variant.
+     The point is that the stable release differs slightly. -->
 <?dbhtml filename="firefox.html" ?>
 
 
@@ -186,19 +184,28 @@ descomente quaisquer outras opções desejadas. Crie o arquivo emitindo o
 seguinte comando:
     </para>
 
-<!-- https://phabricator.services.mozilla.com/D219025 -->
+<!-- The following sections were fixed in 140.0ESR. ICU >
+= 76.1 is required -->
+<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
+         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
 <!--
     <para>
 
-      Adapt two files for compatibility with cbindgen-0.27.0 or later:
+      If you are building with system ICU, adapt the line break mapping for ICU
+      74 or later.  This construct adds five entries to a c++ array.
     </para>
 
-    <screen><userinput>sed 's/input.try/&amp;_parse/' \
-    -i servo/components/style_traits/values.rs &amp;&amp;
-sed '0,/"Keyframe"/{//d}' -i servo/ports/geckolib/cbindgen.toml</userinput></screen>
-    -->
-<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
-         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
+<screen><userinput>for i in {43..47}; do
+   sed -i '/ZWJ/s/}/,CLASS_CHARACTER&amp;/' intl/lwbrk/LineBreaker.cpp 
+done</userinput></screen>
+
+    <para>
+      If you are building with system ICU, adapt the build system to use the
+      correct library:
+    </para>
+
+<screen><userinput remap="pre">sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
+-->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
 
@@ -285,50 +292,25 @@ ac_add_options --without-wasm-sandboxed-libraries
 # telemetry reporting in Firefox.
 unset MOZ_TELEMETRY_REPORTING
 
-mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir</literal>
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
+
+# By default firefox will attempt to use the window class firefox-default on
+# launch. This makes the icon not work properly because wayland does not
+# support the X11 property  class header. Change the remoting name to fix this.
+# This is also reflected in the .desktop file where StartupWMClass is set to
+# firefox.
+MOZ_APP_REMOTINGNAME=firefox</literal>
 EOF</userinput></screen>
 
-    
-    
 
     
-    <para>
-      Se você estiver construindo com o ICU do sistema, adapte o mapeamento de
-quebra de linha para ICU 74 ou posterior. Esta construção adiciona cinco
-entradas para um vetor c++.
-    </para>
 
-<screen><userinput>for i in {43..47}; do
-   sed -i '/ZWJ/s/}/,CLASS_CHARACTER&amp;/' intl/lwbrk/LineBreaker.cpp 
-done</userinput></screen>
-
-    <para>
-      Se você estiver construindo com o ICU do sistema, adapte o sistema de
-construção para usar a biblioteca correta:
-    </para>
-
-<screen><userinput remap="pre">sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
 
     <para>
       Compile o <application>Firefox</application> emitindo os seguintes comandos:
     </para>
 
-    <!-- Not needed with clang. Upstream bug at
-     https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
-
     <para>
-
-      If building on a 32 bit machine, the following sed works around
-      an issue with an incompatible <quote>double</quote> type in one
-      header file:
-    </para>
-
-<screen><userinput>case "$(uname -m)" in
-    i?86) sed -e '/typedef[ ]*double/s/double/long double/' \
-              -i modules/fdlibm/src/math_private.h ;;
-esac</userinput></screen>
--->
-<para>
       Se as APIs de geolocalização forem necessárias:
     </para>
 
@@ -356,75 +338,7 @@ url="https://www.chromium.org/developers/how-tos/api-keys"/>.
        href="../../xincludes/mozshm.xml"/>
     </note>
 
-
-
-    
-
-
-    
-
-
-    <!--<para>
-
-      Fix building Firefox with Clang 16 or C++ headers from GCC 13.
-      And, work around a build failure with Rustc-1.70.0:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;-consolidated-1.patch</userinput></screen>
-
     <para>
-      Apply the following patch so that firefox is able to play H.264 videos:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;-ffmpeg_6-1.patch</userinput></screen>-->
-<!-- https://github.com/rust-lang/rust-bindgen/pull/2689 -->
-<!--
-    <para>
-
-      Adapt the shipped <application>rust-bindgen</application> copy for
-      LLVM-18 and later, and tell <command>cargo</command> we've modified
-      the code of <application>rust-bindgen</application> so the checksum
-      verification of this crate should be skipped:
-    </para>
-
-    <screen><userinput>sed -e "/match cursor.kind()/a                                    \
-        CXCursor_LinkageSpec => return Err(ParseError::Recurse)," \
-    -i third_party/rust/bindgen/ir/item.rs                        &amp;&amp;
-
-cat &gt;&gt; Cargo.toml &lt;&lt; EOF &amp;&amp;
-<literal>[patch.crates-io.bindgen_0_64_0]
-package = "bindgen"
-version = "0.64.0"
-path = "third_party/rust/bindgen"</literal>
-EOF
-
-sed -r '/name = "bindgen"/,+5 s/^source|^checksum/#&amp;/' \
-    -i Cargo.lock</userinput></screen>
--->
-<!-- https://hg.mozilla.org/mozilla-central/rev/ba6abbd36b49 -->
-<!--
-    <para>
-
-      Adapt the WebRTC code to use 64-bit timestamp to fix a build
-      failure with Clang-18 and later:
-    </para>
-
-    <screen><userinput>sed 's/uint32_t timestamp/uint64_t timestamp/'                \
-    -i dom/media/gmp-plugin-openh264/gmp-fake-openh264.cpp    \
-       dom/media/gtest/TestGMPRemoveAndDelete.cpp             \
-       dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.cpp &amp;&amp;
-
-sed '/mInputImageMap/s/uint32_t/uint64_t/' \
-    -i dom/media/webrtc/libwebrtcglue/WebrtcGmpVideoCodec.h</userinput></screen>
-
-    <para>
-      Remove several lines of Rust code only useful for ARM and failing to
-      compile with Rustc-1.78.0 or newer:
-    </para>
-
-    <screen><userinput>sed '/cfg_attr/,/)]/d' -i gfx/qcms/src/lib.rs</userinput></screen>
--->
-<para>
       Agora invoque o conjunto de comandos sequenciais Python
 <command>mach</command> para compilar o pacote.
     </para>
@@ -546,16 +460,17 @@ MIMETYPE+="x-scheme-handler/http;x-scheme-handler/https"           &amp;&amp;
 cat &gt; /usr/share/applications/firefox.desktop &lt;&lt; EOF &amp;&amp;
 <literal>[Desktop Entry]
 Encoding=UTF-8
-Name=Navegador da Web Firefox
-Comment=Navegue a World Wide Web
-GenericName=Navegador da Web
+Name=Firefox Web Browser
+Comment=Browse the World Wide Web
+GenericName=Web Browser
 Exec=firefox %u
 Terminal=false
 Type=Application
 Icon=firefox
 Categories=GNOME;GTK;Network;WebBrowser;
 MimeType=$MIMETYPE
-StartupNotify=true</literal>
+StartupNotify=true
+StartupWMClass=firefox</literal>
 EOF
 
 unset MIMETYPE &amp;&amp;

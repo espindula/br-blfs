@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY ntfs-3g-download-http
-           "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-&ntfs-3g-version;.tgz">
+    "https://github.com/tuxera/ntfs-3g/archive/&ntfs-3g-version;/ntfs-3g-&ntfs-3g-version;.tar.gz">
   <!ENTITY ntfs-3g-download-ftp  "">
-  <!ENTITY ntfs-3g-md5sum        "a038af61be7584b79f8922ff11244090">
-  <!ENTITY ntfs-3g-size          "1,3 MB">
-  <!ENTITY ntfs-3g-buildsize     "22 MB">
+  <!ENTITY ntfs-3g-md5sum        "65814658dfd6ad06796795c4f3d1d6bc">
+  <!ENTITY ntfs-3g-size          "889 KB">
+  <!ENTITY ntfs-3g-buildsize     "21 MB">
   <!ENTITY ntfs-3g-time          "0,2 UPC">
 ]>
 
@@ -141,22 +141,13 @@ item de configuração.
   <sect2 role="installation">
     <title>Instalação do Ntfs-3g</title>
 
-
-
-    <!--
     <para>
-
-      First, adapt <application>Ntfs-3g</application> to the merged-/usr
-      changes:
-    </para>
-
-<screen><userinput remap="pre">sed -i 's|/sbin|$(rootsbindir)|' {ntfsprogs,src}/Makefile.in</userinput></screen>
--->
-<para>
       Instale <application>Ntfs-3g</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr       \
+<screen><userinput>./autogen.sh &amp;&amp;
+
+./configure --prefix=/usr        \
             --disable-static     \
             --with-fuse=internal \
             --docdir=/usr/share/doc/ntfs-3g-&ntfs-3g-version; &amp;&amp;
@@ -180,8 +171,8 @@ ntfs-3g para montar os sistemas de arquivos NTFS, [então] crie um link
 simbólico para o comando <command>mount</command>:
     </para>
 
-<screen role="nodump"><userinput>ln -sv ../bin/ntfs-3g /usr/sbin/mount.ntfs &amp;&amp;
-ln -sv ntfs-3g.8 /usr/share/man/man8/mount.ntfs.8</userinput></screen>
+<screen role="nodump"><userinput>ln -svf ../bin/ntfs-3g /usr/sbin/mount.ntfs &amp;&amp;
+ln -svf ntfs-3g.8 /usr/share/man/man8/mount.ntfs.8</userinput></screen>
 
   </sect2>
 
@@ -191,16 +182,7 @@ ln -sv ntfs-3g.8 /usr/share/man/man8/mount.ntfs.8</userinput></screen>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
-
-    <!--
     <para>
-
-      <command>patch -Np1 -i ...</command>: This command applies a security
-      patch from upstream to fix ntfs-3g on systems that use setuid for the
-      executable.
-    </para>
--->
-<para>
       <parameter>--with-fuse=internal</parameter>: Essa chave força dinamicamente
 o <application>ntfs-3g</application> a usar uma cópia interna da biblioteca
 <application>fuse-2.x</application>. Isso é exigido se você deseja permitir
@@ -379,37 +361,7 @@ bloco ou arquivo de imagem
         </listitem>
       </varlistentry>
 
-
-
-      <!-- Not present in 2021.8.22
-      <varlistentry id="ntfs-3g.secaudit">
-
-        <term><command>ntfs-3g.secaudit</command></term>
-        <listitem>
-          <para>
-            audits NTFS Security Data
-          </para>
-          <indexterm zone="ntfs-3g ntfs-3g.secaudit">
-            <primary sortas="b-ntfs-3g.secaudit">ntfs-3g.secaudit</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="ntfs-3g.usermap">
-        <term><command>ntfs-3g.usermap</command></term>
-        <listitem>
-          <para>
-            creates the file defining the mapping of Windows accounts to Linux
-            logins for users who owns files which should be visible from both
-            Windows and Linux
-          </para>
-          <indexterm zone="ntfs-3g ntfs-3g.usermap">
-            <primary sortas="b-ntfs-3g.usermap">ntfs-3g.usermap</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
--->
-<varlistentry id="ntfscluster">
+      <varlistentry id="ntfscluster">
         <term><command>ntfscluster</command></term>
         <listitem>
           <para>

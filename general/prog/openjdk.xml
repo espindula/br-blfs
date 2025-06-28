@@ -245,9 +245,10 @@ relativas a personalizar a paralelização.
       Configure e construa o pacote com os seguintes comandos:
     </para>
 
-<screen><userinput>unset JAVA_HOME                             &amp;&amp;
-unset CLASSPATH                             &amp;&amp;
-unset MAKEFLAGS                             &amp;&amp;
+<screen><userinput>export MAKEFLAGS_HOLD=$MAKEFLAGS           &amp;&amp;
+unset  JAVA_HOME                           &amp;&amp;
+unset  CLASSPATH                           &amp;&amp;
+unset  MAKEFLAGS                           &amp;&amp;
 bash configure --enable-unlimited-crypto    \
                --disable-warnings-as-errors \
                --with-stdc++lib=dynamic     \
@@ -360,6 +361,21 @@ você pode substituir &quot;<filename>build/*/images/jre</filename>&quot; no
 comando &quot;<command>cp</command>&quot; acima.
       </para>
     </note>
+
+    <para>
+      Existirão muitos binários com informações de depuração que ocuparão mais da
+metade do tamanho instalado. Se não se importar com depuração, você pode
+remover as informações:
+    </para>
+
+<screen><userinput>find /opt/jdk-&openjdk-version;+&openjdk-build; -name *.debuginfo -delete</userinput></screen>
+
+    <para>
+      Restaure a variável <envar>MAKEFLAGS</envar>:
+    </para>
+
+<screen><userinput>export MAKEFLAGS=$MAKEFLAGS_HOLD &amp;&amp;
+unset  MAKEFLAGS_HOLD</userinput></screen>
 
     <para>
       Agora existem dois &quot;SDKs&quot;
