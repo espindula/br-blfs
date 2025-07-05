@@ -6,7 +6,7 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "dace019fa53452f321b93d34a37f995d">
+  <!ENTITY rust-md5sum        "9591d6806ab23c04b862ce934b1e86eb">
   <!ENTITY rust-size          "271 MB">
   <!ENTITY rust-buildsize     "9,4 GB (252 MB instalado); adicionar 7,4 GB se executar os testes">
   <!ENTITY rust-time          "9,0 UPC (incluindo o tempo de transferência; adicionar 15 UPC para testes,
@@ -30,17 +30,18 @@ ambos usando paralelismo=8)">
 para ser uma linguagem segura, simultânea e prática.
     </para>
 
+    <!--
     <para>
-      Esse pacote é atualizado em um ciclo de lançamento de seis semanas. Por ser
-um pacote tão grande e lento para construir, é, no momento, exigido somente
-por uns poucos pacotes neste livro, e particularmente porque versões mais
-novas tendem a quebrar pacotes mais antigos do Mozilla, os(as) editores(as)
-do BLFS consideram que ele deveria ser atualizado somente quando necessário
-(ou para corrigir problemas ou para permitir que uma nova versão de um
-pacote construa).
-    </para>
 
-    <para>
+      This package is updated on a six-week release cycle. Because it is
+      such a large and slow package to build, is at the moment only required
+      by a few packages in this book, and particularly because newer versions
+      tend to break older mozilla packages, the BLFS editors take the view that
+      it should only be updated when that is necessary (either to fix problems,
+      or to allow a new version of a package to build).
+    </para>
+-->
+<para>
       Tal como acontece com muitas outras linguagens de programação, o
 &quot;Rustc&quot; (o compilador &quot;Rust&quot;) precisa de um binário a
 partir do qual inicializar. Ele baixará um binário stage0 no início da
@@ -153,22 +154,18 @@ valores discrepantes muito lentos.
     </itemizedlist>
 
     
-    
-
     <!--  keep this here for reuse in case we need a patch -->
-<!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+<bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/rustc-&rust-version;-llvm_20-1.patch"/>
+          Remendo opcional (exigido para testagem do pacote): <ulink
+url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-    -->
-<bridgehead renderas="sect3">Dependências do Rust</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -258,14 +255,7 @@ a construção.
       </para>
     </note>
 -->
-<!-- retain here in case we need a patch
-    <para>
-
-      Now fix build failures with LLVM 20:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-llvm_20-1.patch</userinput></screen>
--->
+<!-- retain here in case we need a patch -->
 <screen><userinput>cat &lt;&lt; EOF &gt; bootstrap.toml
 <literal># See bootstrap.toml.example for more possible options,
 # and see src/bootstrap/defaults/bootstrap.dist.toml for a few options
@@ -275,7 +265,7 @@ a construção.
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 138986
+change-id = 140732
 
 [llvm]
 # When using system llvm prefer shared libraries
@@ -327,6 +317,13 @@ EOF</userinput></screen>
 
 
     <para>
+      Se executar a suíte de teste, aplique um remendo para torná-la compatível
+com GCC-15 ou mais recente:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
+
+    <para>
       Compile &quot;<application>Rust</application>&quot; executando os seguintes
 comandos:
     </para>
@@ -356,7 +353,21 @@ motivo de preocupação, apenas uma maneira do teste ser terminado.
 disponíveis), emita:
     </para>
 
-<!-- Let's just comment this out.  Nobody has tested on a system w/o
+<screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
+
+    <para>
+      Quatro testes na suíte de teste das instruções de autoaprimoramento são
+conhecidos por falharem porque eles esperam executar no repositório Git do
+Rust. O teste chamado
+<filename>tests/run-make/musl-default-linking</filename> é conhecido por
+falhar porque nós não habilitamos o alvo AArch64 no <xref
+linkend='llvm'/>. O teste chamado
+<filename>tests/run-make/linker-warning</filename> é conhecido por falhar
+devido a algum motivo ainda desconhecido.
+    </para>
+
+
+    <!-- Let's just comment this out.  Nobody has tested on a system w/o
      FileCheck for a long time.
     <para>
       If <command>FileCheck</command> from <application>LLVM</application> has
@@ -364,10 +375,7 @@ disponíveis), emita:
       will fail.
     </para>
 -->
-<screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
-
-
-    <para>
+<para>
       Tal como acontece com todas as grandes suítes de teste, alguns testes podem
 falhar em algumas máquinas - se o número de falhas adicionais for baixo,
 verifique se existem 'failures:' no registro e revise as linhas acima,

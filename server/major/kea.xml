@@ -4,10 +4,10 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY kea-download-http "https://downloads.isc.org/isc/kea/&kea-dhcp-version;/kea-&kea-dhcp-version;.tar.gz">
+  <!ENTITY kea-download-http "https://downloads.isc.org/isc/kea/&kea-dhcp-version;/kea-&kea-dhcp-version;.tar.xz">
   <!ENTITY kea-download-ftp  "">
-  <!ENTITY kea-md5sum        "abf8cb8bbc74fd7691883b837e9deec8">
-  <!ENTITY kea-size          "10 MB">
+  <!ENTITY kea-md5sum        "dbc2b44d9001265083a1452efacf2cd6">
+  <!ENTITY kea-size          "6,3 MB">
   <!ENTITY kea-buildsize     "1,5 GB (332 MB instalado; adicionar 4 GB para testes)">
   <!ENTITY kea-time          "4,1 UPC (com paralelismo=4; adicionar 12 UPC para testes)">
   <!ENTITY kea-arm-vers      "&kea-dhcp-version;">
@@ -67,21 +67,7 @@ fim de vida desde dezembro de 2022.
       </listitem>
     </itemizedlist>
 
-
-
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/kea-&kea-dhcp-version;-fix_boost_1_87-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do Kea</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Kea</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -90,10 +76,10 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="mitkrb"/>, <xref linkend="valgrind"/>; para documentação:
-<xref linkend="doxygen"/>, <xref linkend="graphviz"/> e <xref
-linkend="sphinx_rtd_theme"/>; para testes: <ulink
-url="https://google.github.io/googletest/">GoogleTest</ulink>
+      <ulink url="https://botan.randombit.net/">botan</ulink>, <xref
+linkend="mitkrb"/>, <xref linkend="valgrind"/>; for documentation: <xref
+linkend="doxygen"/>, <xref linkend="graphviz"/>, and <xref
+linkend="sphinx_rtd_theme"/>
     </para>
 
     <bridgehead renderas="sect4">Estruturas opcionais de retaguarda de base de dados</bridgehead>
@@ -129,35 +115,28 @@ Editor Notes:
   <sect2 role="installation">
     <title>Instalação do Servidor DHCP Kea do ISC</title>
 
-
-    <!-- not longer needed since 2.6.3
     <para>
-
-      First, apply a patch which fixes an issue with the most recent
-      version of <application>boost</application>:
-    </para>
-<screen><userinput>patch -Np1 -i ../kea-&kea-dhcp-version;-fix_boost_1_87-1.patch</userinput></screen>
--->
-<para>
       Instale o <application>Servidor DHCP Kea do ISC</application> executando os
 seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr        \
-            --sysconfdir=/etc    \
-            --localstatedir=/var \
-            --enable-shell       \
-            --with-openssl       \
-            --disable-static     \
-            --docdir=/usr/share/doc/kea-&kea-dhcp-version; &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..             \
+      --prefix=/usr        \
+      --sysconfdir=/etc    \
+      --localstatedir=/var \
+      --buildtype=release  \
+      -D crypto=openssl    \
+      -D runstatedir=/run  &amp;&amp;
+
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, você precisa ter instalado o GoogleTest e mantido
-o fonte dele. Você também deveria ter passado
-<option>--with-gtest-source=/caminho/para/diretório_fonte/googletest</option>
-para <command>configure</command> acima. Execute os testes com <command>make
-check</command>. Três testes na suíte TLSTest são conhecidos por falharem.
+      If tests were enabled, run <command>ninja check</command> to test the
+results. There are tests which require a live database when any of the
+database hooks are built.
     </para>
 
     <para>
@@ -166,7 +145,7 @@ emita os seguintes comandos como o(a) usuário(a) <systemitem
 class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make -j1 install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
       Crie alguns diretórios e corrija as configurações de permissão deles como
@@ -182,37 +161,22 @@ install -dm0750 /var/log/kea</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--enable-shell</parameter>: Permite construir
-<command>kea-shell</command>, uma interface de linha de comando para o
-agente de controle.
+      <option>-D crypto=openssl</option>: Allows using OpenSSL for communicating
+with the control-agent and for DNS updates. Use <option>-D
+crypto=botan</option> if you want to use botan.  Default is openssl.
     </para>
 
     <para>
-      <parameter>--with-openssl</parameter>: Permite usar OpenSSL para comunicação
-com o agente de controle e para atualizações de DNS.
-    </para>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
-
-    <para>
-      <option>--with-pgsql</option> ou <option>--with-mysql</option>:
-<application>Kea do ISC</application> consegue armazenar as concessões em
-uma base de dados. Isso pode ser útil em ambientes grandes executando um
-cluster de servidores DHCP. Usar a estrutura de retaguarda
-<emphasis>memfile</emphasis> (que é um arquivo CSV armazenado localmente) é
-possível de qualquer maneira.
+      <option>-D postgresql=enabled</option> or <option>-D mysql=enabled</option>:
+<application>ISC Kea</application> can store the leases on a database. This
+might be useful in large environments running a cluster of DHCP
+servers. Using the <emphasis>memfile</emphasis> backend (which is a CSV file
+stored locally) is possible anyhow.
     </para>
 
     <para>
-      <option>--enable-generate-docs</option>: Se a documentação for para ser
-reconstruída, adicione essa opção. Diversas dependências precisam estar
-instaladas para gerar a documentação.
-    </para>
-
-    <para>
-      <command>make -j1 install</command>: O ISC não recomenda nenhuma forma de
-paralelismo ou opções de tarefa de servidor ao fazer a instalação.
+      <option>-D tests=enabled</option>: This option is required to build the test
+suite. Drop it if you are not going to run the tests.
     </para>
 
   </sect2>
@@ -226,6 +190,11 @@ executam independentemente um do outro. Cada um deles tem o próprio arquivo
 dele de configuração.<phrase revision="sysv"> Arquivos adicionais de
 configuração vem oriundos do agente keactrl, que é usado para controlar os
 servidores de maneira fácil.</phrase>
+    </para>
+    <para>
+      Note that the Kea Control Agent is deprecated since version 3.0.0. Do not
+confuse <application>kea-ctrl-agent</application> with
+<application>keactrl</application>.
     </para>
 
     <para>
