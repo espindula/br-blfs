@@ -6,31 +6,31 @@
 
   <!ENTITY gpgme-download-http "&gnupg-http;/gpgme/gpgme-&gpgme-version;.tar.bz2">
   <!ENTITY gpgme-download-ftp  "">
-  <!ENTITY gpgme-md5sum        "c6f85ce24ad46c9469596df0301f32eb">
-  <!ENTITY gpgme-size          "1,8 MB">
-  <!ENTITY gpgme-buildsize     "352 MB (com testes)">
-  <!ENTITY gpgme-time          "1,3 UPC (com todas as ligações e testes; com paralelismo=4)">
+  <!ENTITY gpgme-md5sum        "60f6871b948060572c7d952e39b42bd8">
+  <!ENTITY gpgme-size          "1,3 MB">
+  <!ENTITY gpgme-buildsize     "24 MB (com testes)">
+  <!ENTITY gpgme-time          "0,2 UPC (com testes e paralelismo=4)">
 ]>
 
-<sect1 id="gpgme" xreflabel="GPGME-&gpgme-version;">
+<sect1 id="gpgme" xreflabel="gpgme-&gpgme-version;">
   <?dbhtml filename="gpgme.html"?>
 
 
-  <title>GPGME-&gpgme-version;</title>
+  <title>gpgme-&gpgme-version;</title>
 
   <indexterm zone="gpgme">
-    <primary sortas="a-GPGME">GPGME</primary>
+    <primary sortas="a-gpgme">gpgme</primary>
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução ao GPGME</title>
+    <title>Introdução ao gpgme</title>
 
     <para>
-      O pacote <application>GPGME</application> é uma biblioteca C que permite que
-suporte à criptografia seja adicionada a um aplicativo. Ele é projetado para
+      O pacote <application>gpgme</application> é uma biblioteca C que permite que
+suporte a criptografia seja adicionada a um programa. Ele é projetado para
 tornar o acesso a mecanismos de criptografia de chave pública, como o
 <application>GnuPG</application> ou o GpgSM, mais fácil para os
-aplicativos. O <application>GPGME</application> fornece uma API
+aplicativos. O <application>gpgme</application> fornece uma API
 criptográfica de alto nível para encriptação, desencriptação, assinatura,
 verificação de assinatura e gerenciamento de chaves.
     </para>
@@ -71,19 +71,7 @@ verificação de assinatura e gerenciamento de chaves.
       </listitem>
     </itemizedlist>
 
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Recommended patch (required if SWIG is installed):
-          <ulink url="&patch-root;/gpgme-&gpgme-version;-gpg_error_1_46-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do GPGME</bridgehead>
+    <bridgehead renderas="sect3">Dependências do gpgme</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -92,107 +80,35 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="doxygen"/> e <xref linkend="graphviz"/> (para documentação da
-API), <xref linkend="gnupg2"/> (exigido se Qt ou SWIG estiverem instalados;
-usado durante a suíte de teste), <xref linkend="clisp"/>, <xref
-linkend="qt6"/> e <xref linkend="swig"/> (para ligações de idioma)
+      <xref linkend="doxygen"/> 
     </para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do GPGME</title>
+    <title>Instalação do gpgme</title>
 
-
-
-    <!-- No longer needed with 1.24.2
     <para>
-
-      First, allow the build system to detect Python-&python3-majorver;.
-      Also, prevent the build system from attaching the
-      <literal>-unknown</literal> suffix to the version string when it's
-      regenerated outside of a Git repository. After this, regenerate the build
-      system:
+      Instale <application>gpgme</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>sed 's/\[3.12\]/&amp;,[&python3-majorver;]/' -i configure.ac &amp;&amp;
-sed 's/-unknown//' -i autogen.sh           &amp;&amp;
-autoconf</userinput></screen>
--->
-<para>
-      Instale <application>GPGME</application> executando os seguintes comandos:
-    </para>
-
-<screen><!--gpgme 1.22 FTBFS when building in tree. Upstream thinks building
-    should be done out of tree, but this is not in the doc yet
-    https://github.com/gpg/gpgme/commit/24a8c279da98fe7e586a9fc3cd91175c9e60ffef
-    -->
-<userinput>mkdir build &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-../configure --prefix=/usr --disable-gpg-test &amp;&amp;
-make PYTHONS=</userinput></screen>
+../configure --prefix=/usr --disable-static &amp;&amp;
+make</userinput></screen>
 
     <para>
-      Se <xref linkend='swig'/> estiver instalado, construa a ligação Python 3
-como uma wheel:
+      Para testar os resultados, execute:
     </para>
 
-<screen><userinput>if swig -version > /dev/null; then
-  srcdir=$PWD/../lang/python \
-  top_builddir=$PWD          \
-  &build-wheel-cmd; $PWD/lang/python
-fi</userinput></screen>
+<screen remap='test'><userinput>make -k check</userinput></screen>
 
     <para>
-      Para testar os resultados, você deveria ter <xref linkend="gnupg2"/>
-instalado e remover o <option>--disable-gpg-test</option> acima. Emita:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen remap='test'><userinput>if swig -version > /dev/null; then
-  python3 -m venv testenv                                              &amp;&amp;
-  testenv/bin/pip3 install --no-index --find-links=dist --no-cache-dir \
-                           gpg                                         &amp;&amp;
-  sed '/PYTHON/s#run-tests.py#&amp; --python-libdir=/dev/null#'            \
-      -i lang/python/tests/Makefile
-fi &amp;&amp;
-
-make -k check PYTHONS= PYTHON=$PWD/testenv/bin/python3</userinput></screen>
-
-
-    <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
-    </para>
-
-<screen role="root"><userinput>make install PYTHONS=</userinput></screen>
-
-    <para>
-      Se <xref linkend='swig'/> estiver instalado, ainda como o(a) usuário(a)
-&root;, instale a ligação do Python 3:
-    </para>
-
-<screen role="root"><userinput>if swig -version > /dev/null; then
-  &install-wheel; gpg
-fi</userinput></screen>
-
-  </sect2>
-
-  <sect2 role="commands">
-    <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>--disable-gpg-test</parameter>: se esse parâmetro não for passado
-para configurar, [então] os aplicativos de teste são construídos durante o
-estágio <command>make</command>, que exige <xref linkend="gnupg2"/>. Esse
-parâmetro não é necessário se <xref linkend="gnupg2"/> estiver instalado.
-    </para>
-
-    <para>
-      <parameter>PYTHONS=</parameter>: Desabilite a construção de ligação Python
-usando o comando obsoleto <command>python3 setup.py build</command>. A
-instrução explícita para construir a ligação Python 3 com o comando
-<command>pip3 wheel</command> é fornecida.
-    </para>
+<screen role="root"><userinput>make install</userinput></screen>
 
   </sect2>
 
@@ -209,13 +125,10 @@ instrução explícita para construir a ligação Python 3 com o comando
           gpgme-json e gpgme-tool
         </seg>
         <seg>
-          libgpgme.so, libgpgmepp.so e libqgpgme.so
+          libgpgme.so
         </seg>
         <seg>
-          /usr/include/{gpgme++,qgpgme,QGpgME},
-/usr/lib/cmake/{Gpgmepp,QGpgme}.
-/usr/lib/python&python3-majorver;/site-packages/gpg{,-&gpgme-version;.dist-info}
-e /usr/share/common-lisp/source/gpgme
+          /usr/share/common-lisp/source/gpgme
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -228,7 +141,7 @@ e /usr/share/common-lisp/source/gpgme
         <term><command>gpgme-json</command></term>
         <listitem>
           <para>
-            gera comandos <application>GPGME</application> no formato JSON
+            gera comandos <application>gpgme</application> no formato JSON
           </para>
           <indexterm zone="gpgme gpgme-json">
             <primary sortas="b-gpgme-json">gpgme-json</primary>
@@ -240,7 +153,7 @@ e /usr/share/common-lisp/source/gpgme
         <term><command>gpgme-tool</command></term>
         <listitem>
           <para>
-            é um servidor assuan que expõe operações <application>GPGME</application>,
+            é um servidor assuan que expõe operações <application>gpgme</application>,
 como impressão de impressões digitais e identificadores de chave com
 servidores de chaves
           </para>
@@ -250,55 +163,14 @@ servidores de chaves
         </listitem>
       </varlistentry>
 
-      
-
-      <!-- As of 1.13.1, this library isn't present anymore.
-      <varlistentry id="libgpgme-pthread">
-        <term><filename class="libraryfile">libgpgme-pthread.so</filename></term>
-        <listitem>
-          <para>
-            contains the <application>GPGME</application> API functions for
-            applications using pthread.
-          </para>
-          <indexterm zone="gpgme libgpgme-pthread">
-            <primary sortas="c-libgpgme-pthread">libgpgme-pthread.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-      -->
-<varlistentry id="libgpgme">
+      <varlistentry id="libgpgme">
         <term><filename class="libraryfile">libgpgme.so</filename></term>
         <listitem>
           <para>
-            contém as funções da API <application>GPGME</application>
+            contém as funções da API do <application>gpgme</application>
           </para>
           <indexterm zone="gpgme libgpgme">
             <primary sortas="c-libgpgme">libgpgme.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="libgpgmepp">
-        <term><filename class="libraryfile">libgpgmepp.so</filename></term>
-        <listitem>
-          <para>
-            contém as funções da API C++ <application>GPGME</application>
-          </para>
-          <indexterm zone="gpgme libgpgmepp">
-            <primary sortas="c-libgpgmepp">libgpgmepp.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry id="libqgpgme">
-        <term><filename class="libraryfile">libqgpgme.so</filename></term>
-        <listitem>
-          <para>
-            contém funções de API para lidar com operações GPG em aplicativos
-<application>Qt</application>
-          </para>
-          <indexterm zone="gpgme libqgpgme">
-            <primary sortas="c-libqgpgme">libqgpgme.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
