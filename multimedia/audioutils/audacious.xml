@@ -7,17 +7,17 @@
   <!ENTITY audacious-download-http
            "https://distfiles.audacious-media-player.org/audacious-&audacious-version;.tar.bz2">
   <!ENTITY audacious-download-ftp         "">
-  <!ENTITY audacious-md5sum               "5866219d45b199f882cb5c31aa320528">
-  <!ENTITY audacious-size                 "624 KB">
+  <!ENTITY audacious-md5sum               "205931bb7abd8f308d75d6f433a41573">
+  <!ENTITY audacious-size                 "628 KB">
   <!ENTITY audacious-buildsize            "16 MB (com suporte a GTK)">
   <!ENTITY audacious-time                 "0,2 UPC (Usando paralelismo=4; com suporte GTK)">
 
   <!ENTITY audacious-plugins-download
            "https://distfiles.audacious-media-player.org/audacious-plugins-&audacious-plugins-version;.tar.bz2">
-  <!ENTITY audacious-plugins-md5sum       "07cc198e6961b84e5945f889cb88ea75">
-  <!ENTITY audacious-plugins-size         "1,7 MB">
-  <!ENTITY audacious-plugins-buildsize    "40 MB (com suporte a GTK)">
-  <!ENTITY audacious-plugins-time         "0,4 UPC (Usando paralelismo=4; com suporte a GTK)">
+  <!ENTITY audacious-plugins-md5sum       "34656f489242488be0ce2ca413ea2ea0">
+  <!ENTITY audacious-plugins-size         "1,8 MB">
+  <!ENTITY audacious-plugins-buildsize    "36 MB (with GTK support)">
+  <!ENTITY audacious-plugins-time         "0,2 UPC (Usando paralelismo=4; com suporte GTK)">
 ]>
 
 <sect1 id="audacious" xreflabel="Audacious-&audacious-version;">
@@ -130,16 +130,16 @@
     <para role="optional">
       <xref linkend="alsa-lib"/>, <xref linkend="curl"/>, <xref linkend="faad2"/>,
 <xref linkend="flac"/>, <xref linkend="lame"/>, <xref linkend="libxml2"/>,
-<xref linkend="libcdio"/> (para identificar e reproduzir CDs), <xref
+<xref linkend="libcdio"/> (to identify and play CDs), <xref
 linkend="libnotify"/>, <xref linkend="libsndfile"/>, <xref
-linkend="libvorbis"/>, <xref linkend="pipewire"/>, <xref
-linkend="pulseaudio"/>, <xref linkend="sdl2"/>, <ulink
+linkend="libvorbis"/>, <xref linkend="opus"/>, <xref linkend="pipewire"/>,
+<xref linkend="pulseaudio"/>, <xref linkend="sdl2"/>, <ulink
 url="https://ampache-browser.org/">ampache-browser</ulink>, <ulink
 url="https://adplug.github.io/">adplug</ulink>, <ulink
-url="https://sourceforge.net/projects/bs2b/">A biblioteca Bauer
-stereophonic-to-binaural DSP (bs2b)</ulink>, <ulink
+url="https://sourceforge.net/projects/bs2b/">The Bauer
+stereophonic-to-binaural DSP (bs2b) library</ulink>, <ulink
 url="https://sourceforge.net/projects/fluidsynth/">FluidSynth</ulink>,
-<ulink url="https://jackaudio.org/">JACK</ulink> (exige <xref
+<ulink url="https://jackaudio.org/">JACK</ulink> (requires <xref
 linkend="libsamplerate"/>), <ulink
 url="https://sourceforge.net/projects/libcue/">libcue</ulink>, <ulink
 url="https://sourceforge.net/projects/modplug-xmms/">libmodplug</ulink>,
@@ -148,7 +148,7 @@ url="https://lib.openmpt.org/libopenmpt/">libopenmpt</ulink>, <ulink
 url="https://www.sourceforge.net/projects/sidplay-residfp/">libsidplayfp</ulink>,
 <ulink url="https://www.lirc.org/">LIRC</ulink>, <ulink
 url="https://sndio.org/">sndio</ulink>, <ulink
-url="https://sourceforge.net/p/soxr/wiki/Home/">SoX</ulink> e <ulink
+url="https://sourceforge.net/p/soxr/wiki/Home/">SoX</ulink>, and <ulink
 url="https://www.wavpack.com/">WavPack</ulink>
     </para>
 
@@ -169,14 +169,13 @@ sequência de caracteres):
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr       \
-            --buildtype=release \
-            -D gtk=true         \
-            -D qt=true          \
-            -D buildstamp=BLFS  \
-            -D libarchive=true  \
-            ..                  &amp;&amp;
-
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -D gtk=true         \
+      -D qt=true          \
+      -D buildstamp=BLFS  \
+      -D libarchive=true  &amp;&amp;
 ninja</userinput></screen>
 
       <para>
@@ -204,13 +203,13 @@ cd audacious-plugins-&audacious-plugins-version;                    &amp;&amp;
 mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup           \
-  --prefix=/usr       \
-  --buildtype=release \
-  -D gtk=true         \
-  -D qt=true          \
-  ..                  &amp;&amp;
-
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -D gtk=true         \
+      -D qt=true          \
+      -D opus=false       \
+      -D wavepack=false   &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -252,29 +251,7 @@ Valgrind.
 
   </sect2>
 
-
-  <!-- None of this seems valid for audacios-4.3
-  <sect2 role="configuration">
-
-    <title>Configuring Audacious</title>
-
-    <para>
-      If you built with both Gtk and Qt user interfaces, the Qt version
-      can be executed from a terminal, issuing <command>audacious
-      - -qt</command>. If you wish a desktop menu entry to execute this Qt
-      version, issue the following commands as the <systemitem
-      class="username">root</systemitem> user:
-    </para>
-
-<screen role="root"><userinput>cp -v /usr/share/applications/audacious{,-qt}.desktop &amp;&amp;
-
-sed -e '/^Name/ s/$/ Qt/' \
-    -e '/Exec=/ s/audacious/&amp; - -qt/' \
-    -i /usr/share/applications/audacious-qt.desktop</userinput></screen>
-
-  </sect2>
--->
-<sect2 role="content">
+  <sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>

@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY balsa-download-http "https://pawsa.fedorapeople.org/balsa/balsa-&balsa-version;.tar.xz">
+  <!ENTITY balsa-download-http "https://gitlab.gnome.org/GNOME/balsa/-/archive/&balsa-version;/balsa-&balsa-version;.tar.gz">
   <!ENTITY balsa-download-ftp  "">
-  <!ENTITY balsa-md5sum        "bebd22cb6bac87ee05255c48ee1d28dd">
-  <!ENTITY balsa-size          "3,5 MB">
-  <!ENTITY balsa-buildsize     "66 MB">
-  <!ENTITY balsa-time          "0,2 UPC (Usando paralelismo=4)">
+  <!ENTITY balsa-md5sum        "c1039c22e8c2544c6a357626d71b6220">
+  <!ENTITY balsa-size          "6,0 MB">
+  <!ENTITY balsa-buildsize     "44 MB">
+  <!ENTITY balsa-time          "0,1 UPC (Usando paralelismo=4)">
 ]>
 
 <sect1 id="balsa" xreflabel="Balsa-&balsa-version;">
@@ -26,8 +26,8 @@
     <title>Introdução ao Balsa</title>
 
     <para>
-      O pacote <application>Balsa</application> contém um cliente de mensagens
-baseado em <application>GNOME</application>-2.
+      O pacote <application>Balsa</application> contém um cliente leve de
+mensagens baseado em <application>GTK+</application>.
     </para>
 
     &lfs123_checked;
@@ -66,27 +66,28 @@ baseado em <application>GNOME</application>-2.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
 
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/balsa-&balsa-version;-upstream_fixes-2.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/balsa-&balsa-version;-upstream_fixes-2.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Balsa</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Balsa</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <!--<xref linkend="rarian"/>
--->
-<xref linkend="aspell"/>, <xref linkend="enchant"/>, <xref
-linkend="gmime3"/>, <xref linkend="gpgme"/>, <xref linkend="gtk3"/> e <xref
-linkend="libnotify"/>
-      
+      <xref linkend="enchant"/>, <xref linkend="gmime3"/>, <xref
+linkend="gpgme"/>, <xref linkend="gtk3"/>, <xref linkend="libical"/>, <xref
+linkend="libnotify"/> e <xref linkend="libsecret"/>
     </para>
 
     <bridgehead renderas="sect4">Exigidas (tempo de execução)</bridgehead>
@@ -97,15 +98,14 @@ linkend="libnotify"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="compface"/>, <xref linkend="gcr"/>, <xref
+      <xref linkend="compface"/>, <xref linkend="gspell"/>, <xref
 linkend="gtksourceview"/>, <xref linkend="libcanberra"/>, <xref
-linkend="libsecret"/>, <xref linkend="mitkrb"/>, <xref linkend="openldap"/>,
-<xref linkend="procmail"/>, <xref linkend="sqlite"/>, <xref
-linkend="webkitgtk"/>, <ulink
+linkend="mitkrb"/>, <xref linkend="openldap"/>, <xref linkend="procmail"/>,
+<xref linkend="sqlite"/>, <xref linkend="webkitgtk"/>, <ulink
 url="https://pypi.python.org/pypi/html2text/">html2text</ulink>, <ulink
-url="https://osmo-pim.sourceforge.net/">osmo</ulink>, <ulink
-url="https://sourceforge.net/projects/rubrica.berlios/">rubrica</ulink>,
-<ulink url="&gnome-download-http;/yelp-tools/">yelp-tools</ulink>
+url="https://github.com/linuxmint/xapp">libxapp</ulink>, <ulink
+url="https://osmo-pim.sourceforge.net/">osmo</ulink> e <ulink
+url="&gnome-download-http;/yelp-tools/">yelp-tools</ulink>
     </para>
 
   </sect2>
@@ -113,22 +113,28 @@ url="https://sourceforge.net/projects/rubrica.berlios/">rubrica</ulink>,
   <sect2 role="installation">
     <title>Instalação do Balsa</title>
 
+
+
+    <!-- Not needed with 2.6.5.
     <para>
-      Primeiro, corrija problemas de construção ao configurar sem WebKitGTK ou ao
-usar WebKitGTK-2.38 ou posterior.
+
+      First, fix build issues when configuring without WebKitGTK, or when
+      using WebKitGTK-2.38 or later.
     </para>
 
 <screen><userinput>patch -Np1 -i ../balsa-&balsa-version;-upstream_fixes-2.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale o <application>Balsa</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr            \
-            --sysconfdir=/etc        \
-            --localstatedir=/var/lib \
-            --without-html-widget    &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup .. --prefix=/usr       \
+               --buildtype=release \
+               -D html-widget=no   &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -138,116 +144,53 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role='root'><userinput>make install</userinput></screen>
+<screen role='root'><userinput>ninja install</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    
-
-    
-
-    <!-- Support has been added for this, but the option is still unrecognized.
     <para>
-
-      <parameter>- -with-rubrica</parameter>: This parameter is used
-      to provide Rubrica2 address book support.
-    </para>
-    -->
-<!-- configure says this is an invalid option with 2.5.11
-    <para>
-
-      <option>- -enable-smime</option>: Use this option to enable S/MIME
-      support if <application>GnuPG-2.x.x</application> is installed.
-    </para>
-    -->
-<para>
-      <parameter>--without-html-widget</parameter>: Essa opção desabilita a
-construção do renderizador HTML. Se você quiser que o renderizador HTML seja
-construído, verifique se você tem o <xref linkend="webkitgtk"/> instalado e,
-então, remova essa opção.
+      <parameter>-D html-widget=no</parameter>: Essa opção desabilita construir o
+renderizador HTML. Se você quiser que o renderizador HTML seja construído,
+verifique se você tem o <xref linkend="webkitgtk"/> instalado e, então,
+remova essa opção.
     </para>
 
     <para>
-      <option>--with-canberra</option>: Habilita suporte a libcanberra.
+      <option>-D canberra=true</option>: Essa chave habilita suporte para sons de
+eventos via <xref linkend="libcanberra" role="nodep"/>.
     </para>
 
     <para>
-      <option>--with-compface</option>: Habilita suporte a compface.
+      <option>-D compface=true</option>: Essa chave habilita suporte para usar
+<xref linkend="compface" role="nodep"/> para comprimir miniaturas para
+contatos.
     </para>
 
     <para>
-      <option>--with-gcr</option>: Usa libgcr para suporte TLS.
+      <option>-D gcr=true</option>: Essa chave habilita suporte para usar libgcr
+para lidar com certificados TLS. Isso exige que o pacote <xref linkend="gcr"
+role="nodep"/> esteja instado, o qual faz parte de uma dependência de tempo
+de execução para libsecret.
     </para>
 
     <para>
-      <option>--with-gss</option>: Habilita suporte GSSAPI.
+      <option>-D gss=true</option>: Essa chave habilita suporte para autenticação
+Kerberos. Isso exige que o pacote <xref linkend="mitkrb" role="nodep"/>
+esteja instalado.
     </para>
 
     <para>
-      <option>--with-ldap</option>: Use essa opção para habilitar o suporte ao
-catálogo de endereços LDAP se o <application>OpenLDAP</application> estiver
-instalado.
-    </para>
-
-    <para>
-      <option>--with-libsecret</option>: Habilita suporte a senhas fortes e
-suporte para o gnome-keyring armazenar senhas.
-    </para>
-
-    
-
-    <!-- configure says this is an invalid option with 2.5.11
-    <para>
-
-      <option>- -with-gpgme</option>: Use this option to enable GPG support
-      if <quote><application>GnuPG</application> Made Easy</quote>
-      (<application>GPGME</application>) is installed.
-    </para>
-    -->
-<para>
-      <option>--with-sqlite</option>: Use essa opção para habilitar o suporte ao
-catálogo de endereços SQLite se o <application>SQLite</application> estiver
-instalado.
+      <option>-D ldap=true</option>: Essa chave habilita suporte ao catálogo de
+endereços LDAP. Isso exige que o pacote <xref linkend="openldap"
+role="nodep"/> esteja instalado.
     </para>
 
   </sect2>
 
-
-
-  <!-- All of this information is invalid. These options no longer exist since
-     Balsa was ported to GTK3.
-  <sect2 role="configuration">
-
-    <title>Configuring Balsa</title>
-
-    <sect3>
-      <title>Configuration Information</title>
-
-      <para>
-        All configuration of <application>Balsa</application> is done
-        through the <application>Balsa</application> menu system, with mailbox
-        configuration done with the Settings&mdash;&gt;Preferences menu.
-      </para>
-
-      <para>
-        If you are unable to connect to your ISP, they probably don't
-        support APOP.  Disable it in Settings/Preferences/POP3/advanced.
-      </para>
-
-      <para>
-        If you enable filters for your incoming POP3 mail, you must have
-        <xref linkend="procmail"/> installed, as the incoming mail will be
-        handed off to <command>procmail</command> for processing.
-      </para>
-
-    </sect3>
-
-  </sect2>
--->
-<sect2 role="content">
+  <sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>
@@ -270,7 +213,7 @@ instalado.
         <term><command>balsa</command></term>
         <listitem>
           <para>
-            é um cliente de mensagens baseado em glib
+            é um cliente de mensagens baseado em GTK+
           </para>
           <indexterm zone="balsa balsa-prog">
             <primary sortas="b-balsa">balsa</primary>
