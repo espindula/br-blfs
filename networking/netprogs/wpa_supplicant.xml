@@ -167,11 +167,11 @@ CFLAGS += -I/usr/include/libnl3</literal>
 EOF</userinput></screen>
 
     <para>
-      Se você deseja usar o <application>WPA Supplicant</application> com o <xref
-linkend="NetworkManager"/>, <phrase revision='sysv'>certifique-se de ter
-instalado o <xref linkend="dbus"/>, </phrase>então adicione as seguintes
-opções ao arquivo de configuração de construção do <application>WPA
-Supplicant</application> executando o seguinte comando:
+      Se deseja usar o <application>WPA Supplicant</application> com o <xref
+linkend="NetworkManager"/>, <phrase revision='sysv'>certifique-se de que
+você tenha instalado o <xref linkend="dbus"/>, então</phrase> adicione as
+seguintes opções ao arquivo de configuração de construção do
+<application>WPA Supplicant</application> executando o seguinte comando:
     </para>
 
 <!-- Fixed in version 2.11
@@ -303,10 +303,15 @@ transmite para se identificar. Execute o seguinte comando como o(a)
 usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
-<screen role="nodump" revision="sysv"><userinput>wpa_passphrase <replaceable>SSID</replaceable> <replaceable>SENHA_SECRETA</replaceable> &gt; /etc/sysconfig/wpa_supplicant-<replaceable>wifi0</replaceable>.conf</userinput></screen>
+<screen role="nodump" revision="sysv"><userinput>wpa_passphrase <replaceable>SSID</replaceable> | sed '/^\t#/d' &gt; /etc/sysconfig/wpa_supplicant-<replaceable>wifi0</replaceable>.conf</userinput></screen>
 
 <screen role="nodump" revision="systemd"><userinput>install -v -dm755 /etc/wpa_supplicant &amp;&amp;
-wpa_passphrase <replaceable>SSID</replaceable> <replaceable>SENHA_SECRETA</replaceable> &gt; /etc/wpa_supplicant/wpa_supplicant-<replaceable>wifi0</replaceable>.conf</userinput></screen>
+wpa_passphrase <replaceable>SSID</replaceable> | sed '/^\t#/d' &gt; /etc/wpa_supplicant/wpa_supplicant-<replaceable>wifi0</replaceable>.conf</userinput></screen>
+
+      <para>
+        O comando <command>wpa_supplicant</command> solicitará que você insira a
+senha do ponto de acesso.
+      </para>
 
       <para>
         <phrase revision="sysv">
