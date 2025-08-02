@@ -66,28 +66,33 @@ conseguem criar arquivamentos "shell".
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/sharutils-&sharutils-version;-consolidated-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do Sharutils</title>
 
     <para>
-      Corrija um estouro de "buffer" de uma coleção desordenada de objetos
-colocados ao acaso uns sobre os outros e um problema exposto pelo "GCC-10":
+      Primeiro, corrija problemas expostos por versões atuais do GCC:
     </para>
 
-<screen><userinput>sed -i 's/BUFSIZ/rw_base_size/' src/unshar.c &amp;&amp;
-sed -i '/program_name/s/^/extern /' src/*opts.h</userinput></screen>
+<screen><userinput>patch -Np1 -i ../sharutils-&sharutils-version;-consolidated-1.patch</userinput></screen>
 
     <para>
       Instale <application>Sharutils</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c       &amp;&amp;
-echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h &amp;&amp;
-
-./configure --prefix=/usr &amp;&amp;
+<screen><userinput>autoreconf -fiv                                         &amp;&amp;
+./configure --prefix=/usr --disable-dependency-tracking &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -99,6 +104,22 @@ make</userinput></screen>
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>--disable-dependency-tracking</parameter>: Essa chave é usada
+para desablitar código desnecessário no sistema de construção.
+    </para>
+
+    <para>
+      <parameter>--with-openssl</parameter>: Essa chave opcional é usada para
+habilitar incorporação de verificações de integridade nos programas
+executáveis do pacote.
+    </para>
 
   </sect2>
 
