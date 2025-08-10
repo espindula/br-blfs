@@ -26,7 +26,7 @@
     <title>Introdução ao dvd+rw-tools</title>
 
     <para>
-        O pacote <application>dvd+rw-tools</application> contém vários utilitários
+      O pacote <application>dvd+rw-tools</application> contém vários utilitários
 para masterizar a mídia DVD, tanto +RW/+R quanto -R[W]. A ferramenta
 principal é <command>growisofs</command> que fornece uma maneira para
 estruturar <emphasis role='strong'>e</emphasis> desenvolver um sistema de
@@ -71,6 +71,16 @@ adicionar uma imagem existente em um DVD parcialmente gravado.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/dvd+rw-tools-&dvd-rw-tools-version;-consolidated_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do dvd+rw-tools</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -84,13 +94,18 @@ adicionar uma imagem existente em um DVD parcialmente gravado.
     <title>Instalação do dvd+rw-tools</title>
 
     <para>
+      Primeiro, aplique um remendo que corrige vários defeitos e corrige
+compilação com versões mais recentes da glibc e os cabeçalhos do núcleo:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../dvd+rw-tools-&dvd-rw-tools-version;-consolidated_fixes-1.patch</userinput></screen>
+
+    <para>
       Instale o <application>dvd+rw-tools</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>sed -i '/stat.h/a #include &lt;sys/sysmacros.h&gt;' growisofs.c &amp;&amp;
-sed -i '/stdlib/a #include &lt;limits.h&gt;' transport.hxx &amp;&amp;
-make all rpl8 btcflash</userinput></screen>
+<screen><userinput>make all rpl8 btcflash</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -109,34 +124,10 @@ install -v -m644 -D index.html \
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i '/stdlib/a #include &lt;limits.h&gt;' ...</command>: Esse
-sed inclui <filename>limits.h</filename>, um dos cabeçalhos do núcleo. Isso
-é necessário devido a uma mudança nos cabeçalhos do núcleo 2.6.23.
-    </para>
-
-
-    <!-- left these here in the event that libisoburn gets fixed and can be a
-     substitution again
-
-    <para>
-
-      <command>sed -i 's#mkisofs"#xorrisofs"#' growisofs.c</command>: This sed
-      changes the code to use <command>xorrisofs</command> from
-      <xref linkend="xorriso"/>. The default was for it to use
-      <command>mkisofs</command> from
-      <ulink url="https://sourceforge.net/projects/cdrtools/files/alpha/">Cdrtools</ulink>.
-    </para>
-
-    <para>
-      <command>sed -i 's#mkisofs#xorrisofs#;s#MKISOFS#XORRISOFS#'
-      growisofs.1</command>: This sed fixes the man page to account for the
-      above change.
-    </para>
--->
-<para>
       <command>make all rpl8 btcflash</command>: Esse comando usa alvos
 adicionais, de forma que todos os utilitários sejam construídos.
     </para>
+
   </sect2>
 
   <sect2 role="content">

@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "9591d6806ab23c04b862ce934b1e86eb">
-  <!ENTITY rust-size          "271 MB">
+  <!ENTITY rust-md5sum        "982f087479302e6d91432efc81852b00">
+  <!ENTITY rust-size          "256 MB">
   <!ENTITY rust-buildsize     "9,4 GB (252 MB instalado); adicionar 7,4 GB se executar os testes">
   <!ENTITY rust-time          "9,0 UPC (incluindo o tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -154,18 +154,20 @@ valores discrepantes muito lentos.
     </itemizedlist>
 
     
-    <!--  keep this here for reuse in case we need a patch -->
-<bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+    <!--  keep this here for reuse in case we need a patch
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo opcional (exigido para testagem do pacote): <ulink
-url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
+          Optional patch (required for testing the package):
+          <ulink url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Rust</bridgehead>
+    -->
+<bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -255,7 +257,15 @@ a construção.
       </para>
     </note>
 -->
-<!-- retain here in case we need a patch -->
+<!-- retain here in case we need a patch
+    <para>
+
+      If running the test suite, apply a patch to make it compatible with
+      GCC-15 or newer:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
+-->
 <screen><userinput>cat &lt;&lt; EOF &gt; bootstrap.toml
 <literal># See bootstrap.toml.example for more possible options,
 # and see src/bootstrap/defaults/bootstrap.dist.toml for a few options
@@ -265,7 +275,7 @@ a construção.
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 140732
+change-id = 142379
 
 [llvm]
 # When using system llvm prefer shared libraries
@@ -317,13 +327,6 @@ EOF</userinput></screen>
 
 
     <para>
-      Se executar a suíte de teste, aplique um remendo para torná-la compatível
-com GCC-15 ou mais recente:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
-
-    <para>
       Compile &quot;<application>Rust</application>&quot; executando os seguintes
 comandos:
     </para>
@@ -356,9 +359,14 @@ disponíveis), emita:
 <screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
 
     <para>
-      Quatro testes na suíte de teste das instruções de autoaprimoramento são
-conhecidos por falharem porque eles esperam executar no repositório Git do
-Rust. O teste chamado
+      
+      <!-- https://github.com/rust-lang/rust/issues/145079 -->
+Oito testes na suíte de teste de interface de usuário(a) são conhecidos por
+falharem com <literal>description</literal> configurado na seção
+<literal>build</literal> do arquivo
+<filename>bootstrap.toml</filename>. Quatro testes na suíte de teste das
+instruções de autoaprimoramento são conhecidos por falharem porque eles
+esperam executar no repositório Git do Rust. O teste chamado
 <filename>tests/run-make/musl-default-linking</filename> é conhecido por
 falhar porque nós não habilitamos o alvo AArch64 no <xref
 linkend='llvm'/>. O teste chamado

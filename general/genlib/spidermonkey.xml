@@ -32,10 +32,7 @@ WebAssembly da Mozilla, escrito em C++ e Rust. No BLFS, o código-fonte do
 SpiderMonkey é retirado do Firefox.
     </para>
 
-    
-    <!-- To editors: make sure polkit works with mozjs when
-         tagging SpiderMonkey or upgrading it to a new major version.  -->
-&lfs123_checked;
+    &lfs123_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -155,13 +152,6 @@ sticky estiver configurado - isso irá desconfigurá-lo.
     </note>
 
     <para>
-      Se você estiver usando ICU-76.1 ou posterior, adapte o sistema de construção
-para usar a biblioteca correta:
-    </para>
-
-<screen><userinput remap="pre">sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
-
-    <para>
       Instale <application>SpiderMonkey</application> executando os seguintes
 comandos:
     </para>
@@ -207,12 +197,11 @@ make</userinput></screen>
      JSTESTS_EXTRA_ARGS="--timeout 300 --wpt=disabled" | tee jstest.log</userinput></screen>
 
     <para>
-      Como nós estamos construindo com o ICU do sistema, 161 testes (de um total
-de mais de 50.000) são conhecidos por falharem. A lista de testes falhos
-pode ser extraída via <command>grep 'UNEXPECTED-FAIL'
-jstest.log</command>. Passe a opção <option>-c</option> para
-<command>grep</command> se você quiser somente o número total de testes
-falhos.
+      Como nós estamos construindo com o ICU do sistema, 24 testes (de um total de
+mais de 50.000) são conhecidos por falharem. A lista de testes falhos pode
+ser extraída via <command>grep 'UNEXPECTED-FAIL' jstest.log</command>. Passe
+a opção <option>-c</option> para <command>grep</command> se você quiser
+somente o número total de testes falhos.
     </para>
 
     <para>
@@ -290,9 +279,20 @@ antes da instalação:
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
+<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1973993
+         https://bugzilla.mozilla.org/show_bug.cgi?id=1973994 -->
 <screen role="root"><userinput>make install &amp;&amp;
 rm -v /usr/lib/libjs_static.ajs &amp;&amp;
 sed -i '/@NSPR_CFLAGS@/d' /usr/bin/js&spidermonkey-major;-config</userinput></screen>
+
+    
+    <para>
+      Ainda como o(a) usuário(a) &root;, corrija dois problemas com os cabeçalhos
+instalados:
+    </para>
+
+<screen role='root'><userinput>ln -sfv js/ProfilingCategoryList.h /usr/include/mozjs-140 &amp;&amp;
+sed '$i#define XP_UNIX' -i /usr/include/mozjs-140/js-config.h</userinput></screen>
 
   </sect2>
 
