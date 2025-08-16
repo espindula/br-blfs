@@ -132,7 +132,9 @@ comandos:
     </para>
 
 <screen revision="sysv"><userinput>sed -e 's@systemd@elogind@'                                \
+    -e 's/-session optional/-session required/'            \
     -e '/elogind/isession  required       pam_loginuid.so' \
+
     -i data/pam-lfs/gdm-launch-environment.pam &amp;&amp;
 
 mkdir build &amp;&amp;
@@ -142,6 +144,7 @@ meson setup ..                   \
       --prefix=/usr              \
       --buildtype=release        \
       -D gdm-xsession=true       \
+      -D initial-vt=7            \
       -D run-dir=/run/gdm        \
       -D logind-provider=elogind \
       -D systemd-journal=false   \
@@ -179,10 +182,15 @@ class="username">root</systemitem>&quot;:
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
 
-    <para>
-      <option>-D initial-vt=7</option>: Use essa chave para fazer o
-<application>GDM</application> iniciar no Terminal Virtual 7 em vez do
-primeiro Terminal Virtual livre.
+    
+    <!-- This is needed due to elogind not being started by a bootscript and
+         not being available until too late. -->
+<para revision="sysv">
+      <parameter>-D initial-vt=7</parameter>: This switch starts GDM on VT7 by
+default, since on SysV systems, elogind is not available until it gets
+activated by PAM during a login session. The default behavior is to start on
+the currently active TTY, but this behavior causes GDM to fail to start in
+virtual environments and other situations where Wayland is not supported.
     </para>
 
     <para>
@@ -231,18 +239,13 @@ sistema dele(a) para ter uma versão mais recente do
       </para>
 
       <para>
-        Em alguns sistemas com GPUs NVIDIA ou GPUs virtuais (como as fornecidas pelo
-qemu), o GDM ocultará as sessões do Wayland por padrão. Isso geralmente é
-feito para evitar que os(as) usuários(as) encontrem problemas com
-controladores defeituosos, o que pode resultar em travamentos do sistema,
-travamentos de aplicativos, problemas de gerenciamento de eletricidade e
-lentidão gráfica. <phrase revision="sysv">No entanto, no sysv, um problema
-de permissão impede executar o X11 para o(a) usuário(a) <systemitem
-role="username">gdm</systemitem>, de forma que executar no Wayland é
-obrigatório. Se o teu sistema for sysv em uma máquina virtual
-ou</phrase><phrase revision="systemd"> Se o teu sistema for uma máquina
-virtual ou</phrase> você tiver uma GPU NVIDIA e ainda quiser tentar executar
-sessões do Wayland, execute o seguinte comando como o(a) usuário(a) &root;:
+        On some systems with NVIDIA GPUs or virtual GPUs (such as provided by qemu),
+GDM will hide Wayland sessions by default. This is often done to prevent
+users from encountering problems with buggy drivers, which can result in
+system lockups, application crashes, power management problems, and graphics
+slowdowns. If your system is a virtual machine or you have an NVIDIA GPU and
+still want to try running Wayland sessions anyway, execute the following
+command as the &root; user:
       </para>
 
  <screen role="nodump"><userinput>ln -s /dev/null /etc/udev/rules.d/61-gdm.rules</userinput></screen>
