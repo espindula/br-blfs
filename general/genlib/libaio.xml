@@ -36,7 +36,7 @@ Entrada/Saída assíncronas acelerados pelo núcleo, assim como os aplicativos
 que exigem a API de Entrada/Saída assíncrona nativa do Linux.
     </para>
 
-    &lfs123_checked;
+    &lfs124_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -82,6 +82,12 @@ que exigem a API de Entrada/Saída assíncrona nativa do Linux.
     </para>
 
 <screen><userinput>sed -i '/install.*libaio.a/s/^/#/' src/Makefile</userinput></screen>
+
+    <para>Em seguida, corrija um problema na suíte de teste:</para>
+
+<screen><userinput>    case "$(uname -m)" in
+      i?86) sed -e "s/off_t/off64_t/" -i harness/cases/23.t ;;
+    esac</userinput></screen>
 
     <para>
       Construa a <application>libaio</application> executando o seguinte comando:

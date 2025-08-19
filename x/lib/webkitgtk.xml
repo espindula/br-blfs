@@ -141,12 +141,31 @@ configuração de <command>-D USE_GTK4</command>
       </para>
 
       <para>
-        Se estiver construindo esse pacote em um sistema de 32 bits, ou um sistema
-de 64 bits com menos de 16 GB de memória, você precisa adicionar a opção
-<command>-D CMAKE_CXX_FLAGS_RELEASE="-O2 -DNDEBUG"</command> à linha do
-CMake para evitar falhas de construção relacionadas à falta de memória. O
-desempenho será ligeiramente impactado, mas não a um nível perceptível
-durante o uso normal.
+        Com a configuração de construção padrão <quote>release</quote>, alguns
+arquivos fonte desse pacote exigem mais que 4 GiB de RAM para serem
+construídos. Como o resultado, você deveria passar
+<parameter>-j<replaceable>&lt;N&gt;</replaceable></parameter> para
+<command>ninja</command> (substituindo <replaceable>&lt;N&gt;</replaceable>
+pelo quociente da quantidade de RAM disponível e 4 GiB) para limitar o
+número de tarefas paralelas e evitar que a tarefa seja terminada pelo OOM
+killer do núcleo.
+      </para>
+
+      
+      <!-- Maybe we should report this to WebKitGTK team and suggest them
+           to seperate the problematic source files.  But anyway BLFS does
+           not really support a 32-bit configuration so this is just
+           informative.  -->
+<para>
+        Em um sistema de 32 bits, a soma de RAM e espaço de troca usados por uma
+tarefa de construção (na verdade, qualquer processo individual) não pode
+exceder 4 GiB. Portanto, se estiver construindo esse pacote em um sistema de
+32 bits, você precisa adicionar a opção <command>-D
+CMAKE_CXX_FLAGS_RELEASE="-O2 -DNDEBUG"</command> ao <command>cmake</command>
+para desabilitar algumas otimizações que precisam de um monte de memória
+para limitar o uso de memória de tarefas individuais de construção. O
+desempenho será ligeiramente impactado, todavia não a um nível onde seja
+perceptível durante o uso normal.
       </para>
     </important>
 

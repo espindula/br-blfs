@@ -4,17 +4,16 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY clisp-download-http "&gnu-http;/clisp/latest/clisp-&clisp-version;.tar.bz2">
+  <!ENTITY clisp-download-http "&sources-anduin-http;/clisp/clisp-&clisp-version;.tar.xz">
   <!ENTITY clisp-download-ftp  "">
-  <!ENTITY clisp-md5sum        "1962b99d5e530390ec3829236d168649">
-  <!ENTITY clisp-size          "7,8 MB">
-  <!ENTITY clisp-buildsize     "163 MB (adicionar 8 MB para os testes)">
-  <!ENTITY clisp-time          "0,9 UPC (1,2 UPC com os testes)">
+  <!ENTITY clisp-md5sum        "e3b3ba6b3432280e4d4a766404f02d6f">
+  <!ENTITY clisp-size          "7,1 MB">
+  <!ENTITY clisp-buildsize     "146 MB (with tests; 34 MB installed)">
+  <!ENTITY clisp-time          "0.6 SBU (Using parallelism=4; add 0.3 SBU for tests)">
 ]>
 
 <sect1 id="clisp" xreflabel="Clisp-&clisp-version;">
   <?dbhtml filename="clisp.html"?>
-
 
   <title>Clisp-&clisp-version;</title>
 
@@ -30,7 +29,16 @@
 inclui um interpretador, compilador, depurador e muitas extensões.
     </para>
 
-    &lfs123_checked;
+    <note>
+      <para>
+        This package has not had a 'stable' release since 2010. The package here was
+created from the <ulink url='https://gitlab.com/gnu-clisp/clisp'>upstream
+git repository</ulink> in order to enable it to be built with gcc-15. The
+most recent commit was May 2025.
+      </para>
+    </note>
+
+    &lfs124_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -66,18 +74,20 @@ inclui um interpretador, compilador, depurador e muitas extensões.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing='compact'>
       <listitem>
         <para>
-          Remendo opcional: <ulink
-url="&patch-root;/clisp-&clisp-version;-readline7_fixes-1.patch"/> (exigido
-se construir contra a "libffcall")
+          Optional patch: <ulink
+          url="&patch-root;/clisp-&clisp-version;-readline7_fixes-1.patch"/>
+          (required if building against libffcall)
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do "Clisp"</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do "Clisp"</bridgehead>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="libsigsegv"/>
@@ -94,54 +104,54 @@ url="https://www.gnu.org/software/libffcall/">libffcall</ulink>
   <sect2 role="installation">
     <title>Instalação do "Clisp"</title>
 
+    <!--
     <note>
+
       <para>
-        Esse pacote não suporta construção paralela.
+        This package does not support parallel build.
       </para>
     </note>
 
     <para>
-      Se você estiver construindo em um sistema de 32 bits, [então] contorne um
-defeito no "GCC" causado pela versão mais recente do "binutils":
+      If you are building on a 32-bit system, work around a bug in GCC caused
+      by the latest version of binutils:
     </para>
 
 <screen><userinput remap="pre">case $(uname -m) in
-   i?86) export CFLAGS="${CFLAGS:--O2 -g} -falign-functions=4" ;;
+    i?86) export CFLAGS="${CFLAGS:- -O2 -g} -falign-functions=4" ;;
 esac</userinput></screen>
 
+
     <para>
-      Remova dois testes que falham por motivos desconhecidos:
+      Remove two tests which fail for unknown reasons:
     </para>
 
 <screen><userinput>sed -i -e '/socket/d' -e '/"streams"/d' tests/tests.lisp</userinput></screen>
 
     <para>
-      Instale <application>Clisp</application> executando os seguintes comandos:
+      Install <application>Clisp</application> by running the following
+      commands:
     </para>
 
     <para>
-      Se você estiver construindo <application>clisp</application> contra a
-<application>libffcall</application>, [então] aplique o remendo para
-corrigir uma falha de construção com a <application>readline</application>
-atual:
+      If you are building <application>clisp</application> against
+      <application>libffcall</application>, apply the patch to fix a build failure
+      with current <application>readline</application>:
     </para>
 
 <screen><userinput>patch -Np1 -i ../clisp-&clisp-version;-readline7_fixes-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>Clisp</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-../configure --srcdir=../                       \
-             --prefix=/usr                      \
-             --docdir=/usr/share/doc/clisp-&clisp-version; \
-             --with-libsigsegv-prefix=/usr &amp;&amp;
-
-ulimit -S -s 16384 &amp;&amp;
-make -j1</userinput></screen>
+../configure --srcdir=../  \
+             --prefix=/usr \
+             --docdir=/usr/share/doc/clisp-&clisp-version; &amp;&amp;
+make</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>make check</command>.
@@ -158,28 +168,15 @@ make -j1</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <command>ulimit -S -s 16384</command>: isso aumenta o tamanho máximo da
-pilha, conforme recomendado pelo <command>configure</command>.
+      <parameter>--docdir=/usr/share/doc/clisp-&clisp-version;</parameter>: this
+switch forces the HTML documentation to be installed into a versioned
+directory.
     </para>
 
     <para>
-      <parameter>--docdir=/usr/share/doc/clisp-&clisp-version;</parameter>: essa
-chave força a documentação HTML ser instalada em um diretório versionado em
-vez de no <filename class="directory">/usr/share/html/</filename>.
-    </para>
-
-    <para>
-      <parameter>--with-libsigsegv-prefix=/usr</parameter>: use isso para informar
-ao <command>configure</command> que você instalou o
-<package>libsigsegv</package> em /usr, caso contrário ele não será
-encontrado.
-    </para>
-
-    <para>
-      <option>--with-libffcall-prefix=/usr</option>: use isso para informar ao
-<command>configure</command> que você instalou o pacote opcional
-<package>libffcall</package> em /usr, caso contrário, como
-<package>libsigsegv</package>, ele não será encontrado.
+      <option>--with-libffcall-prefix=/usr</option>: use this to tell
+<command>configure</command> that you have installed the optional
+<package>libffcall</package> package.
     </para>
 
   </sect2>
@@ -197,11 +194,11 @@ encontrado.
           clisp e clisp-link
         </seg>
         <seg>
-          várias bibliotecas estáticas em <filename
-class="directory">/usr/lib/clisp-&clisp-version;/base/</filename>
+          various static libraries in <filename
+class="directory">/usr/lib/clisp-&clisp-version;+/base/</filename>
         </seg>
         <seg>
-          /usr/lib/clisp-&clisp-version;, /usr/share/doc/clisp-&clisp-version; e
+          /usr/lib/clisp-&clisp-version;+, /usr/share/doc/clisp-&clisp-version;, and
 /usr/share/emacs/site-lisp
         </seg>
       </seglistitem>
