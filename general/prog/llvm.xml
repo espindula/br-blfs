@@ -206,11 +206,12 @@ construção LLVM</emphasis>
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="doxygen"/>, <xref linkend="git"/>, <xref
-linkend="graphviz"/>, <xref linkend="libxml2"/>, <xref linkend="psutil"/>
-(para testes), <xref linkend="pygments"/>, <xref linkend="PyYAML"/> (para
-testes), <xref linkend="rsync"/> (para testes), <xref linkend="sphinx"/>,
-<phrase revision="systemd"><xref linkend="systemd"/> (reconstruído com PAM,
-para testes),</phrase> <xref linkend="texlive"/> (ou <xref
+linkend="graphviz"/>, <xref linkend="libunwind"/>, <xref
+linkend="libxml2"/>, <xref linkend="psutil"/> (para testes), <xref
+linkend="pygments"/>, <xref linkend="PyYAML"/> (para testes), <xref
+linkend="rsync"/> (para testes), <xref linkend="sphinx"/>, <phrase
+revision="systemd"><xref linkend="systemd"/> (reconstruído com PAM, para
+testes),</phrase> <xref linkend="texlive"/> (ou <xref
 linkend="tl-installer"/>), <xref linkend="valgrind"/>, <xref
 linkend="zip"/>, <ulink
 url="https://pypi.org/project/myst-parser">myst-parser</ulink> (para
@@ -391,6 +392,7 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
       <!-- EDITORS - if you have more than 4 cores, use a cgroup to measure
       the elapsed time for the tests.  Also, libstdc++.a and perhaps libstdc++fs.a
       are used by a couple of the link-static tests. -->
+<!-- https://github.com/llvm/llvm-project/commit/6beb6f34bc8e -->
 <!-- 19.1.7: 75293 Passed, 28977 Unsupported, 364 Skipped,
                    133 Expectedly Failed -->
 <!-- To editors: it seems there is a more thorough test suite named
@@ -411,8 +413,13 @@ linkend='build-in-cgroup'/> para detalhes) para limitar o número de núcleos
 lógicos para executar os testes. 23 testes cfi são conhecidos por falharem
 porque a suposição deles acerca do vinculador não é verdadeira com o
 vinculador BFD e nós tivemos que impedi-los de usar o vinculador Gold
-removido. Um teste chamado <filename>Linux/clone_setns.cpp</filename>
-falhará se <option>CONFIG_USER_NS</option> não estiver habilitada na
+removido. Um teste chamado <literal>DataFlowSanitizer-x86_64 ::
+atomic.cpp</literal> é conhecido por falhar com o gcc-15.1 ou mais
+recente. Um teste chamado <filename>SanitizerCommon-asan-x86_64-Linux ::
+onprint.cpp</filename> é conhecido por falhar porque o desbobinador no
+sanitizador depende do ponteiro de quadro que a configuração padrão do Glibc
+não habilita. Um teste chamado <filename>Linux/clone_setns.cpp</filename>
+falhará se <option>CONFIG_USER_NS</option> não estiver habilitado na
 configuração do núcleo.
       
 
