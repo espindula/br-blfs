@@ -31,7 +31,7 @@
 sessões do <application>GNOME</application>.
     </para>
 
-    &lfs123_checked;
+    &lfs124_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -129,7 +129,11 @@ ninja</userinput></screen>
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup --prefix=/usr              \
+            --buildtype=release        \
+            -D man=false               \
+            -D docbook=false           \
+            ..                         &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -140,13 +144,10 @@ ninja</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<!-- For some reason, there are I/O errors with the DTD @ freedesktop
-     that causes error messages to flood stdin. -->
 <screen role="root"><userinput>ninja install</userinput></screen>
 
-
     <para>
-      Mova a documentação para um diretório versionado:
+      Se você gerou a documentação, mova-a para um diretório versionado:
     </para>
 
 <screen role="root"><userinput>mv -v /usr/share/doc/gnome-session{,-&gnome-session-version;}</userinput></screen>
@@ -221,12 +222,20 @@ exibição. <xref linkend="gdm"/> é o gerenciador de exibição recomendado.
     </para>
 
     <para>
-      Também é possível iniciar o <application>GNOME</application> a partir da
+      <!-- Bruce discovered the above regarding gdm/gnome-session. The GDM page
+      now covers using Wayland on systems with NVIDIA cards as well, so I've
+      commented the text below.-->
+<!--One reason to start from the command line is if you want Wayland
+      support on a system that has the proprietary NVIDIA driver installed,
+      since GDM will not show the Wayland session type on such a system.-->
+Também é possível iniciar o <application>GNOME</application> a partir da
 linha de comando. No entanto, você ainda precisa ter o <xref linkend="gdm"/>
-instalado para que algumas partes da área de trabalho funcionem. Um motivo
-para iniciar a partir da linha de comando é se você quiser suporte ao
-Wayland em um sistema que tenha o controlador proprietário NVIDIA instalado,
-uma vez que o GDM não mostrará o tipo de sessão do Wayland em tal sistema.
+instalado para que a área de trabalho funcione. Em lançamentos anteriores do
+GNOME, o gnome-shell iniciava sem ele instalado, mas isso mudou na 48.0. O
+GDM não precisa estar habilitado para iniciar o gnome-shell a partir da
+linha de comando.
+      
+      
     </para>
 
     <para>
