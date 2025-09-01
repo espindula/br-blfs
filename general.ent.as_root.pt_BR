@@ -1,25 +1,34 @@
-<!ENTITY as_root "<note><para>Pour l'installation de paquets multiples dans un script, les installations doivent être faites en tant qu'utilisateur
-  root. Il y a trois options générales qui peuvent être utilisées pour faire cela&nbsp;:</para>
+<!ENTITY as_root "<note><para>Quando instalar múltiplos pacotes em um
+conjunto de comandos sequenciais, a instalação precisa ser feita como
+o(a) usuário(a) root. Existem três opções gerais que podem ser usadas
+para se fazer isso:</para>
+
   <orderedlist>
-  <listitem><para>Lancer le script entièrement en tant qu'utilisateur root (pas recommandé).</para></listitem>
-  <listitem><para>Use the <command>sudo</command> command from the <xref
-  linkend='sudo'/> package.</para></listitem>
-  <listitem><para>Use <command>su -c &quot;command arguments&quot;</command>
-  (guillemet requis) qui demandera le mot de passe root à chaque itération de la boucle.</para></listitem>
+
+  <listitem><para>Executar o conjunto inteiro de comandos sequenciais
+  como o(a) usuário(a) root (não recomendado).</para></listitem>
+
+  <listitem><para>Usar o comando <command>sudo</command> oriundo do
+  pacote <xref linkend='sudo'/>.</para></listitem>
+
+  <listitem><para>Usar <command>su -c &quot;argumentos do 
+  comando&quot;</command> (aspas exigidas), que solicitará a senha do(a) 
+  root para cada interação do loop.</para></listitem>
+
   </orderedlist>
-  <para>Une façon de gérer cette situation est de créer une petite fonction
-  <command>bash</command> qui sélectionne automatiquement la méthode appropriée.
-  Une fois que la commande est initialisée dans l'environnement, il n'est plus nécessaire de le refaire.</para>
-  
-<screen>
-<userinput>as_root()
+
+  <para>Uma maneira de se lidar com essa situação é a de se criar uma
+  função curta do <command>bash</command> que selecione automaticamente
+  o método apropriado. Uma vez que o comando esteja configurado no
+  ambiente, ele não precisa ser configurado novamente.</para>
+
+  <screen><userinput>as_root()
 {
   if   [ $EUID = 0 ];        then $*
   elif [ -x /usr/bin/sudo ]; then sudo $*
   else                            su -c \\&quot;$*\\&quot;
   fi
 }
-export -f as_root</userinput>
-</screen>
-</note>">
 
+export -f as_root</userinput></screen>
+</note>">
