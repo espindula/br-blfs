@@ -116,8 +116,20 @@ Editor Notes:
     <title>Instalação do Servidor DHCP Kea do ISC</title>
 
     <para>
-      Instale o <application>Servidor DHCP Kea do ISC</application> executando os
-seguintes comandos:
+      Primeiro, aplique algumas correções exigidas para boost-&boost-version;:
+    </para>
+
+<screen><userinput>sed -e "s/, modules: \['system'\]//" -i meson.build                      &amp;&amp;
+sed -e "/shared_ptr.hpp/a#include &lt;boost/asio/deadline_timer.hpp&gt;"       \
+    -i src/lib/asiolink/interval_timer.cc                                &amp;&amp;
+sed -e "/posix_time_types.hpp/a#include &lt;boost/asio/deadline_timer.hpp&gt;" \
+    -i src/lib/asiodns/io_fetch.cc                                       &amp;&amp;
+sed -e "/posix_time_types.hpp/a#include &lt;boost/asio/deadline_timer.hpp&gt;" \
+    -i src/lib/asiodns/tests/io_fetch_unittest.cc</userinput></screen>
+
+    <para>
+      Agora, instale o <application>Servidor DHCP Kea do ISC</application>
+executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
@@ -134,7 +146,7 @@ meson setup ..             \
 ninja</userinput></screen>
 
     <para>
-      Se os testes foram habilitados, execute <command>ninja check</command> para
+      Se os testes foram habilitados, execute <command>ninja test</command> para
 testar os resultados. Existem testes que exigem uma base de dados ativa
 quando quaisquer dos ganchos de base de dados forem construídos.
     </para>
@@ -146,6 +158,13 @@ class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para>
+      Corrija alguns caminhos codificados no conjunto de comandos sequenciais
+<command>keactrl</command>:
+    </para>
+
+<screen role="root"><userinput>sed -e "s;\${prefix}/;;" -i /usr/sbin/keactrl</userinput></screen>
 
     <para>
       Crie alguns diretórios e corrija as configurações de permissão deles como
@@ -177,6 +196,11 @@ servidores DHCP. Usar a estrutura de retaguarda <emphasis>memfile</emphasis>
     <para>
       <option>-D tests=enabled</option>: Essa opção é exigida para construir a
 suíte de teste. Descarte-a se você não for executar os testes.
+    </para>
+
+    <para>
+      <option>-D krb5=enabled</option>: This switch enables integration with
+Kerberos for authenticating client computers in an enterprise environment.
     </para>
 
   </sect2>
