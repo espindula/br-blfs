@@ -9,7 +9,7 @@
   <!ENTITY mitkrb-md5sum        "8f841cea186ef6856ea6c2a063091861">
   <!ENTITY mitkrb-size          "8,3 MB">
   <!ENTITY mitkrb-buildsize     "135 MB (adicionar 15 MB para os testes)">
-  <!ENTITY mitkrb-time          "0.4 SBU (Using parallelism=4; add 3.8 SBU for tests)">
+  <!ENTITY mitkrb-time          "0,4 UPC (Usando paralelismo=4; adicionar 3,8 UPC para testes)">
 ]>
 
 <sect1 id="mitkrb" xreflabel="MIT Kerberos V5-&mitkrb-version;">
@@ -93,13 +93,14 @@ Additional Downloads</bridgehead>
       <xref linkend="rpcbind"/>
  (used during the test suite),-->
 <xref linkend="bind-utils"/>, <xref linkend='cracklib'/>
-(<filename>/usr/share/dict/words</filename> referred by some tests), <xref
-linkend="keyutils"/>, <xref linkend="openldap"/>, <xref linkend="valgrind"/>
-(used during the test suite), <xref linkend="yasm"/>, <ulink
+(<filename>/usr/share/dict/words</filename> referenciado por alguns testes),
+<xref linkend="keyutils"/>, <xref linkend="openldap"/>, <xref
+linkend="valgrind"/> (usado durante a suíte de teste), <xref
+linkend="yasm"/>, <ulink
 url="https://thrysoee.dk/editline/">libedit</ulink>, <ulink
 url="https://cmocka.org/">cmocka</ulink>, <ulink
 url="https://pypi.org/project/kdcproxy/">kdcproxy</ulink>, <ulink
-url="https://pypi.org/project/pyrad/">pyrad</ulink>, and <ulink
+url="https://pypi.org/project/pyrad/">pyrad</ulink> e <ulink
 url="https://cwrap.org/resolv_wrapper.html">resolv_wrapper</ulink>
     </para>
 
@@ -150,13 +151,15 @@ make</userinput></screen>
       But on one of my machines (4 cores) -j4 fails and -j1 passes...
       I guess the test suite is just too fragile. -xry111
       -->
-To test the build, issue: <command>make -j1 -k check</command>.  Some tests
-may fail with the latest version of dejagnu and glibc.  Some tests may hang
-for a long time and fail if the system is not connected to a network. One
-test, <filename>t_kadm5srv</filename>, is known to fail. If <xref
-linkend='keyutils'/> is installed but <xref linkend='keyutils-test-kernel'/>
-is not satisfied, some tests will fail complaining <computeroutput>keyctl
-failed with code 1</computeroutput>.
+Para testar a construção, emita: <command>make -j1 -k
+check</command>. Alguns testes possivelmente falhem com a versão mais
+recente de dejagnu e glibc. Alguns testes possivelmente travem por um tempo
+longo e falhem se o sistema não estiver conectado a uma rede de
+intercomunicação. Um teste, <filename>t_kadm5srv</filename>, é conhecido por
+falhar. Se <xref linkend='keyutils'/> estiver instalado, mas <xref
+linkend='keyutils-test-kernel'/> não estiver satisfeita, alguns testes
+falharão, reclamando que <computeroutput>keyctl falhou com o código
+1</computeroutput>.
       
     </para>
 
@@ -205,12 +208,12 @@ comando do subsistema.
     </para>
 
     <para>
-      <parameter>--with-system-verto=no</parameter>: This switch fixes a bug in
-the package where the build system does not recognize its own verto library
-if this package has been installed before. This is not a problem if you are
-reinstalling the same version, but can be problematic if you are updating
-because the old version of the verto library will be used instead of
-installing the newer version.
+      <parameter>--with-system-verto=no</parameter>: Essa chave corrige um defeito
+no pacote em que o sistema de construção não reconhece sua própria
+biblioteca verto se esse pacote tiver sido instalado antes. Isso não é um
+problema se você estiver reinstalando a mesma versão, mas pode ser
+problemático se estiver atualizando, pois a versão antiga da biblioteca
+verto será usada em vez de instalar-se a versão mais recente.
     </para>
 
     <para>
@@ -266,18 +269,19 @@ estrutura de retaguarda da base de dados
 
         <tip>
           <para>
-            You should consider installing some sort of password checking dictionary so
-that you can configure the installation to only accept strong passwords. A
-suitable dictionary to use is installed in the <xref linkend="cracklib"/>
-instructions. Note that only one file can be used, but you can concatenate
-many files into one. The configuration file shown below assumes you have
-installed a dictionary to <filename>/usr/share/dict/words</filename>.
+            Você deveria considerar instalar algum tipo de dicionário de verificação de
+senha, de forma que consiga configurar a instalação para aceitar somente
+senhas fortes. Um dicionário adequado para usar é instalado nas instruções
+do <xref linkend="cracklib"/>. Observe que somente um arquivo pode ser
+usado, mas você consegue concatenar muitos arquivos em um. O arquivo de
+configuração mostrado abaixo assume que você tenha instalado um dicionário
+em <filename>/usr/share/dict/words</filename>.
           </para>
         </tip>
 
         <para>
-          Create the Kerberos configuration file with the following commands issued by
-the &root; user:
+          Crie o arquivo de configuração do Kerberos com os seguintes comandos
+emitidos pelo(a) usuário(a) &root;:
         </para>
 
 <screen role="root"><userinput>cat &gt; /etc/krb5.conf &lt;&lt; "EOF"
@@ -335,14 +339,14 @@ procurar pelos serviços de autenticação do KDC.
         </para>
 
         <para>
-          Next, create the KDC database:
+          A seguir, crie a base de dados do KDC:
        </para>
 
 <screen role="root"><userinput>kdb5_util create -r <replaceable>&lt;EXEMPLO.ORG&gt;</replaceable> -s</userinput></screen>
 
         <para>
-          Now, you should populate the database with principals (users). For now, just
-use your regular login name or &root;.
+          Agora você deveria povoar a base de dados com principais (usuários(as)). Por
+enquanto, apenas use teu nome normal de login ou &root;.
         </para>
 
 <screen role="root"><userinput>kadmin.local
@@ -691,8 +695,8 @@ gerada padrão
         <term><command>krb5-config</command></term>
         <listitem>
           <para>
-            provides information about how to link programs against the
-<application>Kerberos 5</application> libraries
+            fornece informações acerca de como vincular programas às bibliotecas do
+<application>Kerberos 5</application>
           </para>
           <indexterm zone="mitkrb krb5-config-prog2">
             <primary sortas="b-krb5-config">krb5-config</primary>
@@ -728,10 +732,10 @@ gerada padrão
         <term><command>ksu</command></term>
         <listitem>
           <para>
-            is the super user program using the Kerberos protocol. It requires a
-properly configured <filename>/etc/shells</filename> and
-<filename>~/.k5login</filename> containing principals authorized to become
-super users
+            é o programa de superusuário(a) que usa o protocolo Kerberos. Ele exige um
+<filename>/etc/shells</filename> configurado adequadamente e
+<filename>~/.k5login</filename> contendo principais autorizados a se
+tornarem superusuários(as)
           </para>
           <indexterm zone="mitkrb ksu">
             <primary sortas="b-ksu">ksu</primary>
@@ -780,8 +784,8 @@ se uma coleção de cache estiver disponível
         <term><command>sclient</command></term>
         <listitem>
           <para>
-            is used to contact a sample server and authenticate to it using Kerberos 5
-tickets, and then display the server's response
+            é usado para contactar um servidor de amostra e autenticar-se nele usando
+tíquetes Kerberos 5 e, em seguida, exibir a resposta do servidor
           </para>
           <indexterm zone="mitkrb sclient">
             <primary sortas="b-sclient">sclient</primary>
@@ -793,7 +797,8 @@ tickets, and then display the server's response
         <term><command>sim_client</command></term>
         <listitem>
           <para>
-            is a simple UDP-based sample client program for demonstration purposes
+            é um simples programa cliente de amostra baseado em UDP, para propósitos de
+demonstração
           </para>
           <indexterm zone="mitkrb sim_client">
             <primary sortas="b-sim_client">sim_client</primary>
@@ -805,7 +810,8 @@ tickets, and then display the server's response
         <term><command>sim_server</command></term>
         <listitem>
           <para>
-            is a simple UDP-based server application for demonstration purposes
+            é um simples aplicativo servidor baseado em UDP, para propósitos de
+demonstração
           </para>
           <indexterm zone="mitkrb sim_server">
             <primary sortas="b-sim_server">sim_server</primary>
@@ -817,7 +823,7 @@ tickets, and then display the server's response
         <term><command>sserver</command></term>
         <listitem>
           <para>
-            is a sample Kerberos 5 server
+            é um servidor de amostra Kerberos 5
           </para>
           <indexterm zone="mitkrb sserver">
             <primary sortas="b-sserver">sserver</primary>
@@ -854,11 +860,11 @@ tickets, and then display the server's response
         <term><filename class="libraryfile">libgssapi_krb5.so</filename></term>
         <listitem>
           <para>
-            contains the Generic Security Service Application Programming Interface
-(GSSAPI) functions which provide security services to callers in a generic
-fashion, supportable with a range of underlying mechanisms and technologies
-and hence allowing source-level portability of applications to different
-environments
+            contém as funções Generic Security Service Application Programming Interface
+(GSSAPI) que fornecem serviços de segurança para chamadores de forma
+genérica, compatíveis com uma variedade de mecanismos e tecnologias
+subjacentes e, portanto, permitindo portabilidade de nível de fonte de
+aplicativos para diferentes ambientes
           </para>
           <indexterm zone="mitkrb libgssapi_krb5">
             <primary sortas="c-libgssapi_krb5">libgssapi_krb5.so</primary>
