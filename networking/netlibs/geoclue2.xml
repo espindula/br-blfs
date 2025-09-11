@@ -7,9 +7,9 @@
   <!ENTITY geoclue2-download-http
   "https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/&geoclue2-version;/geoclue-&geoclue2-version;.tar.bz2">
   <!ENTITY geoclue2-download-ftp  "">
-  <!ENTITY geoclue2-md5sum        "d58d6f3286a6b3ace395fc36468aace2">
-  <!ENTITY geoclue2-size          "108 KB">
-  <!ENTITY geoclue2-buildsize     "7,2 MB">
+  <!ENTITY geoclue2-md5sum        "def58282c7e1c95bc386906fdfbe29e3">
+  <!ENTITY geoclue2-size          "112 KB">
+  <!ENTITY geoclue2-buildsize     "7,4 MB">
   <!ENTITY geoclue2-time          "0,1 UPC">
 ]>
 
@@ -79,13 +79,13 @@ aplicativos com reconhecimento de localização o mais simples possível.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="avahi"/>, <xref linkend="libnotify"/>, <xref
-linkend="ModemManager"/> e <xref linkend="vala"/>
+      <xref linkend="libnotify"/>, <xref linkend="ModemManager"/> e <xref
+linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gtk-doc"/>
+      <xref linkend="avahi"/> e <xref linkend="gtk-doc"/>
     </para>
 
   </sect2>
@@ -101,10 +101,11 @@ seguintes comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr       \
-            --buildtype=release \
-            -D gtk-doc=false    \
-            ..                  &amp;&amp;
+meson setup --prefix=/usr        \
+            --buildtype=release  \
+            -D gtk-doc=false     \
+            -D nmea-source=false \
+            ..                   &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -127,6 +128,13 @@ class="username">root</systemitem>&quot;:
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
+      <parameter>-D nmea-source=false</parameter>: Essa chave desabilita a fonte
+NMEA. Remova-a se você tiver instalado o pacote
+<application>Avahi</application> e tua rede local de intercomunicação tiver
+um servidor NMEA.
+    </para>
+
+    <para>
       <option>-D 3g-source=false</option>: Essa chave desabilita a estrutura de
 retaguarda 3G. Use-a se você não tiver instalado o pacote
 <application>ModemManager</application>.
@@ -142,12 +150,6 @@ pacote <application>ModemManager</application>.
       <option>-D cdma-source=false</option>: Essa chave desabilita a estrutura de
 retaguarda fonte CDMA. Use-a se você não tiver instalado o pacote
 <application>ModemManager</application>.
-    </para>
-
-    <para>
-      <option>-D nmea-source=false</option>: Essa chave desabilita a fonte
-NMEA. Use-a se você não tiver instalado o pacote
-<application>Avahi</application>.
     </para>
 
     <para>

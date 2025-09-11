@@ -6,10 +6,10 @@
 
   <!ENTITY mesa-download-http "https://mesa.freedesktop.org/archive/mesa-&mesa-version;.tar.xz">
   <!ENTITY mesa-download-ftp  "">
-  <!ENTITY mesa-md5sum        "fe3eb39e8a3c6fbb36eb3da57be022e7">
-  <!ENTITY mesa-size          "45 MB">
-  <!ENTITY mesa-buildsize     "1,1 GB (com documentos; adicionar 576 MB para testes)">
-  <!ENTITY mesa-time          "3,8 UPC (com documentos; adicionar 1,7 UPC para testes; ambos com
+  <!ENTITY mesa-md5sum        "0f5efeb82427fb841fc89df51b487ed5">
+  <!ENTITY mesa-size          "42 MB">
+  <!ENTITY mesa-buildsize     "1,2 GB (com documentos; adicionar 483 MB para testes)">
+  <!ENTITY mesa-time          "3,8 UPC (com documentos; adicionar 1,9 UPC para testes; ambos com
 paralelismo=4)">
 ]>
 
@@ -26,8 +26,8 @@ paralelismo=4)">
     <title>Introdução ao Mesa</title>
 
     <para>
-      <application>Mesa</application> é uma biblioteca gráfica 3D compatível com
-OpenGL.
+      <application>Mesa</application> contém várias bibliotecas e controladores
+para múltiplas APIs como OpenGL e Vulkan.
     </para>
 
 
@@ -221,11 +221,6 @@ controlador residual, a menos que não precise do Vulkan.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <!-- for libsensors according to Meson -->
-<!--<ulink url="https://github.com/KhronosGroup/glslang">
-glslang</ulink>
-      (for vulkan drivers),-->
-<!-- <ulink url="https://github.com/KhronosGroup/Vulkan-Loader">
-Vulkan-Loader</ulink> -->
 <xref linkend="libgcrypt"/>, <xref linkend="libunwind"/>, <xref
 linkend="lm_sensors"/>, <xref linkend="nettle"/>, <xref
 linkend="valgrind"/>, <ulink
@@ -234,8 +229,7 @@ url="https://archive.mesa3d.org/demos/">mesa-demos</ulink> (fornece mais que
 mesmos programas adicionados pelo remendo acima), <ulink
 url="https://omxil.sourceforge.net/">Bellagio OpenMAX Integration
 Layer</ulink> (para plataformas móveis) e <ulink
-url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">libtizonia</ulink>,
-      
+url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">libtizonia</ulink>
     </para>
 
 
@@ -338,6 +332,9 @@ comando:
     </para>
 
 
+<!-- Testers with libglvnd, pass `-D glvnd=disabled` to meson for the patch
+        to work. This will build the OpenGL libraries which we want anyway for
+        accurate measurements. - zeckma -->
 <!-- Note that freedreno, vc4, and virgl all need special support from
         libdrm - renodr
         For me, libdrm does not mention virgl, but mesa accepts it. AFAICS
@@ -409,6 +406,7 @@ DRI_DRIVERS="i965,nouveau"</userinput></screen>
 <userinput>patch -Np1 -i ../mesa-&mesa-version;-add_xdemos-1.patch</userinput></screen>-->
 <userinput>patch -Np1 -i ../mesa-add_xdemos-4.patch</userinput></screen>
    
+   
 
 
       
@@ -447,10 +445,11 @@ controladores compiladas do Mesa para outros(as).
       Para testar os resultados, emita:
     </para>
 
-    <!-- All 98  tests passed for me for 23.3.1 [bdubbs]
+<!-- All 98  tests passed for me for 23.3.1 [bdubbs]
      All 106 tests passed for me for 24.3.1 [zeckma]
      All 104 tests passed for me for 25.0.1 [zeckma]
-     All 94  tests passed for me for 25.1.2 [zeckma] -->
+     All 94  tests passed for me for 25.1.2 [zeckma]
+     All 94  tests passed for me for 25.2.2 [zeckma] -->
 <screen remap='test'><userinput>meson configure -D build-tests=true &amp;&amp;
 sed '/float rsqrtf/,/^}/d' \
     -i ../src/gallium/drivers/llvmpipe/lp_test_arit.c &amp;&amp;
@@ -459,16 +458,14 @@ ninja test</userinput></screen>
 
 
     <para>
-      Agora, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
       Se desejado, instale a documentação opcional executando os seguintes
-comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+comandos como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"
@@ -681,13 +678,20 @@ suporte da Biblioteca de Gráficos Incorporados será construído. As opções d
 Linux disponíveis são auto (padrão), x11, wayland, surfaceless e drm.
     </para>
 
-    <para>
-      <option>-D legacy-x11="..."</option> Esse parâmetro controla quais recursos
-legados do X11 recebem suporte integrado. As opções disponíveis do Linux são
-none (padrão) e dri2. Esses recursos raramente são mais necessários.
-    </para>
 
-  </sect2>
+
+
+  <!-- No available values for this option anymore, dri2 has been completely
+     removed. Hide this now. -->
+<!--
+    <para>
+
+      <option>-D legacy-x11="..."</option> This parameter controls which legacy
+      X11 features get built-in support. Available linux options are none
+      (default) and dri2. These features are rarely needed anymore.
+    </para>
+-->
+</sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>
@@ -700,7 +704,7 @@ none (padrão) e dri2. Esses recursos raramente são mais necessários.
       <!-- in /usr/lib/dri -->
 <segtitle>Controladores VA-API Instalados</segtitle>
       <!-- in /usr/lib/dri -->
-<segtitle>Estruturas GBM de Retaguarda Instaladas</segtitle>
+<segtitle>Controladores GBM Instalados</segtitle>
       <!-- in /usr/lib/gbm -->
 <segtitle>Controladores VDPAU Instalados</segtitle>
       <!-- in /usr/lib/vdpau -->
@@ -710,33 +714,42 @@ none (padrão) e dri2. Esses recursos raramente são mais necessários.
 
       <seglistitem>
         <seg>
-          glxgears, glxinfo, mme_fermi_sim_hw_test e mme_tu104_sim_hw_test
+          
+          <!-- Begin programs -->
+<!-- End programs -->
+glxgears e glxinfo
+          
         </seg>
         <seg>
-          libEGL.so, libGL.so, libGLESv1_CM.so, libGLESv2.so, libgbm.so, libglapi.so,
-libgallium-&mesa-version;.so e libxatracker.so
+          
+          <!-- Begin libraries -->
+<!-- End libraries -->
+libEGL.so, libGL.so, libGLESv1_CM.so, libGLESv2.so, libgbm.so e
+libgallium-&mesa-version;.so
+          
         </seg>
         <seg>
           
           <!-- Begin DRI driver stubs -->
 <!-- End DRI driver stubs -->
-libdril_dri.so e links simbólicos para ela: crocus_dri.so, i915_dri.so,
-iris_dri.so, kms_swrast_dri.so, nouveau_dri.so, r300_dri.so, r600_dri.so,
-r600_drv_video.so, radeonsi_dri.so, swrast_dri.so, virtio_gpu_dri.so,
-vmwgfx_dri.so e zink_dri.so
+libdril_dri.so e linques para ela: crocus_dri.so, i915_dri.so, iris_dri.so,
+kms_swrast_dri.so, nouveau_dri.so, r300_dri.so, r600_dri.so,
+radeonsi_dri.so, swrast_dri.so, virtio_gpu_dri.so, vmwgfx_dri.so e
+zink_dri.so
           
         </seg>
         <seg>
           
           <!-- Begin VA-API drivers -->
 <!-- End VA-API drivers -->
-nouveau_drv_video.so, radeonsi_drv_video.so e virtio_gpu_drv_video.so
+nouveau_drv_video.so, r600_drv_video.so, radeonsi_drv_video.so e
+virtio_gpu_drv_video.so
           
         </seg>
         <seg>
           
-          <!-- Begin GBM backends -->
-<!-- End GBM backends -->
+          <!-- Begin GBM drivers -->
+<!-- End GBM drivers -->
 dri_gbm.so
           
         </seg>
@@ -750,16 +763,24 @@ lincados)
           
         </seg>
         <seg>
-          libvulkan_intel_hasvk.so, libvulkan_intel.so, libvulkan_lvp.so,
+          
+          <!-- Begin Vulkan drivers -->
+<!-- End Vulkan drivers -->
+libvulkan_intel_hasvk.so, libvulkan_intel.so, libvulkan_lvp.so,
 libvulkan_nouveau.so e libvulkan_radeon.so
+          
         </seg>
         <seg>
           
-          <!-- $XORG_PREFIX/include/GL is installed by xorg-protos -->
-$XORG_PREFIX/{include/{EGL,GLES,GLES2,GLES3,KHR},
-$XORG_PREFIX/lib/{dri,gbm,vdpau}}, $XORG_PREFIX/share/drirc.d (contém
+          
+          <!-- Begin directories -->
+<!-- $XORG_PREFIX/include/GL is installed by xorg-protos -->
+<!-- End directories -->
+$XORG_PREFIX/include/{EGL,GLES,GLES2,GLES3,KHR},
+$XORG_PREFIX/lib/{dri,gbm,vdpau}, $XORG_PREFIX/share/drirc.d (contém
 soluções alternativas para vários aplicativos, particularmente navegadores e
 jogos), $XORG_PREFIX/share/vulkan e /usr/share/doc/mesa-&mesa-version;
+          
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -797,9 +818,7 @@ gráfico e bibliotecas GL instaladas
         <term><filename class='libraryfile'>dri_gbm.so</filename></term>
         <listitem>
           <para>
-            implementa funções de Graphics Buffer Management necessitadas pela
-<systemitem class='library'>libgbm</systemitem> em cima da <systemitem
-class='library'>libdrm</systemitem>
+            é o controlador GBM para <application>Mesa</application>
           </para>
         </listitem>
       </varlistentry>
@@ -848,19 +867,26 @@ especificação EGL-1.4
         </listitem>
       </varlistentry>
 
+
+
+
+      <!-- No longer installed as of 25.2.0 -->
+<!--
       <varlistentry id="libglapi">
+
         <term><filename class="libraryfile">libglapi.so</filename></term>
         <listitem>
           <para>
-            é a implementação <application>Mesa</application> da API OpenGL
+            is the <application>Mesa</application> implementation of the OpenGL
+            API
           </para>
           <indexterm zone="mesa libglapi">
             <primary sortas="c-libglapi">libglapi.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="libGLESv1_CM">
+-->
+<varlistentry id="libGLESv1_CM">
         <term><filename class="libraryfile">libGLESv1_CM.so</filename></term>
         <listitem>
           <para>
@@ -896,17 +922,23 @@ especificação EGL-1.4
         </listitem>
       </varlistentry>
 
+<!-- No longer installed as of 25.2.0 -->
+<!--
       <varlistentry id="libxatracker">
+
         <term><filename class="libraryfile">libxatracker.so</filename></term>
         <listitem>
           <para>
-            é o rastreador de estado XA para o controlador VMWare vmwgfx
+            is the XA state tracker for the VMWare vmwgfx driver
           </para>
           <indexterm zone="mesa libxatracker">
             <primary sortas="c-libxatracker">libxatracker.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
+-->
+
+
 
     </variablelist>
 

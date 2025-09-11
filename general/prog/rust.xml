@@ -181,17 +181,16 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="libssh2"/>, <xref linkend="llvm"/> (construído com -D
-LLVM_LINK_LLVM_DYLIB=ON, de forma que Rust consiga vincular ao LLVM do
-sistema em vez de construir a versão fornecida dele) e <xref
-linkend="sqlite"/>
+      <xref linkend="libssh2"/> e <xref linkend="llvm"/> (construído com -D
+LLVM_LINK_LLVM_DYLIB=ON de forma que rust consiga lincar-se ao LLVM do
+sistema em vez de construir versão dele enviada)
     </para>
 
     <note>
       <para>
-        Se uma dependência recomendada não estiver instalada, [então] uma cópia
-enviada no &quot;tarball&quot; do fonte do &quot;Rustc&quot; será construída
-e usada.
+        Se uma dependência recomendada não estiver instalada, você precisará
+modificar as instruções para construir e usar uma cópia enviada no tarball
+do fonte do Rustc. Veja-se a seção Explicações dos Comandos para detalhes.
       </para>
     </note>
 
@@ -337,8 +336,8 @@ comandos:
 <userinput>sed -i -e '/^curl /s/0.4.38/0.4.40/' \
        -e '/^curl-sys /s/0.4.48/0.4.50/' \
        src/tools/cargo/Cargo.toml &amp;&amp; -->
-<userinput>[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1
-[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+<userinput>export LIBSSH2_SYS_USE_PKG_CONFIG=1
+export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
 ./x.py build</userinput></screen>
 
     <note>
@@ -401,13 +400,14 @@ exemplo, <filename>tests/ui/process/nofile-limit.rs</filename>) falhem com o
 SIGSEGV.
       </para>
       <para>
-        Nós ainda estamos investigando a causa raiz desse problema, mas, por
-enquanto, substituímos <parameter>--strip-unneeded</parameter> por
+        Isso é causado por um defeito da Glibc que afeta o Glibc-2.42 e vários
+lançamentos anteriores, de forma que, por enquanto, nós substituímos
+<parameter>--strip-unneeded</parameter> por
 <parameter>--strip-debug</parameter> tanto no livro do LFS quanto na <xref
-linkend='stripping'/> para contornar o problema. Se você encontrar esse
+linkend='stripping'/> para contornar o problema. Se você se deparar com esse
 problema, reconstrua a Glibc e substitua o arquivo <filename
-class='libraryfile'>/usr/lib/libc.a</filename> pela <filename
-class='libraryfile'>libc.a</filename> não despojada proveniente da nova
+class='libraryfile'>/usr/lib/libc.a</filename> pelo <filename
+class='libraryfile'>libc.a</filename> não despojado originário da nova
 construção.
       </para>
     </note>
@@ -540,8 +540,8 @@ será maior e demorará mais.
 <!-- https://github.com/alexcrichton/ssh2-rs/issues/173 -->
 <para>
       <command>export LIBSSH2_SYS_USE_PKG_CONFIG=1</command>: Permite que o
-&quot;<command>cargo</command>&quot; se vincule à &quot;libssh2&quot; do
-sistema.
+<command>cargo</command> se vincule à libssh2 do sistema. Omita esse comando
+se você não tiver instalado <xref linkend='libssh2'/>.
     </para>
 
     
@@ -550,8 +550,8 @@ sistema.
          We don't care about Windoge so override this if we have
          system sqlite3.  -->
 <para>
-      <command>export LIBSQLITE3_SYS_USE_PKG_CONFIG=1</command>: Permite
-<command>cargo</command> lincar ao sqlite do sistema.
+      <command>export LIBSQLITE3_SYS_USE_PKG_CONFIG=1</command>: Permite que o
+<command>cargo</command> se linque ao sqlite do sistema. 
     </para>
 
 

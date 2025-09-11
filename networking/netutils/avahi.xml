@@ -314,10 +314,15 @@ sequenciais de inicialização
       </para>
 
       <para revision="systemd">
-        Para iniciar o processo de segundo plano <command>avahi-daemon</command> na
-inicialização, habilite a unidade do systemd instalada anteriormente
-executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        O <command>avahi-daemon</command> conflitará com
+<command>systemd-resolved</command> sob a configuração padrão se ambos
+estiverem executando simultaneamente em um sistema, pois ambos atuarão como
+um resolvedor e respondedor de DNS Multicast. Se você precisar executar o
+processo de segundo plano Avahi (os(as) editores(as) do BLFS não recomendam
+fazer isso, a menos que você realmente precise da funcionalidade dele),
+desabilite o suporte a DNS Multicast do <command>systemd-resolved</command>
+e habiite a unidade systemd instalada anteriormente executando o seguinte
+comando como o(a) usuário(a) <systemitem class="username">root</systemitem>:
       </para>
 
       <indexterm zone="avahi avahi-init">
@@ -326,16 +331,25 @@ class="username">root</systemitem>:
 
 <screen role="root" revision="sysv"><userinput>make install-avahi</userinput></screen>
 
-<screen role="root" revision="systemd"><userinput>systemctl enable avahi-daemon</userinput></screen>
+<screen role="nodump" revision="systemd"><userinput>mkdir -pv /etc/systemd/resolved.conf.d &amp;&amp;
+cat &gt; /etc/systemd/resolved.conf.d/no-mdns.conf &lt;&lt; EOF &amp;&amp;
+<literal>[Resolve]
+MulticastDNS=no
+</literal>EOF
+systemctl enable avahi-daemon</userinput></screen>
 
       <para revision="systemd">
         Para iniciar o processo de segundo plano <command>avahi-dnsconfd</command>
-na inicialização, habilite a unidade do systemd instalada anteriormente
+na inicialização, habilite a unidade systemd instalada anteriormente
 executando o seguinte comando como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+class="username">root</systemitem> (observe que o seguinte comando também
+habilitará implicitamente o <command>avahi-daemon</command>, de forma que,
+se você o estiver executando, precisará certificar-se de que tenha
+desabilitado o suporte a DNS multicast do
+<command>systemd-resolved</command>, conforme mencionado acima):
       </para>
 
-<screen role="root" revision="systemd"><userinput>systemctl enable avahi-dnsconfd</userinput></screen>
+<screen role="nodump" revision="systemd"><userinput>systemctl enable avahi-dnsconfd</userinput></screen>
 
     </sect3>
 

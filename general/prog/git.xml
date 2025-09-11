@@ -8,17 +8,17 @@
 
   <!ENTITY git-download-http "&git-root;/git-&git-version;.tar.xz">
   <!ENTITY git-download-ftp  "">
-  <!ENTITY git-md5sum        "2cb96fae126d66f8ff23a68f8dd5d748">
+  <!ENTITY git-md5sum        "594c03134a0830c70a49e974d6ee35be">
 
   <!ENTITY git-size          "7,5 MB">
   <!-- but people keep forgetting that an install not only needs the net build
        space, it also needs the install space (or DESTDIR) -->
-  <!ENTITY git-buildsize     "453 MB (com documentação baixada; adicionar 19 MB para construir documentos;
-adicionar 21 MB para testes)">
+  <!ENTITY git-buildsize     "366 MB (com documentação baixada; adicionar 22 MB para construir documentos;
+adicionar 24 MB para testes)">
   <!-- With 2.23.0, there was a large increase in time for tests. Possibly disk related? -->
   <!-- Confirmed that it is disk related.-->
   <!ENTITY git-time          "0,3 UPC (com paralelismo=4; adicionar 1,0 UPC para construir documentos e
-até 7 UPC (dependente da velocidade do disco) para testes)">
+até 6,4 UPC (dependente da velocidade do disco) para testes)">
 ]>
 
 <sect1 id="git" xreflabel="git-&git-version;">
@@ -52,6 +52,7 @@ Server</application>.
 
     &lfs124_checked;
 
+    
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
@@ -126,11 +127,11 @@ linkend='fcron'/> (tempo de execução, para agendamento de tarefas
 etiquetas do <application>Git</application>, ou verificar as assinaturas
 delas), <xref role="runtime" linkend="openssh"/> (tempo de execução,
 necessário para usar <application>Git</application> sobre ssh), <xref
-linkend="pcre2"/>, <xref role="runtime" linkend="subversion"/> com ligações
-Perl (tempo de execução, para <command>git svn</command>), <xref
-role="runtime" linkend="tk"/> (gitk, um visualizador simples de repositórios
-do <application>Git</application>, usa <application>Tk</application> em
-tempo de execução), <xref linkend="valgrind"/>, <ulink
+role="runtime" linkend="subversion"/> com ligações Perl (tempo de execução,
+para <command>git svn</command>), <xref role="runtime" linkend="tk"/> (gitk,
+um visualizador simples de repositórios do <application>Git</application>,
+usa <application>Tk</application> em tempo de execução), <xref
+linkend="valgrind"/>, <ulink
 url="https://metacpan.org/pod/Authen::SASL">Authen::SASL</ulink> (tempo de
 execução, para <command>git send-email</command>), <phrase revision='sysv'>e
 </phrase><xref linkend='perl-io-socket-ssl'/> (tempo de execução, para
@@ -161,9 +162,10 @@ páginas info
       Instale <application>Git</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr \
-           --with-gitconfig=/etc/gitconfig \
-           --with-python=python3 &amp;&amp;
+<screen><userinput>./configure --prefix=/usr                   \
+            --with-gitconfig=/etc/gitconfig \
+            --with-python=python3           \
+            --with-libpcre2                 &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -302,8 +304,10 @@ p4</command> para repositórios "Perforce" e também usado em alguns testes.
     </para>
 
     <para>
-      <option>--with-libpcre2</option>: Use essa chave se
-<application>PCRE2</application> estiver instalado.
+      <parameter>--with-libpcre2</parameter>: Isso garante construir <command>git
+grep</command> com a biblioteca <application>PCRE2</application> instalada
+no LFS, de forma que <command>git grep</command> suportará a opção
+<option>--perl-regexp</option>.
     </para>
 
     <para>

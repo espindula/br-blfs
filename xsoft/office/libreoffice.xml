@@ -316,18 +316,12 @@ fonte.
 
 
 
-
-
-
     <!-- keep a commented instruction if no patches are currently required -->
-<!-- Not needed with 25.8.0.4
-    <para>
-
-      First, fix build failures introduced by the latest version of ICU:
+<para>
+      Primeiro, corrija falhas de construção introduzidas pela versão mais recente
+do poppler:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-icu76_fixes-1.patch</userinput></screen>
--->
 <!-- Not needed with 25.8.0.4
     <para>
 
@@ -337,7 +331,14 @@ fonte.
 
 <screen><userinput remap="pre">sed -i 's/-Djava.security.manager=allow//' external/hsqldb/ExternalProject_hsqldb.mk</userinput></screen>
 -->
-<para>
+<screen><userinput remap="pre">sed -e '/double \*mat/   s/double \*/std::array&lt;double, 6&gt; \&amp;/' \
+    -e '/double \*pBbox/ s/double \*/std::array&lt;double, 4&gt; \&amp;/' \
+    -i sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx    \
+       sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx</userinput></screen>
+
+
+
+    <para>
       Em seguida, corrija um problema com a detecção do Boost::System, que foi
 mudado de uma biblioteca para uma série de cabeçalhos no Boost-1.89.0:
     </para>
