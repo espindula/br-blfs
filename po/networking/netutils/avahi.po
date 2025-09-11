@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:59+0000\n"
-"PO-Revision-Date: 2024-09-06 04:18+0000\n"
+"PO-Revision-Date: 2025-09-06 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/networking_netutils_avahi/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.13.1\n"
 
 #. type: Content of the avahi-download-http entity
 #: blfs-en/networking/netutils/avahi.xml:7
@@ -617,78 +617,108 @@ msgstr ""
 #: blfs-en/networking/netutils/avahi.xml:313
 #, xml-text
 msgid ""
-"To start the <command>avahi-daemon</command> daemon at boot, enable the "
+"The <command>avahi-daemon</command> will conflict with <command>systemd-"
+"resolved</command> under the default configuration if both are running "
+"simultaneously on a system because both will act as a Multicast DNS resolver"
+" and responder.  If you must run the Avahi daemon (the BLFS editors don't "
+"recommend to do that unless you really need its functionality), disable the "
+"Multicast DNS support of <command>systemd-resolved</command> and enable the "
 "previously installed systemd unit by running the following command as the "
 "<systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
-"Para iniciar o processo de segundo plano <command>avahi-daemon</command> na "
-"inicialização, habilite a unidade do systemd instalada anteriormente "
-"executando o seguinte comando como o(a) usuário(a) <systemitem "
-"class=\"username\">root</systemitem>:"
+"O <command>avahi-daemon</command> conflitará com <command>systemd-"
+"resolved</command> sob a configuração padrão se ambos estiverem executando "
+"simultaneamente em um sistema, pois ambos atuarão como um resolvedor e "
+"respondedor de DNS Multicast. Se você precisar executar o processo de "
+"segundo plano Avahi (os(as) editores(as) do BLFS não recomendam fazer isso, "
+"a menos que você realmente precise da funcionalidade dele), desabilite o "
+"suporte a DNS Multicast do <command>systemd-resolved</command> e habiite a "
+"unidade systemd instalada anteriormente executando o seguinte comando como "
+"o(a) usuário(a) <systemitem class=\"username\">root</systemitem>:"
 
 #. type: Content of: <sect1><sect2><sect3><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:319
+#: blfs-en/networking/netutils/avahi.xml:325
 #, xml-text
 msgid "avahi"
 msgstr "avahi"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/networking/netutils/avahi.xml:322
+#: blfs-en/networking/netutils/avahi.xml:328
 #, no-wrap, xml-text
 msgid "<userinput>make install-avahi</userinput>"
 msgstr "<userinput>make install-avahi</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/networking/netutils/avahi.xml:324
+#: blfs-en/networking/netutils/avahi.xml:330
 #, no-wrap, xml-text
-msgid "<userinput>systemctl enable avahi-daemon</userinput>"
-msgstr "<userinput>systemctl enable avahi-daemon</userinput>"
+msgid ""
+"<userinput>mkdir -pv /etc/systemd/resolved.conf.d &amp;&amp;\n"
+"cat &gt; /etc/systemd/resolved.conf.d/no-mdns.conf &lt;&lt; EOF &amp;&amp;\n"
+"<literal>[Resolve]\n"
+"MulticastDNS=no\n"
+"</literal>EOF\n"
+"systemctl enable avahi-daemon</userinput>"
+msgstr ""
+"<userinput>mkdir -pv /etc/systemd/resolved.conf.d &amp;&amp;\n"
+"cat &gt; /etc/systemd/resolved.conf.d/no-mdns.conf &lt;&lt; EOF &amp;&amp;\n"
+"<literal>[Resolve]\n"
+"MulticastDNS=no\n"
+"</literal>EOF\n"
+"systemctl enable avahi-daemon</userinput>"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/networking/netutils/avahi.xml:327
+#: blfs-en/networking/netutils/avahi.xml:338
 #, xml-text
 msgid ""
 "To start the <command>avahi-dnsconfd</command> daemon at boot, enable the "
 "previously installed systemd unit by running the following command as the "
-"<systemitem class=\"username\">root</systemitem> user:"
+"<systemitem class=\"username\">root</systemitem> user (note that the "
+"following command will also implicitly enable <command>avahi-"
+"daemon</command>, so if you are running it, you need to make sure you've "
+"disabled the <command>systemd-resolved</command> Multicast DNS support as "
+"mentioned above):"
 msgstr ""
 "Para iniciar o processo de segundo plano <command>avahi-dnsconfd</command> "
-"na inicialização, habilite a unidade do systemd instalada anteriormente "
+"na inicialização, habilite a unidade systemd instalada anteriormente "
 "executando o seguinte comando como o(a) usuário(a) <systemitem "
-"class=\"username\">root</systemitem>:"
+"class=\"username\">root</systemitem> (observe que o seguinte comando também "
+"habilitará implicitamente o <command>avahi-daemon</command>, de forma que, "
+"se você o estiver executando, precisará certificar-se de que tenha "
+"desabilitado o suporte a DNS multicast do <command>systemd-"
+"resolved</command>, conforme mencionado acima):"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/networking/netutils/avahi.xml:332
+#: blfs-en/networking/netutils/avahi.xml:347
 #, no-wrap, xml-text
 msgid "<userinput>systemctl enable avahi-dnsconfd</userinput>"
 msgstr "<userinput>systemctl enable avahi-dnsconfd</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/networking/netutils/avahi.xml:339
+#: blfs-en/networking/netutils/avahi.xml:354
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netutils/avahi.xml:342
+#: blfs-en/networking/netutils/avahi.xml:357
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netutils/avahi.xml:343
+#: blfs-en/networking/netutils/avahi.xml:358
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netutils/avahi.xml:344
+#: blfs-en/networking/netutils/avahi.xml:359
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netutils/avahi.xml:347
+#: blfs-en/networking/netutils/avahi.xml:362
 #, xml-text
 msgid ""
 "avahi-autoipd, avahi-browse, avahi-browse-domains, avahi-daemon, avahi-"
@@ -702,7 +732,7 @@ msgstr ""
 "host-name, avahi-set-host-name, bshell, bssh e bvnc"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netutils/avahi.xml:352
+#: blfs-en/networking/netutils/avahi.xml:367
 #, xml-text
 msgid ""
 "libavahi-client.so, libavahi-common.so, libavahi-core.so, libavahi-glib.so, "
@@ -714,7 +744,7 @@ msgstr ""
 "ui.so, libdns_sd.so e libhowl.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netutils/avahi.xml:356
+#: blfs-en/networking/netutils/avahi.xml:371
 #, xml-text
 msgid ""
 "/etc/avahi/services, /usr/include/{avahi-client,avahi-common, avahi-compat-"
@@ -726,26 +756,26 @@ msgstr ""
 "libevent, avahi-ui}, /usr/lib/avahi, /usr/share/avahi"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/networking/netutils/avahi.xml:364
+#: blfs-en/networking/netutils/avahi.xml:379
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/networking/netutils/avahi.xml:365
+#: blfs-en/networking/netutils/avahi.xml:380
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:369
+#: blfs-en/networking/netutils/avahi.xml:384
 #, xml-text
 msgid "<command>avahi-autoipd</command>"
 msgstr "<command>avahi-autoipd</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:372
+#: blfs-en/networking/netutils/avahi.xml:387
 #, xml-text
 msgid "is a IPv4LL network address configuration daemon"
 msgstr ""
@@ -754,22 +784,22 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:375
+#: blfs-en/networking/netutils/avahi.xml:390
 #, xml-text
 msgid "avahi-autoipd"
 msgstr "avahi-autoipd"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:394
+#: blfs-en/networking/netutils/avahi.xml:409
 #, xml-text
 msgid "<command>avahi-browse</command>"
 msgstr "<command>avahi-browse</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:397
-#: blfs-en/networking/netutils/avahi.xml:410
-#: blfs-en/networking/netutils/avahi.xml:448
+#: blfs-en/networking/netutils/avahi.xml:412
+#: blfs-en/networking/netutils/avahi.xml:425
+#: blfs-en/networking/netutils/avahi.xml:463
 #, xml-text
 msgid ""
 "browses for mDNS/DNS-SD services using the <application>Avahi</application> "
@@ -780,33 +810,33 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:401
+#: blfs-en/networking/netutils/avahi.xml:416
 #, xml-text
 msgid "avahi-browse"
 msgstr "avahi-browse"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:407
+#: blfs-en/networking/netutils/avahi.xml:422
 #, xml-text
 msgid "<command>avahi-browse-domains</command>"
 msgstr "<command>avahi-browse-domains</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:414
+#: blfs-en/networking/netutils/avahi.xml:429
 #, xml-text
 msgid "avahi-browse-domains"
 msgstr "avahi-browse-domains"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:420
+#: blfs-en/networking/netutils/avahi.xml:435
 #, xml-text
 msgid "<command>avahi-daemon</command>"
 msgstr "<command>avahi-daemon</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:423
+#: blfs-en/networking/netutils/avahi.xml:438
 #, xml-text
 msgid "is the <application>Avahi</application> mDNS/DNS-SD daemon"
 msgstr ""
@@ -815,33 +845,33 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:426
+#: blfs-en/networking/netutils/avahi.xml:441
 #, xml-text
 msgid "avahi-daemon"
 msgstr "avahi-daemon"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:445
+#: blfs-en/networking/netutils/avahi.xml:460
 #, xml-text
 msgid "<command>avahi-discover-standalone</command>"
 msgstr "<command>avahi-discover-standalone</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:452
+#: blfs-en/networking/netutils/avahi.xml:467
 #, xml-text
 msgid "avahi-discover-standalone"
 msgstr "avahi-discover-standalone"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:458
+#: blfs-en/networking/netutils/avahi.xml:473
 #, xml-text
 msgid "<command>avahi-dnsconfd</command>"
 msgstr "<command>avahi-dnsconfd</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:461
+#: blfs-en/networking/netutils/avahi.xml:476
 #, xml-text
 msgid "is a Unicast DNS server from mDNS/DNS-SD configuration daemon"
 msgstr ""
@@ -850,22 +880,22 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:464
+#: blfs-en/networking/netutils/avahi.xml:479
 #, xml-text
 msgid "avahi-dnsconfd"
 msgstr "avahi-dnsconfd"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:470
+#: blfs-en/networking/netutils/avahi.xml:485
 #, xml-text
 msgid "<command>avahi-publish</command>"
 msgstr "<command>avahi-publish</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:473
-#: blfs-en/networking/netutils/avahi.xml:486
-#: blfs-en/networking/netutils/avahi.xml:499
+#: blfs-en/networking/netutils/avahi.xml:488
+#: blfs-en/networking/netutils/avahi.xml:501
+#: blfs-en/networking/netutils/avahi.xml:514
 #, xml-text
 msgid ""
 "registers a mDNS/DNS-SD service or host name or address mapping using the "
@@ -877,48 +907,48 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:477
+#: blfs-en/networking/netutils/avahi.xml:492
 #, xml-text
 msgid "avahi-publish"
 msgstr "avahi-publish"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:483
+#: blfs-en/networking/netutils/avahi.xml:498
 #, xml-text
 msgid "<command>avahi-publish-address</command>"
 msgstr "<command>avahi-publish-address</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:490
+#: blfs-en/networking/netutils/avahi.xml:505
 #, xml-text
 msgid "avahi-publish-address"
 msgstr "avahi-publish-address"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:496
+#: blfs-en/networking/netutils/avahi.xml:511
 #, xml-text
 msgid "<command>avahi-publish-service</command>"
 msgstr "<command>avahi-publish-service</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:503
+#: blfs-en/networking/netutils/avahi.xml:518
 #, xml-text
 msgid "avahi-publish-service"
 msgstr "avahi-publish-service"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:509
+#: blfs-en/networking/netutils/avahi.xml:524
 #, xml-text
 msgid "<command>avahi-resolve</command>"
 msgstr "<command>avahi-resolve</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:512
-#: blfs-en/networking/netutils/avahi.xml:526
-#: blfs-en/networking/netutils/avahi.xml:540
+#: blfs-en/networking/netutils/avahi.xml:527
+#: blfs-en/networking/netutils/avahi.xml:541
+#: blfs-en/networking/netutils/avahi.xml:555
 #, xml-text
 msgid ""
 "resolves one or more mDNS/DNS host name(s) to IP address(es)  (and vice "
@@ -930,96 +960,111 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:517
+#: blfs-en/networking/netutils/avahi.xml:532
 #, xml-text
 msgid "avahi-resolve"
 msgstr "avahi-resolve"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:523
+#: blfs-en/networking/netutils/avahi.xml:538
 #, xml-text
 msgid "<command>avahi-resolve-address</command>"
 msgstr "<command>avahi-resolve-address</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:531
+#: blfs-en/networking/netutils/avahi.xml:546
 #, xml-text
 msgid "avahi-resolve-address"
 msgstr "avahi-resolve-address"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:537
+#: blfs-en/networking/netutils/avahi.xml:552
 #, xml-text
 msgid "<command>avahi-resolve-host-name</command>"
 msgstr "<command>avahi-resolve-host-name</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:545
+#: blfs-en/networking/netutils/avahi.xml:560
 #, xml-text
 msgid "avahi-resolve-host-name"
 msgstr "avahi-resolve-host-name"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:551
+#: blfs-en/networking/netutils/avahi.xml:566
 #, xml-text
 msgid "<command>avahi-set-host-name</command>"
 msgstr "<command>avahi-set-host-name</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:554
+#: blfs-en/networking/netutils/avahi.xml:569
 #, xml-text
 msgid "changes the mDNS host name"
 msgstr "muda o nome &quot;mDNS&quot; do dispositivo"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:557
+#: blfs-en/networking/netutils/avahi.xml:572
 #, xml-text
 msgid "avahi-set-host-name"
 msgstr "avahi-set-host-name"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:575
+#: blfs-en/networking/netutils/avahi.xml:590
 #, xml-text
 msgid "<command>bssh</command>"
 msgstr "<command>bssh</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:578
+#: blfs-en/networking/netutils/avahi.xml:593
 #, xml-text
 msgid "browses for SSH servers on the local network"
 msgstr "procura servidores &quot;SSH&quot; na rede de intercomunicação local"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:581
+#: blfs-en/networking/netutils/avahi.xml:596
 #, xml-text
 msgid "bssh"
 msgstr "bssh"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netutils/avahi.xml:587
+#: blfs-en/networking/netutils/avahi.xml:602
 #, xml-text
 msgid "<command>bvnc</command>"
 msgstr "<command>bvnc</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netutils/avahi.xml:590
+#: blfs-en/networking/netutils/avahi.xml:605
 #, xml-text
 msgid "browses for VNC servers on the local network"
 msgstr "procura servidores &quot;VNC&quot; na rede de intercomunicação local"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netutils/avahi.xml:593
+#: blfs-en/networking/netutils/avahi.xml:608
 #, xml-text
 msgid "bvnc"
 msgstr "bvnc"
+
+#, xml-text
+#~ msgid ""
+#~ "To start the <command>avahi-daemon</command> daemon at boot, enable the "
+#~ "previously installed systemd unit by running the following command as the "
+#~ "<systemitem class=\"username\">root</systemitem> user:"
+#~ msgstr ""
+#~ "Para iniciar o processo de segundo plano <command>avahi-daemon</command> na "
+#~ "inicialização, habilite a unidade do systemd instalada anteriormente "
+#~ "executando o seguinte comando como o(a) usuário(a) <systemitem "
+#~ "class=\"username\">root</systemitem>:"
+
+#, no-wrap, xml-text
+#~ msgid "<userinput>systemctl enable avahi-daemon</userinput>"
+#~ msgstr "<userinput>systemctl enable avahi-daemon</userinput>"
 
 #, xml-text
 #~ msgid "<xref linkend=\"glib2\"/>"
