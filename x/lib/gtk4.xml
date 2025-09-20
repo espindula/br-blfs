@@ -124,6 +124,23 @@ url="https://pypi.org/project/pydbus/">pydbus</ulink> (para alguns testes) e
 
   </sect2>
 
+  <sect2 role="kernel" id='gtk4-kernel'>
+    <title>Configuração do Núcleo</title>
+
+    <para>
+      Some GTK-4 features need the following options in the kernel configuration.
+It's also needed by the test suite.
+    </para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="gtk4-kernel.xml"/>
+
+    <indexterm zone="gtk4 gtk4-kernel">
+      <primary sortas="d-gtk4">gtk4</primary>
+    </indexterm>
+
+  </sect2>
+
   <sect2 role="installation">
     <title>Instalação do GTK 4</title>
 
@@ -170,7 +187,7 @@ ninja</userinput></screen>
     <screen remap='test'><userinput>env -u{GALLIUM_DRIVER,MESA_LOADER_DRIVER_OVERRIDE}          \
     LIBGL_ALWAYS_SOFTWARE=1 VK_LOADER_DRIVERS_SELECT='lvp*' \
     dbus-run-session meson test --setup x11                 \
-                                --no-suite={headless,needs-udmabuf}</userinput></screen>
+                                --no-suite=headless</userinput></screen>
 
     <para>
       <!--
@@ -295,12 +312,8 @@ Desconfigura variáveis que possam conflitar com
     </para>
 
     <para>
-      <parameter>--no-suite={headless,needs-udmabuf}</parameter>: Desabilita os
-testes que exigem a dependência externa pydbus e os testes que exigem o nó
-do dispositivo <filename class='devicefile'>/dev/udmabuf</filename>. O nó do
-dispositivo não existe se o recurso não estiver habilitado na configuração
-do núcleo<phrase revision='sysv'>e, mesmo que exista, não pode ser acessado
-como usuários(as) sem privilégios</phrase>.
+      <parameter>--no-suite=headless</parameter>: Desabilite os testes que exigem
+a dependência externa pydbus.
     </para>
   </sect2>
 

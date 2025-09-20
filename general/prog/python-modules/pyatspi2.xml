@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY pyatspi2-download-http
-           "&gnome-download-http;/pyatspi/2.46/pyatspi-&pyatspi2-version;.tar.xz">
+           "&gnome-download-http;/pyatspi/&pyatspi2-dir;/pyatspi-&pyatspi2-version;.tar.xz">
   <!ENTITY pyatspi2-download-ftp  "">
-  <!ENTITY pyatspi2-md5sum        "0f2bfade055457cb0c2389fd46d1ad70">
-  <!ENTITY pyatspi2-size          "316 KB">
-  <!ENTITY pyatspi2-buildsize     "3,9 MB">
-  <!ENTITY pyatspi2-time          "menos que 0,1 UPC">
+  <!ENTITY pyatspi2-md5sum        "0e02d23694c6601ee1165c4cb09947a8">
+  <!ENTITY pyatspi2-size          "84 KB">
+  <!ENTITY pyatspi2-buildsize     "1,4 MB (Adicionar 15 MB for testes)">
+  <!ENTITY pyatspi2-time          "menos que 0,1 UPC (adicionar 0,7 UPC para testes)">
 ]>
 
   
@@ -91,10 +91,15 @@ módulo &quot;<application>Python 3</application>&quot;, execute os seguintes
 comandos:
       </para>
 
-<screen><userinput>./configure --prefix=/usr --with-python=/usr/bin/python3</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release -D enable_tests=true .. &amp;&amp;
+ninja</userinput></screen>
+
 
       <para>
-        Esse pacote não vem com uma suíte de teste.
+        Para executar os testes, emita: <userinput>ninja test</userinput>.
       </para>
 
       <para>
@@ -103,7 +108,7 @@ execute o seguinte comando como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
       </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
     </sect3>
 
