@@ -6,18 +6,18 @@
 
   <!ENTITY ffmpeg-download-http "https://ffmpeg.org/releases/ffmpeg-&ffmpeg-version;.tar.xz">
   <!ENTITY ffmpeg-download-ftp  "">
-  <!ENTITY ffmpeg-md5sum        "2c91c725fb1b393618554ff429e4ae43">
+  <!ENTITY ffmpeg-md5sum        "02fad5aa6db43488f748c397baccc326">
   <!ENTITY ffmpeg-size          "11 MB">
-  <!ENTITY ffmpeg-buildsize     "227 MB (adicionar 1,7 GB para a suíte/testes FATE; adicionar 881 MB para
-documentação)">
-  <!ENTITY ffmpeg-time          "1,2 UPC (usando paralelismo=4; adicionar 3,2 UPC (com THREADS=4) para
-executar a suíte FATE depois que arquivos de amostra forem baixados;
-adicionar 0,2 UPC para documentos doxygen)">
+  <!ENTITY ffmpeg-buildsize     "209 MB (add 1.7 GB for the FATE suite/tests,
+                                 add 869 MB for documentation)">
+  <!ENTITY ffmpeg-time          "1.6 SBU (using parallelism=4;
+                                 add 3.2 SBU (with THREADS=4) to run the FATE
+                                 suite after sample files are downloaded;
+                                 add 0.2 SBU for doxygen docs)">
 ]>
 
 <sect1 id="ffmpeg" xreflabel="FFmpeg-&ffmpeg-version;">
   <?dbhtml filename="ffmpeg.html"?>
-
 
   <title>FFmpeg-&ffmpeg-version;</title>
 
@@ -91,11 +91,12 @@ url="&patch-root;/ffmpeg-&ffmpeg-version;-chromium_method-1.patch"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="libaom"/>, <xref linkend="libass"/>, <xref
-linkend="fdk-aac"/>, <xref linkend="freetype2"/>, <xref linkend="lame"/>,
-<xref linkend="libvorbis"/>, <xref linkend="libvpx"/>, <xref
-linkend="opus"/>, <xref linkend="x264"/>, <xref linkend="x265"/> e <xref
-linkend="nasm"/>
+      <xref linkend="dav1d"/>, <xref linkend="libaom"/> (for chroma subsampling
+outside of YUV420)  <xref linkend="libass"/>, <xref linkend="fdk-aac"/>,
+<xref linkend="freetype2"/>, <xref linkend="lame"/>, <xref
+linkend="libvorbis"/>, <xref linkend="libvpx"/>, <xref linkend="opus"/>,
+<xref linkend="svt-av1"/> (only supports YUV420), <xref linkend="x264"/>,
+<xref linkend="x265"/>, and <xref linkend="nasm"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas para uso de área de trabalho</bridgehead>
@@ -114,21 +115,16 @@ linkend="nasm"/>
 ,-->
 <!--<xref linkend="opencv"/>
 , Needs a legacy version of opencv -->
-<!--<ulink url="https://vulkan.org/">
-Vulkan</ulink>, and-->
 <xref linkend="doxygen"/>, <xref linkend="fontconfig"/>, <xref
-linkend="fribidi"/>, <xref linkend="frei0r"/>, <xref linkend="libcdio"/>
-(para identificar e reproduzir CDs), <xref linkend="libdrm"/> (para entrada
-<quote>kmsgrab</quote>), <xref linkend="libjxl"/>, <xref
-linkend="libplacebo"/> (para espaços de cores acelerados por hardware e
-mapeamento de tons HDR), <xref linkend="libwebp"/>, <xref
-linkend="openjpeg2"/>, <xref linkend="gnutls"/>, <xref
+linkend="fribidi"/>, <xref linkend="frei0r"/>, <xref linkend="libcdio"/> (to
+identify and play CDs), <xref linkend="libdrm"/> (for <quote>kmsgrab</quote>
+input), <xref linkend="libjxl"/>, <xref linkend="libplacebo"/> (for hardware
+accelerated color spaces and HDR tonemapping), <xref linkend="libwebp"/>,
+<xref linkend="openjpeg2"/>, <xref linkend="gnutls"/>, <xref
 linkend="pulseaudio"/>, <xref linkend="samba"/>, <xref linkend="speex"/>,
-<xref linkend="texlive"/> (ou <xref linkend="tl-installer"/>) para
-documentação PDF e PS, <xref linkend="v4l-utils"/>, <xref
-linkend="vulkan-loader"/>, <xref linkend="xvid"/>, <xref
-linkend="x-window-system"/>, <ulink
-url="https://code.videolan.org/videolan/dav1d">dav1d</ulink>, <ulink
+<xref linkend="texlive"/> (or <xref linkend="tl-installer"/>) for PDF and PS
+documentation, <xref linkend="v4l-utils"/>, <xref linkend="vulkan-loader"/>,
+<xref linkend="xvid"/>, <xref linkend="x-window-system"/>, <ulink
 url="https://github.com/festvox/flite">Flite</ulink>, <ulink
 url="https://www.quut.com/gsm/">GSM</ulink>, <ulink
 url="https://tipok.org.ua/node/17">libaacplus</ulink>, <ulink
@@ -140,10 +136,9 @@ url="https://www.videolan.org/developers/libdca.html">libdca</ulink>, <ulink
 url="https://ieee1394.wiki.kernel.org/index.php/Libraries">libiec61883</ulink>,
 <ulink url="https://github.com/dekkers/libilbc">libilbc</ulink>, <ulink
 url="https://sourceforge.net/projects/modplug-xmms/">libmodplug</ulink>,
-<ulink url="https://github.com/Distrotech/libnut">libnut</ulink>
-(Verificação do Git), <ulink
-url="https://rtmpdump.mplayerhq.hu/">librtmp</ulink>, <ulink
-url="https://www.libssh.org/">libssh</ulink>, <ulink
+<ulink url="https://github.com/Distrotech/libnut">libnut</ulink> (Git
+checkout), <ulink url="https://rtmpdump.mplayerhq.hu/">librtmp</ulink>,
+<ulink url="https://www.libssh.org/">libssh</ulink>, <ulink
 url="https://www.theora.org">libtheora</ulink>, <ulink
 url="https://openal.org/">OpenAL</ulink>, <ulink
 url="https://sourceforge.net/projects/opencore-amr">OpenCore AMR</ulink>,
@@ -153,13 +148,14 @@ url="https://sourceforge.net/projects/schrodinger/">Schroedinger</ulink>,
 url="https://sourceforge.net/projects/opencore-amr/files/vo-aacenc/">vo-aaenc</ulink>,
 <ulink
 url="https://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/">vo-amrwbenc</ulink>,
-e <ulink url="https://github.com/intel/libvpl">libvpl</ulink> (para
-QuickSync não vaapi) com uma das de tempo de execução, <ulink
-url="https://github.com/intel/vpl-gpu-rt">vpl-gpu-rt</ulink>
-(Broadwell/5000+), <ulink
-url="https://github.com/Intel-Media-SDK/MediaSDK">intel-media-sdk</ulink>
-(série Haswell/4000 ou abaixo) use remendos originários do Arch para
-construção, <ulink url="https://zapping.sourceforge.net/ZVBI/">ZVBI</ulink>
+and <ulink
+url="https://glfs-book.github.io/slfs/general/libvpl.html">libvpl</ulink>
+for non-vaapi QuickSync) with one of <ulink
+url="https://glfs-book.github.io/slfs/general/intel-mediasdk.html">Intel-MediaSDK</ulink>
+(Haswell/4000 series or below) or <ulink
+url="https://glfs-book.github.io/slfs/general/intel-onevpl.html">intel-onevpl</ulink>
+(Broadwell/5000+), and <ulink
+url="https://zapping.sourceforge.net/ZVBI/">ZVBI</ulink>
     </para>
 
   </sect2>
@@ -199,6 +195,8 @@ comandos:
             --enable-libx264     \
             --enable-libx265     \
             --enable-openssl     \
+            --enable-libdav1d    \
+            --enable-libsvtav1   \
             --ignore-tests=enhanced-flv-av1,enhanced-flv-multitrack \
             --docdir=/usr/share/doc/ffmpeg-&ffmpeg-version; &amp;&amp;
 
@@ -329,11 +327,6 @@ da documentação.
     </para>
 
     <para>
-      <parameter>--enable-libfreetype</parameter>: Habilita suporte a
-<application>Freetype</application>.
-    </para>
-
-    <para>
       <parameter>--enable-gpl</parameter>: habilita o uso de código GPL e permite
 suporte para pós-processamento, swscale e muitos outros recursos.
     </para>
@@ -364,13 +357,18 @@ depuração nos aplicativos e bibliotecas.
     </para>
 
     <para>
-      <parameter>--enable-libaom</parameter>: Habilita decodificação de áudio e
-vídeo AV1 via <filename class="libraryfile">libaom</filename>.
+      <parameter>--enable-libaom</parameter>: Habilita codificar e decodificar AV1
+via <filename class="libraryfile">libaom</filename>.
     </para>
 
     <para>
       <parameter>--enable-libass</parameter>: Habilita a renderização do formato
 de legenda ASS/SSA via <filename class="libraryfile">libass</filename>.
+    </para>
+
+    <para>
+      <parameter>--enable-libdav1d</parameter>: Habilita decodificar AV1 via
+<filename class="libraryfile">libdav1d</filename>.
     </para>
 
     <para>
@@ -385,9 +383,15 @@ AAC via <filename class="libraryfile">libfdk-aac</filename>.
     </para>
 
     <para>
+      <parameter>--enable-libfreetype</parameter>: Habilita suporte a
+<application>Freetype</application>.
+    </para>
+
+    <para>
       <parameter>--enable-libmp3lame</parameter>: Habilita a codificação de áudio
 MP3 via <filename class="libraryfile">libmp3lame</filename>.
     </para>
+
 
     <!--
     <para>
@@ -400,6 +404,12 @@ MP3 via <filename class="libraryfile">libmp3lame</filename>.
     </para>
 -->
 <para>
+      <parameter>--enable-libsvtav1</parameter>: Habilita codificar AV1 via
+<filename class="libraryfile">libSvtAv1Enc</filename>. Entretanto, somente
+suporta subamostragem de croma de YUV420.
+    </para>
+
+    <para>
       <parameter>--enable-libvorbis</parameter>
 <parameter>--enable-libvpx</parameter>: Habilita codificação WebM via
 <filename class="libraryfile">libvorbis</filename> e <filename

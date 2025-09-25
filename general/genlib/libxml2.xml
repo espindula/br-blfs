@@ -72,17 +72,13 @@ usados para analisar arquivos "XML".
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
-
-      <!--     
       <listitem>
-
         <para>
-          Required patch:
-          <ulink url="&patch-root;/libxml2-&libxml2-version;-fix_parse_blanks-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/libxml2-&libxml2-version;-upstream_fix-1.patch"/>
         </para>
       </listitem>
--->
-<listitem>
+      <listitem>
         <para>
           Suíte de Teste Opcional: <ulink
 url="https://www.w3.org/XML/Test/xmlts&testsuite-version;.tar.gz"/> - Isso
@@ -107,15 +103,16 @@ habilita <command>make check</command> para se fazer uma testagem completa.
   <sect2 role="installation">
     <title>Instalação do libxml2</title>
 
-    <!--
     <para>
-
-      First, apply a patch from upstream:
+      Primeiro, aplique um remendo originário do fluxo de desenvolvimento para
+corrigir uma falha na análise de valores de atributos ainda não normalizados
+(por exemplo, o fonte do próprio BLFS e o fonte de <xref
+linkend='postgresql'/> contêm esses valores):
     </para>
 
-<screen><userinput>patch -Np1 -i ../libxml2-&libxml2-version;-fix_parse_blanks-1.patch</userinput></screen>
--->
-<para>
+<screen><userinput>patch -Np1 -i ../libxml2-&libxml2-version;-upstream_fix-1.patch</userinput></screen>
+
+    <para>
       Instale <application>libxml2</application> executando os seguintes comandos:
     </para>
 
@@ -124,7 +121,6 @@ habilita <command>make check</command> para se fazer uma testagem completa.
             --disable-static  \
             --with-history    \
             --with-icu        \
-            PYTHON=/usr/bin/python3 \
             --docdir=/usr/share/doc/libxml2-&libxml2-version; &amp;&amp;
 make</userinput></screen>
 
@@ -197,8 +193,10 @@ QtWebEngine.
     </para>
 
     <para>
-      <parameter>PYTHON=/usr/bin/python3</parameter>: Permite construir o módulo
-"libxml2" com "Python3" em vez de "Python2".
+      <option>--with-python PYTHON=/usr/bin/python3</option>: Essa combinação de
+chaves habilita as vinculações libxml2 para Python 3. Observe que essas
+vinculações estão obsoletas devido a falhas no projeto da API e serão
+removidas na libxml2-2.16.
     </para>
 
   </sect2>

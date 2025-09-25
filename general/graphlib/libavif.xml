@@ -69,21 +69,20 @@ codificar e decodificar arquivos AVIF.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="libaom"/>
+      <xref linkend="dav1d"/> e <xref linkend="svt-av1"/> (somente suporta YUV420)
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gdk-pixbuf"/>
+      <xref linkend="gdk-pixbuf"/> e <xref linkend="libaom"/> (para subamostragem
+de croma fora de YUV420)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <ulink url="https://github.com/google/googletest">gtest</ulink>, <ulink
-url="https://code.videolan.org/videolan/dav1d">libdav1d</ulink>, <ulink
-url="https://chromium.googlesource.com/libyuv/libyuv/">libyuv</ulink>,
-<ulink url="https://github.com/xiph/rav1e">rav1e</ulink> e <ulink
-url="https://gitlab.com/AOMediaCodec/SVT-AV1">svt-av1</ulink>
+url="https://chromium.googlesource.com/libyuv/libyuv/">libyuv</ulink> e
+<ulink url="https://github.com/xiph/rav1e">rav1e</ulink>
     </para>
 
     &test-use-internet;
@@ -104,6 +103,8 @@ cd    build &amp;&amp;
 cmake -D CMAKE_INSTALL_PREFIX=/usr \
       -D CMAKE_BUILD_TYPE=Release  \
       -D AVIF_CODEC_AOM=SYSTEM     \
+      -D AVIF_CODEC_DAV1D=SYSTEM   \
+      -D AVIF_CODEC_SVT=SYSTEM     \
       -D AVIF_BUILD_GDK_PIXBUF=ON  \
       -D AVIF_LIBYUV=OFF           \
       -G Ninja .. &amp;&amp;
@@ -138,9 +139,9 @@ usuário(a) &root;:
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-D AVIF_CODEC_AOM=ON</parameter>: Essa chave habilita usar o
-codificador AOM. Esse pacote é inútil sem pelo menos um codificador
-integrado.
+      <parameter>-D AVIF_CODEC_{AOM,DAV1D,SVT}=SYSTEM</parameter>: Essas chaves
+habilitam usar o codec de AV1 via dav1d, libaom e SVT-AV1. Esse pacote é
+inútil sem um codificador e decodificador de AV1.
     </para>
 
     <para>
@@ -156,22 +157,8 @@ url="https://chromium.googlesource.com/libyuv/libyuv/">libyuv</ulink>.
     </para>
 
     <para>
-      <option>-D AVIF_CODEC_DAV1D=SYSTEM</option>: Use essa chave se você tiver
-instalado <ulink
-url="https://code.videolan.org/videolan/dav1d">libdav1d</ulink> e desejar
-usá-lo como um codificador.
-    </para>
-
-    <para>
       <option>-D AVIF_CODEC_RAV1E=SYSTEM</option>: Use essa chave se você tiver
 instalado <ulink url="https://github.com/xiph/rav1e">rav1e</ulink> e desejar
-usá-lo como um codificador.
-    </para>
-
-    <para>
-      <option>-D AVIF_CODEC_SVT=SYSTEM</option>: Use essa chave se você tiver
-instalado <ulink
-url="https://gitlab.com/AOMediaCodec/SVT-AV1">svt-av1</ulink> e desejar
 usá-lo como um codificador.
     </para>
 

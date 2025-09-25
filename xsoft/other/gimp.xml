@@ -14,9 +14,9 @@
   <!ENTITY gimp-help-download   "https://download.gimp.org/pub/gimp/help/gimp-help-&gimp-help-version;.tar.bz2">
   <!ENTITY gimp-help-md5sum     "6a45a29097c69d5cf0d86e5c9b6e5f9e">
   <!ENTITY gimp-help-size       "126 MB">
-  <!ENTITY gimp-help-buildsize  "From 351 MB (74 MB installed) for en only to 1.5 GB for all
-                                 languages">
-  <!ENTITY gimp-help-time       "0,4 UPC (somente en), 5,1 UPC para todos os idiomas; usando paralelismo=4">
+  <!ENTITY gimp-help-buildsize  "351 MB (74 MB instalado)"><!-- for en only to 1.5 GB for all
+                                 languages"-->
+  <!ENTITY gimp-help-time       "0,4 UPC"> <!-- (en only), 5.1 SBU for all languages; using parallelism=4"-->
 ]>
 
 <sect1 id="gimp" xreflabel="Gimp-&gimp-version;">
@@ -220,16 +220,28 @@ instalar cópias locais dos arquivos de ajuda para ler offline, desempacote o
 tarball gimp-help e mude para a raiz da árvore do fonte recém-criada. 
     </para>
 
-<screen><userinput>tar -xf ../../gimp-help-&gimp-help-version;.tar.bz2 &amp;&amp;
+<!--
+    <para>
+
+      Remove from <envar>ALL_LINGUAS</envar> the codes for any languages which
+      you do not wish to install. Alternatively, remove the line starting with
+      <envar>ALL_LINGUAS</envar>, if you wish to build all languages.
+    </para>
+-->
+<screen><!--ca cs da de en en_GB es fa fr hr ko lt nl nn pt pt_BR ro sl sv uk zh_CN-->
+<userinput>tar -xf ../../gimp-help-&gimp-help-version;.tar.bz2 &amp;&amp;
 cd gimp-help-&gimp-help-version;
 
-ALL_LINGUAS=&quot;ca cs da de en en_GB es fa fr hr ko lt nl nn pt pt_BR ro sl sv uk zh_CN&quot; \
+sed -i 's/import libxml2//' configure &amp;&amp;
+
+ALL_LINGUAS=&quot;en&quot; \
 ./configure --prefix=/usr</userinput></screen>
 
+
     <para>
-      Remova de <envar>ALL_LINGUAS</envar> os códigos de quaisquer idiomas que
-você não desejar instalar. Alternativamente, remova a linha que começa com
-<envar>ALL_LINGUAS</envar>, se desejar construir todos os idiomas.
+      Construir idiomas que não sejam o inglês só é possível com o módulo libxml2
+do Python 3, que está obsoleto e não mais está habilitado na construção da
+libxml2 do BLFS.
     </para>
 
     <para>
@@ -261,14 +273,15 @@ usar <command>xvfb-run</command> para executar os testes. Sem essa chave,
 muitos testes falham se <command>xvfb-run</command> tiver sido instalado. 
     </para>
 
+  <!--
     <para>
-      <envar>ALL_LINGUAS=&quot;ca cs da de en en_GB es fa...&quot;</envar>: por
-padrão, os arquivos de ajuda serão renderizados em todos os idiomas
-disponíveis. Remova os códigos de quaisquer idiomas que você não desejar
-construir.
-    </para>
 
-  </sect2>
+      <envar>ALL_LINGUAS=&quot;ca cs da de en en_GB es fa...&quot;</envar>: by
+      default, the help files will be rendered in all the available languages.
+      Remove the codes of any languages you do not wish to build.
+    </para>
+-->
+</sect2>
 
   <sect2 role="configuration">
     <title>Configurando o Gimp</title>

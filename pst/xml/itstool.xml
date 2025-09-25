@@ -4,10 +4,10 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY itstool-download-http "https://files.itstool.org/itstool/itstool-&itstool-version;.tar.bz2">
+  <!ENTITY itstool-download-http "https://github.com/itstool/itstool/archive/&itstool-version;/itstool-&itstool-version;.tar.gz">
   <!ENTITY itstool-download-ftp  "">
-  <!ENTITY itstool-md5sum        "267a3bdc72a2d8abb1b824f2ea32ee9b">
-  <!ENTITY itstool-size          "104 KB">
+  <!ENTITY itstool-md5sum        "e759b258617a912acce630de3fa43957">
+  <!ENTITY itstool-size          "79 KB">
   <!ENTITY itstool-buildsize     "688 KB">
   <!ENTITY itstool-time          "menos que 0,1 UPC">
 ]>
@@ -68,11 +68,21 @@ dividi-lo em mensagens usando o Internationalization Tag Set (ITS) da W3C.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing='compact'>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink url=
+"&patch-root;/itstool-&itstool-version;-lxml-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do Itstool</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="DocBook"/>
+      <xref linkend="DocBook"/> e <xref linkend="lxml"/>
     </para>
 
   </sect2>
@@ -81,34 +91,24 @@ dividi-lo em mensagens usando o Internationalization Tag Set (ITS) da W3C.
     <title>Instalação do itstool</title>
 
     <para>
-      
-      <!-- Large volume of runtime messages, upstream inactive.
-        https://wiki.linuxfromscratch.org/blfs/ticket/18664#comment:14 -->
-Primeiro, corrija alguns problemas de compatibilidade com Python-3.12 e
-posterior:
+      Primeiro, aplique um remendo para usar <xref linkend='lxml'/> para manusear
+os arquivos XML em vez do módulo Python obsoleto (desabilitado por padrão)
+originário de <xref linkend='libxml2'/>:
     </para>
 
-<screen><userinput remap="pre">sed -i 's/re.sub(/re.sub(r/'         itstool.in &amp;&amp;
-sed -i 's/re.compile(/re.compile(r/' itstool.in</userinput></screen>
+<screen><userinput>patch -Np1 -i ../itstool-&itstool-version;-lxml-1.patch</userinput></screen>
 
     <para>
       Instale o <application>itstool</application> executando os seguintes
 comandos:
     </para>
 
-<!--
-    <para>
-
-      To test the results, issue: <command>make check</command>.
-    </para>
--->
-<screen><userinput>PYTHON=/usr/bin/python3 ./configure --prefix=/usr &amp;&amp;
+<screen><userinput>PYTHON=/usr/bin/python3 ./autogen.sh --prefix=/usr &amp;&amp;
 make</userinput></screen>
 
-
-
     <para>
-      Esse pacote não vem com uma suíte de teste.
+      Para testar os resultados, emita: <command>python3
+tests/run_tests.py</command>.
     </para>
 
     <para>

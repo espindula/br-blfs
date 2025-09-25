@@ -4,29 +4,24 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY xdg-user-dirs-download-http "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-&xdg-user-dirs-version;.tar.gz">
+  <!ENTITY xdg-user-dirs-download-http
+    "https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/archive/v&xdg-user-dirs-version;/xdg-user-dirs-v&xdg-user-dirs-version;.tar.gz">
   <!ENTITY xdg-user-dirs-download-ftp  "">
-  <!ENTITY xdg-user-dirs-md5sum        "dc7decea7ffb58cd067eff1fe1798cae">
-  <!ENTITY xdg-user-dirs-size          "267 KB">
-  <!ENTITY xdg-user-dirs-buildsize     "3,0 MB">
+  <!ENTITY xdg-user-dirs-md5sum        "0ca8418840e817fd071321f155926492">
+  <!ENTITY xdg-user-dirs-size          "88 KB">
+  <!ENTITY xdg-user-dirs-buildsize     "5,3 MB">
   <!ENTITY xdg-user-dirs-time          "menos que 0,1 UPC">
 ]>
 
 <sect1 id="xdg-user-dirs" xreflabel="Xdg-user-dirs-&xdg-user-dirs-version;">
-  <!-- No other tags inside any title.
-       Use Title Case in All Titles -->
-<?dbhtml filename="xdg-user-dirs.html"?>
+  <?dbhtml filename="xdg-user-dirs.html"?>
 
-
-  
   <title>Xdg-user-dirs-&xdg-user-dirs-version;</title>
 
-  <!--Required section-->
-<indexterm zone="xdg-user-dirs">
+  <indexterm zone="xdg-user-dirs">
     <primary sortas="a-xdg-user-dirs">xdg-user-dirs</primary>
   </indexterm>
 
-  
   <sect2 role="package">
     <title>Introdução ao "Xdg-user-dirs"</title>
 
@@ -90,29 +85,34 @@ linkend="libxslt"/> (todos três para construir as páginas de manual)
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr           \
-            --sysconfdir=/etc       \
-            --disable-documentation &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -D docs=false       \
+            .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput><userinput revision="sysv"> &amp;&amp;
+rm -rvf /usr/lib/systemd</userinput></screen>
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--disable-documentation</parameter>: Desabilita a instalação das
-páginas de manual. Remova essa chave se você tiver instalado as dependências
-opcionais e desejar instalar as páginas de manual desse pacote.
+      <parameter>-D docs=false</parameter>: Desabilita a instalação das páginas de
+manual. Remova essa chave se você tiver instalado as dependências opcionais
+e desejar instalar as páginas de manual desse pacote.
     </para>
   </sect2>
 
