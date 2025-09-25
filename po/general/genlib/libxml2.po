@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 20:00+0000\n"
-"PO-Revision-Date: 2025-09-18 16:18+0000\n"
+"PO-Revision-Date: 2025-09-24 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/general_genlib_libxml2/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -121,7 +121,17 @@ msgid "Additional Downloads"
 msgstr "Transferências Adicionais"
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/general/genlib/libxml2.xml:85
+#: blfs-en/general/genlib/libxml2.xml:77
+#, xml-text
+msgid ""
+"Required patch: <ulink url=\"&patch-"
+"root;/libxml2-&libxml2-version;-upstream_fix-1.patch\"/>"
+msgstr ""
+"Remendo exigido: <ulink url=\"&patch-"
+"root;/libxml2-&libxml2-version;-upstream_fix-1.patch\"/>"
+
+#. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
+#: blfs-en/general/genlib/libxml2.xml:83
 #, xml-text
 msgid ""
 "Optional Test Suite: <ulink "
@@ -133,43 +143,66 @@ msgstr ""
 " habilita <command>make check</command> para se fazer uma testagem completa."
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/general/genlib/libxml2.xml:92
+#: blfs-en/general/genlib/libxml2.xml:90
 #, xml-text
 msgid "libxml2 Dependencies"
 msgstr "Dependências do libxml2"
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/general/genlib/libxml2.xml:94
+#: blfs-en/general/genlib/libxml2.xml:92
 #, xml-text
 msgid "Recommended"
 msgstr "Recomendadas"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/genlib/libxml2.xml:96
+#: blfs-en/general/genlib/libxml2.xml:94
 #, xml-text
 msgid "<xref linkend=\"icu\"/>"
 msgstr "<xref linkend=\"icu\"/>"
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/general/genlib/libxml2.xml:99
+#: blfs-en/general/genlib/libxml2.xml:97
 #, xml-text
 msgid "Optional"
 msgstr "Opcionais"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/genlib/libxml2.xml:101
+#: blfs-en/general/genlib/libxml2.xml:99
 #, xml-text
 msgid "<xref linkend=\"valgrind\"/> (may be used in the tests)"
 msgstr "<xref linkend=\"valgrind\"/> (possivelmente seja usado nos testes)"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/general/genlib/libxml2.xml:106
+#: blfs-en/general/genlib/libxml2.xml:104
 #, xml-text
 msgid "Installation of libxml2"
 msgstr "Instalação do libxml2"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/genlib/libxml2.xml:115
+#: blfs-en/general/genlib/libxml2.xml:107
+#, xml-text
+msgid ""
+"First, apply a patch from upstream to fix a failure parsing not normalized "
+"yet attribute values (for example, the source of BLFS itself and the source "
+"of <xref linkend='postgresql'/> contain such values):"
+msgstr ""
+"Primeiro, aplique um remendo originário do fluxo de desenvolvimento para "
+"corrigir uma falha na análise de valores de atributos ainda não normalizados"
+" (por exemplo, o fonte do próprio BLFS e o fonte de <xref "
+"linkend='postgresql'/> contêm esses valores):"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/general/genlib/libxml2.xml:113
+#, no-wrap, xml-text
+msgid ""
+"<userinput>patch -Np1 -i "
+"../libxml2-&libxml2-version;-upstream_fix-1.patch</userinput>"
+msgstr ""
+"<userinput>patch -Np1 -i "
+"../libxml2-&libxml2-version;-upstream_fix-1.patch</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/general/genlib/libxml2.xml:116
 #, xml-text
 msgid ""
 "Install <application>libxml2</application> by running the following "
@@ -178,7 +211,7 @@ msgstr ""
 "Instale <application>libxml2</application> executando os seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/general/genlib/libxml2.xml:119
+#: blfs-en/general/genlib/libxml2.xml:120
 #, no-wrap, xml-text
 msgid ""
 "<userinput>./configure --prefix=/usr     \\\n"
@@ -186,7 +219,6 @@ msgid ""
 "            --disable-static  \\\n"
 "            --with-history    \\\n"
 "            --with-icu        \\\n"
-"            PYTHON=/usr/bin/python3 \\\n"
 "            --docdir=/usr/share/doc/libxml2-&libxml2-version; &amp;&amp;\n"
 "make</userinput>"
 msgstr ""
@@ -195,7 +227,6 @@ msgstr ""
 "            --disable-static  \\\n"
 "            --with-history    \\\n"
 "            --with-icu        \\\n"
-"            PYTHON=/usr/bin/python3 \\\n"
 "            --docdir=/usr/share/doc/libxml2-&libxml2-version; &amp;&amp;\n"
 "make</userinput>"
 
@@ -329,52 +360,56 @@ msgstr ""
 #: blfs-en/general/genlib/libxml2.xml:196
 #, xml-text
 msgid ""
-"<parameter>PYTHON=/usr/bin/python3</parameter>: Allows building the libxml2 "
-"module with Python3 instead of Python2."
+"<option>--with-python PYTHON=/usr/bin/python3</option>: This combination of "
+"switches enable the libxml2 bindings for Python 3.  Note that those bindings"
+" are deprecated due to flaws in the API design and they will be removed in "
+"libxml2-2.16."
 msgstr ""
-"<parameter>PYTHON=/usr/bin/python3</parameter>: Permite construir o módulo "
-"\"libxml2\" com \"Python3\" em vez de \"Python2\"."
+"<option>--with-python PYTHON=/usr/bin/python3</option>: Essa combinação de "
+"chaves habilita as vinculações libxml2 para Python 3. Observe que essas "
+"vinculações estão obsoletas devido a falhas no projeto da API e serão "
+"removidas na libxml2-2.16."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/general/genlib/libxml2.xml:203
+#: blfs-en/general/genlib/libxml2.xml:205
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/genlib/libxml2.xml:206
+#: blfs-en/general/genlib/libxml2.xml:208
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/genlib/libxml2.xml:207
+#: blfs-en/general/genlib/libxml2.xml:209
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/genlib/libxml2.xml:208
+#: blfs-en/general/genlib/libxml2.xml:210
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/genlib/libxml2.xml:212
+#: blfs-en/general/genlib/libxml2.xml:214
 #, xml-text
 msgid "xml2-config, xmlcatalog, and xmllint"
 msgstr "xml2-config, xmlcatalog e xmllint"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/genlib/libxml2.xml:217
-#: blfs-en/general/genlib/libxml2.xml:280
+#: blfs-en/general/genlib/libxml2.xml:219
+#: blfs-en/general/genlib/libxml2.xml:282
 #, xml-text
 msgid "libxml2.so"
 msgstr "libxml2.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/genlib/libxml2.xml:220
+#: blfs-en/general/genlib/libxml2.xml:222
 #, xml-text
 msgid ""
 "/usr/include/libxml2, /usr/lib/cmake/libxml2, "
@@ -385,26 +420,26 @@ msgstr ""
 "/usr/share/doc/libxml2-&libxml2-version; e /usr/share/gtk-doc/html/libxml2"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/general/genlib/libxml2.xml:229
+#: blfs-en/general/genlib/libxml2.xml:231
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/general/genlib/libxml2.xml:230
+#: blfs-en/general/genlib/libxml2.xml:232
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/genlib/libxml2.xml:234
+#: blfs-en/general/genlib/libxml2.xml:236
 #, xml-text
 msgid "<command>xml2-config</command>"
 msgstr "<command>xml2-config</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/genlib/libxml2.xml:237
+#: blfs-en/general/genlib/libxml2.xml:239
 #, xml-text
 msgid ""
 "determines the compile and linker flags that should be used to compile and "
@@ -416,40 +451,40 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/genlib/libxml2.xml:242
+#: blfs-en/general/genlib/libxml2.xml:244
 #, xml-text
 msgid "xml2-config"
 msgstr "xml2-config"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/genlib/libxml2.xml:248
+#: blfs-en/general/genlib/libxml2.xml:250
 #, xml-text
 msgid "<command>xmlcatalog</command>"
 msgstr "<command>xmlcatalog</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/genlib/libxml2.xml:251
+#: blfs-en/general/genlib/libxml2.xml:253
 #, xml-text
 msgid "is used to monitor and manipulate XML and SGML catalogs"
 msgstr "é usado para monitorar e manipular catálogos \"XML\" e \"SGML\""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/genlib/libxml2.xml:254
+#: blfs-en/general/genlib/libxml2.xml:256
 #, xml-text
 msgid "xmlcatalog"
 msgstr "xmlcatalog"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/genlib/libxml2.xml:260
+#: blfs-en/general/genlib/libxml2.xml:262
 #, xml-text
 msgid "<command>xmllint</command>"
 msgstr "<command>xmllint</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/genlib/libxml2.xml:263
+#: blfs-en/general/genlib/libxml2.xml:265
 #, xml-text
 msgid ""
 "parses XML files and outputs reports (based upon options) to detect errors "
@@ -460,25 +495,33 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/genlib/libxml2.xml:267
+#: blfs-en/general/genlib/libxml2.xml:269
 #, xml-text
 msgid "xmllint"
 msgstr "xmllint"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/genlib/libxml2.xml:273
+#: blfs-en/general/genlib/libxml2.xml:275
 #, xml-text
 msgid "<filename class=\"libraryfile\">libxml2.so</filename>"
 msgstr "<filename class=\"libraryfile\">libxml2.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/genlib/libxml2.xml:276
+#: blfs-en/general/genlib/libxml2.xml:278
 #, xml-text
 msgid "provides functions for programs to parse files that use the XML format"
 msgstr ""
 "fornece funções para aplicativos para analisar arquivos que usam o formato "
 "\"XML\""
+
+#, xml-text
+#~ msgid ""
+#~ "<parameter>PYTHON=/usr/bin/python3</parameter>: Allows building the libxml2 "
+#~ "module with Python3 instead of Python2."
+#~ msgstr ""
+#~ "<parameter>PYTHON=/usr/bin/python3</parameter>: Permite construir o módulo "
+#~ "\"libxml2\" com \"Python3\" em vez de \"Python2\"."
 
 #, xml-text
 #~ msgid "a2bb2b6cb8fc7be1fafa14f500e4f7c5"
@@ -529,24 +572,8 @@ msgstr ""
 #~ msgstr "900841340dc0ec0a8e04bad035510bb4"
 
 #, xml-text
-#~ msgid ""
-#~ "Required patch: <ulink url=\"&patch-"
-#~ "root;/libxml2-&libxml2-version;-fix_parse_blanks-1.patch\"/>"
-#~ msgstr ""
-#~ "Remendo exigido: <ulink url=\"&patch-"
-#~ "root;/libxml2-&libxml2-version;-fix_parse_blanks-1.patch\"/>"
-
-#, xml-text
 #~ msgid "First, apply a patch from upstream:"
 #~ msgstr "Primeiro, aplique um remendo originário do fluxo de desenvolvimento:"
-
-#, no-wrap, xml-text
-#~ msgid ""
-#~ "<userinput>patch -Np1 -i "
-#~ "../libxml2-&libxml2-version;-fix_parse_blanks-1.patch</userinput>"
-#~ msgstr ""
-#~ "<userinput>patch -Np1 -i "
-#~ "../libxml2-&libxml2-version;-fix_parse_blanks-1.patch</userinput>"
 
 #, xml-text
 #~ msgid "85dffa2387ff756bdf8b3b247594914a"
