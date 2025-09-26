@@ -10,8 +10,8 @@
   <!ENTITY svt-av1-download-ftp  "">
   <!ENTITY svt-av1-md5sum        "77b9d52e8c26bacf8bca742f8448dbc1">
   <!ENTITY svt-av1-size          "11 MB">
-  <!ENTITY svt-av1-buildsize     "81 MB">
-  <!ENTITY svt-av1-time          "0,7 UPC (usando paralelismo = 4)">
+  <!ENTITY svt-av1-buildsize     "81 MB (adicionar 647 MB para os testes)">
+  <!ENTITY svt-av1-time          "0.7 SBU (using parallelism=4; add 40.9 SBU for tests)">
 ]>
 
 <sect1 id="svt-av1" xreflabel="SVT-AV1-&svt-av1-version;">
@@ -32,6 +32,7 @@
 
     &lfs124_checked;
 
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
@@ -106,9 +107,25 @@ ninja</userinput></screen>
 
     <para>
       The test suite is very long and doesn't provide meaningful results. If you
-want to test the results anyway, issue <command>cmake .. -D BUILD_TESTING=ON
-&amp;&amp; ninja &amp;&amp; ninja test</command>.  It requires an Internet
-connection to run.
+want to test the results anyway, issue:
+    </para>
+
+<screen remap='test'><userinput>cmake .. -D BUILD_TESTING=ON &amp;&amp;
+ninja                        &amp;&amp;
+ninja TestVectors            &amp;&amp;
+SVT_AV1_TEST_VECTOR_PATH=$PWD/../test/vectors \
+ctest -V -O testlog.txt --timeout 10800</userinput></screen>
+
+    <para>
+      <!--[sic]-->
+<!-- test/Readme.md mentions even more
+      run_paramter_check failures so I guess those tests are just buggy.  -->
+On a relatively slow system it's needed to increase the timeout (see the SBU
+value for tests on top of the page).  In the SvtAv1ApiTests test, 12
+<literal>run_paramter_check</literal> subtests are known to fail.  The test
+harness will download a copy of libaom (even if <xref linkend='libaom'/> is
+already installed the test harness is still incapable to use the system
+installation) and some videos as test inputs.
     </para>
 
 
