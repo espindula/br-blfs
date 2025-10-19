@@ -6,9 +6,9 @@
 
   <!ENTITY cargoc-download-http "https://github.com/lu-zero/cargo-c/archive/v&cargo-c-version;/cargo-c-&cargo-c-version;.tar.gz">
   <!ENTITY cargoc-download-ftp  "">
-  <!ENTITY cargoc-md5sum        "082c8d0028ccb1c4c2dacb1d9a44ed6e">
-  <!ENTITY cargoc-size          "35 KB">
-  <!ENTITY cargoc-buildsize     "827 MB">
+  <!ENTITY cargoc-md5sum        "b2cd3dbd325519c5eba15c319e520967">
+  <!ENTITY cargoc-size          "36 KB">
+  <!ENTITY cargoc-buildsize     "884 MB">
   <!ENTITY cargoc-time          "0,7 UPC">
 
   <!ENTITY cargoc-lock-md5sum   "57fab87782a5f9ef46fcbddc44d425b1">
@@ -95,7 +95,7 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="libssh2"/> 
+      <xref linkend="libssh2"/>
     </para>
 
     &build-use-internet;
@@ -137,8 +137,8 @@ ter sido instalado como uma dependência exigida do <xref linkend='rust'/>.
       Instale <application>cargo-c</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1    &amp;&amp;
-[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1 &amp;&amp;
+<screen><userinput>export LIBSSH2_SYS_USE_PKG_CONFIG=1    &amp;&amp;
+export LIBSQLITE3_SYS_USE_PKG_CONFIG=1 &amp;&amp;
 
 cargo build --release</userinput></screen>
 
@@ -160,17 +160,30 @@ cargo build --release</userinput></screen>
 
   </sect2>
 
-  <!--
   <sect2 role="commands">
+    <title>Explicações do Comando</title>
 
-    <title>Command Explanations</title>
+    
+    <!-- https://github.com/alexcrichton/ssh2-rs/issues/173 -->
+<para>
+      <command>export LIBSSH2_SYS_USE_PKG_CONFIG=1</command>: Permite que
+<command>cargo</command> se lincar à libssh2 do sistema. Omita esse comando
+se você não tiver instalado <xref linkend='libssh2'/>.
+    </para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/meson-buildtype-release.xml"/>
+    
+    <!-- src/tools/cargo/Cargo.toml is specifying "bundled" as the
+         upstream is suggesting to avoid issues building for Windoge.
+         We don't care about Windoge so override this as we have
+         sqlite3 in LFS.  -->
+<para>
+      <command>export LIBSQLITE3_SYS_USE_PKG_CONFIG=1</command>: Permite que
+<command>cargo</command> se linque ao sqlite do sistema.
+    </para>
 
   </sect2>
--->
-<sect2 role="content">
+
+  <sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>

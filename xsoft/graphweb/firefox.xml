@@ -10,11 +10,11 @@
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "7,7 GB (241 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "7,7 GB (233 MB instalado) sem testes">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "15 UPC usando -j8, sem testes">
+  <!ENTITY firefox-time          "16 UPC usando -j8, sem testes">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -144,8 +144,9 @@ Configuração, e <xref linkend="startup-notification"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="icu"/>, <xref linkend="libevent"/>, <xref linkend="libvpx"/>,
-<xref linkend="libwebp"/>, <xref linkend="nasm"/> e <xref linkend="nss"/>
+      <xref linkend="dav1d"/>, <xref linkend="icu"/>, <xref linkend="libaom"/>,
+<xref linkend="libevent"/>, <xref linkend="libvpx"/>, <xref
+linkend="libwebp"/>, <xref linkend="nasm"/> e <xref linkend="nss"/>
     </para>
 
     <note>
@@ -232,6 +233,7 @@ ac_add_options --with-google-location-service-api-keyfile=$PWD/google-key
 
 # Comment out following options if you have not installed
 # recommended dependencies:
+ac_add_options --with-system-av1
 ac_add_options --with-system-icu
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
@@ -239,9 +241,8 @@ ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-webp
 
-# The libdav1d library (av1 decoder) requires nasm. Uncomment this
-# if nasm has not been installed. Do not uncomment this if you have
-# ffmpeg installed.
+# Firefox provides a copy of dav1d if it has not been installed. If you have
+# not installed nasm and ffmpeg, uncomment the following line:
 #ac_add_options --disable-av1
 
 # You cannot distribute the binary if you do this.

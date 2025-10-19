@@ -4,15 +4,14 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!-- Also update the download, md5, size entities in libxml2py2.xml -->
   <!ENTITY libxml2-download-http
     "https://download.gnome.org/sources/libxml2/&libxml2-majver;/libxml2-&libxml2-version;.tar.xz">
 <!--  <!ENTITY libxml2-download-http "http://xmlsoft.org/sources/libxml2-&libxml2-version;.tar.xz">-->
   <!ENTITY libxml2-download-ftp  "">
-  <!ENTITY libxml2-md5sum        "4f44fc1e16ed59c91022e4e89864bcdb">
+  <!ENTITY libxml2-md5sum        "fcf38f534bb8996984dba978ee3e27f4">
   <!ENTITY libxml2-size          "1,9 MB">
-  <!ENTITY libxml2-buildsize     "84 MB (com testes)">
-  <!ENTITY libxml2-time          "0,2 UPC (Usando paralelismo=4; com testes)">
+  <!ENTITY libxml2-buildsize     "49 MB (add 28 MB for documentation and 16 MB for tests)">
+  <!ENTITY libxml2-time          "less than 0.1 SBU (Using parallelism=4; with tests and documentation)">
   <!ENTITY testsuite-version     "20130923">
 ]>
 
@@ -69,16 +68,19 @@ usados para analisar arquivos "XML".
         </para>
       </listitem>
     </itemizedlist>
-
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
+    
+      <!--
       <listitem>
+
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/libxml2-&libxml2-version;-upstream_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/libxml2-&libxml2-version;-upstream_fix-1.patch"/>
         </para>
       </listitem>
-      <listitem>
+      -->
+<listitem>
         <para>
           Suíte de Teste Opcional: <ulink
 url="https://www.w3.org/XML/Test/xmlts&testsuite-version;.tar.gz"/> - Isso
@@ -93,53 +95,61 @@ habilita <command>make check</command> para se fazer uma testagem completa.
     <para role="recommended">
       <xref linkend="icu"/>
     </para>
-
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    
+  <!-- there is no way to use valgrind with meson, it seems
+    <bridgehead renderas="sect4">
+Optional</bridgehead>
     <para role="optional">
-      <xref linkend="valgrind"/> (possivelmente seja usado nos testes)
-    </para>
-  </sect2>
+      <xref linkend="valgrind"/> (may be used in the tests)
+    </para>-->
+</sect2>
 
   <sect2 role="installation">
     <title>Instalação do libxml2</title>
-
+    
+    <!--
     <para>
-      Primeiro, aplique um remendo originário do fluxo de desenvolvimento para
-corrigir uma falha na análise de valores de atributos ainda não normalizados
-(por exemplo, o fonte do próprio BLFS e o fonte de <xref
-linkend='postgresql'/> contêm esses valores):
+
+      First, apply a patch from upstream to fix a failure parsing not
+      normalized yet attribute values (for example, the source of BLFS
+      itself and the source of <xref linkend='postgresql'/> contain such
+      values):
     </para>
 
 <screen><userinput>patch -Np1 -i ../libxml2-&libxml2-version;-upstream_fix-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>libxml2</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr     \
-            --sysconfdir=/etc \
-            --disable-static  \
-            --with-history    \
-            --with-icu        \
-            --docdir=/usr/share/doc/libxml2-&libxml2-version; &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build
+
+meson setup ..           \
+      --prefix=/usr      \
+      -D history=enabled \
+      -D icu=enabled     &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      If you wish to build and install the manual pages and the documentation, you
+should have <xref linkend="libxslt"/> and <xref linkend="doxygen"/>
+installed, and run:
+    </para>
+
+<screen role="doc"><userinput>sed -e "/^dir_doc/s/\$/ + '-' + meson.project_version()/" \
+    -i ../meson.build                                     &amp;&amp;
+meson configure -D docs=enabled                           &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Se você baixou a suíte de teste, [então] emita o seguinte comando:
     </para>
 
-<screen><userinput>tar xf ../xmlts&testsuite-version;.tar.gz</userinput></screen>
+<screen role="test"><userinput>tar xf ../../xmlts&testsuite-version;.tar.gz -C ..</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check &gt;
-check.log</command>. Esse comando imprimirá várias linhas de mensagens de
-erro como <quote><computeroutput>Failed to parse
-xstc/...</computeroutput></quote> porque alguns arquivos de teste estão
-ausentes e essas mensagens podem ser seguramente ignoradas. Um sumário dos
-resultados pode ser obtido com <command>grep -E '^Total|expected|Ran'
-check.log</command>. Se <xref linkend="valgrind"/> estiver instalado e você
-desejar verificar vazamentos de memória, substitua <command>check</command>
-por <command>check-valgrind</command>.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <note>
@@ -161,42 +171,29 @@ class="username">root</systemitem>:
       Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
-
-    <para>
-      Finalmente, evite que alguns pacotes desnecessariamente se vinculem ao ICU
-usando os seguintes comandos como o(a) usuário(a) &root;:
-    </para>
-
-<screen role="root"><userinput>rm -vf /usr/lib/libxml2.la &amp;&amp;
-sed '/libs=/s/xml2.*/xml2"/' -i /usr/bin/xml2-config</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
-
     <para>
-      <parameter>--with-history</parameter>: Essa chave habilita o suporte
-<application>Readline</application> ao executar
-<command>xmlcatalog</command> ou <command>xmllint</command> no modo shell.
+      <parameter>-D history=enabled</parameter>: This switch enables
+<application>Readline</application> support when running
+<command>xmlcatalog</command> or <command>xmllint</command> in shell mode.
     </para>
 
     <para>
-      <parameter>--with-icu</parameter>: Essa chave habilita suporte para
-<application>ICU</application>, o qual fornece suporte adicional
-Unicode. Isso é necessário para alguns pacotes no BLFS, como para
-QtWebEngine.
+      <parameter>-D icu=enabled</parameter>: This switch enables support for
+<application>ICU</application>, which provides additional Unicode support.
+This is needed for some packages in BLFS, such as for QtWebEngine.
     </para>
 
     <para>
-      <option>--with-python PYTHON=/usr/bin/python3</option>: Essa combinação de
-chaves habilita as vinculações libxml2 para Python 3. Observe que essas
-vinculações estão obsoletas devido a falhas no projeto da API e serão
-removidas na libxml2-2.16.
+      <option>-D python=enabled</option>: This switch enables the libxml2 Python
+bindings.  Note that those bindings are deprecated due to flaws in the API
+design and they will be removed in libxml2-2.16.
     </para>
 
   </sect2>
@@ -217,8 +214,8 @@ removidas na libxml2-2.16.
           libxml2.so
         </seg>
         <seg>
-          /usr/include/libxml2, /usr/lib/cmake/libxml2,
-/usr/share/doc/libxml2-&libxml2-version; e /usr/share/gtk-doc/html/libxml2
+          /usr/include/libxml2, /usr/lib/cmake/libxml2, and
+/usr/share/doc/libxml2-&libxml2-version;,
         </seg>
       </seglistitem>
     </segmentedlist>

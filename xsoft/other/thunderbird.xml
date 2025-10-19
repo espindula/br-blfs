@@ -6,10 +6,10 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "30634bba4d0bd3bbb5fef07f1f01459e">
-  <!ENTITY thunderbird-size          "721 MB">
-  <!ENTITY thunderbird-buildsize     "9 GB (276 MB instalado)">
-  <!ENTITY thunderbird-time          "18 UPC (em uma máquina de oito núcleos)">
+  <!ENTITY thunderbird-md5sum        "19f0fe8cc731ce393b4a4a15a226e3ce">
+  <!ENTITY thunderbird-size          "720 MB">
+  <!ENTITY thunderbird-buildsize     "8,9 GB (268 MB instalado)">
+  <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
        the C/C++ code appears to obey it.
 
@@ -93,9 +93,6 @@ obsoletado pela mozilla) e <xref linkend="startup-notification"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      
-      
-      
       <!-- When using system ICU, a problem occurs where the calendar and mail
            functions do not render correctly and it causes other strange
            behavior to occur. See Ticket #18323 for more details, as well as
@@ -104,9 +101,9 @@ obsoletado pela mozilla) e <xref linkend="startup-notification"/>
            being upstreamed yet. Do not enable system ICU yet. -->
 <!--<xref linkend="icu"/>
 ,-->
-<xref linkend="libevent"/>, <xref linkend="libvpx"/>, <xref
-linkend="libwebp"/>, <xref linkend="nasm"/>, <xref linkend="nspr"/> e <xref
-linkend="nss"/>
+<xref linkend="dav1d"/>, <xref linkend="libaom"/>, <xref
+linkend="libevent"/>, <xref linkend="libvpx"/>, <xref linkend="libwebp"/>,
+<xref linkend="nasm"/>, <xref linkend="nspr"/> e <xref linkend="nss"/>
     </para>
 
     <note>
@@ -146,6 +143,18 @@ uma breve descrição de cada uma), emita <command>./mach configure -- --help
 | less</command>. Crie o arquivo com o seguinte comando:
     </para>
 
+<!--
+    <para>
+
+      Change a Rust file to allow implicit autoref to prevent a build failure.
+      The trailing <literal>\r</literal> ensures that the MS-DOS format is used
+      for the inserted line so that it will be consistent with all other lines
+      in the file:
+    </para>
+
+<screen><userinput>sed -e '1i\#![warn(dangerous_implicit_autorefs)]\r' \
+    -i third_party/rust/allocator-api2/src/stable/vec/mod.rs</userinput></screen>
+-->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used.
 
@@ -161,11 +170,16 @@ ac_add_options --disable-necko-wifi
 
 # Comment out following options if you have not installed
 # recommended dependencies:
+ac_add_options --with-system-av1
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-webp
+
+# Thunderbird provides a copy of dav1d if it has not been installed. If you
+# have not installed nasm and ffmpeg, uncomment the following line:
+#ac_add_options --disable-av1
 
 # The BLFS editors recommend not changing anything below this line:
 ac_add_options --prefix=/usr
@@ -200,15 +214,6 @@ ac_add_options --without-wasm-sandboxed-libraries</literal>
 EOF</userinput></screen>
 
 
-    <para>
-      Mude um arquivo do Rust para permitir autoref implícito para evitar uma
-falha de construção. O <literal>\r</literal> final garante que o formato
-MS-DOS seja usado para a linha inserida, de modo que seja consistente com
-todas as outras linhas no arquivo:
-    </para>
-
-<screen><userinput>sed -e '1i\#![warn(dangerous_implicit_autorefs)]\r' \
-    -i third_party/rust/allocator-api2/src/stable/vec/mod.rs</userinput></screen>
 
     <para>
       Agora invoque o conjunto de comandos sequenciais Python
