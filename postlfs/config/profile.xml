@@ -541,7 +541,9 @@ unset RED GREEN NORMAL
 
 # GnuPG wants this or it'll fail with pinentry-curses under some
 # circumstances (for example signing a Git commit)
-tty -s &amp;&amp; export GPG_TTY=$(tty)
+# Note that tty -s will "succeed" in LFS chroot environment so we cannot
+# use -s instead of redirecting to /dev/null.
+$(tty &amp;>/dev/null) &amp;&amp; export GPG_TTY=$(tty)
 
 # End /etc/bashrc</literal>
 EOF</userinput></screen>

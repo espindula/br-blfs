@@ -6,7 +6,7 @@
 
   <!ENTITY graphviz-download-http "https://gitlab.com/graphviz/graphviz/-/archive/&graphviz-version;/graphviz-&graphviz-version;.tar.bz2">
   <!ENTITY graphviz-download-ftp  "">
-  <!ENTITY graphviz-md5sum        "13e07434dd6e8f2ac9bf60dc5e943331">
+  <!ENTITY graphviz-md5sum        "e16012736b0d3c8630f7635ffc0bee99">
   <!ENTITY graphviz-size          "35 MB">
   <!ENTITY graphviz-buildsize     "194 MB (7,1 MB instalado)">
   <!ENTITY graphviz-time          "0,3 UPC (usando paralelismo=4)">
@@ -182,7 +182,22 @@ Fence</ulink>
 comandos:
     </para>
 
+<!-- Fortunately we don't run the test suite of this package.  If we
+         start to run the test suite this hack may break tests.  -->
 <screen><userinput>sed -i '/ldflags/ s/ $.*&amp;&amp;//' cmake/FindPHP.cmake</userinput></screen>
+
+    
+    <para>
+      Agora, evite a codificação rígida de caminhos de busca de bibliotecas
+(rpath) nas bibliotecas compartilhadas. As bibliotecas não precisam do rpath
+para instalação no local padrão, e o rpath pode, às vezes, causar efeitos
+indesejados ou até mesmo problemas de segurança. Nós não podemos usar
+<option>-D CMAKE_SKIP_INSTALL_RPATH=ON</option> para esse pacote porque o
+rpath é realmente necessário para os programas instalados por esse pacote,
+de forma que nós precisamos editar o sistema de construção:
+    </para>
+
+<screen><userinput>sed '/ORIGIN/d' -i lib/CMakeLists.txt</userinput></screen>
 
     <para>
       Instale <application>Graphviz</application> executando os seguintes
@@ -192,10 +207,9 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr   \
-      -D CMAKE_BUILD_TYPE=Release    \
-      -D CMAKE_SKIP_INSTALL_RPATH=ON \
-      ..                             &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      ..                           &amp;&amp;
 
 sed -i '/GZIP/s/:.*$/=/' CMakeCache.txt &amp;&amp;
 
@@ -216,9 +230,6 @@ significativos.
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/cmake-skip-install-rpath.xml"/>
 
     <para>
       <command>sed ... CMakeCache.txt</command>: Esse comando é necessário para

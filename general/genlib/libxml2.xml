@@ -10,8 +10,8 @@
   <!ENTITY libxml2-download-ftp  "">
   <!ENTITY libxml2-md5sum        "fcf38f534bb8996984dba978ee3e27f4">
   <!ENTITY libxml2-size          "1,9 MB">
-  <!ENTITY libxml2-buildsize     "49 MB (add 28 MB for documentation and 16 MB for tests)">
-  <!ENTITY libxml2-time          "less than 0.1 SBU (Using parallelism=4; with tests and documentation)">
+  <!ENTITY libxml2-buildsize     "49 MB (adicionar 28 MB para documentação e 16 MB para testes)">
+  <!ENTITY libxml2-time          "menos que 0,1 UPC (Usando paralelismo=4; com testes e documentação)">
   <!ENTITY testsuite-version     "20130923">
 ]>
 
@@ -95,14 +95,13 @@ habilita <command>make check</command> para se fazer uma testagem completa.
     <para role="recommended">
       <xref linkend="icu"/>
     </para>
-    
-  <!-- there is no way to use valgrind with meson, it seems
-    <bridgehead renderas="sect4">
-Optional</bridgehead>
+
+    <bridgehead renderas="sect4">Opcionais (para gerar a documentação)</bridgehead>
     <para role="optional">
-      <xref linkend="valgrind"/> (may be used in the tests)
-    </para>-->
-</sect2>
+      <xref linkend="doxygen"/> e <xref linkend="libxslt"/>
+    </para>
+
+  </sect2>
 
   <sect2 role="installation">
     <title>Instalação do libxml2</title>
@@ -119,11 +118,18 @@ Optional</bridgehead>
 <screen><userinput>patch -Np1 -i ../libxml2-&libxml2-version;-upstream_fix-1.patch</userinput></screen>
 -->
 <para>
+      Primeiro, remova uma chamada desnecessária ao <command>git</command> no
+<filename>meson.build</filename>:
+    </para>
+
+<screen><userinput>sed -i "/'git'/,+3d" meson.build</userinput></screen>
+
+    <para>
       Instale <application>libxml2</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
-cd    build
+cd    build &amp;&amp;
 
 meson setup ..           \
       --prefix=/usr      \
@@ -132,12 +138,12 @@ meson setup ..           \
 ninja</userinput></screen>
 
     <para>
-      If you wish to build and install the manual pages and the documentation, you
-should have <xref linkend="libxslt"/> and <xref linkend="doxygen"/>
-installed, and run:
+      Se você deseja construir e instalar as páginas de manual e a documentação,
+você deveria ter <xref linkend="libxslt"/> e <xref linkend="doxygen"/>
+instalados e executar:
     </para>
 
-<screen role="doc"><userinput>sed -e "/^dir_doc/s/\$/ + '-' + meson.project_version()/" \
+<screen remap="doc"><userinput>sed -e "/^dir_doc/s/\$/ + '-' + meson.project_version()/" \
     -i ../meson.build                                     &amp;&amp;
 meson configure -D docs=enabled                           &amp;&amp;
 ninja</userinput></screen>
@@ -146,7 +152,7 @@ ninja</userinput></screen>
       Se você baixou a suíte de teste, [então] emita o seguinte comando:
     </para>
 
-<screen role="test"><userinput>tar xf ../../xmlts&testsuite-version;.tar.gz -C ..</userinput></screen>
+<screen remap="test"><userinput>tar xf ../../xmlts&testsuite-version;.tar.gz -C ..</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>ninja test</command>.
@@ -173,27 +179,42 @@ class="username">root</systemitem>:
 
 <screen role="root"><userinput>ninja install</userinput></screen>
 
+    <para>
+      O <command>xml2-config</command> pode retornar sinalizadores necessários
+para lincar à biblioteca estática para o projeto, incluindo as referências
+para as bibliotecas do <xref linkend='icu'/>. Isso seria inútil, pois
+instalamos somente a biblioteca compartilhada. Para piorar as coisas, isso
+pode fazer com que alguns pacotes que usam a
+<application>libxml2</application> sejam lincados desnecessariamente a
+alguma biblioteca do <xref linkend='icu'/>, então esses pacotes precisarão
+de uma reconstrução se o ICU for atualizado para uma nova versão
+principal. Corrija isso executando, como &root;:
+    </para>
+
+<screen role="root"><userinput>sed "s/--static/--shared/" -i /usr/bin/xml2-config</userinput></screen>
+
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>-D history=enabled</parameter>: This switch enables
-<application>Readline</application> support when running
-<command>xmlcatalog</command> or <command>xmllint</command> in shell mode.
+      <parameter>-D history=enabled</parameter>: Essa chave habilita o suporte
+<application>Readline</application> ao executar
+<command>xmlcatalog</command> ou <command>xmllint</command> no modo shell.
     </para>
 
     <para>
-      <parameter>-D icu=enabled</parameter>: This switch enables support for
-<application>ICU</application>, which provides additional Unicode support.
-This is needed for some packages in BLFS, such as for QtWebEngine.
+      <parameter>-D icu=enabled</parameter>: Essa chave habilita suporte para
+<application>ICU</application>, o qual fornece suporte adicional
+Unicode. Isso é necessário para alguns pacotes no BLFS, como para
+QtWebEngine.
     </para>
 
     <para>
-      <option>-D python=enabled</option>: This switch enables the libxml2 Python
-bindings.  Note that those bindings are deprecated due to flaws in the API
-design and they will be removed in libxml2-2.16.
+      <option>-D python=enabled</option>: Essa chave habilita as vinculações
+libxml2 para Python. Observe que essas vinculações estão obsoletas devido a
+falhas no projeto da API e serão removidas na libxml2-2.16.
     </para>
 
   </sect2>
@@ -214,7 +235,7 @@ design and they will be removed in libxml2-2.16.
           libxml2.so
         </seg>
         <seg>
-          /usr/include/libxml2, /usr/lib/cmake/libxml2, and
+          /usr/include/libxml2, /usr/lib/cmake/libxml2 e
 /usr/share/doc/libxml2-&libxml2-version;,
         </seg>
       </seglistitem>
