@@ -7,9 +7,9 @@
   <!ENTITY psutil-download-http "&pymodules-dl;/p/psutil/psutil-&psutil-version;.tar.gz">
   <!ENTITY psutil-download-ftp  "">
   <!ENTITY psutil-md5sum        "&psutil-md5sum;">
-  <!ENTITY psutil-size          "488 KB">
-  <!ENTITY psutil-buildsize     "4,2 MB">
-  <!ENTITY psutil-time          "menos que 0,1 UPC">
+  <!ENTITY psutil-size          "476 KB">
+  <!ENTITY psutil-buildsize     "6,2 MB (adicionar 57 MB para os testes)">
+  <!ENTITY psutil-time          "menos que 0,1 UPC (0,1 UPC com testes)">
 ]>
 
   
@@ -99,7 +99,29 @@ url="https://pypi.org/project/pytest-subtests/">pytest-subtests</ulink> e
         Agora, como o(a) usuário(a) &root;:
       </para>
 
+<!--
+      <para>
+
+        This package does not have a working test suite.
+      </para>
+-->
 <screen role="root"><userinput>&install-wheel; psutil</userinput></screen>
+
+
+      <para>
+        Para a finalidade de executar os testes, os módulos binários têm de ser
+copiados:
+      </para>
+
+<screen remap='test'><userinput>cp build/lib*/psutil/*.so psutil</userinput></screen>
+
+      <para>
+        Se usar Python-3.14.0 ou superior, um teste necessita ser corrigido para
+evitar travamento:
+      </para>
+
+<screen remap='test'><userinput>sed "/multiprocessing.Pool/i\            multiprocessing.set_start_method('fork')" \
+    -i psutil/tests/test_process_all.py</userinput></screen>
 
       <para>
         Para testar os resultados, emita:
@@ -109,19 +131,47 @@ url="https://pypi.org/project/pytest-subtests/">pytest-subtests</ulink> e
 testenv/bin/pip3 install pytest-{instafail,subtests,xdist} pyperf pypinfo &amp;&amp;
 testenv/bin/python3 -m pytest</userinput></screen>
 
-      <para>
-        O teste nomeado de <literal>TestSystemAPIs::test_disk_usage</literal> é
-conhecido por falhar. O teste nomeado de
-<literal>TestAvailProcessAPIs::test_io_counters</literal> é conhecido por
-falhar se o núcleo não tiver <option>CONFIG_TASK_IO_ACCOUNTING</option>
-habilitado. O teste nomeado de
-<literal>TestExampleScripts::test_who</literal> é conhecido por falhar se o
-gerenciador de login não escrever em <filename>/run/utmp</filename> (observe
-que, devido ao potencial problema do ano 2037, o Shadow já parou de escrever
-nele). O teste nomeado de <literal>TestSystemAPIs::test_users</literal> é
-conhecido por falhar se o arquivo <filename>/run/utmp</filename> contiver
-uma entrada para a tela de login.
-      </para>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            O teste nomeado de <literal>TestSystemAPIs::test_disk_usage</literal> é
+conhecido por falhar.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+	         O teste nomeado de <literal>TestSystemNetIfAddrs::test_ips</literal> é
+conhecido por falhar se tunelamento de IPv6 estiver habilitado no núcleo.
+          </para>
+        </listitem>
+        
+        <listitem>
+          <para>
+           O teste nomeado de <literal>TestAvailProcessAPIs::test_io_counters</literal>
+é conhecido por falhar se o núcleo não tiver
+<option>CONFIG_TASK_IO_ACCOUNTING</option> habilitada.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            O teste nomeado de <literal>TestExampleScripts::test_who</literal> é
+conhecido por falhar se o gerenciador de login não escrever no
+<filename>/run/utmp</filename> (observe-se que, devido ao potencial problema
+do ano 2037, Shadow já parou de escrever nele).
+          </para>
+        </listitem>
+
+
+        <listitem>
+          <para>
+            O teste nomeado de <literal>TestSystemAPIs::test_users</literal> é conhecido
+por falhar se o arquivo <filename>/run/utmp</filename> contiver uma entrada
+para a tela de login.
+          </para>
+        </listitem>
+      </itemizedlist>
 
     </sect3>
 

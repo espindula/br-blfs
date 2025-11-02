@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY libheif-download-http "https://github.com/strukturag/libheif/releases/download/v&libheif-version;/libheif-&libheif-version;.tar.gz">
+  <!ENTITY libheif-md5sum        "5d0442f7197a34b7aaf95bdffabb51e9">
+  <!ENTITY libheif-size          "1,8 MB">
+  <!ENTITY libheif-buildsize     "31 MB">
+  <!ENTITY libheif-time          "1,0 UPC">
+]>
+
+
+<!-- Try to keep the indentation used in this file-->
+<sect1 id="libheif" xreflabel="libheif-&libheif-version;">
+  <?dbhtml filename="libheif.html"?>
+
+  <title>libheif-&libheif-version;</title>
+
+  <!--Required section-->
+<indexterm zone="libheif">
+    <primary sortas="a-libheif">libheif</primary>
+  </indexterm>
+
+  
+  <sect2 role="package">
+    <title>Introdução ao libheif</title>
+
+    <para>
+      O pacote <application>libheif</application> é um decodificador e codificador
+de formatos de arquivo HEIF e AVIF.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&libheif-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &libheif-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &libheif-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &libheif-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &libheif-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do libheif</bridgehead>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para>
+      <xref linkend='libaom'/>, <xref linkend='libde265'/> e <xref
+linkend='x265'/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend='brotli'/>, <xref linkend='dav1d'/>, <xref
+linkend='doxygen'/>, <xref linkend='ffmpeg'/>, <xref linkend='gdk-pixbuf'/>,
+<xref linkend='libjpeg'/>, <xref linkend='libpng'/>, <xref
+linkend='libtiff'/>, <xref linkend='libwebp'/>, <xref linkend='openjpeg2'/>,
+<xref linkend='sdl2'/>, <xref linkend='svt-av1'/>, <ulink
+url="https://github.com/ultravideo/kvazaar">kvaaar</ulink>, <ulink
+url="https://www.openh264.org/">openh264</ulink>, <ulink
+url="https://github.com/aous72/OpenJPH">openjph</ulink>, <ulink
+url="https://github.com/ultravideo/uvg266">uvg266</ulink>, <ulink
+url="https://github.com/fraunhoferhhi/vvdec">vvdec</ulink>, <ulink
+url="https://github.com/fraunhoferhhi/vvenc">vvenc</ulink> e <ulink
+url="https://github.com/xiph/rav1e">rav1e</ulink>
+    </para>
+
+    
+  <!--  Only use this if you want to note something in the wiki
+    <para condition="html" role="usernotes">
+
+      Editor Notes: <ulink url="&blfs-wiki;/libheif"/>
+    </para>
+    -->
+</sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do libheif</title>
+
+    <para>
+      Instale <application>libheif</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -G Ninja ..
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    
+
+    <!-- The intention is only listing an option if the dependency is
+         in BLFS and it's not enabled by default even if the dependency is
+         installed.  -->
+<para>
+      <option>-D DAV1D=ON</option>: Essa opção permite usar <xref
+linkend='dav1d'/> para decodificar dados AV1 em arquivos AVIF.
+    </para>
+
+    <para>
+      <option>-D FFMPEG_DECODER=ON</option>: Essa opção permite usar o <xref
+linkend='ffmpeg'/> para decodificar dados H.265 em arquivos HEIC.
+    </para>
+
+    <para>
+      <option>-D JPEG_DECODER=ON -D JPEG_ENCODER=ON</option>: Essas opções
+permitem usar a <xref linkend='libjpeg'/> para codificar e decodificar
+arquivos HEIF com dados JPEG.
+    </para>
+
+    <para>
+      <option>-D OpenJPEG_ENCODER=ON -D OpenJPEG_DECODER=ON</option>: Essas opções
+permitem usar o <xref linkend='openjpeg2'/> para codificar e decodificar
+arquivos HEIF com dados JPEG 2000.
+    </para>
+
+    <para>
+      <option>-D SvtEnc=ON</option>: Essa opção permite usar <xref
+linkend='svt-av1'/> para codificar dados AV1 para arquivos AVIF.
+    </para>
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
+
+      <seglistitem>
+        <seg>
+          heif-convert (linque simbólico para heif-dec), heif-dec, heif-enc,
+heif-info, heif-thumbnailer (se libpng estiver disponível) e heif-view (se
+SDL2 estiver disponível)
+        </seg>
+        <seg>
+          libheif.so
+        </seg>
+        <seg>
+          /usr/include/libheif, /usr/lib/cmake/libheif e /usr/lib/cmake/libheif
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="heif-dec">
+        <term><command>heif-dec</command></term>
+        <listitem>
+          <para>
+            decodifica imagem HEIC/HEIF
+          </para>
+          <indexterm zone="libheif heif-dec">
+            <primary sortas="b-heif-dec">heif-dec</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="heif-enc">
+        <term><command>heif-enc</command></term>
+        <listitem>
+          <para>
+            converte imagem para HEIC/HEIF
+          </para>
+          <indexterm zone="libheif heif-enc">
+            <primary sortas="b-heif-enc">heif-enc</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="heif-info">
+        <term><command>heif-info</command></term>
+        <listitem>
+          <para>
+            mostra informações relativas ao arquivo HEIC/HEIF
+          </para>
+          <indexterm zone="libheif heif-info">
+            <primary sortas="b-heif-info">heif-info</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="heif-thumbnailer">
+        <term><command>heif-thumbnailer</command></term>
+        <listitem>
+          <para>
+            cria miniaturas a partir de arquivos HEIC/HEIF
+          </para>
+          <indexterm zone="libheif heif-thumbnailer">
+            <primary sortas="b-heif-thumbnailer">heif-thumbnailer</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="heif-view">
+        <term><command>heif-view</command></term>
+        <listitem>
+          <para>
+            exibe imagens em formato HEIC/HEIF com SDL2
+          </para>
+          <indexterm zone="libheif heif-view">
+            <primary sortas="b-heif-view">heif-view</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libheif-lib">
+        <term><filename class="libraryfile">libheif.so</filename></term>
+        <listitem>
+          <para>
+            é um decodificador e codificador de arquivos nos formatos ISO/IEC
+23008-12:2017 HEIF e AVIF (AV1 Image File Format)
+          </para>
+          <indexterm zone="libheif libheif-lib">
+            <primary sortas="c-libheif">libheif.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect2>
+</sect1>

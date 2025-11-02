@@ -6,8 +6,8 @@
 
   <!ENTITY brotli-download-http "https://github.com/google/brotli/archive/v&brotli-version;/brotli-&brotli-version;.tar.gz">
   <!ENTITY brotli-download-ftp  "">
-  <!ENTITY brotli-md5sum        "3a6a3dba82a3604792d3cb0bd41bca60">
-  <!ENTITY brotli-size          "500 KB">
+  <!ENTITY brotli-md5sum        "8fbfae9a5ecbc278ae7f761ecb6d1285">
+  <!ENTITY brotli-size          "632 KB">
   <!ENTITY brotli-buildsize     "33 MB (com ligações python3)">
   <!-- The python tests for this package are broken.  The tarball is missing a lot of test files -->
   <!ENTITY brotli-time          "0,3 UPC (com ligações python3; paralelismo=4)">
@@ -102,38 +102,31 @@ cd    build &amp;&amp;
 
 cmake -D CMAKE_INSTALL_PREFIX=/usr \
       -D CMAKE_BUILD_TYPE=Release  \
-      ..  &amp;&amp;
-make</userinput></screen>
+      -G Ninja .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make test</command>.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
-
-    <!--  These are broken
     <para>
-
-      The python tests are missing most of the necessary testdata files and
-      therefore 240 of 311 tests fail.
-      If you nevertheless wish to test the bindings, go back to the top-level directory and
-      issue: <command>python3 setup.py test</command>.
-    </para>
--->
-<para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
       Se desejado, construa as ligações <application>Python3</application>:
     </para>
 
 <screen><userinput>cd .. &amp;&amp;
-sed "/c\/.*\.[ch]'/d;\
-     /include_dirs=\[/\
-     i libraries=['brotlicommon','brotlidec','brotlienc']," \
-    -i setup.py &amp;&amp;
+
+sed -e '/libraries +=/s/=.*/= [required_system_library[3:]]/' \
+    -e '/package_configuration/d'                             \
+    -e '/pkgconfig/d'                                         \
+    -i setup.py                                               &amp;&amp;
+
+USE_SYSTEM_BROTLI=1 \
 &build-wheel-cmd; $PWD</userinput></screen>
 
     <para>
@@ -141,7 +134,7 @@ sed "/c\/.*\.[ch]'/d;\
 &root;:
     </para>
 
-<!-- "131 passed in 2.76s" for me with 1.1.0 -->
+<!-- "135 passed in 4.26s" for me with 1.2.0 -->
 <screen role="root"><userinput>&install-wheel; Brotli</userinput></screen>
 
     
@@ -155,14 +148,19 @@ sed "/c\/.*\.[ch]'/d;\
     <title>Explicações do Comando</title>
 
     
-    <!-- https://github.com/google/brotli/issues/933 -->
+    <!-- TODO: would it be easier to just add the pkgconfig module into the
+         book?  -->
 <para>
-      <command>sed ... -i setup.py</command>: Impede que
-<filename>setup.py</filename> reconstrua o pacote inteiro novamente; use as
-bibliotecas já instaladas para a ligação <application>Python3</application>
-em vez disso.
+      <command>sed ... -i setup.py</command>: Permitir construir a vinculação do
+<application>Python3</application> com <envar>USE_SYSTEM_BROTLI=1</envar>,
+mas sem o módulo pkgconfig do Python 3 (que o BLFS não fornece) instalado.
     </para>
 
+    <para>
+      <envar>USE_SYSTEM_BROTLI=1</envar>: Parar <filename>setup.py</filename> de
+reconstruir o pacote todo novamente e, em vez disso, usar as bibliotecas já
+instaladas para a vinculação do <application>Python3</application>.
+    </para>
   </sect2>
 
   <sect2 role="content">

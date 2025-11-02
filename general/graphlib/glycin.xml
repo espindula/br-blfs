@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY glycin-download-http "https://download.gnome.org/sources/glycin/&glycin-majmin;/glycin-&glycin-version;.tar.xz">
+  <!ENTITY glycin-md5sum        "b86c86d5a7675fac4e97dfb87f78972f">
+  <!ENTITY glycin-size          "6,3 MB">
+  <!ENTITY glycin-buildsize     "1,1 GB (adicionais 775 MB para testes)">
+  <!ENTITY glycin-time          "6,4 UPC (adicionais 9,5 UPC para testes)">
+]>
+
+
+<!-- Try to keep the indentation used in this file-->
+<sect1 id="glycin" xreflabel="glycin-&glycin-version;">
+  <?dbhtml filename="glycin.html"?>
+
+  <title>glycin-&glycin-version;</title>
+
+  <!--Required section-->
+<indexterm zone="glycin">
+    <primary sortas="a-glycin">glycin</primary>
+  </indexterm>
+
+  
+  <sect2 role="package">
+    <title>Introdução ao glycin</title>
+
+    <para>
+      O pacote <application>glycin</application> contém uma estrutura de
+carregamento de imagens isolada e extensível.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&glycin-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &glycin-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &glycin-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &glycin-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &glycin-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do glycin</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref role="runtime" linkend="bubblewrap"/> (tempo de execução), <xref
+linkend="fontconfig"/>, <xref linkend="glib2"/> (GObject Introspection
+recomendado), <xref linkend="lcms2"/>, <xref linkend="libseccomp"/> e <xref
+linkend="rust"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend='libheif'/>, <xref linkend='libjxl'/>, <xref
+linkend='librsvg'/> e <xref linkend="vala"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="gi-docgen"/>, <xref linkend="gtk4"/> e <ulink
+url="https://libopenraw.freedesktop.org/">libopenraw</ulink>
+    </para>
+
+    
+  <!--  Only use this if you want to note something in the wiki
+    <para condition="html" role="usernotes">
+
+      Editor Notes: <ulink url="&blfs-wiki;/glycin"/>
+    </para>
+    -->
+</sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do glycin</title>
+
+    <para>
+      Instale <application>glycin</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr           \
+            --buildtype=release     \
+            -D libglycin-gtk4=false &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Se tiver instalado o <xref linkend="gi-docgen"/>, você consegue construir a
+documentação emitindo:
+    </para>
+
+<screen remap="doc"><userinput>sed "/install_dir:.*doc/s|,$| / 'glycin-' + meson.project_version()&amp;|" \
+    -i ../libglycin/meson.build &amp;&amp;
+
+meson configure -D capi_docs=true &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Agora como o(a) usuário(a) &root;:
+    </para>
+
+    <screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D glycin_gtk4=false</parameter>: Esse parâmetro desabilita a
+construção da <systemitem class='library'>libglycin-gtk4</systemitem> (que
+ainda não é usada por nenhum pacote do BLFS), de forma que esse pacote
+consiga ser construído sem <xref linkend='gtk4'/> instalado.
+    </para>
+
+    <para>
+      <option>-D glycin-loaders=...</option>: Use essa opção para especificar os
+carregadores de imagem a serem construídos. O padrão é
+<literal>glycin-heif,glycin-image-rs,glycin-jxl,glycin-svg</literal>,
+abrangendo o suporte para todos os formatos de imagem comumente usados. Você
+pode remover o carregador <literal>glycin-heif</literal>,
+<literal>glycin-jxl</literal> ou <literal>glycin-svg</literal> se a
+dependência recomendada correspondente não estiver instalada, mas fazer isso
+causará falhas nos testes e prejudicará a funcionalidade desse
+pacote. Também existem carregadores para os formatos JPEG 2000 e RAW, mas
+eles não estão habilitados por padrão.
+    </para>
+
+    <para>
+      <option>-D vapi=false</option>: Essa opção permite construir esse pacote sem
+<xref linkend='vala'/> instalado.
+    </para>
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Biblioteca(s) Instalada(s)</segtitle>
+      <segtitle>Diretório(s) Instalado(s)</segtitle>
+
+      <seglistitem>
+        <seg>
+          glycin-thumbnailer
+        </seg>
+        <seg>
+          libglycin-2.so
+        </seg>
+        <seg>
+          /usr/include/glycin-2, /usr/libexec/glycin-loaders e
+/usr/share/glycin-loaders
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="glycin-thumbnailer">
+        <term><command>glycin-thumbnailer</command></term>
+        <listitem>
+          <para>
+            cria miniaturas para imagens em um formato suportado pelo glycin
+          </para>
+          <indexterm zone="glycin glycin-thumbnailer">
+            <primary sortas="b-glycin-thumbnailer">glycin-thumbnailer</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libglycin-2">
+        <term><filename class="libraryfile">libglycin-2.so</filename></term>
+        <listitem>
+          <para>
+            contém funções de carregamento de imagens que funcionam executando
+carregadores glycin em um ambiente isolado
+          </para>
+          <indexterm zone="glycin libglycin-2">
+            <primary sortas="c-libglycin-2">libglycin-2.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect2>
+</sect1>
