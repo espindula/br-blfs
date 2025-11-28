@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2024-03-22 06:38+0000\n"
-"PO-Revision-Date: 2025-11-02 04:18+0000\n"
+"PO-Revision-Date: 2025-11-09 16:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/x_lib_gdk-pixbuf/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -150,17 +150,23 @@ msgstr "Recomendadas"
 #. type: Content of: <sect1><sect2><para>
 #: blfs-en/x/lib/gdk-pixbuf.xml:84
 #, xml-text
-msgid "<xref linkend=\"docutils\"/> and <xref linkend=\"glycin\"/>"
-msgstr "<xref linkend=\"docutils\"/> e <xref linkend=\"glycin\"/>"
+msgid ""
+"<xref linkend=\"docutils\"/> and <xref linkend=\"glycin\"/> (circular: build"
+" gdk-pixbuf without glycin first, then build glycin with all its recommended"
+" dependencies, and rebuild gdk-pixbuf again)"
+msgstr ""
+"<xref linkend=\"docutils\"/> e <xref linkend=\"glycin\"/> (circular: "
+"construa gdk-pixbuf sem glycin primeiro, então construa glycin com todas as "
+"dependências recomendadas dele e reconstrua gdk-pixbuf novamente)"
 
 #. type: Content of: <sect1><sect2><bridgehead>
-#: blfs-en/x/lib/gdk-pixbuf.xml:88
+#: blfs-en/x/lib/gdk-pixbuf.xml:90
 #, xml-text
 msgid "Optional"
 msgstr "Opcionais"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:90
+#: blfs-en/x/lib/gdk-pixbuf.xml:92
 #, xml-text
 msgid ""
 "<xref linkend=\"gi-docgen\"/> (to generate documentation), <xref "
@@ -179,13 +185,13 @@ msgstr ""
 "linkend=\"libtiff\"/> (obsoleto)"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/gdk-pixbuf.xml:101
+#: blfs-en/x/lib/gdk-pixbuf.xml:103
 #, xml-text
 msgid "Installation of Gdk Pixbuf"
 msgstr "Instalação do Gdk Pixbuf"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:104
+#: blfs-en/x/lib/gdk-pixbuf.xml:106
 #, xml-text
 msgid ""
 "Install <application>Gdk Pixbuf</application> by running the following "
@@ -195,31 +201,43 @@ msgstr ""
 "seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/x/lib/gdk-pixbuf.xml:108
+#: blfs-en/x/lib/gdk-pixbuf.xml:110
 #, no-wrap, xml-text
 msgid ""
 "<userinput>mkdir build &amp;&amp;\n"
 "cd    build &amp;&amp;\n"
 "\n"
-"meson setup ..            \\\n"
-"      --prefix=/usr       \\\n"
-"      --buildtype=release \\\n"
-"      -D others=enabled   \\\n"
-"      --wrap-mode=nofallback &amp;&amp;\n"
+"meson setup ..                \\\n"
+"      --prefix=/usr           \\\n"
+"      --buildtype=release     \\\n"
+"      -D others=enabled       \\\n"
+"      -D png=disabled         \\\n"
+"      -D gif=disabled         \\\n"
+"      -D jpeg=disabled        \\\n"
+"      -D tiff=disabled        \\\n"
+"      -D thumbnailer=disabled \\\n"
+"      --wrap-mode=nofallback  \\\n"
+"      $(pkgconf glycin-2 || echo -D glycin=disabled) &amp;&amp;\n"
 "ninja</userinput>"
 msgstr ""
 "<userinput>mkdir build &amp;&amp;\n"
 "cd    build &amp;&amp;\n"
 "\n"
-"meson setup ..            \\\n"
-"      --prefix=/usr       \\\n"
-"      --buildtype=release \\\n"
-"      -D others=enabled   \\\n"
-"      --wrap-mode=nofallback &amp;&amp;\n"
+"meson setup ..                \\\n"
+"      --prefix=/usr           \\\n"
+"      --buildtype=release     \\\n"
+"      -D others=enabled       \\\n"
+"      -D png=disabled         \\\n"
+"      -D gif=disabled         \\\n"
+"      -D jpeg=disabled        \\\n"
+"      -D tiff=disabled        \\\n"
+"      -D thumbnailer=disabled \\\n"
+"      --wrap-mode=nofallback  \\\n"
+"      $(pkgconf glycin-2 || echo -D glycin=disabled) &amp;&amp;\n"
 "ninja</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:119
+#: blfs-en/x/lib/gdk-pixbuf.xml:127
 #, xml-text
 msgid ""
 "If you have <xref linkend='gi-docgen'/> installed and wish to build the API "
@@ -229,7 +247,7 @@ msgstr ""
 "documentação da API para esse pacote, emita:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/x/lib/gdk-pixbuf.xml:123
+#: blfs-en/x/lib/gdk-pixbuf.xml:131
 #, no-wrap, xml-text
 msgid ""
 "<userinput>sed \"/docs_dir =/s@\\$@ / 'gdk-pixbuf-&gdk-pixbuf-version;'@\" -i ../docs/meson.build &amp;&amp;\n"
@@ -241,13 +259,13 @@ msgstr ""
 "ninja</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:131
+#: blfs-en/x/lib/gdk-pixbuf.xml:139
 #, xml-text
 msgid "The test suite of this package does not provide meaningful results."
 msgstr "A suíte de teste desse pacote não fornece resultados significativos."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:135
+#: blfs-en/x/lib/gdk-pixbuf.xml:143
 #, xml-text
 msgid "Now, as the <systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
@@ -255,13 +273,13 @@ msgstr ""
 "class=\"username\">root</systemitem>&quot;:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/x/lib/gdk-pixbuf.xml:138
+#: blfs-en/x/lib/gdk-pixbuf.xml:146
 #, no-wrap, xml-text
 msgid "<userinput>ninja install</userinput>"
 msgstr "<userinput>ninja install</userinput>"
 
 #. type: Content of: <sect1><sect2><note><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:142
+#: blfs-en/x/lib/gdk-pixbuf.xml:150
 #, xml-text
 msgid ""
 "If you installed the package on to your system using a "
@@ -276,19 +294,19 @@ msgstr ""
 "class=\"username\">root</systemitem>&quot;:"
 
 #. type: Content of: <sect1><sect2><note><screen>
-#: blfs-en/x/lib/gdk-pixbuf.xml:148
+#: blfs-en/x/lib/gdk-pixbuf.xml:156
 #, no-wrap, xml-text
 msgid "<userinput>gdk-pixbuf-query-loaders --update-cache</userinput>"
 msgstr "<userinput>gdk-pixbuf-query-loaders --update-cache</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/gdk-pixbuf.xml:153
+#: blfs-en/x/lib/gdk-pixbuf.xml:161
 #, xml-text
 msgid "Command Explanations"
 msgstr "Explicações do Comando"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:165
+#: blfs-en/x/lib/gdk-pixbuf.xml:173
 #, xml-text
 msgid ""
 "<parameter>-D others=enabled</parameter>: Build the loaders for some formats"
@@ -297,80 +315,92 @@ msgstr ""
 "<parameter>-D others=enabled</parameter>: Construir os carregadores para "
 "alguns formatos ainda não suportados pelo glycin, notadamente XBM e XPM."
 
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/x/lib/gdk-pixbuf.xml:178
+#, xml-text
+msgid ""
+"<parameter>-D *=disabled</parameter>: Don't build the components obsoleted "
+"in favor of glycin.  Those components are automatically disabled when "
+"building this package with glycin installed, but explicitly specify those "
+"options to make the configuration of the first build (without glycin) "
+"consistent."
+msgstr ""
+"<parameter>-D *=disabled</parameter>: Não construir os componentes obsoletos"
+" em favor do glycin. Esses componentes são desabilitados automaticamente ao "
+"construir esse pacote com o glycin instalado, mas especifique essas opções "
+"explicitamente para tornar a configuração da primeira construção (sem "
+"glycin) consistente."
+
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/x/lib/gdk-pixbuf.xml:171
+#: blfs-en/x/lib/gdk-pixbuf.xml:187
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/x/lib/gdk-pixbuf.xml:174
+#: blfs-en/x/lib/gdk-pixbuf.xml:190
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/x/lib/gdk-pixbuf.xml:175
+#: blfs-en/x/lib/gdk-pixbuf.xml:191
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/x/lib/gdk-pixbuf.xml:176
+#: blfs-en/x/lib/gdk-pixbuf.xml:192
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/x/lib/gdk-pixbuf.xml:180
+#: blfs-en/x/lib/gdk-pixbuf.xml:196
 #, xml-text
 msgid "gdk-pixbuf-csource, gdk-pixbuf-pixdata, and gdk-pixbuf-query-loaders"
 msgstr "gdk-pixbuf-csource, gdk-pixbuf-pixdata e gdk-pixbuf-query-loaders"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/x/lib/gdk-pixbuf.xml:185 blfs-en/x/lib/gdk-pixbuf.xml:261
+#: blfs-en/x/lib/gdk-pixbuf.xml:201 blfs-en/x/lib/gdk-pixbuf.xml:277
 #, xml-text
 msgid "libgdk_pixbuf-2.0.so"
 msgstr "libgdk_pixbuf-2.0.so"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/x/lib/gdk-pixbuf.xml:188
-#, fuzzy, xml-text
-#| msgid ""
-#| "/usr/include/gdk-pixbuf-2.0, /usr/libexec/installed-tests/gdk-pixbuf, "
-#| "/usr/share/installed-tests/gdk-pixbuf, /usr/share/gtk-doc/html/gdk-pixbuf, "
-#| "and /usr/share/thumbnailers"
+#: blfs-en/x/lib/gdk-pixbuf.xml:204
+#, xml-text
 msgid ""
 "/usr/include/gdk-pixbuf-2.0, /usr/lib/gdk-pixbuf-2.0, "
 "/usr/libexec/installed-tests/gdk-pixbuf, /usr/share/installed-tests/gdk-"
 "pixbuf, /usr/share/gtk-doc/html/gdk-pixbuf, and /usr/share/thumbnailers"
 msgstr ""
-"/usr/include/gdk-pixbuf-2.0, /usr/libexec/installed-tests/gdk-pixbuf, "
-"/usr/share/installed-tests/gdk-pixbuf, /usr/share/gtk-doc/html/gdk-pixbuf e "
-"/usr/share/thumbnailers"
+"/usr/include/gdk-pixbuf-2.0, /usr/lib/gdk-pixbuf-2.0, "
+"/usr/libexec/installed-tests/gdk-pixbuf, /usr/share/installed-tests/gdk-"
+"pixbuf, /usr/share/gtk-doc/html/gdk-pixbuf e /usr/share/thumbnailers"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/x/lib/gdk-pixbuf.xml:199
+#: blfs-en/x/lib/gdk-pixbuf.xml:215
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/x/lib/gdk-pixbuf.xml:200
+#: blfs-en/x/lib/gdk-pixbuf.xml:216
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/x/lib/gdk-pixbuf.xml:204
+#: blfs-en/x/lib/gdk-pixbuf.xml:220
 #, xml-text
 msgid "<command>gdk-pixbuf-csource</command>"
 msgstr "<command>gdk-pixbuf-csource</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:207
+#: blfs-en/x/lib/gdk-pixbuf.xml:223
 #, xml-text
 msgid ""
 "is a small utility that generates C code containing images, used for "
@@ -381,20 +411,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/x/lib/gdk-pixbuf.xml:211
+#: blfs-en/x/lib/gdk-pixbuf.xml:227
 #, xml-text
 msgid "gdk-pixbuf-csource"
 msgstr "gdk-pixbuf-csource"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/x/lib/gdk-pixbuf.xml:217
+#: blfs-en/x/lib/gdk-pixbuf.xml:233
 #, xml-text
 msgid "<command>gdk-pixbuf-pixdata</command>"
 msgstr "<command>gdk-pixbuf-pixdata</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:220
+#: blfs-en/x/lib/gdk-pixbuf.xml:236
 #, xml-text
 msgid "is a tool used to convert GdkPixbuf to GdkPixdata"
 msgstr ""
@@ -403,20 +433,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/x/lib/gdk-pixbuf.xml:223
+#: blfs-en/x/lib/gdk-pixbuf.xml:239
 #, xml-text
 msgid "gdk-pixbuf-pixdata"
 msgstr "gdk-pixbuf-pixdata"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/x/lib/gdk-pixbuf.xml:229
+#: blfs-en/x/lib/gdk-pixbuf.xml:245
 #, xml-text
 msgid "<command>gdk-pixbuf-query-loaders</command>"
 msgstr "<command>gdk-pixbuf-query-loaders</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:232
+#: blfs-en/x/lib/gdk-pixbuf.xml:248
 #, xml-text
 msgid ""
 "collects information about loadable modules for <application>Gdk "
@@ -429,23 +459,27 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/x/lib/gdk-pixbuf.xml:237
+#: blfs-en/x/lib/gdk-pixbuf.xml:253
 #, xml-text
 msgid "gdk-pixbuf-query-loaders"
 msgstr "gdk-pixbuf-query-loaders"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/x/lib/gdk-pixbuf.xml:255
+#: blfs-en/x/lib/gdk-pixbuf.xml:271
 #, xml-text
 msgid "<filename class=\"libraryfile\">libgdk_pixbuf-2.0.so</filename>"
 msgstr "<filename class=\"libraryfile\">libgdk_pixbuf-2.0.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/x/lib/gdk-pixbuf.xml:258
+#: blfs-en/x/lib/gdk-pixbuf.xml:274
 #, xml-text
 msgid "contains functions used to load and render images"
 msgstr "contém funções usadas para carregar e renderizar imagens"
+
+#, xml-text
+#~ msgid "<xref linkend=\"docutils\"/> and <xref linkend=\"glycin\"/>"
+#~ msgstr "<xref linkend=\"docutils\"/> e <xref linkend=\"glycin\"/>"
 
 #, xml-text
 #~ msgid "75f9cae9bd3c82d4648673e86a77c7bb"
