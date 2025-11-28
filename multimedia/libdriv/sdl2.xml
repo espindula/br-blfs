@@ -4,31 +4,29 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY sdl2-download-http "https://www.libsdl.org/release/SDL2-&sdl2-version;.tar.gz">
+  <!ENTITY sdl2-download-http "https://www.libsdl.org/release/sdl2-compat-&sdl2-version;.tar.gz">
   <!ENTITY sdl2-download-ftp  "">
-  <!ENTITY sdl2-md5sum        "7b234751c91737168d88c83041ca5aa9">
-  <!ENTITY sdl2-size          "7,3 MB">
-  <!ENTITY sdl2-buildsize     "187 MB (com documentos)">
-  <!ENTITY sdl2-time          "0,5 UPC (usando paralelismo=4; com documentos)">
+  <!ENTITY sdl2-md5sum        "ce17260dfcf7a7548747d09882974bef">
+  <!ENTITY sdl2-size          "2,7 MB">
+  <!ENTITY sdl2-buildsize     "63 MB (adicionar 29 MB para os testes)">
+  <!ENTITY sdl2-time          "menos que 0,1 UPC (usando paralelismo=4; adicionar 0,3 UPC para testes)">
 ]>
 
-<sect1 id="sdl2" xreflabel="SDL2-&sdl2-version;">
+<sect1 id="sdl2" xreflabel="sdl2-compat-&sdl2-version;">
   <?dbhtml filename="sdl2.html"?>
 
-
-  <title>SDL2-&sdl2-version;</title>
+  <title>sdl2-compat-&sdl2-version;</title>
 
   <indexterm zone="sdl2">
-    <primary sortas="a-SDL2">SDL2</primary>
+    <primary sortas="a-SDL2">sdl2-compat</primary>
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução ao SDL2</title>
+    <title>Introdução ao sdl2-compat</title>
 
     <para>
-      A Simple DirectMedia Layer Versão 2 (<application>SDL2</application> para
-abreviar) é uma biblioteca multiplataforma projetada para facilitar escrever
-software multimídia, como jogos e emuladores.
+      O pacote sdl2-compat fornece uma camada de compatibilidade para pacotes que
+exigem SDL2, utilizando SDL3 como estrutura de retaguarda.
     </para>
 
     &lfs124_checked;
@@ -67,108 +65,71 @@ software multimídia, como jogos e emuladores.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Dependências do sdl2-compat</bridgehead>
 
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Required patch (for i686 systems):
-           <ulink url="&patch-root;/SDL2-&sdl2-version;-opengl_include_fix-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do SDL2</bridgehead>
-
-    <bridgehead renderas="sect4">Recomendadas</bridgehead>
-    <para role="recommended">
-      <xref linkend="libxkbcommon"/>, <xref linkend="wayland-protocols"/> e <xref
-linkend="xorg7-lib"/> (se esses não estiverem presentes, os módulos
-correspondentes não serão construídos)
-    </para>
-
-    <bridgehead renderas="sect4">Opcionais</bridgehead>
-    <para role="optional">
-      <xref linkend="alsa-lib"/>, <xref linkend="doxygen"/> (para criar
-documentação), <xref linkend="ibus"/>, <xref linkend="libsamplerate"/>,
-<xref linkend="libunwind"/>, <xref linkend="nasm"/>, <xref
-linkend="pipewire"/>, <xref linkend="pulseaudio"/>, <xref
-linkend="x-window-system"/>, <ulink
-url="https://pkgs.fedoraproject.org/repo/pkgs/directfb/">DirectFB</ulink>,
-<ulink url="https://fcitx-im.org/">fcitx</ulink>, <ulink
-url="https://jackaudio.org/">jack</ulink> e <ulink
-url="https://sndio.org/">sndio</ulink>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="cmake"/> e <xref linkend="sdl3"/>
     </para>
 
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do SDL2</title>
+    <title>Instalação do sdl2-compat</title>
 
     <para>
-      Instale o <application>SDL2</application> executando os seguintes comandos:
+      Instale <application>sdl2-compat</application> executando os seguintes
+comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr   \
+      -D CMAKE_BUILD_TYPE=Release    \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON \
+      -D SDL2COMPAT_STATIC=OFF       \
+      -D SDL2COMPAT_TESTS=OFF        \
+      -W no-dev -G Ninja ..         &amp;&amp;
+
+ninja</userinput></screen>
 
     <para>
-      Se você tiver o <xref linkend="doxygen"/> instalado e quiser construir a
-documentação HTML, execute os seguintes comandos:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen remap="doc"><userinput>pushd docs  &amp;&amp;
-  doxygen   &amp;&amp;
-popd</userinput></screen>
-
-    <note>
-      <para>
-        Se você desejar construir e executar os testes de regressão do pacote, não
-delete as bibliotecas estáticas abaixo até depois que os testes sejam
-construídos.
-      </para>
-    </note>
-
-    <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
-    </para>
-
-<screen role="root"><userinput>make install              &amp;&amp;
-rm -v /usr/lib/libSDL2*.a</userinput></screen>
-
-    <para>
-      Se você construiu a documentação, instale-a como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
-    </para>
-
-<screen role="root"
-        remap="doc"><userinput>install -v -m755 -d        /usr/share/doc/SDL2-&sdl2-version;/html &amp;&amp;
-cp -Rv  docs/output/html/* /usr/share/doc/SDL2-&sdl2-version;/html</userinput></screen>
+<screen role="root"><userinput>ninja install &amp;&amp;
+rm -vf /usr/lib/libSDL2_test.a</userinput></screen>
 
   </sect2>
 
   <sect2 role="testing">
-    <title>Testando a SDL2</title>
+    <title>Testando sdl2-compat</title>
 
     <para>
-      Se desejar, teste a instalação do <application>SDL2</application> usando os
-aplicativos de teste incluídos. Nenhum dos binários resultantes precisa ser
-instalado. Emita os seguintes comandos para construir os aplicativos de
-teste:
+      Se você quiser construir os testes, emita os seguintes comandos:
     </para>
 
-<screen><userinput>cd test &amp;&amp;
-./configure &amp;&amp;
-make</userinput></screen>
+<screen><literal>mkdir ../build-tests &amp;&amp;
+cd    ../build-tests &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr   \
+      -D CMAKE_BUILD_TYPE=Release    \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON \
+      -D SDL2COMPAT_INSTALL_TESTS=ON \
+      -D SDL2COMPAT_STATIC=OFF       \
+      -D SDL2COMPAT_TESTS=ON         \
+      -W no-dev -G Ninja ..         &amp;&amp;
+
+ninja &amp;&amp;
+DESTDIR=$PWD/TESTS ninja install</literal></screen>
 
     <para>
-      Cada um dos aplicativos de teste (eles estão listados no arquivo
-<filename>README</filename> nesse diretório) precisará ser executado
-individualmente. Muitos deles precisarão ser eliminados manualmente. Além
-disso, os alto-falantes precisam estar ligados e com o volume em um nível
-adequado.
+      Agora você estará apto(a) para executar os testes em <filename
+class="directory">TESTS/usr/libexec/installed-tests/SDL2_compat</filename>.
+Você terá que executar os testes individualmente. Alguns deles possivelmente
+precisem ser encerrados manualmente e o áudio precisará estar funcionando
+para que você consiga ouvir a partir da saída padrão de áudio.
     </para>
 
   </sect2>
@@ -176,51 +137,27 @@ adequado.
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-skip-install-rpath.xml"/>
+
     <para>
-      <command>rm -v /usr/lib/libSDL2*.a</command>: Normalmente bibliotecas
-estáticas podem ser desabilitadas com uma opção
-<option>--disable-static</option> para o configure, mas isso interrompe a
-construção nesse pacote.
+      <parameter>-D SDL2COMPAT_STATIC=OFF</parameter>: Esse parâmetro desabilita
+construir as bibliotecas estáticas.
     </para>
 
-
-
-
-
-  <!--
     <para>
-
-      <option>- -disable-alsa-shared</option>: This switch disables
-      dynamically loading ALSA shared libraries.
+      <parameter>-D SDL2COMPAT_TESTS=OFF</parameter>: Esse parâmetro desabilita
+construir os testes.
     </para>
--->
-<!--
+
     <para>
-
-      <option>- -disable-x11-shared</option>: This switch disables
-      dynamically loading X11 shared libraries.
+      <command>rm -vf /usr/lib/libSDL2_test.a</command>: Esse comando remove uma
+biblioteca estática inútil.
     </para>
--->
-</sect2>
-
-
-
-  <!--
-  <sect2 role="configuration">
-
-    <title>Configuring SDL2</title>
-
-    <sect3>
-      <title>Configuration Information</title>
-
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/lib-config.xml"/>
-
-    </sect3>
 
   </sect2>
--->
-<sect2 role="content">
+
+  <sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>
@@ -231,7 +168,7 @@ construção nesse pacote.
       <seglistitem>
         <seg>sdl2-config</seg>
         <seg>libSDL2.so</seg>
-        <seg>/usr/include/SDL2, /usr/lib/cmake/SDL2 e /usr/share/doc/SDL-&sdl2-version;</seg>
+        <seg>/usr/include/SDL2 e /usr/lib/cmake/SDL2</seg>
       </seglistitem>
     </segmentedlist>
 
@@ -257,9 +194,7 @@ class="libraryfile">libSDL2</filename>
         <term><filename class="libraryfile">libSDL2.so</filename></term>
         <listitem>
           <para>
-            contém funções que fornecem acesso de baixo nível a áudio, teclado, mouse,
-joystick, hardware 3D via OpenGL e o buffer de quadro 2D em várias
-plataformas
+            fornece funções de compatibilidade para aplicativos SDL2 usando SDL3
           </para>
           <indexterm zone="sdl2 libsdl2">
             <primary sortas="c-libsdl2">libSDL2.so</primary>

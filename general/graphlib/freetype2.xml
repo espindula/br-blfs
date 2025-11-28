@@ -97,9 +97,8 @@ permite que os aplicativos renderizem corretamente as fontes
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="harfbuzz"/> (circular: construa freetype, então harfbuzz,
-então reinstale freetype), <xref linkend="libpng"/> e <xref
-linkend="which"/>
+      <xref role="runtime" linkend="harfbuzz"/> (tempo de execução), <xref
+linkend="libpng"/> e <xref linkend="which"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -132,9 +131,12 @@ comandos:
 <screen><userinput>sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &amp;&amp;
 
 sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" \
-   -i include/freetype/config/ftoption.h  &amp;&amp;
+    -i include/freetype/config/ftoption.h  &amp;&amp;
 
-./configure --prefix=/usr --enable-freetype-config --disable-static &amp;&amp;
+./configure --prefix=/usr            \
+            --disable-static         \
+            --enable-freetype-config \
+            --with-harfbuzz=dynamic &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -142,7 +144,7 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
@@ -169,20 +171,31 @@ problemas de patentes'</literal> de <ulink
 url="https://freetype.org/patents.html"/> antes de habilitar essa opção.
     </para>
 
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/static-libraries.xml"/>
+
     <para>
       <parameter>--enable-freetype-config</parameter>: Essa chave garante que a
-página de manual para "freetype-config" seja instalada.
+página de manual para freetype-config seja instalada.
     </para>
 
     <para>
+      <parameter>--with-harfbuzz=dynamic</parameter>: Essa chave garante que
+HarfBuzz seja carregado dinamicamente, eliminando a necessidade de
+reconstruir esse pacote depois que HarfBuzz seja instalado.
+    </para>
+
+
+    <!-- I do not know if the above switch renders this one useless, due
+     to loading HarfBuzz dynamically. Until the usecase is tested, let's leave
+     this here just to be prudent. - zeckma -->
+<para>
       <option>--without-harfbuzz</option>: se <application>harfbuzz</application>
 for instalado antes de <application>freetype</application> sem suporte a
 <application>freetype</application>, [então] use essa chave para evitar uma
 falha de construção.
     </para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/static-libraries.xml"/>
     
 
   <!-- No longer valid with 2.10.1, /usr/bin/freetype-config is installed

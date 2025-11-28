@@ -6,10 +6,10 @@
 
   <!ENTITY curl-download-http "https://curl.se/download/curl-&curl-version;.tar.xz">
   <!ENTITY curl-download-ftp  "">
-  <!ENTITY curl-md5sum        "3b5aae755714b338af0f66726bceb62a">
-  <!ENTITY curl-size          "2,6 MB">
-  <!ENTITY curl-buildsize     "59 MB (adicionar 64 MB para os testes)">
-  <!ENTITY curl-time          "0,4 UPC (adicionar 4,5 UPC para testes (sem valgrind; adicionar 15 UPC com
+  <!ENTITY curl-md5sum        "7a9d4b772fc56d68479b0416f234105a">
+  <!ENTITY curl-size          "2,7 MB">
+  <!ENTITY curl-buildsize     "49 MB (adicionar 64 MB para os testes)">
+  <!ENTITY curl-time          "0,3 UPC (adicionar 4,5 UPC para testes (sem valgrind; adicionar 17 UPC com
 valgrind) todos usando paralelismo=4)">
 ]>
 
@@ -141,15 +141,15 @@ os testes e possivelmente cause falhas)
   <sect2 role="installation">
     <title>Instalação do cURL</title>
 
-    <!--
-    <para>
-
-      First, apply a patch from upstream:
+    
+    <!-- https://github.com/curl/wcurl/pull/75 -->
+<para>
+      Primeiro, resolva um problema com uma correção de segurança:
     </para>
 
-<screen><userinput>patch -Np1 -i ../curl-&curl-version;-upstream_fix-1.patch</userinput></screen>
--->
-<para>
+<screen><userinput>sed -i 's/2F 5C/%2F %5C/' scripts/wcurl</userinput></screen>
+
+    <para>
       Instale o &quot;<application>cURL</application>&quot; executando os
 seguintes comandos:
     </para>
@@ -453,6 +453,12 @@ Run with valgrind and all dependencies in the book installed.
 TESTDONE: 1870 tests were considered during 1312 seconds.
 TESTDONE: 1605 tests out of 1605 reported OK: 100%
 Run with valgrind and all dependencies in the book installed.
+
+[bdubbs] - Test results for 8.17.0 (2025-11-07)
+TESTDONE: 1890 tests were considered during 1414 seconds.
+TESTDONE: 1676 tests out of 1681 reported OK: 99%
+TESTFAIL: These test cases failed: 1139 1140 1173 1177 1477 (related to man pages)
+Run with valgrind and all dependencies in the book installed.
 -->
 <para>
       Agora, como o(a) usuário(a) &quot;<systemitem
@@ -549,7 +555,7 @@ seguir.
 
       <seglistitem>
         <seg>
-           curl e curl-config
+           curl, curl-config e wcurl
         </seg>
         <seg>
            libcurl.so
@@ -586,6 +592,18 @@ vinculadas e configuração de prefixo
           </para>
           <indexterm zone="curl curl-config">
             <primary sortas="b-curl-config">curl-config</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="wcurl">
+        <term><command>wcurl</command></term>
+        <listitem>
+          <para>
+            É um envolucrador simples em torno do curl para baixar facilmente arquivos
+          </para>
+          <indexterm zone="curl wcurl">
+            <primary sortas="b-wcurl">wcurl</primary>
           </indexterm>
         </listitem>
       </varlistentry>

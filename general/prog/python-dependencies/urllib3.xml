@@ -139,24 +139,21 @@ seguintes comandos:
 <screen remap="test"><!-- no && because of a possible error -->
 <userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
 source testenv/bin/activate                    &amp;&amp;
-pip3 install trustme         \
-             tornado         \
-             python-dateutil \
-             mock            \
-             pysocks         \
-             pytest-timeout  \
-             trio            \
-             hypercorn       \
-             quart           \
-             quart_trio      \
-             httpx           &amp;&amp;
-python3 /usr/bin/pytest
+pip3 install --group dev                       &amp;&amp;
+python3 /usr/bin/pytest --timeout 10
 deactivate</userinput></screen>
 
     <para>
-      Cerca de 34 falhas são conhecidas por ocorrem devido a pequenas mudanças de
-comportamento nos módulos externos do Python acima, quando combinados com
-Python 3.13.7.
+      Mais que 50 falhas são esperadas com as instruções acima. Existem vários
+motivos. Primeiro, o fluxo de desenvolvimento usa uma versão remendada do
+módulo hypercorn para a própria testagem deles(as), que só pode ser obtida
+via <command>git</command> em <ulink
+url="https://github.com/urllib3/hypercorn.git">https://github.com/urllib3/hypercorn.git</ulink>,
+na revisão <quote>urllib3-changes</quote>, e deveria ser instalada primeiro
+no ambiente virtual. Segundo, parece que a suíte de teste não tem sido
+adaptada para versões recentes do Python e para versões recentes dos módulos
+externos do Python. Em particular, alguns testes travarão, de modo que
+<command>pytest</command> precisa da chave <parameter>--timeout</parameter>.
     </para>
 
     </sect3>

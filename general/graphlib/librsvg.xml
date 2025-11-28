@@ -6,8 +6,8 @@
 
   <!ENTITY librsvg-download-http "&gnome-download-http;/librsvg/&librsvg-minor;/librsvg-&librsvg-version;.tar.xz">
   <!ENTITY librsvg-download-ftp  "">
-  <!ENTITY librsvg-md5sum        "ea1e31b9d65fe905fa0cb730c2c7e82f">
-  <!ENTITY librsvg-size          "6,4 MB">
+  <!ENTITY librsvg-md5sum        "f015a7dca4952ba9a2e3b8b536695f1f">
+  <!ENTITY librsvg-size          "6,5 MB">
   <!ENTITY librsvg-buildsize     "1,2 GB (18 MB instalado; adicionar 510 MB para testes)">
   <!ENTITY librsvg-time          "0,6 UPC (adicionar 0,3 UPC para testes; ambos usando paralelismo=4)">
 ]>
@@ -71,22 +71,22 @@ Vector Graphic" ("SVG").
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="cairo"/>, <xref linkend="cargo-c"/>, <xref
-linkend="gdk-pixbuf"/> e <xref linkend="pango"/>
+      <xref linkend="cairo"/>, <xref linkend="cargo-c"/> e <xref linkend="pango"/>
     </para>
 
     &build-use-internet;
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      &gobject-introspection; e <xref linkend="vala"/>
+      <xref role="first" linkend="gdk-pixbuf"/>, &gobject-introspection; e <xref
+linkend="vala"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="docutils"/> (para páginas de manual), <xref
-linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
-(para testes)
+      <xref linkend="dav1d"/> (para suportar AVIF embutido no SVG) e <xref
+linkend="docutils"/> (para páginas de manual) e <xref linkend="gi-docgen"/>
+(para documentação)
     </para>
 
   </sect2>
@@ -111,6 +111,9 @@ linkend="gi-docgen"/> (para documentação) e <xref linkend="xorg7-font"/>
 
          With 2.59.1 one test of 5 fails. (I cannot see any failures here,
          but using rustc-1.82.0.)
+
+         Use meson test -v instead of ninja test to show the failed test
+         in case there is one in the rust test suite.
      -->
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
@@ -124,16 +127,7 @@ ninja</userinput></screen>
       Para testar os resultados, emita:
     </para>
 
-    <!-- https://gitlab.gnome.org/GNOME/librsvg/-/issues/1201 -->
-<screen remap='test'><userinput>meson test -v</userinput></screen>
-
-    
-    <para>
-      Um sub teste nomeado de <literal>too_many_elements</literal> no teste
-<quote>Rust tests (rsvg)</quote> é conhecido por falhar com libxml2-2.15.0
-ou mais recente. Um sub teste nos testes de API da C também é conhecido por
-falhar.
-    </para>
+    <screen remap='test'><userinput>meson test -v</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) &root;:
@@ -184,8 +178,7 @@ falhar.
           rsvg-convert
         </seg>
         <seg>
-          librsvg-2.so e libpixbufloader-svg.so (instalada em
-/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders)
+          librsvg-2.so
         </seg>
         <seg>
           /usr/include/librsvg-2.0 e /usr/share/doc/librsvg-&librsvg-version;
@@ -221,21 +214,6 @@ formatos
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="libpixbufloader-svg">
-        <term><filename class="libraryfile">libpixbufloader-svg.so</filename></term>
-        <listitem>
-          <para>
-            é o plug-in <application>Gdk Pixbuf</application> que permite que
-aplicativos <application>GTK+</application> renderizem imagens de Gráficos
-Escaláveis Vetoriais
-          </para>
-          <indexterm zone="librsvg libpixbufloader-svg">
-            <primary sortas="c-libpixbufloader-svg">libpixbufloader-svg.so</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-
     </variablelist>
 
   </sect2>

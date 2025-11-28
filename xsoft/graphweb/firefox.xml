@@ -10,11 +10,11 @@
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "7,7 GB (233 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "7.7 GB (232 MB installed) without tests">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "16 UPC usando -j8, sem testes">
+  <!ENTITY firefox-time          "15 SBU using -j8, without tests">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -76,21 +76,23 @@ de código <application>Mozilla</application>.
       </listitem>
     </itemizedlist>
 
-
-
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/firefox-&firefox-version;esr-upstream_fixes-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/firefox-&firefox-version;esr-ffmpeg-8.0.patch"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/firefox-&firefox-version;esr-python_3.14_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
-<note>
+
+    <note>
       <para>
         O nome do diretório é firefox-&firefox-version;
       </para>
@@ -176,6 +178,19 @@ linkend="wget"/>, <xref linkend="wireless_tools"/> e <xref linkend="yasm"/>
     <title>Instalação do Firefox</title>
 
     <para>
+      Primeiro, aplique um remendo para corrigir funcionalidade de vídeo com <xref
+linkend="ffmpeg"/>:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-ffmpeg-8.0.patch</userinput></screen>
+
+    <para>
+      Em seguida, corrija construir esse pacote com Python 3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>
+
+    <para>
       A configuração do <application>Firefox</application> é realizada criando-se
 um arquivo <filename>mozconfig</filename> contendo as opções desejadas de
 configuração. Um <filename>mozconfig</filename> padrão é criado abaixo. Para
@@ -200,13 +215,6 @@ seguinte comando:
 <screen><userinput>for i in {43..47}; do
    sed -i '/ZWJ/s/}/,CLASS_CHARACTER&amp;/' intl/lwbrk/LineBreaker.cpp 
 done</userinput></screen>
-
-    <para>
-      If you are building with system ICU, adapt the build system to use the
-      correct library:
-    </para>
-
-<screen><userinput remap="pre">sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
 -->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
@@ -307,10 +315,12 @@ EOF</userinput></screen>
 
     
 
-
     <para>
-      Compile o <application>Firefox</application> emitindo os seguintes comandos:
+      Se você estiver construindo com o ICU-78.1 do sistema ou posterior, atualize
+um arquivo:
     </para>
+
+<screen><userinput remap="pre">sed -i '/VIRAMA = 47/a CLASS_CHARACTER,' intl/lwbrk/LineBreaker.cpp</userinput></screen>
 
     <para>
       Se as APIs de geolocalização forem necessárias:
@@ -341,8 +351,7 @@ url="https://www.chromium.org/developers/how-tos/api-keys"/>.
     </note>
 
     <para>
-      Agora invoque o conjunto de comandos sequenciais Python
-<command>mach</command> para compilar o pacote.
+      Compile o <application>Firefox</application> emitindo os seguintes comandos:
     </para>
 
 <screen><userinput>export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &amp;&amp;
@@ -384,16 +393,16 @@ unset MOZBUILD_STATE_PATH</userinput></screen>
       <command>export MOZBUILD_STATE_PATH=${PWD}/mozbuild</command>: A construção
 te informa que pretende criar <filename
 class="directory">~/.mozbuild</filename> e te oferece uma opção para
-pressionar &lt;ENTER&gt; para aceitar isso ou Ctrl-C para cancelar e
+pressionar &lt;ENTER&gt; para aceitar isso, ou Ctrl-C para cancelar e
 reiniciar a construção depois de especificar o diretório. Na prática, a
-mensagem possivelmente não apareça até depois do &lt;ENTER&gt; ser
-pressionado, ou seja, a construção para.
+mensagem possivelmente não apareça até depois que &lt;ENTER&gt; seja
+teclada, ou seja, a construção trava.
     </para>
 
     <para>
       Esse diretório é usado para um (provavelmente aleatório) identificador de
-telemetria. Criar esse diretório dentro do construção da construção e
-deletá-lo depois da instalação evita que seja usado.
+telemetria. Criar esse diretório dentro do diretório da construção e
+deletá-lo depois da instalação evita que ele seja usado.
     </para>
 
     <para>

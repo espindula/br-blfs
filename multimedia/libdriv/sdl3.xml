@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY sdl3-download-http "https://www.libsdl.org/release/SDL3-&sdl3-version;.tar.gz">
+  <!ENTITY sdl3-download-ftp  "">
+  <!ENTITY sdl3-md5sum        "54acc3f1cb528c26259c32bb29173753">
+  <!ENTITY sdl3-size          "16 MB">
+  <!ENTITY sdl3-buildsize     "126 MB (adicionar 117 MB para os testes)">
+  <!ENTITY sdl3-time          "0.5 UPC (usando paralelismo=4; adicionar 0,6 UPC para testes)">
+]>
+
+<sect1 id="sdl3" xreflabel="SDL3-&sdl3-version;">
+  <?dbhtml filename="sdl3.html"?>
+
+  <title>SDL3-&sdl3-version;</title>
+
+  <indexterm zone="sdl3">
+    <primary sortas="a-SDL3">SDL3</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao SDL3</title>
+
+    <para>
+      A Simple DirectMedia Layer versão 3 (<application>SDL3</application>, para
+abreviar) é uma biblioteca multiplataforma projetada para facilitar escrever
+software multimídia, como jogos e emuladores.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&sdl3-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&sdl3-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &sdl3-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &sdl3-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &sdl3-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &sdl3-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do SDL3</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="cmake"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="alsa-lib"/>, <xref linkend="libusb"/>, <xref
+linkend="libxkbcommon"/>, <xref linkend="mesa"/>, <xref
+linkend="pipewire"/>, <xref linkend="pulseaudio"/>, <xref
+linkend="vulkan-loader"/>, <xref linkend="wayland-protocols"/> e <xref
+linkend="xorg7-lib"/> (Se esses não estiverem presentes, os módulos
+correspondentes não serão construídos)
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="ibus"/>, <ulink url="https://jackaudio.org/">jack</ulink> e
+<ulink url="https://sndio.org/">sndio</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do SDL3</title>
+
+    <para>
+      Instale <application>SDL3</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D SDL_TEST_LIBRARY=OFF      \
+      -D SDL_STATIC=OFF            \
+      -D SDL_RPATH=OFF             \
+      -W no-dev -G Ninja ..       &amp;&amp;
+
+ninja</userinput></screen>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="testing">
+    <title>Testando SDL3</title>
+
+    <para>
+      Se você quiser construir os testes, emita os seguintes comandos:
+    </para>
+
+<screen><literal>mkdir ../build-tests &amp;&amp;
+cd    ../build-tests &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D SDL_STATIC=OFF            \
+      -D SDL_RPATH=OFF             \
+      -D SDL_TESTS=ON              \
+      -D SDL_INSTALL_TESTS=ON      \
+      -W no-dev -G Ninja ..       &amp;&amp;
+
+ninja &amp;&amp;
+DESTDIR=$PWD/TESTS ninja install</literal></screen>
+
+    <para>
+      Agora você estará apto(a) para executar os testes em <filename
+class="directory">TESTS/usr/libexec/installed-tests/SDL3</filename>. Você
+terá que executar os testes individualmente. Alguns deles possivelmente
+precisem ser encerrados manualmente e o áudio precisará estar funcionando
+para que você consiga ouvir a partir da saída padrão de áudio.
+    </para>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D SDL_TEST_LIBRARY=OFF</parameter>: Esse parâmetro desabilita
+construir uma biblioteca estática desnecessária destinada para os
+testes. Ela será construída na seção de testagem.
+    </para>
+
+    <para>
+      <parameter>-D SDL_STATIC=OFF</parameter>: Esse parâmetro desabilita
+construir bibliotecas estáticas.
+    </para>
+
+    <para>
+      <parameter>-D SDL_RPATH=OFF</parameter>: Esse parâmetro desabilita instalar
+com rpath. Caso contrário, isso pode causar problemas de segurança.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativo Instalado</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>None</seg>
+        <seg>libSDL3.so</seg>
+        <seg>/usr/include/SDL3 e /usr/lib/cmake/SDL3</seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libsdl3">
+        <term><filename class="libraryfile">libSDL3.so</filename></term>
+        <listitem>
+          <para>
+            contém funções que fornecem acesso de baixo nível para áudio, teclado,
+mouse, joystick, hardware 3D via OpenGL e ao buffer de quadros 2D entre
+múltiplas plataformas
+          </para>
+          <indexterm zone="sdl3 libsdl3">
+            <primary sortas="c-libsdl3">libSDL3.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

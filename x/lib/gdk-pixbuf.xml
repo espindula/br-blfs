@@ -81,7 +81,9 @@ linkend="shared-mime-info"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="docutils"/> e <xref linkend="glycin"/>
+      <xref linkend="docutils"/> e <xref linkend="glycin"/> (circular: construa
+gdk-pixbuf sem glycin primeiro, então construa glycin com todas as
+dependências recomendadas dele e reconstrua gdk-pixbuf novamente)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -106,11 +108,17 @@ seguintes comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -D others=enabled   \
-      --wrap-mode=nofallback &amp;&amp;
+meson setup ..                \
+      --prefix=/usr           \
+      --buildtype=release     \
+      -D others=enabled       \
+      -D png=disabled         \
+      -D gif=disabled         \
+      -D jpeg=disabled        \
+      -D tiff=disabled        \
+      -D thumbnailer=disabled \
+      --wrap-mode=nofallback  \
+      $(pkgconf glycin-2 || echo -D glycin=disabled) &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -167,6 +175,14 @@ o(a) usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
       <parameter>-D others=enabled</parameter>: Construir os carregadores para
 alguns formatos ainda não suportados pelo glycin, notadamente XBM e XPM.
     </para>
+
+    <para>
+      <parameter>-D *=disabled</parameter>: Não construir os componentes obsoletos
+em favor do glycin. Esses componentes são desabilitados automaticamente ao
+construir esse pacote com o glycin instalado, mas especifique essas opções
+explicitamente para tornar a configuração da primeira construção (sem
+glycin) consistente.
+    </para>
   </sect2>
 
   <sect2 role="content">
@@ -187,8 +203,8 @@ alguns formatos ainda não suportados pelo glycin, notadamente XBM e XPM.
         <seg>
           /usr/include/gdk-pixbuf-2.0, /usr/lib/gdk-pixbuf-2.0,
 /usr/libexec/installed-tests/gdk-pixbuf,
-/usr/share/installed-tests/gdk-pixbuf, /usr/share/gtk-doc/html/gdk-pixbuf,
-and /usr/share/thumbnailers
+/usr/share/installed-tests/gdk-pixbuf, /usr/share/gtk-doc/html/gdk-pixbuf e
+/usr/share/thumbnailers
         </seg>
       </seglistitem>
     </segmentedlist>

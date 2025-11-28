@@ -6,10 +6,10 @@
 
   <!ENTITY nodejs-download-http "https://nodejs.org/dist/v&nodejs-version;/node-v&nodejs-version;.tar.xz">
   <!ENTITY nodejs-download-ftp  "">
-  <!ENTITY nodejs-md5sum        "749c5219b26f9961ddf62e0f02e222a1">
+  <!ENTITY nodejs-md5sum        "216555727f4d52f3ae436dac96e92b07">
   <!ENTITY nodejs-size          "48 MB">
   <!ENTITY nodejs-buildsize     "1,4 GB (adicionar 45 MB para os testes)">
-  <!ENTITY nodejs-time          "14 SBU (add 2.4 SBU for tests: both using
+  <!ENTITY nodejs-time          "14 SBU (add 4.3 SBU for tests: both using
                                  parallelism=8 and 8 CPUs online, parts of the
                                  tests will use all online CPUs)">
 ]>
@@ -69,21 +69,17 @@
       </listitem>
     </itemizedlist>
 
-
-
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/node-v&nodejs-version;-icu_69-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/node-v&nodejs-version;-python_build_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do Node.js</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do Node.js</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -109,6 +105,12 @@ Additional Downloads</bridgehead>
 
   <sect2 role="installation">
     <title>Instalação do Node.js</title>
+
+    <para>
+      Primeiro, corrija construir esse pacote com Python 3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../node-v&nodejs-version;-python_build_fix-1.patch</userinput></screen>
 
     <para>
       Construa <application>Node.js</application> executando os seguintes
@@ -145,6 +147,19 @@ test/parallel/test-fs-cp-async-socket.mjs
 test/parallel/test-fs-cp-sync-copy-socket-error.mjs
 test/parallel/test-http2-client-set-priority.js
 test/parallel/test-http2-priority-event.js
+
+node.js-22.21.1 (+ 4619|-  11):
+test/parallel/test-datetime-change-notify.js
+test/parallel/test-http2-client-set-priority.js
+test/parallel/test-http2-client-unescaped-path.js
+test/parallel/test-http2-multi-content-length.js
+test/parallel/test-http2-priority-event.js
+test/parallel/test-icu-env.js
+test/parallel/test-http2-reset-flood.js
+test/parallel/test-tls-ocsp-callback.js
+test/parallel/test-http2-max-invalid-frames.js
+test/parallel/test-http2-misbehaving-flow-control.js
+test/parallel/test-http2-misbehaving-flow-control-paused.js
 -->
 Para testar os resultados, emita: <command>make test-only</command>. Dos
 4.500 testes, 4 na suíte 'paralela' de teste são conhecidos por falharem.
@@ -163,27 +178,28 @@ ln -sf node /usr/share/doc/node-&nodejs-version;</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>--with-intl=system-icu</parameter>: use a versão do sistema do
-<application>icu</application>. Outros valores são <option>full-icu</option>
-(para construir uma biblioteca completa local
-<application>icu</application>) e <option>small-icu</option> (para construir
-uma biblioteca mínima local <application>icu</application>).
+      <parameter>--with-intl=system-icu</parameter>: This parameter uses the
+system version of <application>ICU</application>. Other values are
+<option>full-icu</option> (to build a local, full
+<application>icu</application> library) and <option>small-icu</option> (to
+build a local, minimal <application>ICU</application> library).
     </para>
 
     <para>
       <parameter>--shared-{brotli,cares,libuv,nghttp2,openssl,zlib}</parameter>:
-use as bibliotecas instadas do sistema em vez das cópias locais.
+This parameter uses the system installed libraries instead of local copies.
     </para>
 
     <para>
-      <option>--without-npm</option>: não construa <application>npm</application>
-(use se você gostaria de construir um <application>npm</application>
-separado posteriormente).
+      <option>--without-npm</option>: This option tells the build system to not
+build <application>npm</application> (use if you'd like to build a separate
+<application>npm</application> later).
     </para>
 
     <para>
-      <option>--shared-http-parser</option>: use a biblioteca instalada do sistema
-em vez de uma cópia local.
+      <option>--shared-http-parser</option>: This option uses the system installed
+<application>http-parser</application> library instead of a local copy if
+you have installed it.
     </para>
 
   </sect2>

@@ -7,10 +7,10 @@
 
   <!ENTITY mariadb-download-http "https://downloads.mariadb.org/interstitial/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
   <!ENTITY mariadb-download-ftp  "">
-  <!ENTITY mariadb-md5sum        "3c81bc728598f5b53067220c7b729747">
+  <!ENTITY mariadb-md5sum        "b288cc592235177a46d3b0eac8722339">
   <!ENTITY mariadb-size          "114 MB">
-  <!ENTITY mariadb-buildsize     "2,2 GB (761 MB instalado)">
-  <!ENTITY mariadb-time          "3,6 UPC (com paralelismo=8, adicionar 0,4 UPC para testes)">
+  <!ENTITY mariadb-buildsize     "2,2 GB (763 MB instalado)">
+  <!ENTITY mariadb-time          "3,7 UPC (com paralelismo=8, adicionar 2,8 UPC para testes)">
 ]>
 
 <sect1 id="mariadb" xreflabel="MariaDB-&mariadb-version;">
@@ -70,8 +70,8 @@ bases de dados relacionais &quot;<application>MySQL</application>&quot;.
 
     <note>
       <para>
-        O tamanho instalado do MariaDB é de 761 MB, mas isso pode ser reduzido em
-cerca de 268 MB, se desejado, removendo-se o diretório <filename
+        O tamanho instalado do MariaDB é de 763 MB, mas isso pode ser reduzido em
+cerca de 269 MB, se desejado, removendo-se o diretório <filename
 class="directory">/usr/share/mariadb/test</filename> depois da instalação.
       </para>
     </note>
@@ -186,21 +186,33 @@ make</userinput></screen>
 my_tzinfo e test-connect, são conhecidos por falharem.
     </para>
 
-    <note><para>
-      Um conjunto mais extenso de testes pode ser executado com o seguinte:</para>
+    <!--
+    Leaving this for upstream developers.  When I tried to run it the 
+    procedure failed after 10 failures.  To fix that, the option
+    - -max-test-fail 0 is needed.
+
+    My error message was:
+    Too many tests(10) failed! Terminating...
+       Only  2616  of 8178 completed.
+       The servers were restarted 890 times
+       Spent 1966.864 of 648 seconds executing testcases
+       Too many failed: Failed 10/1620 tests, 99.38% were successful.
+
+    <note>
+<para>
+      A more extensive set of tests can be run with the following:</para>
 
 <screen remap="test"><userinput>pushd mysql-test
-./mtr --parallel <replaceable>&lt;N&gt;</replaceable> --mem --force
+./mtr - -parallel <replaceable>&lt;N&gt;</replaceable> - -mem - -force
 popd</userinput></screen>
 
     <para>
-      Onde N é o número de testes a executar em paralelo. Mais que cinco mil e
-quatrocentos (5.400) testes são executados em cerca de 24 UPC com N=4. Uns
-poucos testes possivelmente falhem, principalmente devido a problemas no
-conjunto de caracteres.
+      Where N is the number of tests to run in parallel.
+      Over 5400 tests are run in about 24 SBU with N=4.  A few tests
+      may fail, mainly due to character set issues.
     </para></note>
-
-    <para>
+-->
+<para>
       Agora, como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
     </para>

@@ -69,19 +69,14 @@ referência do formato de imagem JPEG XL.
 linkend="libjpeg"/> e <xref linkend="libpng"/>
     </para>
 
-    <bridgehead renderas="sect4">Recomendadas</bridgehead>
-    <para role="recommended">
-      <xref linkend="gdk-pixbuf"/> (para o plugin)
-    </para>
-
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <!--<xref linkend="gimp"/>
  (for the plugin),-->
 <xref linkend="asciidoc"/> (para páginas de manual), <xref
 linkend="doxygen"/> e <xref linkend="graphviz"/> (para documentação), <xref
-linkend="java"/> (para o JAR), <xref linkend="libavif"/>, <xref
-linkend="libwebp"/>, <ulink
+linkend="gdk-pixbuf"/> (para o plugin), <xref linkend="java"/> (para o JAR),
+<xref linkend="libavif"/>, <xref linkend="libwebp"/>, <ulink
 url="https://github.com/google/googletest">gtest</ulink>, <ulink
 url="https://www.openexr.com/">OpenEXR</ulink>, <ulink
 url="https://github.com/webmproject/sjpeg">sjpeg</ulink> e <ulink
@@ -106,7 +101,7 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr             \
       -D BUILD_SHARED_LIBS=ON                  \
       -D JPEGXL_ENABLE_SKCMS=OFF               \
       -D JPEGXL_ENABLE_SJPEG=OFF               \
-      -D JPEGXL_ENABLE_PLUGINS=ON              \
+      -D JPEGXL_ENABLE_PLUGINS=OFF             \
       -D JPEGXL_INSTALL_JARDIR=/usr/share/java \
       -G Ninja ..                              &amp;&amp;
 ninja</userinput></screen>
@@ -121,21 +116,24 @@ BLFS.
       Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>ninja install &amp;&amp;
-gdk-pixbuf-query-loaders --update-cache</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <command>gdk-pixbuf-query-loaders --update-cache</command>: Esse comando
-regenera o cache do carregador do <application>GDK Pixbuf</application>, de
-forma que ele esteja ciente do carregador JPEG-XL.
-    </para>
 
+
+    <!-- Not used now that we are using glycin
     <para>
+
+      <command>gdk-pixbuf-query-loaders - -update-cache</command>: This command
+      regenerates the <application>GDK Pixbuf</application> loader cache so
+      that it is aware of the JPEG-XL loader.
+    </para>
+-->
+<para>
       <parameter>-D BUILD_TESTING=OFF</parameter>: Esse parâmetro desabilita os
 testes porque eles exigem <ulink
 url="https://github.com/google/googletest">gtest</ulink>, que não está no
@@ -163,11 +161,11 @@ o suporte para SimpleJPEG, pois não é necessário para fins de BLFS e exige
     </para>
     
     <para>
-      <!--<xref linkend="gimp"/>
- and-->
-<parameter>-D JPEGXL_ENABLE_PLUGINS=ON</parameter>: Esse parâmetro habilita
-o suporte de Plugin, que cria plug-ins para <xref linkend="gdk-pixbuf"/> se
-o pacote estiver instalado.
+      <parameter>-D JPEGXL_ENABLE_PLUGINS=OFF</parameter>: Esse parâmetro
+desabilita construir os plugins do carregador XL do JPEG para GIMP e
+gdk-pixbuf. O plugin do GIMP não é compatível com a versão do GIMP no livro,
+e o plugin do gdk-pixbuf é inútil quando o gdk-pixbuf é construído com a
+dependência recomendada dele, glycin.
     </para>
 
     <para>
@@ -191,9 +189,8 @@ parâmetro coloca o arquivo JAR para suporte JPEG XL no diretório correto se
           benchmark_xl, cjxl, djxl e jxlinfo
         </seg>
         <seg>
-          libjxl.so, libjxl_cms.so, libjxl_extras_codec.so, libjxl_jni.so,
-libjxl_threads.so e libpixbufloader-jxl.so (em
-/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders)
+          libjxl.so, libjxl_cms.so, libjxl_extras_codec.so, libjxl_jni.so e
+libjxl_threads.so
         </seg>
         <seg>
           /usr/include/jxl

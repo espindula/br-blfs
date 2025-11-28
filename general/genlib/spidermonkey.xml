@@ -7,10 +7,10 @@
   <!ENTITY spidermonkey-download-http "&mozilla-http;/firefox/releases/&spidermonkey-version;esr/source/firefox-&spidermonkey-version;esr.source.tar.xz">
   <!ENTITY spidermonkey-download-ftp  "">
   <!-- size and md5sum are in packages.ent -->
-  <!ENTITY spidermonkey-buildsize     "4,7 GB (53 MB instalado depois de remover 42 MB de bibliotecas estáticas;
-adicionar 30 MB para os testes principais e 30 MB para os testes de jit)">
-  <!ENTITY spidermonkey-time          "2,5 UPC (com paralelismo=4; adicionar 0,7 UPC para os testes principais e
-2,5 UPC para os testes de jit)">
+  <!ENTITY spidermonkey-buildsize     "4.7 GB (52 MB installed after removing 42 MB static lib; add 30 MB for the
+main and jit tests)">
+  <!ENTITY spidermonkey-time          "1.7 SBU (with parallelism=4; add 0.3 SBU for the main tests and 2.5 SBU for
+the jit tests)">
 ]>
 
 <sect1 id="spidermonkey" xreflabel="SpiderMonkey oriundo de Firefox-&spidermonkey-version;">
@@ -67,19 +67,17 @@ SpiderMonkey é retirado do Firefox.
       </listitem>
     </itemizedlist>
 
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/js-&JS91-version;-python_3_10-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/spidermonkey-&spidermonkey-version;-python_3.14_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do SpiderMonkey</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do SpiderMonkey</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -151,6 +149,13 @@ sticky estiver configurado - isso irá desconfigurá-lo.
     </note>
 
     <para>
+      Primeiro, aplique um remendo para corrigir a compatibilidade com o Python
+3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../spidermonkey-&spidermonkey-version;-python_3.14_fixes-1.patch</userinput></screen>
+
+    <para>
       Instale <application>SpiderMonkey</application> executando os seguintes
 comandos:
     </para>
@@ -196,11 +201,12 @@ make</userinput></screen>
      JSTESTS_EXTRA_ARGS="--timeout 300 --wpt=disabled" | tee jstest.log</userinput></screen>
 
     <para>
-      Como nós estamos construindo com o ICU do sistema, 24 testes (de um total de
-mais de 50.000) são conhecidos por falharem. A lista de testes falhos pode
-ser extraída via <command>grep 'UNEXPECTED-FAIL' jstest.log</command>. Passe
-a opção <option>-c</option> para <command>grep</command> se você quiser
-somente o número total de testes falhos.
+      Como nós estamos construindo com o ICU do sistema, pouco mais que 100
+testes, dependendo da versão do ICU, (de um total de mais que 50.000) são
+conhecidos por falharem. A lista de testes falhos pode ser extraída via
+<command>grep 'UNEXPECTED-FAIL' jstest.log</command>. Passe a opção
+<option>-c</option> para <command>grep</command> se você quiser somente o
+número total de testes falhos.
     </para>
 
     <para>

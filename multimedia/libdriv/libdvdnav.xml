@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY libdvdnav-download-http "https://get.videolan.org/libdvdnav/&libdvdnav-version;/libdvdnav-&libdvdnav-version;.tar.bz2">
+  <!ENTITY libdvdnav-download-http "https://get.videolan.org/libdvdnav/&libdvdnav-version;/libdvdnav-&libdvdnav-version;.tar.xz">
   <!ENTITY libdvdnav-download-ftp  "">
-  <!ENTITY libdvdnav-md5sum        "46c46cb0294fbd1fcb8a0181818dad15">
-  <!ENTITY libdvdnav-size          "360 KB">
-  <!ENTITY libdvdnav-buildsize     "3,7 MB">
+  <!ENTITY libdvdnav-md5sum        "e9e9f137cdd52828abc0c61b727ea579">
+  <!ENTITY libdvdnav-size          "84 KB">
+  <!ENTITY libdvdnav-buildsize     "1,4 MB">
   <!ENTITY libdvdnav-time          "menos que 0,1 UPC">
 ]>
 
@@ -16,7 +16,7 @@
   <?dbhtml filename="libdvdnav.html"?>
 
 
-  <title>Libdvdnav-&libdvdnav-version;</title>
+  <title>libdvdnav-&libdvdnav-version;</title>
 
   <indexterm zone="libdvdnav">
     <primary sortas="a-Libdvdnav">Libdvdnav</primary>
@@ -77,17 +77,24 @@ reprodução multiangulo e até jogos interativos de DVD.
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do Libdvdnav</title>
+    <title>Instalação do libdvdnav</title>
+
+    <para>
+      Primeiro, instale a documentação em um diretório versionado:
+    </para>
+
+<screen><userinput>sed -i "/get_option/s/libdvdnav/&amp;-&libdvdnav-version;/" meson.build</userinput></screen>
 
     <para>
       Instale o <application>libdvdnav</application> executando os seguintes
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr    \
-            --disable-static \
-            --docdir=/usr/share/doc/libdvdnav-&libdvdnav-version; &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -97,18 +104,21 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install &amp;&amp;
+rm -fv /usr/lib/libdvdnav.a</userinput></screen>
   </sect2>
 
+  <!--
   <sect2 role="commands">
-    <title>Explicações do Comando</title>
+
+    <title>Command Explanations</title>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
   </sect2>
-
-  <sect2 role="content">
+-->
+<sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>

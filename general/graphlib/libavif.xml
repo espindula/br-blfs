@@ -74,13 +74,13 @@ codificar e decodificar arquivos AVIF.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="gdk-pixbuf"/> e <xref linkend="libaom"/> (para subamostragem
-de croma fora de YUV420)
+      <xref linkend="libaom"/> (para subamostragem de croma fora do YUV420)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <ulink url="https://github.com/google/googletest">gtest</ulink>, <ulink
+      <xref linkend="gdk-pixbuf"/>, <ulink
+url="https://github.com/google/googletest">gtest</ulink>, <ulink
 url="https://chromium.googlesource.com/libyuv/libyuv/">libyuv</ulink> e
 <ulink url="https://github.com/xiph/rav1e">rav1e</ulink>
     </para>
@@ -105,7 +105,7 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr \
       -D AVIF_CODEC_AOM=SYSTEM     \
       -D AVIF_CODEC_DAV1D=SYSTEM   \
       -D AVIF_CODEC_SVT=SYSTEM     \
-      -D AVIF_BUILD_GDK_PIXBUF=ON  \
+      -D AVIF_BUILD_GDK_PIXBUF=OFF \
       -D AVIF_LIBYUV=OFF           \
       -G Ninja .. &amp;&amp;
 ninja</userinput></screen>
@@ -124,14 +124,18 @@ ninja &amp;&amp; ninja test</userinput></screen>
       Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>ninja install</userinput></screen>
-
+<!--
     <para>
-      O formato AV1 precisa ser adicionado ao cache dos carregadores. Como o(a)
-usuário(a) &root;:
+
+      The AV1 format needs to be added to the loaders cache. As the
+      &root; user:
     </para>
 
-<screen role="root"><userinput>gdk-pixbuf-query-loaders --update-cache</userinput></screen>
+<screen role="root"><userinput>gdk-pixbuf-query-loaders - -update-cache</userinput></screen>
+-->
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+
 
   </sect2>
 
@@ -145,9 +149,10 @@ inútil sem um codificador e decodificador de AV1.
     </para>
 
     <para>
-      <parameter>-D AVIF_BUILD_GDK_PIXBUF=ON</parameter>: Essa chave constrói o
-carregador AVIF para aplicativos que usam gdk-pixbuf. Remova-a se você não
-tiver instalado o <xref role="nodep" linkend="gdk-pixbuf"/>.
+      <parameter>-D AVIF_BUILD_GDK_PIXBUF=OFF</parameter>: Essa chave desabilita
+construir o carregador AVIF para aplicativos que usam gdk-pixbuf. O
+carregador é inútil quando o gdk-pixbuf é construído com a dependência
+recomendada dele, glycin.
     </para>
 
     <para>
@@ -177,8 +182,7 @@ usá-lo como um codificador.
           Nenhum(a)
         </seg>
         <seg>
-          libavif.so e libpixbbufloader-avif.so (em
-/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders)
+          libavif.so
         </seg>
         <seg>
           /usr/include/avif e /usr/lib/cmake/libavif

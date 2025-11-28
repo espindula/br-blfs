@@ -100,7 +100,11 @@ construção causado pelo suporte a arquivos grandes:
       
     </para>
 
-<screen><userinput remap="pre">sed '/CDIO_LSEEK/s/lseek64/lseek/' -i lib/driver/_cdio_generic.c</userinput></screen>
+<screen><userinput remap="pre">case $(uname -m) in
+   i?86)
+      sed '/CDIO_LSEEK/s/lseek64/lseek/'  -i lib/driver/_cdio_generic.c &amp;&amp;
+      sed '/CDIO_FSEEK/s/fseeko64/fseek/' -i lib/driver/_cdio_stdio.c   ;;
+esac</userinput></screen>
 
     <para>
       Instale o <application>libcdio</application> executando os seguintes

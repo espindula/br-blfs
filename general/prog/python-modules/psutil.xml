@@ -9,7 +9,7 @@
   <!ENTITY psutil-md5sum        "&psutil-md5sum;">
   <!ENTITY psutil-size          "476 KB">
   <!ENTITY psutil-buildsize     "6,2 MB (adicionar 57 MB para os testes)">
-  <!ENTITY psutil-time          "menos que 0,1 UPC (0,1 UPC com testes)">
+  <!ENTITY psutil-time          "menos que 0,1 UPC (adicionar 0,1 UPC com testes)">
 ]>
 
   
@@ -77,6 +77,7 @@ ifconfig, free e outras.
       <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
       <para role="optional">
         <xref linkend="pytest"/>, <ulink
+url="https://pypi.org/project/colorama/">colorama</ulink>, <ulink
 url="https://pypi.org/project/pyperf/">pyperf</ulink>, <ulink
 url="https://pypi.org/project/pypinfo/">pypinfo</ulink>, <ulink
 url="https://pypi.org/project/pytest-instafail/">pytest-instafail</ulink>,
@@ -116,20 +117,13 @@ copiados:
 <screen remap='test'><userinput>cp build/lib*/psutil/*.so psutil</userinput></screen>
 
       <para>
-        Se usar Python-3.14.0 ou superior, um teste necessita ser corrigido para
-evitar travamento:
-      </para>
-
-<screen remap='test'><userinput>sed "/multiprocessing.Pool/i\            multiprocessing.set_start_method('fork')" \
-    -i psutil/tests/test_process_all.py</userinput></screen>
-
-      <para>
         Para testar os resultados, emita:
       </para>
 
 <screen remap='test'><userinput>python3 -m venv --system-site-packages testenv                            &amp;&amp;
-testenv/bin/pip3 install pytest-{instafail,subtests,xdist} pyperf pypinfo &amp;&amp;
-testenv/bin/python3 -m pytest</userinput></screen>
+testenv/bin/pip3 install colorama pytest-{instafail,subtests,xdist} pyperf \
+                         pypinfo &amp;&amp;
+PSUTIL_DEBUG=1 testenv/bin/python3 -m pytest</userinput></screen>
 
       <itemizedlist spacing="compact">
         <listitem>

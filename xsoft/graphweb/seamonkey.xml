@@ -6,10 +6,10 @@
 
   <!ENTITY seamonkey-download-http "https://archive.seamonkey-project.org/releases/&seamonkey-version;/source/seamonkey-&seamonkey-version;.source.tar.xz">
   <!ENTITY seamonkey-download-ftp  "">
-  <!ENTITY seamonkey-md5sum        "388a3a89245c3c3aa0e2303fba7ed253">
-  <!ENTITY seamonkey-size          "237 MB">
+  <!ENTITY seamonkey-md5sum        "10aa8c289014ff26d3991fc695af3224">
+  <!ENTITY seamonkey-size          "239 MB">
   <!ENTITY seamonkey-buildsize     "3 GB (138 MB instalado)">
-  <!ENTITY seamonkey-time          "6 UPC (com paralelismo=8)">
+  <!ENTITY seamonkey-time          "6,3 UPC (com paralelismo=8)">
 ]>
 
 <sect1 id="seamonkey" xreflabel="seamonkey-&seamonkey-version;">
@@ -102,7 +102,7 @@ desempacotará para o diretório
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
       <xref linkend="cbindgen"/>, <xref linkend="gtk3"/>, <xref
-linkend="libarchive"/>, <xref linkend="python311"/>, <xref linkend="yasm"/>
+linkend="libarchive"/>, <xref linkend="python311"/>, <xref linkend="nasm"/>
 e <xref linkend="zip"/>
     </para>
 
@@ -112,8 +112,7 @@ e <xref linkend="zip"/>
 , Causes build failures similar to Firefox -->
 <xref linkend="icu"/>, <xref linkend="libevent"/>, <xref
 linkend="libwebp"/>, <xref linkend="llvm"/> (com clang), <xref
-linkend="nasm"/>, <xref linkend="nspr"/>, <xref linkend="nss"/> e <xref
-linkend="pulseaudio"/>
+linkend="nspr"/>, <xref linkend="nss"/> e <xref linkend="pulseaudio"/>
     </para>
 
     <note>
@@ -245,8 +244,14 @@ ou posterior exigem alguns recursos do C++17 e adapte o sistema de
 construção para usar a biblioteca correta com o ICU-76 ou posterior:
     </para>
 
+
 <!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1894423 -->
-<screen><userinput remap="pre">(for i in {43..47}; do
+<screen><!-- This used to be 43..47. ICU-78 adjusted line mapping. Firefox 140esr is
+     adjusted by adding a CLASS_CHARACTER at the end of what would be 47. So we
+     just increase 47 to 48 to adapt for ICU-78 rather quite easily instead of
+     needing another sed command/expression. May change again in ICU-79.
+     - zeckma -->
+<userinput remap="pre">(for i in {43..48}; do
    sed '/ZWJ/s/$/,CLASS_CHARACTER/' -i intl/lwbrk/LineBreaker.cpp || exit $?
 done) &amp;&amp;
 
@@ -277,6 +282,7 @@ comandos:
     </para>
 
 <screen><userinput>export PATH_PY311=/opt/python3.11/bin:$PATH &amp;&amp;
+export MOZBUILD_STATE_PATH=${PWD}/mozbuild  &amp;&amp;
 PATH=$PATH_PY311 AUTOCONF=true MACH_USE_SYSTEM_PYTHON=1 ./mach build</userinput></screen>
 
     <para>
@@ -306,15 +312,31 @@ chown -R 0:0 /usr/lib/seamonkey                          &amp;&amp;
 cp -v $(find -name seamonkey.1 | head -n1) /usr/share/man/man1</userinput></screen>
 
     <para>
-      Finalmente, desconfigure a variável <envar>PATH_PY311</envar>:
+      Finalmente, desconfigure variáveis temporárias que foram configuradas acima:
     </para>
 
-<screen><userinput>unset PATH_PY311</userinput></screen>
+<screen><userinput>unset PATH_PY311 MOZBUILD_STATE_PATH</userinput></screen>
 
   </sect2>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <para>
+      <command>export MOZBUILD_STATE_PATH=${PWD}/mozbuild</command>: A construção
+te informa que pretende criar <filename
+class="directory">~/.mozbuild</filename> e te oferece uma opção para
+pressionar &lt;ENTER&gt; para aceitar isso, ou Ctrl-C para cancelar e
+reiniciar a construção depois de especificar o diretório. Na prática, a
+mensagem possivelmente não apareça até depois que &lt;ENTER&gt; seja
+teclada, ou seja, a construção trava.
+    </para>
+
+    <para>
+      Esse diretório é usado para um (provavelmente aleatório) identificador de
+telemetria. Criar esse diretório dentro do diretório da construção e
+deletá-lo depois da instalação evita que ele seja usado.
+    </para>
 
     <para>
       <command>export CC=clang CXX=clang++</command>: Com a introdução do

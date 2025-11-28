@@ -68,10 +68,33 @@
         </listitem>
       </itemizedlist>
 
+      <bridgehead renderas="sect4">Transferências Adicionais</bridgehead>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Remendo exigido: <ulink
+url="&patch-root;/pyxdg-&pyxdg-version;-python3_14-fixes-1.patch"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <bridgehead renderas="sect4">Dependências do PyXDG</bridgehead>
+
+      <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
+      <para role="optional">
+        <xref linkend="pytest"/> e <xref linkend="shared-mime-info"/>
+      </para>
+
     </sect3>
 
     <sect3 role="installation">
       <title>Instalação do PyXDG</title>
+
+      <para>
+        Primeiro, corrija vários problemas causados pelo Python 3.14:
+      </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../pyxdg-&pyxdg-version;-python3_14-fixes-1.patch</userinput></screen>
 
       <para>
         Construa o módulo:
@@ -84,6 +107,14 @@
        </para>
 
 <screen role='root'><userinput>&install-wheel; pyxdg</userinput></screen>
+
+       <para>
+         Para testar os resultados, emita: <command>pytest</command>. Observe-se que
+dois testes, <filename>MimeTest::test_get_type</filename> e
+<filename>MimeTest::test_get_type2</filename>, são conhecidos por falharem
+devido a pequenas diferenças nos tipos MIME a partir das recentes versões do
+pacote shared-mime-info.
+       </para>
 
     </sect3>
 
