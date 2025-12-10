@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-48;/mutter-&mutter-version;.tar.xz">
+  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-49;/mutter-&mutter-version;.tar.xz">
   <!ENTITY mutter-download-ftp  "">
-  <!ENTITY mutter-md5sum        "e03c4eb4d9df60ec46bcc74fd632cb1e">
-  <!ENTITY mutter-size          "8,0 MB">
+  <!ENTITY mutter-md5sum        "2bad5493570e526c987f52cf6fee56ff">
+  <!ENTITY mutter-size          "8,1 MB">
   <!ENTITY mutter-buildsize     "103 MB (com testes)">
-  <!ENTITY mutter-time          "0,4 UPC (Usando paralelismo=4; adicionar 1,4 UPC para testes)">
+  <!ENTITY mutter-time          "0.5 SBU (Using parallelism=4; add 1.4 SBU for tests)">
 ]>
 
 <sect1 id="mutter" xreflabel="Mutter-&mutter-version;">
@@ -68,21 +68,7 @@ controlador de vídeo acelerado por hardware).
       </listitem>
     </itemizedlist>
 
-
-
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/mutter-&mutter-version;-upstream_fixes-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do Mutter</bridgehead>
+    <bridgehead renderas="sect3">Dependências do Mutter</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -115,15 +101,14 @@ linkend="wayland-protocols"/> e <xref linkend="xwayland"/>
       <!-- sorted as "d" instead of "p" -->
 <!--<xref linkend="sysprof"/>
 ,-->
-<xref linkend="python-dbusmock"/> (exigido para testes), <xref
-linkend="xorg-server"/> (para sessões do X11), <ulink
+<xref linkend="python-dbusmock"/> (required for tests), <xref
+linkend="xorg-server"/> (for X11 sessions, deprecated), <ulink
 url="https://github.com/scop/bash-completion/">bash-completion</ulink>,
-<ulink url="&sysprof-url;">sysprof</ulink>, <command>Xvfb</command>
-(proveniente de <xref linkend='xorg-server'/> ou <xref
-linkend='xwayland'/>), <ulink
-url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink> e <ulink
-url='https://gitlab.gnome.org/GNOME/zenity'>zenity</ulink> (os testes do X11
-só executariam com todos os últimos três)
+<ulink url="&sysprof-url;">sysprof</ulink>, <command>Xvfb</command> (from
+<xref linkend='xorg-server'/> or <xref linkend='xwayland'/>), <ulink
+url="&sources-anduin-http;/mutter/xvfb-run">xvfb-run</ulink>, and <ulink
+url='https://gitlab.gnome.org/GNOME/zenity'>zenity</ulink> (the X11 tests
+would only run with all of the last three)
     </para>
 
     
@@ -139,17 +124,7 @@ só executariam com todos os últimos três)
   <sect2 role="installation">
     <title>Instalação do Mutter</title>
 
-
-
-    <!--
     <para>
-
-      First, apply a patch to fix crashes and freezes at runtime:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../mutter-&mutter-version;-upstream_fixes-1.patch</userinput></screen>
--->
-<para>
       Corrija um problema com os testes que, de outra forma, exigiriam que o
 pacote fosse construído com informações de depuração:
     </para>
@@ -162,26 +137,6 @@ sed "/c_args:/a '-U', 'G_DISABLE_ASSERT'," -i src/tests/cogl/unit/meson.build</u
 comandos:
     </para>
 
-<!--
-    <para>
-
-      To test the results, issue:
-      <command>dbus-run-session ninja test</command>. The tests
-      require an active X session to run correctly. It is not necessary to
-      run a  separate D-bus session if not in a GNOME session, but it
-      provides a clean environment in any case. One test,
-      <filename>native-headless</filename>, is known to fail.
-    </para>
-    -->
-<!-- there are no added problems in sysv, AFAICT. Running the tests is
-    not easy whatever the init system. But using the instructions below in
-    a gnome session on sysv works (no test failure)...
-    <para revision='sysv'>
-
-       This package does not come with a test suite that runs properly in the
-       SystemV environment.
-    </para>
-    -->
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
@@ -193,9 +148,6 @@ meson setup --prefix=/usr            \
             ..                       &amp;&amp;
 ninja</userinput></screen>
 
-
-    
-
     <para>
       Se você quiser executar a suíte de teste, certifique-se de que <xref
 linkend='python-dbusmock'/> esteja instalado e emita:
@@ -205,16 +157,14 @@ linkend='python-dbusmock'/> esteja instalado e emita:
 ninja test</userinput></screen>
 
     <para>
-      Os testes exigem uma sessão ativa do X ou do wayland. Alguns testes são
-instáveis (especialmente sob uma carga alta do sistema), de forma que se um
-teste falhar, você pode tentar executá-lo novamente sozinho com o comando
-<command>meson test <replaceable>&lt;nome
-teste&gt;</replaceable></command>. Alguns testes possivelmente falhem
-dependendo de alguma configuração do sistema. Não faça nenhuma entrada de
-mouse ou de teclado enquanto a suíte de teste estiver executando ou alguns
-testes possivelmente falhem. Você também consegue testar funções básicas do
-<application>Mutter</application> seguindo <xref linkend='mutter-starting'
-role=','/> depois de instalá-lo.
+      The tests require an active Wayland session. Some tests are flaky
+(especially if your system is under a high load), so if a test fails you can
+try to run a specific test again by using the <command>meson test
+<replaceable>&lt;test name&gt;</replaceable></command> command.  A few tests
+may fail depending on some system configuration.  Don't make any mouse or
+keyboard input while the test suite is running or some tests may fail.  You
+can also test basic functions of <application>Mutter</application> following
+<xref linkend='mutter-starting' role=','/> after installing this package.
     </para>
 
     <para>
@@ -232,16 +182,16 @@ role=','/> depois de instalá-lo.
       href="../../xincludes/meson-buildtype-release.xml"/>
 
     <para>
-      <parameter>-D bash_completion=false</parameter>: Permite construir o pacote
-sem o pacote <ulink
+      <parameter>-D bash_completion=false</parameter>: Allows building this
+package without the <ulink
 url="https://github.com/scop/bash-completion/">bash-completion</ulink>
-instalado.
+package installed.
     </para>
 
     <para>
-      <parameter>-D tests=disabled</parameter>: Permite construir o pacote sem
-<xref linkend='python-dbusmock'/> instalado. Ele será substituído por
-<command>meson configure</command> se executar a suíte de teste.
+      <parameter>-D tests=disabled</parameter>: Allows building this package
+without <xref linkend='python-dbusmock'/> installed.  It'll be overridden
+with <command>meson configure</command> if running the test suite.
     </para>
 
     <para>
@@ -251,16 +201,12 @@ instalado o <application>Sysprof</application> e desejar analisar o
 desempenho de renderização do <application>Mutter</application>.
     </para>
 
-    
-
-  <!-- No longer in meson.options in 48.2
     <para>
-
-      <option>-D libdisplay_info=disabled</option>: This allows building
-      this package without <xref linkend='libdisplay-info'/> installed.
+      <option>-D x11=true</option>: Allows building this package with X11
+support. X11 support is deprecated and will be removed in GNOME 50.
     </para>
-    -->
-</sect2>
+
+  </sect2>
 
   <sect2 role="starting" id="mutter-starting">
     <title>Iniciando o Mutter</title>
@@ -310,13 +256,13 @@ para a sessão aninhada do Wayland.
 
       <seglistitem>
         <seg>
-          gdctl e mutter
+          gdctl, gnome-service-client, and mutter
         </seg>
         <seg>
-          libmutter-16.so e libmutter-test-16.so (opcional)
+          libmutter-17.so and libmutter-test-17.so (optional)
         </seg>
         <seg>
-          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-16
+          /usr/{lib,include,libexec/installed-tests,share/{,installed-tests}}/mutter-17
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -334,6 +280,18 @@ gerenciador de janelas
           </para>
           <indexterm zone="mutter gdctl">
             <primary sortas="b-gdctl">gdctl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="gnome-service-client">
+        <term><command>gnome-service-client</command></term>
+        <listitem>
+          <para>
+            launches a Wayland client with an optional tag
+          </para>
+          <indexterm zone="mutter gnome-service-client">
+            <primary sortas="b-gnome-service-client">gnome-service-client</primary>
           </indexterm>
         </listitem>
       </varlistentry>

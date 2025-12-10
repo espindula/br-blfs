@@ -4,11 +4,11 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.9/localsearch-&localsearch-version;.tar.xz">
+  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.10/localsearch-&localsearch-version;.tar.xz">
   <!ENTITY localsearch-download-ftp  "">
-  <!ENTITY localsearch-md5sum        "6d29c941a4e10eb7fcc6e84d0d90053a">
+  <!ENTITY localsearch-md5sum        "d8022c33b89fda3c207999b6ad9b09f6">
   <!ENTITY localsearch-size          "4,3 MB">
-  <!ENTITY localsearch-buildsize     "35 MB (com testes)">
+  <!ENTITY localsearch-buildsize     "63 MB (com testes)">
   <!ENTITY localsearch-time          "0,2 UPC (com paralelismo=4; adicionar o equivalente a 1,0 UPC para testes,
 dependente da velocidade do disco)">
 ]>
@@ -67,17 +67,21 @@ sistema de arquivos, bem como um extrator de metadados.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/localsearch-&localsearch-version;-libxml2_2_14-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/localsearch-&localsearch-version;-libxml2_2_14-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Localsearch</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Localsearch</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -89,19 +93,20 @@ linkend="tinysparql"/>
     <para role="recommended">
       <xref linkend="exempi"/>, <xref linkend="giflib"/>, <xref
 linkend="ffmpeg"/>, <xref linkend="icu"/>, <xref linkend="libexif"/>, <xref
-linkend="libgxps"/>, <xref linkend="libseccomp"/>, <xref linkend="poppler"/>
-e <xref linkend="upower"/>
+linkend="libgxps"/>, <xref linkend="libseccomp"/>, <xref
+linkend="libwebp"/>, <xref linkend="poppler"/>, and <xref linkend="upower"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="asciidoc"/>, <xref linkend="cmake"/>, <xref
-linkend="dconf"/>, <xref linkend="libgsf"/>, <xref
-linkend="NetworkManager"/>, <xref linkend="taglib"/>, <xref
+      <xref linkend="asciidoc"/> (to build manual pages; note that manual pages
+are required for some tests), <xref linkend="cmake"/>, <xref
+linkend="gst10-plugins-good"/> (for one test), <xref linkend="libgsf"/>,
+<xref linkend="python-dbusmock"/> (for functional tests), <xref
 linkend="totem-pl-parser"/>, <ulink
 url="https://github.com/lipnitsk/libcue">libcue</ulink>, <ulink
 url="https://libiptcdata.sourceforge.net/">libitpcdata</ulink>, <ulink
-url="https://libosinfo.org">libosinfo</ulink> e <ulink
+url="https://libosinfo.org">libosinfo</ulink>, and <ulink
 url="https://gitlab.gnome.org/GNOME/gupnp">gupnp</ulink>
     </para>
 
@@ -159,14 +164,18 @@ seguinte comando (substitua 200 por um valor adequado para tua máquina):
 <screen remap="test"><userinput>sed -i s/120/<replaceable>200</replaceable>/ tests/functional-tests/meson.build</userinput></screen>
     </note>
 
+
+
+    <!--
     <para>
-      Primeiro, aplique um remendo para tornar o extrator de HTML compatível com
-libxml2-2.14 e posteriores:
+
+      First, apply a patch to make the HTML extractor compatible with
+      libxml2-2.14 and later:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../localsearch-&localsearch-version;-libxml2_2_14-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>Localsearch</application> executando os seguintes
 comandos:
     </para>
@@ -175,10 +184,11 @@ comandos:
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr       \
-            --buildtype=release \
-            -D man=false        \
-            ..                  &amp;&amp;
+meson setup --prefix=/usr             \
+            --buildtype=release       \
+            -D man=false              \
+            -D functional_tests=false \
+            ..                        &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
@@ -188,30 +198,41 @@ meson setup --prefix=/usr                  \
             --buildtype=release            \
             -D systemd_user_services=false \
             -D man=false                   \
+            -D functional_tests=false      \
             ..                             &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita (ajuste o tempo limite do teste individual
-para um valor adequado para a tua máquina; veja-se a nota acima):
+      <!--One test,
+      <filename>
+test_cli_inhibit</filename>, is known to fail.
+      Seem to pass if man pages are built (pierre)-->
+To test the results, issue the following commands. Make sure that you adjust
+the individual test timeout to a value suitable for your machine, please
+read the note above for more details.
     </para>
 
-<screen remap="test"><userinput>dbus-run-session env LC_ALL=C.UTF-8 TRACKER_TESTS_AWAIT_TIMEOUT=<replaceable>20</replaceable> \
-                 ninja test &amp;&amp;
-rm -rf ~/tracker-tests</userinput></screen>
+    <screen remap="test"><userinput>
+meson configure -D man=true -D functional_tests=true &amp;&amp;
+ninja                                                &amp;&amp;
+dbus-run-session env LC_ALL=C.UTF-8 TRACKER_TESTS_AWAIT_TIMEOUT=<replaceable>20</replaceable> \
+                 ninja test</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-    <screen role="root"><userinput>ninja install</userinput></screen>
-
+    <!-- Does not seem to be true anymore (pierre Dec 25)
     <note>
+
       <para>
-        Os testes criam arquivos no diretório do(a) usuário(a) (até 24 MB), de forma
-que eles tem de ser removidos posteriormente.
+        The tests create files in the user directory (up to 24 MB), so
+        they have to be removed afterwards.
       </para>
     </note>
+    -->
+<screen role="root"><userinput>ninja install</userinput></screen>
+    
   </sect2>
 
   <sect2 role="commands">
@@ -227,6 +248,12 @@ linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
 páginas de manual.
     </para>
 
+    <para>
+      <parameter>-D functional_tests=false</parameter>: This switch prevents the
+setup process to require <xref linkend="python-dbusmock"/> and fail if it is
+not installed. You can remove this switch if it is installed.
+    </para>
+
     <para revision="sysv">
       <parameter>-D systemd_user_services=false</parameter>: Essa chave impede o
 processo de construção de instalar unidades do systemd, pois elas são
@@ -234,21 +261,22 @@ inúteis em sistemas SysV.
     </para>
 
     <para>
-      <option>-D seccomp=false</option>: Essa opção desabilita o filtro de chamada
-de sistema seccomp. Em algumas arquiteturas, como i686 e ARM, as funções que
-o tracker-miners usa não são protegidas corretamente, e o tracker-miners
-será morto com um SIGSYS como resultado. Observe que desabilitar o seccomp
-pode fazer com que o sistema seja comprometido ainda mais no caso de uma
-vulnerabilidade de segurança no localsearch ou nas dependências dele ser
-explorada.
+      <option>-D seccomp=false</option>: This option disables the seccomp system
+call filter. On some architectures, such as ARM, the functions that
+localsearch uses are not guarded properly, and localsearch will get killed
+with a SIGSYS signal as a result of this. Note that disabling seccomp may
+cause the system to be compromised worse in the event that a security
+vulnerability in localsearch or its dependencies is exploited, and it is
+<emphasis>NOT</emphasis> recommended.
     </para>
 
     <para>
-      <option>-D landlock=disabled</option>: Essa chave desabilita o sandbox de
-acesso a arquivos Landlock. Use-a se você não quiser construir o núcleo com
-suporte a Landlock. Observe que desabilitar Landlock pode fazer com que o
-sistema seja comprometido ainda mais no caso de uma vulnerabilidade de
-segurança no localsearch ou nas dependências dele ser explorada.
+      <option>-D landlock=disabled</option>: This switch disables the Landlock
+file access sandbox.  Use it if you don't want to build the kernel with
+Landlock support.  Note that disabling Landlock may cause the system to be
+compromised worse in the event that a security vulnerability in localsearch
+or its dependencies is exploited, and this is <emphasis>NOT</emphasis>
+recommended.
     </para>
 
     <para>

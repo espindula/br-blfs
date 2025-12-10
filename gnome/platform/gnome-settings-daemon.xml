@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY gnome-settings-daemon-download-http
-           "&gnome-download-http;/gnome-settings-daemon/&gnome-48;/gnome-settings-daemon-&gnome-settings-daemon-version;.tar.xz">
+           "&gnome-download-http;/gnome-settings-daemon/&gnome-49;/gnome-settings-daemon-&gnome-settings-daemon-version;.tar.xz">
   <!ENTITY gnome-settings-daemon-download-ftp  "">
-  <!ENTITY gnome-settings-daemon-md5sum        "0ec5ed77aa85685cdf3d44f3d8dce0b5">
+  <!ENTITY gnome-settings-daemon-md5sum        "054a3deb8d4e1a0a854b62938ec0bcee">
   <!ENTITY gnome-settings-daemon-size          "1,4 MB">
-  <!ENTITY gnome-settings-daemon-buildsize     "37 MB">
+  <!ENTITY gnome-settings-daemon-buildsize     "32 MB">
   <!ENTITY gnome-settings-daemon-time          "0,1 UPC (usando paralelismo=4, adicionar 0,5 UPC para testes)">
 ]>
 
@@ -114,18 +114,7 @@ linkend="xorg-server"/> ou <xref role="nodep" linkend="xwayland"/>)
   <sect2 role="installation">
     <title>Instalação do GNOME Settings Daemon</title>
 
-
-
-    <!--
-    <para>
-
-      First, fix building with recent versions of
-      <application>meson</application>:
-    </para>
-
-<screen><userinput>sed "/  policy,/d" -i plugins/{power,wacom}/meson.build</userinput></screen>
--->
-<para revision="sysv">
+    <para revision="sysv">
       A seguir, corrija a detecção da libelogind para testes:
     </para>
 
@@ -136,19 +125,8 @@ linkend="xorg-server"/> ou <xref role="nodep" linkend="xwayland"/>)
        A seguir, corrija a funcionalidade da luz de fundo no gnome-control-center:
     </para>
 
-<!--
-    <para>
-
-      If running the test suite, apply a patch to fix test timeouts
-      with python-dbusmock 0.30.0 or later:
-    </para>
-
-    <screen><userinput>patch -Np1 -i ../gnome-settings-daemon-&gnome-settings-daemon-version;-testsuite_fix-1.patch</userinput></screen>
--->
 <screen revision="sysv"><userinput>sed -e 's/(backlight->logind_proxy)/(0)/' \
     -i plugins/power/gsd-backlight.c</userinput></screen>
-
-
 
     <para>
       Instale o <application>Gnome Settings Daemon</application> executando os
@@ -162,6 +140,17 @@ seguintes comandos:
          [pierre, July 31st, 2020]: only one test passed on elogind. I
          have umockdev, but it does not look like it is used. Adding the
          sed allows 9 tests out of 10 to pass. -->
+<!--
+    <para>
+
+      To check the results, execute: <command>ninja test</command>. Note that
+      you must have <application>python-dbusmock</application> installed in
+      order for the tests to complete successfully. Some tests
+      may fail depending on the init system in use.
+    </para>
+    -->
+<!-- The tests do not work because gnome-session 49 has removed the built-in
+         session manager. -->
 <screen revision='sysv'><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
@@ -178,12 +167,10 @@ meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     
+    
+    
     <para>
-      Para verificar os resultados, execute: <command>ninja
-test</command>. Observe que você precisa ter
-<application>python-dbusmock</application> instalado para a finalidade de
-que os testes completem com sucesso. Alguns testes possivelmente falhem
-dependendo do sistema init em uso.
+      Esse pacote não vem com uma suíte de teste funcional.
     </para>
 
     <para>

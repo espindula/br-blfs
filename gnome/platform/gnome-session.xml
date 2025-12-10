@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY gnome-session-download-http
-           "&gnome-download-http;/gnome-session/&gnome-48;/gnome-session-&gnome-session-version;.tar.xz">
+           "&gnome-download-http;/gnome-session/&gnome-49;/gnome-session-&gnome-session-version;.tar.xz">
   <!ENTITY gnome-session-download-ftp  "">
-  <!ENTITY gnome-session-md5sum        "7b06c3d7aff4c13be55fe90a3a8bb0c4">
-  <!ENTITY gnome-session-size          "480 KB">
-  <!ENTITY gnome-session-buildsize     "9,6 MB">
-  <!ENTITY gnome-session-time          "0,2 UPC">
+  <!ENTITY gnome-session-md5sum        "14d0c1ab840ff8a86348e333cd7835ec">
+  <!ENTITY gnome-session-size          "388 KB">
+  <!ENTITY gnome-session-buildsize     "7,5 MB">
+  <!ENTITY gnome-session-time          "0,1 UPC">
 ]>
 
 <sect1 id="gnome-session" xreflabel="gnome-session-&gnome-session-version;">
@@ -89,16 +89,23 @@ documentação)
   <sect2 role="installation">
     <title>Instalação do GNOME Session</title>
 
+
+
+
+    <!-- in gnome-session-49, this file is no longer present as gnome-session has
+     been rewritten in C.
     <para>
-      Ao executar o GNOME sob o <xref linkend="wayland"/>, as configurações de
-ambiente não são importadas para o(a) usuário(a) que usa o perfil do
-sistema. Os(As) desenvolvedores(as) do Wayland estão atualmente indecisos a
-respeito de um método padrão para fornecer configurações de ambiente de
-sistema para sessões de usuário(a). Para contornar essa limitação, execute o
-seguinte comando para fazer com que <command>gnome-session</command> use um
-shell de login:
+
+      When running GNOME under <xref linkend="wayland"/>, environment settings
+      are not imported for the user using the system profile. The Wayland
+      developers are currently undecided on a standard method to provide system
+      environment settings for user sessions. To work around this limitation,
+      execute the following command to make
+      <command>gnome-session</command> use a login shell:
     </para>
 
+<screen><userinput>sed 's@/bin/sh@/bin/sh -l@' -i gnome-session/gnome-session.in</userinput></screen>
+-->
 <!--
     <para revision="sysv">
 
@@ -107,10 +114,7 @@ shell de login:
 
 <screen revision="sysv"><userinput remap="pre">sed -i "/  systemd_dep/,+3d;/if enable_systemd/a \    systemd_userunitdir = '/tmp\'" meson.build</userinput></screen>
 -->
-<screen><userinput>sed 's@/bin/sh@/bin/sh -l@' -i gnome-session/gnome-session.in</userinput></screen>
-
-
-    <para>
+<para>
       Instale o <application>GNOME Session</application> executando os seguintes
 comandos:
     </para>
@@ -150,9 +154,13 @@ ninja</userinput></screen>
       Se você gerou a documentação, mova-a para um diretório versionado:
     </para>
 
+<!-- We need to adjust this when GNOME 50 comes out next year. For now,
+         since we've documented the X11 support via a switch, we'll leave this
+         in... -renodr -->
 <screen role="nodump"><userinput>mv -v /usr/share/doc/gnome-session{,-&gnome-session-version;}</userinput></screen>
 
 
+    
     <para>
       Esse pacote cria dois arquivos <filename>.desktop</filename> baseados em
 Xorg no diretório <filename
@@ -164,7 +172,7 @@ arquivos extras apareçam como opções em um gerenciador de exibição. Como
 o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>rm -v /usr/share/xsessions/gnome.desktop &amp;&amp;
+<screen role="root"><userinput>rm -fv /usr/share/xsessions/gnome.desktop &amp;&amp;
 rm -v /usr/share/wayland-sessions/gnome.desktop</userinput></screen>
 
     <para revision="sysv">
@@ -203,7 +211,7 @@ dependências opcionais.
 
 
 
-  <!-- This option was removed in 46
+    <!-- This option was removed in 46
     <para revision="sysv">
 
       <parameter>-D systemd_journal=false</parameter>
@@ -211,7 +219,12 @@ dependências opcionais.
       with elogind support on a SysV based system.
     </para>
 -->
-</sect2>
+<para>
+      <option>-D x11=true</option>: This option enables support for X11
+sessions. X11 support is deprecated and will be removed in GNOME 50.
+    </para>
+
+  </sect2>
 
   <sect2 role="starting">
     <title>Iniciando o GNOME</title>
@@ -237,6 +250,13 @@ linha de comando.
       
       
     </para>
+
+    <warning>
+      <para>
+        X11 support is deprecated and will be removed in GNOME 50. Please use the
+Wayland session wherever possible.
+      </para>
+    </warning>
 
     <para>
       Para iniciar o <application>GNOME</application> usando <xref role="nodep"

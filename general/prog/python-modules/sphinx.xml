@@ -6,9 +6,9 @@
 
   <!ENTITY sphinx-download-http "https://files.pythonhosted.org/packages/source/s/sphinx/sphinx-&sphinx-version;.tar.gz">
   <!ENTITY sphinx-download-ftp  "">
-  <!ENTITY sphinx-md5sum        "eec3083f144d88cf65ad3da422fc7e66">
-  <!ENTITY sphinx-size          "7,9 MB">
-  <!ENTITY sphinx-buildsize     "32 MB (adicionar 22 MB para os testes)">
+  <!ENTITY sphinx-md5sum        "353b41bbac4d67edc1ecb692f946f965">
+  <!ENTITY sphinx-size          "8,3 MB">
+  <!ENTITY sphinx-buildsize     "32 MB (adicionar 24 MB para os testes)">
   <!ENTITY sphinx-time          "menos que 0,1 UPC (adicionar 0,7 UPC para testes)">
 ]>
 
@@ -72,10 +72,10 @@ documentação bonita em vários formatos.
         <xref linkend="alabaster"/>, <xref linkend="babel"/>, <xref
 linkend="docutils"/>, <xref linkend="imagesize"/>, <xref
 linkend="pygments"/>, <xref linkend="requests"/>, <xref
-linkend="roman-numerals-py"/>, <xref linkend="snowballstemmer"/>, <xref
+linkend="roman-numerals"/>, <xref linkend="snowballstemmer"/>, <xref
 linkend="sc-applehelp"/>, <xref linkend="sc-devhelp"/>, <xref
 linkend="sc-htmlhelp"/>, <xref linkend="sc-jsmath"/>, <xref
-linkend="sc-qthelp"/> e <xref linkend="sc-serializinghtml"/>
+linkend="sc-qthelp"/>, and <xref linkend="sc-serializinghtml"/>
       </para>
 
       <bridgehead renderas="sect5">Opcionais (para testes)</bridgehead>
@@ -91,14 +91,16 @@ url="https://pypi.org/project/typing_extensions/">typing_extensions</ulink>
     <sect3 role="installation">
       <title>Instalação do Sphinx</title>
 
+    <!--
       <para>
-        Primeiro, permita que <application>sphinx</application> use <xref
-linkend="docutils"/>:
+
+        First allow <application>sphinx</application> to use
+        <xref linkend="docutils"/>:
       </para>
 
 <screen><userinput>sed -e 's/0.22/0.23/' -i pyproject.toml</userinput></screen>
-
-    <para>Construa o módulo:</para>
+-->
+<para>Construa o módulo:</para>
 
 &build-wheel;
 
@@ -136,23 +138,30 @@ pode ser testada com os seguintes comandos:
 <screen remap="test"><!-- no && because of a possible error -->
 <userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
 source testenv/bin/activate                    &amp;&amp;
-pip3 install sphinx[test]                      &amp;&amp;
+pip3 install sphinx[test] defusedxml           &amp;&amp;
 python3 -m pytest
 deactivate</userinput></screen>
 
+
       <para>
-        <!--https://github.com/sphinx-doc/sphinx/issues/13945 is related to the
+        <!--
+        Six tests, <filename>
+test_build_latex.py::text_latex_labels</filename>,
+        <filename>test_ext_autodoc.py::test_autodoc_special_members</filename>,
+        <filename>test_ext_autosummary.py::test_autosummary_generate_content_for_module_imported_members</filename>,
+        <filename>test_util_docutils_sphinx_directive.py::test_sphinx_directive_parse_content_to_nodes</filename>,
+        <filename>test_util_docutils_sphinx_directive.py::test_sphinx_directive_parse_text_to_nodes</filename>, and
+        <filename>test_util_typing.py::test_is_invalid_builtin_class</filename>,
+        are known to fail due to changes in docutils-0.22 and Python 3.14.
+-->
+<!--https://github.com/sphinx-doc/sphinx/issues/13945 is related to the
         autodoc failure, which is Python 3.14 related. The remainder are docutils
         related. The PR mentioned in #13945 depends on a major refactor of the
         autodoc code.-->
-Seis testes, <filename>test_build_latex.py::text_latex_labels</filename>,
-<filename>test_ext_autodoc.py::test_autodoc_special_members</filename>,
-<filename>test_ext_autosummary.py::test_autosummary_generate_content_for_module_imported_members</filename>,
-<filename>test_util_docutils_sphinx_directive.py::test_sphinx_directive_parse_content_to_nodes</filename>,
-<filename>test_util_docutils_sphinx_directive.py::test_sphinx_directive_parse_text_to_nodes</filename>
-e <filename>test_util_typing.py::test_is_invalid_builtin_class</filename>,
-são conhecidos por falharem devido às mudanças no docutils-0.22 e Python
-3.14.
+Quatro testes (dos mais que 2.400 testes) são conhecidos por falharem: Três
+em test_ext_autodoc.py e um em test_util_typing.py.
+        
+
         
       </para>
 

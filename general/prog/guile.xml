@@ -6,10 +6,10 @@
 
   <!ENTITY guile-download-http "&gnu-http;/guile/guile-&guile-version;.tar.xz">
   <!ENTITY guile-download-ftp  "">
-  <!ENTITY guile-md5sum        "375f8a423a23d229552512113aa4a954">
-  <!ENTITY guile-size          "5,5 MB">
-  <!ENTITY guile-buildsize     "184 MB (adicionar 4 MB para os testes)">
-  <!ENTITY guile-time          "4,5 UPC (Usando paralelismo=4; adicionar 0,3 UPC para testes)">
+  <!ENTITY guile-md5sum        "f215f364387f6c9b008efaa11e8079dc">
+  <!ENTITY guile-size          "5,6 MB">
+  <!ENTITY guile-buildsize     "195 MB (adicionar 3 MB para os testes)">
+  <!ENTITY guile-time          "4,2 UPC (Usando paralelismo=4; adicionar 0,3 UPC para testes)">
 ]>
 
 <sect1 id="guile" xreflabel="Guile-&guile-version;">
@@ -67,16 +67,6 @@ um interpretador <application>Scheme</application> independente.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Remendo exigido em sistemas de 32 bits: <ulink
-url="&patch-root;/guile-&guile-version;-32bit_fixes-1.patch"/>
-        </para>
-      </listitem>
-    </itemizedlist>
-
     <bridgehead renderas="sect3">Dependências do "Guile"</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -96,20 +86,10 @@ tempo de execução).
     <title>Instalação do "Guile"</title>
 
     <para>
-      Primeiro, se você estiver em um sistema de 32 bits, corrija uma falha de
-construção:
-    </para>
-
-<screen><userinput remap="pre">case $(uname -m) in
-    i?86) patch -Np1 -i ../guile-&guile-version;-32bit_fixes-1.patch ;;
-esac</userinput></screen>
-
-    <para>
       Instale <application>Guile</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>CC="gcc -std=gnu17"          \
-./configure --prefix=/usr    \
+<screen><userinput>./configure --prefix=/usr    \
             --disable-static \
             --docdir=/usr/share/doc/guile-&guile-version; &amp;&amp;
 make      &amp;&amp;
@@ -119,18 +99,34 @@ makeinfo --plaintext -o doc/r5rs/r5rs.txt doc/r5rs/r5rs.texi &amp;&amp;
 makeinfo --plaintext -o doc/ref/guile.txt doc/ref/guile.texi</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>./check-guile</command>. Em um
-sistema "i686", até dez (10) testes falharão na suíte de teste
-<filename>numbers.test</filename> devido a pequenos erros de arredondamento
-de ponto flutuante.
+      <!--On an i686 system, as many as 10 tests will fail in the
+      <filename>
+numbers.test</filename> test suite due to minor floating-point
+      rounding errors.-->
+When running the test suite, first remove a failing test that halts the
+tests: <command>rm test-suite/tests/srfi-207.test</command>.  Then to test
+the results, issue: <command>./check-guile</command>.
+      
     </para>
+    
+    
     
     
 
     <!-- 10 of the numbers tests fail on i686. This should probably be looked
          into at a later point in time. -renodr -->
-<!-- All tests pass for 3.0.10 on a x86_64.  Did not check on i686.
-         -bdubbs -->
+<!-- All tests pass for 3.0.10 on a x86_64.  Did not check on i686.  -->
+<!-- For 3.0.11 on a x86_64: 
+         Totals for this test run:
+         passes:                 43387
+         failures:               0
+         unexpected passes:      0
+         expected failures:      10
+         unresolved test cases:  21
+         untested test cases:    1
+         unsupported test cases: 1
+         errors:                 0    -bdubbs -->
+<!-- All good on i686! -renodr -->
 <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
