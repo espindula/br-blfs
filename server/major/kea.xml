@@ -76,10 +76,11 @@ fim de vida desde dezembro de 2022.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="mitkrb"/>, <xref linkend="valgrind"/>, <ulink
+      <xref linkend="bind"/>, <xref linkend="mitkrb"/>, <xref
+linkend="valgrind"/>, <ulink
 url="https://botan.randombit.net/">botan</ulink>, <ulink
 url="https://cppcheck.sourceforge.io/">cppcheck</ulink>, <ulink
-url="https://github.com/CESNET/libyang">libyang</ulink> e <ulink
+url="https://github.com/CESNET/libyang">libyang</ulink>, and <ulink
 url="https://plantuml.com/">plantuml</ulink>
     </para>
 
@@ -130,7 +131,9 @@ Editor Notes:
 <screen><userinput>sed -e "/asio_wrapper/a#include &lt;boost/asio/deadline_timer.hpp&gt;" \
     -i src/lib/asiolink/interval_timer.cc                        \
        src/lib/asiodns/io_fetch.cc                               \
-       src/lib/asiodns/tests/io_fetch_unittest.cc</userinput></screen>
+       src/lib/asiodns/tests/io_fetch_unittest.cc                &amp;&amp;
+sed -e "/lexical_cast.hpp/a #include &lt;boost/static_assert.hpp&gt;"  \
+    -i src/lib/log/logger_level_impl.cc</userinput></screen>
 
     <para>
       Agora, instale o <application>Servidor DHCP Kea do ISC</application>
@@ -166,11 +169,12 @@ class="username">root</systemitem>:
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Corrija alguns caminhos codificados no conjunto de comandos sequenciais
-<command>keactrl</command>:
+      Fix some hard coded paths in the <command>keactrl</command> script and in
+it's configuration file:
     </para>
 
-<screen role="root"><userinput>sed -e "s;\${prefix}/;;" -i /usr/sbin/keactrl</userinput></screen>
+<screen role="root"><userinput>sed -e "s:\${prefix}/::" -i /usr/sbin/keactrl             &amp;&amp;
+sed -e "s:\${prefix}//etc:/etc:" -i /etc/kea/keactrl.conf</userinput></screen>
 
     <para>
       Crie alguns diretórios e corrija as configurações de permissão deles como
