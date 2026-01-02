@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY libqmi-download-http "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/&libqmi-version;/libqmi-&libqmi-version;.tar.gz">
+  <!ENTITY libqmi-download-ftp  "">
+  <!ENTITY libqmi-md5sum        "05d71b840d1b9dd66ad06e0a1187cf1e">
+  <!ENTITY libqmi-size          "4.2 MB">
+  <!ENTITY libqmi-buildsize     "72 MB (with tests)">
+  <!ENTITY libqmi-time          "0.2 SBU (Using parallelism=4; with tests)">
+]>
+
+<sect1 id="libqmi" xreflabel="libqmi-&libqmi-version;">
+  <?dbhtml filename="libqmi.html"?>
+
+
+  <title>libqmi-&libqmi-version;</title>
+
+  <indexterm zone="libqmi">
+    <primary sortas="a-libqmi">libqmi</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to libqmi</title>
+
+    <para>
+      The <application>libqmi</application> package contains a GLib-based library
+for talking to WWAN modems and devices which speak the Qualcomm MSM
+Interface (QMI) protocol.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&libqmi-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&libqmi-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &libqmi-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &libqmi-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &libqmi-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &libqmi-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">libqmi Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref linkend="glib2"/> (GObject Introspection recommended) and <xref
+linkend="libgudev"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
+      <xref linkend="libmbim"/>
+    </para>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="gtk-doc"/>, <ulink
+url="https://ftpmirror.gnu.org/gnu/help2man/">help2man</ulink>, and <ulink
+url="https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib">libqrtr-glib</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of libqmi</title>
+
+    <para>
+      Install <application>libqmi</application> by running the following commands:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -D bash_completion=false \
+      -D qrtr=false            \
+      -D man=false             &amp;&amp;
+
+ninja</userinput></screen>
+
+    <para>
+      To test the results, issue: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Now, as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+
+    <title>Command Explanations</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para>
+      <parameter>-D bash_completion=false</parameter>: Use this option if the
+external <ulink
+url="https://github.com/scop/bash-completion">bash-completion</ulink>
+package is not installed.
+    </para>
+
+    <para>
+      <parameter>-D man=false</parameter>: Use this option if the external <ulink
+url="https://ftpmirror.gnu.org/gnu/help2man/">help2man</ulink> package is
+not installed.
+    </para>
+
+    <para>
+      <parameter>-D qrtr=false</parameter>: This switch disables support for the
+QRTR protocol which needs the external <ulink
+url="https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib">libqrtr-glib</ulink>
+package.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+          qmicli, qmi-firmware-update, and qmi-network
+        </seg>
+        <seg>
+          libqmi-glib.so
+        </seg>
+        <seg>
+          /usr/include/libqmi-glib 
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="qmicli">
+        <term><command>qmicli</command></term>
+        <listitem>
+          <para>
+            is a utility used to control QMI devices
+          </para>
+          <indexterm zone="libqmi qmicli">
+            <primary sortas="b-qmicli">qmicli</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="qmi-firmware-update">
+        <term><command>qmi-firmware-update</command></term>
+        <listitem>
+          <para>
+            is a utility used to perform firmware updates on QMI devices
+          </para>
+          <indexterm zone="libqmi qmi-firmware-update">
+            <primary sortas="b-qmi-firmware-update">qmi-firmware-update</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="qmi-network">
+        <term><command>qmi-network</command></term>
+        <listitem>
+          <para>
+            is a utility used for simple network management of QMI devices
+          </para>
+          <indexterm zone="libqmi qmi-network">
+            <primary sortas="b-qmi-network">qmi-network</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libqmi-glib">
+        <term><filename class="libraryfile">libqmi-glib.so</filename></term>
+        <listitem>
+          <para>
+            contains API functions for talking to WWAN modems and devices which speak
+the Qualcomm MSM Interface (QMI) protocol
+          </para>
+          <indexterm zone="libqmi libqmi-glib">
+            <primary sortas="c-libqmi-glib">libqmi-glib.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY gpgme-download-http "&gnupg-http;/gpgme/gpgme-&gpgme-version;.tar.bz2">
+  <!ENTITY gpgme-download-ftp  "">
+  <!ENTITY gpgme-md5sum        "73b6d337d02e1829323ef44830e92117">
+  <!ENTITY gpgme-size          "1.3 MB">
+  <!ENTITY gpgme-buildsize     "25 MB (with tests)">
+  <!ENTITY gpgme-time          "0.2 SBU (with tests and parallelism=4)">
+]>
+
+<sect1 id="gpgme" xreflabel="gpgme-&gpgme-version;">
+  <?dbhtml filename="gpgme.html"?>
+
+
+  <title>gpgme-&gpgme-version;</title>
+
+  <indexterm zone="gpgme">
+    <primary sortas="a-gpgme">gpgme</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to gpgme</title>
+
+    <para>
+      The <application>gpgme</application> package is a C library that allows
+cryptography support to be added to a program. It is designed to make access
+to public key crypto engines like <application>GnuPG</application> or GpgSM
+easier for applications. <application>gpgme</application> provides a
+high-level crypto API for encryption, decryption, signing, signature
+verification and key management.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&gpgme-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&gpgme-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &gpgme-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &gpgme-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &gpgme-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &gpgme-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">gpgme Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref linkend="libassuan"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
+ 
+      <!-- https://lists.gnupg.org/pipermail/gnupg-devel/2025-July/036022.html -->
+<xref linkend="gnupg2"/> (as per upstream recommendation)
+    </para>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="doxygen"/>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of gpgme</title>
+
+    <para>
+      Install <application>gpgme</application> by running the following commands:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+../configure --prefix=/usr       \
+             --disable-static    &amp;&amp;
+make</userinput></screen>
+
+    <para>
+      To test the results, you should have <xref linkend="gnupg2"/> installed. If
+so, run:
+    </para>
+
+<screen remap='test'><userinput>make -k check</userinput></screen>
+
+    <para>
+      Now, as the &root; user:
+    </para>
+
+<screen role="root"><userinput>make install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/static-libraries.xml"/>
+
+    <para>
+      <option>--disable-gpg-test</option>: Use this switch if <xref
+linkend="gnupg2"/> is not installed.
+    </para>
+
+  </sect2>
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Program</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directory</segtitle>
+
+      <seglistitem>
+        <seg>
+          gnupg-key-manage, gpgme-json, and gpgme-tool
+        </seg>
+        <seg>
+          libgpgme.so
+        </seg>
+        <seg>
+          /usr/share/common-lisp/source/gpgme
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="gnupg-key-manage">
+        <term><command>gnupg-key-manage</command></term>
+        <listitem>
+          <para>
+            performs a variety of operations on GPG keys, including identifying keys and
+deleting them
+          </para>
+          <indexterm zone="gpgme gnupg-key-manage">
+            <primary sortas="b-gnupg-key-manage">gnupg-key-manage</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="gpgme-json">
+        <term><command>gpgme-json</command></term>
+        <listitem>
+          <para>
+            outputs <application>gpgme</application> commands in JSON format
+          </para>
+          <indexterm zone="gpgme gpgme-json">
+            <primary sortas="b-gpgme-json">gpgme-json</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="gpgme-tool">
+        <term><command>gpgme-tool</command></term>
+        <listitem>
+          <para>
+            is an assuan server exposing <application>gpgme</application> operations,
+such as printing fingerprints and keyids with keyservers
+          </para>
+          <indexterm zone="gpgme gpgme-tool">
+            <primary sortas="b-gpgme-tool">gpgme-tool</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libgpgme">
+        <term><filename class="libraryfile">libgpgme.so</filename></term>
+        <listitem>
+          <para>
+            contains the <application>gpgme</application> API functions
+          </para>
+          <indexterm zone="gpgme libgpgme">
+            <primary sortas="c-libgpgme">libgpgme.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

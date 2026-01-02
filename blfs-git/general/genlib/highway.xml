@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY highway-download-http "https://github.com/google/highway/archive/&highway-version;/highway-&highway-version;.tar.gz">
+  <!ENTITY highway-md5sum        "6c913a4c4ba849a3306d45318f66078d">
+  <!ENTITY highway-size          "3.5 MB">
+  <!ENTITY highway-buildsize     "28 MB">
+  <!ENTITY highway-time          "0.6 SBU (with parallelism=4)">
+]>
+
+<sect1 id="highway" xreflabel="highway-&highway-version;">
+  <?dbhtml filename="highway.html"?>
+
+   <title>highway-&highway-version;</title>
+
+  <indexterm zone="highway">
+    <primary sortas="a-highway">highway</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to highway</title>
+
+    <para>
+      The <application>highway</application> package contains a C++ library that
+provides portable SIMD/vector intrinsics.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&highway-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &highway-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &highway-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &highway-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &highway-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">highway Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref linkend="cmake"/>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of highway</title>
+
+    <para>
+      Install <application>highway</application> by running the following
+commands:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D BUILD_TESTING=OFF         \
+      -D BUILD_SHARED_LIBS=ON      \
+      -G Ninja ..                  &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      This package does come with a test suite, but it requires <ulink
+url="https://github.com/google/googletest">gtest</ulink>, which is not in
+BLFS.
+    </para>
+
+    <para>
+      Now, as the &root; user:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <para>
+      <parameter>-D BUILD_TESTING=OFF</parameter>: This parameter disables the
+test suite from being built because <ulink
+url="https://github.com/google/googletest">gtest</ulink> is not part of
+BLFS. Without this parameter, CMake will download this package during the
+configuration process. If you wish to run the tests, install <ulink
+url="https://github.com/google/googletest">gtest</ulink> and then remove
+this parameter.
+    </para>
+
+    <para>
+      <parameter>-D BUILD_SHARED_LIBS=ON</parameter>: This parameter enables
+building shared versions of the libraries instead of static versions.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+          None
+        </seg>
+        <seg>
+          libhwy.so, libhwy_contrib.so, and libhwy_test.so
+        </seg>
+        <seg>
+          /usr/include/hwy and /usr/lib/cmake/hwy
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libhwy">
+        <term><filename class="libraryfile">libhwy.so</filename></term>
+        <listitem>
+          <para>
+            contains functions that provide portable SIMD/vector intrinsics
+          </para>
+          <indexterm zone="highway libhwy">
+            <primary sortas="c-libhwy">libhwy.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libhwy_contrib">
+        <term><filename class="libraryfile">libhwy_contrib.so</filename></term>
+        <listitem>
+          <para>
+            contains several additions to Highway, including a series of dot product,
+image, math, and sort routines
+          </para>
+          <indexterm zone="highway libhwy_contrib">
+            <primary sortas="c-libhwy_contrib">libhwy_contrib.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry id="libhwy_test">
+        <term><filename class="libraryfile">libhwy_test.so</filename></term>
+        <listitem>
+          <para>
+            contains test helpers for Highway
+          </para>
+          <indexterm zone="highway libhwy_test">
+            <primary sortas="c-libhwy_test">libhwy_test.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect2>
+</sect1>

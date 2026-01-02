@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY seven-zip-download-http "https://github.com/ip7z/7zip/archive/&seven-zip-version;/7zip-&seven-zip-version;.tar.gz">
+  <!ENTITY seven-zip-download-ftp  "">
+  <!ENTITY seven-zip-md5sum        "0f820e4e77bd0fe6a1145e01a23fd886">
+  <!ENTITY seven-zip-size          "2.1 MB">
+  <!ENTITY seven-zip-buildsize     "38 MB">
+  <!ENTITY seven-zip-time          "1.4 SBU">
+]>
+
+<sect1 id="seven-zip" xreflabel="7zip-&seven-zip-version;">
+  <?dbhtml filename="7zip.html"?>
+
+
+  <title>7zip-&seven-zip-version;</title>
+
+  <indexterm zone="seven-zip">
+    <primary sortas="a-7zip">7zip</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to 7zip</title>
+
+    <para>
+      <application>7zip</application> is a file archiver that archives with high
+compression ratios. It handles 7z, ZIP, GZIP, Brotli, BZIP2, XZ, TAR, APM,
+ARJ, CAB, CHM, CPIO, CramFS, DEB, DMG, FAT, HFS, ISO, Lizard, LZ5, LZFSE,
+LZH, LZMA, LZMA2, MBR, MSI, MSLZ, NSIS, NTFS, RAR, RPM, SquashFS, UDF, VHD,
+WIM, XAR, Z, and Zstd formats.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&seven-zip-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&seven-zip-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &seven-zip-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &seven-zip-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &seven-zip-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &seven-zip-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">7zip Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <ulink url="https://github.com/Terraspace/UASM">UASM</ulink>
+    </para>
+
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of 7zip</title>
+
+
+
+    <!-- Doesn't seem to be needed with 25.01.
+    <para>
+      Turn off <literal>-Werror</literal> to avoid warnings being treated as
+      errors:
+    </para>
+
+<screen><userinput>sed 's/-Werror //g' -i CPP/7zip/7zip_gcc.mak</userinput>
+</screen>
+-->
+<para>
+      Install <application>7zip</application> by running the following commands:
+    </para>
+
+<screen><userinput>(for i in Bundles/{Alone,Alone7z,Format7zF,SFXCon} UI/Console; do
+    make -C CPP/7zip/$i -f ../../cmpl_gcc.mak || exit
+done)</userinput></screen>
+
+    <para>
+      This package does not have a test suite.
+    </para>
+
+    <para>
+      Now, as the &root; user:
+    </para>
+
+<screen role="root"><userinput>install -vDm755 CPP/7zip/Bundles/Alone{/b/g/7za,7z/b/g/7zr} \
+                CPP/7zip/Bundles/Format7zF/b/g/7z.so        \
+                CPP/7zip/UI/Console/b/g/7z                  \
+                -t /usr/lib/7zip/                           &amp;&amp;
+
+install -vm755 CPP/7zip/Bundles/SFXCon/b/g/7zCon \
+               /usr/lib/7zip/7zCon.sfx           &amp;&amp;
+
+(for i in 7z 7za 7zr; do
+    cat &gt; /usr/bin/$i &lt;&lt; EOF || exit
+<literal>#!/bin/sh
+exec /usr/lib/7zip/$i "\$@"</literal>
+EOF
+    chmod 755 /usr/bin/$i || exit
+done) &amp;&amp;
+
+cp -rv DOC -T /usr/share/doc/7zip-&seven-zip-version;</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directory</segtitle>
+
+      <seglistitem>
+        <seg>
+          7z, 7za, and 7zr
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          /usr/lib/7zip and /usr/share/doc/7zip-&seven-zip-version;
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="Sevenz">
+        <term><command>7z</command></term>
+        <listitem>
+          <para>
+            is a file archiver utility
+          </para>
+          <indexterm zone="seven-zip Sevenz">
+            <primary sortas="b-7z">7z</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="Sevenza">
+        <term><command>7za</command></term>
+        <listitem>
+          <para>
+            is a stand-alone executable handling less archive formats than
+<command>7z</command>
+          </para>
+          <indexterm zone="seven-zip Sevenza">
+            <primary sortas="b-7za">7za</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="Sevenzr">
+        <term><command>7zr</command></term>
+        <listitem>
+          <para>
+            is a minimal version of <command>7za</command> that handles only 7z archives
+          </para>
+          <indexterm zone="seven-zip Sevenzr">
+            <primary sortas="b-7zr">7zr</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

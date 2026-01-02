@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ <!ENTITY % general-entities SYSTEM "../../general.ent">
+ %general-entities;
+
+  <!ENTITY plasma-download-http "https://download.kde.org/stable/plasma/&plasma-version;">
+  <!ENTITY plasma-download-ftp  "">
+  <!ENTITY plasma-md5sum        "See Below">
+  <!ENTITY plasma-size          "304 MB">
+  <!ENTITY plasma-buildsize     "2.9 GB (690 MB installed)">
+  <!ENTITY plasma-time          "18 SBU (using parallelism=8)">
+]>
+
+<sect1 id="plasma-build" xreflabel="Plasma-&plasma-version;">
+  <?dbhtml filename="plasma-all.html"?>
+
+
+  <title>Building Plasma</title>
+
+  <indexterm zone="plasma-build">
+     <primary sortas="a-kde-plasma">KDE Plasma</primary>
+  </indexterm>
+
+  <para>
+    KDE Plasma is a collection of packages based on top of KDE Frameworks and
+QML. They implement the KDE Display Environment (Plasma).
+  </para>
+
+  &lfs124_checked;
+
+  <para>
+    The instructions below build all of the Plasma packages in one step by using
+a bash script.
+  </para>
+
+  <bridgehead renderas="sect3">Package Information</bridgehead>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        Download (HTTP): <ulink url="&plasma-download-http;"/>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Download (FTP): <ulink url="&plasma-download-ftp;"/>
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Download MD5 sum: &plasma-md5sum;
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Download size: &plasma-size;
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Estimated disk space required: &plasma-buildsize;
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Estimated build time: &plasma-time;
+      </para>
+    </listitem>
+  </itemizedlist>
+
+  <bridgehead renderas="sect3">Plasma Dependencies</bridgehead>
+
+  <bridgehead renderas="sect4">Required</bridgehead>
+  <para role="required">
+    <xref linkend="boost"/>, <xref linkend="ffmpeg"/>, <xref linkend="gtk3"/>,
+<xref linkend="kf6-frameworks"/>, <xref linkend="kirigami-addons"/>, <xref
+linkend="libdisplay-info"/>, <xref linkend="libpwquality"/>, <xref
+linkend="libqalculate"/>, <xref linkend="libnl"/>, <xref
+linkend="libxcvt"/>, <xref linkend="libxkbcommon"/>, <xref linkend="mesa"/>
+built with <xref linkend="wayland"/>, <xref linkend="opencv"/>, <xref
+linkend="phonon"/>, <xref linkend="pipewire"/>, <xref
+linkend="pulseaudio-qt"/>, <xref linkend="qca"/>, <xref linkend="qcoro"/>,
+<xref linkend="sassc"/>, <xref linkend="taglib"/>, <xref
+linkend="xdotool"/>, and <xref linkend="xorg-evdev-driver"/>
+  </para>
+
+  <bridgehead renderas="sect4">Recommended</bridgehead>
+  <para role="recommended">
+    <xref linkend="gsettings-desktop-schemas"/>, <xref linkend="libcanberra"/>,
+<xref linkend="libinput"/>, <xref linkend="libpcap"/>, <xref
+linkend="libwacom"/> and <xref linkend="xorg-wacom-driver"/> (for
+wacomtablet), <xref linkend="linux-pam"/>, <xref linkend="lm_sensors"/>,
+<xref linkend="oxygen-icons"/>, <xref linkend="pciutils"/>, <xref
+linkend="power-profiles-daemon"/>, and the following Python modules: <xref
+linkend="psutil"/>, <xref linkend="pygdbmi"/>, <xref linkend="sentry-sdk"/>,
+<xref linkend="urllib3"/> (if they are not installed, they will be
+downloaded and installed by the drkonqi build procedure)
+  </para>
+
+  <bridgehead renderas="sect4">Recommended (runtime)</bridgehead>
+  <para role="recommended">
+    <xref role="runtime" linkend="accountsservice"/>, <xref role="runtime"
+linkend="breeze-icons"/>, <xref role="runtime" linkend="kio-extras"/>, <xref
+role="runtime" linkend="smartmontools"/>, <xref role="runtime"
+linkend="xdg-desktop-portal"/>, and <xref role="runtime"
+linkend="xwayland"/>
+  </para>
+
+  <bridgehead renderas="sect4">Optional</bridgehead>
+  <para role="optional">
+    <xref linkend="appstream"/> (build with -qt=true), <xref linkend="glu"/>,
+<xref linkend='ibus'/>, <xref linkend='qtwebengine'/>, <ulink
+url="https://www.kdevelop.org/">KDevPlatform</ulink>, <ulink
+url="https://gpsd.gitlab.io/gpsd/">libgps</ulink>, <ulink
+url="https://github.com/libhybris/libhybris">libhybris</ulink>, <ulink
+url="https://www.freedesktop.org/software/PackageKit/releases/">packagekit-qt</ulink>,
+<ulink url="https://launchpad.net/qapt">Qapt</ulink>, <ulink
+url="https://github.com/osiam/osiam">SCIM</ulink>, and <ulink
+url="http://www.dest-unreach.org/socat/">socat</ulink> (for pam_kwallet)
+  </para>
+
+  <sect2>
+    <title>Downloading KDE Plasma</title>
+
+    <para>
+      The easiest way to get the KDE Plasma packages is to use a single
+<command>wget</command> to fetch them all at once:
+    </para>
+
+<screen><userinput>url=https://download.kde.org/stable/plasma/&plasma-version;/
+wget -r -nH -nd -A '*.xz' -np $url</userinput>
+<literal>
+The options used here are:
+  -r            recurse through child directories
+  -nH           disable generation of host-prefixed directories
+  -nd           do not create a hierarchy of directories
+  -A '*.xz'     just get the *.xz files
+  -np           don't get parent directories</literal></screen>
+
+   </sect2>
+
+  <sect2>
+    <title>Setting Package Order</title>
+
+    <para>
+      The order of building files is important due to internal dependencies.
+Create the list of files in the proper order as follows:
+    </para>
+
+<screen><userinput>cat &gt; plasma-&plasma-version;.md5 &lt;&lt; "EOF"
+<literal>58f04117211e972efd92f922c96055cd  kdecoration-6.5.2.tar.xz
+1f4450689ccc7a9aa20198ac8dc0a6cc  libkscreen-6.5.2.tar.xz
+e1be5d31ee907ac0ff175e545b0e0a30  libksysguard-6.5.2.tar.xz
+9dbd57f1b956736dd5a9b7a8ea4c3bd1  breeze-6.5.2.tar.xz
+59398dd08e6f618172a79090e25f387f  breeze-gtk-6.5.2.tar.xz
+7b8cbb35f521ea0fb460c301fc8a9d81  layer-shell-qt-6.5.2.tar.xz
+2ae4496598a51f6eaf2a9f5b3c302c77  plasma-activities-6.5.2.tar.xz
+27f817a83adcc01813240921a76ab33f  libplasma-6.5.2.tar.xz
+38d9e490d8d8208bee2b00c26f88cfef  kscreenlocker-6.5.2.tar.xz
+e098b5e2d4c5a7616dbd6240240e5cab  kinfocenter-6.5.2.tar.xz
+9af88b31a1c8342ea9e891e628c03626  kglobalacceld-6.5.2.tar.xz
+5e1524efe19ca0a22e7c34d3c0042fb0  kwayland-6.5.2.tar.xz
+69a421eb481108d2def1f0ccf4137199  aurorae-6.5.2.tar.xz
+8777d0ef81794ff04571eae1c2d9dba3  knighttime-6.5.2.tar.xz
+68fb57c18349cae5dc411ee8b7e9f654  kwin-x11-6.5.2.tar.xz
+1ed01b28a32782eaa10b28bda811c784  kwin-6.5.2.tar.xz
+aa362ec117c9a7dfff82ee871aafb75c  plasma5support-6.5.2.tar.xz
+cbbda0dbafbd784916e9471c5fc8f6c0  plasma-activities-stats-6.5.2.tar.xz
+7b30f4bd2c71d0f54ea1c3b873181323  kpipewire-6.5.2.tar.xz
+a488661f1feaf83e86dbdcb964d1b827  plasma-workspace-6.5.2.tar.xz
+86ae79614c7be2bcd4529cf86c94b4fc  plasma-disks-6.5.2.tar.xz
+49bb09528e33905794b705deff553478  bluedevil-6.5.2.tar.xz
+83ecf077f949a86ac8c6e1fd1134f3ea  kde-gtk-config-6.5.2.tar.xz
+a852ab4c89356b47e428b8d7fe5711de  kmenuedit-6.5.2.tar.xz
+efea3c5c9289680b3bc0028d7b857654  kscreen-6.5.2.tar.xz
+3d07bbe0e668bcb30aa377f7b74d2474  kwallet-pam-6.5.2.tar.xz
+2e6842536d8a8ff7f069a6dda61d65f6  kwrited-6.5.2.tar.xz
+d304d603402df595a00171ec542c51de  milou-6.5.2.tar.xz
+633148a8dd396c9afddcc5c8bcea117e  plasma-nm-6.5.2.tar.xz
+90e562569589a7ccc9b9da6d8e18801b  plasma-pa-6.5.2.tar.xz
+d9d3df0a1c397a9b291e185f676dcbe9  plasma-workspace-wallpapers-6.5.2.tar.xz
+cc88a0ecc8daba609245136cb5359f06  polkit-kde-agent-1-6.5.2.tar.xz
+147c57031bc1220465d4a6603a535b1c  powerdevil-6.5.2.tar.xz
+29bb939ab84528a498b006ca2142a829  plasma-desktop-6.5.2.tar.xz
+0ed8da3923d8c044d739f318ecabf05a  kgamma-6.5.2.tar.xz
+3d2a784250aa4c782c5126275c5a6b58  ksshaskpass-6.5.2.tar.xz
+#3cd4ebe01da73b50f772c2e4e5c518b4  plasma-sdk-6.5.2.tar.xz
+767a80aa25321096693eb33a89449132  sddm-kcm-6.5.2.tar.xz
+#4e403f30537fb87d942bc6292fa72513  discover-6.5.2.tar.xz
+#7ea4c37754e831f2133d778cc3ba024b  breeze-grub-6.5.2.tar.xz
+#75b0138b771d2776cf38c15ece7337c2  breeze-plymouth-6.5.2.tar.xz
+748b8f9764bd61f0bc89e9bca057f2bc  kactivitymanagerd-6.5.2.tar.xz
+0a411ba2ea20803316863915f7a1702d  plasma-integration-6.5.2.tar.xz
+#18131058a667fda5bee9d45626fee6d2  plymouth-kcm-6.5.2.tar.xz
+aac4e8bbd9d5cdf195488f9c6e13d7e0  xdg-desktop-portal-kde-6.5.2.tar.xz
+56c7d0c55024bd43b5c14ff77e374631  drkonqi-6.5.2.tar.xz
+5f318f2a7e7284c385ab30940002858d  plasma-vault-6.5.2.tar.xz
+#72099f019b5f6835355ed05a15d0040d  plasma-browser-integration-6.5.2.tar.xz
+89969215ac1123b112ac9ff325e7bb8a  kde-cli-tools-6.5.2.tar.xz
+e1911d223164f6374bc5f24492b02832  systemsettings-6.5.2.tar.xz
+f8e8ad0c0c5654abedd734c03b47cd2e  plasma-thunderbolt-6.5.2.tar.xz
+#05af2d5b9b5a884698a59a2a6fbdde66  plasma-mobile-6.5.2.tar.xz
+#1c265e16027a5fcbe44be6fb2fa63605  plasma-nano-6.5.2.tar.xz
+5833d6717d40ef290959e013753cbae2  plasma-firewall-6.5.2.tar.xz
+638f11e73f908e0220d4fabee932c9fc  plasma-systemmonitor-6.5.2.tar.xz
+2848dcc8f8c7cf188919da3c55e373c9  qqc2-breeze-style-6.5.2.tar.xz
+8f1d8564eb8134ecf203a47898a25190  ksystemstats-6.5.2.tar.xz
+b4ce7000f5f96ad2d2439a97e632293a  oxygen-sounds-6.5.2.tar.xz
+a00742176687fd7eae75084984ef754b  kdeplasma-addons-6.5.2.tar.xz
+#76abe3c9f6abf7f68e96b8ee93f5b8b4  flatpak-kcm-6.5.2.tar.xz
+1e094cc3ff5b8a056a20bda0fc10dace  plasma-welcome-6.5.2.tar.xz
+86b168a0c06a0ba86c94e08bc09e42af  ocean-sound-theme-6.5.2.tar.xz
+07df94e19e97f52775d31a35a0ecc60d  print-manager-6.5.2.tar.xz
+d95d9304abd61952db9a29a2d8bfbbba  wacomtablet-6.5.2.tar.xz
+#47f0fb5bf97ae5662f59ef0340edcc8c  kwayland-integration-6.5.2.tar.xz
+#d0711337e89dfd43aec1d30970d2add8  krdp-6.5.2.tar.xz
+ab37b5180696761079325fab2c9e269d  oxygen-6.5.2.tar.xz
+#78074c45dc269f5593b310c385ca87af  plasma-dialer-6.5.2.tar.xz
+#b83bf556dcf693215097d2c3b151aa88  spacebar-6.5.2.tar.xz
+1b3e818d9662e3fd65923dc7af4ec273  spectacle-6.5.2.tar.xz</literal>
+EOF</userinput></screen>
+
+    <note>
+      <title>About Commented Out Packages</title>
+      <para>
+        In the above list, several files are commented out with a hash (#)
+character.
+
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The plasma-sdk package is optional and used for software development.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The discover package requires <xref linkend="appstream"/> to be built with
+the -D qt=true switch.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The breeze-grub, breeze-plymouth, and plymouth-kcm packages above are all
+for customized support of <ulink
+url="https://www.freedesktop.org/wiki/Software/Plymouth/"> Plymouth</ulink>
+which is designed to be run within an initial ram disk during boot (see
+<xref linkend="initramfs"/>).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The plasma-browser-integration package is designed to implement browser
+integration for Plasma into Mozilla Firefox and Google Chrome. The package
+does build, but is only useful if you want these browsers to be integrated
+into the shell in a way that lets you see (and control) downloads from
+Plasma's notifications area, as well as allowing you to search browser
+history in the KDE Runner. Note that you must also install a browser
+extension for this to work. For more details, see <ulink
+url="https://community.kde.org/Plasma/Browser_Integration"> the KDE Plasma
+wiki page about browser integration.</ulink>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The krdp package is used to allow an RDP server to be run while using
+Plasma. This feature requires the 2.x version of FreeRDP, which is not in
+BLFS.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The plasma-nano package is used for embedded systems.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The plasma-mobile, plasma-dialer, and spacebar packages provide phone
+functionality for Plasma.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The flatpak-kcm package is for managing support of flatpak applications.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The kwayland-integration application requires plasma5 support.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </note>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of Plasma</title>
+
+    &as_root;
+
+    <para>
+      First, start a subshell that will exit on error:
+    </para>
+
+<screen><userinput>bash -e</userinput></screen>
+
+    <para>
+      Install all of the packages by running the following commands:
+    </para>
+
+<screen><!-- some packages end up with files owned by root in $packagedir,
+     so use as_root for removing -->
+<userinput>while read -r line; do
+
+    # Get the file name, ignoring comments and blank lines
+    if $(echo $line | grep -E -q '^ *$|^#' ); then continue; fi
+    file=$(echo $line | cut -d" " -f2)
+
+    pkg=$(       echo $file|sed 's|^.*/||')    # Remove directory
+    name=$(      echo $pkg |sed 's|-6.*$||')   # Isolate package name
+    packagedir=$(echo $pkg |sed 's|\.tar.*||') # Source directory
+
+    tar -xf $file
+    pushd $packagedir
+
+       mkdir build
+       cd    build
+
+       cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
+             -D CMAKE_INSTALL_LIBEXECDIR=libexec \
+             -D CMAKE_BUILD_TYPE=Release         \
+             -D BUILD_QT5=OFF                    \
+             -D BUILD_TESTING=OFF                \
+             -W no-dev ..  &amp;&amp;
+
+        make
+        as_root make install
+    popd
+
+
+    as_root rm -rf $packagedir
+    as_root /sbin/ldconfig
+
+done &lt; plasma-&plasma-version;.md5
+
+exit</userinput></screen>
+
+    <para>
+      If you did not set <envar>$KF6_PREFIX</envar> to <filename>/usr</filename>,
+create symlinks to allow display managers to find
+<application>Plasma</application>, and to allow the XDG Desktop Portal to be
+detected. As the &root; user:
+    </para>
+
+<screen role="root"><!-- work around a bug in xdg-desktop-portal-->
+<userinput># Setup xsessions (X11 sessions)
+install -dvm 755 /usr/share/xsessions
+cd /usr/share/xsessions
+
+[ -e plasma.desktop ] ||
+ln -sfv $KF6_PREFIX/share/xsessions/plasmax11.desktop 
+
+# Setup wayland-sessions 
+install -dvm 755 /usr/share/wayland-sessions
+cd /usr/share/wayland-sessions
+
+[ -e plasmawayland.desktop ] ||
+ln -sfv $KF6_PREFIX/share/wayland-sessions/plasma.desktop
+
+# Setup xdg-desktop-portal
+install -dvm 755 /usr/share/xdg-desktop-portal
+cd /usr/share/xdg-desktop-portal 
+
+[ -e kde-portals.conf ] ||
+ln -sfv $KF6_PREFIX/share/xdg-desktop-portal/kde-portals.conf
+
+# Setup kde portal
+install -dvm 755 /usr/share/xdg-desktop-portal/portals
+cd /usr/share/xdg-desktop-portal/portals
+
+[ -e kde.portal ] ||
+ln -sfv $KF6_PREFIX/share/xdg-desktop-portal/portals/kde.portal</userinput></screen>
+
+    <para revision="sysv">
+      Useless systemd units have been installed in <filename
+class="directory">$KF6_PREFIX/lib</filename>. Remove them now (as
+<systemitem class="username">root</systemitem>):
+    </para>
+
+<screen role="root"
+        revision="sysv"><userinput>rm -rf $KF6_PREFIX/lib/systemd</userinput></screen>
+
+  </sect2>
+
+  <!--
+    <sect2 role="commands">
+
+    <title>Command Explanations</title>
+
+    <para>
+      <command>ln -sfv ../code/$(basename $j) $(dirname $j)/../ui/</command>:
+      Create symbolic links so qml files can find needed javascript modules.
+    </para>
+
+  </sect2>
+-->
+<sect2 role="configuration">
+    <title>Configuring Plasma</title>
+
+    <sect3>
+      <title>Linux PAM Configuration</title>
+
+      <para>
+        If you built Plasma with the recommended <application>Linux
+PAM</application> support, create necessary configuration files by running
+the following commands as the <systemitem class="username">root</systemitem>
+user:
+      </para>
+
+<screen role="root"><userinput>cat &gt; /etc/pam.d/kde &lt;&lt; "EOF"
+<literal># Begin /etc/pam.d/kde
+
+auth     requisite      pam_nologin.so
+auth     required       pam_env.so
+
+auth     required       pam_succeed_if.so uid &gt;= 1000 quiet
+auth     include        system-auth
+
+account  include        system-account
+password include        system-password
+session  include        system-session
+
+# End /etc/pam.d/kde</literal>
+EOF
+
+cat &gt; /etc/pam.d/kde-np &lt;&lt; "EOF"
+<literal># Begin /etc/pam.d/kde-np
+
+auth     requisite      pam_nologin.so
+auth     required       pam_env.so
+
+auth     required       pam_succeed_if.so uid &gt;= 1000 quiet
+auth     required       pam_permit.so
+
+account  include        system-account
+password include        system-password
+session  include        system-session
+
+# End /etc/pam.d/kde-np</literal>
+EOF
+
+cat &gt; /etc/pam.d/kscreensaver &lt;&lt; "EOF"
+<literal># Begin /etc/pam.d/kscreensaver
+
+auth    include system-auth
+account include system-account
+
+# End /etc/pam.d/kscreensaver</literal>
+EOF</userinput></screen>
+    </sect3>
+  </sect2>
+
+  <sect2 role="starting">
+    <title>Starting Plasma</title>
+
+    <para revision="sysv">
+      You can start <application>Plasma</application> from runlevel 3, using <xref
+linkend="xinit"/>, or from runlevel 5, using a Display Manager, such as
+<xref linkend="lightdm"/>.
+    </para>
+
+    <para revision="systemd">
+      <!--, or from a graphical display manager, such as
+      <xref linkend="sddm"/>
+-->
+You can start <application>Plasma</application> from a TTY, using <xref
+linkend="xinit"/>.
+    </para>
+
+    <para>
+      To start <application>Plasma</application> using <xref linkend="xinit"/>,
+run the following commands:
+    </para>
+
+<screen role="nodump"><userinput>cat &gt; ~/.xinitrc &lt;&lt; "EOF"
+<literal>dbus-launch --exit-with-x11 $KF6_PREFIX/bin/startplasma-x11</literal>
+EOF
+
+startx</userinput></screen>
+
+    <para>
+      The X session starts on the first unused virtual terminal, normally vt7.
+You can switch to another vt<emphasis>n</emphasis> simultaneously pressing
+the keys Ctrl-Alt-F<emphasis>n</emphasis> (<emphasis>n</emphasis>=1, 2,
+...).  To switch back to the X session, normally started at vt7, use
+Ctrl-Alt-F7. The vt where the command <command>startx</command> was executed
+will display many messages, including X starting messages, applications
+automatically started with the session, and eventually, some warning and
+error messages. You may prefer to redirect those messages to a log file,
+which not only will keep the initial vt uncluttered, but can also be used
+for debugging purposes. This can be done starting X with:
+    </para>
+
+    <screen role="nodump"><userinput>startx &amp;&gt; ~/x-session-errors</userinput></screen>
+
+    <para>
+      When shutting down or rebooting, the shutdown messages appear on the vt
+where X was running. If you wish to see those messages, simultaneously press
+keys Alt-F7 (assuming that X was running on vt7).
+    </para>
+
+
+  <!-- Start plasma wayland with 
+
+/opt/kf6/lib/libexec/plasma-dbus-run-session-if-needed /opt/kf6/bin/startplasma-wayland
+
+Investigate why it's in /opt/kf6/lib/libexec and not just in /opt/kf6/libexec
+
+
+Now the entry is "plasma (X11)" for Xorg, so I guess this is
+     not needed anymore:
+    <para>
+      If you intend to start <application>Plasma</application> using a
+    display manager such as <xref linkend="lightdm"/>, there will be two entries
+    for <application>Plasma</application>, one for use with
+    <application>Xorg</application>, and another for
+    <application>Wayland</application>. Modify the
+    <application>Xorg</application> entry with the following command, as the
+    <systemitem class="username">root</systemitem> user, so that you can
+    differentiate between the two:</para>
+
+<screen role="root"><userinput>sed '/^Name=/s/Plasma/Plasma on Xorg/' -i /usr/share/xsessions/plasma.desktop</userinput>
+</screen>
+-->
+</sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+           There are too many plasma programs (over 50 in /opt/kf6/bin) to list
+separately here.
+        </seg>
+        <seg>
+           There are too many plasma libraries (over 250 in /opt/kf6/lib) to list
+separately here.
+        </seg>
+        <seg>
+           There are too many plasma directories (over 2700 in /opt/kf6) to list
+separately here.
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+  </sect2>
+
+</sect1>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect2 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../../general.ent">
+  %general-entities;
+
+  <!ENTITY maturin-download-http "https://github.com/PyO3/maturin/archive/v&maturin-version;/maturin-&maturin-version;.tar.gz">
+  <!ENTITY maturin-download-ftp  "">
+  <!ENTITY maturin-md5sum        "&maturin-md5sum;">
+  <!ENTITY maturin-size          "576 KB">
+  <!ENTITY maturin-buildsize     "462 MB (add 5.1 GB for tests)">
+  <!ENTITY maturin-time          "1.3 SBU (add 5.2 SBU for tests, both using 4 cores)">
+]>
+
+  <sect2 id="maturin" xreflabel="maturin-&maturin-version;">
+
+    <title>maturin-&maturin-version;</title>
+
+    <indexterm zone="maturin">
+      <primary sortas="a-maturin">maturin</primary>
+    </indexterm>
+
+    <sect3 role="package">
+      <title>Introduction to the maturin Module</title>
+
+      <para>
+        The <application>maturin</application> module provides a build system for
+rust binaries and crates generated from Python packages.
+      </para>
+
+      &lfs124_checked;
+
+      <bridgehead renderas="sect4">Package Information</bridgehead>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Download (HTTP): <ulink url="&maturin-download-http;"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Download (FTP): <ulink url="&maturin-download-ftp;"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Download MD5 sum: &maturin-md5sum;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Download size: &maturin-size;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Estimated disk space required: &maturin-buildsize;
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Estimated build time: &maturin-time;
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <bridgehead renderas="sect4">maturin Dependencies</bridgehead>
+
+      <bridgehead renderas="sect5">Required</bridgehead>
+      <para role="required">
+        <xref linkend="rust"/> and <xref linkend="setuptools_rust"/>
+      </para>
+    
+      <bridgehead renderas="sect5">Optional</bridgehead>
+      
+      <para role="optional">
+        <xref linkend="patchelf"/> and <ulink url="https://ziglang.org/">zig</ulink>
+      </para>
+      
+      <bridgehead renderas="sect5">Optional (for testing)</bridgehead>
+      <para role="optional">
+        <ulink url="https://pypi.org/project/cffi/">cffi</ulink>, <ulink
+url="https://pypi.org/project/pycparser/">pycparser</ulink>, and <ulink
+url="https://pypi.org/project/virtualenv/">virtualenv</ulink>
+      </para>
+
+    </sect3>
+
+    <sect3 role="installation">
+      <title>Installation of maturin</title>
+
+      <para>
+        Build the module:
+      </para>
+
+&build-wheel;
+
+      <para>
+        Now, as the <systemitem class="username">root</systemitem> user:
+      </para>
+
+<screen role="root"><userinput>&install-wheel; maturin</userinput></screen>
+
+      <para>
+        To test the installation, issue:
+      </para>
+
+<screen remap="test"><userinput>python3 -m venv --system-site-packages testenv     &amp;&amp;
+testenv/bin/pip3 install cffi pycparser virtualenv &amp;&amp;
+PATH=$PWD/testenv/bin:$PATH cargo test</userinput></screen>
+
+      <para>
+        Three tests, <filename>integration_cffi_mixed</filename>,
+<filename>pyo3_mixed_include_exclude_sdist</filename>, and
+<filename>pyo3_no_extension_module</filename>, are known to fail.
+      </para>
+
+    </sect3>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../../xincludes/pip3-cmd-explain.xml"/>
+
+    <sect3 role="content">
+      <title>Contents</title>
+
+      <segmentedlist>
+        <segtitle>Installed Programs</segtitle>
+        <segtitle>Installed Libraries</segtitle>
+        <segtitle>Installed Directories</segtitle>
+
+        <seglistitem>
+          <seg>maturin</seg>
+          <seg>None</seg>
+          <seg>
+            /usr/lib/python&python3-majorver;/site-packages/maturin and
+/usr/lib/python&python3-majorver;/site-packages/maturin-&maturin-version;.dist-info
+          </seg>
+        </seglistitem>
+      </segmentedlist>
+
+      <variablelist>
+        <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+        <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+        
+        <varlistentry id="maturin-prog">
+          <term><command>maturin</command></term>
+          <listitem>
+            <para>
+              builds crates with pyo3, cffi, and uniffi bindings as well as rust binaries
+as Python packages
+            </para>
+            <indexterm zone="maturin maturin-prog">
+              <primary sortas="b-maturin">maturin</primary>
+            </indexterm>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect3>
+
+  </sect2>

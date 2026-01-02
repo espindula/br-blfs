@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../../general.ent">
+  %general-entities;
+
+  <!ENTITY grub-efi-download-http "&gnu-http;/grub/grub-&grub-version;.tar.xz">
+  <!ENTITY grub-efi-download-ftp  "">
+  <!ENTITY grub-efi-md5sum        "60c564b1bdc39d8e43b3aab4bc0fb140">
+  <!ENTITY grub-efi-size          "29 MB">
+  <!ENTITY grub-efi-buildsize     "174 MB (with optional dependencies and download)">
+  <!ENTITY grub-efi-time          "0.6 SBU">
+
+  <!ENTITY unifont-download-http  "https://unifoundry.com/pub/unifont/unifont-&unifont-version;/font-builds/unifont-&unifont-version;.pcf.gz">
+  <!ENTITY unifont-md5sum         "c3fbc239da0fb49a9afc9b141f606ad4">
+  <!ENTITY unifont-size           "1.3 MB">
+]>
+
+<sect1 id="grub-efi" xreflabel="GRUB-&grub-version; for EFI">
+  <?dbhtml filename="grub-efi.html"?>
+
+
+  <title>GRUB-&grub-version; for EFI</title>
+
+  <indexterm zone="grub-efi">
+    <primary sortas="a-grub-efi">grub-efi</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to GRUB</title>
+
+    <para>
+      The <application>GRUB</application> package provides GRand Unified
+Bootloader.  In this page it will be built with UEFI support, which is not
+enabled for GRUB built in LFS.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&grub-efi-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&grub-efi-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &grub-efi-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &grub-efi-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &grub-efi-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &grub-efi-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Additional Downloads</bridgehead>
+    
+    <!--
+    <itemizedlist spacing="compact">
+
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/grub-&grub-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+    -->
+<itemizedlist spacing="compact">
+      <title>Optional Unicode font data for the GRUB menu (only useful if FreeType is
+installed)</title>
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&unifont-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &unifont-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &unifont-size;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">GRUB Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
+      <xref role="runtime" linkend="efibootmgr"/> (runtime)
+    </para>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="freetype2"/>, <xref linkend="fuse3"/>, and <xref
+linkend="lvm2"/>
+    </para>
+
+    <para role="nodep">
+      If you are building GRUB for a 32-bit LFS system to boot it on a 64-bit UEFI
+firmware, rebuild <xref linkend="gcc"/> with the
+<parameter>--enable-targets=all</parameter> switch appended to the
+<command>../configure</command> command.
+    </para>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of GRUB</title>
+
+    <para>
+      First, install font data as the <systemitem
+class="username">root</systemitem> user if you've downloaded it and you've
+installed the optional dependency <xref linkend='freetype2'/>:
+    </para>
+
+<screen role="root"><userinput>mkdir -pv /usr/share/fonts/unifont &amp;&amp;
+zcat ../unifont-&unifont-version;.pcf.gz > /usr/share/fonts/unifont/unifont.pcf</userinput></screen>
+
+    <warning>
+      <para>Unset any environment variables which may affect the build:</para>
+
+      <screen><userinput>unset {C,CPP,CXX,LD}FLAGS</userinput></screen>
+
+      <para>Don't try <quote>tuning</quote> this package with custom compilation flags:
+this package is a bootloader, with low-level operations in the source code
+which is likely to be broken by some aggressive optimizations.</para>
+    </warning>
+
+    <para>
+      Add a file missing from the release tarball:
+    </para>
+
+    <screen><userinput>echo <literal>depends bli part_gpt</literal> > grub-core/extra_deps.lst</userinput></screen>
+
+    <para>
+      Build <application>GRUB</application> with the following commands:
+    </para>
+
+<screen><userinput>./configure --prefix=/usr        \
+            --sysconfdir=/etc    \
+            --disable-efiemu     \
+            --with-platform=efi  \
+            --target=x86_64      \
+            --disable-werror     &amp;&amp;
+make</userinput></screen>
+
+    <para>
+      This package does not have a test suite providing meaningful results.
+    </para>
+
+    <para>
+      Now, if you've skipped the LFS GRUB package, as the <systemitem
+class="username">root</systemitem> user install GRUB and skip the remaining
+instructions in this section:
+    </para>
+
+<screen role="nodump"><userinput>make install &amp;&amp;
+mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions</userinput></screen>
+
+    <para>
+      If you've not skipped LFS GRUB package, as the &root; user, only install the
+components not installed from the LFS GRUB package instead:
+    </para>
+
+    <screen role="root"><userinput>make -C grub-core install</userinput></screen>
+
+    <para>
+      If you've installed the optional font data and <xref linkend='freetype2'/>,
+install the <command>grub-mkfont</command> program and the font data files
+(without the font data files GRUB can still function normally, but the boot
+menu will be displayed using a coarse font or in a smaller region on the
+screen).
+    </para>
+
+<screen role="nodump"><userinput>install -vm755 grub-mkfont /usr/bin/ &amp;&amp;
+install -vm644 ascii.h widthspec.h *.pf2 /usr/share/grub/</userinput></screen>
+
+    <para>
+      If both <xref linkend='fuse3'/> and <xref linkend='lvm2'/> are installed,
+also install the <command>grub-mount</command> program:
+    </para>
+
+<screen role="nodump"><userinput>install -vm755 grub-mount /usr/bin/</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <!--
+    <para>
+
+      <parameter>- -enable-grub-mkfont</parameter>: Build the tool named
+      <command>grub-mkfont</command> to generate the font file for the boot
+      loader from the font data we've installed.
+    </para>
+
+    <warning>
+      <para>If the recommended dependency <xref linkend="freetype2"/> is not
+      installed, it is possible to omit this option and build GRUB.  However,
+      if <command>grub-mkfont</command> is not built, or the unicode font
+      data is not available at the time GRUB is built, GRUB won't install
+      any font for the boot loader.  The GRUB boot menu will be displayed
+      using a coarse font or in a smaller region on the screen.</para>
+    </warning>
+-->
+<para>
+      <parameter>--with-platform=efi</parameter>: Ensures building GRUB with EFI
+enabled.
+    </para>
+
+    <para>
+      <parameter>--target=x86_64</parameter>: Ensures building GRUB for x86_64
+even if building on a 32-bit LFS system.  Most EFI firmware on x86_64 does
+not support 32-bit bootloaders.
+    </para>
+
+    <para>
+      <option>--target=i386</option>: A few 32-bit x86 platforms have EFI
+support.  And, some x86_64 platforms have a 32-bit EFI implementation, but
+they are very old and rare. Use this instead of
+<parameter>--target=x86_64</parameter> if you are <emphasis
+role='bold'>absolutely sure</emphasis> that LFS is running on such a system.
+    </para>
+
+  </sect2>
+
+  <sect2>
+    <title>Configuring GRUB</title>
+
+    <para>
+      Using GRUB to make the LFS system bootable on UEFI platform will be
+discussed in <xref linkend="grub-setup"/>.
+    </para>
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <para>
+      A list of the installed files, along with their short descriptions can be
+found at <ulink url="&lfs-root;/chapter08/grub.html#contents-gRUB"/>.
+    </para>
+
+    <para>
+      Listed below are the newly installed programs along with short descriptions.
+    </para>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>grub-mkfont and grub-mount (optional)</seg>
+        <seg>/usr/lib/grub/x86_64-efi</seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="grub-mkfont">
+        <term><command>grub-mkfont</command></term>
+        <listitem>
+          <para>
+            converts common font file formats into PF2
+          </para>
+          <indexterm zone="grub-efi grub-mkfont">
+            <primary sortas="b-grub-mkfont">grub-mkfont</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="grub-mount">
+        <term><command>grub-mount</command></term>
+        <listitem>
+          <para>
+            is a debug tool for filesystem driver
+          </para>
+          <indexterm zone="grub-efi grub-mount">
+            <primary sortas="b-grub-mount">grub-mount</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+  </sect2>
+
+</sect1>

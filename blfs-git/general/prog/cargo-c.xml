@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY cargoc-download-http "https://github.com/lu-zero/cargo-c/archive/v&cargo-c-version;/cargo-c-&cargo-c-version;.tar.gz">
+  <!ENTITY cargoc-download-ftp  "">
+  <!ENTITY cargoc-md5sum        "6c62e37e21f4ff3a1739b0ed07f78974">
+  <!ENTITY cargoc-size          "37 KB">
+  <!ENTITY cargoc-buildsize     "884 MB">
+  <!ENTITY cargoc-time          "0.7 SBU">
+
+  <!ENTITY cargoc-lock-md5sum   "10afea997148e271e4f0afa617d7480e">
+]>
+
+<sect1 id="cargo-c" xreflabel="cargo-c-&cargo-c-version;">
+  <?dbhtml filename="cargo-c.html"?>
+
+
+  <title>cargo-c-&cargo-c-version;</title>
+
+  <indexterm zone="cargo-c">
+    <primary sortas="a-cargo-c">cargo-c</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to cargo-c</title>
+
+    <para>
+      The <application>cargo-c</application> package creates a cargo subcommand to
+build and install C-ABI compatible dynamic and static libraries.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&cargoc-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&cargoc-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &cargoc-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &cargoc-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &cargoc-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &cargoc-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    
+
+    <!-- Moved to an explicit curl command.  See the note below the
+         curl command for reason.
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required download: <ulink url="https://github.com/lu-zero/cargo-c/releases/download/v&cargo-c-version;/Cargo.lock"/>
+        </para>
+        <para>
+          Cargo.lock md5sum: &Cargo.lock-md5sum;
+        </para>
+      </listitem>
+
+    </itemizedlist>-->
+<bridgehead renderas="sect3">cargo-c Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref linkend="rust"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recommended</bridgehead>
+    <para role="recommended">
+      <xref linkend="libssh2"/>
+    </para>
+
+    &build-use-internet;
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of cargo-c</title>
+
+    <para>
+      First, download a file to ensure that <command>cargo</command> uses the
+dependency versions specified by the upstream developers when this cargo-c
+version (&cargo-c-version;) was released.  Without this, the latest versions
+of the dependencies would be used and they might cause breakages:
+    </para>
+
+<screen><userinput>curl -fLO https://github.com/lu-zero/cargo-c/releases/download/v&cargo-c-version;/Cargo.lock</userinput></screen>
+
+    <note>
+      <para>
+        Normally we would put such a download into an <quote>Additional
+Downloads</quote> section. But in this case we cannot tell the package name
+and version from the file name <filename>Cargo.lock</filename>, so it's
+better not to put the ambiguously-named file outside the <filename
+class='directory'>cargo-c-&cargo-c-version;</filename> directory.  We use
+<command>curl</command> here because the <xref linkend='curl'/> package
+should have been installed as a required dependency of <xref
+linkend='rust'/>.
+      </para>
+
+      <para>
+        The md5sum of the file should be <literal>&cargoc-lock-md5sum;</literal>.
+      </para>
+    </note>
+
+    <para>
+      Install <application>cargo-c</application> by running the following
+commands:
+    </para>
+
+<screen><userinput>export LIBSSH2_SYS_USE_PKG_CONFIG=1    &amp;&amp;
+export LIBSQLITE3_SYS_USE_PKG_CONFIG=1 &amp;&amp;
+
+cargo build --release</userinput></screen>
+
+    <para>
+      To test the results, issue: <command>cargo test --release</command>.
+    </para>
+
+    <para>
+      Now, as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>install -vm755 target/release/cargo-{capi,cbuild,cinstall,ctest} /usr/bin/</userinput></screen>
+
+    <para>
+      Finally, unset the exported environment variables:
+    </para>
+
+<screen><userinput>unset LIB{SSH2,SQLITE3}_SYS_USE_PKG_CONFIG</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    
+    <!-- https://github.com/alexcrichton/ssh2-rs/issues/173 -->
+<para>
+      <command>export LIBSSH2_SYS_USE_PKG_CONFIG=1</command>: Allow
+<command>cargo</command> to link to system libssh2.  Omit this command if
+you've not installed <xref linkend='libssh2'/>.
+    </para>
+
+    
+    <!-- src/tools/cargo/Cargo.toml is specifying "bundled" as the
+         upstream is suggesting to avoid issues building for Windoge.
+         We don't care about Windoge so override this as we have
+         sqlite3 in LFS.  -->
+<para>
+      <command>export LIBSQLITE3_SYS_USE_PKG_CONFIG=1</command>: Allow
+<command>cargo</command> to link to system sqlite.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+          cargo-capi, cargo-cbuild, cargo-cinstall, and cargo-ctest
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          None
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+  </sect2>
+
+</sect1>

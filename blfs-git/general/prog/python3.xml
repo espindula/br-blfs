@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY python3-download-http
+           "https://www.python.org/ftp/python/&python3-version;/Python-&python3-version;.tar.xz">
+  <!ENTITY python3-download-ftp  "">
+  <!ENTITY python3-md5sum        "19a31b2838db3b53f9f2db8782bf8773">
+  <!ENTITY python3-size          "22 MB">
+  <!ENTITY python3-buildsize     "332 MB (add 64 MB for tests)">
+  <!ENTITY python3-time          "1.7 SBU (add 0.9 SBU for tests; both using parallelism=4)">
+  <!--
+  Note: Size does not reflect docs that were installed in LFS.
+  Test time measured with 60 second timeout.
+  -->
+  <!ENTITY python3htmldoc-download-http
+  "https://www.python.org/ftp/python/doc/&python3-version;/python-&python3-version;-docs-html.tar.bz2">
+  <!ENTITY python3-docs-md5sum "43371faecf09acafc877b54df75871bd">
+]>
+
+<sect1 id="python3" xreflabel="Python-&python3-version;">
+  <?dbhtml filename="python3.html" ?>
+
+
+  <title>Python-&python3-version;</title>
+
+  <indexterm zone="python3">
+    <primary sortas="a-Python3">Python3</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to Python 3</title>
+
+    <para>
+      The <application>Python 3</application> package contains the
+<application>Python</application> development environment.  This is useful
+for object-oriented programming, writing scripts, prototyping large programs
+or developing entire applications.
+    </para>
+
+    <note>
+      <para>
+        <application>Python 3</application> was installed in LFS.  The only reason
+to rebuild it here is if optional modules are needed, or to upgrade this
+package.
+      </para>
+    </note>
+
+    &lfs124_checked;
+
+    <important>
+      <para>
+         If upgrading to a new Python-3 minor version (for example, from
+Python-3.13.x to Python-3.14.0), you will need to reinstall any Python
+modules you have installed. You should also reinstall packages that generate
+Python modules, including &gobject-introspection;, <xref linkend="opencv"/>,
+<xref linkend="fontforge"/>, <xref linkend="gnome-tweaks"/>, <xref
+linkend="samba"/>, and <xref linkend="graphviz"/> (if swig is installed).
+      </para>
+
+      <para>Before you upgrade, you can get a list of modules installed with
+<command>pip3 list</command>.  The list may be incomplete as some Python
+modules are not installed with <command>pip3</command>, for example the
+<literal>cracklib</literal> module installed by <xref role='nodep'
+linkend='cracklib'/>.  Use <command>ls
+/usr/lib/python3.<replaceable>minor</replaceable>/site-packages</command>
+for a comprehensive list.
+      </para>
+
+      <para>
+         The Python modules from LFS will also have to be reinstalled: <ulink
+url="&lfs-root;/chapter08/flit-core.html">flit-core</ulink>, <ulink
+url="&lfs-root;/chapter08/packaging.html">packaging</ulink>, <ulink
+url="&lfs-root;/chapter08/wheel.html">wheel</ulink>, <ulink
+url="&lfs-root;/chapter08/setuptools.html">setuptools</ulink>, <ulink
+url="&lfs-root;/chapter08/meson.html">meson</ulink>, <ulink
+url="&lfs-root;/chapter08/markupsafe.html">MarkupSafe</ulink>, and <ulink
+url="&lfs-root;/chapter08/jinja2.html">Jinja2</ulink>.
+      </para>
+    </important>
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&python3-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&python3-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &python3-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &python3-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &python3-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &python3-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Required Additional Download</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch: <ulink url="&patch-root;/Python-&python3-version;-security_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Additional Optional Download</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&python3htmldoc-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &python3-docs-md5sum;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Python 3 Dependencies</bridgehead>
+
+    <!--
+    <bridgehead renderas="sect4">
+Recommended</bridgehead>
+    <para role="recommended">
+      <xref linkend="s-qlite"/> (required if building firefox or thunderbird)
+    </para>
+-->
+<bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="bluez"/>, <xref linkend="gdb"/> (required for some tests),
+<xref linkend="valgrind"/>, and <ulink
+url="https://www.bytereef.org/mpdecimal/">libmpdec</ulink>
+    </para>
+
+    <bridgehead renderas="sect4">Optional (For Additional Modules)</bridgehead>
+    <para role="optional">
+      <xref linkend="libnsl"/>, <xref linkend="tk"/>, and &berkeley-db;
+    </para>
+
+    <para condition="html" role="usernotes">Editor Notes: <ulink url="&blfs-wiki;/Python3"/>
+    </para>
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of Python 3</title>
+
+    <para>
+      Fix a regression that causes issues in packages like <xref
+linkend="pyatspi2"/>:
+    </para>
+
+<screen><userinput remap="pre">sed -e "/self.namespaceURI =/i\        self.ownerDocument = None" \
+    -i Lib/xml/dom/minidom.py</userinput></screen>
+
+    <para>
+      Install <application>Python 3</application> by running the following
+commands:
+    </para>
+
+<screen><userinput>./configure --prefix=/usr          \
+            --enable-shared        \
+            --with-system-expat    \
+            --enable-optimizations \
+            --without-static-libpython &amp;&amp;
+make</userinput></screen>
+
+    <para>
+      Some tests are known to occasionally hang indefinitely.  So to test the
+results, run the test suite but set a 2-minute time limit for each test
+case:
+    </para>
+
+<!-- 
+         For Python-3.12.3 all tests pass
+         Total tests: run=41,778 skipped=1,155
+         Total test files: run=485/488 skipped=24 resource_denied=3
+
+         For Python-3.12.4 
+         Total tests: run=42,152 failures=6 skipped=1,234
+         Total test files: run=487/489 failed=4 skipped=17 resource_denied=6 rerun=4
+
+         For Python-3.13.0
+         Total tests: run=44,153 skipped=1,640
+         Total test files: run=479/478 failed=3 skipped=20 resource_denied=2 rerun=3
+
+         For Python-3.13.1
+         Total tests: run=44,420 failures=2 skipped=1,863
+         Total test files: run=480/478 failed=4 skipped=20 resource_denied=2 rerun=4
+
+         For Python-3.13.2
+         Total tests: run=46,327 failures=2 skipped=1,716
+         Total test files: run=479/480 failed=1 skipped=21 resource_denied=2 rerun=1
+
+         For Python-3.13.3
+         Total tests: run=44,697 failures=2 skipped=1,870
+         Total test files: run=482/480 failed=4 skipped=21 resource_denied=2 rerun=4
+
+         For Python-3.13.4
+         Total tests: run=45,204 failures=2 skipped=1,745
+         Total test files: run=481/480 failed=3 skipped=20 resource_denied=2 rerun=3
+
+         For Python-3.13.6
+         Total tests: run=45,289 failures=2 skipped=1,966
+         Total test files: run=482/480 failed=4 skipped=20 resource_denied=2 rerun=4
+
+         For Python-3.13.7
+         Total tests: run=46,701 failures=2 skipped=1,773
+         Total test files: run=479/480 failed=1 skipped=20 resource_denied=2 rerun=1
+
+         For Python-3.14.0
+         Total tests: run=46,901 failures=2 skipped=1,819
+         Total test files: run=492/491 failed=5 skipped=21 resource_denied=4 rerun=5
+
+         For Python-3.14.2
+         Total tests: run=47,481 skipped=2,053
+         Total test files: run=488/491 failed=1 skipped=20 resource_denied=4 rerun=1
+    -->
+<screen remap='test'><userinput>make test TESTOPTS="--timeout 120"</userinput></screen>
+
+    
+
+    <para>
+      For a relatively slow system you may need to increase the time limit and 1
+SBU (measured when building Binutils pass 1 with one CPU core) should be
+enough.  Some tests are flaky, so the test suite will automatically re-run
+failed tests.  If a test failed but then passed when re-run, it should be
+considered as passed.
+    </para>
+
+    <para>
+      Of over 47,000 tests, the following test(s) are known to fail: test_zipfile.
+    </para>
+
+    <para>
+      Now, as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>make install</userinput></screen>
+
+    <para>
+      If upgrading and the documentation has been downloaded, optionally install
+it as the &root; user:
+    </para>
+
+<screen role="root"><userinput>install -v -dm755 /usr/share/doc/python-&python3-version;/html
+
+tar --strip-components=1  \
+    --no-same-owner       \
+    --no-same-permissions \
+    -C /usr/share/doc/python-&python3-version;/html \
+    -xvf ../python-&python3-version;-docs-html.tar.bz2</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <para>
+      <command> CXX="/usr/bin/g++" ./configure ...</command>: Avoid an annoying
+message during configuration.
+    </para>
+
+    <para>
+      <parameter>--with-system-expat</parameter>: This switch enables linking
+against the system version of <application>Expat</application>.
+    </para>
+
+
+
+    <!--
+    <para>
+
+      <parameter>- -with-ensurepip=yes</parameter> : This switch enables building
+      the <command>pip</command> and <command>setuptools</command> packaging
+      programs. <command>setuptools</command> is needed for building some
+      Python modules.
+    </para>
+-->
+<para>
+      <parameter>--enable-optimizations</parameter>: This switch enables stable,
+but expensive, optimizations.
+    </para>
+
+    <para>
+      <option>--with-lto</option>: This optional switch enables thick Link Time
+Optimization. Unusually, it creates a much larger <filename
+class="libraryfile">/usr/lib/python&python3-majorver;/config-&python3-majorver;-&lt;arch&gt;-linux-gnu/libpython&python3-majorver;.a</filename>
+with a small increase in the time to compile
+<application>Python</application>. Run-time results do not appear to show
+any benefit from doing this.
+    </para>
+
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configuring Python 3</title>
+
+    <para>
+      In order for <command>python3</command> to find the installed documentation,
+create the following version independent symlink:
+    </para>
+
+<screen role="root"><userinput>ln -svfn python-&python3-version; /usr/share/doc/python-3</userinput></screen>
+
+    <para>
+      and add the following environment variable to the individual user's or
+system's profile:
+    </para>
+
+<screen role="root"><userinput>export PYTHONDOCS=/usr/share/doc/python-3/html</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+          
+
+          
+
+          <!--2to3 (symlink) and
+          2to3-&python3-majorver;,-->
+<!--
+          easy_install-&python3-majorver;,
+          -->
+idle3 (symlink) and idle&python3-majorver;, pip3 and pip&python3-majorver;,
+pydoc3 (symlink) and pydoc&python3-majorver;, python3 (symlink) and
+python&python3-majorver;, and python3-config (symlink) and
+python&python3-majorver;-config
+        </seg>
+        <seg>
+          libpython&python3-majorver;.so and libpython3.so
+        </seg>
+        <seg>
+          /usr/include/python&python3-majorver;, /usr/lib/python&python3-majorver;,
+and /usr/share/doc/python-&python3-version;
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <!--
+      <varlistentry id="2to3">
+
+        <term><command>2to3</command></term>
+        <listitem>
+          <para>
+            is designed to assist in the transition between python2 and python3
+            by automatically converting code to be Python3 compatible.
+          </para>
+          <indexterm zone="python3 2to3">
+            <primary sortas="b-2to3">2to3</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      Put here for easy use when removing Python2 -->
+<!--
+      <varlistentry id="easy_install">
+
+        <term><command>easy_install</command></term>
+        <listitem>
+          <para>
+            is a frontend to pip3 to make it easier to configure python modules
+            through the PIP package manager
+          </para>
+          <indexterm zone="python3 easy_install">
+            <primary sortas="python3 easy_install">easy_install</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      -->
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+      
+      
+      <varlistentry id="idle3">
+        <term><command>idle3</command></term>
+        <listitem>
+          <para>
+            is a wrapper script that opens a <application>Python</application> aware GUI
+editor. For this script to run, you must have installed
+<application>Tk</application> before Python so that the Tkinter Python
+module is built
+          </para>
+          <indexterm zone="python3 idle3">
+            <primary sortas="b-idle3">idle3</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="pydoc3">
+        <term><command>pydoc3</command></term>
+        <listitem>
+          <para>
+            is the <application>Python</application> documentation tool
+          </para>
+          <indexterm zone="python3 pydoc3">
+            <primary sortas="b-pydoc3">pydo3c</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="python3-prog">
+        <term><command>python3</command></term>
+        <listitem>
+          <para>
+            is an interpreted, interactive, object-oriented programming language
+          </para>
+          <indexterm zone="python3 python3-prog">
+            <primary sortas="b-python3">python3</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="python-ver">
+        <term><command>python&python3-majorver;</command></term>
+        <listitem>
+          <para>
+            is a version-specific name for the <command>python</command> program
+          </para>
+          <indexterm zone="python3 python-ver">
+            <primary sortas="b-python&python3-majorver;">python&python3-majorver;</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+<!--
+      <varlistentry id="pyvenv">
+
+        <term><command>pyvenv</command></term>
+        <listitem>
+          <para>
+            creates virtual <application>Python</application> environments in
+            one or more target directories.
+          </para>
+          <indexterm zone="python3 pyvenv">
+            <primary
+            sortas="b-python&python3-majorver;">python&python3-majorver;</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+      -->
+      
+    </variablelist>
+
+  </sect2>
+
+</sect1>

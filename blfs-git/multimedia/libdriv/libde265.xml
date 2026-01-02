@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY libde265-download-http "https://github.com/strukturag/libde265/releases/download/v&libde265-version;/libde265-&libde265-version;.tar.gz">
+  <!ENTITY libde265-md5sum        "f3173ff6fa273e139de19e6e77bec9b6">
+  <!ENTITY libde265-size          "817 KB">
+  <!ENTITY libde265-buildsize     "30 MB">
+  <!ENTITY libde265-time          "0.2 SBU">
+]>
+
+
+<!-- Try to keep the indentation used in this file-->
+<sect1 id="libde265" xreflabel="libde265-&libde265-version;">
+  <?dbhtml filename="libde265.html"?>
+
+  <title>libde265-&libde265-version;</title>
+
+  <!--Required section-->
+<indexterm zone="libde265">
+    <primary sortas="a-libde265">libde265</primary>
+  </indexterm>
+
+  
+  <sect2 role="package">
+    <title>Introduction to libde265</title>
+
+    <para>
+      The <application>libde265</application> package contains an open source
+H.265 video codec implementation.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&libde265-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &libde265-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &libde265-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &libde265-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &libde265-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">libde265 Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="sdl2"/> (for YUV overlay output support of
+<command>dec265</command>), both <ulink
+url="https://&lfs-domainname;/blfs/view/12.2/x/qt5-components.html">Qt
+5</ulink> and <xref linkend="ffmpeg"/> (for building
+<command>sherlock265</command>)
+    </para>
+
+    
+  <!--  Only use this if you want to note something in the wiki
+    <para condition="html" role="usernotes">
+
+      Editor Notes: <ulink url="&blfs-wiki;/libde265"/>
+    </para>
+    -->
+</sect2>
+
+  
+  <!--Required section-->
+<sect2 role="installation">
+    <title>Installation of libde265</title>
+
+    
+    <!-- One of them would be "/usr/bin/tests" and IMO installing them is
+         completely stupid.  -->
+<para>
+      First, prevent the installation of some programs which are only useful for
+hacking libde265:
+    </para>
+
+<screen><userinput>sed '/tools/d' -i Makefile.am &amp;&amp;
+./autogen.sh</userinput></screen>
+
+    <para>
+      Install <application>libde265</application> by running the following
+commands:
+    </para>
+
+<!-- The README.md file mentions a "testdata" directory but I cannot
+         find it in the tarball.  -->
+<screen><userinput>./configure --prefix=/usr         \
+            --disable-sherlock265 \
+            --disable-static      &amp;&amp;
+make</userinput></screen>
+
+    
+    <para>
+      This package does not come with a test suite.
+    </para>
+
+    <para>
+      Now, as the &root; user:
+    </para>
+
+<screen role="root"><userinput>make install</userinput></screen>
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <para>
+      <parameter>--disable-sherlock265</parameter>: This switch disables the
+sherlock265 program because it requires Qt5, which is no longer in BLFS.
+The sherlock265 program is mostly useful for users who are editing H.265
+videos.
+    </para>
+
+    <para>
+      <option>--enable-encoder</option>: This option enables the H.265 encoder, in
+addition to the decoder.  The encoder is still experimental though so the
+instructions above do not contain this option.
+    </para>
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Program</segtitle>
+      <segtitle>Installed Library</segtitle>
+      <segtitle>Installed Directory</segtitle>
+
+      <seglistitem>
+        <seg>
+          dec265
+        </seg>
+        <seg>
+          libde265.so
+        </seg>
+        <seg>
+          /usr/include/libde265
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="dec265">
+        <term><command>dec265</command></term>
+        <listitem>
+          <para>
+            decodes H.265 data (a raw bitstream of a stream with NAL units)
+          </para>
+          <indexterm zone="libde265 dec265">
+            <primary sortas="b-dec265">dec265</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libde265-lib">
+        <term><filename class="libraryfile">libde265.so</filename></term>
+        <listitem>
+          <para>
+            contains an H.265 video decoder
+          </para>
+          <indexterm zone="libde265 libde265-lib">
+            <primary sortas="c-libde265">libde265.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect2>
+</sect1>

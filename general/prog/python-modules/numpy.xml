@@ -9,13 +9,20 @@
   <!ENTITY numpy-md5sum        "&numpy-md5sum;">
   <!ENTITY numpy-size          "20 MB">
   <!ENTITY numpy-buildsize     "110 MB (adicionar 23 MB para os testes)">
-  <!ENTITY numpy-time          "0,5 UPC (adicionar 1,1 UPC para testes)">
+  <!ENTITY numpy-time          "0,6 UPC (adicionar 1,2 UPC para testes)">
 ]>
 
 
 
-  <!-- For numpy-2.3.4 tests (bdubbs):
-     47238 passed, 1713 skipped, 2819 deselected, 33 xfailed, 5 xpassed in 94.49s 
+  <!-- 
+  For numpy-2.2.6, 19 May 2025, bdubbs (i7-14700K)
+  46946 passed, 1713 skipped, 2815 deselected, 32 xfailed, 5 xpassed in 94.57s
+
+  For numpy-2.3.4 tests (bdubbs):
+  47238 passed, 1713 skipped, 2819 deselected, 33 xfailed, 5 xpassed in 94.49s 
+
+  For numpy-2.4.0 tests (bdubbs):
+  47173 passed, 1053 skipped, 2817 deselected, 32 xfailed, 2 xpassed in 107.05s
 -->
 <sect2 id="numpy" xreflabel="NumPy-&numpy-version;">
 
@@ -104,7 +111,8 @@ url="https://www.openblas.net/">openblas</ulink>
 
       <para> Construa o módulo: </para>
 
-<screen><userinput>pip3 wheel -w dist --no-build-isolation --no-deps --no-cache-dir -C setup-args=-Dallow-noblas=true $PWD</userinput></screen>
+<screen><userinput>pip3 wheel -w dist --no-build-isolation --no-deps --no-cache-dir \
+           -C setup-args=-Dallow-noblas=true $PWD</userinput></screen>
 
       <para>
         Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
@@ -117,10 +125,6 @@ url="https://www.openblas.net/">openblas</ulink>
       </para>
 
 <!-- no && for actual test because of a possible error -->
-<!--
-  numpy-2.2.6, 19 May 2025, bdubbs (i7-14700K)
-  46946 passed, 1713 skipped, 2815 deselected, 32 xfailed, 5 xpassed in 94.57s
--->
 <screen remap="test"><userinput>mkdir -p test                                  &amp;&amp;
 cd       test                                  &amp;&amp;
 python3 -m venv --system-site-packages testenv &amp;&amp;
@@ -128,8 +132,6 @@ source testenv/bin/activate                    &amp;&amp;
 pip3 install hypothesis                        &amp;&amp;
 python3 -c "import numpy, sys; sys.exit(numpy.test() is False)"
 deactivate</userinput></screen>
-
-
 
 
 

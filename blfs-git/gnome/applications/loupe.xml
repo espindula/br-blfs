@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY loupe-download-http "&gnome-download-http;/loupe/&gnome-49;/loupe-&loupe-version;.tar.xz">
+  <!ENTITY loupe-download-ftp  "">
+  <!ENTITY loupe-md5sum        "3eeafe4da0f1dc973610b46ab5e5965a">
+  <!ENTITY loupe-size          "356 KB">
+  <!ENTITY loupe-buildsize     "1.0 GB (11 MB installed, add 2 MB for tests)">
+  <!ENTITY loupe-time          "1.4 SBU (with 4 jobs, add 2.6 SBU for tests)">
+]>
+
+<sect1 id="loupe" xreflabel="Loupe-&loupe-version;">
+  <?dbhtml filename="loupe.html"?>
+
+
+  <title>Loupe-&loupe-version;</title>
+
+  <indexterm zone="loupe">
+    <primary sortas="a-Loupe">Loupe</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to Loupe</title>
+
+    <para>
+      <application>Loupe</application> is an application used for viewing image
+files on the <application>GNOME</application> Desktop.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&loupe-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&loupe-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download MD5 sum: &loupe-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &loupe-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &loupe-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &loupe-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Loupe Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref role="runtime" linkend="glycin"/> (runtime), <xref linkend="lcms2"/>,
+<xref linkend="libadwaita1"/>, <xref linkend="libgweather"/>, <xref
+linkend="libseccomp"/>, and <xref linkend="rust"/>
+    </para>
+
+    <bridgehead renderas="sect4">Optional</bridgehead>
+    <para role="optional">
+      <xref linkend="appstream"/>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of Loupe</title>
+
+    <para>
+      Install <application>Loupe</application> by running the following commands:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            ..                  &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Running the test suite will rebuild the entire package with a different
+configuration, and the package will be built for three times if installing
+it after running the test suite.  So it's better to run the test suite after
+the installation.
+    </para>
+
+    <para>
+      Now, as the <systemitem class="username">root</systemitem> user:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para>
+      To test the results, issue: <command>ninja test</command>
+    </para>
+
+    <para>
+      If you've installed Eog (which is unmaintained and removed from BLFS)
+before and now you want the file managers (like Nautilus) to open image
+files using Loupe instead of Eog, as the &root; user, remove the desktop
+file of Eog:
+    </para>
+
+    <screen role="root"><userinput>rm -fv /usr/share/applications/org.gnome.eog.desktop</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Command Explanations</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/meson-buildtype-release.xml"/>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Program</segtitle>
+      <segtitle>Installed Library</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+        <seg>
+          loupe
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          /usr/share/help/*/loupe
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="loupe-prog">
+        <term><command>loupe</command></term>
+        <listitem>
+          <para>
+            is a fast and functional image viewer designed to be used with the
+<application>GNOME</application> desktop.
+          </para>
+          <indexterm zone="loupe loupe-prog">
+            <primary sortas="b-loupe">loupe</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

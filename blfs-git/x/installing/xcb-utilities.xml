@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY xcb-utilities-download-http "https://xorg.freedesktop.org/archive/individual/lib/">
+  <!ENTITY xcb-utilities-download-ftp  "">
+  <!ENTITY xcb-utilities-size          "1.1 MB">
+  <!ENTITY xcb-utilities-buildsize     "13.3 MB">
+  <!ENTITY xcb-utilities-time          "0.1 SBU (ignoring the time to download)">
+
+  <!ENTITY xcb-util-image-version      "0.4.1">
+  <!ENTITY xcb-util-image-md5sum       "a67bfac2eff696170259ef1f5ce1b611">
+
+  <!ENTITY xcb-util-keysyms-version    "0.4.1">
+  <!ENTITY xcb-util-keysyms-md5sum     "fbdc05f86f72f287ed71b162f1a9725a">
+
+  <!ENTITY xcb-util-renderutil-version "0.3.10">
+  <!ENTITY xcb-util-renderutil-md5sum  "193b890e2a89a53c31e2ece3afcbd55f">
+
+  <!ENTITY xcb-util-wm-version         "0.4.2">
+  <!ENTITY xcb-util-wm-md5sum          "581b3a092e3c0c1b4de6416d90b969c3">
+
+  <!ENTITY xcb-util-cursor-version     "0.1.6">
+  <!ENTITY xcb-util-cursor-md5sum      "e85bccd1993992be07232f8b80a814c8">
+
+]>
+
+<sect1 id="xcb-utilities" xreflabel="XCB Utilities">
+  <?dbhtml filename="xcb-utilities.html"?>
+
+
+  <title>XCB Utilities</title>
+
+  <indexterm zone="xcb-utilities">
+    <primary sortas="a-xcb-utilities">XCB Utilities</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introduction to XCB Utilities</title>
+
+    <para>
+      The XCB utilities provide extensions that developers can use when making X
+Window software. <xref linkend="xcb-util"/> was just installed but these
+utilities offer even more extensions that X Window software may depend on.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Package Information</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Download (HTTP): <ulink url="&xcb-utilities-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download (FTP): <ulink url="&xcb-utilities-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Download size: &xcb-utilities-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated disk space required: &xcb-utilities-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Estimated build time: &xcb-utilities-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">XCB Utilities Dependencies</bridgehead>
+
+    <bridgehead renderas="sect4">Required</bridgehead>
+    <para role="required">
+      <xref linkend="libxcb"/> and <xref linkend="xcb-util"/>
+    </para>
+
+  </sect2>
+
+  <sect2>
+    <title>Downloading XCB Utilities</title>
+
+    <para>
+      First, create a list of files to be downloaded. This file will also be used
+to verify the integrity of the downloads when complete:
+    </para>
+
+<screen><userinput>cat &gt; xcb-utils.md5 &lt;&lt; "EOF"
+<literal>&xcb-util-image-md5sum;  xcb-util-image-&xcb-util-image-version;.tar.xz
+&xcb-util-keysyms-md5sum;  xcb-util-keysyms-&xcb-util-keysyms-version;.tar.xz
+&xcb-util-renderutil-md5sum;  xcb-util-renderutil-&xcb-util-renderutil-version;.tar.xz
+&xcb-util-wm-md5sum;  xcb-util-wm-&xcb-util-wm-version;.tar.xz
+&xcb-util-cursor-md5sum;  xcb-util-cursor-&xcb-util-cursor-version;.tar.xz</literal>
+EOF</userinput></screen>
+
+    <para>
+      To download the needed files using <xref linkend='wget'/>, use the following
+commands:
+    </para>
+
+<screen><userinput>mkdir xcb-utils &amp;&amp;
+cd    xcb-utils &amp;&amp;
+grep -v '^#' ../xcb-utils.md5 | awk '{print $2}' | wget -i- -c \
+     -B &xcb-utilities-download-http; &amp;&amp;
+md5sum -c ../xcb-utils.md5</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Installation of XCB Utilities</title>
+
+&as_root;
+
+    <para>
+      First, start a subshell that will exit on error:
+    </para>
+
+<screen><userinput>bash -e</userinput></screen>
+
+    <para>
+      Install all of the packages by running the following commands:
+    </para>
+
+<screen><userinput>for package in $(grep -v '^#' ../xcb-utils.md5 | awk '{print $2}')
+do
+  packagedir=${package%.tar.?z*}
+  tar -xf $package
+  pushd $packagedir
+     ./configure $XORG_CONFIG
+     make
+     as_root make install
+  popd
+  rm -rf $packagedir
+done</userinput></screen>
+
+    <para>
+      Finally, exit the shell that was started earlier:
+    </para>
+
+<screen><userinput>exit</userinput></screen>
+
+  </sect2>
+  
+  <sect2 role="content">
+    <title>Contents</title>
+
+    <segmentedlist>
+      <segtitle>Installed Programs</segtitle>
+      <segtitle>Installed Libraries</segtitle>
+      <segtitle>Installed Directories</segtitle>
+
+      <seglistitem>
+
+        <seg>None</seg>
+        <seg>
+          libxcb-image.so, libxcb-keysyms.so, libxcb-render-util.so, libxcb-ewmh.so,
+libxcb-icccm.so, and libxcb-cursor.so
+        </seg>
+        <seg>None</seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Short Descriptions</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libxcb-image">
+        <term><filename class="libraryfile">libxcb-image.so</filename></term>
+        <listitem>
+          <para>
+            is a port of Xlib's XImage and XShmImage functions
+          </para>
+          <indexterm zone="xcb-utilities libxcb-image">
+            <primary sortas="c-libxcb-image">libxcb-image.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libxcb-keysyms">
+        <term><filename class="libraryfile">libxcb-keysyms.so</filename></term>
+        <listitem>
+          <para>
+            provides the standard X key constants and API functions for conversion
+to/from keycodes
+          </para>
+          <indexterm zone="xcb-utilities libxcb-keysyms">
+            <primary sortas="c-libxcb-keysyms">libxcb-keysyms.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libxcb-render-util">
+        <term><filename class="libraryfile">libxcb-render-util.so</filename></term>
+        <listitem>
+          <para>
+            provides convenience functions for the Render extension
+          </para>
+          <indexterm zone="xcb-utilities libxcb-render-util">
+            <primary sortas="c-libxcb-render-util">libxcb-render-util.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libxcb-ewmh">
+        <term><filename class="libraryfile">libxcb-ewmh.so</filename></term>
+        <listitem>
+          <para>
+            provides the client and window-manager helpers for EWMH
+          </para>
+          <indexterm zone="xcb-utilities libxcb-ewmh">
+            <primary sortas="c-libxcb-ewmh">libxcb-ewmh.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libxcb-icccm">
+        <term><filename class="libraryfile">libxcb-icccm.so</filename></term>
+        <listitem>
+          <para>
+            provides the client and window-manager helpers for ICCCM
+          </para>
+          <indexterm zone="xcb-utilities libxcb-icccm">
+            <primary sortas="c-libxcb-icccm">libxcb-icccm.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libxcb-cursor">
+        <term><filename class="libraryfile">libxcb-cursor.so</filename></term>
+        <listitem>
+          <para>
+             is a port of Xlib's libXcursor functions
+          </para>
+          <indexterm zone="xcb-utilities libxcb-cursor">
+            <primary sortas="c-libxcb-cursor">libxcb-cursor.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

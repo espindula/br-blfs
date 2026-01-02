@@ -6,9 +6,9 @@
 
   <!ENTITY glew-download-http "https://downloads.sourceforge.net/glew/glew-&glew-version;.tgz">
   <!ENTITY glew-download-ftp  "">
-  <!ENTITY glew-md5sum        "3579164bccaef09e36c0af7f4fd5c7c7">
-  <!ENTITY glew-size          "820 KB">
-  <!ENTITY glew-buildsize     "16 MB">
+  <!ENTITY glew-md5sum        "1b321240e1f6651175e953b46bccb3f2">
+  <!ENTITY glew-size          "848 KB">
+  <!ENTITY glew-buildsize     "15 MB">
   <!ENTITY glew-time          "menos que 0,1 UPC">
 ]>
 
@@ -86,9 +86,11 @@ seguintes comandos:
     </para>
 
 <screen><userinput>sed -i 's%lib64%lib%g' config/Makefile.linux &amp;&amp;
-sed -i -e '/glew.lib.static:/d' \
-       -e '/0644 .*STATIC/d'     \
-       -e 's/glew.lib.static//' Makefile     &amp;&amp;
+sed -e '/glew.lib.static:/d' \
+    -e '/0644 .*STATIC/d'    \
+    -e 's/glew.lib.static//' \
+    -e 's|/local||'          \
+    -i Makefile              &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -117,6 +119,11 @@ class="directory">/usr/lib</filename>&quot;.
     <para>
       <command>sed -i -e '/glew.lib.static:/d' ...</command>: Isso suprime a
 biblioteca estática.
+    </para>
+
+    <para>
+      <command>sed -i -e 's|/local||' ...</command>: Isso assegura que o pacote
+seja instalado em <filename class="directory">/usr</filename>.
     </para>
 
     <para>
