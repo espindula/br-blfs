@@ -1,0 +1,850 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-01-02 08:32-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Content of: <sect1><title>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:8
+#: blfs-en/blfs-git/postlfs/config/profile.xml:12
+#, xml-text
+msgid "The Bash Shell Startup Files"
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:15
+#, xml-text
+msgid ""
+"The shell program <filename>/bin/bash</filename> (hereafter referred to as "
+"just \"the shell\") uses a collection of startup files to help create an "
+"environment.  Each file has a specific use and may affect login and "
+"interactive environments differently.  The files in the <filename "
+"class=\"directory\">/etc</filename> directory generally provide global "
+"settings. If an equivalent file exists in your home directory it may "
+"override the global settings."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:25
+#, xml-text
+msgid ""
+"An interactive login shell is started after a successful login, using "
+"<filename>/bin/login</filename>, by reading the "
+"<filename>/etc/passwd</filename> file. This shell invocation normally reads "
+"<filename>/etc/profile</filename> and its private equivalent "
+"<filename>~/.bash_profile</filename> (or <filename>~/.profile</filename> if "
+"called as <command>/bin/sh</command>) upon startup."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:34
+#, xml-text
+msgid ""
+"An interactive non-login shell is normally started at the command-line using"
+" a shell program (e.g., "
+"<prompt>[prompt]$</prompt><command>/bin/bash</command>) or by the "
+"<command>/bin/su</command> command.  An interactive non-login shell is also "
+"started with a terminal program such as <command>xterm</command> or "
+"<command>konsole</command> from within a graphical environment. This type of"
+" shell invocation normally copies the parent environment and then reads the "
+"user's <filename>~/.bashrc</filename> file for additional startup "
+"configuration instructions."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:46
+#, xml-text
+msgid ""
+"A non-interactive shell is usually present when a shell script is running.  "
+"It is non-interactive because it is processing a script and not waiting for "
+"user input between commands. For these shell invocations, only the "
+"environment inherited from the parent shell is used."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:53
+#, xml-text
+msgid ""
+"The file <filename>~/.bash_logout</filename> is not used for an invocation "
+"of the shell.  It is read and executed when a user exits from an interactive"
+" login shell."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:59
+#, xml-text
+msgid ""
+"Many distributions use <filename>/etc/bashrc</filename> for system wide "
+"initialization of non-login shells. This file is usually called from the "
+"user's <filename>~/.bashrc</filename> file and is not built directly into "
+"<command>bash</command> itself.  This convention is followed in this "
+"section."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:67
+#, xml-text
+msgid ""
+"For more information see <command>info bash</command> -- <emphasis "
+"role=\"strong\">Nodes: Bash Startup Files and Interactive Shells</emphasis>."
+msgstr ""
+
+#. type: Content of: <sect1><note><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:74
+#, xml-text
+msgid ""
+"Most of the instructions below are used to create files located in the "
+"<filename class='directory'>/etc</filename> directory structure which "
+"requires you to execute the commands as the <systemitem "
+"class='username'>root</systemitem> user. If you elect to create the files in"
+" user's home directories instead, you should run the commands as an "
+"unprivileged user."
+msgstr ""
+
+#. type: Content of: <sect1><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:83
+#, xml-text
+msgid "Editor Notes: <ulink url=\"&blfs-wiki;/bash-shell-startup-files\"/>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:87
+#: blfs-en/blfs-git/postlfs/config/profile.xml:90
+#, xml-text
+msgid "/etc/profile"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:94
+#, xml-text
+msgid ""
+"Here is a base <filename>/etc/profile</filename>. This file starts by "
+"setting up some helper functions and some basic parameters. It specifies "
+"some <command>bash</command> history parameters and, for security purposes, "
+"disables keeping a permanent history file for the <systemitem "
+"class=\"username\">root</systemitem> user.  It then calls small, single "
+"purpose scripts in the <filename class='directory'>/etc/profile.d</filename>"
+" directory to provide most of the initialization."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:104
+#, no-wrap, xml-text
+msgid ""
+"<?dbfo keep-together=\"auto\"?><userinput>cat &gt; /etc/profile &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/profile\n"
+"# Written for Beyond Linux From Scratch\n"
+"# by James Robertson &lt;jameswrobertson@earthlink.net&gt;\n"
+"# modifications by Dagmar d'Surreal &lt;rivyqntzne@pbzpnfg.arg&gt;\n"
+"\n"
+"# System wide environment variables and startup programs.\n"
+"\n"
+"# System wide aliases and functions should go in /etc/bashrc.  Personal\n"
+"# environment variables and startup programs should go into\n"
+"# ~/.bash_profile.  Personal aliases and functions should go into\n"
+"# ~/.bashrc.\n"
+"\n"
+"# Functions to help us manage paths.  Second argument is the name of the\n"
+"# path variable to be modified (default: PATH)\n"
+"pathremove () {\n"
+"        local IFS=':'\n"
+"        local NEWPATH\n"
+"        local DIR\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        for DIR in ${!PATHVARIABLE} ; do\n"
+"                if [ \"$DIR\" != \"$1\" ] ; then\n"
+"                  NEWPATH=${NEWPATH:+$NEWPATH:}$DIR\n"
+"                fi\n"
+"        done\n"
+"        export $PATHVARIABLE=\"$NEWPATH\"\n"
+"}\n"
+"\n"
+"pathprepend () {\n"
+"        pathremove $1 $2\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        export $PATHVARIABLE=\"$1${!PATHVARIABLE:+:${!PATHVARIABLE}}\"\n"
+"}\n"
+"\n"
+"pathappend () {\n"
+"        pathremove $1 $2\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        export $PATHVARIABLE=\"${!PATHVARIABLE:+${!PATHVARIABLE}:}$1\"\n"
+"}\n"
+"\n"
+"export -f pathremove pathprepend pathappend\n"
+"\n"
+"# Set the initial path\n"
+"export PATH=/usr/bin\n"
+"\n"
+"# Attempt to provide backward compatibility with LFS earlier than 11\n"
+"if [ ! -L /bin ]; then\n"
+"        pathappend /bin\n"
+"fi\n"
+"\n"
+"if [ $EUID -eq 0 ] ; then\n"
+"        pathappend /usr/sbin\n"
+"        if [ ! -L /sbin ]; then\n"
+"                pathappend /sbin\n"
+"        fi\n"
+"        unset HISTFILE\n"
+"fi\n"
+"\n"
+"# Set up some environment variables.\n"
+"export HISTSIZE=1000\n"
+"export HISTIGNORE=\"&amp;:[bf]g:exit\"\n"
+"\n"
+"# Set some defaults for graphical systems\n"
+"export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share}\n"
+"export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg}\n"
+"export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}\n"
+"\n"
+"for script in /etc/profile.d/*.sh ; do\n"
+"        if [ -r $script ] ; then\n"
+"                . $script\n"
+"        fi\n"
+"done\n"
+"\n"
+"unset script\n"
+"\n"
+"# End /etc/profile</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:183
+#, xml-text
+msgid "The /etc/profile.d Directory"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:186
+#, xml-text
+msgid "/etc/profile.d"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:190
+#, xml-text
+msgid ""
+"Now create the <filename class='directory'>/etc/profile.d</filename> "
+"directory, where the individual initialization scripts are placed:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:194
+#, no-wrap, xml-text
+msgid ""
+"<userinput>install --directory --mode=0755 --owner=root --group=root "
+"/etc/profile.d</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:199
+#: blfs-en/blfs-git/postlfs/config/profile.xml:202
+#, xml-text
+msgid "/etc/profile.d/bash_completion.sh"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:207
+#, xml-text
+msgid ""
+"Using the bash completion script below is controversial. Not all users like "
+"it.  It adds many (usually over 1000) lines to the bash environment and "
+"makes it difficult to use the 'set' command to examine simple environment "
+"variables.  Omitting this script does not interfere with the ability of bash"
+" to use the tab key for file name completion."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:217
+#, xml-text
+msgid ""
+"This script imports bash completion scripts, installed by many other BLFS "
+"packages, to allow TAB command line completion."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:221
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/bash_completion.sh &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/profile.d/bash_completion.sh\n"
+"# Import bash completion scripts\n"
+"\n"
+"# If the bash-completion package is installed, use its configuration instead\n"
+"if [ -f /usr/share/bash-completion/bash_completion ]; then\n"
+"\n"
+"  # Check for interactive bash and that we haven't already been sourced.\n"
+"  if [ -n \"${BASH_VERSION-}\" -a -n \"${PS1-}\" -a -z \"${BASH_COMPLETION_VERSINFO-}\" ]; then\n"
+"\n"
+"    # Check for recent enough version of bash.\n"
+"    if [ ${BASH_VERSINFO[0]} -gt 4 ] || \\\n"
+"       [ ${BASH_VERSINFO[0]} -eq 4 -a ${BASH_VERSINFO[1]} -ge 1 ]; then\n"
+"       [ -r \"${XDG_CONFIG_HOME:-$HOME/.config}/bash_completion\" ] &amp;&amp; \\\n"
+"            . \"${XDG_CONFIG_HOME:-$HOME/.config}/bash_completion\"\n"
+"       if shopt -q progcomp &amp;&amp; [ -r /usr/share/bash-completion/bash_completion ]; then\n"
+"          # Source completion code.\n"
+"          . /usr/share/bash-completion/bash_completion\n"
+"       fi\n"
+"    fi\n"
+"  fi\n"
+"\n"
+"else\n"
+"\n"
+"  # bash-completions are not installed, use only bash completion directory\n"
+"  if shopt -q progcomp; then\n"
+"    for script in /etc/bash_completion.d/* ; do\n"
+"      if [ -r $script ] ; then\n"
+"        . $script\n"
+"      fi\n"
+"    done\n"
+"  fi\n"
+"fi\n"
+"\n"
+"# End /etc/profile.d/bash_completion.sh</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:259
+#, xml-text
+msgid "Make sure that the directory exists:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:262
+#, no-wrap, xml-text
+msgid ""
+"<userinput>install --directory --mode=0755 --owner=root --group=root "
+"/etc/bash_completion.d</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:265
+#, xml-text
+msgid ""
+"For a more complete installation, see <ulink url=\"&blfs-wiki;/bash-shell-"
+"startup-files#bash-completions\"/>."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:272
+#: blfs-en/blfs-git/postlfs/config/profile.xml:275
+#, xml-text
+msgid "/etc/profile.d/dircolors.sh"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:279
+#, xml-text
+msgid ""
+"This script uses the <filename>~/.dircolors</filename> and "
+"<filename>/etc/dircolors</filename> files to control the colors of file "
+"names in a directory listing. They control colorized output of things like "
+"<command>ls --color</command>.  The explanation of how to initialize these "
+"files is at the end of this section."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:286
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/dircolors.sh &lt;&lt; \"EOF\"\n"
+"<literal># Setup for /bin/ls and /bin/grep to support color, the alias is in /etc/bashrc.\n"
+"if [ -f \"/etc/dircolors\" ] ; then\n"
+"        eval $(dircolors -b /etc/dircolors)\n"
+"fi\n"
+"\n"
+"if [ -f \"$HOME/.dircolors\" ] ; then\n"
+"        eval $(dircolors -b $HOME/.dircolors)\n"
+"fi</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:300
+#: blfs-en/blfs-git/postlfs/config/profile.xml:303
+#, xml-text
+msgid "/etc/profile.d/extrapaths.sh"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:307
+#, xml-text
+msgid ""
+"This script adds some useful paths to the <envar>PATH</envar> and can be "
+"used to customize other PATH related environment variables (e.g. "
+"LD_LIBRARY_PATH, etc) that may be needed for all users."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:312
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/extrapaths.sh &lt;&lt; \"EOF\"\n"
+"<literal>if [ -d /usr/local/lib/pkgconfig ] ; then\n"
+"        pathappend /usr/local/lib/pkgconfig PKG_CONFIG_PATH\n"
+"fi\n"
+"if [ -d /usr/local/bin ]; then\n"
+"        pathprepend /usr/local/bin\n"
+"fi\n"
+"if [ -d /usr/local/sbin -a $EUID -eq 0 ]; then\n"
+"        pathprepend /usr/local/sbin\n"
+"fi\n"
+"\n"
+"if [ -d /usr/local/share ]; then\n"
+"        pathprepend /usr/local/share XDG_DATA_DIRS\n"
+"fi\n"
+"\n"
+"# Set some defaults before other applications add to these paths.\n"
+"pathappend /usr/share/info INFOPATH</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:333
+#, xml-text
+msgid ""
+"The <command>man</command> program automatically deduces the search path for"
+" man pages by examining the content of the <envar>PATH</envar> variable, see"
+" <ulink role='man' url='&man;manpath.5'>manpath(5)</ulink> for details.  "
+"Setting the <envar>MANPATH</envar> variable may override the automatic "
+"deduction, so the BLFS editors do not recommend setting it.  If you must set"
+" it for any reason, it's better to start its value with a colon "
+"(<literal>:</literal>), for example "
+"<command>MANPATH=:/opt/somepkg/share/man:/opt/otherpkg/share/man</command> "
+"so the paths listed in the <envar>MANPATH</envar> variable will be appended "
+"to the automatically deduced value instead of overriding it."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:351
+#: blfs-en/blfs-git/postlfs/config/profile.xml:354
+#, xml-text
+msgid "/etc/profile.d/readline.sh"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:358
+#, xml-text
+msgid ""
+"This script sets up the default <filename>inputrc</filename> configuration "
+"file. If the user does not have individual settings, it uses the global "
+"file."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:363
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/readline.sh &lt;&lt; \"EOF\"\n"
+"<literal># Set up the INPUTRC environment variable.\n"
+"if [ -z \"$INPUTRC\" -a ! -f \"$HOME/.inputrc\" ] ; then\n"
+"        INPUTRC=/etc/inputrc\n"
+"fi\n"
+"export INPUTRC</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:374
+#: blfs-en/blfs-git/postlfs/config/profile.xml:377
+#, xml-text
+msgid "/etc/profile.d/umask.sh"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:381
+#, xml-text
+msgid ""
+"Setting the <command>umask</command> value is important for security.  Here "
+"the default group write permissions are turned off for system users and when"
+" the user name and group name are not the same."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:386
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/umask.sh &lt;&lt; \"EOF\"\n"
+"<literal># By default, the umask should be set.\n"
+"if [ \"$(id -gn)\" = \"$(id -un)\" -a $EUID -gt 99 ] ; then\n"
+"  umask 002\n"
+"else\n"
+"  umask 022\n"
+"fi</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:425
+#: blfs-en/blfs-git/postlfs/config/profile.xml:428
+#, xml-text
+msgid "/etc/profile.d/i18n.sh"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:432
+#, xml-text
+msgid ""
+"This script sets an environment variable necessary for native language "
+"support. A full discussion on determining this variable can be found on the "
+"<ulink url=\"&lfs-root;/chapter09/locale.html\">Configuring the System "
+"Locale</ulink> page."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:439
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; \"EOF\"\n"
+"<literal># Set up i18n variables\n"
+"for i in $(locale); do\n"
+"  unset ${i%=*}\n"
+"done\n"
+"\n"
+"if [[ \"$TERM\" = linux ]]; then\n"
+"  export LANG=C.UTF-8\n"
+"else\n"
+"  export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable>\n"
+"fi</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:452
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/i18n.sh &lt;&lt; \"EOF\"\n"
+"<literal># Set up i18n variables\n"
+"for i in $(locale); do\n"
+"  unset ${i%=*}\n"
+"done\n"
+"\n"
+"if [[ \"$TERM\" = linux ]]; then\n"
+"  export LANG=C.UTF-8\n"
+"else\n"
+"  source /etc/locale.conf\n"
+"\n"
+"  for i in $(locale); do\n"
+"    key=${i%=*}\n"
+"    if [[ -v $key ]]; then\n"
+"      export $key\n"
+"    fi\n"
+"  done\n"
+"fi</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:475
+#, xml-text
+msgid "Other Initialization Values"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:478
+#, xml-text
+msgid ""
+"Other initialization can easily be added to the <filename>profile</filename>"
+" by adding additional scripts to the <filename "
+"class='directory'>/etc/profile.d</filename> directory."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:488
+#: blfs-en/blfs-git/postlfs/config/profile.xml:491
+#, xml-text
+msgid "/etc/bashrc"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:495
+#, xml-text
+msgid ""
+"Here is a base <filename>/etc/bashrc</filename>.  Comments in the file "
+"should explain everything you need."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:499
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/bashrc &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/bashrc\n"
+"# Written for Beyond Linux From Scratch\n"
+"# by James Robertson &lt;jameswrobertson@earthlink.net&gt;\n"
+"# updated by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;\n"
+"\n"
+"# System wide aliases and functions.\n"
+"\n"
+"# System wide environment variables and startup programs should go into\n"
+"# /etc/profile.  Personal environment variables and startup programs\n"
+"# should go into ~/.bash_profile.  Personal aliases and functions should\n"
+"# go into ~/.bashrc\n"
+"\n"
+"# Provides colored /bin/ls and /bin/grep commands.  Used in conjunction\n"
+"# with code in /etc/profile.\n"
+"\n"
+"alias ls='ls --color=auto'\n"
+"alias grep='grep --color=auto'\n"
+"\n"
+"# Provides prompt for interactive shells, specifically shells started\n"
+"# in the X environment. [Review the LFS archive thread titled\n"
+"# PS1 Environment Variable for a great case study behind this script\n"
+"# addendum.]\n"
+"\n"
+"NORMAL=\"\\[\\e[0m\\]\"\n"
+"RED=\"\\[\\e[1;31m\\]\"\n"
+"GREEN=\"\\[\\e[1;32m\\]\"\n"
+"if [[ $EUID == 0 ]] ; then\n"
+"  PS1=\"$RED\\u [ $NORMAL\\w$RED ]# $NORMAL\"\n"
+"else\n"
+"  PS1=\"$GREEN\\u [ $NORMAL\\w$GREEN ]\\$ $NORMAL\"\n"
+"fi\n"
+"\n"
+"unset RED GREEN NORMAL\n"
+"\n"
+"# GnuPG wants this or it'll fail with pinentry-curses under some\n"
+"# circumstances (for example signing a Git commit)\n"
+"# Note that tty -s will \"succeed\" in LFS chroot environment so we cannot\n"
+"# use -s instead of redirecting to /dev/null.\n"
+"$(tty &amp;>/dev/null) &amp;&amp; export GPG_TTY=$(tty)\n"
+"\n"
+"# End /etc/bashrc</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:544
+#, xml-text
+msgid ""
+"For more information on the escape sequences you can use for your prompt "
+"(i.e., the <envar>PS1</envar> environment variable) see <command>info "
+"bash</command> -- <emphasis role=\"strong\">Node: Printing a "
+"Prompt</emphasis>."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:553
+#: blfs-en/blfs-git/postlfs/config/profile.xml:556
+#, xml-text
+msgid "~/.bash_profile"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:560
+#, xml-text
+msgid ""
+"Here is a base <filename>~/.bash_profile</filename>.  If you want each new "
+"user to have this file automatically, just change the output of the command "
+"to <filename>/etc/skel/.bash_profile</filename> and check the permissions "
+"after the command is run. You can then copy <filename> "
+"/etc/skel/.bash_profile</filename> to the home directories of already "
+"existing users, including <systemitem class=\"username\">root</systemitem>, "
+"and set the owner and group appropriately."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:569
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; ~/.bash_profile &lt;&lt; \"EOF\"\n"
+"<literal># Begin ~/.bash_profile\n"
+"# Written for Beyond Linux From Scratch\n"
+"# by James Robertson &lt;jameswrobertson@earthlink.net&gt;\n"
+"# updated by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;\n"
+"\n"
+"# Personal environment variables and startup programs.\n"
+"\n"
+"# Personal aliases and functions should go in ~/.bashrc.  System wide\n"
+"# environment variables and startup programs are in /etc/profile.\n"
+"# System wide aliases and functions are in /etc/bashrc.\n"
+"\n"
+"if [ -f \"$HOME/.bashrc\" ] ; then\n"
+"  source $HOME/.bashrc\n"
+"fi\n"
+"\n"
+"if [ -d \"$HOME/bin\" ] ; then\n"
+"  pathprepend $HOME/bin\n"
+"fi\n"
+"\n"
+"# Having . in the PATH is dangerous\n"
+"#if [ $EUID -gt 99 ]; then\n"
+"#  pathappend .\n"
+"#fi\n"
+"\n"
+"# End ~/.bash_profile</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:600
+#: blfs-en/blfs-git/postlfs/config/profile.xml:603
+#, xml-text
+msgid "~/.profile"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:607
+#, xml-text
+msgid ""
+"Here is a base <filename>~/.profile</filename>. The comments and "
+"instructions for using <filename class=\"directory\">/etc/skel</filename> "
+"for <filename>.bash_profile</filename> above also apply here. Only the "
+"target file names are different."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:613
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; ~/.profile &lt;&lt; \"EOF\"\n"
+"<literal># Begin ~/.profile\n"
+"# Personal environment variables and startup programs.\n"
+"\n"
+"if [ -d \"$HOME/bin\" ] ; then\n"
+"  pathprepend $HOME/bin\n"
+"fi\n"
+"\n"
+"# Set up user specific i18n variables\n"
+"#export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable>\n"
+"\n"
+"# End ~/.profile</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:630
+#: blfs-en/blfs-git/postlfs/config/profile.xml:633
+#, xml-text
+msgid "~/.bashrc"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:637
+#, xml-text
+msgid "Here is a base <filename>~/.bashrc</filename>."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:640
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; ~/.bashrc &lt;&lt; \"EOF\"\n"
+"<literal># Begin ~/.bashrc\n"
+"# Written for Beyond Linux From Scratch\n"
+"# by James Robertson &lt;jameswrobertson@earthlink.net&gt;\n"
+"\n"
+"# Personal aliases and functions.\n"
+"\n"
+"# Personal environment variables and startup programs should go in\n"
+"# ~/.bash_profile.  System wide environment variables and startup\n"
+"# programs are in /etc/profile.  System wide aliases and functions are\n"
+"# in /etc/bashrc.\n"
+"\n"
+"if [ -f \"/etc/bashrc\" ] ; then\n"
+"  source /etc/bashrc\n"
+"fi\n"
+"\n"
+"# Set up user specific i18n variables\n"
+"#export LANG=<replaceable>&lt;ll&gt;</replaceable>_<replaceable>&lt;CC&gt;</replaceable>.<replaceable>&lt;charmap&gt;</replaceable><replaceable>&lt;@modifiers&gt;</replaceable>\n"
+"\n"
+"# End ~/.bashrc</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:666
+#: blfs-en/blfs-git/postlfs/config/profile.xml:669
+#, xml-text
+msgid "~/.bash_logout"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:673
+#, xml-text
+msgid ""
+"This is an empty <filename>~/.bash_logout</filename> that can be used as a "
+"template.  You will notice that the base <filename>~/.bash_logout "
+"</filename> does not include a <userinput>clear</userinput> command.  This "
+"is because the clear is handled in the <filename>/etc/issue</filename> file."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:680
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; ~/.bash_logout &lt;&lt; \"EOF\"\n"
+"<literal># Begin ~/.bash_logout\n"
+"# Written for Beyond Linux From Scratch\n"
+"# by James Robertson &lt;jameswrobertson@earthlink.net&gt;\n"
+"\n"
+"# Personal items to perform on logout.\n"
+"\n"
+"# End ~/.bash_logout</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:694
+#: blfs-en/blfs-git/postlfs/config/profile.xml:697
+#, xml-text
+msgid "/etc/dircolors"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><indexterm><primary>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:701
+#, xml-text
+msgid "~/.dircolors"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:705
+#, xml-text
+msgid ""
+"If you want to use the <filename>dircolors</filename> capability, then run "
+"the following command. The <filename class=\"directory\">/etc/skel "
+"</filename> setup steps shown above also can be used here to provide a "
+"<filename>~/.dircolors</filename> file when a new user is set up.  As "
+"before, just change the output file name on the following command and assure"
+" the permissions, owner, and group are correct on the files created and/or "
+"copied."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:714
+#, no-wrap, xml-text
+msgid "<userinput>dircolors -p > /etc/dircolors</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:717
+#, xml-text
+msgid ""
+"If you wish to customize the colors used for different file types, you can "
+"edit the <filename>/etc/dircolors</filename> file. The instructions for "
+"setting the colors are embedded in the file."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/postlfs/config/profile.xml:724
+#, xml-text
+msgid ""
+"Finally, Ian Macdonald has written an excellent collection of tips and "
+"tricks to enhance your shell environment.  You can read it online at <ulink "
+"url=\"https://caliban.org/bash/index.shtml\"/>."
+msgstr ""

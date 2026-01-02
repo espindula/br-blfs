@@ -1,0 +1,585 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-12-30 09:06-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Content of the gituid entity
+#: blfs-en/blfs-git/general/prog/gitserver.xml:6
+#: blfs-en/blfs-git/general/prog/gitserver.xml:7
+#, xml-text
+msgid "58"
+msgstr ""
+
+#. type: Content of: <sect1><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:10
+#: blfs-en/blfs-git/general/prog/gitserver.xml:14
+#, xml-text
+msgid "Running a Git Server"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:17
+#, xml-text
+msgid "Introduction"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:20
+#, xml-text
+msgid ""
+"This section will describe how to set up, administer and secure a "
+"<application>git</application> server. <application>Git</application> has "
+"many options available. For more detailed documentation see <ulink "
+"url=\"https://git-scm.com/book/en/v2\"/>."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><bridgehead>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:26
+#, xml-text
+msgid "Server Dependencies"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><bridgehead>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:28
+#, xml-text
+msgid "Required"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:30
+#, xml-text
+msgid "<xref linkend=\"git\"/> and <xref linkend=\"openssh\"/>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:37
+#, xml-text
+msgid "Setting up a Git Server"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:40
+#, xml-text
+msgid ""
+"The following instructions will install a <application>git</application> "
+"server. It will be set up to use <application>OpenSSH</application> as the "
+"secure remote access method."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:47
+#, xml-text
+msgid "Configuration of the server consists of the following steps:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:51
+#, xml-text
+msgid "1. Set Up Users, Groups, and Permissions"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:54
+#, xml-text
+msgid ""
+"You will need to be user <systemitem class='username'>root</systemitem> for "
+"the initial portion of configuration. Create the <systemitem "
+"class=\"username\">git</systemitem> user and group and set and unusable "
+"password hash with the following commands:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:60
+#, no-wrap, xml-text
+msgid ""
+"<userinput>groupadd -g &gitgid; git &amp;&amp;\n"
+"useradd -c \"git Owner\" -d /home/git -m -g git -s /usr/bin/git-shell -u &gituid; git &amp;&amp;\n"
+"sed -i '/^git:/s/^git:[^:]:/git:NP:/' /etc/shadow</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:65
+#, xml-text
+msgid ""
+"Putting in an unusable password hash (replacing the <literal>!</literal> by "
+"<literal>NP</literal>) unlocks the account but it cannot be used to login "
+"via password authentication. That is required by "
+"<application>sshd</application> to work properly.  Next, create some files "
+"and directories in the home directory of the git user allowing access to the"
+" git repository using ssh keys."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:73
+#, no-wrap, xml-text
+msgid ""
+"<userinput>install -o git -g git -dm0700 /home/git/.ssh &amp;&amp;\n"
+"install -o git -g git -m0600 /dev/null /home/git/.ssh/authorized_keys</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:77
+#, xml-text
+msgid ""
+"For any developer who should have access to the repository add his/her "
+"public ssh key to <filename>/home/git/.ssh/authorized_keys</filename>.  "
+"First, prepend some options to prevent users from using the connection to "
+"git for port forwarding to other machines the git server might reach."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:84
+#, no-wrap, xml-text
+msgid ""
+"<userinput>echo -n \"no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty \" >> /home/git/.ssh/authorized_keys &amp;&amp;\n"
+"cat &lt;user-ssh-key&gt; &gt;&gt; /home/git/.ssh/authorized_keys</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:88
+#, xml-text
+msgid ""
+"It is also useful to set the default name of the initial branch of new "
+"repositories by modifying the git configuration. As the <systemitem "
+"class='username'>root</systemitem> user, run:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:93
+#, no-wrap, xml-text
+msgid "<userinput>git config --system init.defaultBranch trunk</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:96
+#, xml-text
+msgid ""
+"Finally add the <filename>/usr/bin/git-shell</filename> entry to the "
+"<filename>/etc/shells</filename> configuration file. This shell has been set"
+" in the <systemitem class='username'>git</systemitem> user profile and is to"
+" make sure that only git related actions can be executed:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:103
+#, no-wrap, xml-text
+msgid "<userinput>echo \"/usr/bin/git-shell\" &gt;&gt; /etc/shells</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:108
+#, xml-text
+msgid "2. Create a git repository"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:111
+#, xml-text
+msgid ""
+"The repository can be anywhere on the filesystem. It is important that the "
+"git user has read/write access to that location. We use <filename "
+"class=\"directory\">/srv/git</filename> as base directory. Create a new "
+"<application>git</application> repository with the following commands (as "
+"the <systemitem class=\"username\">root</systemitem> user):"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:121
+#, xml-text
+msgid ""
+"In all the instructions below, we use <emphasis>project1</emphasis> as an "
+"example repository name.  You should name your repository as a short "
+"descriptive name for your specific project."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:127
+#, no-wrap, xml-text
+msgid ""
+"<userinput>install -o git -g git -m755 -d /srv/git/project1.git &amp;&amp;\n"
+"cd /srv/git/project1.git                             &amp;&amp;\n"
+"git init --bare                                      &amp;&amp;\n"
+"chown -R git:git .</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:135
+#, xml-text
+msgid "3. Populate the repository from a client system"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:139
+#, xml-text
+msgid ""
+"All the instructions in this section and the next should be done on a user "
+"system, not the server system."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:145
+#, xml-text
+msgid ""
+"Now that the repository is created, it can be used by the developers to put "
+"some files into it. Once the ssh key of the user is imported to git's "
+"<filename>authorized_keys</filename> file, the user can interact with the "
+"repository."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:152
+#, xml-text
+msgid ""
+"A minimal configuration should be available on the developer's system "
+"specifying its user name and the email address.  Create this minimal config "
+"file on client side:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:157
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; ~/.gitconfig &lt;&lt;EOF\n"
+"[user]\n"
+"        name = &lt;users-name&gt;\n"
+"        email = &lt;users-email-address&gt;\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:164
+#, xml-text
+msgid ""
+"On the developer's machine, set up some files to be pushed to the repository"
+" as the initial content:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:170
+#, xml-text
+msgid ""
+"The <emphasis>gitserver</emphasis> term used below should be the host name "
+"(or ip address) of the git server."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:175
+#, no-wrap, xml-text
+msgid ""
+"<userinput>mkdir myproject\n"
+"cd myproject\n"
+"git init --initial-branch=trunk\n"
+"git remote add origin git@gitserver:/srv/git/project1.git\n"
+"cat &gt;README &lt;&lt;EOF\n"
+"This is the README file\n"
+"EOF\n"
+"git add README\n"
+"git commit -m 'Initial creation of README'\n"
+"git push --set-upstream origin trunk</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:186
+#, xml-text
+msgid ""
+"The initial content is now pushed to the server and is available for other "
+"users. On the current machine, the argument <literal>--set-upstream origin "
+"trunk</literal> is now no longer required as the local repository is now "
+"connected to the remote repository. Subsequent pushes can be performed as"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:194
+#, no-wrap, xml-text
+msgid "<userinput>git push</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:197
+#, xml-text
+msgid ""
+"Other developers can now clone the repository and do modifications to the "
+"content (as long as their ssh keys has been installed):"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:202
+#, no-wrap, xml-text
+msgid ""
+"<userinput>git clone git@gitserver:/srv/git/project1.git\n"
+"cd project1\n"
+"vi README\n"
+"git commit -am 'Fix for README file'\n"
+"git push</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:210
+#, xml-text
+msgid ""
+"This is a very basic server setup based on "
+"<application>OpenSSH</application> access. All developers are using the "
+"<systemitem class=\"username\">git</systemitem> user to perform actions on "
+"the repository and the changes users are committing can be distinguished as "
+"the local user name (see <filename>~/.gitconfig</filename>) is recorded in "
+"the changesets."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:221
+#, xml-text
+msgid ""
+"Access is restricted by the public keys added to git's "
+"<filename>authorized_keys</filename> file and there is no option for the "
+"public to export/clone the repository. To enable this, continue with step 4 "
+"to set up the git server for public read-only access."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:229
+#, xml-text
+msgid ""
+"In the URL used to clone the project, the absolute path (here "
+"<filename>/srv/git/project1.git</filename>) has to be specified as the "
+"repository is not in git's home directory but in <filename "
+"class=\"directory\">/srv/git</filename>. To get rid of the need to expose "
+"the structure of the server installation, a symlink can be added in git's "
+"home directory for each project like this:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:236
+#, no-wrap, xml-text
+msgid "<userinput>ln -svf /srv/git/project1.git /home/git/</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:239
+#, xml-text
+msgid "Now, the repository can be cloned using"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:241
+#, no-wrap, xml-text
+msgid "<userinput>git clone git@gitserver:project1.git</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><title>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:246
+#, xml-text
+msgid "4. Configure the Server"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:249
+#, xml-text
+msgid ""
+"The setup described above makes a repository available for authenticated "
+"users (via providing the ssh public key file).  There is also a simple way "
+"to publish the repository to unauthenticated users &mdash; of course without"
+" write access."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:257
+#, xml-text
+msgid ""
+"The combination of access via ssh (for authenticated users) and the export "
+"of repositories to unauthenticated users via the daemon is in most cases "
+"enough for a development site."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><note><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:264
+#, xml-text
+msgid ""
+"The daemon will be reachable at port <literal>9418</literal> by default. "
+"Make sure that your firewall setup allows access to that port."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:271
+#, xml-text
+msgid ""
+"To start the server at boot time, install the git-daemon bootscript included"
+" in the <xref linkend=\"bootscripts\"/> package:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:276
+#, xml-text
+msgid "git"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:279
+#: blfs-en/blfs-git/general/prog/gitserver.xml:291
+#, no-wrap, xml-text
+msgid "<userinput>make install-git-daemon</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:282
+#, xml-text
+msgid ""
+"To start the server at boot time, install the <filename>git-"
+"daemon.service</filename> unit from the <xref linkend=\"systemd-units\"/> "
+"package:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><indexterm><primary>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:288
+#, xml-text
+msgid "gitserve"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:294
+#, xml-text
+msgid ""
+"In order to allow <application>git</application> to export a repository, a "
+"file named <filename>git-daemon-export-ok</filename> is required in each "
+"repository directory on the server. The file needs no content, just its "
+"existence enables, its absence disables the export of that repository."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:301
+#, no-wrap, xml-text
+msgid ""
+"<userinput>touch /srv/git/project1.git/git-daemon-export-ok</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:304
+#, xml-text
+msgid ""
+"The script to start the git daemon uses some default values internally. Most"
+" important is the path to the repository directory which is set to <filename"
+" class=\"directory\">/srv/git</filename>.  In case you have for whatever "
+"reason created the repository in a different location, you'll need to tell "
+"the boot script where the repository is to be found. This can be achieved by"
+" creating a configuration file named <filename>/etc/sysconfig/git-"
+"daemon</filename>.  This configuration file will be imported if it exists, "
+"meaning it is optional. The file can look like:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:314
+#, no-wrap, xml-text
+msgid ""
+"# Begin /etc/sysconfig/git-daemon\n"
+"\n"
+"# Specify the location of the git repository\n"
+"GIT_BASE_DIR=\"/srv/git/\"\n"
+"\n"
+"# Directories added to whitelist\n"
+"DFT_REPO_DIR=\"$GIT_BASE_DIR\"\n"
+"\n"
+"# Add extra options which will appended to the 'git daemon'\n"
+"# command executed in the boot script\n"
+"GIT_DAEMON_OPTS=\"\"\n"
+"\n"
+"# End /etc/sysconfig/git-daemon\n"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:329
+#, xml-text
+msgid ""
+"Along with the <filename>git-daemon.service</filename> unit, a configuration"
+" file named <filename>/etc/default/git-daemon</filename> has been installed."
+" Review this configuration file to match your needs."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:336
+#, xml-text
+msgid "There are only three options to set in the configuration file:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para><itemizedlist><listitem><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:340
+#, xml-text
+msgid "GIT_BASE_DIR=&lt;dirname&gt;"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para><itemizedlist><listitem><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:342
+#, xml-text
+msgid ""
+"Specify the location of the git repositories.  Relative paths used when "
+"accessing the daemon will translated relative to this directory."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para><itemizedlist><listitem><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:349
+#, xml-text
+msgid "DFT_REPO_DIR=&lt;dirname&gt;"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para><itemizedlist><listitem><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:351
+#, xml-text
+msgid ""
+"This directory is added to the white list of allowed directories. This "
+"variable can hold multiple directory names but is usually set equal to "
+"<literal>GIT_BASE_DIR</literal>."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para><itemizedlist><listitem><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:358
+#, xml-text
+msgid "GIT_DAEMON_OPTS=&lt;options&gt;"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para><itemizedlist><listitem><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:361
+#, xml-text
+msgid ""
+"In case special options to the <command>git daemon</command> command are "
+"needed, they have to be specified in this setting.  One example might be to "
+"adjust the port number where daemon is listening. In this case, add "
+"<literal>--port=&lt;port number&gt;</literal> to this variable.  For more "
+"information about which options can be set, take a look at the output of "
+"<command>git daemon --help</command>."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:374
+#, xml-text
+msgid ""
+"After starting the daemon, unauthenticated users can clone exported "
+"repositories by using"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:377
+#, no-wrap, xml-text
+msgid "<userinput>git clone git://gitserver/project1.git</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/blfs-git/general/prog/gitserver.xml:380
+#, xml-text
+msgid ""
+"As the base directory is <filename class=\"directory\">/srv/git</filename> "
+"by default (or set to a custom value in the configuration), "
+"<application>git</application> interprets the incoming path (/project1.git) "
+"relative to that base directory so that the repository in <filename "
+"class=\"directory\">/srv/git/project1.git</filename> is served."
+msgstr ""

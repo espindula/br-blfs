@@ -1,0 +1,198 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-12-30 09:01-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Content of: <sect1><title>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:8
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:12
+#, xml-text
+msgid "Configuring the Java environment"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:15
+#, xml-text
+msgid "Setting up the environment"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:18
+#, xml-text
+msgid ""
+"After the package installation is complete, the next step is to make sure "
+"that the system can properly find the files.  If you set up your login "
+"scripts as recommended in <xref linkend='postlfs-config-profile'/>, update "
+"the environment by creating the <filename>openjdk.sh</filename> script, as "
+"the <systemitem class=\"username\">root</systemitem> user:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:25
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/profile.d/openjdk.sh &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/profile.d/openjdk.sh\n"
+"\n"
+"# Set JAVA_HOME directory\n"
+"JAVA_HOME=/opt/jdk\n"
+"\n"
+"# Adjust PATH\n"
+"pathappend $JAVA_HOME/bin\n"
+"\n"
+"# Auto Java CLASSPATH: Copy jar files to, or create symlinks in, the\n"
+"# /usr/share/java directory.\n"
+"\n"
+"AUTO_CLASSPATH_DIR=/usr/share/java\n"
+"\n"
+"pathprepend . CLASSPATH\n"
+"\n"
+"for dir in `find ${AUTO_CLASSPATH_DIR} -type d 2>/dev/null`; do\n"
+"    pathappend $dir CLASSPATH\n"
+"done\n"
+"\n"
+"for jar in `find ${AUTO_CLASSPATH_DIR} -name \"*.jar\" 2>/dev/null`; do\n"
+"    pathappend $jar CLASSPATH\n"
+"done\n"
+"\n"
+"export JAVA_HOME\n"
+"\n"
+"# By default, Java creates several files in a directory named\n"
+"# /tmp/hsperfdata_[username]. This directory contains files that are used for\n"
+"# performance monitoring and profiling, but aren't normally needed on a BLFS\n"
+"# system. This environment variable disables that feature.\n"
+"_JAVA_OPTIONS=\"-XX:-UsePerfData\"\n"
+"\n"
+"export _JAVA_OPTIONS\n"
+"\n"
+"unset AUTO_CLASSPATH_DIR dir jar _JAVA_OPTIONS\n"
+"\n"
+"# End /etc/profile.d/openjdk.sh</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:65
+#, xml-text
+msgid ""
+"If <xref linkend=\"sudo\"/> is installed, the super user should have access "
+"to the above variables. Execute the following commands as the <systemitem "
+"class=\"username\">root</systemitem> user:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:70
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt; /etc/sudoers.d/java &lt;&lt; \"EOF\"\n"
+"<literal>Defaults env_keep += JAVA_HOME\n"
+"Defaults env_keep += CLASSPATH\n"
+"Defaults env_keep += _JAVA_OPTIONS</literal>\n"
+"EOF</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:77
+#, xml-text
+msgid ""
+"To use <command>mandb</command> to include the OpenJDK man pages in its "
+"database, issue, as the <systemitem class=\"username\">root </systemitem> "
+"user:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:82
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cat &gt;&gt; /etc/man_db.conf &lt;&lt; \"EOF\" &amp;&amp;\n"
+"<literal># Begin Java addition\n"
+"MANDATORY_MANPATH     /opt/jdk/man\n"
+"MANPATH_MAP           /opt/jdk/bin     /opt/jdk/man\n"
+"MANDB_MAP             /opt/jdk/man     /var/cache/man/jdk\n"
+"# End Java addition</literal>\n"
+"EOF\n"
+"\n"
+"mkdir -p /var/cache/man &amp;&amp;\n"
+"mandb -c /opt/jdk/man</userinput>"
+msgstr ""
+
+#. type: Attribute 'xreflabel' of: <sect1><sect2>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:95
+#, xml-text
+msgid "installing the JVM Certificate Authority Certificates"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:97
+#, xml-text
+msgid "Setting up the Certificate Authority Certificates for Java"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:100
+#, xml-text
+msgid ""
+"<application>OpenJDK</application> uses its own format for the CA "
+"certificates. The Java security modules use "
+"<envar>$JAVA_HOME</envar><filename>/lib/security/cacerts</filename> by "
+"default. In order to keep all the certificates in one place, we use "
+"<filename>/etc/pki/tls/java/cacerts</filename>. The instructions on the "
+"<xref linkend=\"make-ca\"/> page previously created the file located in "
+"<filename class=\"directory\">/etc/pki/tls/java</filename>.  Set up a "
+"symlink in the default location as the <systemitem "
+"class=\"username\">root</systemitem> user:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:111
+#, no-wrap, xml-text
+msgid ""
+"<userinput>ln -sfv /etc/pki/tls/java/cacerts "
+"/opt/jdk/lib/security/cacerts</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:114
+#, xml-text
+msgid ""
+"Use the following command to check if the <filename>cacerts</filename> file "
+"has been successfully installed:"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:118
+#, no-wrap, xml-text
+msgid "<userinput>/opt/jdk/bin/keytool -list -cacerts</userinput>"
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:121
+#, xml-text
+msgid ""
+"At the prompt <computeroutput>Enter keystore password:</computeroutput>, "
+"enter <userinput>changeit</userinput> (the default) or just press the "
+"<quote>Enter</quote> key. If the <filename>cacerts</filename> file was "
+"installed correctly, you will see a list of the certificates with related "
+"information for each one. If not, you need to reinstall them."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/blfs-git/general/prog/ojdk-conf.xml:129
+#, xml-text
+msgid ""
+"If you later install a new JVM, you just have to create the symlink in the "
+"default location to be able to use the cacerts."
+msgstr ""
