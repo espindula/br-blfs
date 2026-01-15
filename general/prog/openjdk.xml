@@ -5,21 +5,21 @@
   %general-entities;
 
   <!ENTITY ojdk-tarball              "jdk-&openjdk-version;-ga.tar.gz">
-  <!ENTITY ojdk-repo                 "https://github.com/openjdk/jdk24u">
+  <!ENTITY ojdk-repo                 "https://github.com/openjdk/jdk21u">
   <!ENTITY ojdk-download             "&ojdk-repo;/archive/&ojdk-tarball;">
 
   <!ENTITY anduin-download           "&sources-anduin-http;/OpenJDK/OpenJDK-&openjdk-version;">
 
-  <!ENTITY ojdk-md5sum               "160e4f0de98c13fddba4f1dc0bad3615">
-  <!ENTITY ojdk-size                 "115 MB">
+  <!ENTITY ojdk-md5sum               "4accf6cbdd48f1f1151c2ec50dbf01b1">
+  <!ENTITY ojdk-size                 "109 MB">
 
   <!ENTITY jtreg-version             "7.5.1+1">
   <!ENTITY jtreg-download            "&anduin-download;/jtreg-&jtreg-version;.tar.gz">
   <!ENTITY jtreg-md5sum              "deb728d5f67a84adadd6025b9ad3252f">
   <!ENTITY jtreg-size                "9,0 MB">
 
-  <!ENTITY ojdk-bdsize               "3,8 GB (adicionar 630 MB para os testes)">
-  <!ENTITY ojdk-time                 "4,3 UPC com 4 tarefas (adicionar 35 UPC para testes com 4 tarefas)">
+  <!ENTITY ojdk-bdsize               "3,9 GB (adicionar 589 MB para os testes)">
+  <!ENTITY ojdk-time                 "4,5 UPC com 4 tarefas (adicionar 24 UPC para testes com 4 tarefas)">
 ]>
 
 <sect1 id="openjdk" xreflabel="OpenJDK-&openjdk-version;">
@@ -203,12 +203,6 @@ url="https://zlib.net/pigz">pigz</ulink>
 
 <screen><userinput>tar -xf ../jtreg-&jtreg-version;.tar.gz</userinput></screen>
 
-    <para>
-      Corrija uma falha de construção causada pela glibc-2.42:
-    </para>
-
-<screen><userinput>find src -name *.*pp -exec sed -i 's/uabs(/g_uabs(/' {} \;</userinput></screen>
-
     <note>
       <para>
         Antes de continuar, você deveria garantir que sua variável de ambiente
@@ -330,6 +324,9 @@ deveria esperar ver cerca de oitenta (80) falhas e dez (10) erros.
          24.0.2+12:
          for x86_64: passed: 6,952; failed: 54; error: 43
          for i686:   passed: 6,856; failed: 64; error: 41
+         21.0.9+10:
+         for x86_64: passed: 6,721; failed: 73; error: 13
+         for i686:   passed: 6,641; failed: 33; error: 17
     -->
 <para>
       Instale o pacote com os seguintes comandos como o(a) usuário(a)
@@ -582,10 +579,11 @@ um. Caso contrário, você precisa reinstalá-los.
       <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
-        <seg>jar, jarsigner, java, javac, javadoc, javap, jcmd, jconsole, jdb, jdeprscan,
-jdeps, jfr, jhsdb, jimage, jinfo, jlink, jmap, jmod, jnativescan, jpackage,
-jps, jrunscript, jshell, jstack, jstat, jstatd, jwebserver, keytool,
-rmiregistry e serialver</seg>
+        <seg><!--jnativescan,-->
+jar, jarsigner, java, javac, javadoc, javap, jcmd, jconsole, jdb, jdeprscan,
+jdeps, jfr, jhsdb, jimage, jinfo, jlink, jmap, jmod, jpackage, jps,
+jrunscript, jshell, jstack, jstat, jstatd, jwebserver, keytool, rmiregistry
+e serialver</seg>
         <seg>37 bibliotecas em /opt/jdk-&openjdk-version;+&openjdk-build;/lib/</seg>
         <seg>/opt/jdk-&openjdk-version;+&openjdk-build;</seg>
       </seglistitem>
@@ -829,20 +827,24 @@ remoto de depuração
         </listitem>
       </varlistentry>
 
+
+
+      <!--
       <varlistentry id="jnativescan">
+
         <term><command>jnativescan</command></term>
         <listitem>
           <para>
-            encontra métodos que acessam funcionalidades nativas quando executados. Isso
-incluirá chamadas restritas de métodos e declarações 'nativas' de métodos
+            finds methods that access native functionality when run. This will
+            include restricted method calls and 'native' method declarations
           </para>
           <indexterm zone="openjdk jnativescan">
             <primary sortas="b-jnativescan">jnativescan</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="jpackage">
+-->
+<varlistentry id="jpackage">
         <term><command>jpackage</command></term>
         <listitem>
           <para>

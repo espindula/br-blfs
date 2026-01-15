@@ -149,15 +149,18 @@ url="https://libwpd.sourceforge.net/">libwpd</ulink>)
   <sect2 role="installation">
     <title>Instalação do Inkscape</title>
 
-    <!--
     <para>
-
-      First, fix build failures with recent versions of poppler:
+      Primeiro, corrija falhas de construção com versões do poppler-26.01.0 e
+posteriores:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-version;-poppler_fixes-5.patch</userinput></screen>
--->
-<para>
+<screen><userinput remap="pre">sed -i 's/gfree/g_free/' src/extension/internal/pdfinput/pdf-input.cpp &amp;&amp;
+
+sed -e '/Stream.h/a#include &lt;poppler/goo/gmem.h&gt;' \
+    -e 's/reset/rewind/'                          \
+    -i src/extension/internal/pdfinput/svg-builder.cpp</userinput></screen>
+
+    <para>
       Instale o <application>Inkscape</application> executando os seguintes
 comandos:
     </para>

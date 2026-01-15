@@ -6,8 +6,8 @@
 
   <!ENTITY shadow-download-http "https://github.com/shadow-maint/shadow/releases/download/&shadow-version;/shadow-&shadow-version;.tar.xz">
   <!ENTITY shadow-download-ftp  "">
-  <!ENTITY shadow-md5sum        "30ef46f54363db1d624587be68794ef2">
-  <!ENTITY shadow-size          "2,2 MB">
+  <!ENTITY shadow-md5sum        "fcbec276e95ea2509746378818eb9fd0">
+  <!ENTITY shadow-size          "2,3 MB">
   <!ENTITY shadow-buildsize     "103 MB">
   <!ENTITY shadow-time          "0,2 UPC">
 ]>
@@ -125,13 +125,29 @@ instalação do <application>Linux-PAM</application>.
 comandos:
     </para>
 
-<screen><!--
+<screen revision='sysv'><!--
 <screen>
 <userinput>patch -Np1 -i ../shadow-4.10-useradd_segfault-1.patch &amp;&amp;
 -->
-<!--
-This is the default:            - -with-group-name-max-length=32 &amp;&amp;-->
 <userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in          &amp;&amp;
+
+find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \; &amp;&amp;
+find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \; &amp;&amp;
+find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \; &amp;&amp;
+
+sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
+    -e 's@/var/spool/mail@/var/mail@'                   \
+    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
+    -i etc/login.defs                                   &amp;&amp;
+
+./configure --sysconfdir=/etc   \
+            --disable-static    \
+            --without-libbsd    \
+            --disable-logind    \
+            --with-{b,yes}crypt &amp;&amp;
+make</userinput></screen>
+
+<screen revision='systemd'><userinput>sed -i 's/groups$(EXEEXT) //' src/Makefile.in          &amp;&amp;
 
 find man -name Makefile.in -exec sed -i 's/groups\.1 / /'   {} \; &amp;&amp;
 find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \; &amp;&amp;
@@ -206,6 +222,11 @@ padrão para estar consistente com aquele configurado no LFS.
 <filename class="libraryfile">libbsd</filename>, a qual nós não temos no
 BLFS. Uma implementação interna de <command>readpassphrase</command> é usada
 no lugar.
+    </para>
+
+    <para revision="sysv">
+      <parameter>--disable-logind</parameter>: Essa opção é exigida para
+construções não systemd.
     </para>
 
     <para>

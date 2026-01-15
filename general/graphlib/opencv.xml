@@ -6,13 +6,13 @@
 
   <!ENTITY opencv-download-http     "https://github.com/opencv/opencv/archive/&opencv-version;/opencv-&opencv-version;.tar.gz">
   <!ENTITY opencv-download-ftp      "">
-  <!ENTITY opencv-md5sum            "eb6f8ff4f4cd16ef1b97bc21edc74de9">
+  <!ENTITY opencv-md5sum            "f33c0ace3add57aba7b9d3fe3c41feb4">
   <!ENTITY opencv-size              "91 MB">
   <!ENTITY opencv-buildsize         "1,0 GB (com opencv-contrib)">
-  <!ENTITY opencv-time              "3,6 UPC (usando paralelismo = 8)">
+  <!ENTITY opencv-time              "4,1 UPC (usando paralelismo = 8)">
 
   <!ENTITY opencv-contrib-download "https://github.com/opencv/opencv_contrib/archive/&opencv-contrib-version;/opencv_contrib-&opencv-contrib-version;.tar.gz">
-  <!ENTITY opencv-contrib-md5sum   "55603c033cc5f3d5e307b699ad72e25a">
+  <!ENTITY opencv-contrib-md5sum   "8ed522edaefc2d55df685438acae9beb">
   <!ENTITY opencv-contrib-size     "53 MB">
 ]>
 
@@ -72,13 +72,16 @@ voltadas principalmente para visão computacional em tempo real.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
+
+      <!--
       <listitem>
+
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/opencv-&opencv-version;-ffmpeg8-1.patch"/>
+          Required patch: <ulink url="&patch-root;/opencv-&opencv-version;-ffmpeg8-1.patch"/>
         </para>
       </listitem>
-      <listitem>
+-->
+<listitem>
         <para>
           Módulos adicionais opcionais: <ulink url="&opencv-contrib-download;"/>
         </para>
@@ -144,14 +147,18 @@ Toolkit</ulink>,
   <sect2 role="installation">
     <title>Instalação do opencv</title>
 
+
+
+    <!--
     <para>
-      Primeiro, aplique um remendo para tornar o pacote compatível com
-<application>ffmpeg-8</application>:
+
+      First, apply a patch to make the package compatible with 
+      <application>ffmpeg-8</application>:
     </para>
 
 <screen><userinput>patch -Np1 -i ../opencv-&opencv-version;-ffmpeg8-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Se você baixou os módulos opcionais, [então] desempacote-os agora:
     </para>
 
@@ -164,18 +171,17 @@ Toolkit</ulink>,
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr        \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -D ENABLE_CXX11=ON                  \
-      -D BUILD_PERF_TESTS=OFF             \
-      -D WITH_XINE=ON                     \
-      -D BUILD_TESTS=OFF                  \
-      -D ENABLE_PRECOMPILED_HEADERS=OFF   \
-      -D CMAKE_SKIP_INSTALL_RPATH=ON      \
-      -D BUILD_WITH_DEBUG_INFO=OFF        \
-      -D OPENCV_GENERATE_PKGCONFIG=ON     \
-      -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
-      -W no-dev  ..                       &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr      \
+      -D CMAKE_BUILD_TYPE=Release       \
+      -D ENABLE_CXX11=ON                \
+      -D BUILD_PERF_TESTS=OFF           \
+      -D WITH_XINE=ON                   \
+      -D BUILD_TESTS=OFF                \
+      -D ENABLE_PRECOMPILED_HEADERS=OFF \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON    \
+      -D BUILD_WITH_DEBUG_INFO=OFF      \
+      -D OPENCV_GENERATE_PKGCONFIG=ON   \
+      -W no-dev  ..                     &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -192,9 +198,6 @@ make</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="../../xincludes/cmake-policy-version.xml"/>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/cmake-skip-install-rpath.xml"/>
@@ -246,15 +249,15 @@ libopencv_calib3d.so, libopencv_ccalib.so, libopencv_core.so,
 libopencv_datasets.so, libopencv_dnn_objdetect.so, libopencv_dnn.so,
 libopencv_dnn_superres.so, libopencv_dpm.so, libopencv_face.so,
 libopencv_features2d.so, libopencv_flann.so, libopencv_freetype.so,
-libopencv_gapi.so, libopencv_hfs.so, libopencv_highgui.so,
-libopencv_imgcodecs.so, libopencv_img_hash.so, libopencv_imgproc.so,
-libopencv_intensity_transform.so, libopencv_line_descriptor.so,
-libopencv_mcc.so, libopencv_ml.so, libopencv_objdetect.so,
-libopencv_optflow.so, libopencv_phase_unwrapping.so, libopencv_photo.so,
-libopencv_plot.so, libopencv_quality.so, libopencv_rapid.so,
-libopencv_reg.so, libopencv_rgbd.so, libopencv_saliency.so,
-libopencv_shape.so, libopencv_signal.so, libopencv_stereo.so,
-libopencv_stitching.so, libopencv_structured_light.so,
+libopencv_fuzzy.so, libopencv_gapi.so, libopencv_hfs.so,
+libopencv_highgui.so, libopencv_imgcodecs.so, libopencv_img_hash.so,
+libopencv_imgproc.so, libopencv_intensity_transform.so,
+libopencv_line_descriptor.so, libopencv_mcc.so, libopencv_ml.so,
+libopencv_objdetect.so, libopencv_optflow.so, libopencv_phase_unwrapping.so,
+libopencv_photo.so, libopencv_plot.so, libopencv_quality.so,
+libopencv_rapid.so, libopencv_reg.so, libopencv_rgbd.so,
+libopencv_saliency.so, libopencv_shape.so, libopencv_signal.so,
+libopencv_stereo.so, libopencv_stitching.so, libopencv_structured_light.so,
 libopencv_superres.so, libopencv_surface_matching.so, libopencv_text.so,
 libopenct_tracking.so, libopencv_video.so, libopencv_videoio.so,
 libopencv_videostage.so, libopencv_wechat_qrcode.so,

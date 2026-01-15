@@ -6,9 +6,9 @@
 
   <!ENTITY vlc-download-http "https://download.videolan.org/vlc/&vlc-version;/vlc-&vlc-version;.tar.xz">
   <!ENTITY vlc-download-ftp  "">
-  <!ENTITY vlc-md5sum        "bf98812c217f2e2a0c715822f6581c67">
-  <!ENTITY vlc-size          "25 MB">
-  <!ENTITY vlc-buildsize     "451 MB">
+  <!ENTITY vlc-md5sum        "ebc3f0d0a94785fd2b2df4087516938e">
+  <!ENTITY vlc-size          "26 MB">
+  <!ENTITY vlc-buildsize     "957 MB">
   <!ENTITY vlc-time          "1,2 UPC (usando paralelismo = 4; com os testes)">
 ]>
 
@@ -70,24 +70,14 @@ longo da rede de intercomunicação.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <itemizedlist spacing='compact'>
-      <listitem>
-        <para>
-          Remendo exigido: <ulink
-url="&patch-root;/vlc-&vlc-version;-ffmpeg8-1.patch"/>
-        </para>
-      </listitem> 
-    </itemizedlist>
-
     <bridgehead renderas="sect3">Dependências do VLC</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="alsa-lib"/>, <xref linkend="desktop-file-utils"/>, <xref
 linkend="ffmpeg"/>, <xref linkend="liba52"/>, <xref linkend="libgcrypt"/>
-<xref linkend="libmad"/>, <xref linkend="lua"/> e <xref
-linkend="x-window-system"/>
+<xref linkend="libmad"/>, <xref linkend="lua"/>, <xref linkend="qt6"/> e
+<xref linkend="x-window-system"/>
     </para>
 
     <bridgehead renderas="sect4">Recursos e pacotes opcionais</bridgehead>
@@ -97,11 +87,13 @@ linkend="x-window-system"/>
 
     <bridgehead renderas="sect4">Plugins opcionais de entrada</bridgehead>
     <para role="optional">
-      <xref linkend="libarchive"/>, <xref linkend="libcddb"/>, <xref
+      <!--<xref linkend="opencv"/>
+, Needs OpenCV-1.x -->
+<xref linkend="libarchive"/>, <xref linkend="libcddb"/>, <xref
 linkend="libdv"/>, <xref linkend="libdvdcss"/>, <xref
 linkend="libdvdread"/>, <xref linkend="libdvdnav"/>, <xref
-linkend="libproxy"/>, <xref linkend="opencv"/>, <xref linkend="samba"/>,
-<xref linkend="v4l-utils"/>, <ulink
+linkend="libproxy"/>, <xref linkend="samba"/>, <xref linkend="v4l-utils"/>,
+<ulink
 url="https://www.videolan.org/developers/libbluray.html">libbluray</ulink>,
 <ulink url="https://sourceforge.net/projects/libdc1394/">libdc1394</ulink>,
 <ulink url="https://github.com/sahlberg/libnfs">libnfs</ulink>, <ulink
@@ -215,12 +207,6 @@ url="https://www.team-mediaportal.com/extensions/mp2-plugins/atmolight">AtmoLigh
     <title>Instalação do VLC</title>
 
     <para>
-      Primeiro, corrija compilar esse pacote com ffmpeg-8 e posteriores:
-    </para>
-
-<screen><userinput>patch -Np1 -i ../vlc-&vlc-version;-ffmpeg8-1.patch</userinput></screen>
-
-    <para>
       Instale o <application>VLC</application> executando os seguintes comandos:
     </para>
 
@@ -239,6 +225,38 @@ make</userinput></screen>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/update-icons-and-desktop.xml"/>
+
+  </sect2>
+
+  <sect2 role="using">
+    <title>Usando VLC</title>
+
+    <para>
+      Por um tempo, <application>Qt-5</application> foi a única maneira de obter
+uma interface gráfica pela qual esse pacote é conhecido. Ele agora suporta
+<application>Qt-6</application>, mas vem com um monte de desvantagens, pois
+é uma nova versão da interface anterior. As coisas estão em um estado
+quebrado. Por exemplo, a pausa e outros recursos de navegação estão
+quebrados, o posicionamento do vídeo está incorreto, entre outros problemas.
+    </para>
+
+    <para>
+      Outro problema é que a reprodução de vídeo, apesar da reprodução de áudio
+com metadados de imagem ser boa, está quebrada no Wayland sem o uso da
+variável <envar>QT_QPA_PLATFORM</envar>. Se você estiver no Wayland, você
+deveria executar <command>QT_QPA_PLATFORM=xcb vlc -I "qt"</command> para
+executar a interface Qt. Isso força a interface de janela do
+<literal>xcb</literal> ser usada em vez da do <literal>wayland</literal>, já
+que a reprodução do vídeo tentará usar <literal>xcb</literal> de qualquer
+maneira e falhará. No <application>X11</application>, isso não deveria ser
+um problema.
+    </para>
+
+    <para>
+      No entanto, muitos problemas ainda persistirão. É recomendado ainda usar o
+<application>VLC</application> por outros meios até que esses problemas
+sejam corrigidos.
+    </para>
 
   </sect2>
 
@@ -319,8 +337,7 @@ quiser construir esse módulo.
 
       <seglistitem>
         <seg>
-          <!--qvlc,-->
-cvlc, nvlc, rvlc, vlc e vlc-wrapper
+          cvlc, nvlc, qvlc, rvlc, vlc e vlc-wrapper
         </seg>
         <seg>
           libvlccore.so, libvlc.so e muitos plugins em /usr/lib/vlc/plugins
@@ -362,24 +379,20 @@ ncurses
         </listitem>
       </varlistentry>
 
-
-
-      <!-- We don't carry Qt5 anymore, so this isn't installed
       <varlistentry id="qvlc">
-
         <term><command>qvlc</command></term>
         <listitem>
           <para>
-            is a script to run <application>VLC</application> with the
-            <application>Qt</application> interface
+            é um conjunto de comandos sequenciais para executar o
+<application>VLC</application> com a interface <application>Qt</application>
           </para>
           <indexterm zone="vlc qvlc">
             <primary sortas="b-qvlc">qvlc</primary>
           </indexterm>
         </listitem>
       </varlistentry>
--->
-<varlistentry id="rvlc">
+
+      <varlistentry id="rvlc">
         <term><command>rvlc</command></term>
         <listitem>
           <para>

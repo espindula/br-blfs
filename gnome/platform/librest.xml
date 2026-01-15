@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY librest-download-http "&gnome-download-http;/librest/0.10/librest-&librest-version;.tar.xz">
+  <!ENTITY librest-download-ftp  "">
+  <!ENTITY librest-md5sum        "32b0ecf86932cd45b4e7078690c8306f">
+  <!ENTITY librest-size          "72 KB">
+  <!ENTITY librest-buildsize     "4,0 MB (com testes)">
+  <!ENTITY librest-time          "0,2 UPC (com testes)">
+]>
+
+<sect1 id="librest" xreflabel="librest-&librest-version;">
+  <?dbhtml filename="librest.html"?>
+
+
+  <title>librest-&librest-version;</title>
+
+  <indexterm zone="librest">
+    <primary sortas="a-librest">librest</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao librest</title>
+
+    <para>
+      O pacote <application>librest</application> contém uma biblioteca que é
+projetada para tornar mais fácil acessar serviços web que aleguem ser
+"RESTful". Ele inclui envolucradores convenientes para libsoup e libxml para
+tornar o uso remoto da API RESTful mais fácil.
+    </para>
+
+    &lfs124_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&librest-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&librest-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &librest-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &librest-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &librest-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &librest-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do librest</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="json-glib"/>, <xref linkend="libsoup3"/> e <xref
+linkend="make-ca"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      &gobject-introspection;
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="gi-docgen"/>, <xref linkend="libadwaita1"/> e <xref
+linkend="gtksourceview5"/> (para construir a demonstração) e <xref
+linkend="vala"/>
+    </para>
+
+    &test-use-internet;
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do librest</title>
+
+    <para>
+      Instale <application>librest</application> executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -D examples=false   \
+            -D gtk_doc=false    \
+            ..                  &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Se você tiver <xref linkend='gi-docgen'/> instalado e desejar construir a
+documentação da API para esse pacote, emita:
+    </para>
+
+<screen role='nodump'><userinput>sed "/output/s/librest-1.0/librest-&librest-version;/" -i ../docs/meson.build &amp;&amp;
+meson configure -D gtk_doc=true                                    &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../../xincludes/meson-buildtype-release.xml"/>
+
+    <para>
+      <parameter>-D gtk_doc=false</parameter>: &gi-doc-disable;
+    </para>
+
+    <para>
+      <parameter>-D examples=false</parameter>: Remova essa opção se <xref
+linkend="libadwaita1"/> e <xref linkend="gtksourceview5"/> estiverem
+instalados e você desejar construir o aplicativo de demonstração fornecido
+por esse pacote.
+    </para>
+
+    <para>
+      <option>-D vapi=true</option>: Use essa chave se <xref linkend="vala"/>
+estiver instalado e você desejar construir as ligações Vala fornecidas por
+esse pacote.
+    </para>
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          librest-demo (opcional)
+        </seg>
+        <seg>
+          librest-1.0.so e librest-extras-1.0.so
+        </seg>
+        <seg>
+          /usr/include/rest-1.0 e /usr/share/gtk-doc/html/librest-&librest-version;
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="librest-demo">
+        <term><command>librest-demo</command></term>
+        <listitem>
+          <para>
+            fornece um exemplo de como usar as funções de consulta da API da Web RESTful
+          </para>
+          <indexterm zone="librest librest-demo">
+            <primary sortas="b-librest-demo">librest-demo</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="librest-1.0">
+        <term><filename class="libraryfile">librest-1.0.so</filename></term>
+        <listitem>
+          <para>
+            contém as funções de consulta da API da Web RESTful
+          </para>
+          <indexterm zone="librest librest-1.0">
+            <primary sortas="c-librest-1.0">librest-1.0.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="librest-extras-1.0">
+        <term><filename class="libraryfile">librest-extras-1.0.so</filename></term>
+        <listitem>
+          <para>
+            contém funções extras de consulta da API da Web RESTful
+          </para>
+          <indexterm zone="librest librest-extras-1.0">
+            <primary sortas="c-librest-extras-1.0">librest-extras-1.0.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>
