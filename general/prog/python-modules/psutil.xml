@@ -7,8 +7,8 @@
   <!ENTITY psutil-download-http "&pymodules-dl;/p/psutil/psutil-&psutil-version;.tar.gz">
   <!ENTITY psutil-download-ftp  "">
   <!ENTITY psutil-md5sum        "&psutil-md5sum;">
-  <!ENTITY psutil-size          "480 KB">
-  <!ENTITY psutil-buildsize     "58 MB (com testes)">
+  <!ENTITY psutil-size          "484 KB">
+  <!ENTITY psutil-buildsize     "94 MB (com testes)">
   <!ENTITY psutil-time          "0,2 UPC (com testes)">
 ]>
 
@@ -157,21 +157,38 @@ conhecido por falhar se tunelamento de IPv6 estiver habilitado no núcleo.
           </para>
         </listitem>
 
-        <listitem>
+        
+        <!-- If Shadow is rebuilt with logind, it won't use utmp to track
+             sessions no more and uses logind instead.  This test is invoking
+             the "who" program which is from Coreutils (not Shadow) so it
+             will print nothing and break the test.  Coreutils may be built
+             with logind support but it's not enabled by default (even if
+             libsystemd is installed), and we cannot simply enable it when
+             we build it in LFS because at the time point libsystemd is not
+             installed yet.  See the discussion about utmp Y2038 issue in
+             the LFS Shadow page.  -->
+<listitem>
           <para>
-            O teste nomeado de <literal>TestExampleScripts::test_who</literal> é
+            O teste nominado de <literal>TestExampleScripts::test_who</literal> é
 conhecido por falhar se o gerenciador de login não escrever no
-<filename>/run/utmp</filename> (observe-se que, devido ao potencial problema
-do ano 2037, Shadow já parou de escrever nele).
+<filename>/run/utmp</filename><phrase revision='systemd'> (observe-se que,
+devido ao potencial problema do ano 2038, se <xref linkend='shadow'/> já
+estiver reconstruído no BLFS, ele parará de escrever no arquivo)</phrase>.
           </para>
         </listitem>
 
-
-        <listitem>
+        
+        <!-- The mechanism is a little different from above: here psutil
+             itself parses utmp, so even if we build Coreutils with logind
+             support it still won't help.  And it also doesn't like the
+             utmp entry created by gdm (for gdm itself) for some
+             reason.  -->
+<listitem>
           <para>
-            O teste nomeado de <literal>TestSystemAPIs::test_users</literal> é conhecido
-por falhar se o arquivo <filename>/run/utmp</filename> contiver uma entrada
-para a tela de login.
+            O teste nominado de <literal>TestSystemAPIs::test_users</literal> é
+conhecido por falhar se o arquivo <filename>/run/utmp</filename> contiver
+uma entrada para a tela de login. Ele também pode falhar devido ao mesmo
+motivo que para o <literal>TestExampleScripts::test_who</literal>.
           </para>
         </listitem>
       </itemizedlist>

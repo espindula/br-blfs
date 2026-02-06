@@ -119,6 +119,15 @@ cada vez que <command>make-ca</command> for executado)
     <title>Instalação do make-ca e Geração dos Armazenamentos de Certificados de AC</title>
 
     <para>
+      Primeiramente, remova a opção <parameter>-t</parameter> dos comandos
+<command>mktemp</command> no conjunto de comandos sequenciados. Essa opção
+está obsoleta e pode causar efeitos indesejados se <envar>TMPDIR</envar>
+estiver configurada no ambiente:
+    </para>
+
+    <screen><userinput>sed '/mktemp/s/-t //' -i make-ca</userinput></screen>
+
+    <para>
       O script <application>make-ca</application> baixará e processará os
 certificados incluídos no arquivo <filename>certdata.txt</filename> para uso
 como âncoras de confiança para o módulo de confiança <xref

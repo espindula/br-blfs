@@ -72,6 +72,12 @@ class='directory'>/opt</filename>): <ulink
 url="&patch-root;/glycin-&glycin-version;-xorg_prefix-1.patch"/>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Remendo recomendado (exigido para carregar imagens XBM e XPM): <ulink
+url="&patch-root;/glycin-&glycin-version;-xbm_xpm-1.patch"/>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do glycin</bridgehead>
@@ -122,6 +128,27 @@ linkend='xorg-env'/> antes de se construir o glycin):
 
 <screen><userinput>cargo vendor &amp;&amp;
 patch -Np1 -i ../glycin-&glycin-version;-xorg_prefix-1.patch</userinput></screen>
+
+    <note>
+      <para>
+        O remendo de suporte XBM e XPM abaixo depende implicitamente do remendo e
+das instruções acima, de modo que certifique-se de que você tenha emitido as
+instruções antes de aplicar o remendo de suporte XBM e XPM. De qualquer
+maneira, elas não causam nenhum dano para uma instalação do Xorg no
+<filename class='directory'>/usr</filename>.
+      </para>
+    </note>
+
+    <para>
+      Agora remende retroativamente uma mudança de fluxo de desenvolvimento para
+tornar glycin capaz de carregar imagens XBM e XPM. A mudança de fluxo de
+desenvolvimento introduz uma caixa Rust nova e dependente
+(<literal>image-extras</literal>) que precisa ser sincronizada nos fontes de
+fornecedores(as) executando-se <command>cargo vendor</command> novamente:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../glycin-&glycin-version;-xbm_xpm-1.patch &amp;&amp;
+cargo vendor</userinput></screen>
 
     <para>
       Instale <application>glycin</application> executando os seguintes comandos:

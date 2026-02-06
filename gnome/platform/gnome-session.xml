@@ -157,7 +157,7 @@ ninja</userinput></screen>
 <!-- We need to adjust this when GNOME 50 comes out next year. For now,
          since we've documented the X11 support via a switch, we'll leave this
          in... -renodr -->
-<screen role="nodump"><userinput>mv -v /usr/share/doc/gnome-session{,-&gnome-session-version;}</userinput></screen>
+<screen remap="doc" role="root"><userinput>mv -v /usr/share/doc/gnome-session{,-&gnome-session-version;}</userinput></screen>
 
 
     
@@ -226,7 +226,7 @@ X11. O suporte X11 está obsoleto e será removido no GNOME 50.
 
   </sect2>
 
-  <sect2 role="starting">
+  <sect2 role="starting" revision="systemd">
     <title>Iniciando o GNOME</title>
 
     <para>
@@ -250,17 +250,20 @@ linha de comando.
       
       
     </para>
-
+    
+    <!-- we don't build with x11 support. So there is no point in starting
+         with X11
     <warning>
+
       <para>
-        O suporte ao X11 está obsoleto e será removido no GNOME 50. Por favor, use a
-sessão Wayland sempre que possível.
+        X11 support is deprecated and will be removed in GNOME 50. Please use
+        the Wayland session wherever possible.
       </para>
     </warning>
 
     <para>
-      Para iniciar o <application>GNOME</application> usando <xref role="nodep"
-linkend="xinit"/>, execute os seguintes comandos:
+      To start <application>GNOME</application> using
+      <xref role="nodep" linkend="xinit"/>, run the following commands:
     </para>
 
 <screen role="nodump"><userinput>cat &gt; ~/.xinitrc &lt;&lt; "EOF"
@@ -268,13 +271,16 @@ linkend="xinit"/>, execute os seguintes comandos:
 EOF
 
 startx</userinput></screen>
-
-    <para>
-      Alternativamente, para iniciar o <application>GNOME</application> com
-suporte ao Wayland, execute o seguinte comando:
+-->
+<para>
+      Para iniciar o <application>GNOME</application> sem um gerenciador de
+exibição você precisa determinar teu ID de sessão, usando
+<command>loginctl</command>. Feito isso, emita (nós supomos que o ID de
+sessão seja 1):
     </para>
 
-<screen role="nodump"><userinput>XDG_SESSION_TYPE=wayland dbus-run-session gnome-session</userinput></screen>
+    <screen role="nodump"><userinput>systemctl --user set-environment XDG_SESSION_TYPE=wayland XDG_SESSION_ID=<replaceable>1</replaceable> &amp;&amp;
+systemctl --user start gnome-session-wayland@gnome.target</userinput></screen>
 
   </sect2>
 

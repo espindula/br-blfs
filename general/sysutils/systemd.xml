@@ -360,6 +360,58 @@ pelo executável <command>systemd</command> recém-construído e instalado:
 
     <screen role='root'><userinput>systemctl daemon-reexec</userinput></screen>
 
+    <para>
+      Um ambiente de área de trabalho frequentemente executa como um grupo de
+serviços de usuário(a) do systemd. Esses serviços são gerados pela instância
+por usuário(a) do systemd, em vez do shell de login. Para garantir que esses
+serviços obtenham as variáveis de ambiente que nós configuramos via
+<filename class='directory'>/etc/profile.d</filename>; como o(a) usuário(a)
+&root;, instale um gerador de ambiente do systemd para despejar todas as
+variáveis de ambiente exportadas relevantes na instância por usuário(a) do
+systemd quando a instância iniciar para executar:
+    </para>
+
+    <screen role='root'><userinput>install -vdm755 /etc/systemd/user-environment-generators &amp;&amp;
+cat &gt; /etc/systemd/user-environment-generators/50-profile.sh &lt;&lt; "EOF" &amp;&amp;
+<literal>#!/usr/bin/env -S -i /usr/bin/bash
+# SPDX-License-Identifier: MIT
+
+. /etc/profile
+
+# Systemd should have already set a better value for them.
+unset XDG_RUNTIME_DIR
+for i in $(locale); do
+  unset ${i%=*}
+done
+
+# Some shell magic that we don't want to expose.
+unset SHLVL
+
+python3 &lt;&lt; _EOF
+import os
+for var in os.environ:
+  # Simply unsetting them in shell does not work.
+  if var in ['LC_CTYPE', '_']:
+    continue
+
+  print(var + '=' + os.environ[var])
+_EOF</literal>
+EOF
+
+chmod -v 755 /etc/systemd/user-environment-generators/50-profile.sh</userinput></screen>
+
+    <para>
+      Leia-se <ulink role='man'
+url='&man;systemd.environment-generator.7'>systemd.environment-generator(7)</ulink>
+para detalhes acerca dos geradores de ambiente do systemd. Observe que se
+tiver editado o conteúdo de <filename
+class='directory'>/etc/profile.d</filename> quando um ambiente de área de
+trabalho estiver executando, você precisa executar o comando
+<command>systemctl --user daemon-reload</command> para sincronizar a mudança
+na instância por usuário(a) do systemd e, em seguida, deslogar-se e logar-se
+novamente para sincronizar a mudança no ambiente de área de trabalho.
+    </para>
+
     <important>
       <para>
         Agora certifique-se de que <xref linkend='shadow'/> já tenha sido

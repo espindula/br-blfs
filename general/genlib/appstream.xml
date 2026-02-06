@@ -6,9 +6,9 @@
 
   <!ENTITY appstream-download-http "https://www.freedesktop.org/software/appstream/releases/AppStream-&appstream-version;.tar.xz">
   <!ENTITY appstream-download-ftp  "">
-  <!ENTITY appstream-md5sum        "6a91a71c8a5983f83e4c172e3e27f179">
+  <!ENTITY appstream-md5sum        "993cb6e1c6ab57ce59c5c3ba397f2b21">
   <!ENTITY appstream-size          "2,7 MB">
-  <!ENTITY appstream-buildsize     "39 MB">
+  <!ENTITY appstream-buildsize     "40 MB">
   <!ENTITY appstream-time          "menos que 0,1 UPC (adicionar 0,1 UPC para testes; ambos usando
 paralelismo=4)">
 ]>
@@ -102,16 +102,15 @@ comandos:
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr       \
-            --buildtype=release \
-            -D apidocs=false    \
+meson setup --prefix=/usr            \
+            --buildtype=release      \
+            -D apidocs=false         \
+            -D bash-completion=false \
             -D stemming=false   .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>ninja test</command>. Um teste,
-<filename>/YAML/Write/Releases</filename>, é conhecido por falhar devido a
-pequenas diferenças da saída gerada com a libfyaml-0.9.x.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
@@ -138,6 +137,11 @@ instalada de qualquer maneira.
     </para>
 
     <para>
+      <parameter>-D bash-completion=false</parameter>: Essa chave desabilita
+suporte a bash-completion o qual não está no BLFS.
+    </para>
+
+    <para>
       <parameter>-D stemming=false</parameter>: Essa chave desabilita o suporte de
 lematização. Remova essa chave se você tiver <ulink
 url="https://github.com/zvelo/libstemmer">libstemmer</ulink> instalado e
@@ -151,9 +155,9 @@ aplicativos Qt6 nesse pacote.
     </para>
 
     <para>
-      <parameter>-D man=false</parameter>: Essa chave desabilita construir as
-páginas de manual. Adicione-a se você não tiver o <xref
-linkend="docbook-xsl" role="nodep"/> instalado.
+      <option>-D man=false</option>: Essa chave desabilita construir as páginas de
+manual. Adicione-a se você não tiver o <xref linkend="docbook-xsl"
+role="nodep"/> instalado.
     </para>
 
   </sect2>

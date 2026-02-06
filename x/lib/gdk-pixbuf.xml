@@ -7,9 +7,9 @@
   <!ENTITY gdk-pixbuf-download-http
       "&gnome-download-http;/gdk-pixbuf/&gdk-pixbuf-dir;/gdk-pixbuf-&gdk-pixbuf-version;.tar.xz">
   <!ENTITY gdk-pixbuf-download-ftp  "">
-  <!ENTITY gdk-pixbuf-md5sum        "2676fd771eeec4ecee3af4b366aa1412">
-  <!ENTITY gdk-pixbuf-size          "6,2 MB">
-  <!ENTITY gdk-pixbuf-buildsize     "35 MB (com testes)">
+  <!ENTITY gdk-pixbuf-md5sum        "1cde6bd5665107fa10d1deef32ec8c4c">
+  <!ENTITY gdk-pixbuf-size          "5,8 MB">
+  <!ENTITY gdk-pixbuf-buildsize     "69 MB (com testes)">
   <!ENTITY gdk-pixbuf-time          "0,2UPC (com testes)">
 ]>
 
@@ -111,7 +111,6 @@ cd    build &amp;&amp;
 meson setup ..                \
       --prefix=/usr           \
       --buildtype=release     \
-      -D others=enabled       \
       -D png=disabled         \
       -D gif=disabled         \
       -D jpeg=disabled        \
@@ -126,16 +125,12 @@ ninja</userinput></screen>
 documentação da API para esse pacote, emita:
     </para>
 
-<!-- TODO: it looks like the test suite isn't updated for glycin.  The
-         upstream CI still has glycin disabled.  Revisit when update to
-         2.46.  -->
 <screen role='nodump'><userinput>sed "/docs_dir =/s@\$@ / 'gdk-pixbuf-&gdk-pixbuf-version;'@" -i ../docs/meson.build &amp;&amp;
 meson configure -D gtk_doc=true                                        &amp;&amp;
 ninja</userinput></screen>
 
-    
     <para>
-      A suíte de teste desse pacote não fornece resultados significativos.
+      Para testar os resultados, emita: <command>ninja test</command>
     </para>
 
     <para>
@@ -167,14 +162,6 @@ o(a) usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
     <!-- gi-docgen can get installed without this, if deps exist -->
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-wrap-nofallback.xml"/>
-
-    
-    <!-- TODO: when https://gitlab.gnome.org/GNOME/glycin/-/issues/192 is
-         done we should remove it.  Revisit when update to 2.46.  -->
-<para>
-      <parameter>-D others=enabled</parameter>: Construir os carregadores para
-alguns formatos ainda não suportados pelo glycin, notadamente XBM e XPM.
-    </para>
 
     <para>
       <parameter>-D *=disabled</parameter>: Não construir os componentes obsoletos

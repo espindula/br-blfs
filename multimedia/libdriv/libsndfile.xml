@@ -98,9 +98,20 @@ e <xref linkend="speex"/>
 comandos:
     </para>
 
+<!-- https://github.com/libsndfile/libsndfile/issues/1107
+         FIXME: not really analyzed yet.  -->
 <screen><userinput>./configure --prefix=/usr    \
             --docdir=/usr/share/doc/libsndfile-&libsndfile-version; &amp;&amp;
 make</userinput></screen>
+
+    
+    <para>
+      Se executar a suíte de teste, desabilite os testes do Opus os quais
+falhariam com o lançamento recente do Opus e faria com que a suíte de teste
+saísse mais cedo:
+    </para>
+
+<screen><userinput>sed '/ogg_opus/,+1s/HAVE_[A-Z_]*/0/' -i tests/lossy_comp_test.c</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>make check</command>.

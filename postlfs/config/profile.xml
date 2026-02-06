@@ -198,8 +198,10 @@ de comandos sequenciados de inicialização são colocados:
 <screen role="root"><userinput>install --directory --mode=0755 --owner=root --group=root /etc/profile.d</userinput></screen>
 
     </sect3>
-
+    
+    <!--
     <sect3 id="etc-profile.d-bash-completion.sh">
+
       <title>/etc/profile.d/bash_completion.sh</title>
 
       <indexterm zone="postlfs-config-profile etc-profile.d-bash-completion.sh">
@@ -208,20 +210,18 @@ de comandos sequenciados de inicialização são colocados:
 
       <note>
         <para>
-          Usar o conjunto de comandos sequenciados de completação do bash abaixo é
-controverso. Nem todos(as) os(as) usuários(as) gostam dele. Ele adiciona
-muitas (usualmente mais que mil (1.000)) linhas ao ambiente do bash e torna
-difícil usar o comando 'set' para examinar variáveis simples de
-ambiente. Omitir-se este conjunto de comandos sequenciados não interfere na
-habilidade do bash de usar a tecla tab para a completação de nome de
-arquivo.
+          Using the bash completion script below is controversial. Not all
+          users like it.  It adds many (usually over 1000) lines to the bash
+          environment and makes it difficult to use the 'set' command to
+          examine simple environment variables.  Omitting this script does
+          not interfere with the ability of bash to use the tab key for file
+          name completion.
         </para>
       </note>
 
       <para>
-        Este conjunto de comandos sequenciados importa conjuntos de comandos
-sequenciados de completação do bash, instalados por muitos outros pacotes do
-BLFS, para permitir a completação de linha de comando TAB.
+        This script imports bash completion scripts, installed by many
+        other BLFS packages, to allow TAB command line completion.
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/profile.d/bash_completion.sh &lt;&lt; "EOF"
@@ -250,7 +250,7 @@ else
 
   # bash-completions are not installed, use only bash completion directory
   if shopt -q progcomp; then
-    for script in /etc/bash_completion.d/* ; do
+    for script in /usr/share/bash-completion/completions/* ; do
       if [ -r $script ] ; then
         . $script
       fi
@@ -262,48 +262,19 @@ fi
 EOF</userinput></screen>
 
       <para>
-        Tenha certeza de que o diretório existe:
+        Make sure that the directory exists:
       </para>
 
-<screen role="root"><userinput>install --directory --mode=0755 --owner=root --group=root /etc/bash_completion.d</userinput></screen>
+<screen role="root"><userinput>install -dm755 /etc/bash_completion.d</userinput></screen>
 
       <para>
-        Para uma instalação mais completa, veja-se <ulink
-url="&blfs-wiki;/bash-shell-startup-files#bash-completions"/>.
+        For a more complete installation, see
+        <ulink url="&blfs-wiki;/bash-shell-startup-files#bash-completions"/>.
       </para>
 
     </sect3>
-
-    <sect3 id="etc-profile.d-dircolors.sh">
-      <title>/etc/profile.d/dircolors.sh</title>
-
-      <indexterm zone="postlfs-config-profile etc-profile.d-dircolors.sh">
-        <primary sortas="e-etc-profile.d-dircolors.sh">/etc/profile.d/dircolors.sh</primary>
-      </indexterm>
-
-      <para>
-        Este conjunto de comandos sequenciados usa os arquivos
-<filename>~/.dircolors</filename> e <filename>/etc/dircolors</filename> para
-controlar as cores dos nomes de arquivos em uma listagem de diretório. Eles
-controlam a saída gerada colorida de coisas como <command>ls
---color</command>. A explicação do como inicializar esses arquivos está ao
-final desta seção.
-      </para>
-
-<screen role="root"><userinput>cat &gt; /etc/profile.d/dircolors.sh &lt;&lt; "EOF"
-<literal># Setup for /bin/ls and /bin/grep to support color, the alias is in /etc/bashrc.
-if [ -f "/etc/dircolors" ] ; then
-        eval $(dircolors -b /etc/dircolors)
-fi
-
-if [ -f "$HOME/.dircolors" ] ; then
-        eval $(dircolors -b $HOME/.dircolors)
-fi</literal>
-EOF</userinput></screen>
-
-    </sect3>
-
-    <sect3 id="extrapaths.sh">
+    -->
+<sect3 id="extrapaths.sh">
       <title>/etc/profile.d/extrapaths.sh</title>
 
       <indexterm zone="postlfs-config-profile extrapaths.sh">
@@ -521,8 +492,15 @@ arquivo deveriam explicar tudo o que você precisa.
 # should go into ~/.bash_profile.  Personal aliases and functions should
 # go into ~/.bashrc
 
-# Provides colored /bin/ls and /bin/grep commands.  Used in conjunction
-# with code in /etc/profile.
+# Provides colored /bin/ls and /bin/grep commands.
+
+if [ -f "/etc/dircolors" ] ; then
+        eval $(dircolors -b /etc/dircolors)
+fi
+
+if [ -f "$HOME/.dircolors" ] ; then
+        eval $(dircolors -b $HOME/.dircolors)
+fi
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
@@ -551,6 +529,17 @@ $(tty &amp;>/dev/null) &amp;&amp; export GPG_TTY=$(tty)
 
 # End /etc/bashrc</literal>
 EOF</userinput></screen>
+
+    <para>
+      O conjunto de comandos sequenciados acima usa os arquivos
+<filename>~/.dircolors</filename> e <filename>/etc/dircolors</filename> para
+controlar as cores dos nomes de arquivos em uma listagem de diretório. Eles
+controlam a saída gerada colorida de coisas como <command>ls
+--color</command>. A explicação do como inicializar esses arquivos está ao
+final desta seção. A configuração também depende do terminal sendo usado, de
+modo que precisa ser configurado para cada shell interativo, em vez de
+somente para o shell de login.
+    </para>
 
     <para>
       Para mais informação acerca das sequências de escape que você pode usar para
