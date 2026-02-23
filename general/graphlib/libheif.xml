@@ -32,7 +32,7 @@
 de formatos de arquivo HEIF e AVIF.
     </para>
 
-    &lfs124_checked;
+    &lfs130_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -59,6 +59,16 @@ de formatos de arquivo HEIF e AVIF.
       <listitem>
         <para>
           Tempo de construção estimado: &libheif-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/libheif-&libheif-version;-svt_av1_build_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -100,6 +110,13 @@ url="https://github.com/xiph/rav1e">rav1e</ulink>
     <title>Instalação do libheif</title>
 
     <para>
+      Primeiro, corrija construir libheif se você for habilitar o codificador
+SVT-AV1:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../libheif-&libheif-version;-svt_av1_build_fix-1.patch</userinput></screen>
+
+    <para>
       Instale <application>libheif</application> executando os seguintes comandos:
     </para>
 
@@ -109,6 +126,7 @@ cd    build &amp;&amp;
 cmake -D CMAKE_INSTALL_PREFIX=/usr \
       -D CMAKE_BUILD_TYPE=Release  \
       -D WITH_GDK_PIXBUF=OFF       \
+      -D WITH_OpenH264_DECODER=OFF \
       -G Ninja ..                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -139,30 +157,30 @@ de via carregador.
          in BLFS and it's not enabled by default even if the dependency is
          installed.  -->
 <para>
-      <option>-D WITH_DAV1D=ON</option>: This option allows using <xref
-linkend='dav1d'/> to decode AV1 data in AVIF files.
+      <option>-D WITH_DAV1D=ON</option>: Essa opção permite usar <xref
+linkend='dav1d'/> para decodificar dados AV1 em arquivos AVIF.
     </para>
 
     <para>
-      <option>-D WITH_FFMPEG_DECODER=ON</option>: This option allows using <xref
-linkend='ffmpeg'/> to decode H.265 data in HEIC files.
+      <option>-D WITH_FFMPEG_DECODER=ON</option>: Essa opção permite usar o <xref
+linkend='ffmpeg'/> para decodificar dados H.265 em arquivos HEIC.
     </para>
 
     <para>
-      <option>-D WITH_JPEG_ENCODER=ON -D WITH_JPEG_DECODER=ON</option>: These
-options allow using <xref linkend='libjpeg'/> to encode and decode HEIF
-files with JPEG data.
+      <option>-D WITH_JPEG_ENCODER=ON -D WITH_JPEG_DECODER=ON</option>: Essas
+opções permitem usar a <xref linkend='libjpeg'/> para codificar e
+decodificar arquivos HEIF com dados JPEG.
     </para>
 
     <para>
       <option>-D WITH_OpenJPEG_ENCODER=ON -D WITH_OpenJPEG_DECODER=ON</option>:
-These options allow using <xref linkend='openjpeg2'/> to encode and decode
-HEIF files with JPEG 2000 data.
+Essas opções permitem usar o <xref linkend='openjpeg2'/> para codificar e
+decodificar arquivos HEIF com dados JPEG 2000.
     </para>
 
     <para>
-      <option>-D WITH_SvtEnc=ON</option>: This option allows using <xref
-linkend='svt-av1'/> to encode AV1 data for AVIF files.
+      <option>-D WITH_SvtEnc=ON</option>: Essa opção permite usar <xref
+linkend='svt-av1'/> para codificar dados AV1 para arquivos AVIF.
     </para>
   </sect2>
 

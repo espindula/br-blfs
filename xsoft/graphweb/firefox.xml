@@ -14,7 +14,7 @@
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "15 UPC usando -j8, sem testes">
+  <!ENTITY firefox-time          "13 UPC usando-se -j8, sem testes">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -37,7 +37,7 @@
 de código <application>Mozilla</application>.
     </para>
 
-    &lfs124_checked;
+    &lfs130_checked;
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
         href="../../xincludes/security-updates.xml"/>
@@ -82,6 +82,12 @@ de código <application>Mozilla</application>.
         <para>
           Remendo exigido: <ulink
 url="&patch-root;/firefox-&firefox-version;esr-ffmpeg-8.0.patch"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/firefox-&firefox-version;esr-glibc-2.43.patch"/>
         </para>
       </listitem>
       <listitem>
@@ -185,7 +191,20 @@ linkend="ffmpeg"/>:
 <screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-ffmpeg-8.0.patch</userinput></screen>
 
     <para>
-      Em seguida, corrija construir esse pacote com Python 3.14:
+      Corrija construir esse pacote com glibc-2.43 e adapte as somas de
+verificação:
+    </para>
+
+<screen><userinput
+  remap="pre">GLSL_PTHREAD="third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h"
+OLDSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
+patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
+NEWSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
+sed "s/$OLDSHA/$NEWSHA/" \
+  -i third_party/rust/glslopt/.cargo-checksum.json</userinput></screen>
+
+    <para>
+      Em seguida, corrija construir esse pacote com Python-3.14:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>

@@ -7,9 +7,9 @@
   <!--  <!ENTITY systemd-download-http "https://anduin.linuxfromscratch.org/LFS/systemd-&systemd-version;-&systemd-stable;.tar.xz"> For whenever we move to a stable snapshot for backports -->
   <!ENTITY systemd-download-http "https://github.com/systemd/systemd/archive/v&systemd-version;/systemd-&systemd-version;.tar.gz">
   <!ENTITY systemd-download-ftp  "">
-  <!ENTITY systemd-md5sum        "5c5e5c1c43d4ee5e5648e7ab118ac476">
+  <!ENTITY systemd-md5sum        "623f73826e7702ac08c57febb9d20431">
   <!ENTITY systemd-size          "16 MB">
-  <!ENTITY systemd-buildsize     "407 MB (com testes)">
+  <!ENTITY systemd-buildsize     "424 MB (com testes)">
   <!ENTITY systemd-time          "1,7 UPC (com testes usando quatro núcleos)">
 
 ]>
@@ -39,7 +39,7 @@ serviço <command>systemd-logind</command> funcional, o qual fornece muitos
 recursos adicionais para pacotes dependentes.
     </para>
 
-    &lfs124_checked;
+    &lfs130_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -386,6 +386,11 @@ done
 
 # Some shell magic that we don't want to expose.
 unset SHLVL
+
+# Systemd does not want to pass functions to the environment
+for i in $(declare -pF | awk '{print $3}'); do
+  unset -f $i
+done
 
 python3 &lt;&lt; _EOF
 import os

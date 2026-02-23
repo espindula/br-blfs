@@ -31,7 +31,7 @@ analisar HTML. Ele foi projetado para conformar-se com a especificação HTML
 WHATWG.
       </para>
 
-      &lfs124_checked;
+      &lfs130_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -95,6 +95,17 @@ remoção de vários métodos originários do módulo 'ast':
       </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../html5lib-&html5lib-version;-python_3.14_buildfix-1.patch</userinput></screen>
+
+      <para>
+        
+        <!-- Loosely based on upstream PR#592, primarily excluding additional
+             guards that we don't need because we're only supporting
+             setuptools-82 and later. -->
+A seguir, corrija uma falha de construção com setuptools-82.0.0:
+      </para>
+
+<screen><userinput remap="pre">sed -i 's/from pkg_resources import/from packaging.version import parse as/' setup.py &amp;&amp;
+sed -i 's/import pkg_resources/pkg_resources = None/' setup.py</userinput></screen>
 
       <para>
         Para construir o módulo do <application>Python 3</application>, execute:

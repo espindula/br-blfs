@@ -29,7 +29,7 @@ extensão &quot;<application>Sphinx</application>&quot; que renderiza
 matemática de exibição em &quot;HTML&quot; via &quot;JavaScript&quot;.
       </para>
 
-      &lfs124_checked;
+      &lfs130_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -65,6 +65,16 @@ matemática de exibição em &quot;HTML&quot; via &quot;JavaScript&quot;.
         </listitem>
       </itemizedlist>
 
+      <bridgehead renderas="sect4">Transferências Adicionais</bridgehead>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Remendo exigido: <ulink
+url="&patch-root;/sphinxcontrib-jsmath-&sc-jsmath-version;-sphinx9_fixes-1.patch"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+
       <bridgehead renderas="sect4">Dependências do Sphinxcontrib-jsmath</bridgehead>
 
       <bridgehead renderas="sect5">Opcionais (para testagem)</bridgehead>
@@ -76,6 +86,14 @@ matemática de exibição em &quot;HTML&quot; via &quot;JavaScript&quot;.
 
     <sect3 role="installation">
       <title>Instalação do Sphinxcontrib-jsmath</title>
+
+    <para>
+      
+      <!-- PR #53 upstream with additional modifications for tests -->
+Primeiro, corrija várias incompatibilidades com Sphinx-9.1 e pytest-9.0.2:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../sphinxcontrib-jsmath-&sc-jsmath-version;-sphinx9_fixes-1.patch</userinput></screen>
 
     <para> Construa o módulo: </para>
 
@@ -89,20 +107,23 @@ class="username">root</systemitem>&quot;:
 <screen role="root"><userinput>&install-wheel; sphinxcontrib-jsmath</userinput></screen>
 
     <para>
-      A instalação pode ser testada com os seguintes comandos:
+      A instalação pode ser testada com o seguinte comando:
     </para>
 
-<screen remap="test"><userinput>sed -i 's/text()/read_&amp;/' tests/test_jsmath.py &amp;&amp;
-pytest</userinput></screen>
-
+<!-- Not needed with the sphinx9 compatibility fixes patch.
     <para>
-      o comando <command>sed ...</command> é necessário por causa de uma mudança
-na API do <application>Sphinx</application> para versões maiores que 5.0. No
-entanto, mesmo com a correção, um teste na suíte
-<filename>tests/test_jsmath.py</filename> é conhecido por falhar:
-<filename>test_disabled_when_equations_not_found</filename>. Um aviso acerca
-de mudanças futuras no docutils também será impresso.
+
+      the <command>sed ...</command> command is needed because of a change
+      in <application>Sphinx</application> API for versions greater than
+      5.0. Even with the fix though, one test in the
+      <filename>tests/test_jsmath.py</filename> suite is known to fail:
+      <filename>test_disabled_when_equations_not_found</filename>. One
+      warning about upcoming changes in docutils is also printed.
     </para>
+-->
+<screen remap="test"><userinput>pytest</userinput></screen>
+
+
 
     </sect3>
 

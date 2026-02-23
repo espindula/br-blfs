@@ -147,8 +147,8 @@ firmware antes que esses dispositivos possam ser usados.
       Apesar de não necessárias para carregar um blob de firmware, as seguintes
 ferramentas possivelmente sejam úteis para determinar, obter ou preparar o
 firmware necessário para a finalidade de carregá-lo no sistema: <xref
-linkend="cpio"/>; <xref linkend="git"/>; <xref linkend="pciutils"/>; e <xref
-linkend="wget"/>
+linkend="cpio"/> (ou <xref linkend='libarchive'/>), <xref linkend="git"/>,
+<xref linkend="pciutils"/> e <xref linkend="wget"/>
     </para>
   </note>
 
@@ -344,9 +344,10 @@ para <xref linkend='early-microcode'/>.
 
       <para>
         Se você tiver estabelecido que o microcódigo atualizado está disponível para
-o seu sistema, [então] é hora de prepará-lo para o carregamento
-antecipado. Isso exige um pacote adicional, o <xref linkend='cpio'/> e a
-criação de um initrd que precisará ser adicionado ao grub.cfg.
+o seu sistema, é hora de prepará-lo para o carregamento antecipado. Isso
+exige um pacote adicional, o <xref linkend='cpio'/> (ou <xref
+linkend='libarchive'/>) e a criação de um initrd que precisará ser
+adicionado ao grub.cfg.
       </para>
 
       <para>
@@ -398,10 +399,12 @@ pelo nome do contêiner para a família da sua CPU):
 
 
       <para>
-        Agora, prepare o initrd:
+        Agora prepare o initrd (você também pode usar <command>bsdcpio</command>
+originário do <xref linkend='libarchive'/> em vez do
+<command>cpio</command>):
       </para>
 
-<screen><userinput>find . | cpio -o -H newc &gt; /boot/microcode.img</userinput></screen>
+<screen><userinput>find * | cpio -o -H newc &gt; /boot/microcode.img</userinput></screen>
 
       <para>
         Agora você precisa adicionar uma entrada nova a /boot/grub/grub.cfg e aqui

@@ -38,7 +38,7 @@ navegação e mensagens eletrônicas. Esses aplicativos são <xref
 linkend="firefox"/> e <xref linkend="thunderbird"/>.
     </para>
 
-    &lfs124_checked;
+    &lfs130_checked;
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
         href="../../xincludes/security-updates.xml"/>
@@ -80,6 +80,12 @@ linkend="firefox"/> e <xref linkend="thunderbird"/>.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/seamonkey-&seamonkey-version;-libvpx_security_fixes-1.patch"/>
+        </para>
+      </listitem>
       <listitem>
         <para>
           Remendo recomendado (exigido para construir com ICU-75 do sistema ou mais
@@ -240,8 +246,9 @@ EOF</userinput></screen>
       Primeiro, se você estiver construindo com o ICU do sistema, adapte o
 mapeamento de quebra de linha para o ICU-74 ou posterior, aplique um remendo
 para construir esse pacote com o C++17 padrão porque os cabeçalhos do ICU-75
-ou posterior exigem alguns recursos do C++17 e adapte o sistema de
-construção para usar a biblioteca correta com o ICU-76 ou posterior:
+ou posterior exigem alguns recursos do C++17, corrija um problema de
+segurança na versão empacotada da libvpx e adapte o sistema de construção
+para usar a biblioteca correta com ICU-76 ou posterior:
     </para>
 
 
@@ -255,7 +262,8 @@ construção para usar a biblioteca correta com o ICU-76 ou posterior:
    sed '/ZWJ/s/$/,CLASS_CHARACTER/' -i intl/lwbrk/LineBreaker.cpp || exit $?
 done) &amp;&amp;
 
-patch -Np1 -i ../seamonkey-&seamonkey-version;-cxx17-1.patch &amp;&amp;
+patch -Np1 -i ../seamonkey-&seamonkey-version;-cxx17-1.patch                 &amp;&amp;
+patch -Np1 -i ../seamonkey-&seamonkey-version;-libvpx_security_fixes-1.patch &amp;&amp;
 
 sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
 

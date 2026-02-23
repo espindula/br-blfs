@@ -37,7 +37,7 @@ xreflabel="docbook-xsl-ns-&docbook-xsl-version;">
 realizar transformações sobre arquivos XML DocBook 5.0.
     </para>
 
-    &lfs124_checked;
+    &lfs130_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -171,60 +171,20 @@ usadas porque o fluxo de desenvolvimento tem ambas colocadas na documentação
 deles(as)):
       </para>
 
-<screen role="root"><userinput>if [ ! -d /etc/xml ]; then install -v -m755 -d /etc/xml; fi &amp;&amp;
-if [ ! -f /etc/xml/catalog ]; then
-    xmlcatalog --noout --create /etc/xml/catalog
-fi &amp;&amp;
+<screen role="root"><userinput>(set -e
 
-xmlcatalog --noout --add "rewriteSystem" &docbook-xsl-spacing;            \
-           "http://cdn.docbook.org/release/xsl/&docbook-xsl-version;"     \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
+ install -v -d -m755 /etc/xml
+ [ -e /etc/xml/catalog ] || xmlcatalog --noout --create /etc/xml/catalog
 
-xmlcatalog --noout --add "rewriteSystem" &docbook-xsl-spacing;            \
-           "https://cdn.docbook.org/release/xsl/&docbook-xsl-version;"    \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteURI" &docbook-xsl-spacing;               \
-           "http://cdn.docbook.org/release/xsl/&docbook-xsl-version;"     \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteURI" &docbook-xsl-spacing;               \
-           "https://cdn.docbook.org/release/xsl/&docbook-xsl-version;"    \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteSystem"                   \
-           "http://cdn.docbook.org/release/xsl/current"    \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteSystem"                   \
-           "https://cdn.docbook.org/release/xsl/current"   \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteURI"                      \
-           "http://cdn.docbook.org/release/xsl/current"    \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteURI"                      \
-           "https://cdn.docbook.org/release/xsl/current"   \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;" \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteSystem"                           \
-           "http://docbook.sourceforge.net/release/xsl-ns/current" \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;"         \
-           /etc/xml/catalog &amp;&amp;
-
-xmlcatalog --noout --add "rewriteURI"                              \
-           "http://docbook.sourceforge.net/release/xsl-ns/current" \
-           "/usr/share/xml/docbook/xsl-stylesheets-&docbook-xsl-version;"         \
-           /etc/xml/catalog</userinput></screen>
+ for uri in http{,s}://cdn.docbook.org/release/xsl/{1.79.2,current} \
+            http://docbook.sourceforge.net/release/xsl-ns/current; do
+   for rewrite in System URI; do
+     xmlcatalog --noout --add "rewrite$rewrite"        \
+       "$uri"                                          \
+       "/usr/share/xml/docbook/xsl-stylesheets-1.79.2" \
+       /etc/xml/catalog
+   done
+ done)</userinput></screen>
 
     </sect3>
 

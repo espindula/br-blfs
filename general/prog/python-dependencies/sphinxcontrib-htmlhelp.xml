@@ -29,7 +29,7 @@ extensão &quot;<application>Sphinx</application>&quot; que renderiza
 arquivos de ajuda &quot;HTML&quot;.
       </para>
 
-      &lfs124_checked;
+      &lfs130_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -91,15 +91,20 @@ class="username">root</systemitem>&quot;:
 
     <para>
       Se as dependências opcionais estiverem instaladas, o pacote pode ser testado
-com:
+com os seguintes comandos. O primeiro comando corrige um problema com a API
+removida no Sphinx.
     </para>
 
-<screen remap="test"><userinput>pytest</userinput></screen>
+    
+<screen remap="test"><!-- https://github.com/sphinx-doc/sphinxcontrib-htmlhelp/pull/44 -->
+<userinput>sed -i 's/keyword/pair: keyword;/' tests/roots/test-chm/index.rst &amp;&amp;
+pytest</userinput></screen>
 
     <para>
-      A suíte de teste imprimirá um aviso acerca das próximas mudanças no
-docutils.
+      Os testes produzirão um aviso de descontinuação acerca das próximas mudanças
+no sphinx-11.x.
     </para>
+
     </sect3>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
