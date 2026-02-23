@@ -6,13 +6,13 @@
                                       set to IGNORE for development or rc -->
 <!ENTITY % relyear    "2023">
 <!ENTITY % relnum     "11.3">
-
+<!ENTITY % reldate    "March 1st, 2023">
 <!ENTITY % relpubdate "2023-03-01">
 <!-- ================================================================== -->
 <!-- Do not change anything below unless the www or book layouts change -->
 
-<!-- Automaticamente gerado pelo git-version.sh. Usado para release ou
-dev --> <!ENTITY % conditional-entities SYSTEM "conditional.ent">
+<!-- Automaticamente gerado pelo git-version.sh. Usado para release ou dev
+--> <!ENTITY % conditional-entities SYSTEM "conditional.ent">
 %conditional-entities;
 
 <![ %development; [
@@ -85,10 +85,11 @@ dev --> <!ENTITY % conditional-entities SYSTEM "conditional.ent">
 <!ENTITY lfs-root             "../../../../lfs/view/&lfs-version;">
 <!ENTITY lfs-dev              "../../../../lfs/view/development">
 <!ENTITY lfs-ticket-root      "https://wiki.&lfs-domainname;/lfs/ticket/">
-<!ENTITY gnu-http             "https://ftp.gnu.org/gnu">
-<!ENTITY gnu-ftp              "ftp://ftp.gnu.org/gnu">
+<!ENTITY gnu-http             "https://ftpmirror.gnu.org">
+<!--<!ENTITY gnu-http             "https://ftp.gnu.org/gnu">-->
+<!--<!ENTITY gnu-ftp              "ftp://ftp.gnu.org/gnu">-->
 <!ENTITY gnupg-http           "https://www.gnupg.org/ftp/gcrypt">
-<!ENTITY gnupg-ftp            "ftp://ftp.gnupg.org/gcrypt">
+<!--<!ENTITY gnupg-ftp            "ftp://ftp.gnupg.org/gcrypt">-->
 <!ENTITY gstreamer-dl         "https://gstreamer.freedesktop.org/src">
 <!ENTITY kernel-dl            "https://www.kernel.org/pub">
 <!ENTITY mozilla-http         "https://archive.mozilla.org/pub">
@@ -124,7 +125,7 @@ url='https://download.gnome.org/sources/gtk+/2.24/'>GTK+-2</ulink>">
 
 <!-- Fim versões do LFS -->
 
-<!ENTITY blfs-bootscripts-version     "20250225">
+<!ENTITY blfs-bootscripts-version     "20251220">
 <!ENTITY systemd-units-version        "20251204">
 
 <!ENTITY blfs-wiki                    "https://wiki.&lfs-domainname;/blfs/wiki">
@@ -134,23 +135,71 @@ url='https://download.gnome.org/sources/gtk+/2.24/'>GTK+-2</ulink>">
      construirá/funcionará -->
 
 
-<!ENTITY lfs124_checked "<note><para>Versões de desenvolvimento do BLFS possivelmente não construam ou executem alguns pacotes corretamente se o LFS ou as dependências tiverem sido atualizados desde as versões estáveis mais recentes dos livros.</para></note>">
+<!ENTITY lfs124_checked  "<note><para>Versões de desenvolvimento do BLFS
+                          possivelmente não construam ou executem alguns
+                          pacotes adequadamente se o LFS, ou dependências,
+                          tiver sido atualizado desde as versões estáveis
+                          mais recentes dos livros.</para></note>">
 
-<!-- <!ENTITY lfs124_checked  "<para>Esse pacote é conhecido por construir
-                              e funcionar adequadamente usando-se uma
-                              plataforma LFS 12.4.</para>">-->
-
+<!ENTITY lfs130_checked  "<note><para>
+                         <phrase revision='systemd'> Esse pacote é conhecido por construir 
+                         e funcionar adequadamente usando-se uma plataforma LFS 13.0.</phrase>
+                         <phrase revision='sysv'>Esta versão do BLFS possivelmente não construa 
+                         ou execute alguns pacotes adequadamente se o LFS, ou as dependências 
+                         dele, tiver sido atualizado desde a versão estável mais recente dos 
+                         livros System V.</phrase>
+                         </para></note>">
 
 <!-- Fim das entidades especiais acerca de compatibilidade do LFS -->
 
+<!ENTITY as_root "<note><para>Quando se instalar múltiplos pacotes em
+                 um conjunto de comandos sequênciais, a instalação
+                 precisa ser feita como o(a) usuário(a) root. Existem
+                 três opções gerais que podem ser usadas para se fazer
+                 isso:</para>
 
+  <orderedlist>
 
-<!ENTITY not-katamari "<para>Este pacote não faz parte do Xorg Katamari e é fornecido apenas como uma dependência de outros pacotes ou para testar a instalação completa do Xorg.</para>">
+  <listitem><para>Executar o conjunto inteiro de comandos sequênciais
+  como o(a) usuário(a) root (não recomendado).</para></listitem>
+
+  <listitem><para>Usar-se o comando <command>sudo</command> originário
+  do pacote <xref linkend='sudo'/>.</para></listitem>
+
+  <listitem><para>Usar-se <command>su -c &quot;argumentos do
+  comando&quot;</command> (aspas exigidas), que solicitará a senha
+  do(a) root para cada interação do ciclo.</para></listitem>
+
+  </orderedlist>
+
+  <para>Uma maneira para se lidar com essa situação é a de se criar
+  uma função curta do <command>bash</command> que automaticamente
+  selecione o método apropriado. Uma vez que o comando esteja
+  configurado no ambiente, não se precisa configurá-lo
+  novamente.</para>
+
+  <screen><userinput>as_root()
+{
+  if   [ $EUID = 0 ];        then $*
+  elif [ -x /usr/bin/sudo ]; then sudo $*
+  else                            su -c \\&quot;$*\\&quot;
+  fi
+}
+
+export -f as_root</userinput></screen> </note>">
+
+<!ENTITY not-katamari         "<para>Esse pacote é fornecido para
+                              testagem da instalação completa do
+                              Xorg.</para>">
 
 <!ENTITY % package-entities SYSTEM      "packages.ent">
 %package-entities;
 
-<!ENTITY parallel_issues "<note><para>Às vezes, esse pacote pode falhar quando construído com vários processadores. Consulte <xref linkend='parallel-builds'/> para obter mais informações.</para></note>">
+<!ENTITY parallel_issues "<note><para>Esse pacote possível e
+                         ocasionalmente falhe ao construir com
+                         múltiplos processadores. Veja-se
+                         <xref linkend='parallel-builds'/> para
+                         mais informações.</para></note>">
 
 <!ENTITY shell-env "<note><para>Se instalar no ambiente chroot,
                    assegure-se de exportar a variável de ambiente
@@ -184,9 +233,9 @@ url='https://download.gnome.org/sources/gtk+/2.24/'>GTK+-2</ulink>">
          "<phrase revision='sysv'><xref linkend='elogind'/></phrase>
           <phrase revision='systemd'><xref linkend='systemd'/></phrase>">
 
-<!ENTITY build-wheel-cmd "pip3 wheel -w dist --no-build-isolation
---no-deps --no-cache-dir"> <!ENTITY build-wheel
-"<screen><userinput>&build-wheel-cmd; $PWD</userinput></screen>">
+<!ENTITY build-wheel-cmd "pip3 wheel -w dist --no-build-isolation --no-deps
+--no-cache-dir"> <!ENTITY build-wheel "<screen><userinput>&build-wheel-cmd;
+$PWD</userinput></screen>">
 
 <!ENTITY install-wheel "pip3 install --no-index --find-links dist
 --no-user">
@@ -199,49 +248,12 @@ DB</ulink> (obsoleto)">
 Introspection)">
 
 <!ENTITY github-lfs-fork "<note><para>No GitHub, nós bifurcamos o
-repositório do fluxo de desenvolvimento em nosso próprio espaço de nomes
-do <literal>lfs-book</literal> e recriamos uma etiqueta para o
-lançamento. Isso foi feito para garantir que o nome do arquivo do
-tarball baixado esteja correto e consistente (ou seja, ele não deveria
-mudar ao se usar o navegador em vez de uma ferramenta como
-<command>wget</command>). Nossa etiqueta e a etiqueta de lançamento do
-fluxo de desenvolvimento estão na mesma submissão, de forma que não
-introduzimos nenhuma mudança no conteúdo do tarball, exceto o nome do
-diretório dele de nível superior (que o Git não
+repositório do fluxo de desenvolvimento em nosso próprio espaço de nomes do
+<literal>lfs-book</literal> e recriamos uma etiqueta para o lançamento. Isso
+foi feito para garantir que o nome do arquivo do tarball baixado esteja
+correto e consistente (ou seja, ele não deveria mudar ao se usar o navegador
+em vez de uma ferramenta como <command>wget</command>). Nossa etiqueta e a
+etiqueta de lançamento do fluxo de desenvolvimento estão na mesma submissão,
+de forma que não introduzimos nenhuma mudança no conteúdo do tarball, exceto
+o nome do diretório dele de nível superior (que o Git não
 rastreia).</para></note>">
-
-
-<!ENTITY as_root "<note><para>Quando instalar múltiplos pacotes em um
-conjunto de comandos sequenciais, a instalação precisa ser feita como
-o(a) usuário(a) root. Existem três opções gerais que podem ser usadas
-para se fazer isso:</para>
-
-  <orderedlist>
-
-  <listitem><para>Executar o conjunto inteiro de comandos sequenciais
-  como o(a) usuário(a) root (não recomendado).</para></listitem>
-
-  <listitem><para>Usar o comando <command>sudo</command> oriundo do
-  pacote <xref linkend='sudo'/>.</para></listitem>
-
-  <listitem><para>Usar <command>su -c &quot;argumentos do 
-  comando&quot;</command> (aspas exigidas), que solicitará a senha do(a) 
-  root para cada interação do loop.</para></listitem>
-
-  </orderedlist>
-
-  <para>Uma maneira de se lidar com essa situação é a de se criar uma
-  função curta do <command>bash</command> que selecione automaticamente
-  o método apropriado. Uma vez que o comando esteja configurado no
-  ambiente, ele não precisa ser configurado novamente.</para>
-
-  <screen><userinput>as_root()
-{
-  if   [ $EUID = 0 ];        then $*
-  elif [ -x /usr/bin/sudo ]; then sudo $*
-  else                            su -c \\&quot;$*\\&quot;
-  fi
-}
-
-export -f as_root</userinput></screen>
-</note>">
