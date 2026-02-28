@@ -121,6 +121,7 @@ recompile o núcleo, se necessário:
 
 
 
+    
     <!--
     <para>
 
@@ -136,7 +137,15 @@ recompile o núcleo, se necessário:
 #define PREFER_STDARG 1' \
     -i src/shared/shell.c</userinput></screen>
 -->
+<!-- https://github.com/bluez/bluez/issues/1905 -->
 <para>
+      Primeiro, corrija uma regressão que impede o BlueZ de inicializar
+adaptadores no lançamento mais recente:
+    </para>
+
+<screen><userinput remap="pre">sed -i '4967,4968d' src/adapter.c</userinput></screen>
+
+    <para>
       Instale <application>BlueZ</application> executando os seguintes comandos:
     </para>
 
@@ -161,14 +170,23 @@ make</userinput></screen>
       Agora, como o(a) usuário(a) &root;:
     </para>
 
+<!-- 555 is needed here to silence a warning from the systemd unit. A better
+    approach may be to change ConfigureDirectoryMode in the unit to go with 755,
+    but for now I'm just trying to align with upstream's configuration. It does
+    not make much sense as to why we need this though, but we don't want any
+    confusion related to the warning...
+    https://github.com/bluez/bluez/issues/414 and
+    https://github.com/bluez/bluez/issues/329#issuecomment-1102459104 -->
 <screen role="root"><userinput>make install &amp;&amp;
 ln -svf ../libexec/bluetooth/bluetoothd /usr/sbin</userinput></screen>
+
+    
 
     <para>
       Instale o principal arquivo de configuração como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>install -v -dm755 /etc/bluetooth &amp;&amp;
+<screen role="root"><userinput>install -v -dm555 /etc/bluetooth &amp;&amp;
 install -v -m644 src/main.conf /etc/bluetooth/main.conf</userinput></screen>
 
     <para>

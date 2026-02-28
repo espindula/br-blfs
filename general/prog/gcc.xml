@@ -37,10 +37,10 @@ atualizar C e C++ quanto para instalar compiladores adicionais.
 
     <note>
       <para>
-        Linguagens adicionais, entre elas COBOL, D e Ada, estão disponíveis na
+        Linguagens adicionais, incluindo COBOL, D e Ada, estão disponíveis na
 coleção. COBOL atualmente é suportada somente em sistemas x86-64. D e Ada
-tem uma exigência de instruções de autoaprimoramento de binário para a
-primeira instalação, de forma que a instalação delas não está descrita
+têm uma exigência de instruções de autoaprimoramento de binário para a
+primeira instalação, de modo que a instalação delas não está descrita
 aqui. Para instalar D ou Ada, você pode prosseguir ao longo das mesmas
 linhas conforme abaixo depois de instalar o compilador correspondente a
 partir de um pacote binário. Finalmente, adicione <option>ada</option> ou
@@ -131,11 +131,11 @@ graphite)
 
     <important>
       <para>
-        Mesmo se você especificar somente linguagens diferentes de "C" e "C++" para
-o comando <command>./configure</command> abaixo, o processo de instalação
-substituirá seus compiladores e bibliotecas "C" e "C++" do
+        Mesmo se você especificar somente linguagens diferentes de C e C++ para o
+comando <command>./configure</command> abaixo, o processo de instalação
+sobrescreverá teus compiladores e bibliotecas C e C++ do
 <application>GCC</application> existentes. Executar a suíte completa de
-teste é recomendado.
+teste é recomendado por causa disso.
       </para>
 
       <para>
@@ -151,11 +151,11 @@ url="&lfs-root;/chapter08/gcc.html"/>).
 
     <para>
       As instruções abaixo estão intencionalmente realizando um processo de
-<quote>bootstrap</quote>. As instruções iniciais de carregamento são
-necessárias para robustez e são altamente recomendadas ao atualizar a versão
-dos compiladores. Para desabilitar as instruções iniciais de carregamento de
-qualquer maneira, adicione <parameter>--disable-bootstrap</parameter> às
-opções <command>./configure</command> abaixo.
+<quote>autoaprimoramento</quote>. Autoaprimorar-se é necessário para
+robustez e é altamente recomendado ao atualizar a versão de
+compiladores. Para desabilitar o autoaprimoramento de qualquer maneira,
+adicione <parameter>--disable-bootstrap</parameter> às opções do
+<command>./configure</command> abaixo.
     </para>
 
     <para>
@@ -228,6 +228,15 @@ encontrar nos registros, especialmente se você usar tarefas paralelas com
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
+<!-- This hasn't been relevant since 12.4, so let's comment this out for now.
+    <important>
+
+      <para>
+        Now you should upgrade readline to 8.3-rc1 or newer following the
+        LFS book, or packages using readline may fail to build.
+      </para>
+    </important>
+-->
 <screen role="root"><userinput>make install &amp;&amp;
 
 mkdir -pv /usr/share/gdb/auto-load/usr/lib              &amp;&amp;
@@ -239,13 +248,7 @@ chown -v -R root:root \
 ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/&gcc-version;/liblto_plugin.so \
         /usr/lib/bfd-plugins/</userinput></screen>
 
-    <important>
-      <para>
-        Agora você deveria atualizar readline para 8.3-rc1 ou mais recente seguindo
-o livro LFS, ou os pacotes que usam readline possivelmente falhem para
-construir.
-      </para>
-    </important>
+
 
   </sect2>
 
@@ -264,16 +267,16 @@ arquivos sejam criados para a arquitetura específica do seu computador.
     </para>
 
     <para>
-      <parameter>--with-system-zlib</parameter>: Usa a
-<application>zlib</application> do sistema em vez daquela empacotada. A
+      <parameter>--with-system-zlib</parameter>: Usa a versão do sistema da
+<application>zlib</application> em vez da cópia empacotada. A
 <application>zlib</application> é usada para comprimir e descomprimir a
 linguagem intermediária do <application>GCC</application> em arquivos de
-objeto "Link Time Optimization" ("LTO").
+objeto Link Time Optimization (LTO).
     </para>
 
     <para>
       <parameter>--enable-default-pie</parameter>: Torna a opção
-<option>-fpie</option> o padrão ao compilar aplicativos. Juntamente com o
+<option>-fpie</option> o padrão ao compilar programas. Juntamente com o
 recurso <xref linkend="gASLR"/> habilitado no núcleo, isso derrota alguns
 tipos de ataques baseados em esquemas conhecidos de memória.
     </para>
@@ -281,8 +284,8 @@ tipos de ataques baseados em esquemas conhecidos de memória.
     <para>
       <parameter>--enable-default-ssp</parameter>: Torna a opção
 <option>-fstack-protector-strong</option> o padrão ao compilar
-aplicativos. <xref linkend="gSSP"/> é uma técnica que evita a alteração do
-fluxo do programa por corrompimento da pilha de parâmetros.
+programas. <xref linkend="gSSP"/> é uma técnica que evita ataques que
+alteram o fluxo de um programa por corrompimento da pilha de parâmetros.
     </para>
 
     <para>
@@ -297,7 +300,9 @@ como parte de uma tendência mais ampla de fortalecer os binários.
 Esse comando identifica quais linguagens construir. Você pode modificar esse
 comando para remover linguagens indesejadas. A GCC também suporta Ada e D,
 mas construir a GCC com suporte a Ada (ou D) precisa de um compilador Ada
-(ou D) existente. Portanto, eles não estão habilitados aqui.
+(ou D) existente. Portanto, elas não estão habilitadas aqui. Você também
+consegue habilitar suporte a COBOL adicionando cobol ao comando, mas observe
+que ela só funciona adequadamente em sistemas x86_64.
     </para>
 
 
@@ -343,18 +348,18 @@ usuário(a) e grupo <systemitem class="username">root</systemitem>.
       <!-- from Arch, not tested -->
 <option>--enable-host-shared --enable-languages=jit</option>: Construir
 <systemitem class="library">libgccjit</systemitem>, uma biblioteca para
-incorporar a GCC em aplicativos e bibliotecas para gerar código de máquina
-. Apesar do <quote>JIT</quote> (just-in-time) no nome, a biblioteca também
-pode ser usada para compilação AOT
-(ahead-of-time). <option>--enable-host-shared</option> é necessário para
-construir <systemitem class="library">libgccjit</systemitem>, mas retarda
+incorporar a GCC em programas e bibliotecas para gerar código de
+máquina. Apesar do <quote>JIT</quote> (just-in-time) no nome, a biblioteca
+pode ser usada para compilação AOT (ahead-of-time)
+também. <option>--enable-host-shared</option> é necessário para construir
+<systemitem class="library">libgccjit</systemitem>, mas retarda
 significativamente a GCC. Portanto <systemitem
 class="library">libgccjit</systemitem> deveria ser construída e instalada
 separadamente, não como parte da instalação <quote>principal</quote> da
 GCC. Se você precisar dessa biblioteca, configure a GCC com essas duas
 opções e instale a biblioteca executando <command>make -C gcc
 jit.install-common jit.install-info</command> como o(a) usuário(a)
-&root;. Essa biblioteca não é usada por nenhum pacote do BLFS, nem testada
+&root;. Essa biblioteca não é usada por nenhum pacote do BLFS, nem é testada
 pelos(as) desenvolvedores(as) do BLFS.
     </para>
 

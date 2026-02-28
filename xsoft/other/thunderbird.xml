@@ -6,9 +6,9 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "9e68bcc19f0e25f908d68009660dfc59">
+  <!ENTITY thunderbird-md5sum        "79736d3b08b8ef66314feb8a29aafc2f">
   <!ENTITY thunderbird-size          "724 MB">
-  <!ENTITY thunderbird-buildsize     "8,8 GB (267 MB instalado)">
+  <!ENTITY thunderbird-buildsize     "8,9 GB (267 MB instalado)">
   <!ENTITY thunderbird-time          "14 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
        the C/C++ code appears to obey it.
@@ -150,16 +150,9 @@ adequados antes de continuar.
       </para>
     </note>
 
-    <para>
-      A configuração do <application>Thunderbird</application> é realizada
-criando-se um arquivo <filename>mozconfig</filename> contendo as opções de
-configuração desejadas. Um <filename>mozconfig</filename> padrão é criado
-abaixo. Para ver a lista completa de opções de configuração disponíveis (e
-uma breve descrição de cada uma), emita <command>./mach configure -- --help
-| less</command>. Crie o arquivo com o seguinte comando:
-    </para>
 
-<!--
+
+    <!--
     <para>
 
       Change a Rust file to allow implicit autoref to prevent a build failure.
@@ -171,6 +164,46 @@ uma breve descrição de cada uma), emita <command>./mach configure -- --help
 <screen><userinput>sed -e '1i\#![warn(dangerous_implicit_autorefs)]\r' \
     -i third_party/rust/allocator-api2/src/stable/vec/mod.rs</userinput></screen>
 -->
+<para>
+      Em seguida, corrija construir esse pacote com Python-3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch</userinput></screen>
+
+    <para>
+      Remova somas de verificação de caixas do cargo para arquivos que não
+existem:
+    </para>
+
+<screen><userinput
+  remap="pre">for crate in {minimal-lexical,lmdb-rkv,cubeb-sys,wasi,glslopt,sfv}; do
+  sed -e 's|,"[^"]*.gitmodules[^,]*[^,]||' \
+      -e '$a\'                             \
+      -i comm/third_party/rust/$crate/.cargo-checksum.json
+done</userinput></screen>
+
+    <para>
+      Corrija construir esse pacote com glibc-2.43 e adapte as somas de
+verificação:
+    </para>
+
+<screen><userinput
+  remap="pre">GLSL_PTHREAD="comm/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h"
+OLDSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
+patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
+NEWSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
+sed "s/$OLDSHA/$NEWSHA/" \
+  -i comm/third_party/rust/glslopt/.cargo-checksum.json</userinput></screen>
+
+    <para>
+      A configuração do <application>Thunderbird</application> é realizada
+criando-se um arquivo <filename>mozconfig</filename> contendo as opções de
+configuração desejadas. Um <filename>mozconfig</filename> padrão é criado
+abaixo. Para ver a lista completa de opções de configuração disponíveis (e
+uma breve descrição de cada uma), emita <command>./mach configure -- --help
+| less</command>. Crie o arquivo com o seguinte comando:
+    </para>
+
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used.
 
@@ -228,27 +261,6 @@ ac_add_options --with-system-zlib
 # and was reported to seriously slow the build. Disable it.
 ac_add_options --without-wasm-sandboxed-libraries</literal>
 EOF</userinput></screen>
-
-
-
-    <para>
-      Em seguida, corrija construir esse pacote com Python-3.14:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch</userinput></screen>
-
-    <para>
-      Corrija construir esse pacote com glibc-2.43 e adapte as somas de
-verificação:
-    </para>
-
-<screen><userinput
-  remap="pre">GLSL_PTHREAD="comm/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h"
-OLDSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
-patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
-NEWSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
-sed "s/$OLDSHA/$NEWSHA/" \
-  -i comm/third_party/rust/glslopt/.cargo-checksum.json</userinput></screen>
 
     <para>
       Agora invoque o conjunto de comandos sequenciais Python
