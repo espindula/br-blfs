@@ -8,7 +8,7 @@
   <!ENTITY kdenlive-download-ftp  "">
   <!ENTITY kdenlive-md5sum        "b3f4d4bf3d0d855f75238b5dd8122742">
   <!ENTITY kdenlive-size          "14 MB">
-  <!ENTITY kdenlive-buildsize     "521 MB">
+  <!ENTITY kdenlive-buildsize     "624 MB">
   <!ENTITY kdenlive-time          "3,1 UPC (usando paralelismo = 4)">
 ]>
 
@@ -26,7 +26,8 @@
 
     <para>
       O pacote <application>Kdenlive</application> é um editor de vídeos baseado
-em KF6.
+no KDE Frameworks que consegue lidar com numerosos codecs de áudio e de
+vídeo.
     </para>
 
     &lfs130_checked;
@@ -82,9 +83,11 @@ linkend="v4l-utils"/> (tempo de execução)
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <ulink
-url="https://glfs-book.github.io/slfs/general/ladspa-sdk.html">LADSPA-SDK</ulink>
-e <ulink
+url="https://glfs-book.github.io/slfs/general/ladspa-sdk.html">LADSPA-SDK</ulink>,
+<ulink
 url="https://glfs-book.github.io/slfs/general/noise-suppression.html">Noise-Suppression</ulink>
+e <ulink
+url="https://github.com/AcademySoftwareFoundation/OpenTimelineIO">OpenTimelineIO</ulink>
     </para>
 
     &build-use-internet;
@@ -110,13 +113,18 @@ cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
 make</userinput></screen>
 
     <note><para>
-      O processo de construção baixará um repositório Git do
+      <!-- renodr: I still don't like that we're doing this, but I know it's
+           the best approach for BLFS 13.0 -->
+O processo de construção baixará um repositório Git do
 <application>OpenTimelineIO</application>, totalizando cerca de 100 MB. A
 configuração parecerá travar logo depois que o
 <command>cmake</command>começar a executar. Isso é normal; ele está buscando
 esse repositório Git. Se travar por um tempo, é muito provável que seja
 devido a uma baixa velocidade de transferência durante o processo de
-transferência.
+transferência. A opção do CMake <parameter>-D FETCH_OTIO</parameter> deveria
+ser omitida se você tiver instalado o pacote
+<application>OpenTimelineIO</application>.
+      
     </para></note>
 
     <para>
@@ -160,8 +168,8 @@ transferência.
         <term><command>kdenlive</command></term>
         <listitem>
           <para>
-             é um editor de vídeos não linear de fonte aberto que suporta um grande
-número de formatos
+             é um editor de vídeos, de fonte aberto e não linear, que suporta numerosos
+codecs de áudio e de vídeo
           </para>
           <indexterm zone="kdenlive kdenlive-prog">
             <primary sortas="b-kdenlive">kdenlive</primary>

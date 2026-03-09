@@ -411,10 +411,22 @@ url='&man;systemd.environment-generator.7'>systemd.environment-generator(7)</uli
 para detalhes acerca dos geradores de ambiente do systemd. Observe que se
 tiver editado o conteúdo de <filename
 class='directory'>/etc/profile.d</filename> quando um ambiente de área de
-trabalho estiver executando, você precisa executar o comando
-<command>systemctl --user daemon-reload</command> para sincronizar a mudança
-na instância por usuário(a) do systemd e, em seguida, deslogar-se e logar-se
-novamente para sincronizar a mudança no ambiente de área de trabalho.
+trabalho estiver executando, você precisará sincronizar a mudança na
+instância systemd por usuário(a):
+    </para>
+
+    <screen role='nodump'><userinput>systemctl --user unset-environment \
+  $(/etc/systemd/user-environment-generators/50-profile.sh | sed 's/=.*//')
+systemctl --user daemon-reload</userinput></screen>
+
+    <para>
+      E, em seguida, deslogar-se e logar-se novamente para sincronizar a mudança
+no ambiente de área de trabalho. O comando <command>systemctl --user
+unset-environment</command> é necessário em alguns ambientes de área de
+trabalho que escrevam as variáveis de ambiente no bloco de variáveis de
+ambiente em tempo de execução da instância systemd por usuário(a), porque o
+conteúdo desse bloco de variáveis substituiria a configuração proveniente do
+gerador.
     </para>
 
     <important>

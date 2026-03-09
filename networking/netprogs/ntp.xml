@@ -142,8 +142,18 @@ useradd -c "Protocolo de horário da rede de intercomunicação" -d /var/lib/ntp
 foi introduzido:
     </para>
 
+<!--https://bugs.ntp.org/show_bug.cgi?id=3929-->
 <screen><userinput>sed -i 's/getclock/getclock memchr/'               sntp/m4/ntp_libntp.m4 &amp;&amp;
-sed -i 's/pthread_detach(NULL)/pthread_detach(0)/' sntp/m4/openldap-thread-check.m4</userinput></screen>
+sed -i 's/pthread_detach(NULL)/pthread_detach(0)/' sntp/m4/openldap-thread-check.m4 &amp;&amp;
+autoreconf -fiv</userinput></screen>
+
+    
+    <para>
+      Em seguida, aplique uma correção de fluxo de desenvolvimento para evitar uma
+falha de segmento:
+    </para>
+
+<screen><userinput>sed -i "/ep.*FAILED/,+4s/ep/ep2/" ntpd/ntp_io.c</userinput></screen>
 
     <para>
       Instale o &quot;<application>ntp</application>&quot; executando os seguintes
@@ -305,6 +315,13 @@ linkend="systemd-units" revision="systemd"/>&quot;.
       </indexterm>
 
 <screen role="root"><userinput>make install-ntpd</userinput></screen>
+
+      <para>
+        Além disso, você deveria desabilitar um serviço incompatível. Como o(a)
+usuário(a) &root;:
+      </para>
+
+<screen role="root"><userinput>systemctl disable systemd-timesyncd.service</userinput></screen>
 
       <para>
         Se você preferir executar <command>ntpd</command> periodicamente, adicione o

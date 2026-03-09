@@ -218,11 +218,12 @@ recente de gst-plugins-base:
       Instale o <application>VLC</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>BUILDCC=gcc ./configure --prefix=/usr --disable-libplacebo &amp;&amp;
+<screen><userinput>BUILDCC=gcc ./configure --prefix=/usr &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>.
+      Para testar os resultados, emita: <command>make check</command>. Um teste
+falhará se você não estiver em um ambiente gráfico.
     </para>
 
     <para>
@@ -243,15 +244,16 @@ make</userinput></screen>
       Por um tempo, <application>Qt-5</application> foi a única maneira de obter
 uma interface gráfica pela qual esse pacote é conhecido. Ele agora suporta
 <application>Qt-6</application>, mas vem com um monte de desvantagens, pois
-é uma nova versão da interface anterior. As coisas estão em um estado
-quebrado. Por exemplo, a pausa e outros recursos de navegação estão
+é uma recente portagem da interface anterior. Vários bits da funcionalidade
+estão quebrados. Por exemplo, a pausa e outros recursos de navegação estão
 quebrados, o posicionamento do vídeo está incorreto, entre outros problemas.
     </para>
 
     <para>
       Outro problema é que a reprodução de vídeo, apesar da reprodução de áudio
 com metadados de imagem ser boa, está quebrada no Wayland sem o uso da
-variável <envar>QT_QPA_PLATFORM</envar>. Se você estiver no Wayland, você
+variável <envar>QT_QPA_PLATFORM</envar>. O problema exato é que o vídeo
+nunca reproduz, e a janela move por toda a tela. Se estiver no Wayland, você
 deveria executar <command>QT_QPA_PLATFORM=xcb vlc -I "qt"</command> para
 executar a interface Qt. Isso força a interface de janela do
 <literal>xcb</literal> ser usada em vez da do <literal>wayland</literal>, já
@@ -271,15 +273,18 @@ sejam corrigidos.
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <para>
-      <parameter>--disable-libplacebo</parameter>: Essa chave é exigida para
-desabilitar suporte para usar libplacebo como um pipeline de renderização
-porque o VLC é incompatível com a versão mais recente da libplacebo.
-    </para>
+    
 
+    <!-- This is the default now, so let's comment this out.
     <para>
-      <option>--disable-vpx</option>: Use essa chave para desabilitar a
-<application>libvpx</application>.
+      <parameter>- -disable-libplacebo</parameter>: This switch is required to
+      disable support for using libplacebo as a rendering pipeline because VLC
+      is incompatible with the latest version of libplacebo.
+    </para>
+    -->
+<para>
+      <option>--disable-vpx</option>: Use essa chave se você não tiver
+<application>libvpx</application> instalado.
     </para>
 
     

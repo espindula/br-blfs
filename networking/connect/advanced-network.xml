@@ -95,10 +95,9 @@ DHCP=yes</literal>
 EOF</userinput></screen>
 
       <para>
-        Alternativamente, se usar uma configuração de &quot;IP&quot; estático,
-[então] crie o seguinte arquivo de configuração executando o seguinte
-comando como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+        Alternativamente, se usar uma configuração de IP estático, crie o seguinte
+arquivo de configuração executando o seguinte comando como o(a) usuário(a)
+&root;:
       </para>
 
 <screen role="root"><userinput>cat &gt; /etc/systemd/network/60-br0.network &lt;&lt; EOF
@@ -110,6 +109,14 @@ Address=192.168.0.2/24
 Gateway=192.168.0.1
 DNS=192.168.0.1</literal>
 EOF</userinput></screen>
+
+      <para>
+        Se quiser contatar outro sistema conectado à ponte, por exemplo, uma
+instância do qemu, então você também precisará habilitar o encaminhamento de
+IP. Novamente, como o(a) usuário(a) &root;, faça: 
+      </para>
+
+<screen role="root"><userinput>echo 'IPForward=ipv4' >> /etc/systemd/network/60-br0.network</userinput></screen>
 
       <para>
         Para ativar a interface de ponte, simplesmente reinicie o processo de

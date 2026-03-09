@@ -81,10 +81,7 @@ linkend="rpcsvc-proto"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <!--<xref linkend="libnfsidmap"/>
- (for NFSv4 support),
-      This is now built in, as of 2.2.1-->
-<xref linkend="cyrus-sasl"/> (para autenticação SASL), <xref
+      <xref linkend="cyrus-sasl"/> (para autenticação SASL), <xref
 linkend="libnsl"/> (para suporte ao cliente NIS), <xref linkend="lvm2"/>
 (libdevmapper para suporte a NFSv4), <xref linkend="openldap"/> (para
 autenticação LDAP), <xref linkend="mitkrb"/> ou <ulink
@@ -130,19 +127,28 @@ selecionadas.
 
     <note>
       <para>
-        No BLFS nós assumimos que o &quot;NFS&quot; v3 será usado. Se o
-<emphasis>servidor</emphasis> oferecer &quot;NFS&quot; v4 (para o Linux,
-&quot;CONFIG_NFSD_V4&quot;) então a negociação automática para v3 falhará e
-você precisará adicionar &quot;<literal>nfsver=3</literal>&quot; às opções
-de montagem. Isso também se aplica se essa opção estiver habilitada no
-núcleo do <emphasis>cliente</emphasis>, por exemplo, em uma distribuição
-tentando montar a partir de um servidor BLFS v3.
+        No BLFS nós assumimos que o NFSv3 será usado. Se o
+<emphasis>servidor</emphasis> oferecer NFSv4 (para o Linux, CONFIG_NFSD_V4),
+então a negociação automática para v3 falhará e você precisará adicionar
+<literal>nfsver=3</literal> às opções de montagem. Isso também se aplica se
+essa opção estiver habilitada no núcleo do <emphasis>cliente</emphasis>, por
+exemplo, em uma distribuição tentando montar a partir de um servidor NFSv3
+BLFS.
       </para>
       <para>
-        Mesmo que nenhuma extremidade da conexão suporte &quot;NFS&quot; v4,
-adicionar &quot;<literal>nfsver=3</literal>&quot; ainda é benéfico porque
-evita que uma mensagem de erro "NFS: bad mount option value specified:
-minorversion=1" seja registrada em cada montagem.
+        Mesmo se nenhuma extremidade da conexão suportar NFSv4, adicionar
+<literal>nfsver=3</literal> ainda é benéfico porque evita que uma mensagem
+de erro "NFS: bad mount option value specified: minorversion=1" seja
+registrada em cada montagem.
+      </para>
+      <para>
+        Observe que, para os propósitos do BLFS, nós estamos abordando somente NFSv3
+porque ele é mais fácil de configurar. Se depender de alguns dos recursos
+mais avançados de configuração ou de segurança do NFSv4, você possivelmente
+queira revisar <ulink
+url="https://bobcares.com/blog/mastering-nfsv4-mount-setup-in-client-and-server/">esta
+postagem do blog</ulink>, pois ela possivelmente te ajude a ajustar a
+configuração para NFSv4.
       </para>
     </note>
 
@@ -236,20 +242,13 @@ testes precisam ser executados como o(a) usuário(a) &root;.
   <sect2 role="commands">
     <title>Explicações do Comando</title>
 
-    <!--
     <para>
-
-      <command>sed ... support/nsm/rpc.c</command>: This sed it required
-      to fix a build issue with glibc-2.26 and later.
+      <parameter>--disable-nfsv4</parameter>: Essa opção impede construir recursos
+do NFSv4 nos programas instalados. Remova-a se você precisar dos recursos
+avançados fornecidos pelo NFSv4.
     </para>
 
     <para>
-      <parameter>- -disable-nfsv4</parameter>: This allows the package to be
-      built when libnfsidmap has not been installed.
-    </para>
-    nfs-utils now carries libnfsidmap
--->
-<para>
       <parameter>--disable-gss</parameter>: Desabilita o suporte a GSSAPI nesse
 pacote. Se precisar usá-lo, certifique-se de que <xref linkend="mitkrb"/>
 esteja instalado e de que você tem suporte a GSSAPI habilitado no <xref
@@ -257,8 +256,8 @@ linkend="libtirpc"/> também.
     </para>
 
     <para>
-      <parameter>LIBS="-lsqlite3 -levent_core"</parameter>: é exigido para o
-aplicativo fsidd.
+      <parameter>LIBS='-lsqlite3 -levent_core'</parameter>: Essa variável de
+ambiente é exigida para o programa fsidd ser compilado corretamente.
     </para>
 
     <para>
@@ -310,15 +309,15 @@ Inicialização</phrase> <phrase revision="systemd">Unidades do
 Systemd</phrase></title>
 
         <para>
-          Instale <phrase revision="sysv">o conjunto de comandos sequenciais de
-iniciação <filename>/etc/rc.d/init.d/nfs-server</filename> incluso </phrase>
-<phrase revision="systemd">as unidades de servidor NFSv4 inclusas</phrase>
-no pacote <xref linkend="bootscripts" revision="sysv"/> <xref
-linkend="systemd-units" revision="systemd"/> para iniciar o servidor na
-inicialização.
+          Se você tiver habilitado construir recursos do NFSv4, instale <phrase
+revision="sysv">o conjunto de comandos sequenciados de iniciação
+<filename>/etc/rc.d/init.d/nfs-server</filename> incluso </phrase> <phrase
+revision="systemd">as unidades de servidor NFSv4 inclusas</phrase> no pacote
+<xref linkend="bootscripts" revision="sysv"/> <xref linkend="systemd-units"
+revision="systemd"/> para iniciar o servidor na inicialização.
         </para>
 
-<screen role="root" revision="systemd"><userinput>make install-nfsv4-server</userinput></screen>
+<screen role="nodump" revision="systemd"><userinput>make install-nfsv4-server</userinput></screen>
 
         <para revision="systemd">
           Se você desabilitou o suporte ao &quot;NFSv4&quot;, [então] execute o

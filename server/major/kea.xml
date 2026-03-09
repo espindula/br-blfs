@@ -26,12 +26,12 @@
     <title>Introdução ao Servidor DHCP Kea do ISC</title>
 
     <para>
-      O pacote <application>ISC Kea</application> contém os aplicativos de
-servidor para DHCP. É o sucessor do antigo servidor DHCP do ISC, que está em
-fim de vida desde dezembro de 2022.
+      O pacote <application>ISC Kea</application> contém os programas de servidor
+para DHCP. Isso é o sucessor do antigo servidor DHCP do ISC, o qual ficou
+fora de suporte em dezembro de 2022.
     </para>
 
-    &lfs124_checked;
+    &lfs130_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -78,7 +78,7 @@ fim de vida desde dezembro de 2022.
     <para role="optional">
       <xref linkend="bind"/>, <xref linkend="mitkrb"/>, <xref
 linkend="valgrind"/>, <ulink
-url="https://botan.randombit.net/">botan</ulink>, <ulink
+url="https://botan.randombit.net/">Botan</ulink>, <ulink
 url="https://cppcheck.sourceforge.io/">cppcheck</ulink>, <ulink
 url="https://github.com/CESNET/libyang">libyang</ulink> e <ulink
 url="https://plantuml.com/">plantuml</ulink>
@@ -109,7 +109,9 @@ Editor Notes:
     <title>Configuração do Núcleo</title>
 
     <para>
-      Você precisa ter suporte a Packet Socket. Suporte a IPv6 é opcional.
+      Você precisa ter suporte a Packet Socket. Suporte a IPv6 é
+opcional. Habilite as seguintes opções no kernel e reinicialize se
+necessário:
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -190,18 +192,19 @@ install -dm0750 /var/log/kea</userinput></screen>
     <title>Explicações do Comando</title>
 
     <para>
-      <option>-D crypto=openssl</option>: Permite usar OpenSSL para comunicação
-com o agente de controle e para atualizações de DNS. Use <option>-D
-crypto=botan</option> se você quiser usar o botan. O provedor padrão é
-openssl.
+      <parameter>-D crypto=openssl</parameter>: Permite usar OpenSSL para
+comunicação com o agente de controle e para atualizações de DNS. Use
+<option>-D crypto=botan</option> se você quiser usar a Botan. O provedor
+padrão é OpenSSL.
     </para>
 
     <para>
       <option>-D postgresql=enabled</option> ou <option>-D mysql=enabled</option>:
-O <application>ISC Kea</application> pode armazenar os leases em uma base de
-dados. Isso pode ser útil em ambientes grandes que executam um cluster de
-servidores DHCP. Usar a estrutura de retaguarda <emphasis>memfile</emphasis>
-(que é um arquivo CSV armazenado localmente) é possível de qualquer maneira.
+O <application>ISC Kea</application> pode armazenar as concessões dentro de
+uma base de dados. Isso pode ser útil em ambientes grandes que executam um
+cluster de servidores DHCP. Usar a estrutura de retaguarda
+<emphasis>memfile</emphasis> (que é um arquivo CSV armazenado localmente) é
+possível e esse método é o que a configuração padrão apresentada aqui usa.
     </para>
 
     <para>
@@ -419,7 +422,7 @@ class="directory">/run</filename> em vez de em <filename
 class="directory">/tmp</filename>.
       </para>
 
-<screen role="nodump"><userinput>cat &gt; /etc/kea/kea-ctrl-agent.conf &lt;&lt; "EOF"
+<screen role='root'><userinput>cat &gt; /etc/kea/kea-ctrl-agent.conf &lt;&lt; "EOF"
 <literal>// Begin /etc/kea/kea-ctrl-agent.conf
 {
   // This is a basic configuration for the Kea Control Agent.
@@ -475,7 +478,7 @@ maneira: pelo menos o campo <emphasis>interfaces</emphasis>, o campo
 <emphasis>Subnet4</emphasis>):
       </para>
 
-<screen role="nodump"><userinput>cat &gt; /etc/kea/kea-dhcp4.conf &lt;&lt; "EOF"
+<screen role='root'><userinput>cat &gt; /etc/kea/kea-dhcp4.conf &lt;&lt; "EOF"
 <literal>// Begin /etc/kea/kea-dhcp4.conf
 {
   "Dhcp4": {

@@ -214,6 +214,22 @@ class="username">root</systemitem>:
 <screen role="root"><userinput>install -v -dm755                $KF6_PREFIX/share/icons &amp;&amp;
 ln -sfv /usr/share/icons/hicolor $KF6_PREFIX/share/icons</userinput></screen>
 
+    <para>
+      Adicionalmente, se <xref linkend="sudo"/> estiver instalado, essas variáveis
+deveriam estar disponíveis para o(a) superusuário(a). Execute os seguintes
+comandos como o(a) usuário(a) <systemitem
+class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>cat &gt;&gt; /etc/sudoers.d/qt &lt;&lt; "EOF"
+<literal>Defaults env_keep += QT_PLUGIN_PATH
+Defaults env_keep += QML2_IMPORT_PATH</literal>
+EOF
+
+cat &gt;&gt; /etc/sudoers.d/kde &lt;&lt; "EOF"
+<literal>Defaults env_keep += KF6_PREFIX</literal>
+EOF</userinput></screen>
+
     <tip>
       <para>
         Ocasionalmente, os caminhos de instalação estão rigidamente codificados nos
