@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:59+0000\n"
-"PO-Revision-Date: 2026-02-08 04:18+0000\n"
+"PO-Revision-Date: 2026-03-04 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/general_sysutils_systemd/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -683,23 +683,48 @@ msgid ""
 "generator.7'>systemd.environment-generator(7)</ulink> for details about the "
 "systemd environment generators.  Note that if you've edited the content of "
 "<filename class='directory'>/etc/profile.d</filename> when a desktop "
-"environment is running, you need to run the <command>systemctl --user "
-"daemon-reload</command> command to sync the change into the systemd per-user"
-" instance, and then log out and log in again to sync the change into the "
-"desktop environment."
+"environment is running, you need to sync the change into the systemd per-"
+"user instance:"
 msgstr ""
 "Leia-se <ulink role='man' url='&man;systemd.environment-"
 "generator.7'>systemd.environment-generator(7)</ulink> para detalhes acerca "
 "dos geradores de ambiente do systemd. Observe que se tiver editado o "
 "conteúdo de <filename class='directory'>/etc/profile.d</filename> quando um "
-"ambiente de área de trabalho estiver executando, você precisa executar o "
-"comando <command>systemctl --user daemon-reload</command> para sincronizar a"
-" mudança na instância por usuário(a) do systemd e, em seguida, deslogar-se e"
-" logar-se novamente para sincronizar a mudança no ambiente de área de "
-"trabalho."
+"ambiente de área de trabalho estiver executando, você precisará sincronizar "
+"a mudança na instância systemd por usuário(a):"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/general/sysutils/systemd.xml:421
+#, no-wrap, xml-text
+msgid ""
+"<userinput>systemctl --user unset-environment \\\n"
+"  $(/etc/systemd/user-environment-generators/50-profile.sh | sed 's/=.*//')\n"
+"systemctl --user daemon-reload</userinput>"
+msgstr ""
+"<userinput>systemctl --user unset-environment \\\n"
+"  $(/etc/systemd/user-environment-generators/50-profile.sh | sed 's/=.*//')\n"
+"systemctl --user daemon-reload</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/general/sysutils/systemd.xml:426
+#, xml-text
+msgid ""
+"And then log out and log in again to sync the change into the desktop "
+"environment.  The <command>systemctl --user unset-environment</command> "
+"command is needed on some desktop environments which write the environment "
+"variables into the runtime environment variable pool of the per-user systemd"
+" instance because the content of that pool would override the setting from "
+"the generator."
+msgstr ""
+"E, em seguida, deslogar-se e logar-se novamente para sincronizar a mudança "
+"no ambiente de área de trabalho. O comando <command>systemctl --user unset-"
+"environment</command> é necessário em alguns ambientes de área de trabalho "
+"que escrevam as variáveis de ambiente no bloco de variáveis de ambiente em "
+"tempo de execução da instância systemd por usuário(a), porque o conteúdo "
+"desse bloco de variáveis substituiria a configuração proveniente do gerador."
 
 #. type: Content of: <sect1><sect2><important><para>
-#: blfs-en/general/sysutils/systemd.xml:425
+#: blfs-en/general/sysutils/systemd.xml:437
 #, xml-text
 msgid ""
 "Now ensure <xref linkend='shadow'/> has been already rebuilt with <xref "
@@ -721,7 +746,7 @@ msgstr ""
 "usuário(a) em tempo de execução."
 
 #. type: Content of: <sect1><sect2><warning><para>
-#: blfs-en/general/sysutils/systemd.xml:438
+#: blfs-en/general/sysutils/systemd.xml:450
 #, xml-text
 msgid ""
 "If you are upgrading from a previous version of systemd and an initrd is "
@@ -733,13 +758,13 @@ msgstr ""
 "initrd antes de reinicializar o sistema."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/general/sysutils/systemd.xml:447
+#: blfs-en/general/sysutils/systemd.xml:459
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/sysutils/systemd.xml:450
+#: blfs-en/general/sysutils/systemd.xml:462
 #, xml-text
 msgid ""
 "A list of the installed files, along with their short descriptions can be "
@@ -751,7 +776,7 @@ msgstr ""
 "root;/chapter08/systemd.html#contents-systemd\"/>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/general/sysutils/systemd.xml:456
+#: blfs-en/general/sysutils/systemd.xml:468
 #, xml-text
 msgid ""
 "Listed below are the newly installed programs along with short descriptions."
@@ -760,13 +785,13 @@ msgstr ""
 "descrições curtas."
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/general/sysutils/systemd.xml:461
+#: blfs-en/general/sysutils/systemd.xml:473
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/general/sysutils/systemd.xml:465
+#: blfs-en/general/sysutils/systemd.xml:477
 #, xml-text
 msgid ""
 "homectl (optional), systemd-cryptenroll (if <xref linkend=\"cryptsetup\"/> "
@@ -778,26 +803,26 @@ msgstr ""
 "estiver instalado),"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/general/sysutils/systemd.xml:473
+#: blfs-en/general/sysutils/systemd.xml:485
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/general/sysutils/systemd.xml:474
+#: blfs-en/general/sysutils/systemd.xml:486
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/sysutils/systemd.xml:478
+#: blfs-en/general/sysutils/systemd.xml:490
 #, xml-text
 msgid "<command>homectl</command>"
 msgstr "<command>homectl</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/sysutils/systemd.xml:481
+#: blfs-en/general/sysutils/systemd.xml:493
 #, xml-text
 msgid ""
 "is a tool to create, remove, change, or inspect a home directory managed by "
@@ -811,20 +836,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/sysutils/systemd.xml:487
+#: blfs-en/general/sysutils/systemd.xml:499
 #, xml-text
 msgid "homectl"
 msgstr "homectl"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/sysutils/systemd.xml:493
+#: blfs-en/general/sysutils/systemd.xml:505
 #, xml-text
 msgid "<command>systemd-cryptenroll</command>"
 msgstr "<command>systemd-cryptenroll</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/sysutils/systemd.xml:496
+#: blfs-en/general/sysutils/systemd.xml:508
 #, xml-text
 msgid ""
 "Is used to enroll or remove a system from full disk encryption, as well as "
@@ -836,40 +861,40 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/sysutils/systemd.xml:500
+#: blfs-en/general/sysutils/systemd.xml:512
 #, xml-text
 msgid "systemd-cryptenroll"
 msgstr "systemd-cryptenroll"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/sysutils/systemd.xml:506
+#: blfs-en/general/sysutils/systemd.xml:518
 #, xml-text
 msgid "<command>systemd-cryptsetup</command>"
 msgstr "<command>systemd-cryptsetup</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/sysutils/systemd.xml:509
+#: blfs-en/general/sysutils/systemd.xml:521
 #, xml-text
 msgid "Attaches or removes an encrypted block device"
 msgstr "Anexa ou remove um dispositivo de bloco criptografado"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/sysutils/systemd.xml:512
+#: blfs-en/general/sysutils/systemd.xml:524
 #, xml-text
 msgid "systemd-cryptsetup"
 msgstr "systemd-cryptsetup"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/general/sysutils/systemd.xml:532
+#: blfs-en/general/sysutils/systemd.xml:544
 #, xml-text
 msgid "<filename class=\"libraryfile\">pam_systemd.so</filename>"
 msgstr "<filename class=\"libraryfile\">pam_systemd.so</filename>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/general/sysutils/systemd.xml:535
+#: blfs-en/general/sysutils/systemd.xml:547
 #, xml-text
 msgid ""
 "is a PAM module used to register user sessions with the "
@@ -882,7 +907,7 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/general/sysutils/systemd.xml:540
+#: blfs-en/general/sysutils/systemd.xml:552
 #, xml-text
 msgid "pam_systemd.so"
 msgstr "pam_systemd.so"
