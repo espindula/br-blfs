@@ -6,10 +6,10 @@
 
   <!ENTITY libarchive-download-http "https://github.com/libarchive/libarchive/releases/download/v&libarchive-version;/libarchive-&libarchive-version;.tar.xz">
   <!ENTITY libarchive-download-ftp  "">
-  <!ENTITY libarchive-md5sum        "2cd5a73ed7fe7f9da22d34ac1048534e">
-  <!ENTITY libarchive-size          "5,8 MB">
-  <!ENTITY libarchive-buildsize     "43 MB (adicionar 37 MB para os testes)">
-  <!ENTITY libarchive-time          "0,3 UPC (adicionar 0,8 UPC para testes)">
+  <!ENTITY libarchive-md5sum        "cc93976c9b7db628a1b92a337a5def56">
+  <!ENTITY libarchive-size          "5,7 MB">
+  <!ENTITY libarchive-buildsize     "48 MB (adicionar 37 MB para os testes)">
+  <!ENTITY libarchive-time          "0,2 UPC (adicionar 0,3 UPC para testes)">
 ]>
 
 <sect1 id="libarchive" xreflabel="libarchive-&libarchive-version;">
@@ -146,8 +146,20 @@ pacotes estiverem instalados.
     </para>
 
     <para>
-      <option>--with-nettle</option>: Essa chave usa Nettle para suporte a
-criptografia em vez do OpenSSL.
+      <!-- Originally I reverted the commit where I added this because I had
+      a patch from upstream. The patch turned out to be insufficient, it fixes
+      the compiler errors but then generates numerous amounts of undefined
+      reference errors at link time. I chimed in on the upstream bug report
+      at https://github.com/libarchive/libarchive/issues/2876 - and the PR
+      I used to try fixing it was:
+      https://github.com/libarchive/libarchive/pull/2858
+      Since this support is explicitly opt-in, let's just note it's broken
+      for now and I will follow up when upstream gets back to me. -renodr
+      -->
+<option>--with-nettle</option>: Essa chave usa Nettle para suporte
+criptográfico em vez de OpenSSL. Esse suporte é conhecido ter quebrado o
+fluxo de desenvolvimento devido ao Nettle-4.0.
+      
     </para>
 
   </sect2>
@@ -162,7 +174,7 @@ criptografia em vez do OpenSSL.
 
       <seglistitem>
         <seg>
-          bsdcat, bsdcpio, bsdtar e bsdunzip
+          bsdcat, bsdcpio, bsdtar, bsdunzip e unzip (linque simbólico para bsdunzip)
         </seg>
         <seg>
           libarchive.so

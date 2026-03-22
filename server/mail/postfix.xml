@@ -9,9 +9,9 @@
   mirror status, some of the mirrors shown as http are actually https -->
   <!ENTITY postfix-download-http "https://ghostarchive.org/postfix/postfix-release/official/postfix-&postfix-version;.tar.gz">
   <!ENTITY postfix-download-ftp  "">
-  <!ENTITY postfix-md5sum        "ca4d82e7cabb7fb725ee00599e8b65fd">
-  <!ENTITY postfix-size          "4,8 MB">
-  <!ENTITY postfix-buildsize     "158 MB">
+  <!ENTITY postfix-md5sum        "4b2f1446b9a41fc3fe7fb19c6f488741">
+  <!ENTITY postfix-size          "5,0 MB">
+  <!ENTITY postfix-buildsize     "169 MB (62 MB instalado)">
   <!ENTITY postfix-time          "0,2 UPC (Usando paralelismo=4)">
 ]>
 
@@ -217,7 +217,7 @@ fi</userinput></screen>
 
 <screen><userinput>if [ -r /usr/lib/liblmdb.so ]; then
   CCARGS="$CCARGS -DHAS_LMDB"
-  AUXLIBS="$AUXLIBS -llmdb"
+  AUXLIBS_LMDB="-llmdb"
 fi</userinput></screen>
       </sect4>
 
@@ -252,11 +252,12 @@ fi</userinput></screen>
       </sect4>
 
       <sect4>
-        <title>MySQL</title>
+        <title>MySQL ou MariaDB</title>
 
         <para>
-          Para usar o &quot;<application>MySQL</application>&quot; com o
-&quot;<application>Postfix</application>&quot;, use os seguintes argumentos:
+          Para usar <application>MySQL</application> ou
+<application>MariaDB</application> com <application>Postfix</application>,
+use os seguintes argumentos:
         </para>
 
 <screen><userinput>if [ -r /usr/lib/libmysqlclient.so ]; then
@@ -332,7 +333,12 @@ seguintes comandos:
 <!-- There is a test suite, but it fails a lot. It seems to need
          the host to be specifically setup for the tests.
          Run with `make tests' and `make root_tests' -->
-<screen><userinput>make CC="gcc -std=gnu17" CCARGS="$CCARGS" AUXLIBS="$AUXLIBS" makefiles &amp;&amp;
+<screen><userinput>make makefiles                    \
+     CCARGS="$CCARGS"             \
+     AUXLIBS="$AUXLIBS"           \
+     AUXLIBS_LMDB="$AUXLIBS_LMDB" \
+     default_database_type=lmdb   \
+     default_cache_db_type=lmdb   &amp;&amp;
 make</userinput></screen>
 
     
@@ -378,22 +384,33 @@ poucos. Se as opções &quot;<option>html_directory</option>&quot; e
 [então] a documentação não será instalada.
     </para>
 
-    
-    <!--
-      Next version of postfix still has gcc15 issues
-      Tested at 22 July 25 with RC postfix-3.11-20250621.tar.gz
-    -->
-<para>
-      <option>CC="gcc -std=gnu17"</option>: isso é usado para superar um problema
-com o gcc-15. Essa versão do gcc usa <literal>-std=gnu23</literal> por
-padrão, o que expõe vários problemas no código-fonte.
-    </para>
 
+
+    <!--
     <para>
-      <option>CCARGS="-DNO_EAI ..."</option>: isso desligará o suporte a SMTPUTF8,
+
+      <option>CC="gcc -std=gnu17"</option>: this is used to overcome an issue
+      with gcc-15. This version of gcc uses <literal>-std=gnu23</literal> by
+      default which exposes several issues in the source code.
+    </para>
+-->
+<para>
+      <option>CCARGS="-DNO_EAI ..."</option>: Isso desligará o suporte a SMTPUTF8,
 por exemplo, se o restante da tua infraestrutura de endereço de correio
 eletrônico não puder lidar com endereços UTF-8 de correio eletrônico e
 valores de cabeçalho de mensagem.
+    </para>
+
+    <para>
+      <option>default_database_type=lmdb</option>: o Postfix não mais especifica
+um tipo padrão de base de dados. Precisa ser especificado ao criar os
+arquivos do make.
+    </para>
+
+    <para>
+      <option>default_cache_db_type=lmdb</option>: o Postfix não mais especifica
+um tipo padrão de cache. Precisa ser especificado ao criar os arquivos do
+make.
     </para>
 
   </sect2>
@@ -443,19 +460,17 @@ root:             <replaceable>&lt;LOGIN&gt;</replaceable>
 EOF</userinput></screen>
 
       <para>
-        Para proteger um arquivo &quot;<filename>/etc/aliases</filename>&quot;
-existente, o comando acima anexa esses apelidos a ele, se existir. Esse
-arquivo deveria ser verificado e os apelidos duplicados removidos, se
-presentes.
+        Para proteger um arquivo <filename>/etc/aliases</filename> existente, o
+comando acima pospõe esses apelidos a ele se existir. Esse arquivo deveria
+ser verificado e os apelidos duplicados removidos se presentes.
       </para>
 
       <para>
-        Os(As) editores(as) do BLFS recomendam usar LMDB em vez de Berkeley DB para
-tabelas do Postfix. Adicione três linhas em
-<filename>/etc/postfix/main.cf</filename> para fazer com que
-<command>postmap</command> codifique as tabelas de pesquisa no formato do
-LMDB por padrão e para mudar a configuração padrão de resumo das tabelas de
-apelidos:
+        Os(As) editores(as) do BLFS recomendam usar LMDB para tabelas do
+Postfix. Adicione três linhas no <filename>/etc/postfix/main.cf</filename>
+para fazer com que <command>postmap</command> codifique as tabelas de
+pesquisa no formato do LMDB por padrão e para mudar a configuração padrão de
+resumo das tabelas de apelidos:
       </para>
 
 <screen role="root"><userinput>echo 'default_database_type = lmdb'       &gt;&gt; /etc/postfix/main.cf &amp;&amp;

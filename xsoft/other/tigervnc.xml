@@ -158,6 +158,13 @@ compatíveis com sistemas LFS:
 <screen><userinput remap="pre">sed -i "/FL_MINOR_VERSION/s/3/4/" CMakeLists.txt</userinput></screen>
 
     <para>
+      A seguir, adapte para nettle-4 e superiores:
+    </para>
+
+<screen><userinput remap="pre">grep -rl _digest | xargs sed -Ei '/digest/s/([^,]*),.*,(.*)/\1,\2/' &amp;&amp;
+grep -rl _DIGEST | xargs sed -i '/DIGEST/s/, 16//'</userinput></screen>
+
+    <para>
       Instale o <application>tigervnc</application> executando os seguintes
 comandos:
     </para>
@@ -167,8 +174,12 @@ mkdir -p unix/xserver &amp;&amp;
 tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
     --strip-components=1              \
     -C unix/xserver                   &amp;&amp;
-( cd unix/xserver &amp;&amp;
-  patch -Np1 -i ../xserver21.patch ) &amp;&amp;
+( cd unix/xserver                              &amp;&amp;
+  patch -Np1 -i ../xserver21.patch             &amp;&amp;
+  sed -e '/sha.h/s/sha/sha1/'                  \
+      -e '/sha1/a #include &lt;nettle/version.h&gt;' \
+      -e 's/ctx, 20/ctx/'                      \
+      -i os/xsha1.c )                 &amp;&amp;
 
 # Build viewer
 cmake -G "Unix Makefiles"          \
@@ -184,12 +195,11 @@ pushd unix/xserver &amp;&amp;
 
   CPPFLAGS="-I/usr/include/drm" \
   ./configure $XORG_CONFIG      \
-      --disable-xwayland    --disable-dri        --disable-dmx         \
       --disable-xorg        --disable-xnest      --disable-xvfb        \
       --disable-xwin        --disable-xephyr     --disable-kdrive      \
       --disable-devel-docs  --disable-config-hal --disable-config-udev \
       --disable-unit-tests  --disable-selective-werror                 \
-      --disable-static      --enable-dri3                              \
+      --disable-static      --enable-dri3        --disable-dri         \
       --without-dtrace      --enable-dri2        --enable-glx          \
       --with-pic &amp;&amp;
   make  &amp;&amp;
@@ -200,8 +210,12 @@ mkdir -p unix/xserver &amp;&amp;
 tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
     --strip-components=1              \
     -C unix/xserver                   &amp;&amp;
-( cd unix/xserver &amp;&amp;
-  patch -Np1 -i ../xserver21.patch ) &amp;&amp;
+( cd unix/xserver                              &amp;&amp;
+  patch -Np1 -i ../xserver21.patch             &amp;&amp;
+  sed -e '/sha.h/s/sha/sha1/'                  \
+      -e '/sha1/a #include &lt;nettle/version.h&gt;' \
+      -e 's/ctx, 20/ctx/'                      \
+      -i os/xsha1.c )                 &amp;&amp;
 
 # Build viewer
 cmake -G "Unix Makefiles"          \
@@ -216,12 +230,11 @@ pushd unix/xserver &amp;&amp;
 
   CPPFLAGS="-I/usr/include/drm"       \
   ./configure $XORG_CONFIG            \
-      --disable-xwayland    --disable-dri        --disable-dmx         \
       --disable-xorg        --disable-xnest      --disable-xvfb        \
       --disable-xwin        --disable-xephyr     --disable-kdrive      \
       --disable-devel-docs  --disable-config-hal --disable-config-udev \
       --disable-unit-tests  --disable-selective-werror                 \
-      --disable-static      --enable-dri3                              \
+      --disable-static      --enable-dri3        --disable-dri         \
       --without-dtrace      --enable-dri2        --enable-glx          \
       --with-pic &amp;&amp;
   make  &amp;&amp;

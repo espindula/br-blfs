@@ -6,9 +6,9 @@
 
   <!ENTITY gtk-doc-download-http "&gnome-download-http;/gtk-doc/&gtk-doc-major;/gtk-doc-&gtk-doc-version;.tar.xz">
   <!ENTITY gtk-doc-download-ftp  "">
-  <!ENTITY gtk-doc-md5sum        "16817ad9e0bef63358b29b63f7738bbd">
-  <!ENTITY gtk-doc-size          "528 KB">
-  <!ENTITY gtk-doc-buildsize     "12 MB (com testes)">
+  <!ENTITY gtk-doc-md5sum        "69c1105d8c968cb5303a40bc88685eac">
+  <!ENTITY gtk-doc-size          "550 KB">
+  <!ENTITY gtk-doc-buildsize     "14 MB (adicionar 2,3 MB para os testes)">
   <!ENTITY gtk-doc-time          "menos que 0,1 UPC (com testes)">
 ]>
 
@@ -133,7 +133,10 @@ comando <command>pip3</command>.
 <screen><userinput>mkdir -p build &amp;&amp;
 cd       build &amp;&amp;
 
-meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -D tests=false      &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -148,12 +151,26 @@ estiver instalado.
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      <!-- https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/74 -->
-Para testar os resultados, emita: <command>ninja test</command>. Alguns
-testes falharão dependendo dos pacotes instalados opcionalmente. Um teste,
-<filename>test-gobject-mkhtml</filename>, é conhecido por falhar devido a
-problemas com versões mais recentes da libxml2.
-      
+      Para testar os resultados, certifique-se de ter o módulo Python
+<emphasis>parameterized</emphasis> instalado e emita:
+    </para>
+
+<screen remap='test'><userinput>meson configure -D tests=true &amp;&amp;
+ninja test</userinput></screen>
+
+    <para>
+      Alguns testes falharão dependendo dos pacotes instalados opcionalmente.
+    </para>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D testes=false</parameter>: impede construir testes. O padrão é
+<parameter>true</parameter>, mas exige o módulo Python
+<emphasis>parameterized</emphasis>.
     </para>
 
   </sect2>
@@ -176,7 +193,7 @@ gtkdoc-scan e gtkdoc-scangobj
         <seg>Nenhum(a)</seg>
 
         <seg>
-          /usr/share/gtk-doc e /usr/share/cmake/GtkDoc
+          /usr/lib/cmake/GtkDoc, /usr/share/gtk-doc e /usr/share/help/*/gtk-doc-manual
         </seg>
       </seglistitem>
     </segmentedlist>

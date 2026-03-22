@@ -6,32 +6,12 @@
 
   <!ENTITY llvm-url "https://github.com/llvm/llvm-project/releases/download/llvmorg-&llvm-version;">
 
-  <!ENTITY llvm-download-http "&llvm-url;/llvm-&llvm-version;.src.tar.xz">
+  <!ENTITY llvm-download-http "&llvm-url;/llvm-project-&llvm-version;.src.tar.xz">
   <!ENTITY llvm-download-ftp  "">
-  <!ENTITY llvm-md5sum        "a45a3d91b0b178759b5ee86be81e1ca1">
-  <!ENTITY llvm-size          "75 MB">
+  <!-- md5sum and size in packages.ent to be shared with libclc -->
   <!ENTITY llvm-buildsize     "4,7 GB (1,1 GB instalado; adicionar 23 GB para testes e 2,3 GB para
 documentação)">
   <!ENTITY llvm-time          "13 UPC (Adicionar 19 UPC para testes; ambos usando paralelismo=8)">
-
-  <!ENTITY clang-download-http "&llvm-url;/clang-&llvm-version;.src.tar.xz">
-  <!ENTITY clang-md5sum        "0e76ea8303e5a44d482773ad339c97d1">
-  <!ENTITY clang-size          "26 MB">
-
-  <!ENTITY compiler-rt-download-http "&llvm-url;/compiler-rt-&llvm-version;.src.tar.xz">
-  <!ENTITY compiler-rt-md5sum        "4659411fe5f4d78fc987ad7be6318b27">
-  <!ENTITY compiler-rt-size          "2,6 MB">
-
-  <!-- CMake modules and third party dependencies renamed and uploaded
-       onto anduin to avoid stupid file names.  -->
-
-  <!ENTITY cmake-llvm-download-http "&sources-anduin-http;/llvm/llvm-cmake-&llvm-version;.src.tar.xz">
-  <!ENTITY cmake-llvm-md5sum         "fb75e927effbedba72de1f421154fd0c">
-  <!ENTITY cmake-llvm-size           "8,8 KB">
-
-  <!ENTITY llvm-3rdparty-download-http "&sources-anduin-http;/llvm/llvm-third-party-&llvm-version;.src.tar.xz">
-  <!ENTITY llvm-3rdparty-md5sum        "4cad220587e039a2ff9465766c018621">
-  <!ENTITY llvm-3rdparty-size          "446 KB">
 ]>
 
 <sect1 id="llvm" xreflabel="LLVM-&llvm-version;">
@@ -108,94 +88,6 @@ usam <application>Clang</application> e <application>LLVM</application>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <para>
-      <emphasis role="strong">módulos Cmake para LLVM</emphasis>
-    </para>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Transferência: <ulink url="&cmake-llvm-download-http;"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Soma de verificação MD5 da transferência: &cmake-llvm-md5sum;
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Tamanho da transferência: &cmake-llvm-size;
-        </para>
-      </listitem>
-    </itemizedlist>
-
-    <para>
-      <emphasis role="strong">Dependências de terceiros(as) para sistema de
-construção LLVM</emphasis>
-    </para>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Transferência: <ulink url="&llvm-3rdparty-download-http;"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Soma de verificação MD5 da transferência: &llvm-3rdparty-md5sum;
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Tamanho da transferência: &llvm-3rdparty-size;
-        </para>
-      </listitem>
-    </itemizedlist>
-
-
-    <bridgehead renderas="sect3">Transferência Recomendada</bridgehead>
-    <para>
-      <emphasis role="strong">Clang</emphasis>
-    </para>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Transferência: <ulink url="&clang-download-http;"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Soma de verificação MD5 da transferência: &clang-md5sum;
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Tamanho da transferência: &clang-size;
-        </para>
-      </listitem>
-    </itemizedlist>
-
-    <bridgehead renderas="sect3">Transferência Opcional</bridgehead>
-    <para>
-      <emphasis role="strong">Compilador RT</emphasis>
-    </para>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Transferência: <ulink url="&compiler-rt-download-http;"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Soma de verificação MD5 da transferência: &compiler-rt-md5sum;
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Tamanho da transferência: &compiler-rt-size;
-        </para>
-      </listitem>
-    </itemizedlist>
     <bridgehead renderas="sect3">Dependências do LLVM</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -225,63 +117,13 @@ construir documentação), <ulink url="https://ocaml.org/">OCaml</ulink> e
     <title>Instalação do LLVM</title>
 
     <para>
-      Dois tarballs adicionais
-<filename>llvm-cmake-&llvm-version;.src.tar.xz</filename> e
-<filename>llvm-third-party-&llvm-version;.src.tar.xz</filename> são
-necessários para o sistema de construção do LLVM. O fluxo de desenvolvimento
-espera eles extraídos no mesmo nível, como o tarball
-<filename>llvm-&llvm-version;.src.tar.xz</filename>, e os diretórios
-extraídos renomeados para <filename class="directory">cmake</filename> e
-<filename class="directory">third-party</filename>. Extraia-os e modifique o
-sistema de construção para evitar criar diretórios ambiguamente nomeados
-fora da hierarquia <filename>llvm-&llvm-version;.src</filename>:
-    </para>
-
-<!-- To make our life easier I'll stop modifying the directory names
-         for the tarballs.  They are just simply renamed and uploaded to
-         anduin now.  The directory names shouldn't be a problem as the
-         directories only reside in the llvm-&llvm-version;.src tree.  -->
-<screen><userinput>tar -xf ../llvm-cmake-&llvm-version;.src.tar.xz                              &amp;&amp;
-tar -xf ../llvm-third-party-&llvm-version;.src.tar.xz                        &amp;&amp;
-sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@cmake-&llvm-version;.src@'          \
-    -i CMakeLists.txt                                                &amp;&amp;
-sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@third-party-&llvm-version;.src@' \
-    -i cmake/modules/HandleLLVMOptions.cmake</userinput></screen>
-
-    
-    <note>
-      <para>
-        Esses dois tarballs extraem nos diretórios chamados <filename
-class='directory'>cmake-&llvm-version;.src</filename> e <filename
-class='directory'>third-party-&llvm-version;.src</filename>, ou seja, os
-nomes dos diretórios carecem do prefixo <literal>llvm-</literal>.
-      </para>
-    </note>
-
-    <para>
-      Instale o <application>clang</application> na árvore do fonte executando os
-seguintes comandos:
-    </para>
-
-<screen><userinput>tar -xf ../clang-&llvm-version;.src.tar.xz -C tools &amp;&amp;
-mv tools/clang-&llvm-version;.src tools/clang</userinput></screen>
-
-    <para>
-      Se você tiver baixado <application>compiler-rt</application>, instale-o na
-árvore do fonte executando os seguintes comandos:
-    </para>
-
-<screen><userinput>tar -xf ../compiler-rt-&llvm-version;.src.tar.xz -C projects    &amp;&amp;
-mv projects/compiler-rt-&llvm-version;.src projects/compiler-rt</userinput></screen>
-
-    <para>
      Existem muitos conjuntos de comandos sequenciais Python nesse pacote que
 usam <command>/usr/bin/env python</command> para acessar o Python do
 sistema, que no LFS é <xref linkend="python3"/>. Use o seguinte comando para
 corrigir esses conjuntos de comandos sequenciais:
     </para>
 
-<screen><userinput>grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'</userinput></screen>
+<screen><userinput>grep -rl '#!.*python$' | xargs sed -i '1s/python$/python3/'</userinput></screen>
 
     <para>
       Certifique-se de instalar o programa <command>FileCheck</command> que é
@@ -289,7 +131,7 @@ necessário para a suíte de teste de alguns pacotes (por exemplo <xref
 linkend='rust'/>):
     </para>
 
-    <screen><userinput>sed 's/utility/tool/' -i utils/FileCheck/CMakeLists.txt</userinput></screen>
+    <screen><userinput>sed 's/utility/tool/' -i llvm/utils/FileCheck/CMakeLists.txt</userinput></screen>
 
     <para>
       Instale o <application>LLVM</application> executando os seguintes comandos:
@@ -315,9 +157,9 @@ ninja docs-llvm-html  docs-llvm-man</userinput></screen>
 
 <screen remap="doc"><userinput>ninja docs-clang-html docs-clang-man</userinput></screen>
 -->
-<!-- https://github.com/llvm/llvm-project/issues/123023 -->
-<screen><userinput>mkdir -v build &amp;&amp;
-cd       build &amp;&amp;
+<!-- The excessive core dump made my system irresponsive.  -->
+<screen><userinput>mkdir -v llvm/build &amp;&amp;
+cd       llvm/build &amp;&amp;
 
 CC=gcc CXX=g++                               \
 cmake -D CMAKE_INSTALL_PREFIX=/usr           \
@@ -328,6 +170,8 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr           \
       -D LLVM_LINK_LLVM_DYLIB=ON             \
       -D LLVM_ENABLE_RTTI=ON                 \
       -D LLVM_TARGETS_TO_BUILD="host;AMDGPU" \
+      -D LLVM_ENABLE_PROJECTS=clang          \
+      -D LLVM_ENABLE_RUNTIMES=compiler-rt    \
       -D LLVM_BINUTILS_INCDIR=/usr/include   \
       -D LLVM_INCLUDE_BENCHMARKS=OFF         \
       -D CLANG_DEFAULT_PIE_ON_LINUX=ON       \
@@ -335,20 +179,6 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr           \
       -W no-dev -G Ninja ..                  &amp;&amp;
 ninja</userinput></screen>
 
-
-    
-    <para>
-      Se você desejar executar a suíte de teste e tiver baixado o compiler-rt,
-contorne um problema que causa falhas de teste ao construir o LLVM com GCC e
-<parameter>-D CLANG_CONFIG_FILE_SYSTEM_DIR</parameter> e evite que algumas
-suítes de teste usem <command>ld.gold</command> que o pacote Binutils do LFS
-não mais fornece:
-    </para>
-
-    <!-- The excessive core dump made my system irresponsive.  -->
-<screen remap="test"><userinput>sed -e 's/config.has_no_default_config_flag/True/' \
-    -e 's/"-fuse-ld=gold"//'                       \
-    -i ../projects/compiler-rt/test/lit.common.cfg.py</userinput></screen>
 
     
     <para>
@@ -392,9 +222,9 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
       <!-- EDITORS - if you have more than 4 cores, use a cgroup to measure
       the elapsed time for the tests.  Also, libstdc++.a and perhaps libstdc++fs.a
       are used by a couple of the link-static tests. -->
-<!-- https://github.com/llvm/llvm-project/commit/6beb6f34bc8e -->
-<!-- 19.1.7: 75293 Passed, 28977 Unsupported, 364 Skipped,
-                   133 Expectedly Failed -->
+<!-- https://github.com/llvm/llvm-project/issues/184961 -->
+<!-- 22.1.0: 92579 Passed, 34885 Unsupported, 420 Skipped,
+                   136 Expectedly Failed, 4 Failed -->
 <!-- To editors: it seems there is a more thorough test suite named
            "test-suite-x.y.z.src.tar.xz" on the GitHub release download
            page.  The usage of it is on
@@ -408,15 +238,12 @@ Se <option>-jN</option> (N substituído por um número) for passado para
 mas executados usando todos os núcleos lógicos disponíveis. Execute o
 comando de teste em um cgroup (<phrase revision='systemd'>passe a opção
 <option>-p AllowedCPUs=...</option> para o comando
-<command>systemd-run</command>, </phrase> leia-se <xref
+<command>systemd-run</command>, </phrase> leia <xref
 linkend='build-in-cgroup'/> para detalhes) para limitar o número de núcleos
-lógicos para executar os testes. 23 testes de cfi são conhecidos por
-falharem porque a suposição deles acerca do vinculador não é verdadeira com
-o vinculador BFD e nós tivemos que impedi-los de usar o vinculador Gold
-removido. Um teste chamado <literal>DataFlowSanitizer-x86_64 ::
-atomic.cpp</literal> é conhecido por falhar com o gcc-15.1 ou mais
-recente. Um teste chamado <filename>Linux/clone_setns.cpp</filename> falhará
-se <option>CONFIG_USER_NS</option> não estiver habilitado na configuração do
+lógicos para executar os testes. Quatro testes nominados de
+<filename>Linux/pthread_join.cpp</filename> são conhecidos por falharem. Um
+teste nominado de <filename>Linux/clone_setns.cpp</filename> falhará se
+<option>CONFIG_USER_NS</option> não estiver habilitado na configuração do
 núcleo.
       
 
@@ -494,6 +321,27 @@ todos os alvos. Você pode usar uma lista separada por ponto e vírgula. Os
 alvos válidos são: host, AArch64, AMDGPU, ARM, AVR, BPF, Hexagon, Lanai,
 LoongArch, Mips, MSP430, NVPTX, PowerPC, RISCV, Sparc, SystemZ, VE,
 WebAssembly, X86, XCore ou all.
+    </para>
+
+    <para>
+      <parameter>-D LLVM_ENABLE_PROJECTS=clang</parameter>: Essa chave seleciona
+os subprojetos LLVM a serem construídos (além das bibliotecas LLVM). Leia a
+definição de <literal>LLVM_ALL_PROJECTS</literal> em
+<filename>llvm/CMakeLists.txt</filename> para a lista de todos os
+subprojetos. Para BLFS nós construímos somente clang (que os(as)
+desenvolvedores(as) de alguns pacotes do BLFS recomendam usar em vez do
+GCC).
+    </para>
+
+    <para>
+      <parameter>-D LLVM_ENABLE_RUNTIMES=compiler-rt</parameter>: Essa chave
+seleciona as bibliotecas de tempo de execução do LLVM a serem
+construídas. Para BLFS, nós precisamos somente da compiler-rt (para alguns
+recursos do clang e do <xref linkend='rust'/>) e da libclc, e a última tem
+de ser construída separadamente (<xref linkend='libclc'/>) para evitar uma
+dependência circular envolvendo <xref
+linkend='spirv-llvm-translator'/>. Portanto, nós habilitamos somente a
+compiler-rt aqui.
     </para>
 
     <para>

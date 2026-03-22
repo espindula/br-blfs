@@ -229,6 +229,16 @@ aplique o remendo reimplementado:
 <screen><userinput remap="pre">patch -Np1 -i ../xorg-server-&xorg-server-version;-tearfree_backport-1.patch</userinput></screen>
 
     <para>
+      Agora, corrija o código para ser compatível com <xref linkend="nettle"/> e
+posterior:
+    </para>
+
+<screen><userinput remap="pre">sed -e '/sha.h/s/sha/sha1/'                  \
+    -e '/sha1/a #include &lt;nettle/version.h&gt;' \
+    -e 's/ctx, 20/ctx/'                      \
+    -i os/xsha1.c</userinput></screen>
+
+    <para>
       Instale o servidor executando os seguintes comandos:
     </para>
 

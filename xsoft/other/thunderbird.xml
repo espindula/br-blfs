@@ -6,10 +6,10 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "79736d3b08b8ef66314feb8a29aafc2f">
+  <!ENTITY thunderbird-md5sum        "e7f41ea1e4a39b322c5d63969e31ec92">
   <!ENTITY thunderbird-size          "724 MB">
   <!ENTITY thunderbird-buildsize     "8,9 GB (267 MB instalado)">
-  <!ENTITY thunderbird-time          "14 UPC (em uma máquina de oito núcleos)">
+  <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
        the C/C++ code appears to obey it.
 
@@ -90,6 +90,12 @@ url="&patch-root;/thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch
 url="&patch-root;/thunderbird-&thunderbird-version;esr-glibc-2.43.patch"/>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/thunderbird-&thunderbird-version;esr-llvm_22-1.patch"/>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do Thunderbird</bridgehead>
@@ -150,50 +156,38 @@ adequados antes de continuar.
       </para>
     </note>
 
-
-
-    <!--
     <para>
-
-      Change a Rust file to allow implicit autoref to prevent a build failure.
-      The trailing <literal>\r</literal> ensures that the MS-DOS format is used
-      for the inserted line so that it will be consistent with all other lines
-      in the file:
+      Primeiramente, corrija construir esse pacote com Python-3.14:
     </para>
 
-<screen><userinput>sed -e '1i\#![warn(dangerous_implicit_autorefs)]\r' \
-    -i third_party/rust/allocator-api2/src/stable/vec/mod.rs</userinput></screen>
--->
-<para>
-      Em seguida, corrija construir esse pacote com Python-3.14:
-    </para>
-
+<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=2006630 -->
 <screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch</userinput></screen>
 
+    
     <para>
       Remova somas de verificação de caixas do cargo para arquivos que não
 existem:
     </para>
 
-<screen><userinput
-  remap="pre">for crate in {minimal-lexical,lmdb-rkv,cubeb-sys,wasi,glslopt,sfv}; do
-  sed -e 's|,"[^"]*.gitmodules[^,]*[^,]||' \
-      -e '$a\'                             \
-      -i comm/third_party/rust/$crate/.cargo-checksum.json
-done</userinput></screen>
+<screen><userinput remap="pre">find -name .cargo-checksum.json | \
+     xargs sed -ri 's|"[^"]*.gitmodules":"[^"]*",?||'</userinput></screen>
 
     <para>
       Corrija construir esse pacote com glibc-2.43 e adapte as somas de
 verificação:
     </para>
 
-<screen><userinput
-  remap="pre">GLSL_PTHREAD="comm/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h"
-OLDSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
-patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
-NEWSHA=`sha256sum $GLSL_PTHREAD | awk '{ print $1 }'` &amp;&amp;
-sed "s/$OLDSHA/$NEWSHA/" \
-  -i comm/third_party/rust/glslopt/.cargo-checksum.json</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
+sed '/patch.crates-io/a glslopt={path="../third_party/rust/glslopt"}' \
+    -i comm/rust/Cargo.toml &amp;&amp;
+sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' \
+    -i comm/rust/Cargo.lock</userinput></screen>
+
+    <para>
+      Em seguida, corrija construir esse pacote com LLVM-22:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-llvm_22-1.patch</userinput></screen>
 
     <para>
       A configuração do <application>Thunderbird</application> é realizada

@@ -5,9 +5,9 @@
   %general-entities;
 
   <!ENTITY libde265-download-http "https://github.com/strukturag/libde265/releases/download/v&libde265-version;/libde265-&libde265-version;.tar.gz">
-  <!ENTITY libde265-md5sum        "f3173ff6fa273e139de19e6e77bec9b6">
-  <!ENTITY libde265-size          "817 KB">
-  <!ENTITY libde265-buildsize     "30 MB">
+  <!ENTITY libde265-md5sum        "1c14b8da1ce75ed87ede01274d4eb15d">
+  <!ENTITY libde265-size          "284K KB">
+  <!ENTITY libde265-buildsize     "6,9 MB">
   <!ENTITY libde265-time          "0,2 UPC">
 ]>
 
@@ -65,6 +65,11 @@ fonte aberta de codificador/decodificador de vídeo H.265.
 
     <bridgehead renderas="sect3">Dependências do libde265</bridgehead>
 
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="cmake"/>
+    </para>
+
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="sdl2"/> (para suporte de saída de sobreposição YUV do
@@ -88,17 +93,6 @@ url="https://&lfs-domainname;/blfs/view/12.2/x/qt5-components.html">Qt
 <sect2 role="installation">
     <title>Instalação do libde265</title>
 
-    
-    <!-- One of them would be "/usr/bin/tests" and IMO installing them is
-         completely stupid.  -->
-<para>
-      Primeiro, impeça a instalação de alguns programas que são úteis somente para
-hackear a libde265:
-    </para>
-
-<screen><userinput>sed '/tools/d' -i Makefile.am &amp;&amp;
-./autogen.sh</userinput></screen>
-
     <para>
       Instale <application>libde265</application> executando os seguintes
 comandos:
@@ -106,9 +100,12 @@ comandos:
 
 <!-- The README.md file mentions a "testdata" directory but I cannot
          find it in the tarball.  -->
-<screen><userinput>./configure --prefix=/usr         \
-            --disable-sherlock265 \
-            --disable-static      &amp;&amp;
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      .. &amp;&amp;
 make</userinput></screen>
 
     
@@ -121,23 +118,6 @@ make</userinput></screen>
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
-  </sect2>
-
-  <sect2 role="commands">
-    <title>Explicações do Comando</title>
-
-    <para>
-      <parameter>--disable-sherlock265</parameter>: Essa chave desabilita o
-programa sherlock265 porque ele exige Qt5, que não mais está no BLFS. O
-programa sherlock265 é mais útil para usuários(as) que estejam editando
-vídeos H.265.
-    </para>
-
-    <para>
-      <option>--enable-encoder</option>: Essa opção habilita o codificador H.265,
-além do decodificador. No entanto, o codificador ainda é experimental, de
-forma que as instruções acima não contém essa opção.
-    </para>
   </sect2>
 
   <sect2 role="content">

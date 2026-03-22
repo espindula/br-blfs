@@ -6,10 +6,10 @@
 
   <!ENTITY mesa-download-http "https://mesa.freedesktop.org/archive/mesa-&mesa-version;.tar.xz">
   <!ENTITY mesa-download-ftp  "">
-  <!ENTITY mesa-md5sum        "8e699baecbb0a15b5651cc0db2035a4c">
+  <!ENTITY mesa-md5sum        "20a629e63ffe1474b33993684bf9cb75">
   <!ENTITY mesa-size          "42 MB">
-  <!ENTITY mesa-buildsize     "1,1 GB (com documentos; adicionar 457 MB para testes)">
-  <!ENTITY mesa-time          "3 UPCs (com documentos; adicionar 1,4 UPC para testes; ambos com
+  <!ENTITY mesa-buildsize     "1,1 GB (com documentos; adicionar 541 MB para testes)">
+  <!ENTITY mesa-time          "3,2 UPCs (com documentos; adicionar 1,7 UPC para testes; ambos com
 paralelismo=4)">
 ]>
 
@@ -37,10 +37,10 @@ BLFS, como AppImages, podem ter problemas com ambos, construção e execução,
 em sistemas com bibliotecas OpenGL instaladas a partir desse pacote. Se você
 acha que não consegue construir ou executar um pacote fornecido ou binário,
 então instale o pacote GLFS <ulink
-url="https://glfs-book.github.io/glfs/shareddeps/libglvnd.html">libglvnd</ulink>.
-Ele fornece as próprias bibliotecas dele OpenGL e permite usar controladores
-externos ao BLFS. Você terá que reconstruir muitos pacotes que usam a OpenGL
-para a finalidade de permitir que pacotes usem
+url="glfs/view/dev/shareddeps/libglvnd.html">libglvnd</ulink>. Ele fornece
+as próprias bibliotecas dele OpenGL e permite usar controladores externos ao
+BLFS. Você terá que reconstruir muitos pacotes que usam a OpenGL para a
+finalidade de permitir que pacotes usem
 <application>libglvnd</application>. Fazer isso não é suportado pelos(as)
 editores(as) do BLFS.
     </para></note>
@@ -230,8 +230,8 @@ url="https://archive.mesa3d.org/demos/">mesa-demos</ulink> (fornece mais que
 inclui os mesmos programas adicionados pelo remendo acima), <ulink
 url="https://omxil.sourceforge.net/">Camada de Integração Bellagio
 OpenMAX</ulink> (para plataformas móveis), <ulink
-url="https://glfs-book.github.io/glfs/shareddeps/libglvnd.html">libglvnd</ulink>
-(fornece bibliotecas OpenGL) e <ulink
+url="/glfs/view/dev/shareddeps/libglvnd.html">libglvnd</ulink> (fornece
+bibliotecas OpenGL) e <ulink
 url="https://github.com/tizonia/tizonia-openmax-il/wiki/Tizonia-OpenMAX-IL/">
 libtizonia</ulink>
     </para>
@@ -344,79 +344,11 @@ comando:
         For me, libdrm does not mention virgl, but mesa accepts it. AFAICS
         freedreno is for qualcom hardware, libdrm will build for it on suitable
         systems. VC4 is for the Broadcom VC4 used in the raspberry pi - ken -->
-<!--
-    <note>
-
-      <para>
-        The measurements above, and the Contents below, are for a full build.
-        Many people will not wish to install drivers they cannot use, so the
-        following paragraphs explain how to limit the drivers, and give an
-        example which can be be reduced or amended as necessary.
-      </para>
-    </note>
-
--->
-<!--
-    <para>
-
-      The (non-gallium) DRI drivers available in X86 are auto, <emphasis>or
-      alternatively a choice from</emphasis> i915, i965, nouveau, r100, r200,
-      and swrast. Use 'auto' to build all available DRI drivers, or use an
-      empty string (DRI_DRIVERS="") if you wish to only build gallium drivers.
-    </para>
-
-    <para>
-      The platforms ("window systems") available for X86 linux are x11, wayland,
-     drm, and surfaceless. By not specifying anything, the meson
-      build-system will build for all these platforms if you have the
-      dependencies, identical to if you had specified '-Dplatforms=auto'.
-    </para>
-
-    <para>
-      Modify the commands below for your desired drivers.  The drivers listed
-      below will cover most modern video cards and virtual machines.  For help in
-      selecting drivers see <ulink url="https://docs.mesa3d.org/systems.html"/>.
--->
-<!-- these two don't seem to be mentioned in that mesa link -->
-<!--
-      For intel drivers, specify crocus for i965 gen 4 through to haswell, iris
-      for broadwell and later.
-    </para>
-
-
-    <note>
-      <para>
-        Although the nouveau drivers can be built for both gallium and dri, the
-        i915 driver can only be built for one or the other.
-      </para>
-    </note>
-
-<screen><userinput>GALLIUM_DRV="crocus,i915,iris,nouveau,r600,radeonsi,svga,swrast,virgl"
-DRI_DRIVERS="i965,nouveau"</userinput></screen>
--->
-<!-- https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/22021 -->
-<!-- No longer needed
-    <para>
-
-      Remove two unneeded references to LLVM headers to avoid a build
-      failure with LLVM 17 or later:
-    </para>
-
-<screen><userinput>sed '/Scalar.h/d;/Utils.h/d' \
-    -i src/gallium/auxiliary/gallivm/lp_bld_init.c</userinput>
-</screen>
--->
 <screen><!--<screen>
 <userinput>patch -Np1 -i ../mesa-&mesa-version;-add_xdemos-1.patch</userinput></screen>-->
 <userinput>patch -Np1 -i ../mesa-add_xdemos-4.patch</userinput></screen>
    
    
-
-
-      
-
-
-    
 
     <para>
       Instale o <application>Mesa</application> executando os seguintes comandos:
@@ -449,12 +381,8 @@ controladores compiladas do Mesa para outros(as).
       Para testar os resultados, emita:
     </para>
 
-<!-- All 98  tests passed for me for 23.3.1 [bdubbs]
-     All 106 tests passed for me for 24.3.1 [zeckma]
-     All 104 tests passed for me for 25.0.1 [zeckma]
-     All 94  tests passed for me for 25.1.2 [zeckma]
-     All 94  tests passed for me for 25.2.2 [zeckma]
-     All 97  tests passed for me for 25.3.1 [zeckma] -->
+<!-- all 97  tests passed for me for 25.3.1 [zeckma]
+     all 100 tests passed for me for 26.0.1 [zeckma] -->
 <screen remap='test'><!--
 sed '/float rsqrtf/,/^}/d' \
     -i ../src/gallium/drivers/llvmpipe/lp_test_arit.c &amp;&amp;-->

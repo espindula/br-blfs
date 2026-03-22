@@ -6,9 +6,9 @@
 
   <!ENTITY giflib-download-http "https://sourceforge.net/projects/giflib/files/giflib-&giflib-version;.tar.gz">
   <!ENTITY giflib-download-ftp  "">
-  <!ENTITY giflib-http-md5sum   "913dd251492134e235ee3c9a91987a4d">
-  <!ENTITY giflib-http-size     "440 KB">
-  <!ENTITY giflib-buildsize     "4,0 MB (com documentação)">
+  <!ENTITY giflib-http-md5sum   "d4ad42777ef499a7c6f8aabf2ccf7716">
+  <!ENTITY giflib-http-size     "460 KB">
+  <!ENTITY giflib-buildsize     "4,1 MB (com documentação)">
   <!ENTITY giflib-time          "menos que 0,1 UPC (com a documentação)">
 ]>
 
@@ -67,23 +67,26 @@ arquivos "GIF".
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/giflib-&giflib-version;-upstream_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/giflib-&giflib-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/giflib-&giflib-version;-security_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/giflib-&giflib-version;-security_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do giflib</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do giflib</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -104,28 +107,30 @@ documentação se <command>make</command> for executado posteriormente.
   <sect2 role="installation">
     <title>Instalação do giflib</title>
 
+
+    <!--
     <para>
-      Primeiro, evite que o processo de construção instale arquivos XML em vez de
-páginas de manual:
+
+      First, prevent the build process from installing XML files instead of man
+      pages:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../giflib-&giflib-version;-upstream_fixes-1.patch</userinput></screen>
 
     <para>
-      Em seguida, corrija várias vulnerabilidades de segurança no utilitário
-'gif2rgb':
+      Next, fix several security vulnerabilities in the 'gif2rgb' utility:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../giflib-&giflib-version;-security_fixes-1.patch</userinput></screen>
 
     <para>
-      Em seguida, remova uma dependência desnecessária de <xref
-linkend="imagemagick"/> movendo um arquivo para um local esperado:
+      Next, remove an unnecessary dependency on <xref linkend="imagemagick"/>
+      by moving a file into an expected location:
     </para>
 
 <screen><userinput remap="pre">cp pic/gifgrid.gif doc/giflib-logo.gif</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>giflib</application> executando os seguintes comandos:
     </para>
 
@@ -140,6 +145,14 @@ linkend="imagemagick"/> movendo um arquivo para um local esperado:
     </para>
 
 <!--
+find doc \( -name Makefile\* -o -name \*.1 \
+         -o -name \*.xml \) -exec rm -v {} \; &amp;&amp;
+
+install -v -dm755 /usr/share/doc/giflib-&giflib-version; &amp;&amp;
+cp -v -R doc/* /usr/share/doc/giflib-&giflib-version;</userinput>
+</screen>
+-->
+<!--
     <para>
 
       If <xref linkend="xmlto"/> is installed, then the API documentation has
@@ -148,15 +161,11 @@ linkend="imagemagick"/> movendo um arquivo para um local esperado:
       class="username">root</systemitem> user:
     </para>
 -->
-<screen role="root"><userinput>make PREFIX=/usr install &amp;&amp;
+<screen role="root"><userinput>make PREFIX=/usr \
+     DOCDIR=/usr/share/doc/giflib-&giflib-version; install &amp;&amp;
 
-rm -fv /usr/lib/libgif.a &amp;&amp;
+rm -fv /usr/lib/libgif.a</userinput></screen>
 
-find doc \( -name Makefile\* -o -name \*.1 \
-        -o -name \*.xml \) -exec rm -v {} \; &amp;&amp;
-
-install -v -dm755 /usr/share/doc/giflib-&giflib-version; &amp;&amp;
-cp -v -R doc/* /usr/share/doc/giflib-&giflib-version;</userinput></screen>
 
   </sect2>
 
@@ -168,13 +177,15 @@ cp -v -R doc/* /usr/share/doc/giflib-&giflib-version;</userinput></screen>
 biblioteca estática que não é usada por nenhum pacote do BLFS.
     </para>
 
-    <para>
-      <command>find doc ... -exec rm -v {} \;</command>: Esse comando remove os
-arquivos <filename>Makefiles</filename>, man e xml do diretório de
-documentação que, de outra forma, seriam instalados pelos comandos a seguir.
-    </para>
 
-  </sect2>
+
+  <!--    <para>
+
+      <command>find doc ... -exec rm -v {} \;</command>: This command removes
+      <filename>Makefiles</filename>, man and xml files from the documentation
+      directory that would otherwise be installed by the commands that follow.
+    </para> -->
+</sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>
@@ -185,7 +196,8 @@ documentação que, de outra forma, seriam instalados pelos comandos a seguir.
       <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
-        <seg>gif2rgb, gifbuild, gifclrmp, giffix, giftext e giftool</seg>
+        <seg><!--gif2rgb, -->
+gifbuild, gifclrmp, giffix, giftext e giftool</seg>
         <seg>libgif.so</seg>
         <seg>/usr/share/doc/giflib-&giflib-version;</seg>
       </seglistitem>
@@ -193,19 +205,22 @@ documentação que, de outra forma, seriam instalados pelos comandos a seguir.
 
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
-      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
-
+      <!--
       <varlistentry id="gif2rgb">
+
         <term><command>gif2rgb</command></term>
         <listitem>
           <para>
-            converte imagens salvas como "GIF" em imagens "RGB" de 24 bits
+            converts images saved as GIF to 24-bit RGB images
           </para>
           <indexterm zone="giflib gif2rgb">
             <primary sortas="b-gif2rgb">gif2rgb</primary>
           </indexterm>
         </listitem>
       </varlistentry>
+-->
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
 
       <varlistentry id="gifbuild">
         <term><command>gifbuild</command></term>

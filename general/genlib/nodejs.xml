@@ -6,10 +6,10 @@
 
   <!ENTITY nodejs-download-http "https://nodejs.org/dist/v&nodejs-version;/node-v&nodejs-version;.tar.xz">
   <!ENTITY nodejs-download-ftp  "">
-  <!ENTITY nodejs-md5sum        "cbbbbb20f7748b946b27a3dd88409098">
+  <!ENTITY nodejs-md5sum        "740a43170672a2f945641436ed14e869">
   <!ENTITY nodejs-size          "49 MB">
   <!ENTITY nodejs-buildsize     "1,4 GB (adicionar 46 MB para os testes)">
-  <!ENTITY nodejs-time          "14 SBU (add 4.7 SBU for tests: both using
+  <!ENTITY nodejs-time          "14 SBU (add 4.3 SBU for tests: both using
                                  parallelism=8 and 8 CPUs online, parts of the
                                  tests will use all online CPUs)">
 ]>
@@ -69,17 +69,21 @@
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/node-v&nodejs-version;-python_build_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/node-v&nodejs-version;-python_build_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Node.js</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Node.js</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -89,7 +93,8 @@ url="&patch-root;/node-v&nodejs-version;-python_build_fix-1.patch"/>
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
       <xref linkend="brotli"/>, <xref linkend="c-ares"/>, <xref linkend="icu"/>,
-<xref linkend="libuv"/> e <xref linkend="nghttp2"/>
+<xref linkend="libuv"/>, <xref linkend="nghttp2"/> e <xref
+linkend="simdutf"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -106,13 +111,17 @@ url="&patch-root;/node-v&nodejs-version;-python_build_fix-1.patch"/>
   <sect2 role="installation">
     <title>Instalação do Node.js</title>
 
+
+
+    <!--
     <para>
-      Primeiro, corrija construir esse pacote com Python 3.14:
+
+      First, fix building this package with Python 3.14:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../node-v&nodejs-version;-python_build_fix-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Construa <application>Node.js</application> executando os seguintes
 comandos:
     </para>
@@ -121,8 +130,9 @@ comandos:
             --shared-brotli        \
             --shared-cares         \
             --shared-libuv         \
-            --shared-openssl       \
             --shared-nghttp2       \
+            --shared-openssl       \
+            --shared-simdutf       \
             --shared-zlib          \
             --with-intl=system-icu &amp;&amp;
 make</userinput></screen>
@@ -145,34 +155,19 @@ Note: We should remove test results after each new BLFS release, and test
 failures here should be updates to Node.js after the latest release.
   - zeckma
 
-After BLFS-12.4:
+After BLFS-13.0:
 
-node.js-22.19.0 (+ 4476|-   3):
-test/parallel/test-fs-cp.mjs
-test/parallel/test-http2-client-set-priority.js
-test/parallel/test-http2-priority-event.js
-
-node.js-22.20.0 (+ 4587|-   4):
-test/parallel/test-fs-cp-async-socket.mjs
-test/parallel/test-fs-cp-sync-copy-socket-error.mjs
-test/parallel/test-http2-client-set-priority.js
-test/parallel/test-http2-priority-event.js
-
-node.js-22.21.1 (+ 4619|-  11):
-test/parallel/test-datetime-change-notify.js
-test/parallel/test-http2-client-set-priority.js
-test/parallel/test-http2-client-unescaped-path.js
-test/parallel/test-http2-multi-content-length.js
-test/parallel/test-http2-priority-event.js
-test/parallel/test-icu-env.js
-test/parallel/test-http2-reset-flood.js
-test/parallel/test-tls-ocsp-callback.js
-test/parallel/test-http2-max-invalid-frames.js
-test/parallel/test-http2-misbehaving-flow-control.js
-test/parallel/test-http2-misbehaving-flow-control-paused.js
-
-node.js-22.22.0 (+ 4625|-  11):
-Same test failures as node.js-22.21.1.
+node.js-22.22.1 (+ 4658|-  10):
+parallel/test-http2-client-set-priority.js
+parallel/test-http2-client-unescaped-path.js
+parallel/test-http2-multi-content-length.js
+parallel/test-http2-priority-event.js
+parallel/test-http2-reset-flood.js
+parallel/test-tls-ocsp-callback.js
+parallel/test-util-styletext.js
+parallel/test-http2-misbehaving-flow-control-paused.js
+parallel/test-http2-max-invalid-frames.js
+parallel/test-http2-misbehaving-flow-control.js
 -->
 <para>
       Agora, como o(a) usuário(a) &root;:
@@ -194,7 +189,7 @@ uma biblioteca mínima local <application>ICU</application>).
     </para>
 
     <para>
-      <parameter>--shared-{brotli,cares,libuv,nghttp2,openssl,zlib}</parameter>:
+      <parameter>--shared-{brotli,cares,libuv,nghttp2,openssl,simdutf,zlib}</parameter>:
 Esse parâmetro usa as bibliotecas instaladas do sistema em vez das cópias
 locais.
     </para>
