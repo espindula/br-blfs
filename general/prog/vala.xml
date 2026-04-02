@@ -6,10 +6,10 @@
 
   <!ENTITY vala-download-http "&gnome-download-http;/vala/&vala-major-version;/vala-&vala-version;.tar.xz">
   <!ENTITY vala-download-ftp  "">
-  <!ENTITY vala-md5sum        "14238ac89810b932db9fd75999739494">
+  <!ENTITY vala-md5sum        "a2dc825de503fad703584cfb0ed50302">
   <!ENTITY vala-size          "3,8 MB">
-  <!ENTITY vala-buildsize     "160 MB (adicionar 19 MB para os testes)">
-  <!ENTITY vala-time          "0,5 UPC (adicionar 1,0 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY vala-buildsize     "160 MB (adicionar 16 MB para os testes)">
+  <!ENTITY vala-time          "0,4 UPC (adicionar 0,9 UPC para testes; ambos usando paralelismo=4)">
 ]>
 
 <sect1 id="vala" xreflabel="Vala-&vala-version;">
@@ -69,17 +69,19 @@ escritos em &quot;C&quot;.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/vala-&vala-version;-graphviz_13_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/vala-&vala-version;-graphviz_13_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Vala</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Vala</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -106,20 +108,21 @@ url="https://weasyprint.org/">weasyprint</ulink>
     <title>Instalação do Vala</title>
 
     
-    <!-- https://gitlab.gnome.org/GNOME/vala/-/issues/1621 -->
-<para>
-      Primeiro, corrija um problema que faz com que <command>valadoc</command>
-trave quando compilado contra graphviz-13 ou posterior:
+    <!-- https://gitlab.gnome.org/GNOME/vala/-/issues/1621 
+    <para>
+
+      First, fix an issue causing <command>valadoc</command> to crash
+      when compiled against graphviz-13 or later:
     </para>
 
 <screen><userinput>patch -Np1 -i ../vala-&vala-version;-graphviz_13_fix-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>Vala</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>./configure --prefix=/usr &amp;&amp;
-make bootstrap</userinput></screen>
+make</userinput></screen>
 
     <para>
       Para testar os resultados, emita: <command>make check</command>.
@@ -138,15 +141,14 @@ class="username">root</systemitem>&quot;:
     <title>Explicações do Comando</title>
 
     <para>
-      <parameter>bootstrap</parameter>: Esse alvo do <command>make</command> força
-o sistema de construção a construir o pacote duas vezes e a usar o
-executável <command>valac</command> produzido na primeira construção para
-regerar os arquivos <filename class="extension">.c</filename> a partir dos
-arquivos <filename class="extension">.vala</filename>. Isso é necessário
-porque o remendo muda um dos arquivos <filename
-class="extension">.vala</filename>. Porém não é necessário se um executável
-<command>valac</command> já estiver instalado no sistema. Nesse caso, basta
-executar <command>make</command>.
+      <option>bootstrap</option>: This <command>make</command> target forces the
+building system to build the package twice and use the
+<command>vala</command> executable produced in the first build to regenerate
+the <filename class="extension">.c</filename> files from the <filename
+class="extension">.vala</filename> files if needed.  If a
+<command>vala</command> executable is not installed yet and you've modified
+any <filename class="extension">.vala</filename> files in the source tree,
+run <command>make bootstrap</command> instead of <command>make</command>.
     </para>
 
     <para>

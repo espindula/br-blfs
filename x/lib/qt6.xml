@@ -8,15 +8,14 @@
 
   <!ENTITY qt6-download-http "&qt6-url;/qt-everywhere-src-&qt6-version;.tar.xz">
   <!ENTITY qt6-download-ftp  "">
-  <!ENTITY qt6-md5sum        "c888eeca204d8ee144d9c57c2df9f8f4">
-  <!ENTITY qt6-size          "1,3 GB">
-  <!ENTITY qt6-buildsize     "50 GB (474 MB instalado)">
+  <!ENTITY qt6-md5sum        "a93e9f424a9d11ee8d67bf8fb1af4772">
+  <!ENTITY qt6-size          "970 MB">
+  <!ENTITY qt6-buildsize     "48 GB (499 MB instalado)">
   <!ENTITY qt6-time          "12 UPC (usando paralelismo = 8)">
 ]>
 
 <sect1 id="qt6" xreflabel="Qt-&qt6-version;">
   <?dbhtml filename="qt6.html" ?>
-
 
   <title>Qt-&qt6-version;</title>
 
@@ -236,8 +235,9 @@ encontrar componentes e atualizar para uma nova versão.
     </note>
 
     <para>
-      Desabilite uma declaração conflitante em sistemas i686 e corrija um erro de
-construção devido a intrínsecos SIMD no QtMultimedia:
+      Primeiro, se você estiver em um sistema i686, desabilite uma declaração
+conflitante e corrija um erro de construção devido a intrínsecos SIMD no
+QtMultimedia:
     </para>
 
 <screen><userinput>if [ "$(uname -m)" == "i686" ]; then
@@ -247,35 +247,37 @@ construção devido a intrínsecos SIMD no QtMultimedia:
 fi</userinput></screen>
 
     <para>
+      Em seguida, remova dois componentes que não são usados no BLFS e que demoram
+muito para construir. Remova também o qtwebengine, pois nós construímos esse
+componente separadamente com componentes instalados no sistema.
+    </para>
+
+<screen><userinput>rm -rf qtwebengine qt3d qtquick3dphysics</userinput></screen>
+
+    <para>
       Instale <application>Qt6</application> executando os seguintes comandos:
     </para>
 
-<screen revision="sysv"><userinput>./configure -prefix $QT6PREFIX      \
-            -sysconfdir /etc/xdg    \
-            -dbus-linked            \
-            -openssl-linked         \
-            -system-sqlite          \
-            -nomake examples        \
-            -no-rpath               \
-            -no-sbom                \
-            -syslog                 \
-            -skip qt3d              \
-            -skip qtquick3dphysics  \
-            -skip qtwebengine       &amp;&amp;
+<screen revision="sysv"><userinput>./configure -prefix $QT6PREFIX   \
+            -sysconfdir /etc/xdg \
+            -dbus-linked         \
+            -openssl-linked      \
+            -system-sqlite       \
+            -nomake examples     \
+            -no-rpath            \
+            -no-sbom             \
+            -syslog              &amp;&amp;
 ninja</userinput></screen>
 
-<screen revision="systemd"><userinput>./configure -prefix $QT6PREFIX      \
-            -sysconfdir /etc/xdg    \
-            -dbus-linked            \
-            -openssl-linked         \
-            -system-sqlite          \
-            -nomake examples        \
-            -no-rpath               \
-            -no-sbom                \
-            -journald               \
-            -skip qt3d              \
-            -skip qtquick3dphysics  \
-            -skip qtwebengine       &amp;&amp;
+<screen revision="systemd"><userinput>./configure -prefix $QT6PREFIX   \
+            -sysconfdir /etc/xdg \
+            -dbus-linked         \
+            -openssl-linked      \
+            -system-sqlite       \
+            -nomake examples     \
+            -no-rpath            \
+            -no-sbom             \
+            -journald            &amp;&amp;
 ninja</userinput></screen>
 
     <para>

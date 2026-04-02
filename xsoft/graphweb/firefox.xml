@@ -14,7 +14,7 @@
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
-  <!ENTITY firefox-time          "13 UPC usando-se -j8, sem testes">
+  <!ENTITY firefox-time          "15 UPC usando-se -j8, sem testes">
 ]>
 
 <sect1 id="firefox" xreflabel="Firefox-&firefox-version;">
@@ -190,37 +190,6 @@ linkend="wget"/>, <xref linkend="wireless_tools"/> e <xref linkend="yasm"/>
     <title>Instalação do Firefox</title>
 
     <para>
-      Primeiro, aplique um remendo para corrigir funcionalidade de vídeo com <xref
-linkend="ffmpeg"/>:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-ffmpeg-8.0.patch</userinput></screen>
-
-    <para>
-      Nós precisamos de um remendo para corrigir construir esse pacote com
-glibc-2.43. Este remendo muda a caixa fornecida Rust, de modo que nós
-precisamos editar o sistema de construção para fazer
-<command>cargo</command> ignorar a verificação da soma de verificação:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
-sed '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
-    -i Cargo.toml &amp;&amp;
-sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
-
-    <para>
-      Em seguida, corrija construir esse pacote com Python-3.14:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>
-
-    <para>
-      Em seguida, corrija construir esse pacote com LLVM-22:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-llvm_22-1.patch</userinput></screen>
-
-    <para>
       A configuração do <application>Firefox</application> é realizada criando-se
 um arquivo <filename>mozconfig</filename> contendo as opções desejadas de
 configuração. Um <filename>mozconfig</filename> padrão é criado abaixo. Para
@@ -231,21 +200,6 @@ descomente quaisquer outras opções desejadas. Crie o arquivo emitindo o
 seguinte comando:
     </para>
 
-<!-- The following sections were fixed in 140.0ESR. ICU >
-= 76.1 is required -->
-<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1859752
-         https://hg.mozilla.org/try/rev/d5f3b0c4f08a -->
-<!--
-    <para>
-
-      If you are building with system ICU, adapt the line break mapping for ICU
-      74 or later.  This construct adds five entries to a c++ array.
-    </para>
-
-<screen><userinput>for i in {43..47}; do
-   sed -i '/ZWJ/s/}/,CLASS_CHARACTER&amp;/' intl/lwbrk/LineBreaker.cpp 
-done</userinput></screen>
--->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
 
@@ -342,8 +296,36 @@ mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 MOZ_APP_REMOTINGNAME=firefox</literal>
 EOF</userinput></screen>
 
+    <para>
+      Aplique um remendo para corrigir funcionalidade de vídeo com <xref
+linkend="ffmpeg"/>:
+    </para>
 
-    
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-ffmpeg-8.0.patch</userinput></screen>
+
+    <para>
+      Um remendo é necessário para corrigir construir com glibc-2.43. Este remendo
+muda a caixa fornecida Rust, de modo que o sistema de construção precise ser
+mudado para fazer com que <command>cargo</command> ignore a verificação de
+soma de verificação:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
+sed '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
+    -i Cargo.toml &amp;&amp;
+sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
+
+    <para>
+      Em seguida, corrija construir esse pacote com Python-3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>
+
+    <para>
+      Em seguida, corrija construir esse pacote com LLVM-22:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-llvm_22-1.patch</userinput></screen>
 
     <para>
       Se você estiver construindo com o ICU-78.1 do sistema ou posterior, atualize
