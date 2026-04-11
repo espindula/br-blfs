@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY efibootmgr-download-http "https://github.com/rhboot/efibootmgr/archive/&efibootmgr-version;/efibootmgr-&efibootmgr-version;.tar.gz">
+  <!ENTITY efibootmgr-download-ftp  "">
+  <!ENTITY efibootmgr-md5sum        "e170147da25e1d5f72721ffc46fe4e06">
+  <!ENTITY efibootmgr-size          "48 KB">
+  <!ENTITY efibootmgr-buildsize     "1,1 MB">
+  <!ENTITY efibootmgr-time          "menos que 0,1 UPC">
+]>
+
+<sect1 id="efibootmgr" xreflabel="efibootmgr-&efibootmgr-version;">
+  <?dbhtml filename="efibootmgr.html"?>
+
+  <title>efibootmgr-&efibootmgr-version;</title>
+
+  <indexterm zone="efibootmgr">
+    <primary sortas="a-efibootmgr">efibootmgr</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao efibootmgr</title>
+
+    <para>
+      O pacote <application>efibootmgr</application> fornece ferramentas e
+bibliotecas para manipular variáveis EFI.
+    </para>
+
+    &lfs130_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&efibootmgr-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&efibootmgr-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &efibootmgr-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &efibootmgr-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &efibootmgr-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &efibootmgr-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do efibootmgr</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="efivar"/> e <xref linkend="popt"/>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do efibootmgr</title>
+
+    <para>
+      Construa o <application>efibootmgr</application> com os seguintes comandos:
+    </para>
+
+<screen><userinput>make EFIDIR=LFS EFI_LOADER=grubx64.efi</userinput></screen>
+
+    <para>
+      Esse pacote não tem uma suíte de teste.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>make install EFIDIR=LFS</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>EFIDIR=LFS</parameter>: Essa opção especifica o nome do
+subdiretório da distribuição sob <filename
+class="directory">/boot/efi/EFI</filename>. O sistema de construção desse
+pacote precisa que essa seja configurada explicitamente.
+    </para>
+
+    <para>
+      <parameter>EFI_LOADER=grubx64.efi</parameter>: Essa opção especifica o nome
+do carregador de inicialização EFI padrão. Ele é configurado para
+corresponder ao carregador de inicialização EFI fornecido pelo GRUB.
+    </para>
+
+  </sect2>
+
+  <sect2 role="using">
+    <title>Usando efibootmgr</title>
+
+    <para>
+      No LFS, as instruções explicam como instalar o GRUB para UEFI. O processo
+instala a EFI em um local rigidamente codificado, pesquisado pela maioria
+das implementações de firmware UEFI. No entanto, se você reinstalar o GRUB,
+ele usará esse pacote para instalar a EFI em um local que o GRUB prefere, o
+que permite maior controle sobre o gerenciamento da EFI. A opção
+<option>--removable</option> não mais será necessária ao executar o
+<command>grub-install</command>. Esse pacote pode ser necessário em cenários
+onde o firmware UEFI não procure pelo local rigidamente codificado da EFI. O
+livro do LFS endereça essa situação.
+    </para>
+
+    <para>
+      Para a finalidade de que o <command>efibootmgr</command> funcione, o sistema
+de arquivos da variável EFI precisa ser montado previamente. Se você ainda
+estiver em um chroot e não tiver reiniciado, monte-o como o(a) usuário(a)
+&root;:
+    </para>
+
+<screen role="root"><userinput>mountpoint /sys/firmware/efi/efivars ||
+  mount -v -t efivarfs efivarfs /sys/firmware/efi/efivars</userinput></screen>
+
+    <para revision="sysv">
+      O sistema de arquivos da variável EFI não é montado automaticamente na
+inicialização para sistemas SysVinit, significando que sempre que
+<command>grub-install</command> ou <command>efibootmgr</command> forem
+executados, eles falharão. Para garantir que o sistema de arquivos seja
+montado na inicialização, adicione o seguinte ao
+<filename>/etc/fstab</filename> como o(a) usuário(a) &root;:
+    </para>
+
+<screen revision="sysv"
+  role="root"><userinput>cat &gt;&gt; /etc/fstab &lt;&lt; "EOF"
+<literal>efivarfs /sys/firmware/efi/efivars efivarfs defaults 0 0</literal>
+EOF</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          efibootdump e efibootmgr
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="efibootdump">
+        <term><command>efibootdump</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para exibir opções individuais de inicialização UEFI, a
+partir de um arquivo ou de uma variável UEFI
+          </para>
+          <indexterm zone="efibootdump">
+            <primary sortas="b-efibootdump">efibootdump</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="efibootmgr-prog">
+        <term><command>efibootmgr</command></term>
+        <listitem>
+          <para>
+            é uma ferramenta para manipular o Gerenciador de Inicialização UEFI
+          </para>
+          <indexterm zone="efibootmgr efibootmgr-prog">
+            <primary sortas="b-efibootmgr">efibootmgr</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

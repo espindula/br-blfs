@@ -24,9 +24,9 @@
 
   <!-- full size remeasured for 7.0.0.3 -->
 
-  <!ENTITY libreoffice-buildsize  "7.6 GB including the additional files if downloaded during the build (744 MB
-installed). Installing the whole set of languages requires more than 25 GB
-(around 3 GB installed)">
+  <!ENTITY libreoffice-buildsize  "7,6 GB incluindo os arquivos adicionais se baixados durante a construção
+(744 MB instalado). Instalar-se o conjunto inteiro de idiomas exige mais que
+25 GB (cerca de 3 GB instalado)">
 
  <!-- Editors: many updates to poppler will break LO using system poppler until
       somebody is able to provide a patch or sed.  In these cases, please mark
@@ -60,7 +60,7 @@ installed). Installing the whole set of languages requires more than 25 GB
 
        For 7.5.4.2, I increased the parallelism to 8.  -bdubbs
   -->
-  <!ENTITY libreoffice-time "24 SBU with parallelism=8 (will vary due to download time)">
+  <!ENTITY libreoffice-time "24 UPC com paralelismo=8 (variará devido ao tempo de transferência)">
 
 ]>
 
@@ -319,18 +319,22 @@ fonte.
 
 
 
-
-
     <!-- keep a commented instruction if no patches are currently required -->
-<!--    <para>
-
-      First, fix build failures introduced by the latest version of poppler:
+<para>
+      Primeiro, corrija falhas de construção introduzidas pela versão mais recente
+do poppler:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-poppler_26.02-1.patch</userinput></screen>-->
-<para>
-      First, fix a bug with linking to zlib, fix a bug which would cause an
-install failure, and prevent compression of man pages:
+<!--patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-poppler_26.02-1.patch-->
+<screen><userinput remap="pre">sed -e '/, const GooString/ s/GooString *\*/std::string \&amp;/' \
+    -i sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx \
+       sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx</userinput></screen>
+
+
+
+    <para>
+      Primeiro, corrija um defeito com lincagem para zlib, corrija um defeito que
+causaria uma falha da instalação, e evite a compressão de páginas de manual:
     </para>
 
 <screen><userinput remap="pre">sed -i '/icuuc \\/a zlib\\'           writerperfect/Library_wpftdraw.mk &amp;&amp;

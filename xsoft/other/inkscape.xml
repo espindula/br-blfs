@@ -76,7 +76,7 @@ mudar imagens SVG.
       <listitem>
         <para>
           Remendo exigido: <ulink
-url="&patch-root;/inkscape-&inkscape-version;-poppler-26_fixes.patch"/>
+url="&patch-root;/inkscape-&inkscape-version;-poppler-26_fixes-2.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -152,7 +152,7 @@ url="https://libwpd.sourceforge.net/">libwpd</ulink>)
 poppler-26.01.0:
     </para>
 
-<!--
+    <!--
     <para>
 
       Then, fix build failures that appeared with poppler-26.01.0:
@@ -164,7 +164,7 @@ sed -e '/Stream.h/a#include &lt;poppler/goo/gmem.h&gt;' \
     -e 's/reset/rewind/'                          \
     -i src/extension/internal/pdfinput/svg-builder.cpp</userinput></screen>
 -->
-<screen><userinput remap="pre">patch -Np1 -i inkscape-&inkscape-version;-poppler-26_fixes.patch</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../inkscape-&inkscape-version;-poppler-26_fixes-2.patch</userinput></screen>
 
 
 
@@ -186,13 +186,14 @@ comandos:
       "bash download-gtest.sh". CMake is unable to find gtest.
     </para>
 -->
-<screen><userinput>mkdir build                       &amp;&amp;
-cd    build                       &amp;&amp;
+<screen><userinput>mkdir build                        &amp;&amp;
+cd    build                        &amp;&amp;
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr        \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -W no-dev                           \
-      ..                                  &amp;&amp;
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -D WITH_INTERNAL_2GEOM=ON    \
+      -W no-dev                    \
+      ..                           &amp;&amp;
 make</userinput></screen>
 
 
@@ -222,6 +223,14 @@ no código.
     </para>
 
     <para>
+      <parameter>-D WITH_INTERNAL_2GEOM=ON</parameter>: Essa chave é inútil para a
+primeira construção do <application>Inkscape</application>, mas ela impede
+lincagem para biblioteca <filename
+class="libraryfile">lib2geom.so</filename> previamente instalada ao
+atualizar o <application>Inkscape</application>.
+    </para>
+
+    <para>
       <parameter>-W no-dev</parameter>: Esse parâmetro silencia vários avisos
 destinados somente para os(as) desenvolvedores(as) de projetos.
     </para>
@@ -247,14 +256,11 @@ que manipulam imagens.
           inkscape e inkview
         </seg>
         <seg>
-          
-          <!--lib2geom.so and-->
-libinkscape_base.so (em /usr/lib/inkscape)
+          lib2geom.so e libinkscape_base.so (em /usr/lib/inkscape)
         </seg>
         <seg>
-          
-          <!--/usr/include/2geom-&lib2geom-version;,-->
-/usr/lib/inkscape e /usr/share/inkscape
+          /usr/include/2geom-&lib2geom-version;, /usr/lib/inkscape e
+/usr/share/inkscape
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -295,6 +301,18 @@ libinkscape_base.so (em /usr/lib/inkscape)
           </para>
           <indexterm zone="inkscape libinkscape_base">
             <primary sortas="c-libinkscape_base">libinkscape_base.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="lib2geom">
+        <term><filename class="libraryfile">lib2geom.so</filename></term>
+        <listitem>
+          <para>
+            é uma biblioteca de geometria 2D em C++ para gráficos vetoriais
+          </para>
+          <indexterm zone="inkscape lib2geom">
+            <primary sortas="c-lib2geom">lib2geom.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

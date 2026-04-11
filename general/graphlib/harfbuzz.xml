@@ -7,9 +7,9 @@
   <!ENTITY harfbuzz-download-http
            "https://github.com/harfbuzz/harfbuzz/releases/download/&harfbuzz-version;/harfbuzz-&harfbuzz-version;.tar.xz">
   <!ENTITY harfbuzz-download-ftp  "">
-  <!ENTITY harfbuzz-md5sum        "de595664aa7213f408d417ea16e8a6be">
+  <!ENTITY harfbuzz-md5sum        "da27771546eb196b8bec6703d81b12b7">
   <!ENTITY harfbuzz-size          "19 MB">
-  <!ENTITY harfbuzz-buildsize     "169 MB (com testes)">
+  <!ENTITY harfbuzz-buildsize     "161 MB (com testes)">
   <!ENTITY harfbuzz-time          "0,8 UPC (com testes; ambos usando paralelismo=4)">
 ]>
 
@@ -71,22 +71,25 @@ modelagem de texto "OpenType".
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <xref linkend="glib2"/> (exigido para Pango; GObject Introspection exigido
-para construir GNOME), <xref role="first" linkend="graphite2"/> (exigido
-para construir <xref role="nodep" linkend="texlive"/> ou <xref role="nodep"
-linkend="libreoffice"/> com harfbuzz do sistema), <xref linkend="icu"/> e
-<xref linkend="freetype2"/>
+      <xref linkend="freetype2"/>, <xref linkend="glib2"/> (exigido para Pango;
+GObject Introspection exigido para construir GNOME), <xref role="first"
+linkend="graphite2"/> (exigido para construir <xref role="nodep"
+linkend="texlive"/> ou <xref role="nodep" linkend="libreoffice"/> com
+harfbuzz do sistema), e <xref linkend="icu"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <xref linkend="cairo"/> (circular: construa cairo e todas as dependências
 recomendadas dele, incluindo harfbuzz, primeiro, então reconstrua harfbuzz
-se a infraestrutura de retaguarda cairo for necessária), <xref
-linkend="git"/>, <xref linkend="gtk-doc"/>, <ulink
+se a estrutura de retaguarda cairo for necessária), <xref linkend="git"/>,
+<xref linkend="gtk-doc"/>, <xref linkend="glew"/>, <xref linkend="mesa"/>, e
+<ulink
+url="https://linuxfromscratch.org/slfs/view/dev/graph/glfw.html">glfw</ulink>
+(todos três para o utilitário <application>hb-gpu</application>), <ulink
 url="https://pypi.org/project/FontTools/">FontTools</ulink> (módulo Python
 3, para a suíte de teste), <ulink
-url="https://www.colm.net/open-source/ragel/">ragel</ulink> e <ulink
+url="https://www.colm.net/open-source/ragel/">ragel</ulink>, e <ulink
 url="https://github.com/bytecodealliance/wasm-micro-runtime">wasm-micro-runtime</ulink>
     </para>
 
@@ -161,15 +164,16 @@ isso.
 
       <seglistitem>
         <seg>
-          hb-info, hb-ot-shape-closure, hb-shape, hb-subset e hb-view (somente se
-"Cairo" estiver instalado)
+          hb-info, hb-raster, hb-shape, hb-subset, hb-vector e hb-view (somente se
+Cairo estiver instalado)
         </seg>
         <seg>
-          libharfbuzz.so, libharfbuzz-cairo.so (somente se "Cairo" estiver instalado),
-libharfbuzz-gobject.so, libharfbuzz-icu.so e libharfbuzz-subset.so
+          libharfbuzz.so, libharfbuzz-cairo.so (somente se Cairo estiver instalado),
+libharfbuzz-gobject.so, libharfbuzz-gpu.so, libharfbuzz-icu.so,
+libharfbuzz-raster.so, libharfbuzz-subset.so e libharfbuzz-vector.so
         </seg>
         <seg>
-          /usr/include/harbuzz, /usr/lib/cmake/harfbuzz e
+          /usr/include/harfbuzz, /usr/lib/cmake/harfbuzz e
 /usr/share/gtk-doc/html/harfbuzz (opcional)
         </seg>
       </seglistitem>
@@ -191,17 +195,34 @@ libharfbuzz-gobject.so, libharfbuzz-icu.so e libharfbuzz-subset.so
        </listitem>
      </varlistentry>
 
+
+
+      <!-- Not seen after 14.0.0
      <varlistentry id="hb-ot-shape-closure">
+
         <term><command>hb-ot-shape-closure</command></term>
         <listitem>
           <para>
-            fornece o conjunto de caracteres contidos em uma sequência de caracteres,
-representados como caracteres únicos e(ou) nomes únicos de
-caracteres. Exemplo: <command>hb-ot-shape-closure
-/usr/share/fonts/dejavu/DejaVuSans.ttf "Hello World."</command>
+            gives the set of characters contained in a string, represented as
+            single characters and/or single character names. Example:
+            <command>hb-ot-shape-closure
+              /usr/share/fonts/dejavu/DejaVuSans.ttf "Hello World."</command>
           </para>
           <indexterm zone="harfbuzz hb-ot-shape-closure">
             <primary sortas="b-hb-ot-shape-closure">hb-ot-shape-closure</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+-->
+<varlistentry id="hb-raster">
+        <term><command>hb-raster</command></term>
+        <listitem>
+          <para>
+            é usado para renderizar texto com formatação como uma imagem raster usando
+uma fonte específica
+          </para>
+          <indexterm zone="harfbuzz hb-raster">
+            <primary sortas="b-hb-raster">hb-raster</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -227,6 +248,18 @@ posicionados
           </para>
           <indexterm zone="harfbuzz hb-subset">
             <primary sortas="b-hb-subset">hb-subset</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="hb-vector">
+        <term><command>hb-vector</command></term>
+        <listitem>
+          <para>
+            é usado para desenhar texto em formato SVG com uma fonte específica
+          </para>
+          <indexterm zone="harfbuzz hb-vector">
+            <primary sortas="b-hb-vector">hb-vector</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -286,6 +319,20 @@ World."</command>
         </listitem>
       </varlistentry>
 
+      <varlistentry id="libharfbuzz-gpu">
+        <term><filename class="libraryfile">libharfbuzz-gpu.so</filename></term>
+        <listitem>
+          <para>
+            fornece funções de API para codificar contornos de glifos na CPU em blocos
+compactos que a GPU decodifica e rasteriza diretamente em um sombreador de
+fragmentos
+          </para>
+          <indexterm zone="harfbuzz libharfbuzz-gpu">
+            <primary sortas="c-libharfbuzz-gpu">libharfbuzz-gpu.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="libharfbuzz-icu">
         <term><filename class="libraryfile">libharfbuzz-icu.so</filename></term>
         <listitem>
@@ -294,6 +341,19 @@ World."</command>
           </para>
           <indexterm zone="harfbuzz libharfbuzz-icu">
             <primary sortas="c-libharfbuzz-icu">libharfbuzz-icu.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libharfbuzz-raster">
+        <term><filename class="libraryfile">libharfbuzz-raster.so</filename></term>
+        <listitem>
+          <para>
+            fornece funções de API para rasterizar glifos para bitmaps, incluindo fontes
+coloridas
+          </para>
+          <indexterm zone="harfbuzz libharfbuzz-raster">
+            <primary sortas="c-libharfbuzz-raster">libharfbuzz-raster.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>
@@ -311,6 +371,19 @@ fonte
         </listitem>
       </varlistentry>
 
+      <varlistentry id="libharfbuzz-vector">
+        <term><filename class="libraryfile">libharfbuzz-vector.so</filename></term>
+        <listitem>
+          <para>
+            fornece funções de API para gerar glifos para formatos vetoriais, incluindo
+fontes coloridas. Somente SVG atualmente é suportado, mas outros formatos
+poderão ser adicionados posteriormente
+          </para>
+          <indexterm zone="harfbuzz libharfbuzz-vector">
+            <primary sortas="c-libharfbuzz-vector">libharfbuzz-vector.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
     </variablelist>
 
   </sect2>

@@ -1175,6 +1175,54 @@ rustc; alguns deles, ainda assim, usarão todas as CPUs online, pelo menos
 desde o rustc-1.42.0.
       </para>
 
+      <bridgehead renderas="sect4" id="cargo-offline">Construindo offline com Cargo</bridgehead>
+
+      <para>
+        Um dos problemas com <application>Cargo</application> é que os crates
+necessários são baixados dinamicamente, o que o torna de modo a
+<command>cargo build</command> não poder ser executado offline. Outro
+aborrecimento é que os crates necessários são baixados para o diretório
+<filename class="directory">~/.cargo</filename>, o que possivelmente bagunce
+o diretório lar do(a) usuário(a) ou o do(a) &root;. Para aqueles(as) que
+quiserem ter mais algum controle sobre o local da transferência dos crates,
+é possível configurar a variável <envar>CARGO_HOME</envar> para o local
+desejado no ambiente, por exemplo:
+      </para>
+
+<screen role='nodump'><userinput>export CARGO_HOME=<replaceable>/sources/cargo</replaceable></userinput></screen>
+
+      <para>
+        Também é possível baixar todos os crates necessários de uma só vez antes de
+construir um pacote. Nós apresentaremos dois métodos, que podem precisar ser
+adaptados para o pacote específico que está sendo construído. O mais simples
+é o de baixar os pacotes necessários executando <command>cargo
+fetch</command> a partir do diretório que contém o arquivo
+<filename>Cargo.toml</filename> de nível superior. Os pacotes são baixados
+para <envar>$CARGO_HOME</envar> (ou <filename
+class='directory'>~/.cargo</filename>) e podem ser usados offline nas
+instruções de construção. Mas isso pode falhar em alguns casos, por exemplo,
+para pacotes que redefinam <envar>CARGO_HOME</envar> no sistema de
+construção deles. Nesse caso, as seguintes instruções (executadas a partir
+do diretório que contém o <filename>Cargo.toml</filename> de nível superior)
+criarão um diretório <quote>vendor</quote> contendo os crates do fonte e o
+usarão offline. Observe que os crates também são baixados para
+<envar>$CARGO_HOME</envar> pelo comando <command>cargo vendor</command>:
+      </para>
+
+<screen role='nodump'><userinput>cargo vendor    &amp;&amp;
+mkdir -v .cargo &amp;&amp;
+cat &gt; .cargo/config.toml &lt;&lt; EOF
+<literal>[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"</literal>
+EOF</userinput></screen>
+
+      <para>
+        Depois disso, as instruções podem ser executadas como no livro.
+      </para>
+
   </sect2>
 
   <sect2 id="optimizations">

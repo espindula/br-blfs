@@ -130,8 +130,17 @@ esteja configurada corretamente para ambos, o(a) usuário(a) atual e para
 &root;, seguindo <xref linkend='xorg-env'/> antes de se construir o glycin):
     </para>
 
+<!--https://gitlab.gnome.org/GNOME/glycin/-/merge_requests/396-->
 <screen><userinput>cargo vendor &amp;&amp;
 patch -Np1 -i ../glycin-&glycin-version;-xorg_prefix-1.patch</userinput></screen>
+
+
+    <para>
+      Fix a build error when a system <application>libglycin</application> is not
+yet installed:
+    </para>
+
+<screen><userinput>sed -i "s/get_option('libglycin-gtk4')/(&amp; or get_option('glycin-thumbnailer'))/" meson.build</userinput></screen>
 
     <para>
       Instale <application>glycin</application> executando os seguintes comandos:

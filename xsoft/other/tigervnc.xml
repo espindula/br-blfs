@@ -174,12 +174,15 @@ mkdir -p unix/xserver &amp;&amp;
 tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
     --strip-components=1              \
     -C unix/xserver                   &amp;&amp;
-( cd unix/xserver                              &amp;&amp;
+
+pushd unix/xserver                             &amp;&amp;
   patch -Np1 -i ../xserver21.patch             &amp;&amp;
+
   sed -e '/sha.h/s/sha/sha1/'                  \
       -e '/sha1/a #include &lt;nettle/version.h&gt;' \
       -e 's/ctx, 20/ctx/'                      \
-      -i os/xsha1.c )                 &amp;&amp;
+      -i os/xsha1.c                            &amp;&amp;
+popd                                           &amp;&amp;
 
 # Build viewer
 cmake -G "Unix Makefiles"          \
@@ -187,7 +190,7 @@ cmake -G "Unix Makefiles"          \
       -D CMAKE_BUILD_TYPE=Release  \
       -D INSTALL_SYSTEMD_UNITS=OFF \
       -W no-dev .                  &amp;&amp;
-make &amp;&amp;
+make                               &amp;&amp;
 
 # Build server
 pushd unix/xserver &amp;&amp;
@@ -202,7 +205,7 @@ pushd unix/xserver &amp;&amp;
       --disable-static      --enable-dri3        --disable-dri         \
       --without-dtrace      --enable-dri2        --enable-glx          \
       --with-pic &amp;&amp;
-  make  &amp;&amp;
+  make           &amp;&amp;
 popd</userinput></screen>
 
 <screen revision="systemd"><userinput># Put code in place
@@ -210,19 +213,21 @@ mkdir -p unix/xserver &amp;&amp;
 tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
     --strip-components=1              \
     -C unix/xserver                   &amp;&amp;
-( cd unix/xserver                              &amp;&amp;
+
+pushd unix/xserver                             &amp;&amp;
   patch -Np1 -i ../xserver21.patch             &amp;&amp;
   sed -e '/sha.h/s/sha/sha1/'                  \
       -e '/sha1/a #include &lt;nettle/version.h&gt;' \
       -e 's/ctx, 20/ctx/'                      \
-      -i os/xsha1.c )                 &amp;&amp;
+      -i os/xsha1.c                            &amp;&amp;
+popd                                           &amp;&amp;
 
 # Build viewer
 cmake -G "Unix Makefiles"          \
       -D CMAKE_INSTALL_PREFIX=/usr \
       -D CMAKE_BUILD_TYPE=Release  \
-      -W no-dev . &amp;&amp;
-make &amp;&amp;
+      -W no-dev .                  &amp;&amp;
+make                               &amp;&amp;
 
 # Build server
 pushd unix/xserver &amp;&amp;
@@ -237,7 +242,7 @@ pushd unix/xserver &amp;&amp;
       --disable-static      --enable-dri3        --disable-dri         \
       --without-dtrace      --enable-dri2        --enable-glx          \
       --with-pic &amp;&amp;
-  make  &amp;&amp;
+  make           &amp;&amp;
 popd</userinput></screen>
 
     <para>
