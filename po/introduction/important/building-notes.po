@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2026-04-02 09:27-0300\n"
-"PO-Revision-Date: 2026-03-15 04:18+0000\n"
+"POT-Creation-Date: 2026-04-10 20:42-0300\n"
+"PO-Revision-Date: 2026-04-07 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/introduction_important_building-notes/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -2418,14 +2418,119 @@ msgstr ""
 "rustc; alguns deles, ainda assim, usarão todas as CPUs online, pelo menos "
 "desde o rustc-1.42.0."
 
-#. type: Content of: <sect1><sect2><title>
+#. type: Content of: <sect1><sect2><bridgehead>
+#: blfs-en/introduction/important/building-notes.xml:1178
+#, xml-text
+msgid "Building offline with Cargo"
+msgstr "Construindo offline com Cargo"
+
+#. type: Content of: <sect1><sect2><para>
 #: blfs-en/introduction/important/building-notes.xml:1181
+#, xml-text
+msgid ""
+"One of the problems with <application>Cargo</application> is that the needed"
+" crates are downloaded on the fly, which makes it so that <command>cargo "
+"build</command> cannot be run offline. Another annoyance is that the needed "
+"crates are downloaded to the directory <filename "
+"class=\"directory\">~/.cargo</filename>, which may clutter the user's or "
+"&root;'s home directory. For those who want to have some more control on the"
+" download location for the crates, it is possible to set the variable "
+"<envar>CARGO_HOME</envar> to the desired location in the environment, for "
+"example:"
+msgstr ""
+"Um dos problemas com <application>Cargo</application> é que os crates "
+"necessários são baixados dinamicamente, o que o torna de modo a "
+"<command>cargo build</command> não poder ser executado offline. Outro "
+"aborrecimento é que os crates necessários são baixados para o diretório "
+"<filename class=\"directory\">~/.cargo</filename>, o que possivelmente "
+"bagunce o diretório lar do(a) usuário(a) ou o do(a) &root;. Para aqueles(as)"
+" que quiserem ter mais algum controle sobre o local da transferência dos "
+"crates, é possível configurar a variável <envar>CARGO_HOME</envar> para o "
+"local desejado no ambiente, por exemplo:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/introduction/important/building-notes.xml:1192
+#, no-wrap, xml-text
+msgid ""
+"<userinput>export "
+"CARGO_HOME=<replaceable>/sources/cargo</replaceable></userinput>"
+msgstr ""
+"<userinput>export "
+"CARGO_HOME=<replaceable>/sources/cargo</replaceable></userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/introduction/important/building-notes.xml:1195
+#, xml-text
+msgid ""
+"It is also possible to have all the needed crates downloaded at once before "
+"building a package. We'll give two methods, which may have to be adapted to "
+"the particular package that is built. The simplest one is to download the "
+"needed packages by running <command>cargo fetch</command> from the directory"
+" containing the top-level <filename>Cargo.toml</filename> file. The packages"
+" are downloaded to <envar>$CARGO_HOME</envar> (or <filename "
+"class='directory'>~/.cargo</filename>), and can be used offline in the build"
+" instructions. But this may fail in some cases, for example for packages "
+"that redefine <envar>CARGO_HOME</envar> in their build system. In this case,"
+" the following instructions (run from the directory containing the top "
+"<filename>Cargo.toml</filename>), will create a <quote>vendor</quote> "
+"directory containing the source crates and will use it offline. Note that "
+"the crates are also downloaded to <envar>$CARGO_HOME</envar> by the "
+"<command>cargo vendor</command> command:"
+msgstr ""
+"Também é possível baixar todos os crates necessários de uma só vez antes de "
+"construir um pacote. Nós apresentaremos dois métodos, que podem precisar ser"
+" adaptados para o pacote específico que está sendo construído. O mais "
+"simples é o de baixar os pacotes necessários executando <command>cargo "
+"fetch</command> a partir do diretório que contém o arquivo "
+"<filename>Cargo.toml</filename> de nível superior. Os pacotes são baixados "
+"para <envar>$CARGO_HOME</envar> (ou <filename "
+"class='directory'>~/.cargo</filename>) e podem ser usados offline nas "
+"instruções de construção. Mas isso pode falhar em alguns casos, por exemplo,"
+" para pacotes que redefinam <envar>CARGO_HOME</envar> no sistema de "
+"construção deles. Nesse caso, as seguintes instruções (executadas a partir "
+"do diretório que contém o <filename>Cargo.toml</filename> de nível superior)"
+" criarão um diretório <quote>vendor</quote> contendo os crates do fonte e o "
+"usarão offline. Observe que os crates também são baixados para "
+"<envar>$CARGO_HOME</envar> pelo comando <command>cargo vendor</command>:"
+
+#. type: Content of: <sect1><sect2><screen>
+#: blfs-en/introduction/important/building-notes.xml:1212
+#, no-wrap, xml-text
+msgid ""
+"<userinput>cargo vendor    &amp;&amp;\n"
+"mkdir -v .cargo &amp;&amp;\n"
+"cat &gt; .cargo/config.toml &lt;&lt; EOF\n"
+"<literal>[source.crates-io]\n"
+"replace-with = \"vendored-sources\"\n"
+"\n"
+"[source.vendored-sources]\n"
+"directory = \"vendor\"</literal>\n"
+"EOF</userinput>"
+msgstr ""
+"<userinput>cargo vendor    &amp;&amp;\n"
+"mkdir -v .cargo &amp;&amp;\n"
+"cat &gt; .cargo/config.toml &lt;&lt; EOF\n"
+"<literal>[source.crates-io]\n"
+"replace-with = \"vendored-sources\"\n"
+"\n"
+"[source.vendored-sources]\n"
+"directory = \"vendor\"</literal>\n"
+"EOF</userinput>"
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/introduction/important/building-notes.xml:1223
+#, xml-text
+msgid "After this, the instructions can be run as in the book."
+msgstr "Depois disso, as instruções podem ser executadas como no livro."
+
+#. type: Content of: <sect1><sect2><title>
+#: blfs-en/introduction/important/building-notes.xml:1229
 #, xml-text
 msgid "Optimizing the build"
 msgstr "Otimizando a construção"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1184
+#: blfs-en/introduction/important/building-notes.xml:1232
 #, xml-text
 msgid ""
 "Many people will prefer to optimize compiles as they see fit, by providing "
@@ -2443,7 +2548,7 @@ msgstr ""
 "<command>info gcc</command>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1192
+#: blfs-en/introduction/important/building-notes.xml:1240
 #, xml-text
 msgid ""
 "Some packages default to <option>-O2 -g</option>, others to <option>-O3 "
@@ -2472,7 +2577,7 @@ msgstr ""
 " para confirmar o que está sendo usado."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1208
+#: blfs-en/introduction/important/building-notes.xml:1256
 #, xml-text
 msgid ""
 "Clearly, if you are optimizing your own program you can spend time to "
@@ -2502,7 +2607,7 @@ msgstr ""
 "tudo executará em um SandyBridge."
 
 #. type: Content of: <sect1><sect2><note><para>
-#: blfs-en/introduction/important/building-notes.xml:1225
+#: blfs-en/introduction/important/building-notes.xml:1273
 #, xml-text
 msgid ""
 "Be careful that the name of a <option>-march</option> setting does not "
@@ -2516,7 +2621,7 @@ msgstr ""
 "AVX, mas <option>-march=skylake</option> assume AVX e até mesmo AVX2."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1234
+#: blfs-en/introduction/important/building-notes.xml:1282
 #, xml-text
 msgid ""
 "When a shared library is built by GCC, a feature named <quote>semantic "
@@ -2554,7 +2659,7 @@ msgstr ""
 " (por exemplo <xref linkend='python3'/>) e também é o padrão do Clang."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1255
+#: blfs-en/introduction/important/building-notes.xml:1303
 #, xml-text
 msgid ""
 "There are also various other options which some people claim are beneficial."
@@ -2566,7 +2671,7 @@ msgstr ""
 "então, descobrir que, em seu uso, as opções não fornecem um benefício."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1261
+#: blfs-en/introduction/important/building-notes.xml:1309
 #, xml-text
 msgid ""
 "If building Perl or Python modules, in general the <envar>CFLAGS</envar> and"
@@ -2578,7 +2683,7 @@ msgstr ""
 "pacotes <quote>ancestrais</quote>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1268
+#: blfs-en/introduction/important/building-notes.xml:1316
 #, xml-text
 msgid ""
 "For <envar>LDFLAGS</envar>, three options can be used for optimization.  "
@@ -2590,7 +2695,7 @@ msgstr ""
 "pacotes usa algumas dessas opções como padrão."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1274
+#: blfs-en/introduction/important/building-notes.xml:1322
 #, xml-text
 msgid ""
 "With <option>-Wl,-O1</option>, the linker will optimize the hash table to "
@@ -2603,7 +2708,7 @@ msgstr ""
 "<option>-O1</option>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1281
+#: blfs-en/introduction/important/building-notes.xml:1329
 #, xml-text
 msgid ""
 "With <option>-Wl,--as-needed</option>, the linker will disregard unnecessary"
@@ -2628,7 +2733,7 @@ msgstr ""
 "<application>libtool</application>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1294
+#: blfs-en/introduction/important/building-notes.xml:1342
 #, xml-text
 msgid ""
 "With <option>-Wl,-z,pack-relative-relocs</option>, the linker generates a "
@@ -2643,7 +2748,7 @@ msgstr ""
 "compartilhada."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1302
+#: blfs-en/introduction/important/building-notes.xml:1350
 #, xml-text
 msgid ""
 "The <option>-Wl,</option> prefix is necessary because despite the variable "
@@ -2658,13 +2763,13 @@ msgstr ""
 "<command>ld</command>."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/introduction/important/building-notes.xml:1312
+#: blfs-en/introduction/important/building-notes.xml:1360
 #, xml-text
 msgid "Options for hardening the build"
 msgstr "Opções para fortalecer a construção"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1315
+#: blfs-en/introduction/important/building-notes.xml:1363
 #, xml-text
 msgid ""
 "Even on desktop systems, there are still a lot of exploitable "
@@ -2681,7 +2786,7 @@ msgstr ""
 "aplicará várias medidas de fortalecimento."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1324
+#: blfs-en/introduction/important/building-notes.xml:1372
 #, xml-text
 msgid ""
 "In the past, there was Hardened LFS where gcc (a much older version)  was "
@@ -2708,7 +2813,7 @@ msgstr ""
 "substituindo."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1340
+#: blfs-en/introduction/important/building-notes.xml:1388
 #, xml-text
 msgid ""
 "For hardening options which are reasonably cheap, there is some discussion "
@@ -2730,13 +2835,13 @@ msgstr ""
 "vezes, não serão perceptíveis."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1352
+#: blfs-en/introduction/important/building-notes.xml:1400
 #, xml-text
 msgid "The main distros use much more, such as:"
 msgstr "As principais distribuições usam muito mais, como:"
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1358
+#: blfs-en/introduction/important/building-notes.xml:1406
 #, xml-text
 msgid ""
 "<option>-Wl,-z,now</option>: disables lazy binding to enhance "
@@ -2748,7 +2853,7 @@ msgstr ""
 " possa se tornar imutável."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1365
+#: blfs-en/introduction/important/building-notes.xml:1413
 #, xml-text
 msgid ""
 "<option>-fstack-clash-protection</option>: prevents the attacker from using "
@@ -2764,7 +2869,7 @@ msgstr ""
 "a partir de um endereço de pilha, ou vice-versa."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1375
+#: blfs-en/introduction/important/building-notes.xml:1423
 #, xml-text
 msgid ""
 "<option>-ftrivial-auto-var-init=zero</option>: initializes some variables by"
@@ -2774,7 +2879,7 @@ msgstr ""
 "preenchendo zero bytes se elas não forem inicializadas por outros meios."
 
 #. type: Content of: <sect1><sect2><itemizedlist><listitem><para>
-#: blfs-en/introduction/important/building-notes.xml:1382
+#: blfs-en/introduction/important/building-notes.xml:1430
 #, xml-text
 msgid ""
 "<option>-fcf-protection=full</option>: utilizes Intel and AMD CET technology"
@@ -2798,7 +2903,7 @@ msgstr ""
 "protegido pelo CET."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1397
+#: blfs-en/introduction/important/building-notes.xml:1445
 #, xml-text
 msgid ""
 "In GCC 14, the option <option>-fhardened</option> is a shorthand to enable "
@@ -2811,7 +2916,7 @@ msgstr ""
 "_FORTIFY_SOURCE=2</option>."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1404
+#: blfs-en/introduction/important/building-notes.xml:1452
 #, xml-text
 msgid ""
 "You may also encounter the so-called <quote>userspace retpoline</quote> "
@@ -2830,7 +2935,7 @@ msgstr ""
 "o desempenho ainda é suficiente."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/introduction/important/building-notes.xml:1415
+#: blfs-en/introduction/important/building-notes.xml:1463
 #, xml-text
 msgid ""
 "Whilst gcc has many hardening options, clang/LLVM's strengths lie elsewhere."
