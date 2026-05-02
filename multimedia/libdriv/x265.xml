@@ -6,9 +6,9 @@
 
   <!ENTITY x265-download-http "https://bitbucket.org/multicoreware/x265_git/downloads/x265_&x265-version;.tar.gz">
   <!ENTITY x265-download-ftp  "">
-  <!ENTITY x265-md5sum        "f1c3c80248d8574378a4aac8f374f6de">
-  <!ENTITY x265-size          "1,6 MB">
-  <!ENTITY x265-buildsize     "39 MB">
+  <!ENTITY x265-md5sum        "0a7edcf495aba9f320047d61647d610b">
+  <!ENTITY x265-size          "1,8 MB">
+  <!ENTITY x265-buildsize     "49 MB">
   <!ENTITY x265-time          "0,4 UPC (usando paralelismo=4)">
 ]>
 
@@ -89,11 +89,10 @@ codificação de fluxos de vídeo no formato H.265/HEVC.
     <title>Instalação do x265</title>
 
     <para>
-      Primeiro, remova algumas configurações de política do CMake que não mais são
-compatíveis com o CMake-4.0 e posteriores:
+      Primeiro, corrija construir esse pacote para plataformas de 32 bits:
     </para>
 
-<screen><userinput>sed -r '/cmake_policy.*(0025|0054)/d' -i source/CMakeLists.txt</userinput></screen>
+<screen><userinput>sed -i 's/FORMAT_ELF/UNIX64 \&amp;\&amp; FORMAT_ELF/' source/common/x86/cpu-a.asm</userinput></screen>
 
     <para>
       Instale o <application>x265</application> executando os seguintes comandos:
@@ -106,7 +105,6 @@ cd    bld &amp;&amp;
 
 cmake -D CMAKE_INSTALL_PREFIX=/usr        \
       -D GIT_ARCHETYPE=1                  \
-      -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
       -W no-dev                           \
       ../source                           &amp;&amp;
 make</userinput></screen>
@@ -163,9 +161,6 @@ instalado. O Git não é exigido para mais nada nesse pacote, de forma que
 essa chave é usada para contornar isso para usuários(as) que não queiram
 instalar o Git como uma dependência de construção.
       </para>
-
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-        href="../../xincludes/cmake-policy-version.xml"/>
 
       <para>
         <parameter>-W no-dev</parameter>: Essa chave é usada para suprimir avisos

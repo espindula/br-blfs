@@ -6,9 +6,9 @@
 
   <!ENTITY rsync-download-http "https://www.samba.org/ftp/rsync/src/rsync-&rsync-version;.tar.gz">
   <!ENTITY rsync-download-ftp  "">
-  <!ENTITY rsync-md5sum        "04ce67866db04fd7a1cde0b78168406e">
-  <!ENTITY rsync-size          "1,1 MB">
-  <!ENTITY rsync-buildsize     "11 MB (com testes; adicionar 24 MB para documentação HTML da API)">
+  <!ENTITY rsync-md5sum        "352650b73e30cc0ba54707ae72bdac43">
+  <!ENTITY rsync-size          "1,2 MB">
+  <!ENTITY rsync-buildsize     "12 MB (with tests; add 50 MB for HTML API documentation)">
   <!ENTITY rsync-time          "0,6 UPC (com testes)">
 ]>
 
@@ -67,17 +67,21 @@ arquivamentos grandes por intermédio de uma rede de intercomunicação.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/rsync-&rsync-version;-security_fix-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/rsync-&rsync-version;-security_fix-2.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do &quot;rsync&quot;</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do &quot;rsync&quot;</bridgehead>
 
     
     <!-- This now uses LZ4, OpenSSL, and zstd from LFS. -->
@@ -108,15 +112,19 @@ emitidos pelo(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;:
     </para>
 
+<!--
+    <para>
+
+      First, fix a security vulnerability:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../rsync-&rsync-version;-security_fix-2.patch</userinput></screen>
+-->
 <screen role="root"><userinput>groupadd -g 48 rsyncd &amp;&amp;
 useradd -c "Processo de segundo plano rsyncd" -m -d /home/rsync -g rsyncd \
     -s /bin/false -u 48 rsyncd</userinput></screen>
 
-    <para>
-      Primeiro, corrija uma vulnerabilidade de segurança:
-    </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../rsync-&rsync-version;-security_fix-1.patch</userinput></screen>
 
     <para>
       Instale o &quot;<application>rsync</application>&quot; executando os
@@ -136,11 +144,10 @@ construir a documentação &quot;HTML&quot; da &quot;API&quot;, [então] emita:
 <screen remap="doc"><userinput>doxygen</userinput></screen>
 
     <para>
-      Para executar os testes, corrija um teste e então execute a suíte de teste:
+      To run the tests, issue:
     </para>
 
-<screen><userinput>sed -i '/typedef/d' wildtest.c &amp;&amp;
-make check</userinput></screen>
+<screen><userinput>make check</userinput></screen>
 
     <para>
       Agora, como o(a) usuário(a) &quot;<systemitem

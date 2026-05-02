@@ -4,9 +4,6 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY glycin-download-http "https://download.gnome.org/sources/glycin/&glycin-majmin;/glycin-&glycin-version;.tar.xz">
-  <!ENTITY glycin-md5sum        "411550c5da777a952bb6c811fd882156">
-  <!ENTITY glycin-size          "6,8 MB">
   <!ENTITY glycin-buildsize     "1,4 GB (com documentação; adicionar 1 GB para testes)">
   <!ENTITY glycin-time          "3,8 UPC (com documentação; adicionar 2,5 UPC para testes)">
 ]>
@@ -104,9 +101,8 @@ linkend='librsvg'/> e <xref linkend="vala"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gi-docgen"/>, <xref linkend="gtk4"/> (para <systemitem
-class='library'>libglycin-gtk4</systemitem> e a suíte de teste) e <ulink
-url="https://libopenraw.freedesktop.org/">libopenraw</ulink>
+      <xref linkend="gi-docgen"/>, <xref linkend="gtk4"/> (para a suíte de teste)
+e <ulink url="https://libopenraw.freedesktop.org/">libopenraw</ulink>
     </para>
 
     
@@ -136,11 +132,12 @@ patch -Np1 -i ../glycin-&glycin-version;-xorg_prefix-1.patch</userinput></screen
 
 
     <para>
-      Fix a build error when a system <application>libglycin</application> is not
-yet installed:
+      Corrija um erro de construção quando um <application>libglycin</application>
+de sistema não estiver ainda instaldo:
     </para>
 
-<screen><userinput>sed -i "s/get_option('libglycin-gtk4')/(&amp; or get_option('glycin-thumbnailer'))/" meson.build</userinput></screen>
+<screen><userinput>sed -e "s/get_option('libglycin-gtk4')/(&amp; or get_option('glycin-thumbnailer'))/" \
+    -i meson.build</userinput></screen>
 
     <para>
       Instale <application>glycin</application> executando os seguintes comandos:
@@ -185,9 +182,9 @@ esteja instalado e, então, emita: <command>meson configure -D tests=true
 
     <para>
       <parameter>-D glycin_gtk4=false</parameter>: Esse parâmetro desabilita a
-construção da <systemitem class='library'>libglycin-gtk4</systemitem> (que
-ainda não é usada por nenhum pacote do BLFS), de forma que esse pacote
-consiga ser construído sem <xref linkend='gtk4'/> instalado.
+construção de <systemitem class='library'>libglycin-gtk4</systemitem>. Essa
+biblioteca será construída separadamente como <xref linkend='glycin-gtk4'/>,
+para evitar uma dependência circular.
     </para>
 
     <para>
@@ -199,8 +196,8 @@ pode remover o carregador <literal>glycin-heif</literal>,
 <literal>glycin-jxl</literal> ou <literal>glycin-svg</literal> se a
 dependência recomendada correspondente não estiver instalada, mas fazer isso
 causará falhas nos testes e prejudicará a funcionalidade desse
-pacote. Também existem carregadores para os formatos JPEG 2000 e RAW, mas
-eles não estão habilitados por padrão.
+pacote. Existe também um carregador para o formato RAW, mas ele não está
+habilitado por padrão.
     </para>
 
     <para>

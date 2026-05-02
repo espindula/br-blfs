@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "cd01d7a97f98940567663652ac9747a0">
-  <!ENTITY rust-size          "262 MB">
+  <!ENTITY rust-md5sum        "c206536bb0e11bbf2ebae91504096e34">
+  <!ENTITY rust-size          "228 MB">
   <!ENTITY rust-buildsize     "10 GB (324 MB instalado); adicionar 11 GB se executar os testes">
   <!ENTITY rust-time          "10 UPC (incluindo tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -139,20 +139,28 @@ discrepantes muito lentos.
     </itemizedlist>
 
     
-
-    <!--  keep this here for reuse in case we need a patch
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    
+    <!--  keep this here for reuse in case we need a patch -->
+<!-- deliberately skipped turning version and md5 into entities:
+         it's unlikely we'd still need this in the next rustc release.  -->
+<bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Optional patch (required for testing the package):
-          <ulink url="&patch-root;/rustc-&rust-version;-testsuite_fix-1.patch"/>
+          Ligações Rust do OpenSSL atualizadas para suportar OpenSSL 4.: <ulink
+url="https://github.com/lfs-book/rust-openssl/archive/v0.10.78/rust-openssl-v0.10.78.tar.gz"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: 8bfcc36cba65c98380f7ac1ec07efdb4
         </para>
       </listitem>
     </itemizedlist>
-    -->
-<bridgehead renderas="sect3">Dependências do Rust</bridgehead>
+
+    &github-lfs-fork;
+
+    <bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -226,15 +234,6 @@ exige somente mudar o link simbólico
 a construção.
     </para>
 
-<!-- retain here in case we need a patch
-    <para>
-
-      If running the test suite, apply a patch to make it compatible with
-      GCC-15 or newer:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
--->
 <screen><userinput>cat &lt;&lt; EOF &gt; bootstrap.toml
 <literal># See bootstrap.toml.example for more possible options,
 # and see src/bootstrap/defaults/bootstrap.dist.toml for a few options
@@ -259,9 +258,6 @@ description = "for BLFS &version;"
 
 # Omit the documentation to save time and space (the default is to build them).
 docs = false
-
-# Do not look for new versions of the dependencies online.
-locked-deps = true
 
 # Only install these extended tools. Cargo, clippy, rustdoc, and rustfmt
 # are installed by a default rustup installation, and rust-src is needed
@@ -290,6 +286,33 @@ llvm-config = "/usr/bin/llvm-config"
 [target.i686-unknown-linux-gnu]
 llvm-config = "/usr/bin/llvm-config"</literal>
 EOF</userinput></screen>
+
+    <para>
+      Use uma versão mais recente da ligação Rust do OpenSSL para permitir
+construir esse pacote com OpenSSL 4:
+    </para>
+
+<!-- retain here in case we need a patch
+    <para>
+
+      If running the test suite, apply a patch to make it compatible with
+      GCC-15 or newer:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
+-->
+<screen><userinput>tar xf ../rust-openssl-v0.10.78.tar.gz &amp;&amp;
+
+cat &gt;&gt; src/tools/cargo/Cargo.toml &lt;&lt; EOF &amp;&amp;
+<literal>[patch.crates-io]
+openssl = { path = "../../../rust-openssl-0.10.78/openssl" }
+openssl-sys = { path = "../../../rust-openssl-0.10.78/openssl-sys" }
+</literal>EOF
+
+sed -ri src/tools/cargo/Cargo.lock \
+    -e '/name = "openssl-sys"/,/^$/{/source|checksum/d;s/0.9.111/0.9.114/}' \
+    -e '/name = "openssl"/,/^$/{/source|checksum/d;s/0.10.75/0.10.78/}'     \
+    -e '/name = "openssl-macros"/,/^$/{/source|checksum/d}'</userinput></screen>
 
 
     <para>
@@ -325,15 +348,20 @@ terminado.
 <screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
 
     <para>
-      <!-- https://github.com/rust-lang/rust/pull/151375 -->
-O teste nominado
-<filename>tests/run-make/rustdoc-target-modifiers</filename> é conhecido por
-falhar porque nós não habilitamos o alvo AArch64 no <xref
-linkend='llvm'/>. Os testes nominados
-<filename>missing_span_in_backtrace.rs</filename> e
-<filename>trimmed_multiline_suggestion.rs</filename> possivelmente falhem
-porque eles dependem da largura do terminal. Oito testes relacionados ao
-alvo AMDGPU são conhecidos por falharem com LLVM 22 ou mais recente.
+      <!-- https://github.com/rust-lang/rust/issues/154392 -->
+<!-- https://github.com/rust-lang/rust/issues/155606 -->
+Nos testes do <filename class='directory'>rustdoc-ui</filename>, o teste
+chamado <filename>track-diagnostics.rs</filename> é conhecido por falhar
+porque ele codifica rigidamente caminhos inexistentes no LFS, e o teste
+chamado <filename>ice-bug-report-url.rs</filename> é conhecido por falhar
+por motivo desconhecido. Nos testes do <filename
+class='directory'>run-make</filename>, o teste chamado
+<filename>remap-path-prefix-std</filename> é conhecido por falhar porque ele
+não funciona com LTO habilitado; o teste chamado
+<filename>rustdoc-target-modifiers</filename> é conhecido por falhar porque
+nós não habilitamos o alvo AArch64 no <xref linkend='llvm'/>; e o teste
+chamado <filename>short-ice</filename> é conhecido por falhar por motivo
+desconhecido.
     </para>
 
     <para>

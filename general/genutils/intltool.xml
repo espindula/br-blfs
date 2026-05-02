@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY intltool-download-http "http://launchpad.net/intltool/trunk/&intltool-version;/+download/intltool-&intltool-version;.tar.gz">
+  <!ENTITY intltool-download-ftp  "">
+  <!ENTITY intltool-md5sum        "12e517cac2b57a0121cda351570f1e63">
+  <!ENTITY intltool-size          "159 KB">
+  <!ENTITY intltool-buildsize     "1,5 MB">
+  <!ENTITY intltool-time          "menos que 0,1 UPC">
+]>
+
+<sect1 id="intltool" xreflabel="Intltool-&intltool-version;">
+  <?dbhtml filename="intltool.html"?>
+
+
+  <title>Intltool-&intltool-version;</title>
+
+  <indexterm zone="intltool">
+    <primary sortas="a-Intltool">Intltool</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao Intltool</title>
+
+    <para>
+      O <application>Intltool</application> é uma ferramenta de
+internacionalização usada para extrair sequências traduzíveis de caracteres
+a partir de arquivos fonte, coletar as sequências extraídas de caracteres
+com mensagens a partir de arquivos fonte tradicionais (<filename
+class="directory">&lt;diretório fonte&gt;/&lt;pacote&gt;/po</filename>) e
+mesclar as traduções em arquivos <filename>.xml</filename>,
+<filename>.desktop</filename> e <filename>.oaf</filename>.
+    </para>
+
+    &lfs130_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&intltool-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&intltool-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &intltool-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &intltool-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &intltool-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &intltool-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do Intltool</bridgehead>
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="perl-xml-parser"/>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do Intltool</title>
+
+    <para>Primeiro, corrija um aviso que é causado pelo perl-5.22 e posteriores:</para>
+
+<screen><userinput remap="pre">sed -i 's:\\\${:\\\$\\{:' intltool-update.in</userinput></screen>
+
+    <note>
+      <para>
+        A expressão regular acima parece incomum por causa de todas as barras
+invertidas. O que ela faz é adicionar uma barra invertida antes do caractere
+de chave de fechamento na sequência '\${', resultando em '\$\{'.
+      </para>
+    </note>
+
+    <para>
+      Primeiro, corrija um aviso que é causado pelo perl-5.22 e posteriores:
+    </para>
+
+<screen><userinput>sed -i 's:\\\${:\\\$\\{:' intltool-update.in</userinput></screen>
+
+    <para>
+      Instale <application>Intltool</application> executando os seguintes
+comandos:
+    </para>
+
+<screen><userinput>./configure --prefix=/usr &amp;&amp;
+make</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>make check</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+    </para>
+
+<screen role="root"><userinput>make install &amp;&amp;
+install -v -m644 -D doc/I18N-HOWTO \
+    /usr/share/doc/intltool-&intltool-version;/I18N-HOWTO</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          intltool-extract, intltool-merge, intltool-prepare, intltool-update e
+intltoolize
+        </seg>
+        <seg>
+          None
+        </seg>
+        <seg>
+          /usr/share/doc/intltool-&intltool-version; e /usr/share/intltool
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="intltoolize">
+        <term><command>intltoolize</command></term>
+        <listitem>
+          <para>
+            prepara um pacote para usar <application>intltool</application>.
+          </para>
+          <indexterm zone="intltool intltoolize">
+            <primary sortas="b-intltoolize">intltoolize</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="intltool-extract">
+        <term><command>intltool-extract</command></term>
+        <listitem>
+          <para>
+            gera arquivos de cabeçalho que conseguem ser lidos pelo
+<command>gettext</command>.
+          </para>
+          <indexterm zone="intltool intltool-extract">
+            <primary sortas="b-intltool-extract">intltool-extract</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="intltool-merge">
+        <term><command>intltool-merge</command></term>
+        <listitem>
+          <para>
+            mescla sequências traduzidas de caracteres em vários tipos de arquivo.
+          </para>
+          <indexterm zone="intltool intltool-merge">
+            <primary sortas="b-intltool-merge">intltool-merge</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="intltool-prepare">
+        <term><command>intltool-prepare</command></term>
+        <listitem>
+          <para>
+            atualiza arquivos pot e os mescla com arquivos de tradução.
+          </para>
+          <indexterm zone="intltool intltool-prepare">
+            <primary sortas="b-intltool-prepare">intltool-prepare</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="intltool-update">
+        <term><command>intltool-update</command></term>
+        <listitem>
+          <para>
+            atualiza os arquivos de modelo <filename>po</filename> e os mescla com as
+traduções.
+          </para>
+          <indexterm zone="intltool intltool-update">
+            <primary sortas="b-intltool-update">intltool-update</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

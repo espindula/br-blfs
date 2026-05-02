@@ -71,18 +71,22 @@ disco.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      
-      <!-- GTKMM2 is no longer used since 1.0.0, see #12110 -->
-<xref linkend="gtkmm3"/> e <xref linkend="parted"/>
+      <xref linkend="gtkmm3"/> e <xref linkend="parted"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="btrfs-progs"/> (se usar um sistema de arquivos btrfs), <ulink
+      <xref linkend="btrfs-progs"/> (se você estiver usando um sistema de arquivos
+btrfs), <ulink
 url="https://github.com/exfatprogs/exfatprogs">exfatprogs</ulink> e <ulink
 url="https://github.com/pali/udftools">udftools</ulink>
     </para>
 
+    <para>
+      Dependências adicionais possivelmente sejam necessárias, dependendo dos
+tipos de sistema de arquivos que você estiver trabalhando. Por favor, leia a
+seção "Usando o Gparted" abaixo para mais informações.
+    </para>
   </sect2>
 
   <sect2 role="installation">
@@ -93,9 +97,7 @@ url="https://github.com/pali/udftools">udftools</ulink>
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr    \
-            --disable-doc    \
-            --disable-static &amp;&amp;
+<screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -116,14 +118,18 @@ make</userinput></screen>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
 
+    
+
+
+    <!-- Does not seem to be needed with 1.8.1.
     <para>
-      <parameter>--disable-doc</parameter>: Essa chave desabilita a construção da
-documentação opcional. Remova-a se você tiver instalado o <application>GNOME
-Doc Utils</application>.
+
+      <parameter>- -disable-doc</parameter>: This switch disables building of
+      the optional documentation. Remove it if you have installed
+      <application>GNOME Doc Utils</application>.
     </para>
-
-
-    <!-- this is an option, not a parameter, but is it still necessary for
+    -->
+<!-- this is an option, not a parameter, but is it still necessary for
      wayland? -->
 <para>
       <option>--enable-xhost-root</option>: Essa chave fornece uma solução
@@ -137,122 +143,55 @@ para conceder e revogar acesso de root para a tela do X11.
     <title>Usando o Gparted</title>
 
     <para>
-      <!--<xref linkend="ntfs-3g"/>
+      <!--<xref linkend="reiserfs"/>
 ,-->
-<!--<xref linkend="reiserfs"/>
-,-->
-Para manipular sistemas de arquivos, o Gparted tem uma dependência de tempo
-de execução de várias ferramentas do sistema de arquivos (você somente
-precisa instalar as ferramentas para os sistemas de arquivos que usar
-realmente): <xref linkend="hdparm"/> (exigido para opcionalmente exibir
-informações do número de série do dispositivo), <xref
-linkend="btrfs-progs"/>, <xref role="runtime" linkend="dosfstools"/>,
-e2fsprogs (instalado como parte do LFS), <xref linkend="jfsutils"/>, <xref
+Para manipular sistemas de arquivos, Gparted tem uma dependência de tempo de
+execução de várias ferramentas de sistema de arquivos (você só precisa
+instalar as ferramentas para sistemas de arquivos que você realmente usar):
+<xref linkend="hdparm"/> (exigido para exibir opcionalmente o número de
+série de um dispositivo), <xref linkend="btrfs-progs"/>, <xref
+role="runtime" linkend="dosfstools"/>, e2fsprogs (instalado como parte do
+LFS), <xref linkend="jfsutils"/>, <xref linkend="ntfs-3g"/>, <xref
 linkend="xfsprogs"/>, <ulink url="&gnu-http;/mtools/">mtools</ulink>
-(exigido para ler e escrever rótulos de volume e UUIDs de FAT16/32), <ulink
+(exigido para ler e escrever rótulos de volume FAT16/32 e UUIDs), <ulink
 url="https://www.mars.org/home/rob/proj/hfs/">hfsutils</ulink>, <ulink
 url="https://packages.debian.org/sid/hfsprogs">hfsprogs</ulink>, <ulink
 url="https://nilfs.sourceforge.io/en/">nilfs-utils</ulink>, <ulink
-url="https://reiser4.wiki.kernel.org/index.php/Reiser4progs">Reiser4progs</ulink>
-e <ulink
+url="https://reiser4.wiki.kernel.org/index.php/Reiser4progs">
+Reiser4progs</ulink> e <ulink
 url='https://mirrors.edge.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/'>
 reiserfsprogs</ulink>.
     </para>
 
     <para>
-      <!--Another solution is to use <application>
-pkexec</application>, from
-      <xref linkend="polkit"/>, but some configuration is necessary.-->
-<!--Below, we
-      describe these two alternatives: "ssh-askpass" and "pkexec".-->
-Privilégios de root são exigidos para executar o Gparted. Se desejar
+      Privilégios de root são exigidos para executar o Gparted. Se você quiser
 executar o aplicativo a partir do menu, outros aplicativos e configurações
-serão necessários. Exemplos de aplicativos que podem ser usados: <ulink
-url="https://people.debian.org/~kov/gksu/">gksu</ulink>, <ulink
-url="https://launchpad.net/kdesudo">kdesudo</ulink> ou <ulink
-url="https://github.com/tarakbumba/xdg-su">xdg-su</ulink>. Outra solução
-simples é <xref linkend="ssh-askpass"/>. 
+podem ser necessários, dependendo do teu ambiente de área de trabalho. Se
+você estiver usando KDE Plasma, GNOME ou LXQt, tua área de trabalho inclui
+uma implementação do ssh-askpass ou um envolucrador em torno do Polkit que
+fornece essa funcionalidade para você. Se você não estiver usando um desses
+ambientes de área de trabalho, uma solução mais fácil é a de usar o pacote
+genérico <xref linkend="ssh-askpass"/>.
     </para>
 
     <sect3 role="ssh-askpass">
       <title>ssh-askpass</title>
         <para>
-          Para usar opcionalmente o <xref linkend="ssh-askpass"/> se ele estiver
-instalado em teu sistema, execute os seguintes comandos como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
+          Para usar o <xref linkend="ssh-askpass"/> se ele estiver instalado em teu
+sistema, execute os seguintes comandos como o(a) usuário(a) &root;:
         </para>
 
 <screen role="root"><userinput>cp -v /usr/share/applications/gparted.desktop /usr/share/applications/gparted.desktop.back &amp;&amp;
 sed -i 's/Exec=/Exec=sudo -A /'               /usr/share/applications/gparted.desktop</userinput></screen>
 
         <para>
-         Agora, clicando no item de menu para o Gparted, uma caixa de diálogo aparece
-na tela solicitando a senha do(a) administrador(a).</para>
+          Agora, quando você clicar no item de menu para o Gparted, uma caixa de
+diálogo aparecerá solicitando a senha do(a) administrador(a).
+        </para>
 
     </sect3>
 
-  <!--
-    <sect3 role="pkexec" revision="sysv">
-
-      <title>pkexec</title>
-        <para>
-          To optionally use <application>pkexec</application>, you need <xref
-          linkend="polkit-gnome"/><!- - or <xref linkend="lxpolkit"/>- ->, and
-          <xref linkend="consolekit"/> installed with support to <xref
-          linkend="linux-pam"/> and <xref linkend="polkit"/>. As the
-          <systemitem class="username">root</systemitem> user, configure <xref
-          linkend="gparted"/> and <xref linkend="polkit"/> with the following
-          commands:
-        </para>
-
-<screen role="root"><userinput>cp -v /usr/share/applications/gparted.desktop \
-                                     /usr/share/applications/gparted.desktop.back &amp;&amp;
-sed -i 's:/usr/bin/gparted:/usr/bin/gparted_polkit:' \
-                                   /usr/share/applications/gparted.desktop      &amp;&amp;
-
-cat &gt; /usr/bin/gparted_polkit &lt;&lt; "EOF" &amp;&amp;
-<literal>#!/bin/bash
-
-pkexec /usr/bin/gparted $@</literal>
-EOF
-chmod -v 0755 /usr/bin/gparted_polkit</userinput></screen>
-
-        <para>
-          Still as the <systemitem class="username">root</systemitem> user,
-          configure <xref linkend="polkit"/> and <xref linkend="gparted"/> to
-          use <application>pkexec</application>:
-        </para>
-
-<screen role="root"><userinput>cat &gt; /usr/share/polkit-1/actions/org.gnome.gparted.policy &lt;&lt; "EOF"
-<literal>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE policyconfig PUBLIC
- "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
- "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd"&gt;
-&lt;policyconfig&gt;
-
-  &lt;action id="org.freedesktop.policykit.pkexec.run-gparted"&gt;
-    &lt;description&gt;Run GParted&lt;/description&gt;
-    &lt;message&gt;Authentication is required to run GParted&lt;/message&gt;
-    &lt;defaults&gt;
-      &lt;allow_any&gt;no&lt;/allow_any&gt;
-      &lt;allow_inactive&gt;no&lt;/allow_inactive&gt;
-      &lt;allow_active&gt;auth_admin_keep&lt;/allow_active&gt;
-    &lt;/defaults&gt;
-    &lt;annotate key="org.freedesktop.policykit.exec.path"&gt;/usr/bin/gparted&lt;/annotate&gt;
-    &lt;annotate key="org.freedesktop.policykit.exec.allow_gui"&gt;true&lt;/annotate&gt;
-  &lt;/action&gt;
-
-&lt;/policyconfig&gt;</literal>
-EOF
-chmod -v 0644 /usr/share/polkit-1/actions/org.gnome.gparted.policy</userinput></screen>
-
-        <para>
-         Now, clicking in the menu item for Gparted, a dialog appears in the
-         screen, asking for the administrator password.</para>
-
-    </sect3>
--->
-</sect2>
+  </sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>
@@ -264,8 +203,7 @@ chmod -v 0644 /usr/share/polkit-1/actions/org.gnome.gparted.policy</userinput></
 
       <seglistitem>
         <seg>
-          <!--, gpartedbin-->
-gparted e gparted_polkit (opcional)
+          gparted e gparted_polkit (opcional)
         </seg>
         <seg>
           Nenhum(a)
@@ -293,23 +231,7 @@ antes de chamar <command>gpartedbin</command>
         </listitem>
       </varlistentry>
 
-      
-
-      <!--
-      <varlistentry id="gpartedbin">
-
-        <term><command>gpartedbin</command></term>
-        <listitem>
-          <para>
-            is the Gparted binary
-          </para>
-          <indexterm zone="gparted gpartedbin">
-            <primary sortas="b-gpartedbin">gpartedbin</primary>
-          </indexterm>
-        </listitem>
-      </varlistentry>
-      -->
-<varlistentry id="gparted_polkit">
+      <varlistentry id="gparted_polkit">
         <term><command>gparted_polkit</command></term>
         <listitem>
           <para>
