@@ -6,9 +6,9 @@
 
   <!ENTITY ibus-download-http "https://github.com/ibus/ibus/archive/&ibus-version;/ibus-&ibus-version;.tar.gz">
   <!ENTITY ibus-download-ftp  "">
-  <!ENTITY ibus-md5sum        "edd5a8c13be20c7575f447e80ad4fd86">
-  <!ENTITY ibus-size          "1,7 MB">
-  <!ENTITY ibus-buildsize     "57 MB (adicionar 1 MB para os testes)">
+  <!ENTITY ibus-md5sum        "7504f9c694d12e3cfe1e9e358f84c21f">
+  <!ENTITY ibus-size          "1,8 MB">
+  <!ENTITY ibus-buildsize     "116 MB (com testes)">
   <!ENTITY ibus-time          "0,5 UPC (Usando paralelismo=4; adicionar 1,4 UPC para testes)">
 <!-- Since UCD.zip can be used by gucharmap too, let's use the same version:
      This prevents version mismatches, since UCD.zip filename is not versioned.
@@ -164,10 +164,13 @@ make</userinput></screen>
 make</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make -k check</command>. O teste
-chamado ibus-compose falha porque ele usa alguns locais não instalados no
-LFS. O teste xkb-latin-layouts também é conhecido por falhar em alguns
-sistemas.
+      Para testar os resultados, emita: <command>sed 's/python$/&amp;3/' -i
+engine/test-gnome.py &amp;&amp; make -k check</command>. O teste chamado
+ibus-compose falha porque ele usa algumas localidades não instaladas no
+LFS. O teste chamado ibus-keypress exige
+<literal>CONFIG_INPUT_UINPUT</literal> habilitada na configuração do núcleo
+e ele falharia caso contrário. O teste xkb-latin-layouts também é conhecido
+por falhar em alguns sistemas.
     </para>
 
     <para>

@@ -4,17 +4,16 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY elogind-download-http "https://github.com/elogind/elogind/archive/V&elogind-version;/elogind-&elogind-version;.tar.gz">
+  <!ENTITY elogind-download-http "https://github.com/elogind/elogind/archive/v&elogind-version;/elogind-&elogind-version;.tar.gz">
   <!ENTITY elogind-download-ftp  "">
-  <!ENTITY elogind-md5sum        "7fcaf4e1b3d40f69029d2b03402ccef3">
-  <!ENTITY elogind-size          "2,0 MB">
-  <!ENTITY elogind-buildsize     "49 MB (com testes)">
-  <!ENTITY elogind-time          "0,2 UPC (com paralelismo=4; com testes)">
+  <!ENTITY elogind-md5sum        "6d084ff01c3eaf5e1a2f54c93fb279a2">
+  <!ENTITY elogind-size          "2,6 MB">
+  <!ENTITY elogind-buildsize     "67 MB (com testes)">
+  <!ENTITY elogind-time          "0.3 SBU (with parallelism=4; with tests)">
 ]>
 
 <sect1 id="elogind" revision="sysv" xreflabel="elogind-&elogind-version;">
   <?dbhtml filename="elogind.html"?>
-
 
   <title>elogind-&elogind-version;</title>
 
@@ -173,7 +172,7 @@ testes, <filename>test-login</filename>,
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
 <screen role="root"><userinput>ninja install                                          &amp;&amp;
@@ -275,24 +274,21 @@ cabeçalhos compatíveis com o "systemd".
     <sect3><title>Informação de Configuração</title>
 
       <para>
-        O arquivo instalado <filename>/etc/elogind/logind.conf</filename> contém
-todas as opções possíveis com os padrões delas comentados. Você
-possivelmente quera desabilitar a eliminação automática de processos do(a)
-usuário(a) quando o(a) usuário(a) sai, executando como o(a) usuário(a)
-<systemitem class="username">root</systemitem>:
+        The installed file <filename>/etc/elogind/logind.conf</filename> contains
+all the possible options with their defaults, commented out. You may wish to
+disable automatically killing user processes when the user logs out, by
+running, as the &root; user:
       </para>
 
 <screen role="root"><userinput>sed -e '/\[Login\]/a KillUserProcesses=no' \
    -i /etc/elogind/logind.conf</userinput></screen>
 
       <para>
-        Cada usuário precisará registrar uma sessão de usuário(a) usando
-<application>Linux-PAM</application> no login. O arquivo
-<filename>/etc/pam.d/system-session</filename> precisa ser modificado e um
-novo arquivo precisa ser criado para a finalidade de que o
-<command>elogind</command> funcione corretamente. Execute os seguintes
-comandos como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+        Each user will need to register a user session using
+<application>Linux-PAM</application> at login. The
+<filename>/etc/pam.d/system-session</filename> file needs to be modified and
+a new file must be created in order for <command>elogind</command> to work
+correctly. Run the following commands as the &root; user:
       </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/pam.d/system-session &lt;&lt; "EOF" &amp;&amp;
@@ -322,6 +318,39 @@ password required    pam_deny.so
 # Fim /etc/pam.d/elogind-user</literal>
 EOF</userinput></screen>
 
+    <para>
+      This package provides a Name Service Switch (NSS) module. Previously, a
+Systemd-less system didn't have a dedicated NSS module used for better name
+resolution, while Systemd systems have one that is tightly ingrained with
+that software suite. Now, such a module is provided. In order to use it, the
+<filename>/etc/nsswitch.conf</filename> file that was installed in LFS must
+be altered. Overwrite the file as the &root; user:
+    </para>
+
+<screen role="root"><userinput>cat &gt; /etc/nsswitch.conf &lt;&lt; "EOF" &amp;&amp;
+<literal># Begin /etc/nsswitch.conf
+
+passwd: files elogind
+group: files elogind
+shadow: files elogind
+
+hosts: files dns
+networks: files
+
+protocols: files
+services: files
+ethers: files
+rpc: files
+
+# End /etc/nsswitch.conf</literal>
+EOF</userinput></screen>
+
+    <note><para>
+      The <literal>myhostname</literal>, <literal>mymachines</literal>, and
+<literal>resolve</literal> NSS modules are still not provided (they come
+from Systemd). The installed file cannot use them yet.
+    </para></note>
+
     <note>
       <para>Depois da conclusão do <application>elogind</application>, você deveria
 verificar se ele funciona corretamente. Primeiro, certifique-se de que
@@ -344,10 +373,10 @@ SESSÃO e um SEAT foram criados.</para>
 
       <seglistitem>
         <seg>
-          busctl, elogind-inhibit e loginctl
+          busctl, elogind-inhibit, loginctl, userdbctl, and varlinkctl
         </seg>
         <seg>
-           libelogind.so
+           libelogind.so and libnss_elogind.so
         </seg>
         <seg>
           /usr/lib/elogind, /etc/elogind, /usr/include/elogind e
@@ -398,6 +427,30 @@ desligamento, suspensão ou inatividade
         </listitem>
       </varlistentry>
 
+      <varlistentry id="userdbctl">
+        <term><command>userdbctl</command></term>
+        <listitem>
+          <para>
+            is used to inspect users, groups, and group memberships
+          </para>
+          <indexterm zone="elogind userdbctl">
+            <primary sortas="b-userdbctl">userdbctl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="varlinkctl">
+        <term><command>varlinkctl</command></term>
+        <listitem>
+          <para>
+            is used to interact with and invoke Varlink services
+          </para>
+          <indexterm zone="elogind varlinkctl">
+            <primary sortas="b-varlinkctl">varlinkctl</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
       <varlistentry id="libelogind">
         <term><filename class="libraryfile">libelogind.so</filename></term>
         <listitem>
@@ -406,6 +459,18 @@ desligamento, suspensão ou inatividade
           </para>
           <indexterm zone="elogind libelogind">
             <primary sortas="c-libelogind">libelogind.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libnss_elogind">
+        <term><filename class="libraryfile">libnss_elogind.so</filename></term>
+        <listitem>
+          <para>
+            is the Name Service Switch (NSS) module for elogind
+          </para>
+          <indexterm zone="elogind libnss_elogind">
+            <primary sortas="c-libnss_elogind">libnss_elogind.so</primary>
           </indexterm>
         </listitem>
       </varlistentry>

@@ -10,7 +10,7 @@
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "7,6 GB (233 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "7,7 GB (233 MB instalado) sem testes">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
@@ -78,13 +78,17 @@ de código <application>Mozilla</application>.
 
     <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
+
+      <!--
       <listitem>
+
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/firefox-&firefox-version;esr-ffmpeg-8.0.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/firefox-&firefox-version;esr-ffmpeg-8.0.patch"/>
         </para>
       </listitem>
-      <listitem>
+-->
+<listitem>
         <para>
           Remendo exigido: <ulink
 url="&patch-root;/firefox-&firefox-version;esr-glibc-2.43.patch"/>
@@ -200,6 +204,15 @@ descomente quaisquer outras opções desejadas. Crie o arquivo emitindo o
 seguinte comando:
     </para>
 
+<!--
+    <para>
+
+      Apply a sed to fix video functionality with
+      <xref linkend="ffmpeg"/>:
+    </para>
+
+<screen><userinput remap="pre">sed -i '/so.61/i \  "libavcodec.so.62",' dom/media/platforms/ffmpeg/FFmpegRuntimeLinker.cpp</userinput></screen>
+-->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
 
@@ -296,12 +309,7 @@ mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 MOZ_APP_REMOTINGNAME=firefox</literal>
 EOF</userinput></screen>
 
-    <para>
-      Aplique um remendo para corrigir funcionalidade de vídeo com <xref
-linkend="ffmpeg"/>:
-    </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-ffmpeg-8.0.patch</userinput></screen>
 
     <para>
       Um remendo é necessário para corrigir construir com glibc-2.43. Este remendo
@@ -310,15 +318,11 @@ mudado para fazer com que <command>cargo</command> ignore a verificação de
 soma de verificação:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
-sed '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
-    -i Cargo.toml &amp;&amp;
-sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
-
+<!--
     <para>
-      Em seguida, corrija construir esse pacote com rustc-1.95.0. Novamente, o
-sistema de construção precisa de uma mudança para ignorar a verificação de
-soma de verificação:
+
+      Next, fix building this package with rustc-1.95.0.  Again the build
+      system needs a change to skip the checksum verification:
     </para>
 
 <screen><userinput remap="pre">sed '/use super::/a use core::simd::Select;' \
@@ -326,6 +330,15 @@ soma de verificação:
 sed '/patch.crates-io/a encoding_rs={path="third_party/rust/encoding_rs"}' \
     -i Cargo.toml &amp;&amp;
 sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
+-->
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
+
+sed -e '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
+    -i Cargo.toml &amp;&amp;
+ 
+sed -i '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' Cargo.lock</userinput></screen>
+
+
 
     <para>
       Em seguida, corrija construir esse pacote com Python-3.14:

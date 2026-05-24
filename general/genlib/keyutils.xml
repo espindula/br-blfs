@@ -118,13 +118,21 @@ class="username">root</systemitem>:
 <screen role="root" remap="test"><userinput>make -k test</userinput></screen>
 
     <para>
-      <!-- I did verify that this occurs on other distros as well, and it seems
-      to be known at Gentoo.-->
+      <!-- The kernel needs to invoke /sbin/request-key sometimes, so
+      running the test suite in a chroot environment will actually test
+      the host distro's request-key program.  Just don't do that.
+
+      The tests are currently known to fail once it attempts to add user-generated keys
+      to the keyring.
+      I did verify that this occurs on other distros as well, and it seems
+      to be known at Gentoo.
+
+      Is this still a issue if we rule out running the test suite in
+      chroot? -->
 Se <xref linkend='lsb-tools'/> não estiver instalado, a suíte de teste
 produzirá algumas linhas reclamando que o comando
 <command>lsb_release</command> não está disponível, mas não afetará o
-resultado do teste. Os testes atualmente são conhecidos por falharem tão
-logo tentem adicionar chaves geradas pelo(a) usuário(a) ao chaveiro.
+resultado do teste. Os testes não funcionam em um ambiente chroot.
       
     </para>
 

@@ -6,10 +6,10 @@
 
   <!ENTITY libical-download-http "https://github.com/libical/libical/releases/download/v&libical-version;/libical-&libical-version;.tar.gz">
   <!ENTITY libical-download-ftp  "">
-  <!ENTITY libical-md5sum        "539a8a293d344e7aa8ccf3740494a46d">
-  <!ENTITY libical-size          "952 KB">
-  <!ENTITY libical-buildsize     "29 MB (com testes)">
-  <!ENTITY libical-time          "0,2 UPC (usando paralelismo=4; com testes)">
+  <!ENTITY libical-md5sum        "a9577808c1de6612bc8a0c76ce5c20da">
+  <!ENTITY libical-size          "1,8 MB">
+  <!ENTITY libical-buildsize     "153 MB (com testes e documentos)">
+  <!ENTITY libical-time          "0,4 UPC (usando paralelismo=4; com testes e documentos)">
 <!-- run at -j1 because it fails at -j4 -->
 ]>
 
@@ -83,7 +83,9 @@ protocolos e formatos de dados "iCalendar".
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="doxygen"/> (para a documentação da API), <xref
+      <!-- <xref linkend="java"/>
+ -->
+<xref linkend="doxygen"/> (para a documentação da API), <xref
 linkend="graphviz"/> (para a documentação da API), <xref linkend="gtk-doc"/>
 (para a documentação da API), <xref linkend="icu"/>, <xref
 linkend="pygobject3"/> (para alguns testes) e &berkeley-db;
@@ -94,55 +96,40 @@ linkend="pygobject3"/> (para alguns testes) e &berkeley-db;
   <sect2 role="installation">
     <title>Instalação do libical</title>
 
-    
-    
-
-    <!-- https://github.com/libical/libical/pull/690 -->
-<!-- Seems fixed in 3.0.19
     <para>
-
-      If <xref linkend='icu'/> is installed, fix an incompatibility
-      with ICU 75 or later:
-    </para>
-
-    <screen><userinput>sed -i '/getKeywordValuesForLocale/s/NULL/""/' src/libical/icalrecur.c</userinput></screen>
-    -->
-<para>
       Instale <application>libical</application> executando os seguintes comandos:
     </para>
 
-  
-<screen><!-- Needs confirmation, but I got a race condition at -j8,
-  -j1 allowed the build to pass. Pierre 2019-12-06
-  I always have it actually. Hence the entity.
+    
+    &parallel_issues;
 
-  Works at -j8 and -j4 for version 3.0.18
-
-  Hit it again at -j18 for version 3.0.20 - xry111
-  &parallel_issues;-->
+<screen><!-- Still needed for version 4.0.0 -->
 <userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
 cmake -D CMAKE_INSTALL_PREFIX=/usr  \
       -D CMAKE_BUILD_TYPE=Release   \
-      -D SHARED_ONLY=yes            \
-      -D ICAL_BUILD_DOCS=false      \
-      -D GOBJECT_INTROSPECTION=true \
-      -D ICAL_GLIB_VAPI=true        \
+      -D LIBICAL_STATIC=NO          \
+      -D LIBICAL_BUILD_DOCS=false   \
+      -D LIBICAL_GLIB_VAPI=true     \
+      -D LIBICAL_JAVA_BINDINGS=OFF  \
+      -D LIBICAL_GOBJECT_INTROSPECTION=true \
       .. &amp;&amp;
 make -j1</userinput></screen>
 
     <para>
       Se tiver <xref linkend="doxygen"/>, <xref linkend="graphviz"/> e <xref
 linkend="gtk-doc"/> instalados e desejar construir a documentação da API,
-você deveria remover a chave <parameter>-D ICAL_BUILD_DOCS=false</parameter>
-e emitir:
+você deveria remover a chave <parameter>-D
+LIBCAL_BUILD_DOCS=false</parameter> e emitir:
     </para>
 
 <screen remap="doc"><userinput>make docs</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make test</command>.
+      Se você desejar executar os testes, adicione a opção <option>-D
+LIBICAL_BUILD_TESTING=ON</option> ao CMake ao configurar esse pacote e, em
+seguida, emita: <command>make test</command>.
     </para>
 
     <para>
@@ -171,45 +158,42 @@ aplicar um nível mais alto de otimização à compilação.
     </para>
 
     <para>
-      <parameter>-D SHARED_ONLY=yes</parameter>: Essa chave é usada para a
+      <parameter>-D LIBICAL_STATIC=NO</parameter>: Essa chave é usada para a
 finalidade de construir somente as bibliotecas compartilhadas.
     </para>
 
     <para>
-      <parameter>-D ICAL_BUILD_DOCS=false</parameter>: Essa chave evita construir
-a documentação do <application>GTK</application>. Remova se você desejar
-construir a documentação.
+      <parameter>-D LIBCAL_BUILD_DOCS=false</parameter>: Essa chave evita
+construir a documentação do <application>GTK</application>. Remova se você
+quiser construir a documentação.
     </para>
 
     <para>
-      <parameter>-D GOBJECT_INTROSPECTION=true</parameter>: Essa chave é usada
-para gerar ligações de meta dados do GObject.
+      <parameter>-D LIBICAL_GOBJECT_INTROSPECTION=true</parameter>: Essa chave é
+usada para gerar ligações de meta dados do GObject.
     </para>
 
     <para>
-      <parameter>-D ICAL_GLIB_VAPI=true</parameter>: Essa chave é usada para a
-finalidade de construir ligações para <xref linkend="vala"/>.
-    </para>
-
-    <para>
-      <option>-D USE_BUILTIN_TZDATA=yes</option>: Essa chave é usada para a
-finalidade de construir usando teus próprios dados de fuso horário.
+      <parameter>-D LIBICAL_GLIB_VAPI=true</parameter>: Essa chave é usada para
+construir ligações para <xref linkend="vala"/>.
     </para>
 
     
 
-  <!-- No CMake equivalents
+    <!-- Leaving commented until tested against JDK.
     <para>
 
-      <parameter>- -enable-cxx</parameter>: This switch enables
-      <application>libical</application> C++ library.
+      <parameter>-D LIBICAL_JAVA_BINDINGS=OFF</parameter>: This switch is used
+      to disable the Java bindings. Remove it if you have <xref linkend="java"/>
+      installed and want to build them to use in Java applications.
+    </para>
+    -->
+<para>
+      <option>-D LIBICAL_ENABLE_BUILTIN_TZDATA=true</option>: Essa chave é usada
+para usar os dados de fuso horário incluídos.
     </para>
 
-    <para>
-      <option>- -enable-python</option>: This switch enables
-      <application>libical</application> Python bindings.
-    </para> -->
-</sect2>
+  </sect2>
 
   <sect2 role="content">
     <title>Conteúdo</title>
@@ -224,13 +208,13 @@ finalidade de construir usando teus próprios dados de fuso horário.
           Nenhum(a)
         </seg>
         <seg>
-          libical_cxx.so, libical.so, libical-glib.so, libicalss_cxx.so, libicalss.so
-e libicalvcal.so
+          libical.so, libicalss.so, libicalss_cxx.so, libicalvcal.so, libicalvcard.so
+(experimental), libical-glib.so e libical_cxx.so
         </seg>
         <seg>
           /usr/include/libical, /usr/include/libical-glib, /usr/lib/cmake/LibIcal,
-/usr/libexec/libical, /usr/share/gtk-doc/html/libical-glib (opcional) e
-/usr/share/doc/libical-&libical-version;/html
+/usr/libexec/libical, /usr/share/gtk-doc/libical-glib (quando documentos
+forem construídos) e /usr/share/doc/libical-&libical-version;
         </seg>
       </seglistitem>
     </segmentedlist>
@@ -279,7 +263,7 @@ e libicalvcal.so
         <term><filename class="libraryfile">libicalss.so</filename></term>
         <listitem>
           <para>
-            é uma biblioteca que te permite armazenar os dados do componente "iCal" no
+            é uma biblioteca que te permite armazenar dados do componente "iCal" no
 disco em uma variedade de maneiras
           </para>
           <indexterm zone="libical libicalss">
@@ -312,6 +296,17 @@ disco em uma variedade de maneiras
         </listitem>
       </varlistentry>
 
+      <varlistentry id="libicalvcard">
+        <term><filename class="libraryfile">libicalvcard.so</filename></term>
+        <listitem>
+          <para>
+            é uma biblioteca experimental para manuseio de dados formatados em VCARD
+          </para>
+          <indexterm zone="libical libicalvcard">
+            <primary sortas="c-libicalvcard">libicalvcard.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
     </variablelist>
 
   </sect2>

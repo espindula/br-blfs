@@ -93,6 +93,18 @@ linkend="valgrind"/> (para a suíte de teste)
     <title>Instalação do Wget</title>
 
     <para>
+      Primeiro, faça uma correção para tornar o pacote compatível com OpenSSL 4. A
+variável bash serve para fins de apresentação, devido à longa linha.
+    </para>
+
+<screen><userinput>NEW_LINE='#if !defined OPENSSL_NO_SSL3_METHOD '
+NEW_LINE+='&amp;&amp; OPENSSL_VERSION_NUMBER &lt; 0x40000000L'
+
+sed -i "/SSL3/c $NEW_LINE" src/openssl.c
+
+unset NEW_LINE </userinput></screen>
+
+    <para>
       Instale o &quot;<application>Wget</application>&quot; executando os
 seguintes comandos:
     </para>

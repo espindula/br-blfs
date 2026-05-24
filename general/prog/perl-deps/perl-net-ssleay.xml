@@ -5,7 +5,7 @@
   %general-entities;
 
   <!ENTITY my-download-http "&metacpan_authors;/C/CH/CHRISN/Net-SSLeay-&Net-SSLeay-version;.tar.gz">
-  <!ENTITY my-md5sum "1b22c764e5a094c6261e37a4b1f148ce">
+  <!ENTITY my-md5sum "63772ad94b874b5f0f025c2a4285f82f">
 
 ]>
 
@@ -26,20 +26,8 @@
         Net::SSLeay é uma extensão Perl para usar OpenSSL.
       </para>
 
-      
 
-      <!--
-      <bridgehead renderas="sect4">
-Additional Download</bridgehead>
-      <itemizedlist spacing="compact">
-        <listitem>
-          <para>
-            Required patch (for openssl-1.1.1):
-            <ulink url="&patch-root;/Net-SSLeay-&Net-SSLeay-version;-openssl_1.1.1-1.patch"/>
-          </para>
-        </listitem>
-      </itemizedlist>-->
-&lfs130_checked;
+      &lfs130_checked;
 
       <bridgehead renderas="sect4">Informação do Pacote</bridgehead>
       <itemizedlist spacing="compact">
@@ -55,27 +43,32 @@ Additional Download</bridgehead>
         </listitem>
       </itemizedlist>
 
+      <bridgehead renderas="sect4">Transferência Adicional</bridgehead>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Remendo exigido (para openssl-4): <ulink
+url="&patch-root;/Net-SSLeay-&Net-SSLeay-version;-openssl4_fixes-1.patch"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+
     </sect3>
 
     <sect3 role="installation">
       <title>Instalação do Net::SSLeay</title>
 
-      <note>
-        <para>
-          
-          <!-- https://github.com/radiator-software/p5-net-ssleay/issues/511 -->
-<!-- https://rt.cpan.org/Public/Bug/Display.html?id=12954 -->
-Um teste chamado <filename>32_x509_get_cert_info.t</filename> é conhecido
-por falhar com OpenSSL-3.4.0 ou posterior. Se habilitar os testes externos,
-um teste em t/external/15_altnames.t possivelmente falhe. 
-        </para>
-      </note>
+      <para>
+        Primeiro, aplique um remendo para suportar OpenSSL-4:
+      </para>
+
+<screen><userinput>patch -Np1 -i ../Net-SSLeay-&Net-SSLeay-version;-openssl4_fixes-1.patch</userinput></screen>
 
       <para>
         Esse módulo usa uma variante das instruções padrão de construção e
 instalação: <screen><userinput>yes '' | perl Makefile.PL &amp;&amp;
 make                      &amp;&amp;
-make test || true</userinput></screen> Agora, como o(a) usuário(a)
+make test</userinput></screen> Agora, como o(a) usuário(a)
 <systemitem class="username">root</systemitem>: <screen role="root"><userinput>make install</userinput></screen>
 
       </para>
@@ -91,13 +84,14 @@ externos, que falharão se você não tiver conectividade de rede de
 intercomunicação. O padrão é "n"; especificar isso permite que você
 automatize a construção.
       </para>
-
+      
+    <!--
       <para>
-        <command>|| true</command>: Ao executar um conjunto de comandos sequenciais
-que sai em caso de erro, isso evita a parada devido à falha conhecida de
-teste.
-      </para>
 
-    </sect3>
+        <command>|| true</command>: When running a script which exits on
+        error, this prevents stopping because of the known test failure.
+      </para>
+      -->
+</sect3>
 
   </sect2>

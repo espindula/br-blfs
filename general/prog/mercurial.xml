@@ -6,10 +6,10 @@
 
   <!ENTITY mercurial-download-http "https://www.mercurial-scm.org/release/mercurial-&mercurial-version;.tar.gz">
   <!ENTITY mercurial-download-ftp  "">
-  <!ENTITY mercurial-md5sum        "1b7fd8be6664ba24e47c29f31dc1ac26">
+  <!ENTITY mercurial-md5sum        "9a637d4fc411da358cfa341cd18d0a12">
   <!ENTITY mercurial-size          "8,8 MB">
-  <!ENTITY mercurial-buildsize     "127 MB (com documentos, adicionar 2,5 GB para testes)">
-  <!ENTITY mercurial-time          "0,3 UPC (com documentos; adicionar 30 UPC para testes; ambos usando
+  <!ENTITY mercurial-buildsize     "124 MB (com documentos, adicionar 2,5 GB para testes)">
+  <!ENTITY mercurial-time          "0,3 UPC (com documentos; adicionar 24 UPC para testes; ambos usando
 paralelismo=4)">
 ]>
 
@@ -99,6 +99,12 @@ url="https://github.com/google/re2/">re2</ulink>
     <title>Instalação do &quot;Mercurial&quot;</title>
 
     <para>
+      Primeiro, remova alguns comandos que conflitam com openssl4: 
+    </para>
+
+<screen role="root"><userinput>sed -i "15,23 s/^/#/" setup.py</userinput></screen>
+
+    <para>
       <application>Mercurial</application> é construído e instalado em um comando
 único como o(a) usuário(a) &root;:
     </para>
@@ -111,24 +117,29 @@ mas somente as páginas de manual são instaladas. Se você desejar instalar a
 documentação html, emita como o(a) usuário(a) &root;:
     </para>
 
+<!--
+    <para>
+
+      If you wish to run the tests, the rust sources have to be fixed for the
+      most recent rust version:
+    </para>
+
+<screen remap="test"><userinput>pushd rust                           &amp;&amp;
+cargo fix - -workspace - -allow-no-scm &amp;&amp;
+popd</userinput></screen>
+-->
 <screen role="root"
         remap="doc"><userinput>mkdir /usr/share/doc/mercurial-&mercurial-version; &amp;&amp;
 cp -R doc/html /usr/share/doc/mercurial-&mercurial-version;</userinput></screen>
 
-    <para>
-      Se você desejar executar os testes, os fontes da rust têm de ser corrigidos
-para a versão mais recente da rust:
-    </para>
 
-<screen remap="test"><userinput>pushd rust                           &amp;&amp;
-cargo fix --workspace --allow-no-scm &amp;&amp;
-popd</userinput></screen>
 
     <para>
-      Existe também um problema com as permissões no diretório de construção, já
-que o comando <command>install</command> acima criou arquivos titularizados
-pelo(a) &root;, que um teste tenta modificar. Para remediar isso, emita,
-como o(a) usuário(a) &root;:
+      Para a finalidade de executar os testes, assegure-se de que todos os
+arquivos sejam titularizados por um(a) usante desprivilegiado(a). Isso
+corrige um problema com permissões no diretório de construção, já que o
+comando <command>install</command> acima criou arquivos titularizados
+pelo(a) &root;. Para remediar isso, emita, como o(a) usante &root;:
     </para>
 
 <screen remap="test"
@@ -136,8 +147,18 @@ como o(a) usuário(a) &root;:
 
     <para>
       Onde <replaceable>username</replaceable> deveria ser substituído pelo nome
-de usuário(a) da pessoa que executa os testes. Para executar a suíte de
-teste, emita:
+de usante da pessoa que executa os testes. 
+    </para>
+
+    <para>
+      A suíte de teste tenta executar alguns testes que são incompatíveis com
+<xref linkend="rust"/>. Remova-os com:
+    </para>
+
+<screen remap="test"><userinput>sed -i "177,181 s/^/#/" Makefile</userinput></screen>
+
+    <para>
+      Agora, execute a suíte de teste com:
     </para>
 
 <screen remap="test"><userinput>TESTFLAGS="-j<replaceable>&lt;N&gt;</replaceable> --with-hg /usr/bin/hg" make check</userinput></screen>
@@ -175,6 +196,7 @@ pouca memória.
       # Ran 974 tests, 58 skipped, 14 failed. -pierre 22 Nov 25 (mercurial-7.1.2 with python-3.14).
       # Ran 1006 tests, 60 skipped, 3 failed. -renodr 11 Feb 26 (mercurial-7.2 with python-3.14).
       # Ran 1001 tests, 67 skipped, 0 failed. -pierre 7 Apr 26 (mercurial-7.2.1).
+      # Ran 998 tests, 71 skipped, 0 failed.  -bdubbs 21 May 26 (mercurial-7.2.2).
       -->
 <para>
       Para a finalidade de investigar quaisquer testes aparentemente falhos, você
@@ -275,7 +297,7 @@ EOF</userinput></screen>
           hg
         </seg>
         <seg>
-          vários módulos internos sob
+          numerosos módulos internos sob
 /usr/lib/python&python3-majorver;/site-packages/mercurial
         </seg>
         <seg>

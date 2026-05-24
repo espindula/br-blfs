@@ -6,7 +6,7 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "97d6e42e960385a80b3195d5bdc635cc">
+  <!ENTITY thunderbird-md5sum        "1198213ae8b38f75f424cd59e5ff16b7">
   <!ENTITY thunderbird-size          "724 MB">
   <!ENTITY thunderbird-buildsize     "8,9 GB (267 MB instalado)">
   <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito núcleos)">
@@ -177,11 +177,26 @@ existem:
 verificação:
     </para>
 
+<!--
+    <para>
+
+      Next, fix building this package with rustc-1.95.0.  Again the build
+      system needs a change to skip the checksum verification:
+    </para>
+
+<screen><userinput remap="pre">sed '/use super::/a use core::simd::Select;' \
+    -i comm/third_party/rust/encoding_rs/src/x_user_defined.rs &amp;&amp;
+sed '/patch.crates-io/a encoding_rs={path="../third_party/rust/encoding_rs"}' \
+    -i comm/rust/Cargo.toml &amp;&amp;
+sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i comm/rust/Cargo.lock</userinput></screen>
+-->
 <screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
 sed '/patch.crates-io/a glslopt={path="../third_party/rust/glslopt"}' \
     -i comm/rust/Cargo.toml &amp;&amp;
 sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' \
     -i comm/rust/Cargo.lock</userinput></screen>
+
+
 
     <para>
       Em seguida, corrija construir esse pacote com LLVM-22:

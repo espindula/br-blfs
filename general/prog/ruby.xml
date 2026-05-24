@@ -6,10 +6,10 @@
 
   <!ENTITY ruby-download-http "https://cache.ruby-lang.org/pub/ruby/&ruby-minor-version;/ruby-&ruby-version;.tar.xz">
   <!ENTITY ruby-download-ftp  "">
-  <!ENTITY ruby-md5sum        "e182f8c1c1a5c2804b2783439a5ee1cc">
-  <!ENTITY ruby-size          "18 MB">
-  <!ENTITY ruby-buildsize     "2,8 GB (com documentos da API da C e testes)">
-  <!ENTITY ruby-time          "1,5 UPC (com documentos da API da C; usando paralelismo=4; adicionar 0,4 UPC
+  <!ENTITY ruby-md5sum        "89be441b4ece4bda98b1d8deca3c63d6">
+  <!ENTITY ruby-size          "17 MB">
+  <!ENTITY ruby-buildsize     "1,8 GB (com documentos da API da C e testes)">
+  <!ENTITY ruby-time          "1,7 UPC (com documentos da API da C; usando paralelismo=4; adicionar 0,5 UPC
 para testes)">
 ]>
 
@@ -68,6 +68,16 @@ automatização orientada a objetos.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/ruby-4.0.5-openssl4_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do Ruby</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -96,6 +106,12 @@ linkend="asciidoctor"/>, você precisa reinstalar esses pacotes ao atualizar
 para uma nova versão secundária do Ruby.
       </para>
     </note>
+
+    <para>
+      Primeiro, aplique um remendo para compatibilidade com openssl4:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../ruby-4.0.5-openssl4_fixes-1.patch</userinput></screen>
 
     <para>
       Instale <application>Ruby</application> executando o seguinte comando:
@@ -131,7 +147,7 @@ variáveis para a suíte de teste.
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+    <screen role="root"><userinput>XDG_DATA_HOME=/tmp make install</userinput></screen>
 
     <note>
       <para>
@@ -197,6 +213,16 @@ instalar índices rdoc.
     <para>
       <option>--disable-install-capi</option>: Essa chave desabilita construir e
 instalar documentos da API da C.
+    </para>
+
+    <para>
+      <command>XDG_DATA_HOME=/tmp ...</command>: Se <envar>XDG_DATA_HOME</envar>
+não estiver configurada, o processo de instalação criará o diretório
+<filename class='directory'>$HOME/.local/share</filename> se ele não
+existir. Dependendo da maneira como os privilégios de root foram adquiridos,
+isso possivelmente crie arquivos titularizados por &root; no diretório lar
+do(a) usante ou em <filename class='directory'>/root</filename>, o que
+também não é desejável.
     </para>
 
   </sect2>

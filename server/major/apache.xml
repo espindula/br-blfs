@@ -7,9 +7,9 @@
   <!ENTITY apache-download-http
            "https://archive.apache.org/dist/httpd/httpd-&apache-version;.tar.bz2">
   <!ENTITY apache-download-ftp  "">
-  <!ENTITY apache-md5sum        "57b22503d04bf666a9ea829becc755e7">
+  <!ENTITY apache-md5sum        "f7310cfdfc702cee625e9881049d5819">
   <!ENTITY apache-size          "7,2 MB">
-  <!ENTITY apache-buildsize     "88 MB">
+  <!ENTITY apache-buildsize     "129 MB">
   <!ENTITY apache-time          "0,3 UPC (Usando paralelismo=4)">
 ]>
 
@@ -75,6 +75,12 @@ executar grandes operações de serviço web.
           Remendo exigido: <ulink url="&patch-root;/httpd-blfs_layout-1.patch"/>
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/httpd-2.4.67-openssl4_fixes-2.patch"/>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do Apache HTTPD</bridgehead>
@@ -86,9 +92,9 @@ executar grandes operações de serviço web.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="brotli"/>, <xref linkend="doxygen"/>, <xref
-linkend="jansson"/>, <xref linkend="libxml2"/>, <xref linkend="lua"/>, <xref
-linkend="lynx"/> ou <xref linkend="Links"/> ou <ulink
+      <xref linkend="brotli"/>, <xref linkend="curl"/>, <xref linkend="doxygen"/>,
+<xref linkend="jansson"/>, <xref linkend="libxml2"/>, <xref linkend="lua"/>,
+<xref linkend="lynx"/> ou <xref linkend="Links"/> ou <ulink
 url="&elinks-url;">ELinks</ulink>, <xref linkend="nghttp2"/>, <xref
 linkend="openldap"/> (<xref linkend="apr-util"/> precisa ser instalado com
 suporte ldap), <xref linkend="rsync"/>, &berkeley-db; e <ulink
@@ -110,6 +116,12 @@ class="username">root</systemitem>:
 <screen role="root"><userinput>groupadd -g 25 apache &amp;&amp;
 useradd -c "Servidor Apache" -d /srv/www -g apache \
         -s /bin/false -u 25 apache</userinput></screen>
+
+    <para>
+      Agora adicione um remendo para compatibilidade com openssl4:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../httpd-2.4.67-openssl4_fixes-2.patch</userinput></screen>  
 
     <para>
       Construa e instale o <application>Apache HTTPD</application> executando os

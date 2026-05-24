@@ -7,10 +7,10 @@
 
   <!ENTITY mariadb-download-http "https://downloads.mariadb.org/interstitial/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
   <!ENTITY mariadb-download-ftp  "">
-  <!ENTITY mariadb-md5sum        "85044cd1ec59cbdbcc4d27a9646d6261">
-  <!ENTITY mariadb-size          "115 MB">
-  <!ENTITY mariadb-buildsize     "2,2 GB (764 MB instalado)">
-  <!ENTITY mariadb-time          "3,8 UPC (com paralelismo=8, adicionar 2,9 UPC para testes)">
+  <!ENTITY mariadb-md5sum        "27c6eeeda18e0c298f63b7def5ad8061">
+  <!ENTITY mariadb-size          "114 MB">
+  <!ENTITY mariadb-buildsize     "2,3 GB (778 MB instalado)">
+  <!ENTITY mariadb-time          "3,9 UPC (com paralelismo=8, adicionar 2,9 UPC para testes)">
 ]>
 
 <sect1 id="mariadb" xreflabel="MariaDB-&mariadb-version;">
@@ -68,10 +68,20 @@ bases de dados relacionais &quot;<application>MySQL</application>&quot;.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/mariadb-&mariadb-version;-openssl4_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <note>
       <para>
-        O tamanho instalado do MariaDB é de 763 MB, mas isso pode ser reduzido em
-cerca de 269 MB, se desejado, removendo-se o diretório <filename
+        O tamanho instalado do MariaDB é de 778 MB, mas isso pode ser reduzido em
+cerca de 270 MB, se desejado, removendo-se o diretório <filename
 class="directory">/usr/share/mariadb/test</filename> depois da instalação.
       </para>
     </note>
@@ -142,11 +152,10 @@ usuário(a) e o grupo:
 useradd -c "MariaDB Server" -d /srv/mariadb -g mariadb -s /bin/false -u 40 mariadb</userinput></screen>
 
     <para>
-      Corrija um problema com detectagem do Boost-1.89.0 e posteriores:
+      Corrija problemas de tempo de execução com OpenSSL-4.0 e posteriores:
     </para>
 
-<screen><userinput>sed -i 's/regex system/regex/' \
-       storage/columnstore/columnstore/cmake/boost.cmake</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../mariadb-&mariadb-version;-openssl4_fixes-1.patch</userinput></screen>
 
     <para>
       Instale o &quot;<application>MariaDB</application>&quot; executando os
@@ -252,8 +261,8 @@ Connector/C do MariaDB que não são suportados sem configuração adicional.
     </para>
 
     <para>
-      <option>-D WITHOUT_SERVER=ON</option>: Use essa chave se você não quiser o
-servidor e gostaria de construir somente o cliente.
+      <option>-D WITHOUT_SERVER=ON</option>: Use isto: wqswitch se você não quiser
+o servidor e gostaria de construir somente o cliente.
     </para>
 
     <para>

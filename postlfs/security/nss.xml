@@ -7,17 +7,17 @@
 <!-- for when .0 is not part of the new tarball name, but always referenced -->
 <!ENTITY nss-url "archive.mozilla.org/pub/security/nss/releases">
 
-<!-- micro versions-->
+<!-- micro versions
   <!ENTITY nss-download-http "https://&nss-url;/NSS_3_&nss-minor-version;_&nss-micro-version;_RTM/src/nss-&nss-version;.tar.gz">
-
+-->
 <!-- no micro versions -->
-<!--<!ENTITY nss-download-http "https://&nss-url;/NSS_&nss-dir;_RTM/src/nss-&nss-version;.tar.gz">-->
+<!ENTITY nss-download-http "https://&nss-url;/NSS_&nss-dir;_RTM/src/nss-&nss-version;.tar.gz">
   <!ENTITY nss-download-ftp  "">
-  <!ENTITY nss-md5sum        "af095ecde13b76cd700ef325758c662d">
+  <!ENTITY nss-md5sum        "7b6b89b1271721b3694d1a2646a4e69c">
   <!ENTITY nss-size          "75 MB">
-  <!ENTITY nss-buildsize     "392 MB (com testes)">
+  <!ENTITY nss-buildsize     "319 MB (adicionar 72 MB para testes)">
   <!ENTITY nss-time          "0,8 UPC (com paralelismo=4; adicionar 42 UPC para testes em Ryzens da AMD ou
-ao menos 23 UPC em máquinas Intel)">
+8,4 UPC em máquinas Intel)">
   <!-- Don't know why but I got 27 (i9-10900) - rahul -->
   <!-- On my system, I got 64.2 SBU, but Bruce gets 18 SBU. -renodr -->
   <!-- On my system, I got 63 SBU, but Xi gets ~18 SBU. -pierre (for 3.78) -->
@@ -40,6 +40,17 @@ ao menos 23 UPC em máquinas Intel)">
      TinderboxPrint:Unknown: 2
 
    Changes did not warrant running a 16 SBU test suite for 3.106. [bdubbs]
+
+   Test Results 3.105: (Intel i7-14700K) 16 SBU [bdubbs]
+
+   Test Results 3.124: (Intel i7-14700K) 8.4 SBU [bdubbs]
+     Tests summary:
+     Passed:             31903
+     Failed:             0
+     Failed with core:   0
+     ASan failures:      0
+     Unknown status:     1
+     TinderboxPrint:Unknown: 1
    -->
 ]>
 
@@ -144,6 +155,7 @@ padrões de segurança da Internet em um aplicativo.
     <title>Instalação do NSS</title>
 
 
+
     <!--
     <note>
 
@@ -160,6 +172,15 @@ padrões de segurança da Internet em um aplicativo.
 <screen><userinput>grep -q adx /proc/cpuinfo || \
 patch -Np1 -i ../nss-&nss-version;-illegal_instruction-1.patch</userinput></screen>
 
+-->
+<!--
+    <para>
+
+      First, if you are going to run the test suite, adapt some tests to
+      sqlite-3.53.0 and later:
+    </para>
+
+<screen><userinput remap="pre">sed -i "490 s/,X'/,[xX]'/" nss/tests/dbtests/dbtests.sh</userinput></screen>
 -->
 <para>
       Instale <application>NSS</application> executando os seguintes comandos:
@@ -246,13 +267,13 @@ desconhecidas.
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>cd ../dist                                                          &amp;&amp;
+<screen role="root"><userinput>cd ../dist                                         &amp;&amp;
 
-install -v -m755 Linux*/lib/*.so              /usr/lib              &amp;&amp;
-install -v -m644 Linux*/lib/{*.chk,libcrmf.a} /usr/lib              &amp;&amp;
+install -v -m755 Linux*/lib/*.so  /usr/lib         &amp;&amp;
+install -v -m644 Linux*/lib/*.chk /usr/lib         &amp;&amp;
 
-install -v -m755 -d                           /usr/include/nss      &amp;&amp;
-cp -v -RL {public,private}/nss/*              /usr/include/nss      &amp;&amp;
+install -v -m755 -d               /usr/include/nss &amp;&amp;
+cp -v -RL {public,private}/nss/*  /usr/include/nss &amp;&amp;
 
 install -v -m755 Linux*/bin/{certutil,nss-config,pk12util} /usr/bin &amp;&amp;
 
@@ -360,7 +381,7 @@ com a chave <parameter>-n</parameter> ou modificando o arquivo
           certutil, nss-config e pk12util
         </seg>
         <seg>
-          libcrmf.a, libfreebl3.so, libfreeblpriv3.so, libnss3.so, libnssckbi.so,
+          libfreebl3.so, libfreeblpriv3.so, libnss3.so, libnssckbi.so,
 libnssckbi-testlib.so, libnssdbm3.so, libnsssysinit.so, libnssutil3.so,
 libpkcs11testmodule.so, libsmime3.so, libsoftokn3.so e libssl3.so
         </seg>

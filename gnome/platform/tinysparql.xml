@@ -76,9 +76,8 @@ custo com uma interface SPARQL 1.1.
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      &gobject-introspection;, <xref linkend="icu"/>, <xref linkend="libsoup3"/>,
-<xref linkend="localsearch"/> (tempo de execução) e <xref
-linkend="pygobject3"/>
+      &gobject-introspection;, <xref linkend="icu"/>, <xref linkend="libsoup3"/> e
+<xref role="runtime" linkend="localsearch"/> (tempo de execução)
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -89,7 +88,7 @@ linkend="pygobject3"/>
 
 -->
 <xref linkend="asciidoc"/>, <xref linkend="avahi"/>, <xref
-linkend="graphviz"/>, <ulink
+linkend="graphviz"/>, <xref linkend="pygobject3"/>, <ulink
 url="https://github.com/scop/bash-completion/">bash-completion</ulink> e
 <ulink url="https://snowballstem.org/">libstemmer</ulink>
     </para>
@@ -128,6 +127,7 @@ cd    build &amp;&amp;
 meson setup --prefix=/usr       \
             --buildtype=release \
             -D man=false        \
+            -D tests=false      \
             ..                  &amp;&amp;
 ninja</userinput></screen>
 
@@ -138,7 +138,8 @@ meson setup --prefix=/usr                  \
             --buildtype=release            \
             -D man=false                   \
             -D systemd_user_services=false \
-            ..                            &amp;&amp;
+            -D tests=false                 \
+            ..                             &amp;&amp;
 ninja</userinput></screen>
 
     <para>
@@ -148,7 +149,8 @@ ninja</userinput></screen>
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>meson configure -D debug=true
+      Para testar os resultados, garanta que <xref linkend='pygobject3'/> esteja
+instalado e emita: <command>meson configure -D debug=true tests=true
 &amp;&amp; LC_ALL=C.UTF-8 ninja test</command>. A suíte de teste deveria ser
 executada a partir de uma sessão gráfica. Um teste, test_cli, é conhecido
 por falhar devido às páginas de manual não serem geradas, porém passará se
