@@ -87,8 +87,7 @@ url="&patch-root;/protobuf-c-&protobuf-c-version;-protobuf34_fix-1.patch"/>
     <title>Instalação do Protobuf-c</title>
 
     <para>
-      Primeiro corrija problemas causados pelo <xref linkend="protobuf"/> e
-posteriores:
+      Primeiro corrija problemas causados pelo protobuf-34 e posteriores:
     </para>
 
 <screen><userinput>patch -Np1 -i ../protobuf-c-&protobuf-c-version;-protobuf34_fix-1.patch</userinput></screen>
@@ -98,7 +97,8 @@ posteriores:
 comandos:
     </para>
 
-<screen><userinput>CXXFLAGS+=" -std=c++20" ./configure --prefix=/usr --disable-static &amp;&amp;
+<screen><userinput>CXXFLAGS="${CXXFLAGS:--O2 -g} -std=c++20" \
+./configure --prefix=/usr --disable-static &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -115,6 +115,12 @@ make</userinput></screen>
 
   <sect2 role="commands">
     <title>Explicações do Comando</title>
+
+    <para>
+      <envar>CXXFLAGS="${CXXFLAGS:--O2 -g} -std=c++20"</envar>: Substituir o
+padrão C++ definido previamente (C++ 2017) desse pacote, pois os cabeçalhos
+originários do protobuf-35 e posteriores exigem recursos de C++ 2020.
+    </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>

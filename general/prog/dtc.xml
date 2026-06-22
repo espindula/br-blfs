@@ -5,9 +5,9 @@
   %general-entities;
 
   <!ENTITY dtc-download-http "https://kernel.org/pub/software/utils/dtc/dtc-&dtc-version;.tar.xz">
-  <!ENTITY dtc-md5sum        "0f193be84172556027da22d4fe3464e0">
-  <!ENTITY dtc-size          "168 KB">
-  <!ENTITY dtc-buildsize     "13 MB (com testes)">
+  <!ENTITY dtc-md5sum        "9753bdbf18763efef1f5ae8c0cecb5f6">
+  <!ENTITY dtc-size          "176 KB">
+  <!ENTITY dtc-buildsize     "14 MB (com testes)">
   <!ENTITY dtc-time          "0,2 UPC (com testes)">
 ]>
 
@@ -65,17 +65,21 @@ dispositivos no formato binário.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/dtc-&dtc-version;-glibc_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/dtc-&dtc-version;-glibc_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências de Dtc</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências de Dtc</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -87,28 +91,32 @@ linkend='texlive'/>
   <sect2 role="installation">
     <title>Instalação do Dtc</title>
 
+
+
+    <!--
     <para>
-      Primeiro, corrija compilar esse pacote com glibc-2.43:
+
+      First, fix compiling this package with glibc-2.43:
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../dtc-&dtc-version;-glibc_fixes-1.patch</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale <application>dtc</application> executando os seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -D python=disabled  &amp;&amp;
+meson setup ..                  \
+      --prefix=/usr             \
+      --buildtype=release       \
+      -D default_library=shared \
+      -D python=disabled        &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>CC='gcc -Wl,-z,noexecstack' meson
-test -v</command>.
+      Para testar os resultados, emita: <command>ninja test</command>.
     </para>
 
     <para>
@@ -116,12 +124,6 @@ test -v</command>.
     </para>
 
     <screen role="root"><userinput>ninja install</userinput></screen>
-
-    <para>
-      Ainda como o(a) usuário(a) &root;, remova a biblioteca estática inútil:
-    </para>
-
-    <screen role="root"><userinput>rm /usr/lib/libfdt.a</userinput></screen>
 
     <para>
       Se você tiver <xref linkend='texlive'/> instalado, poderá construir o

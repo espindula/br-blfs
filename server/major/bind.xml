@@ -7,9 +7,9 @@
   <!ENTITY bind-download-http "https://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
   <!ENTITY bind-download-ftp  "">
   <!ENTITY bind-md5sum        "&bind-md5;">
-  <!ENTITY bind-size          "5,5 MB">
-  <!ENTITY bind-buildsize     "163 MB (23 MB instalado)">
-  <!ENTITY bind-time          "0,4 UPC (com paralelismo=4; cerca de 40 minutos, um tanto independente do
+  <!ENTITY bind-size          "5,6 MB">
+  <!ENTITY bind-buildsize     "193 MB (23 MB instalado)">
+  <!ENTITY bind-time          "0,4 UPC (com paralelismo=4; cerca de 8 minutos, um tanto independente do
 processador, para executar a suíte completa de teste)">
 ]>
 
@@ -107,8 +107,11 @@ url="&w3m-url;">w3m</ulink>
     <bridgehead renderas="sect4">Opcional (para executar a suíte de teste)</bridgehead>
     <para role="optional">
       <xref linkend="perl-net-dns"/>, <ulink
-url="https://www.dnspython.org/">dnspython</ulink> e <ulink
-url="https://hypothesis.readthedocs.io/en/latest/">hypothesis</ulink>
+url="https://pypi.org/project/cryptography/">cryptography</ulink>, <ulink
+url="https://www.dnspython.org/">dnspython</ulink>, <ulink
+url="https://pypi.org/project/h2/">h2</ulink>, <ulink
+url="https://hypothesis.readthedocs.io/en/latest/">hypothesis</ulink> e
+<ulink url="https://pypi.org/project/pytest-xdist/">pytest-xdist</ulink>
     </para>
 
     <para condition="html" role="usernotes">
@@ -137,6 +140,16 @@ url="https://hypothesis.readthedocs.io/en/latest/">hypothesis</ulink>
     </note>
 -->
 <para>
+      Se você planeja executar os testes, um ambiente virtual Python deveria ser
+configurado, de forma que <command>configure</command> encontre o binário do
+Python a partir desse ambiente. Isso é necessário porque esse binário é
+então rigidamente codificado na estrutura essencial de suporte do teste:
+    </para>
+
+<screen remap='test'><userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
+source testenv/bin/activate</userinput></screen>
+
+    <para>
       Instale o &quot;<application>BIND</application>&quot; executando os
 seguintes comandos:
     </para>
@@ -167,24 +180,27 @@ permitted&quot;. Essas mensagens não afetam os testes.
         remap="test"><userinput>bin/tests/system/ifconfig.sh up</userinput></screen>
 
     <para>
-      A suíte de teste possivelmente indique alguns testes ignorados, dependendo
-de quais opções de configuração forem usadas. Alguns testes são marcados com
-<quote>UNTESTED</quote> ou até mesmo falham se <xref
-linkend="perl-net-dns"/> não estiver instalado. Um teste,
-<filename>dnssec</filename>, é conhecido por falhar. Os testes exigem os
-módulos Python <ulink
+      A suíte de teste pode indicar alguns testes ignorados, dependendo de quais
+opções de configuração sejam usadas. Alguns testes são marcados como
+<quote>UNTESTED</quote> ou podem até mesmo falhar se o <xref
+linkend="perl-net-dns"/> não estiver instalado. Os testes exigem os módulos
+Python <ulink
+url="https://pypi.org/project/cryptography/">cryptography</ulink>, <ulink
+url="https://www.dnspython.org/">dnspython</ulink>, <ulink
+url="https://pypi.org/project/h2/">h2</ulink>, <ulink
 url="https://hypothesis.readthedocs.org/">hypothesis</ulink> e <ulink
-url="https://www.dnspython.org/">dnspython</ulink>, os quais não estão no
-BLFS. Para contornar isso, as instruções abaixo criam um ambiente virtual
-Python e, em seguida, instalam os módulos nele antes de executar os
-testes. Para executar os testes, como um(a) usuário(a) desprivilegiado(a),
-execute:
+url="https://pypi.org/project/pytest-xdist/">pytest-xdist</ulink>, os quais
+não estão no BLFS. Esses módulos são instalados no ambiente virtual criado
+anteriormente antes da execução dos testes. Para executar os testes, como
+um(a) usante desprivilegiado(a), execute:
     </para>
 
-<screen remap="test"><userinput>python3 -m venv --system-site-packages testenv &amp;&amp;
-source testenv/bin/activate                    &amp;&amp;
-pip3 install dnspython hypothesis              &amp;&amp;
-make -k check                                  &amp;&amp;
+<screen remap="test"><userinput>pip3 install cryptography \
+             dnspython    \
+             h2           \
+             hypothesis   \
+             pytest-xdist &amp;&amp;
+make -k check             &amp;&amp;
 deactivate</userinput></screen>
 
     <para>
@@ -318,16 +334,16 @@ class="username">named</systemitem>&quot;:
       </para>
 
 <screen role="root"><userinput>groupadd -g 20 named &amp;&amp;
-useradd -c "Proprietário(a) do BIND" -g named -s /bin/false -u 20 named &amp;&amp;
-install -d -m770 -o named -g named /srv/named</userinput></screen>
+useradd -c "BIND Owner" -g named -s /bin/false -u 20 named</userinput></screen>
+
 
       <para>
         Configure alguns arquivos, diretórios e dispositivos necessários ao
 &quot;<application>BIND</application>&quot;:
       </para>
 
-<screen role="root"><userinput>mkdir -p /srv/named &amp;&amp;
-cd      /srv/named &amp;&amp;
+<screen role="root"><userinput>install -d -m770 -o named -g named /srv/named &amp;&amp;
+cd       /srv/named &amp;&amp;
 mkdir -p dev etc/named/{slave,pz} usr/lib/engines var/run/named &amp;&amp;
 mknod /srv/named/dev/null c 1 3 &amp;&amp;
 mknod /srv/named/dev/urandom c 1 9 &amp;&amp;

@@ -9,7 +9,7 @@
   <!ENTITY elogind-md5sum        "6d084ff01c3eaf5e1a2f54c93fb279a2">
   <!ENTITY elogind-size          "2,6 MB">
   <!ENTITY elogind-buildsize     "67 MB (com testes)">
-  <!ENTITY elogind-time          "0.3 SBU (with parallelism=4; with tests)">
+  <!ENTITY elogind-time          "0,3 UPC (com paralelismo=4; com testes)">
 ]>
 
 <sect1 id="elogind" revision="sysv" xreflabel="elogind-&elogind-version;">
@@ -274,21 +274,22 @@ cabeçalhos compatíveis com o "systemd".
     <sect3><title>Informação de Configuração</title>
 
       <para>
-        The installed file <filename>/etc/elogind/logind.conf</filename> contains
-all the possible options with their defaults, commented out. You may wish to
-disable automatically killing user processes when the user logs out, by
-running, as the &root; user:
+        O arquivo instalado <filename>/etc/elogind/logind.conf</filename> contém
+todas as opções possíveis com os padrões delas comentados. Você
+possivelmente deseje desabilitar a eliminação automática de processos de
+usante quando o(a) usante desloga, executando como o(a) usante &root;:
       </para>
 
 <screen role="root"><userinput>sed -e '/\[Login\]/a KillUserProcesses=no' \
    -i /etc/elogind/logind.conf</userinput></screen>
 
       <para>
-        Each user will need to register a user session using
-<application>Linux-PAM</application> at login. The
-<filename>/etc/pam.d/system-session</filename> file needs to be modified and
-a new file must be created in order for <command>elogind</command> to work
-correctly. Run the following commands as the &root; user:
+        Cada usante precisará registrar uma sessão de usante usando
+<application>Linux-PAM</application> no login. O arquivo
+<filename>/etc/pam.d/system-session</filename> precisa ser modificado e um
+novo arquivo precisa ser criado para a finalidade de que o
+<command>elogind</command> funcione corretamente. Execute os seguintes
+comandos como o(a) usante &root;:
       </para>
 
 <screen role="root"><userinput>cat &gt;&gt; /etc/pam.d/system-session &lt;&lt; "EOF" &amp;&amp;
@@ -319,12 +320,13 @@ password required    pam_deny.so
 EOF</userinput></screen>
 
     <para>
-      This package provides a Name Service Switch (NSS) module. Previously, a
-Systemd-less system didn't have a dedicated NSS module used for better name
-resolution, while Systemd systems have one that is tightly ingrained with
-that software suite. Now, such a module is provided. In order to use it, the
-<filename>/etc/nsswitch.conf</filename> file that was installed in LFS must
-be altered. Overwrite the file as the &root; user:
+      Esse pacote fornece um módulo Name Service Switch (NSS). Anteriormente, um
+sistema sem Systemd não tinha um módulo NSS dedicado usado para melhor
+resolução de nomes, enquanto sistemas Systemd têm um que está intimamente
+integrado com essa suíte de software. Agora, tal módulo é fornecido. Para a
+finalidade de usá-lo, o arquivo <filename>/etc/nsswitch.conf</filename> que
+foi instalado no LFS precisa ser alterado. Sobrescreva o arquivo como o(a)
+usante &root;:
     </para>
 
 <screen role="root"><userinput>cat &gt; /etc/nsswitch.conf &lt;&lt; "EOF" &amp;&amp;
@@ -346,9 +348,9 @@ rpc: files
 EOF</userinput></screen>
 
     <note><para>
-      The <literal>myhostname</literal>, <literal>mymachines</literal>, and
-<literal>resolve</literal> NSS modules are still not provided (they come
-from Systemd). The installed file cannot use them yet.
+      Os módulos NSS <literal>myhostname</literal>, <literal>mymachines</literal>
+e <literal>resolve</literal> ainda não são fornecidos (eles vêm do
+Systemd). O arquivo instalado ainda não consegue usá-los.
     </para></note>
 
     <note>
@@ -373,10 +375,10 @@ SESSÃO e um SEAT foram criados.</para>
 
       <seglistitem>
         <seg>
-          busctl, elogind-inhibit, loginctl, userdbctl, and varlinkctl
+          busctl, elogind-inhibit, loginctl, userdbctl e varlinkctl
         </seg>
         <seg>
-           libelogind.so and libnss_elogind.so
+           libelogind.so e libnss_elogind.so
         </seg>
         <seg>
           /usr/lib/elogind, /etc/elogind, /usr/include/elogind e
@@ -431,7 +433,7 @@ desligamento, suspensão ou inatividade
         <term><command>userdbctl</command></term>
         <listitem>
           <para>
-            is used to inspect users, groups, and group memberships
+            é usado para inspecionar usantes, grupos e associações a grupos
           </para>
           <indexterm zone="elogind userdbctl">
             <primary sortas="b-userdbctl">userdbctl</primary>
@@ -443,7 +445,7 @@ desligamento, suspensão ou inatividade
         <term><command>varlinkctl</command></term>
         <listitem>
           <para>
-            is used to interact with and invoke Varlink services
+            é usado para interagir com, e invocar, serviços Varlink
           </para>
           <indexterm zone="elogind varlinkctl">
             <primary sortas="b-varlinkctl">varlinkctl</primary>
@@ -467,7 +469,7 @@ desligamento, suspensão ou inatividade
         <term><filename class="libraryfile">libnss_elogind.so</filename></term>
         <listitem>
           <para>
-            is the Name Service Switch (NSS) module for elogind
+            é o módulo Name Service Switch (NSS) para elogind
           </para>
           <indexterm zone="elogind libnss_elogind">
             <primary sortas="c-libnss_elogind">libnss_elogind.so</primary>

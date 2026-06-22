@@ -6,8 +6,8 @@
 
   <!ENTITY zsh-download-http "https://www.zsh.org/pub/zsh-&zsh-version;.tar.xz">
   <!ENTITY zsh-download-ftp  "">
-  <!ENTITY zsh-md5sum        "182e37ca3fe3fa6a44f69ad462c5c30e">
-  <!ENTITY zsh-size          "3,2 MB">
+  <!ENTITY zsh-md5sum        "5492bfe9a4afacdb2d1d81c27a1d44fa">
+  <!ENTITY zsh-size          "3,3 MB">
   <!ENTITY zsh-buildsize     "48 MB (inclui documentação e testes)">
   <!ENTITY zsh-time          "1,6 UPC (Usando paralelismo=4; inclui documentação e testes)">
 ]>
@@ -91,33 +91,6 @@ url='https://fbb-git.gitlab.io/yodl/'>yodl</ulink>
     <title>Instalação do zsh</title>
 
     <para>
-      Adapte o sistema de construção de documentação para texinfo-7.0 ou
-posterior:
-    </para>
-
-<!-- https://github.com/zsh-users/zsh/commit/4c89849c9817
-         https://github.com/zsh-users/zsh/commit/ab4d62eb975a -->
-<screen><userinput>sed -e 's/set_from_init_file/texinfo_&amp;/' \
-    -i Doc/Makefile.in</userinput></screen>
-
-    
-    <para>
-      Alguns programas fornecidos no sistema de construção para detectar recursos
-do sistema usam sintaxe pré-C99 rejeitada pelo GCC-14.1 ou
-posterior. Corrija-os porque o Zsh será configurado incorretamente e falhará
-caso contrário:
-    </para>
-
-<screen><userinput>sed -e 's/^main/int &amp;/'      \
-    -e 's/exit(/return(/'    \
-    -i aczsh.m4 configure.ac &amp;&amp;
-
-sed -e 's/test = /&amp;(char**)/' \
-    -i configure.ac           &amp;&amp;
-
-autoconf</userinput></screen>
-
-    <para>
       Os arquivos de documentação contém referências aos arquivos de configuração
 do zsh em <filename class='directory'>/etc</filename>, mas nós usaremos
 <filename class='directory'>/etc/zsh</filename> para armazenar esses
@@ -148,7 +121,8 @@ precisamos corrigir as referências manualmente:
             --sysconfdir=/etc/zsh    \
             --enable-etcdir=/etc/zsh \
             --enable-cap             \
-            --enable-gdbm            &amp;&amp;
+            --enable-gdbm            \
+            --enable-pcre            &amp;&amp;
 make                                 &amp;&amp;
 
 makeinfo  Doc/zsh.texi --html      -o Doc/html &amp;&amp;
@@ -172,7 +146,7 @@ documentação no formato PDF emitindo o seguinte comando:
 
 <screen role="root"><userinput>make install                                                    &amp;&amp;
 make infodir=/usr/share/info install.info                       &amp;&amp;
-make htmldir=/usr/share/doc/zsh-&zsh-version;/html install.html           &amp;&amp;
+make htmldir=/usr/share/doc/zsh-&zsh-version;/html install.html         &amp;&amp;
 install -v -m644 zsh.{html,txt} Etc/FAQ /usr/share/doc/zsh-&zsh-version;</userinput></screen>
 
     <para>
@@ -208,15 +182,13 @@ localizados no diretório <filename class='directory'>/etc</filename>.
 biblioteca <application>GDBM</application>.
     </para>
 
-  <!-- the next zsh release will support it
     <para>
-
-      <option>- -enable-pcre</option>: This option allows zsh to use
-      the <application>PCRE2</application> regular expression library in shell
-      builtins.
+      <parameter>--enable-pcre</parameter>: Essa opção permite que o zsh use a
+biblioteca de expressões regulares <application>PCRE2</application> em
+integrados de shell.
     </para>
--->
-</sect2>
+
+  </sect2>
 
   <sect2 role="configuration">
     <title>Configurando o zsh</title>

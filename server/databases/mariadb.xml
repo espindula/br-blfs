@@ -7,10 +7,10 @@
 
   <!ENTITY mariadb-download-http "https://downloads.mariadb.org/interstitial/mariadb-&mariadb-version;/source/mariadb-&mariadb-version;.tar.gz">
   <!ENTITY mariadb-download-ftp  "">
-  <!ENTITY mariadb-md5sum        "27c6eeeda18e0c298f63b7def5ad8061">
-  <!ENTITY mariadb-size          "114 MB">
-  <!ENTITY mariadb-buildsize     "2,3 GB (778 MB instalado)">
-  <!ENTITY mariadb-time          "3,9 UPC (com paralelismo=8, adicionar 2,9 UPC para testes)">
+  <!ENTITY mariadb-md5sum        "e6ec06ab51a7afa581562499616624a4">
+  <!ENTITY mariadb-size          "115 MB">
+  <!ENTITY mariadb-buildsize     "2,5 GB (832 MB instalado)">
+  <!ENTITY mariadb-time          "4,3 UPC (com paralelismo=8, adicionar 2,6 UPC para testes)">
 ]>
 
 <sect1 id="mariadb" xreflabel="MariaDB-&mariadb-version;">
@@ -90,7 +90,7 @@ class="directory">/usr/share/mariadb/test</filename> depois da instalação.
       <para>
         Se você estiver atualizando uma base de dados existente, por favor veja as
 <ulink
-url="https://mariadb.com/docs/release-notes/community-server/mariadb-11-8-series/what-is-mariadb-118">Observações
+url="https://mariadb.com/docs/release-notes/community-server/12.3/mariadb-12.3-changes-and-improvements">Observações
 de Lançamento do MariaDB</ulink> para informações adicionais e use as
 instruções depois da seção Informação de Configuração para garantir uma
 atualização segura.
@@ -140,6 +140,16 @@ sistema sem grandes mudanças na configuração de construção de um dos dois
 aplicativos.
       </para>
     </warning>
+
+    <caution>
+      <para>
+        Se você estiver atualizando o MariaDB da versão 11.x para a 12.x, por favor,
+preste atenção especial para as notas de atualização mais adiante nesta
+página. Usantes de instalações existentes do MariaDB possivelmente queiram
+considerar permanecer na ramificação LTS 11.8.x, especialmente se dependerem
+da funcionalidade Galera, que foi removida do MariaDB-12.x.
+      </para>
+    </caution>
 
     <para>
       Por motivos de segurança, executar o servidor como um(a) usuário(a) e grupo
@@ -438,14 +448,16 @@ inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
 
 <screen role="root" revision="systemd"><userinput>make install-mariadb</userinput></screen>
 
-      <note>
+      <caution>
         <para>
-          Se você já tem uma base de dados existente e essa instalação de binários foi
-apenas uma atualização para uma versão mais recente, [então] verifique a
-documentação do(a) desenvolvedor(a) para atualização. É recomendado
-executar: <screen role="nodump"><userinput>mariadb-upgrade</userinput></screen>
+          Atualizar-se MariaDB da versão 11 para a 12 exige uma cópia completa de
+segurança, um desligamento limpo, desinstalar-se os binários antigos,
+instalar-se os binários da versão 12, reiniciar-se o servidor e executar-se
+o comando <command>mariadb-upgrade</command> para atualizar tabelas de
+sistema. Ignorar-se essa cópia de segurança pode resultar em dados
+irrecuperáveis.
         </para>
-      </note>
+      </caution>
     </sect3>
 
   </sect2>

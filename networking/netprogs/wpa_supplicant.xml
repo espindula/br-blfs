@@ -74,19 +74,17 @@ sem fio protegido por senha.
       </listitem>
     </itemizedlist>
 
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-openssl_4_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas (tempo de execução)</bridgehead>
     <para role="nodump">
@@ -174,22 +172,18 @@ seguintes opções ao arquivo de configuração de construção do
 <application>WPA Supplicant</application> executando o seguinte comando:
     </para>
 
-<!-- Fixed in version 2.11
-    <para>
-
-      Next, patch a security vulnerability that occurs when connecting to some
-      networks:
-      <!- - CVE-2023-52160, see Ticket #19304. - ->
-    </para>
-
-<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-security_fix-1.patch</userinput></screen>
--->
 <screen><userinput>cat &gt;&gt; wpa_supplicant/.config &lt;&lt; "EOF"
 <literal>CONFIG_CTRL_IFACE_DBUS=y
 CONFIG_CTRL_IFACE_DBUS_NEW=y
 CONFIG_CTRL_IFACE_DBUS_INTRO=y</literal>
 EOF</userinput></screen>
 
+
+    <para>
+      A seguir, corrija construir com OpenSSL-4:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-openssl_4_fixes-1.patch</userinput></screen>
 
     <para>
       Instale o <application>WPA Supplicant</application> executando os seguintes

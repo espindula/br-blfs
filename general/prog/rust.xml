@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "c206536bb0e11bbf2ebae91504096e34">
-  <!ENTITY rust-size          "228 MB">
+  <!ENTITY rust-md5sum        "75632c07ce29c765b905f26719c3cb3c">
+  <!ENTITY rust-size          "231 MB">
   <!ENTITY rust-buildsize     "10 GB (324 MB instalado); adicionar 11 GB se executar os testes">
   <!ENTITY rust-time          "10 UPC (incluindo tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -142,13 +142,14 @@ discrepantes muito lentos.
     
     <!--  keep this here for reuse in case we need a patch -->
 <!-- deliberately skipped turning version and md5 into entities:
-         it's unlikely we'd still need this in the next rustc release.  -->
+         it will be uneeded in 1.97.0 per
+         https://github.com/rust-lang/cargo/pull/16931. -->
 <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
           Ligações Rust do OpenSSL atualizadas para suportar OpenSSL 4.: <ulink
-url="https://github.com/lfs-book/rust-openssl/archive/v0.10.78/rust-openssl-v0.10.78.tar.gz"/>
+url="https://github.com/lfs-book/rust-openssl/archive/v0.10.78/rust-openssl-0.10.78.tar.gz"/>
         </para>
       </listitem>
       <listitem>
@@ -185,6 +186,11 @@ instalada do sistema do LLVM em vez de construir versão dele enviada)
 modificar as instruções para construir e usar uma cópia enviada no tarball
 do fonte do Rustc. Veja-se a seção Explicações dos Comandos para mais
 detalhes.
+      </para>
+      <para role="recommended">
+        Se usar as instruções para instalar em <filename
+class="directory">/opt</filename>, é assumido que você tenha configurado
+<xref linkend="postlfs-config-profile"/>.
       </para>
     </note>
 
@@ -243,7 +249,7 @@ a construção.
 # Tell x.py that the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn users to review that information.
-change-id = 148671
+change-id = 154508
 
 [llvm]
 # When using the system installed copy of LLVM, prefer the shared libraries
@@ -301,7 +307,7 @@ construir esse pacote com OpenSSL 4:
 
 <screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
 -->
-<screen><userinput>tar xf ../rust-openssl-v0.10.78.tar.gz &amp;&amp;
+<screen><userinput>tar xf ../rust-openssl-0.10.78.tar.gz &amp;&amp;
 
 cat &gt;&gt; src/tools/cargo/Cargo.toml &lt;&lt; EOF &amp;&amp;
 <literal>[patch.crates-io]
@@ -310,8 +316,8 @@ openssl-sys = { path = "../../../rust-openssl-0.10.78/openssl-sys" }
 </literal>EOF
 
 sed -ri src/tools/cargo/Cargo.lock \
-    -e '/name = "openssl-sys"/,/^$/{/source|checksum/d;s/0.9.111/0.9.114/}' \
-    -e '/name = "openssl"/,/^$/{/source|checksum/d;s/0.10.75/0.10.78/}'     \
+    -e '/name = "openssl-sys"/,/^$/{/source|checksum/d;s/0.9.112/0.9.114/}' \
+    -e '/name = "openssl"/,/^$/{/source|checksum/d;s/0.10.76/0.10.78/}'     \
     -e '/name = "openssl-macros"/,/^$/{/source|checksum/d}'</userinput></screen>
 
 
@@ -320,13 +326,7 @@ sed -ri src/tools/cargo/Cargo.lock \
 comandos:
     </para>
 
-
-<screen><!-- fixed in 1.58.0, retain as a reminder that fixed crates can be used
-<screen>
-<userinput>sed -i -e '/^curl /s/0.4.38/0.4.40/' \
-       -e '/^curl-sys /s/0.4.48/0.4.50/' \
-       src/tools/cargo/Cargo.toml &amp;&amp; -->
-<userinput>export LIBSSH2_SYS_USE_PKG_CONFIG=1
+<screen><userinput>export LIBSSH2_SYS_USE_PKG_CONFIG=1
 export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
 ./x.py build</userinput></screen>
 
@@ -348,11 +348,8 @@ terminado.
 <screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
 
     <para>
-      <!-- https://github.com/rust-lang/rust/issues/154392 -->
-<!-- https://github.com/rust-lang/rust/issues/155606 -->
+      <!-- https://github.com/rust-lang/rust/issues/155606 -->
 Nos testes do <filename class='directory'>rustdoc-ui</filename>, o teste
-chamado <filename>track-diagnostics.rs</filename> é conhecido por falhar
-porque ele codifica rigidamente caminhos inexistentes no LFS, e o teste
 chamado <filename>ice-bug-report-url.rs</filename> é conhecido por falhar
 por motivo desconhecido. Nos testes do <filename
 class='directory'>run-make</filename>, o teste chamado

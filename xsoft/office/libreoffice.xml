@@ -7,25 +7,25 @@
   <!ENTITY libreoffice-dl "https://download.documentfoundation.org/libreoffice/src/&libreoffice-version;">
 
   <!ENTITY libreoffice-core-download-http "&libreoffice-dl;/libreoffice-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-core-md5sum        "acaa63689cc524173d0a79dcadb83367">
-  <!ENTITY libreoffice-core-size          "278 MB">
+  <!ENTITY libreoffice-core-md5sum        "37824c911fecb2bbd038b5e4d04d8335">
+  <!ENTITY libreoffice-core-size          "279 MB">
 
   <!ENTITY libreoffice-dict-download-http "&libreoffice-dl;/libreoffice-dictionaries-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-dict-md5sum        "7fd7e703ac17a6970c8315d89b455e13">
-  <!ENTITY libreoffice-dict-size          "60 MB">
+  <!ENTITY libreoffice-dict-md5sum        "3e5dc8a8306ec4ea42dc41785966f762">
+  <!ENTITY libreoffice-dict-size          "59 MB">
 
   <!ENTITY libreoffice-help-download-http "&libreoffice-dl;/libreoffice-help-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-help-md5sum        "97171746ac4ef40fbadc5e6b3d31a0a3">
+  <!ENTITY libreoffice-help-md5sum        "68226bbe36bd41d37c449780602cfe69">
   <!ENTITY libreoffice-help-size          "56 MB">
 
   <!ENTITY libreoffice-translations-download-http "&libreoffice-dl;/libreoffice-translations-&libreoffice-dlversion;.tar.xz">
-  <!ENTITY libreoffice-translations-md5sum "49d9571fe2de9fd7d6405e097f6dd4f7">
-  <!ENTITY libreoffice-translations-size   "225 MB">
+  <!ENTITY libreoffice-translations-md5sum "5508d97305c3b8ff905734754462201f">
+  <!ENTITY libreoffice-translations-size   "224 MB">
 
   <!-- full size remeasured for 7.0.0.3 -->
 
-  <!ENTITY libreoffice-buildsize  "7,6 GB incluindo os arquivos adicionais se baixados durante a construção
-(744 MB instalado). Instalar-se o conjunto inteiro de idiomas exige mais que
+  <!ENTITY libreoffice-buildsize  "10,7 GB incluindo os arquivos adicionais se baixados durante a construção
+(837 MB instalado). Instalar-se o conjunto inteiro de idiomas exige mais que
 25 GB (cerca de 3 GB instalado)">
 
  <!-- Editors: many updates to poppler will break LO using system poppler until
@@ -60,7 +60,7 @@
 
        For 7.5.4.2, I increased the parallelism to 8.  -bdubbs
   -->
-  <!ENTITY libreoffice-time "24 UPC com paralelismo=8 (variará devido ao tempo de transferência)">
+  <!ENTITY libreoffice-time "30 UPC com paralelismo=8 (variará devido ao tempo de transferência)">
 
 ]>
 
@@ -168,7 +168,7 @@ construção.
 
 
       
-    <!-- keep one commented patch, it's sure to again need one or more in a few months:-->
+      <!-- keep one commented patch, it's sure to again need one or more in a few months:-->
 <!--
       <listitem>
 
@@ -177,15 +177,16 @@ construção.
           <ulink url="&patch-root;/libreoffice-&libreoffice-dlversion;-icu76_fixes-1.patch"/>
         </para>
       </listitem>
-
-      <listitem>
+      -->
+<listitem>
         <para>
-          Required patch to fix building with <xref linkend="poppler"/>:
-          <ulink url="&patch-root;/libreoffice-&libreoffice-dlversion;-poppler_26.02-1.patch"/>
+          Remendo exigido para corrigir construção com <xref linkend="poppler"/>:
+<ulink
+url="&patch-root;/libreoffice-&libreoffice-dlversion;-poppler_26.06-1.patch"/>
         </para>
       </listitem>
-      -->
-</itemizedlist>
+
+    </itemizedlist>
     <bridgehead renderas="sect3">Dependências do LibreOffice</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -325,15 +326,10 @@ fonte.
 do poppler:
     </para>
 
-<!--patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-poppler_26.02-1.patch-->
-<screen><userinput remap="pre">sed -e '/, const GooString/ s/GooString *\*/std::string \&amp;/' \
-    -i sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx \
-       sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx</userinput></screen>
-
-
+<screen><userinput remap="pre">patch -Np1 -i ../libreoffice-&libreoffice-dlversion;-poppler_26.06-1.patch</userinput></screen>
 
     <para>
-      Primeiro, corrija um defeito com lincagem para zlib, corrija um defeito que
+      Então, corrija um defeito com lincagem para zlib, corrija um defeito que
 causaria uma falha da instalação, e evite a compressão de páginas de manual:
     </para>
 

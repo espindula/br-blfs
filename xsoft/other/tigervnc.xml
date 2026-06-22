@@ -6,11 +6,10 @@
 
   <!ENTITY tigervnc-download-http "https://github.com/TigerVNC/tigervnc/archive/v&tigervnc-version;/tigervnc-&tigervnc-version;.tar.gz">
   <!ENTITY tigervnc-download-ftp  "">
-  <!ENTITY tigervnc-md5sum        "1164ecb53cd7163f350887df7a215554">
+  <!ENTITY tigervnc-md5sum        "61c6b4af2bc925c7ef4110b8a52d3d2f">
   <!ENTITY tigervnc-size          "2,1 MB">
-  <!ENTITY tigervnc-buildsize     "152 MB">
-  <!ENTITY tigervnc-time          "0,5 UPC (Usando paralelismo=4)">
-  <!--<!ENTITY tigervnc-xorg-version  "21.1.13">-->
+  <!ENTITY tigervnc-buildsize     "154 MB">
+  <!ENTITY tigervnc-time          "0,6 UPC (Usando paralelismo=4)">
 ]>
 
 <sect1 id="tigervnc" xreflabel="tigervnc-&tigervnc-version;">
@@ -152,12 +151,6 @@ compatíveis com sistemas LFS:
 <screen><userinput remap="pre">patch -Np1 -i ../tigervnc-&tigervnc-version;-configuration_fixes-1.patch</userinput></screen>
 
     <para>
-      Agora, torne o pacote consistente com fltk-1.4.1 e posteriores:
-    </para>
-
-<screen><userinput remap="pre">sed -i "/FL_MINOR_VERSION/s/3/4/" CMakeLists.txt</userinput></screen>
-
-    <para>
       A seguir, adapte para nettle-4 e superiores:
     </para>
 
@@ -177,11 +170,6 @@ tar -xf ../xorg-server-&xorg-server-version;.tar.xz \
 
 pushd unix/xserver                             &amp;&amp;
   patch -Np1 -i ../xserver21.patch             &amp;&amp;
-
-  sed -e '/sha.h/s/sha/sha1/'                  \
-      -e '/sha1/a #include &lt;nettle/version.h&gt;' \
-      -e 's/ctx, 20/ctx/'                      \
-      -i os/xsha1.c                            &amp;&amp;
 popd                                           &amp;&amp;
 
 # Build viewer
@@ -250,15 +238,17 @@ popd</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>#Install viewer
+<screen role="root"><userinput># Install viewer
 make install &amp;&amp;
 mv  /usr/share/doc/tigervnc /usr/share/doc/tigervnc-&tigervnc-version;
 
-#Install server
-( cd unix/xserver/hw/vnc &amp;&amp; make install ) &amp;&amp;
+# Install server
+( cd unix/xserver/hw/vnc &amp;&amp; make install )                     &amp;&amp;
+cp  unix/vncserver/vncserver@.service /usr/lib/systemd/system/ &amp;&amp;
+install -m755 unix/vncserver/vncsession-start /usr/libexec/    &amp;&amp;
 
 [ -e /usr/bin/Xvnc ] || ln -svf $XORG_PREFIX/bin/Xvnc /usr/bin/Xvnc</userinput></screen>
 
@@ -309,8 +299,7 @@ tela seja instalado.
 
     <para revision='sysv'>
       Para restaurar o comportamento anterior, instale os arquivos adicionais
-baixados como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:</para>
+baixados como o(a) usante &root;:</para>
 
 <screen role="root" revision='sysv'><userinput>install -m755 --owner=root ../vncserver /usr/bin &amp;&amp;
 cp ../vncserver.1 /usr/share/man/man1</userinput></screen>
@@ -370,7 +359,8 @@ configurar o servidor VNC dessa forma, siga estas instruções.
 
     <para revision="systemd">
        Primeiro, instale um arquivo Xsession rudimentar, de forma que o servidor
-VNC consiga inicializar adequadamente as sessões do X:
+VNC consiga inicializar adequadamente as sessões do X. Como o(a) usante
+&root;:
     </para>
 
 <screen role="root" revision="systemd"><userinput>install -vdm755 /etc/X11/tigervnc &amp;&amp;
@@ -384,7 +374,11 @@ VNC qual sessão está alocada para um(a) usuário(a).
       
     </para>
 
-<screen role="root" revision="systemd"><userinput>echo ":1=$(whoami)" >> /etc/tigervnc/vncserver.users</userinput></screen>
+<screen revision="systemd"><userinput>ME=$(echo :1=$(whoami))</userinput></screen>
+
+    <para revision="systemd">Então como o(a) usante &root;:</para>
+
+<screen role="root" revision="systemd"><userinput>bash -c "echo $ME >> /etc/tigervnc/vncserver.users"</userinput></screen>
 
     <para revision="systemd">
       Em seguida, configure um arquivo de configuração para informar ao
