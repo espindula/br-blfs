@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-24 19:59+0000\n"
-"PO-Revision-Date: 2026-06-02 04:18+0000\n"
+"PO-Revision-Date: 2026-07-02 04:18+0000\n"
 "Last-Translator: Jamenson Ferreira Espindula de Almeida Melo <jafesp@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.linuxfromscratch.org/projects/beyond-linux-from-scratch/postlfs_shells_zsh/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -52,7 +52,7 @@ msgstr "zsh-&zsh-version;"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/postlfs/shells/zsh.xml:22 blfs-en/postlfs/shells/zsh.xml:304
+#: blfs-en/postlfs/shells/zsh.xml:22 blfs-en/postlfs/shells/zsh.xml:378
 #, xml-text
 msgid "zsh"
 msgstr "zsh"
@@ -385,6 +385,157 @@ msgstr ""
 #: blfs-en/postlfs/shells/zsh.xml:214
 #, xml-text
 msgid ""
+"Create a basic <filename>/etc/zsh/zprofile</filename> file.  Like "
+"<filename>/etc/profile</filename> provided in <xref linkend='postlfs-config-"
+"profile'/>, it sets up some helper functions and some basic parameters, then"
+" loads the scripts in <filename class='directory'>/etc/profile.d</filename>:"
+msgstr ""
+"Crie um arquivo <filename>/etc/zsh/zprofile</filename> básico. Assim como o "
+"<filename>/etc/profile</filename> fornecido em <xref linkend='postlfs-"
+"config-profile'/>, ele configura algumas funções auxiliares e alguns "
+"parâmetros básicos e, em seguida, carrega os conjuntos de comandos "
+"sequenciados em <filename class='directory'>/etc/profile.d</filename>:"
+
+#. type: Content of: <sect1><sect2><sect3><screen>
+#: blfs-en/postlfs/shells/zsh.xml:221
+#, no-wrap, xml-text
+msgid ""
+"<?dbfo keep-together=\"auto\"?><userinput>install -vdm755 /etc/zsh &amp;&amp;\n"
+"cat &gt; /etc/zsh/zprofile &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/zsh/zprofile\n"
+"# Written for Beyond Linux From Scratch\n"
+"\n"
+"# System wide environment variables and startup programs.\n"
+"\n"
+"# Functions to help us manage paths.  Second argument is the name of the\n"
+"# path variable to be modified (default: PATH)\n"
+"pathremove () {\n"
+"        local IFS=':'\n"
+"        local NEWPATH\n"
+"        local DIR\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        for DIR in ${(P)=PATHVARIABLE} ; do\n"
+"                if [ \"$DIR\" != \"$1\" ] ; then\n"
+"                  NEWPATH=${NEWPATH:+$NEWPATH:}$DIR\n"
+"                fi\n"
+"        done\n"
+"        export $PATHVARIABLE=\"$NEWPATH\"\n"
+"}\n"
+"\n"
+"pathprepend () {\n"
+"        pathremove $1 $2\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        export $PATHVARIABLE=\"$1${(P)PATHVARIABLE:+:${(P)PATHVARIABLE}}\"\n"
+"}\n"
+"\n"
+"pathappend () {\n"
+"        pathremove $1 $2\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        export $PATHVARIABLE=\"${(P)PATHVARIABLE:+${(P)PATHVARIABLE}:}$1\"\n"
+"}\n"
+"\n"
+"# Set the initial path\n"
+"export PATH=/usr/bin\n"
+"\n"
+"# Attempt to provide backward compatibility with LFS earlier than 11\n"
+"if [ ! -L /bin ]; then\n"
+"        pathappend /bin\n"
+"fi\n"
+"\n"
+"if [ $EUID -eq 0 ] ; then\n"
+"        pathappend /usr/sbin\n"
+"        if [ ! -L /sbin ]; then\n"
+"                pathappend /sbin\n"
+"        fi\n"
+"        unset HISTFILE\n"
+"fi\n"
+"\n"
+"# Set some defaults for graphical systems\n"
+"export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share}\n"
+"export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg}\n"
+"export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}\n"
+"\n"
+"for script in /etc/profile.d/*.sh ; do\n"
+"        if [ -r $script ] ; then\n"
+"                . $script\n"
+"        fi\n"
+"done\n"
+"\n"
+"unset script\n"
+"\n"
+"# End /etc/zsh/zprofile</literal>\n"
+"EOF</userinput>"
+msgstr ""
+"<?dbfo keep-together=\"auto\"?><userinput>install -vdm755 /etc/zsh &amp;&amp;\n"
+"cat &gt; /etc/zsh/zprofile &lt;&lt; \"EOF\"\n"
+"<literal># Begin /etc/zsh/zprofile\n"
+"# Written for Beyond Linux From Scratch\n"
+"\n"
+"# System wide environment variables and startup programs.\n"
+"\n"
+"# Functions to help us manage paths.  Second argument is the name of the\n"
+"# path variable to be modified (default: PATH)\n"
+"pathremove () {\n"
+"        local IFS=':'\n"
+"        local NEWPATH\n"
+"        local DIR\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        for DIR in ${(P)=PATHVARIABLE} ; do\n"
+"                if [ \"$DIR\" != \"$1\" ] ; then\n"
+"                  NEWPATH=${NEWPATH:+$NEWPATH:}$DIR\n"
+"                fi\n"
+"        done\n"
+"        export $PATHVARIABLE=\"$NEWPATH\"\n"
+"}\n"
+"\n"
+"pathprepend () {\n"
+"        pathremove $1 $2\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        export $PATHVARIABLE=\"$1${(P)PATHVARIABLE:+:${(P)PATHVARIABLE}}\"\n"
+"}\n"
+"\n"
+"pathappend () {\n"
+"        pathremove $1 $2\n"
+"        local PATHVARIABLE=${2:-PATH}\n"
+"        export $PATHVARIABLE=\"${(P)PATHVARIABLE:+${(P)PATHVARIABLE}:}$1\"\n"
+"}\n"
+"\n"
+"# Set the initial path\n"
+"export PATH=/usr/bin\n"
+"\n"
+"# Attempt to provide backward compatibility with LFS earlier than 11\n"
+"if [ ! -L /bin ]; then\n"
+"        pathappend /bin\n"
+"fi\n"
+"\n"
+"if [ $EUID -eq 0 ] ; then\n"
+"        pathappend /usr/sbin\n"
+"        if [ ! -L /sbin ]; then\n"
+"                pathappend /sbin\n"
+"        fi\n"
+"        unset HISTFILE\n"
+"fi\n"
+"\n"
+"# Set some defaults for graphical systems\n"
+"export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share}\n"
+"export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg}\n"
+"export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}\n"
+"\n"
+"for script in /etc/profile.d/*.sh ; do\n"
+"        if [ -r $script ] ; then\n"
+"                . $script\n"
+"        fi\n"
+"done\n"
+"\n"
+"unset script\n"
+"\n"
+"# End /etc/zsh/zprofile</literal>\n"
+"EOF</userinput>"
+
+#. type: Content of: <sect1><sect2><sect3><para>
+#: blfs-en/postlfs/shells/zsh.xml:288
+#, xml-text
+msgid ""
 "The first time zsh is executed, you will be prompted by messages asking "
 "several questions. The answers will be used to create a "
 "<filename>~/.zshrc</filename> file. If you wish to run these questions "
@@ -398,7 +549,7 @@ msgstr ""
 "version;/functions/zsh-newuser-install -f</command>."
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/shells/zsh.xml:222
+#: blfs-en/postlfs/shells/zsh.xml:296
 #, xml-text
 msgid ""
 "There are several built-in advanced prompts. In the <command>zsh</command> "
@@ -423,43 +574,43 @@ msgstr ""
 " shell iniciar, com o prompt que escolher."
 
 #. type: Content of: <sect1><sect2><sect3><indexterm><primary>
-#: blfs-en/postlfs/shells/zsh.xml:236
+#: blfs-en/postlfs/shells/zsh.xml:310
 #, xml-text
 msgid "/etc/zsh/zshenv"
 msgstr "/etc/zsh/zshenv"
 
 #. type: Content of: <sect1><sect2><sect3><indexterm><primary>
-#: blfs-en/postlfs/shells/zsh.xml:240
+#: blfs-en/postlfs/shells/zsh.xml:314
 #, xml-text
 msgid "/etc/zsh/zprofile"
 msgstr "/etc/zsh/zprofile"
 
 #. type: Content of: <sect1><sect2><sect3><indexterm><primary>
-#: blfs-en/postlfs/shells/zsh.xml:244
+#: blfs-en/postlfs/shells/zsh.xml:318
 #, xml-text
 msgid "/etc/zsh/zshrc"
 msgstr "/etc/zsh/zshrc"
 
 #. type: Content of: <sect1><sect2><sect3><indexterm><primary>
-#: blfs-en/postlfs/shells/zsh.xml:248
+#: blfs-en/postlfs/shells/zsh.xml:322
 #, xml-text
 msgid "/etc/zsh/zlogin"
 msgstr "/etc/zsh/zlogin"
 
 #. type: Content of: <sect1><sect2><sect3><indexterm><primary>
-#: blfs-en/postlfs/shells/zsh.xml:252
+#: blfs-en/postlfs/shells/zsh.xml:326
 #, xml-text
 msgid "/etc/zsh/zlogout"
 msgstr "/etc/zsh/zlogout"
 
 #. type: Content of: <sect1><sect2><sect3><title>
-#: blfs-en/postlfs/shells/zsh.xml:258
+#: blfs-en/postlfs/shells/zsh.xml:332
 #, xml-text
 msgid "Configuration Information"
 msgstr "Informação de Configuração"
 
 #. type: Content of: <sect1><sect2><sect3><para>
-#: blfs-en/postlfs/shells/zsh.xml:261
+#: blfs-en/postlfs/shells/zsh.xml:335
 #, xml-text
 msgid ""
 "Update <filename>/etc/shells</filename> to include the "
@@ -471,7 +622,7 @@ msgstr ""
 "<systemitem class=\"username\">root</systemitem>):"
 
 #. type: Content of: <sect1><sect2><sect3><screen>
-#: blfs-en/postlfs/shells/zsh.xml:266
+#: blfs-en/postlfs/shells/zsh.xml:340
 #, no-wrap, xml-text
 msgid ""
 "<userinput>cat &gt;&gt; /etc/shells &lt;&lt; \"EOF\"\n"
@@ -483,69 +634,69 @@ msgstr ""
 "EOF</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/postlfs/shells/zsh.xml:275
+#: blfs-en/postlfs/shells/zsh.xml:349
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/postlfs/shells/zsh.xml:278
+#: blfs-en/postlfs/shells/zsh.xml:352
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/postlfs/shells/zsh.xml:279
+#: blfs-en/postlfs/shells/zsh.xml:353
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/postlfs/shells/zsh.xml:280
+#: blfs-en/postlfs/shells/zsh.xml:354
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/postlfs/shells/zsh.xml:283
+#: blfs-en/postlfs/shells/zsh.xml:357
 #, xml-text
 msgid "zsh and zsh-&zsh-version; (hardlinked to each other)"
 msgstr "zsh e zsh-&zsh-version; (rigidamente vinculados entre eles)"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/postlfs/shells/zsh.xml:284
+#: blfs-en/postlfs/shells/zsh.xml:358
 #, xml-text
 msgid "Numerous plugin helper modules under /usr/lib/zsh/&zsh-version;/"
 msgstr ""
 "Numerosos módulos auxiliares de plugin sob /usr/lib/zsh/&zsh-version;/"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/postlfs/shells/zsh.xml:286
+#: blfs-en/postlfs/shells/zsh.xml:360
 #, xml-text
 msgid "/usr/{lib,share}/zsh and /usr/share/doc/zsh-&zsh-version;"
 msgstr "/usr/{lib,share}/zsh e /usr/share/doc/zsh-&zsh-version;"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/postlfs/shells/zsh.xml:291
+#: blfs-en/postlfs/shells/zsh.xml:365
 #, xml-text
 msgid "Short Description"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/postlfs/shells/zsh.xml:292
+#: blfs-en/postlfs/shells/zsh.xml:366
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/postlfs/shells/zsh.xml:296
+#: blfs-en/postlfs/shells/zsh.xml:370
 #, xml-text
 msgid "<command>zsh</command>"
 msgstr "<command>zsh</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/postlfs/shells/zsh.xml:299
+#: blfs-en/postlfs/shells/zsh.xml:373
 #, xml-text
 msgid ""
 "is a shell which has command-line editing, built-in spelling correction, "

@@ -129,20 +129,34 @@ msgstr "Instalação do Net-tools"
 
 #. type: Content of: <sect1><sect2><para>
 #: blfs-en/networking/netprogs/net-tools.xml:87
-#, xml-text
+#, fuzzy, xml-text
+#| msgid ""
+#| "The instructions below automate the configuration process by piping "
+#| "<command>yes</command> to the <command>make</command> command.  If you wish "
+#| "to run the interactive configuration process (by changing the instruction to"
+#| " just <command>make</command>), but you are not sure how to answer all the "
+#| "questions, then just accept the defaults.  This will be just fine in the "
+#| "majority of cases. What you're asked here is a bunch of questions about "
+#| "which network protocols you've enabled in your kernel. The default answers "
+#| "will enable the tools from this package to work with the most common "
+#| "protocols: TCP, PPP, and several others. You still need to actually enable "
+#| "these protocols in the kernel&mdash;what you do here is merely tell the "
+#| "package to include support for those protocols in its programs, but it's up "
+#| "to the kernel to make the protocols available."
 msgid ""
 "The instructions below automate the configuration process by piping "
-"<command>yes</command> to the <command>make</command> command.  If you wish "
-"to run the interactive configuration process (by changing the instruction to"
-" just <command>make</command>), but you are not sure how to answer all the "
-"questions, then just accept the defaults.  This will be just fine in the "
-"majority of cases. What you're asked here is a bunch of questions about "
-"which network protocols you've enabled in your kernel. The default answers "
-"will enable the tools from this package to work with the most common "
-"protocols: TCP, PPP, and several others. You still need to actually enable "
-"these protocols in the kernel&mdash;what you do here is merely tell the "
-"package to include support for those protocols in its programs, but it's up "
-"to the kernel to make the protocols available."
+"<command>yes</command> to the <command>make config</command> command.  If "
+"you wish to run the interactive configuration process (by changing the "
+"instruction to just <command>make config</command>), but you are not sure "
+"how to answer all the questions, then just accept the defaults, except for "
+"anything touching X25, ROSE, and NETROM, which have been disabled in "
+"linux-7.1.  What you're asked here is a bunch of questions about which "
+"network protocols you've enabled in your kernel. The default answers will "
+"enable the tools from this package to work with the most common protocols: "
+"TCP, PPP, and several others. You still need to actually enable these "
+"protocols in the kernel&mdash;what you do here is merely tell the package to"
+" include support for those protocols in its programs, but it's up to the "
+"kernel to make the protocols available."
 msgstr ""
 "As instruções abaixo automatizam o processo de configuração canalizando "
 "&quot;<command>yes</command>&quot; para o comando "
@@ -160,7 +174,7 @@ msgstr ""
 "dele, mas cabe ao núcleo disponibilizar os protocolos."
 
 #. type: Content of: <sect1><sect2><note><para>
-#: blfs-en/networking/netprogs/net-tools.xml:104
+#: blfs-en/networking/netprogs/net-tools.xml:105
 #, xml-text
 msgid ""
 "This package has several unneeded protocols and hardware device specific "
@@ -177,7 +191,7 @@ msgstr ""
 "family&quot; e &quot;INET (TCP/IP) protocol family&quot;."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:113
+#: blfs-en/networking/netprogs/net-tools.xml:114
 #, xml-text
 msgid ""
 "For this package, we use the DESTDIR method of installation in order to "
@@ -189,7 +203,7 @@ msgstr ""
 "aqueles que queremos manter ou que não são apropriados para nosso sistema."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:122
+#: blfs-en/networking/netprogs/net-tools.xml:123
 #, xml-text
 msgid ""
 "Install <application>Net-tools</application> by running the following "
@@ -199,11 +213,15 @@ msgstr ""
 "seguintes comandos:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/networking/netprogs/net-tools.xml:126
+#: blfs-en/networking/netprogs/net-tools.xml:127
 #, no-wrap, xml-text
 msgid ""
 "<userinput>export BINDIR='/usr/bin' SBINDIR='/usr/bin' &amp;&amp;\n"
-"yes \"\" | make -j1                           &amp;&amp;\n"
+"yes \"\" | make config                        &amp;&amp;\n"
+"sed -e /ROM/s/0/1/  \\\n"
+"    -e /X25/s/0/1/  \\\n"
+"    -e /ROSE/s/0/1/ \\\n"
+"    -i config.h                             &amp;&amp;\n"
 "make DESTDIR=$PWD/install -j1 install       &amp;&amp;\n"
 "rm    install/usr/bin/{nis,yp}domainname    &amp;&amp;\n"
 "rm    install/usr/bin/{hostname,dnsdomainname,domainname,ifconfig} &amp;&amp;\n"
@@ -212,7 +230,11 @@ msgid ""
 "unset BINDIR SBINDIR</userinput>"
 msgstr ""
 "<userinput>export BINDIR='/usr/bin' SBINDIR='/usr/bin' &amp;&amp;\n"
-"yes \"\" | make -j1                          &amp;&amp;\n"
+"yes \"\" | make config                        &amp;&amp;\n"
+"sed -e /ROM/s/0/1/  \\\n"
+"    -e /X25/s/0/1/  \\\n"
+"    -e /ROSE/s/0/1/ \\\n"
+"    -i config.h                             &amp;&amp;\n"
 "make DESTDIR=$PWD/install -j1 install       &amp;&amp;\n"
 "rm    install/usr/bin/{nis,yp}domainname    &amp;&amp;\n"
 "rm    install/usr/bin/{hostname,dnsdomainname,domainname,ifconfig} &amp;&amp;\n"
@@ -221,13 +243,13 @@ msgstr ""
 "unset BINDIR SBINDIR</userinput>"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:136
+#: blfs-en/networking/netprogs/net-tools.xml:141
 #, xml-text
 msgid "This package does not come with a test suite."
 msgstr "Esse pacote não vem com uma suíte de teste."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:140
+#: blfs-en/networking/netprogs/net-tools.xml:145
 #, xml-text
 msgid "Now, as the <systemitem class=\"username\">root</systemitem> user:"
 msgstr ""
@@ -235,7 +257,7 @@ msgstr ""
 "class=\"username\">root</systemitem>&quot;:"
 
 #. type: Content of: <sect1><sect2><screen>
-#: blfs-en/networking/netprogs/net-tools.xml:143
+#: blfs-en/networking/netprogs/net-tools.xml:148
 #, no-wrap, xml-text
 msgid ""
 "<userinput>chown -R root:root install &amp;&amp;\n"
@@ -245,13 +267,13 @@ msgstr ""
 "cp -a install/* /</userinput>"
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/networking/netprogs/net-tools.xml:149
+#: blfs-en/networking/netprogs/net-tools.xml:154
 #, xml-text
 msgid "Command Explanations"
 msgstr "Explicações do Comando"
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:152
+#: blfs-en/networking/netprogs/net-tools.xml:157
 #, xml-text
 msgid ""
 "<command>export BINDIR='/usr/bin' SBINDIR='/usr/bin'</command>: Ensure the "
@@ -261,10 +283,14 @@ msgstr ""
 "se de que os executáveis estejam instalados no local correto."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:157
-#, xml-text
+#: blfs-en/networking/netprogs/net-tools.xml:162
+#, fuzzy, xml-text
+#| msgid ""
+#| "<command>yes \"\" | make </command>: Piping <command>yes</command> to "
+#| "<command>make config</command> skips the interactive configuration and "
+#| "accepts the defaults."
 msgid ""
-"<command>yes \"\" | make </command>: Piping <command>yes</command> to "
+"<command>yes \"\" | make config</command>: Piping <command>yes</command> to "
 "<command>make config</command> skips the interactive configuration and "
 "accepts the defaults."
 msgstr ""
@@ -273,7 +299,15 @@ msgstr ""
 "config</command>&quot; ignora a configuração interativa e aceita os padrões."
 
 #. type: Content of: <sect1><sect2><para>
-#: blfs-en/networking/netprogs/net-tools.xml:163
+#: blfs-en/networking/netprogs/net-tools.xml:169
+#, xml-text
+msgid ""
+"<command>sed -e ...</command>: This disables building protocols that are not"
+" available anymore in the kernel."
+msgstr ""
+
+#. type: Content of: <sect1><sect2><para>
+#: blfs-en/networking/netprogs/net-tools.xml:174
 #, xml-text
 msgid "<command>rm ...</command>: Remove unneeded programs and man pages."
 msgstr ""
@@ -281,31 +315,31 @@ msgstr ""
 "desnecessários."
 
 #. type: Content of: <sect1><sect2><title>
-#: blfs-en/networking/netprogs/net-tools.xml:169
+#: blfs-en/networking/netprogs/net-tools.xml:180
 #, xml-text
 msgid "Contents"
 msgstr "Conteúdo"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netprogs/net-tools.xml:172
+#: blfs-en/networking/netprogs/net-tools.xml:183
 #, xml-text
 msgid "Installed Programs"
 msgstr "Aplicativos Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netprogs/net-tools.xml:173
+#: blfs-en/networking/netprogs/net-tools.xml:184
 #, xml-text
 msgid "Installed Libraries"
 msgstr "Bibliotecas Instaladas"
 
 #. type: Content of: <sect1><sect2><segmentedlist><segtitle>
-#: blfs-en/networking/netprogs/net-tools.xml:174
+#: blfs-en/networking/netprogs/net-tools.xml:185
 #, xml-text
 msgid "Installed Directories"
 msgstr "Diretórios Instalados"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netprogs/net-tools.xml:177
+#: blfs-en/networking/netprogs/net-tools.xml:188
 #, xml-text
 msgid ""
 "arp, ipmaddr, iptunnel, mii-tool, nameif, netstat, plipconfig, rarp, route, "
@@ -315,33 +349,33 @@ msgstr ""
 " slattach"
 
 #. type: Content of: <sect1><sect2><segmentedlist><seglistitem><seg>
-#: blfs-en/networking/netprogs/net-tools.xml:188
-#: blfs-en/networking/netprogs/net-tools.xml:189
+#: blfs-en/networking/netprogs/net-tools.xml:199
+#: blfs-en/networking/netprogs/net-tools.xml:200
 #, xml-text
 msgid "None"
 msgstr "Nenhum(a)"
 
 #. type: Content of: <sect1><sect2><variablelist><bridgehead>
-#: blfs-en/networking/netprogs/net-tools.xml:194
+#: blfs-en/networking/netprogs/net-tools.xml:205
 #, xml-text
 msgid "Short Descriptions"
 msgstr "Descrições Curtas"
 
 #. type: Content of: <sect1><sect2><variablelist>
-#: blfs-en/networking/netprogs/net-tools.xml:195
+#: blfs-en/networking/netprogs/net-tools.xml:206
 #, xml-text
 msgid "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 msgstr "<?dbfo list-presentation=\"list\"?> <?dbhtml list-presentation=\"table\"?>"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:199
+#: blfs-en/networking/netprogs/net-tools.xml:210
 #, xml-text
 msgid "<command>arp</command>"
 msgstr "<command>arp</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:202
+#: blfs-en/networking/netprogs/net-tools.xml:213
 #, xml-text
 msgid ""
 "is used to manipulate the kernel's ARP cache, usually to add or delete an "
@@ -353,20 +387,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:206
+#: blfs-en/networking/netprogs/net-tools.xml:217
 #, xml-text
 msgid "arp"
 msgstr "arp"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:212
+#: blfs-en/networking/netprogs/net-tools.xml:223
 #, xml-text
 msgid "<command>ipmaddr</command>"
 msgstr "<command>ipmaddr</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:215
+#: blfs-en/networking/netprogs/net-tools.xml:226
 #, xml-text
 msgid "adds, deletes and shows an interface's multicast addresses"
 msgstr ""
@@ -375,40 +409,40 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:218
+#: blfs-en/networking/netprogs/net-tools.xml:229
 #, xml-text
 msgid "ipmaddr"
 msgstr "ipmaddr"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:224
+#: blfs-en/networking/netprogs/net-tools.xml:235
 #, xml-text
 msgid "<command>iptunnel</command>"
 msgstr "<command>iptunnel</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:227
+#: blfs-en/networking/netprogs/net-tools.xml:238
 #, xml-text
 msgid "adds, changes, deletes and shows an interface's tunnels"
 msgstr "adiciona, muda, deleta e mostra os túneis de uma interface"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:230
+#: blfs-en/networking/netprogs/net-tools.xml:241
 #, xml-text
 msgid "iptunnel"
 msgstr "iptunnel"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:236
+#: blfs-en/networking/netprogs/net-tools.xml:247
 #, xml-text
 msgid "<command>mii-tool</command>"
 msgstr "<command>mii-tool</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:239
+#: blfs-en/networking/netprogs/net-tools.xml:250
 #, xml-text
 msgid ""
 "checks or sets the status of a network interface's Media Independent "
@@ -420,40 +454,40 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:243
+#: blfs-en/networking/netprogs/net-tools.xml:254
 #, xml-text
 msgid "mii-tool"
 msgstr "mii-tool"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:249
+#: blfs-en/networking/netprogs/net-tools.xml:260
 #, xml-text
 msgid "<command>nameif</command>"
 msgstr "<command>nameif</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:252
+#: blfs-en/networking/netprogs/net-tools.xml:263
 #, xml-text
 msgid "names network interfaces based on MAC addresses"
 msgstr "nomeia interfaces de rede baseado em endereços &quot;MAC&quot;"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:255
+#: blfs-en/networking/netprogs/net-tools.xml:266
 #, xml-text
 msgid "nameif"
 msgstr "nameif"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:261
+#: blfs-en/networking/netprogs/net-tools.xml:272
 #, xml-text
 msgid "<command>netstat</command>"
 msgstr "<command>netstat</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:264
+#: blfs-en/networking/netprogs/net-tools.xml:275
 #, xml-text
 msgid ""
 "is used to report network connections, routing tables, and interface "
@@ -464,20 +498,20 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:268
+#: blfs-en/networking/netprogs/net-tools.xml:279
 #, xml-text
 msgid "netstat"
 msgstr "netstat"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:274
+#: blfs-en/networking/netprogs/net-tools.xml:285
 #, xml-text
 msgid "<command>plipconfig</command>"
 msgstr "<command>plipconfig</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:277
+#: blfs-en/networking/netprogs/net-tools.xml:288
 #, xml-text
 msgid ""
 "is used to fine tune the PLIP device parameters, to improve its performance"
@@ -487,60 +521,60 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:281
+#: blfs-en/networking/netprogs/net-tools.xml:292
 #, xml-text
 msgid "plipconfig"
 msgstr "plipconfig"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:287
+#: blfs-en/networking/netprogs/net-tools.xml:298
 #, xml-text
 msgid "<command>rarp</command>"
 msgstr "<command>rarp</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:290
+#: blfs-en/networking/netprogs/net-tools.xml:301
 #, xml-text
 msgid "is used to manipulate the kernel's RARP table"
 msgstr "é usado para manipular a tabela &quot;RARP&quot; do núcleo"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:293
+#: blfs-en/networking/netprogs/net-tools.xml:304
 #, xml-text
 msgid "rarp"
 msgstr "rarp"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:299
+#: blfs-en/networking/netprogs/net-tools.xml:310
 #, xml-text
 msgid "<command>route</command>"
 msgstr "<command>route</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:302
+#: blfs-en/networking/netprogs/net-tools.xml:313
 #, xml-text
 msgid "is used to manipulate the IP routing table"
 msgstr "é usado para manipular a tabela de roteamento &quot;IP&quot;"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:305
+#: blfs-en/networking/netprogs/net-tools.xml:316
 #, xml-text
 msgid "route"
 msgstr "route"
 
 #. type: Content of: <sect1><sect2><variablelist><varlistentry><term>
-#: blfs-en/networking/netprogs/net-tools.xml:311
+#: blfs-en/networking/netprogs/net-tools.xml:322
 #, xml-text
 msgid "<command>slattach</command>"
 msgstr "<command>slattach</command>"
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><para>
-#: blfs-en/networking/netprogs/net-tools.xml:314
+#: blfs-en/networking/netprogs/net-tools.xml:325
 #, xml-text
 msgid ""
 "attaches a network interface to a serial line. This allows you to use normal"
@@ -552,7 +586,7 @@ msgstr ""
 
 #. type: Content of:
 #. <sect1><sect2><variablelist><varlistentry><listitem><indexterm><primary>
-#: blfs-en/networking/netprogs/net-tools.xml:319
+#: blfs-en/networking/netprogs/net-tools.xml:330
 #, xml-text
 msgid "slattach"
 msgstr "slattach"
