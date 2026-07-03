@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!-- The mirror is used here, since the SourceHut downloads result in
+       &seatd-version;.tar.gz rather than seatd-&seatd-version;.tar.gz, leading
+       to 0.9.3.tar.gz, then extracting to seatd-0.9.3. -->
+  <!ENTITY seatd-download-http
+    "https://github.com/kennylevinsen/seatd/archive/&seatd-version;/seatd-&seatd-version;.tar.gz">
+  <!ENTITY seatd-md5sum        "c1cc200188d31214b88af015b1f19f7b">
+  <!ENTITY seatd-size          "44 KB">
+  <!ENTITY seatd-buildsize     "4 MB (com testes)">
+  <!ENTITY seatd-time          "menos que 0,1 UPC (com testes)">
+]>
+
+<sect1 id="seatd" xreflabel="seatd-&seatd-version;">
+  <?dbhtml filename="seatd.html"?>
+
+  <title>seatd-&seatd-version;</title>
+
+  <indexterm zone="seatd">
+    <primary sortas="a-seatd">seatd</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao seatd</title>
+
+    <para>
+      O pacote seatd fornece uma biblioteca universal de gerenciamento de
+seat. Ele é o que muitos compositores Wayland usam para gerenciar seats, uma
+sessão para um(a) usante na qual aplicativos conseguem interagir. Ele
+consegue, opcionalmente, fornecer o próprio gerenciador dele de seat como
+uma alternativa para uma variante do logind, porém as instruções fornecidas
+o usarão como um shim, o qual <phrase revision="sysv">e</phrase>logind
+<phrase revision="systemd"> proveniente do <xref
+linkend="systemd"/></phrase> será o gerenciador subjacente de seat.
+    </para>
+
+    &lfs130_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&seatd-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &seatd-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &seatd-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &seatd-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &seatd-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do seatd</bridgehead>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <phrase revision="sysv"><xref linkend="elogind"/></phrase> <phrase
+revision="systemd"><xref linkend="systemd"/></phrase>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do seatd</title>
+    <para>
+      Instale seatd executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr             \
+            --buildtype=release       \
+            -D server=disabled        \
+            -D libseat-seatd=disabled \
+            .. &amp;&amp;
+
+ninja</userinput></screen>
+
+    <para>
+      Para executar a suíte de teste, emita: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="commands">
+    <title>Explicações do Comando</title>
+
+    <para>
+      <parameter>-D server=disabled</parameter>: Desabilita construir o processo
+de segundo plano seatd.
+    </para>
+
+    <para>
+      <parameter>-D libseat-seatd=disabled</parameter>: Esse parâmetro desabilita
+construir suporte para o processo de segundo plano de gerenciamento seatd
+para <filename class="libraryfile">libseat.so</filename> e, em vez disso,
+confia no <phrase revision="sysv">e</phrase>logind instalado no sistema.
+    </para>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Biblioteca Instalada</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          None
+        </seg>
+        <seg>
+          libseat.so
+        </seg>
+        <seg>
+          none
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libseat">
+        <term><filename class="libraryfile">libseat.so</filename></term>
+        <listitem>
+          <para>
+            contém funções para processar gerenciamento de seat
+          </para>
+          <indexterm zone="seatd libseat">
+            <primary sortas="c-libseat">libseat.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

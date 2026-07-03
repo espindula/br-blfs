@@ -7,8 +7,8 @@
   <!ENTITY dovecot-download-http
   "https://www.dovecot.org/releases/&dovecot-major;.&dovecot-minor;/dovecot-&dovecot-version;.tar.gz">
   <!ENTITY dovecot-download-ftp  "">
-  <!ENTITY dovecot-md5sum        "5c32d194129424b2dd92b864e4c8e16a">
-  <!ENTITY dovecot-size          "7,5 MB">
+  <!ENTITY dovecot-md5sum        "1cfdb796f726dff687b6431a3b6012c3">
+  <!ENTITY dovecot-size          "7,9 MB">
   <!ENTITY dovecot-buildsize     "253 MB">
   <!ENTITY dovecot-time          "4,8 UPC">
 ]>
@@ -151,14 +151,16 @@ seguintes comandos:
             --localstatedir=/var                   \
             --with-systemd=no                      \
             --docdir=/usr/share/doc/dovecot-&dovecot-version;  \
-            --disable-static &amp;&amp;
+            --disable-static                       \
+            CXX="g++ -std=gnu++17" &amp;&amp;
 make</userinput></screen>
 
 <screen revision="systemd"><userinput>./configure --prefix=/usr                          \
             --sysconfdir=/etc                      \
             --localstatedir=/var                   \
             --docdir=/usr/share/doc/dovecot-&dovecot-version;  \
-            --disable-static                       &amp;&amp;
+            --disable-static                       \
+            CXX="g++ -std=gnu++17"                 &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -180,6 +182,12 @@ class="username">root</systemitem>&quot;:
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
+
+    <para>
+      <parameter>CXX="g++ -std=gnu++17"</parameter>: Essa configuração habilita o
+padrão C++17. Ela é necessária se <xref linkend='xapian'/> estiver instalado
+e não danifica se não.
+    </para>
 
     <para>
       <option>--with-ldap</option>: Essa chave habilita o suporte a autenticação

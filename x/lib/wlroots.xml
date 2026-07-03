@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY wlroots-root
+    "https://gitlab.freedesktop.org/wlroots/wlroots/-/archive">
+  <!ENTITY wlroots-download-http
+    "&wlroots-root;/&wlroots-version;/wlroots-&wlroots-version;.tar.bz2">
+  <!ENTITY wlroots-md5sum        "601d92e41b9d1383a1e4c23a2e040aec">
+  <!ENTITY wlroots-size          "492 KB">
+  <!ENTITY wlroots-buildsize     "18 MB">
+  <!ENTITY wlroots-time          "0,2 UPC">
+]>
+
+<sect1 id="wlroots" xreflabel="wlroots-&wlroots-version;">
+  <?dbhtml filename="wlroots.html"?>
+
+  <title>wlroots-&wlroots-version;</title>
+
+  <indexterm zone="wlroots">
+    <primary sortas="a-wlroots">wlroots</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao wlroots</title>
+
+    <para>
+      wlroots é uma biblioteca de compositor Wayland e a base da maioria dos
+compositores Wayland. Compositores que usem uma base diferente possivelmente
+tenham usado esse pacote no início da estória do compositor para fornecer a
+maior parte do trabalho.
+    </para>
+
+    &lfs130_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&wlroots-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &wlroots-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &wlroots-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &wlroots-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &wlroots-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&dl-root;/wlroots/wlroots-&wlroots-version;-const_strchr-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do wlroots</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="libdrm"/>, <xref linkend="libxkbcommon"/>, <xref
+linkend="pixman"/>, <xref linkend="wayland"/> e <xref
+linkend="wayland-protocols"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            <xref linkend="mesa"/>: Para alocação de GBM e o renderizador OpenGL.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="hwdata"/>, <xref linkend="libdisplay-info"/> e <xref
+linkend="libliftoff"/>: Para a estrutura de retaguarda DRM; pode ser usado
+para genericamente selecionar um renderizador, em vez de ser implícita.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="libinput"/>: Para a estrutura de retaguarda libinput.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="lcms2"/>: Para gerenciamento de cores.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="seatd"/>: Para manuseio de sessão.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="vulkan-loader"/> e <xref linkend="glslang"/>: Para o
+renderizador Vulkan.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <xref linkend="xcb-utilities"/>, <xref linkend="xorg7-lib"/> e <xref
+linkend="xwayland"/>: Para suporte de aplicativo/biblioteca do Xorg.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <important><para>
+      Ignorar qualquer uma das dependências recomendadas pode levar a falhas de
+configuração, construção ou execução em vários compositores. Um exemplo é o
+GLESv2: se ele não for encontrado, a renderização OpenGL como um todo será
+desabilitada. Renderização OpenGL é o principal e, na maioria dos casos, o
+único renderizador disponível que um determinado compositor consegue usar se
+ele não depender da estrutura de retaguarda de DRM recomendada para
+selecionar um renderizador para o compositor. Considere a maioria das
+dependências listadas acima como exigidas, além daquelas exigidas para o
+renderizador Vulkan e o suporte ao Xorg.
+    </para></important>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="cairo"/> (para exemplos)
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do wlroots</title>
+
+    <para>
+      Instale wlroots executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr          \
+            --buildtype=release    \
+            --wrap-mode=nofallback \
+            .. &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Esse pacote não tem uma suíte de teste.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          None
+        </seg>
+        <seg>
+          libwlroots-&wlroots-minor;.so
+        </seg>
+        <seg>
+          /usr/include/wlroots-&wlroots-minor;
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="libwlroots">
+        <term><filename class="libraryfile">libwlroots-&wlroots-minor;.so</filename></term>
+        <listitem>
+          <para>
+            fornece funções para compositores Wayland
+          </para>
+          <indexterm zone="wlroots libwlroots">
+            <primary sortas="b-libwlroots">libwlroots-&wlroots-minor;.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>

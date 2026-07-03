@@ -15,7 +15,6 @@
 <sect1 id="lxqt-wayland-session" xreflabel="lxqt-wayland-session-&lxqt-session-version;">
   <?dbhtml filename="lxqt-wayland-session.html"?>
 
-
   <title>lxqt-wayland-session-&lxqt-wayland-session-version;</title>
 
   <indexterm zone="lxqt-wayland-session">
@@ -26,8 +25,12 @@
     <title>Introdução ao lxqt-wayland-session</title>
 
     <para>
-      O pacote <application>lxqt-wayland-session</application> contém o
-gerenciador de sessão baseado em Wayland para
+      O pacote <application>lxqt-wayland-session</application> contém um conjunto
+auxiliar de comandos sequenciados para <application>LXQt</application> que
+inicia um compositor Wayland a partir de uma lista fornecida e, em seguida,
+a sessão principal de Wayland do <application>LXQt</application>. Esse
+pacote também fornece arquivos de configuração específicos para cada
+compositor, para ajudar com uma experiência fluida do
 <application>LXQt</application>.
     </para>
 
@@ -75,6 +78,11 @@ gerenciador de sessão baseado em Wayland para
 <xref linkend="qtxdg-tools"/>
     </para>
 
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref role="runtime" linkend="wayfire"/> (tempo de execução)
+    </para>
+
   </sect2>
 
   <sect2 role="installation">
@@ -118,36 +126,27 @@ make</userinput></screen>
     </para>
   </sect2>
 -->
-<sect2 role="configuration">
+<sect2 id="lxqt-wls-conf" role="configuration">
     <title>Configurando lxqt-wayland-session</title>
 
     <para>
-      <!--Alternatively, if you wish the Window
-      Manager of your choice to appear in the drop down list, include it in
-      <filename>
-/etc/xdg/lxqt/windowmanagers.conf</filename>. For <xref
-      linkend="fluxbox"/>, include the line
+      A sessão seleciona a partir de uma lista preexistente de compositores
+Wayland para usar. Embora compositores como Hyprland e Niri possam ser
+usados, o seguinte usa o compositor recomendado <xref
+linkend="wayfire"/>. Tentar apenas iniciar a sessão sem configuração falhará
+se labwc, outro compositor Wayland, não estiver instalado. Cada usante
+precisará ter uma configuração. Copie e edite uma configuração preexistente
+como um(a) usante comum para usar o compositor recomendado para a sessão:
     </para>
 
-<screen role="nodump"><userinput><literal>fluxbox/Name=Fluxbox</literal></userinput></screen>
+<screen role="nodump"><userinput>mkdir -pv ~/.config/lxqt &amp;&amp;
+cp -v /usr/share/lxqt/session.conf ~/.config/lxqt &amp;&amp;
+sed -i '/\[Environment\]/a compositor=wayfire' \
+       ~/.config/lxqt/session.conf</userinput></screen>
+
     <para>
-      and it will appear as an option in the drop down list. To change the WM,
-      after selecting it, you need to restart the session.
--->
-Outros Gerenciadores de Janelas além do <xref linkend="openbox"/> podem ser
-usados, por exemplo o <xref linkend="xfwm4"/>. Por favor, observe que o
-<xref linkend="icewm"/> não é um bom substituto. O
-<application>Fluxbox</application> funciona, embora nesse contexto (com o
-<xref linkend="lxqt-config"/>), o <xref linkend="openbox"/> seja melhor. O
-arquivo de configuração
-<filename>/usr/share/lxqt/windowmanagers.conf</filename> vem com muitos
-exemplos de Gerenciadores de Janelas, e os que estiverem instalados
-aparecerão em uma lista suspensa do
-<command>lxqt-config-session</command>. Para aqueles não incluídos em
-<filename>/usr/share/lxqt/windowmanagers.conf</filename>, você consegue usar
-o botão "pesquisar" do <command>lxqt-config-session</command>, por exemplo,
-para <xref linkend="fluxbox"/>, navegando ao longo do sistema de arquivos
-até que consiga escolher <command>fluxbox</command>. 
+      Agora continue até <xref linkend="lxqt-post-install"/> para completar a
+configuração.
     </para>
 
   </sect2>
@@ -181,7 +180,7 @@ até que consiga escolher <command>fluxbox</command>.
         <term><command>lxqt-qdbus</command></term>
         <listitem>
           <para>
-            É um envolucrador dbus para atalhos de teclado em compositores Wayland.
+            é um envolucrador dbus para atalhos de teclado em compositores wayland
           </para>
           <indexterm zone="lxqt-wayland-session lxqt-qdbus">
             <primary sortas="b-lxqt-qdbus">lxqt-qdbus</primary>

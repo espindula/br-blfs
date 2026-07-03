@@ -6,8 +6,8 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "cea7024dae755e38afb330a027a938c6">
-  <!ENTITY thunderbird-size          "731 MB">
+  <!ENTITY thunderbird-md5sum        "8042c106d366b63ad39e29b8504e9cfa">
+  <!ENTITY thunderbird-size          "717 MB">
   <!ENTITY thunderbird-buildsize     "8,9 GB (267 MB instalado)">
   <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
@@ -202,7 +202,15 @@ sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' \
       Em seguida, corrija construir esse pacote com LLVM-22:
     </para>
 
+<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
 <screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-llvm_22-1.patch</userinput></screen>
+
+
+    <para>
+      Em seguida, corrija construir esse pacote com cbindgen-0.29.4:
+    </para>
+
+<screen><userinput remap="pre">sed -i '/const [CVP]/s/pub //' gfx/wr/webrender/src/texture_cache.rs</userinput></screen>
 
     <para>
       A configuração do <application>Thunderbird</application> é realizada

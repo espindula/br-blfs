@@ -6,9 +6,9 @@
 
   <!ENTITY samba-download-http "https://download.samba.org/pub/samba/stable/samba-&samba-version;.tar.gz">
   <!ENTITY samba-download-ftp  "">
-  <!ENTITY samba-md5sum        "70fbbd0189ee6e9dc92b5a2cb2fcfb1d">
+  <!ENTITY samba-md5sum        "2e39965bcfd6bae06208ded1c7b77596">
   <!ENTITY samba-size          "41 MB">
-  <!ENTITY samba-buildsize     "744 MB (adicionar 46 MB para teste rápido)">
+  <!ENTITY samba-buildsize     "724 MB (adicionar 46 MB para teste rápido)">
   <!ENTITY samba-time          "1,7 UPC (usando paralelismo=4; adicionar 0,4 UPC para teste rápido)">
 ]>
 
@@ -133,9 +133,10 @@ url="https://tdb.samba.org/">tdb</ulink> (incluído)
 
     <bridgehead renderas="sect4">Opcionais (para a Suíte de Teste de Desenvolvedor(a))</bridgehead>
     <para role="optional">
-      Instale na ordem listada: <xref linkend="six"/>, <xref linkend="pytest"/>,
-<ulink url="&pypi;/argparse/">argparse</ulink>, <ulink
-url="&pypi;/testtools/">testtools</ulink>, <ulink
+      <!--      <ulink url="&pypi;/argparse/">
+argparse</ulink>, -->
+Instale na ordem listada: <xref linkend="six"/>, <xref linkend="pytest"/>,
+<ulink url="&pypi;/testtools/">testtools</ulink>, <ulink
 url="&pypi;/testscenarios/">testscenarios</ulink> e <ulink
 url="&pypi;/python-subunit/">python-subunit</ulink>
     </para>
@@ -186,8 +187,10 @@ make</userinput></screen>
     --enable-fhs                           \
     --without-ad-dc                        \
     --with-system-mitkrb5                  \
+    --with-systemd                         \
     --enable-selftest                      \
-    --disable-rpath-install                &amp;&amp;
+    --disable-rpath-install                \
+    --systemd-install-services             &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -310,6 +313,13 @@ reduz o tempo de construção. Remova isso se você não tiver <xref
 linkend="mitkrb"/> instalado.
     </para>
 
+    <para revision="systemd">
+      <parameter>--with-systemd</parameter>: Habilite integração
+<application>systemd</application> (exigida por
+<literal>Type=notify</literal> nos arquivos fornecidos de unidade do
+systemd).
+    </para>
+
     
     <!-- Note that /usr/lib/samba is still in rpath and it's really
          needed. -->
@@ -327,6 +337,11 @@ arquivos instalados.
     <para>
       <option>--with-selftest-prefix=SELFTEST_PREFIX</option>: Essa opção
 especifica o diretório de trabalho da suíte de teste (padrão=./st).
+    </para>
+
+    <para revision="systemd">
+      <parameter>--systemd-install-services</parameter>: Instale as unidades de
+systemd fornecidas.
     </para>
 
     <para>
@@ -612,65 +627,28 @@ serviços de domínio do Windows para clientes Linux.
 
         <para>
           Para iniciar os processos de segundo plano do
-&quot;<application>Samba</application>&quot; na inicialização, instale as
-unidades do &quot;systemd&quot; a partir do pacote &quot;<xref
-linkend="systemd-units"/>&quot; executando o seguinte comando como o(a)
-usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
+<application>Samba</application> na inicialização, habilite a unidade do
+systemd fornecida executando o seguinte comando como o(a) usante &root;:
         </para>
 
         <indexterm zone="samba samba-init-sysd">
           <primary sortas="f-samba">samba</primary>
         </indexterm>
 
-<screen role="root"><userinput>make install-samba</userinput></screen>
+<screen role="root"><userinput>systemctl enable smb.service</userinput></screen>
 
         <para>
-          Para iniciar o processo de segundo plano
-&quot;<command>winbindd</command>&quot; na inicialização, instale a unidade
-do &quot;systemd&quot; a partir do pacote &quot;<xref
-linkend="systemd-units"/>&quot; executando o seguinte comando como o(a)
-usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
+          Para iniciar o processo de segundo plano <command>winbindd</command> na
+inicialização, habilite a unidade do systemd fornecida executando o seguinte
+comando como o(a) usante &root;:
         </para>
 
         <indexterm zone="samba samba-init-sysd">
           <primary sortas="f-winbindd">winbindd</primary>
         </indexterm>
 
-<screen role="root"><userinput>make install-winbindd</userinput></screen>
+<screen role="root"><userinput>systemctl enable winbind.service</userinput></screen>
 
-        <note>
-          <para>
-            Esse pacote vem com dois tipos de unidades: um arquivo de serviço e um
-arquivo de soquete. O arquivo de serviço iniciará o processo de segundo
-plano &quot;smbd&quot; uma vez na inicialização e ele continuará executando
-até o sistema ser desligado. O arquivo de soquete fará com que o
-&quot;systemd&quot; escute na porta do &quot;smbd&quot; (padrão 445, precisa
-ser editado para qualquer outra coisa) e iniciará o processo de segundo
-plano &quot;smbd&quot; quando algo tentar se conectar a essa porta e parará
-o processo de segundo plano quando a conexão for terminada. Isso é chamado
-de ativação de soquete e é análogo a usar
-&quot;<application>{,x}inetd</application>&quot; em um sistema baseado em
-&quot;SysVinit&quot;.
-          </para>
-
-          <para>
-            Por padrão, o primeiro método é usado - o processo de segundo plano
-&quot;smbd&quot; é iniciado na inicialização e parado no desligamento. Se o
-método de soquete for desejado, [então] você precisa executar os seguintes
-comandos como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
-          </para>
-
-<screen role="root"><userinput>systemctl stop smbd          &amp;&amp;
-systemctl disable smbd       &amp;&amp;
-systemctl enable smbd.socket &amp;&amp;
-systemctl start smbd.socket</userinput></screen>
-
-          <para>
-            Observe que somente o processo de segundo plano &quot;smbd&quot; pode ser
-ativado por soquete.
-          </para>
-        </note>
       </sect4>
 
     </sect3>

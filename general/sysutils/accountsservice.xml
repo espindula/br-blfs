@@ -3,14 +3,13 @@
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
-
   <!ENTITY accountsservice-download-http
-           "https://www.freedesktop.org/software/accountsservice/accountsservice-&accountsservice-version;.tar.xz">
+           "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/archive/&accountsservice-version;/accountsservice-&accountsservice-version;.tar.bz2">
   <!ENTITY accountsservice-download-ftp  "">
-  <!ENTITY accountsservice-md5sum        "03dccfe1b306b7ca19743e86d118e64d">
-  <!ENTITY accountsservice-size          "621 KB">
-  <!ENTITY accountsservice-buildsize     "9,8 MB (adicionar 0,5 MB para testes)">
-  <!ENTITY accountsservice-time          "menos que 0,1 UPC (com testes)">
+  <!ENTITY accountsservice-md5sum        "eac46328f48acd37ab55bb74106f67ec">
+  <!ENTITY accountsservice-size          "660 KB">
+  <!ENTITY accountsservice-buildsize     "11 MB (com testes)">
+  <!ENTITY accountsservice-time          "0,4 UPC (com testes)">
 ]>
 
 <sect1 id="accountsservice" xreflabel="AccountsService-&accountsservice-version;">
@@ -76,10 +75,7 @@ url='&man;userdel.8'>userdel(8)</ulink>.
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      
-      <!--<xref linkend="libgcrypt"/>
- and-->
-<xref linkend="polkit"/>
+      <xref linkend="polkit"/>
     </para>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -96,9 +92,7 @@ linkend="systemd"/> (tempo de execução)</phrase> e <xref linkend="vala"/>
 
     <bridgehead renderas="sect4">Opcionais (para testes)</bridgehead>
     <para role="optional">
-      <!-- I did not have gtk-doc installed this time, and it worked fine. -->
-<xref linkend="python-dbusmock"/> e <xref linkend="pygobject3"/>
-      
+      <xref linkend="python-dbusmock"/> e <xref linkend="pygobject3"/>
     </para>
 
   </sect2>
@@ -107,25 +101,8 @@ linkend="systemd"/> (tempo de execução)</phrase> e <xref linkend="vala"/>
     <title>Instalação do "AccountsService"</title>
 
     <para>
-      Primeiro, renomeie um diretório cuja presença impede o sistema de construção
-de executar se <xref linkend="python-dbusmock"/> não estiver instalado:
-    </para>
-
-<screen><userinput>mv tests/dbusmock{,-tests}</userinput></screen>
-
-    <para>
-      Em seguida, corrija um conjunto de comandos sequenciais de teste, de forma
-que o novo diretório seja encontrado e adapte-o para Python 3.12.0 ou
-posterior:
-    </para>
-
-<screen><userinput>sed -e '/accounts_service\.py/s/dbusmock/dbusmock-tests/' \
-    -e 's/assertEquals/assertEqual/'                      \
-    -i tests/test-libaccountsservice.py</userinput></screen>
-
-    <para>
-      Corrija um teste que falha se a localidade <option>en_IE.UTF-8</option> não
-estiver instalada:
+      Primeiro, Corrija um teste que falha se a localidade
+<option>en_IE.UTF-8</option> não estiver instalada:
     </para>
 
 <screen><userinput>sed -i '/^SIMULATED_SYSTEM_LOCALE/s/en_IE.UTF-8/en_HK.iso88591/' tests/test-daemon.py</userinput></screen>
@@ -135,8 +112,6 @@ estiver instalada:
 comandos:
     </para>
 
-<!-- We have to do this after meson setup because mocklibc is extracted
-         from a tarball by the meson setup command.  -->
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
@@ -154,17 +129,6 @@ meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
       -D admin_group=adm</userinput></screen>
-
-    
-    <para>
-      Agora adapte a cópia de mocklibc enviada para permitir construir a suíte de
-teste com GCC 14 ou posterior:
-    </para>
-
-<screen><userinput>grep 'print_indent'     ../subprojects/mocklibc-1.0/src/netgroup.c \
-     | sed 's/ {/;/' >> ../subprojects/mocklibc-1.0/src/netgroup.h &amp;&amp;
-sed -i '1i#include &lt;stdio.h&gt;'                                      \
-    ../subprojects/mocklibc-1.0/src/netgroup.h</userinput></screen>
 
     <para>
       Construa o pacote:
@@ -189,11 +153,6 @@ sed -i '1i#include &lt;stdio.h&gt;'                                      \
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
-
-    <para>
-      <parameter>-D admin_group=adm</parameter>: Essa chave configura o grupo para
-contas de administrador(a).
-    </para>
 
     <para>
       <option>-D docbook=true</option>: Essa chave habilita construir a

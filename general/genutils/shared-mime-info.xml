@@ -7,14 +7,13 @@
   <!ENTITY shared-mime-info-download-http
            "https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/&shared-mime-info-version;/shared-mime-info-&shared-mime-info-version;.tar.gz">
   <!ENTITY shared-mime-info-download-ftp  "">
-  <!ENTITY shared-mime-info-md5sum        "aac56db912b7b12a04fb0018e28f2f36">
-  <!ENTITY shared-mime-info-size          "7,5 MB">
-  <!ENTITY shared-mime-info-buildsize     "26 MB (com testes)">
+  <!ENTITY shared-mime-info-md5sum        "59fcd24e31d9744f4333f609f6c2ea13">
+  <!ENTITY shared-mime-info-size          "8.4 MB">
+  <!ENTITY shared-mime-info-buildsize     "32 MB (with tests)">
   <!ENTITY shared-mime-info-time          "menos que 0,1 UPC (com testes)">
 
   <!ENTITY xdgmime-download-http "&sources-anduin-http;/xdgmime/xdgmime.tar.xz">
   <!ENTITY xdgmime-md5sum        "7dfb4446705d345d3acd672024049e86">
-
 ]>
 
 <sect1 id="shared-mime-info"
@@ -73,20 +72,22 @@ todos os aplicativos de suporte.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Transferência opcional, exigida para executar a suíte de teste: <ulink
-url="&xdgmime-download-http;"/>
+          Optional download, required to run the test suite:
+          <ulink url="&xdgmime-download-http;"/>
         </para>
         <para>
-          Soma de verificação MD5 de "xdgmime": &xdgmime-md5sum;
+          xdgmime md5sum: &xdgmime-md5sum;
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do "Shared Mime Info"</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do "Shared Mime Info"</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -95,7 +96,7 @@ url="&xdgmime-download-http;"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="xmlto"/>
+      <xref linkend="git"/> (for tests), and <xref linkend="xmlto"/>
     </para>
 
 
@@ -105,40 +106,55 @@ url="&xdgmime-download-http;"/>
     <title>Instalação do "Shared Mime Info"</title>
 
     <para>
+      When extracting the tarball, the directory does not match the tarball name.
+For convenience, rename it:
+    </para>
+
+<screen remap="optional"><userinput>cd ..                                           &amp;&amp;
+mv shared-mime-info-2.5* shared-mime-info-2.5.1 &amp;&amp;
+cd shared-mime-info-2.5.1</userinput></screen>
+
+    <para>
       Instale <application>Shared Mime Info</application> executando os seguintes
 comandos:
     </para>
 
+
+
+<screen><!--
     <para>
-      Se deseja executar a suíte de teste, [então] você precisa primeiro extrair o
-tarball <filename>xdgmime</filename> no diretório atual e compilá-lo, de
-forma que <command>meson</command> consiga encontrá-lo:
+
+      If you wish to run the test suite, you must first extract the
+      <filename>xdgmime</filename> tarball into the current directory,
+      and compile it so that <command>meson</command> can find it:
     </para>
 
 <screen remap="test"><userinput>tar -xf ../xdgmime.tar.xz &amp;&amp;
 make -C xdgmime</userinput></screen>
-
-    <para>
-      Agora construa o pacote:
-    </para>
-
-<screen><userinput>mkdir build &amp;&amp;
+-->
+<userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup --prefix=/usr --buildtype=release -D update-mimedb=true .. &amp;&amp;
+meson setup --prefix=/usr         \
+            --buildtype=release   \
+            -D update-mimedb=true \
+            -D build-tests=false  \
+            .. &amp;&amp;
 ninja</userinput></screen>
-
-    <para role="optional">
-      Se você tiver seguido as instruções acima para construir
-<application>xdgmime</application>, [então], para testar o resultado, emita
-<command>ninja test</command>.
-    </para>
 
     <para>
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para role="test">
+      If want to run the tests, support files will automatically be downloaded
+from upstream. Build and run the tests with: 
+    </para>
+   
+<screen role="test"><userinput>meson configure -D build-tests=true &amp;&amp;
+ninja test</userinput></screen>
 
   </sect2>
 

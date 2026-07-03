@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY wayfire-download-http
+    "https://github.com/WayfireWM/wayfire/releases/download/v&wayfire-version;/wayfire-&wayfire-version;.tar.xz">
+  <!ENTITY wayfire-md5sum        "326874a57bb11d3e5cdfa1eb21c2e468">
+  <!ENTITY wayfire-size          "920 KB">
+  <!ENTITY wayfire-buildsize     "221 MB">
+  <!ENTITY wayfire-time          "0,5 UPC (com paralelismo=4)">
+]>
+
+<sect1 id="wayfire" xreflabel="wayfire-&wayfire-version;">
+  <?dbhtml filename="wayfire.html"?>
+
+  <title>wayfire-&wayfire-version;</title>
+
+  <indexterm zone="wayfire">
+    <primary sortas="a-wayfire">wayfire</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao wayfire</title>
+
+    <para>
+      Wayfire é um compositor Wayland que pega um monte de efeitos do agora
+descontinuado compositor Compiz do Xorg. Ele busca ser personalizável, porém
+leve. Ao contrário de outros compositores, ele também é 3D e suporta
+múltiplas perspectivas para visualização das janelas.
+    </para>
+
+    &build-use-internet;
+
+    &lfs130_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&wayfire-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &wayfire-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &wayfire-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &wayfire-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &wayfire-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <bridgehead renderas="sect3">Dependências do Wayfire</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="glm"/>, <xref linkend="freetype2"/>, <xref
+linkend="libdrm"/>, <xref linkend="libevdev"/>, <xref linkend="libinput"/>,
+<xref linkend="libjpeg"/>, <xref linkend="libpng"/>, <xref
+linkend="libxkbcommon"/>, <xref linkend="mesa"/>, <xref
+linkend="nlohmann-json"/>, <xref linkend="pango"/> (com Cairo), <xref
+linkend="pixman"/>, <xref linkend="wayland"/>, <xref
+linkend="wayland-protocols"/>, <xref linkend="wlroots"/> e <xref
+linkend="yyjson"/>
+    </para>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="xorg7-lib"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="doxygen"/>, <xref linkend="libnotify"/>, <ulink
+url="https://github.com/doctest/doctest">doctest</ulink> (para testes) e
+<ulink url="https://github.com/juniorrantila/libinotify">libinotify</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do Wayfire</title>
+
+    <para>
+      Instale Wayfire executando os seguintes comandos:
+    </para>
+
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+ninja</userinput></screen>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install</userinput></screen>
+
+    <para>
+      Remova algumas bibliotecas estáticas inúteis como o(a) usante &root;:
+    </para>
+
+<screen role="root"><userinput>rm -vf /usr/lib/libwftouch.a \
+       /usr/lib/libwayfire-{move-drag-interface,workspace-wall}.a</userinput></screen>
+
+    <para>
+      Copie o arquivo padrão de configuração para <filename
+class="directory">/usr/share/wayfire</filename> como o(a) usante &root;:
+    </para>
+
+<screen role="root"><userinput>cp -v ../wayfire.ini /usr/share/wayfire</userinput></screen>
+
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configurando Wayfire</title>
+
+    <sect3 id="wayfire-config">
+      <title>Arquivos de Configuração</title>
+      <para>
+        <filename>~/.config/wayfire.ini</filename>. A versão padrão está em
+<filename class="directory">/usr/share/wayfire</filename> e não será usado e
+precisa ser copiado para <filename class="directory">~/.config</filename>
+      </para>
+
+      <indexterm zone="wayfire wayfire-config">
+        <primary sortas="e-AA.config">~/.config/wayfire.ini</primary>
+      </indexterm>
+
+    </sect3>
+
+    <sect3><title>Informação de Configuração</title>
+
+      <para>
+        Copie o arquivo padrão de configuração:
+      </para>
+
+<screen><userinput>cp /usr/share/wayfire/wayfire.ini ~/.config</userinput></screen>
+
+      <para>
+        Agora, inspecione o arquivo e faça quaisquer mudanças para adequar ao teu
+fluxo de trabalho. Se você precisar saber quais plugins estão instalados,
+examine a lista de Plugins Instalados abaixo.
+      </para>
+
+    </sect3>
+
+  </sect2>
+
+  <sect2 role="content">
+    <title>Conteúdo</title>
+
+    <segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Plugins Instalados</segtitle>
+      <segtitle>Diretórios Instalados</segtitle>
+
+      <seglistitem>
+        <seg>
+          wayfire
+        </seg>
+        <seg>
+          libwayfire-blur-base.so, libwf-config.so e libwf-utils.so
+        </seg>
+        <seg>
+          alpha, animate, autostart, blur, command, cube, decoration,
+default-config-backend, expo, extra-gestures, fast-switcher, fisheye,
+foreign-toplevel, grid, gtk-shell, idle, input-method-v1, invert, ipc-rules,
+ipc, move, oswitch, place, preserve-output, resize, scale,
+scale-title-filter, session-lock, shortcuts-inhibit, simple-tile, stipc,
+switcher, swipe, vk-color-management, vswitch, wayfire-shell, window-rules,
+wm-actions, wobbly, wrot, wsets, xdg-activation, xkb-bindings e zoom
+        </seg>
+        <seg>
+          /usr/include/wayfire, /usr/lib/wayfire e /usr/share/wayfire
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="wayfire-bin">
+        <term><command>wayfire</command></term>
+        <listitem>
+          <para>
+            é o compositor Wayfire
+          </para>
+          <indexterm zone="wayfire wayfire-bin">
+            <primary sortas="b-wayfire-bin">wayfire</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libwayfire-blur-base">
+        <term><filename class="libraryfile">libwayfire-blur-base.so</filename></term>
+        <listitem>
+          <para>
+            fornece funções básicas para implementações de desfoque no Wayfire
+          </para>
+          <indexterm zone="wayfire libwayfire-blur-base">
+            <primary sortas="b-libwayfire-blur-base">libwayfire-blur-base.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libwf-config">
+        <term><filename class="libraryfile">libwf-config.so</filename></term>
+        <listitem>
+          <para>
+            fornece funções que gerenciam arquivos de configuração
+          </para>
+          <indexterm zone="wayfire libwf-config">
+            <primary sortas="b-libwf-config">libwf-config.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libwf-utils">
+        <term><filename class="libraryfile">libwf-utils.so</filename></term>
+        <listitem>
+          <para>
+            contém várias funções usadas pelo Wayfire e bibliotecas dele
+          </para>
+          <indexterm zone="wayfire libwf-utils">
+            <primary sortas="b-libwf-utils">libwf-utils.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>
