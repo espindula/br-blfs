@@ -7,13 +7,14 @@
   <!ENTITY shared-mime-info-download-http
            "https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/&shared-mime-info-version;/shared-mime-info-&shared-mime-info-version;.tar.gz">
   <!ENTITY shared-mime-info-download-ftp  "">
-  <!ENTITY shared-mime-info-md5sum        "59fcd24e31d9744f4333f609f6c2ea13">
-  <!ENTITY shared-mime-info-size          "8.4 MB">
-  <!ENTITY shared-mime-info-buildsize     "32 MB (with tests)">
+  <!ENTITY shared-mime-info-md5sum        "5f8baa7bac254ea9e65782f754a2880b">
+  <!ENTITY shared-mime-info-size          "8,5 MB">
+  <!ENTITY shared-mime-info-buildsize     "32 MB (com testes)">
   <!ENTITY shared-mime-info-time          "menos que 0,1 UPC (com testes)">
 
-  <!ENTITY xdgmime-download-http "&sources-anduin-http;/xdgmime/xdgmime.tar.xz">
+<!--  <!ENTITY xdgmime-download-http "&sources-anduin-http;/xdgmime/xdgmime.tar.xz">
   <!ENTITY xdgmime-md5sum        "7dfb4446705d345d3acd672024049e86">
+-->
 ]>
 
 <sect1 id="shared-mime-info"
@@ -96,23 +97,15 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="git"/> (for tests), and <xref linkend="xmlto"/>
+      <xref linkend="git"/> (para testes) e <xref linkend="xmlto"/>
     </para>
 
+    &test-use-internet;
 
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do "Shared Mime Info"</title>
-
-    <para>
-      When extracting the tarball, the directory does not match the tarball name.
-For convenience, rename it:
-    </para>
-
-<screen remap="optional"><userinput>cd ..                                           &amp;&amp;
-mv shared-mime-info-2.5* shared-mime-info-2.5.1 &amp;&amp;
-cd shared-mime-info-2.5.1</userinput></screen>
 
     <para>
       Instale <application>Shared Mime Info</application> executando os seguintes
@@ -139,6 +132,7 @@ meson setup --prefix=/usr         \
             --buildtype=release   \
             -D update-mimedb=true \
             -D build-tests=false  \
+            -D build-spec=false   \
             .. &amp;&amp;
 ninja</userinput></screen>
 
@@ -149,8 +143,9 @@ ninja</userinput></screen>
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para role="test">
-      If want to run the tests, support files will automatically be downloaded
-from upstream. Build and run the tests with: 
+      Se você quiser executar os testes, os arquivos de suporte serão baixados
+automaticamente a partir do fluxo de desenvolvimento. Construa e execute os
+testes com: 
     </para>
    
 <screen role="test"><userinput>meson configure -D build-tests=true &amp;&amp;
@@ -169,6 +164,13 @@ ninja test</userinput></screen>
 sistema de construção para executar <command>update-mime-database</command>
 durante a instalação. Caso contrário, isso precisa ser feito manualmente
 para a finalidade de poder usar a base de dados MIME.
+    </para>
+
+    <para>
+      <parameter>-D build-spec=false</parameter>: Esse parâmetro instrui o sistema
+de construção a NÃO inserir a especificação HTML em
+shared-mime-info-spec-html. Omita esse parâmetro se o <xref
+linkend="xmlto"/> estiver instalado.
     </para>
   </sect2>
 

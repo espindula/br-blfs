@@ -135,7 +135,15 @@ necessário:
        src/lib/asiodns/io_fetch.cc                               \
        src/lib/asiodns/tests/io_fetch_unittest.cc                &amp;&amp;
 sed -e "/lexical_cast.hpp/a #include &lt;boost/static_assert.hpp&gt;"  \
-    -i src/lib/log/logger_level_impl.cc</userinput></screen>
+    -i src/lib/log/logger_level_impl.cc                          \
+       src/lib/dns/rdataclass.cc</userinput></screen>
+
+    <para>
+      Também aplique uma correção para construir com OpenSSL-4:
+    </para>
+
+<screen><userinput>sed -e 's/^[ ]*\(::X509_NAME\)/const \1/' \
+    -i src/lib/asiolink/openssl_tls.h</userinput></screen>
 
     <para>
       Agora, instale o <application>Servidor DHCP Kea do ISC</application>

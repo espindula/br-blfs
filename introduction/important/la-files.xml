@@ -94,45 +94,45 @@ diretórios que possivelmente estejam causando problemas.
 <literal>#!/bin/bash
 
 # /usr/sbin/remove-la-files.sh
-# Escrito para o Beyond Linux From Scratch
-# por Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
+# Written for Beyond Linux From Scratch
+# by Bruce Dubbs &lt;bdubbs@&lfs-domainname;&gt;
 
-# Certifique-se de que estamos executando com privilégios de "root"
+# Make sure we are running with root privs
 if test "${EUID}" -ne 0; then
-    echo "Erro: $(basename ${0}) precisa ser executado como o(a) usuário(a) root! Saindo..."
+    echo "Error: $(basename ${0}) must be run as the root user! Exiting..."
     exit 1
 fi
 
-# Certifique-se de que PKG_CONFIG_PATH esteja definido se descartado pelo "sudo"
+# Make sure PKG_CONFIG_PATH is set if discarded by sudo
 source /etc/profile
 
 OLD_LA_DIR=/var/local/la-files
 
 mkdir -p $OLD_LA_DIR
 
-# Pesquise somente diretórios em /opt, mas não links simbólicos para diretórios
+# Only search directories in /opt, but not symlinks to directories
 OPTDIRS=$(find /opt -mindepth 1 -maxdepth 1 -type d)
 
-# Mova todos os arquivos ".la" encontrados para um diretório fora do caminho
+# Move any found .la files to a directory out of the way
 find /usr/lib $OPTDIRS -name "*.la" ! -path "/usr/lib/ImageMagick*" \
   -exec mv -fv {} $OLD_LA_DIR \;
 ###############
 
-# Corrija quaisquer arquivos ".pc" que possam ter referências ".la"
+# Fix any .pc files that may have .la references
 
 STD_PC_PATH='/usr/lib/pkgconfig
              /usr/share/pkgconfig
              /usr/local/lib/pkgconfig
              /usr/local/share/pkgconfig'
 
-# Para cada diretório que pode conter arquivos ".pc"
+# For each directory that can have .pc files
 for d in $(echo $PKG_CONFIG_PATH | tr : ' ') $STD_PC_PATH; do
 
-  # Para cada arquivo "pc"
+  # For each pc file
   for pc in $d/*.pc ; do
     if [ $pc == "$d/*.pc" ]; then continue; fi
 
-    # Verifique cada palavra em uma linha com uma referência ".la"
+    # Check each word in a line with a .la reference
     for word in $(grep '\.la' $pc); do
       if $(echo $word | grep -q '.la$' ); then
         mkdir -p $d/la-backup
@@ -141,7 +141,7 @@ for d in $(echo $PKG_CONFIG_PATH | tr : ' ') $STD_PC_PATH; do
         basename=$(basename $word )
         libref=$(echo $basename|sed -e 's/^lib/-l/' -e 's/\.la$//')
 
-        # Corrige o arquivo ".pc"
+        # Fix the .pc file
         sed -i "s:$word:$libref:" $pc
       fi
     done

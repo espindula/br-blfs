@@ -6,9 +6,9 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "8042c106d366b63ad39e29b8504e9cfa">
-  <!ENTITY thunderbird-size          "717 MB">
-  <!ENTITY thunderbird-buildsize     "8,9 GB (267 MB instalado)">
+  <!ENTITY thunderbird-md5sum        "2965c67ff47e063565cbf3642abcf95b">
+  <!ENTITY thunderbird-size          "893 MB">
+  <!ENTITY thunderbird-buildsize     "11,0 GB (296 MB instalado)">
   <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
        the C/C++ code appears to obey it.
@@ -76,29 +76,33 @@ Gecko para o habilitar a exibir e compor mensagens eletrônicas em HTML.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/thunderbird-&thunderbird-version;esr-glibc-2.43.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/thunderbird-&thunderbird-version;esr-glibc-2.43.patch"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/thunderbird-&thunderbird-version;esr-llvm_22-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/thunderbird-&thunderbird-version;esr-llvm_22-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Thunderbird</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Thunderbird</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -156,27 +160,42 @@ adequados antes de continuar.
       </para>
     </note>
 
-    <para>
-      Primeiramente, corrija construir esse pacote com Python-3.14:
-    </para>
-
-<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=2006630 -->
-<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch</userinput></screen>
 
     
+
+
+
+
+
+
+    <!--
     <para>
-      Remova somas de verificação de caixas do cargo para arquivos que não
-existem:
+
+      At first, fix building this package with Python-3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch</userinput></screen>
+-->
+<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=2006630 -->
+<!--
+    <para>
+
+      Remove checksums from cargo crates for files that don't exist:
     </para>
 
 <screen><userinput remap="pre">find -name .cargo-checksum.json | \
      xargs sed -ri 's|"[^"]*.gitmodules":"[^"]*",?||'</userinput></screen>
 
     <para>
-      Corrija construir esse pacote com glibc-2.43 e adapte as somas de
-verificação:
+      Fix building this package with glibc-2.43 and adapt the checksums:
     </para>
 
+<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
+sed '/patch.crates-io/a glslopt={path="../third_party/rust/glslopt"}' \
+    -i comm/rust/Cargo.toml &amp;&amp;
+sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' \
+    -i comm/rust/Cargo.lock</userinput></screen>
+-->
 <!--
     <para>
 
@@ -190,29 +209,24 @@ sed '/patch.crates-io/a encoding_rs={path="../third_party/rust/encoding_rs"}' \
     -i comm/rust/Cargo.toml &amp;&amp;
 sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i comm/rust/Cargo.lock</userinput></screen>
 -->
-<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
-sed '/patch.crates-io/a glslopt={path="../third_party/rust/glslopt"}' \
-    -i comm/rust/Cargo.toml &amp;&amp;
-sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' \
-    -i comm/rust/Cargo.lock</userinput></screen>
-
-
-
+<!--
     <para>
-      Em seguida, corrija construir esse pacote com LLVM-22:
+
+      Next, fix building this package with LLVM-22:
     </para>
 
-<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
 <screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-llvm_22-1.patch</userinput></screen>
-
-
+-->
+<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
+<!--
     <para>
-      Em seguida, corrija construir esse pacote com cbindgen-0.29.4:
+
+      Next, fix building this package with cbindgen-0.29.4:
     </para>
 
 <screen><userinput remap="pre">sed -i '/const [CVP]/s/pub //' gfx/wr/webrender/src/texture_cache.rs</userinput></screen>
-
-    <para>
+-->
+<para>
       A configuração do <application>Thunderbird</application> é realizada
 criando-se um arquivo <filename>mozconfig</filename> contendo as opções de
 configuração desejadas. Um <filename>mozconfig</filename> padrão é criado

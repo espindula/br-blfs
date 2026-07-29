@@ -7,9 +7,9 @@
   <!ENTITY NetworkManager-download-http
 "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/&NetworkManager-version;/downloads/NetworkManager-&NetworkManager-version;.tar.xz">
   <!ENTITY NetworkManager-download-ftp  "">
-  <!ENTITY NetworkManager-md5sum        "e21ec74b24f72a044e75c0ae92a9bb62">
-  <!ENTITY NetworkManager-size          "6,0 MB">
-  <!ENTITY NetworkManager-buildsize     "365 MB (com testes e documentação)">
+  <!ENTITY NetworkManager-md5sum        "897723f25e84233eb6e54b46947e7e1b">
+  <!ENTITY NetworkManager-size          "6,3 MB">
+  <!ENTITY NetworkManager-buildsize     "355 MB (com testes e documentação)">
   <!ENTITY NetworkManager-time          "0,8 UPC (com testes, usando paralelismo=4)">
 ]>
 
@@ -106,18 +106,19 @@ execução, construído com suporte a D-Bus)
     <para role="optional">
       <!-- <xref linkend="firewalld"/>
  (For whenever firewalld is reintroduced) -->
-<xref linkend="bluez"/>, <xref linkend="dbus-python"/> (para a suíte de
-teste), <xref linkend="gnutls"/> (pode ser usado em vez do <xref
-role="nodep" linkend="nss"/>), <xref linkend="gtk-doc"/>, <xref
-linkend="jansson"/>, <xref linkend="libnvme"/>, <xref
-linkend="ModemManager"/>, <xref linkend="upower"/>, <xref
+<xref linkend="bluez"/>, <xref linkend="dbus-python"/> (for the test suite),
+<xref linkend="gnutls"/> (can be used instead of <xref role="nodep"
+linkend="nss"/>), <xref linkend="gtk-doc"/>, <xref linkend="jansson"/>,
+<xref linkend="libnvme"/>, <xref linkend="llvm"/> (with Clang and the BPF
+target), <xref linkend="ModemManager"/>, <xref linkend="upower"/>, <xref
 linkend="valgrind"/>, <ulink
 url="https://thekelleys.org.uk/dnsmasq/doc.html">dnsmasq</ulink>, <ulink
 url="https://firewalld.org/">firewalld</ulink>, <ulink
 url="https://github.com/Distrotech/libaudit">libaudit</ulink>, <ulink
 url="https://github.com/jpirko/libteam">libteam</ulink>, <ulink
 url="https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/">mobile-broadband-provider-info</ulink>,
-<ulink url="https://www.samba.org/ftp/ppp/">PPP</ulink> e <ulink
+<ulink url='https://github.com/libbpf/libbpf'>libbpf</ulink>, <ulink
+url="https://www.samba.org/ftp/ppp/">PPP</ulink>, and <ulink
 url="https://dianne.skoll.ca/projects/rp-pppoe/">RP-PPPoE</ulink>
     </para>
 
@@ -173,21 +174,23 @@ comandos:
 <screen revision="sysv"><userinput>mkdir build &amp;&amp;
 cd    build &amp;&amp;
 
-meson setup ..                    \
-      --prefix=/usr               \
-      --buildtype=release         \
-      -D libaudit=no              \
-      -D nmtui=true               \
-      -D ovs=false                \
-      -D ppp=false                \
-      -D nbft=false               \
-      -D selinux=false            \
-      -D session_tracking=elogind \
-      -D modem_manager=false      \
-      -D systemdsystemunitdir=no  \
-      -D systemd_journal=false    \
-      -D nm_cloud_setup=false     \
-      -D qt=false                 &amp;&amp;
+meson setup ..                        \
+      --prefix=/usr                   \
+      --buildtype=release             \
+      -D libaudit=no                  \
+      -D nmtui=true                   \
+      -D ovs=false                    \
+      -D ppp=false                    \
+      -D nbft=false                   \
+      -D selinux=false                \
+      -D session_tracking=elogind     \
+      -D modem_manager=false          \
+      -D systemdsystemunitdir=no      \
+      -D systemdsystemgeneratordir=no \
+      -D systemd_journal=false        \
+      -D nm_cloud_setup=false         \
+      -D clat=false                   \
+      -D qt=false                     &amp;&amp;
 ninja</userinput></screen>
 
 <screen revision="systemd"><userinput>mkdir build &amp;&amp;
@@ -205,6 +208,7 @@ meson setup ..                    \
       -D qt=false                 \
       -D session_tracking=systemd \
       -D nm_cloud_setup=false     \
+      -D clat=false               \
       -D modem_manager=false      &amp;&amp;
 ninja</userinput></screen>
 
@@ -280,10 +284,11 @@ instalado.
     </para>
 
     <para revision="sysv">
-      <parameter>-D systemdsystemunitdir=no</parameter> e <parameter>-D
+      <parameter>-D systemdsystemunitdir=no</parameter>, <parameter>-D
+systemdsystemgeneratordir=no</parameter> e <parameter>-D
 systemd_journal=false</parameter>: systemd não é usado para sistemas de
-inicialização SysV, de forma que evite instalar unidades e usar o diário do
-systemd.
+iniciação sysv, de modo que evite instalar unidades, arquivos geradores e de
+usar o diário do systemd.
     </para>
 
     <para>
@@ -342,6 +347,13 @@ SELinux, vez que ele(a) não é usado(a) no BLFS.
 tiver instalado <xref linkend='jansson'/>. Isso desabilita nm-cloud-setup,
 que é usado para configurar automaticamente a rede de intercomunicação em um
 ambiente de nuvem pública dentro de uma VM.
+    </para>
+
+    <para>
+      <parameter>-D clat=false</parameter>: This switch disables CLAT support.
+Remove it if you have installed libbpf, and also installed LLVM built with
+Clang and the BPF target enabled (note that in the BLFS <xref
+linkend='llvm'/> instruction the BPF target is not enabled).
     </para>
 
     <para>

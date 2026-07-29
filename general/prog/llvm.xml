@@ -39,7 +39,7 @@ especificada, conhecida como a LLVM Intermediate Representation ("LLVM IR").
 
     <para>
       <application>Clang</application> fornece novas estruturas C, C++, Objective
-C e Objective C++ de interação direta com o(a) usuário(a) para o
+C e Objective C++ de interação direta com o(a) usante para o
 <application>LLVM</application> e é exigido por alguns pacotes de área de
 trabalho, como <application>firefox</application>, e para
 <application>rust</application> se for construído usando o sistema
@@ -88,6 +88,16 @@ usam <application>Clang</application> e <application>LLVM</application>.
       </listitem>
     </itemizedlist>
 
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <itemizedlist spacing='compact'>
+      <listitem>
+        <para>
+          Remendo exigido: <ulink
+url="&patch-root;/llvm-&llvm-version;-upstream_fix-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+
     <bridgehead renderas="sect3">Dependências do LLVM</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -117,6 +127,13 @@ construir documentação), <ulink url="https://ocaml.org/">OCaml</ulink> e
     <title>Instalação do LLVM</title>
 
     <para>
+      Primeiro, corrija um defeito que causante de código incorreto em algumas
+condições:
+    </para>
+
+    <screen><userinput>patch -Np1 -i ../llvm-&llvm-version;-upstream_fix-1.patch</userinput></screen>
+
+    <para>
      Existem muitos conjuntos de comandos sequenciais Python nesse pacote que
 usam <command>/usr/bin/env python</command> para acessar o Python do
 sistema, que no LFS é <xref linkend="python3"/>. Use o seguinte comando para
@@ -134,6 +151,29 @@ linkend='rust'/>):
     <screen><userinput>sed 's/utility/tool/' -i llvm/utils/FileCheck/CMakeLists.txt</userinput></screen>
 
     <para>
+      Como o(a) usante &root;, crie dois arquivos de configuração para tornar
+<xref linkend='gSSP'/> habilitado por padrão para <command>clang</command> e
+<command>clang++</command>, de forma que a configuração padrão do recurso
+SSP deles seja consistente com <xref linkend='gcc'/>:
+    </para>
+
+<screen role='root'><userinput>mkdir -pv /etc/clang &amp;&amp;
+for i in clang clang++; do
+  echo -fstack-protector-strong &gt; /etc/clang/$i.cfg
+done</userinput></screen>
+
+    <note>
+      <para>
+        Geralmente, nós criamos os arquivos de configuração apenas depois de
+instalar o pacote no BLFS. No entanto, nesse caso, o sistema de construção
+construirá o compiler-rt com <command>clang</command> e
+<command>clang++</command>, de modo que nós criamos os arquivos de
+configuração antes de compilar o LLVM para garantir que o compiler-rt
+construa com SSP.
+      </para>
+    </note>
+
+    <para>
       Instale o <application>LLVM</application> executando os seguintes comandos:
     </para>
 
@@ -148,7 +188,7 @@ linkend='rust'/>):
 <screen remap="doc"><userinput>cmake -D LLVM_BUILD_DOCS=ON            \
       -D LLVM_ENABLE_SPHINX=ON         \
       -D SPHINX_WARNINGS_AS_ERRORS=OFF \
-      -W no-dev -G Ninja ..            &amp;&amp;
+      -W no-author -G Ninja ..         &amp;&amp;
 ninja docs-llvm-html  docs-llvm-man</userinput></screen>
 
     <para>
@@ -176,7 +216,7 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr           \
       -D LLVM_INCLUDE_BENCHMARKS=OFF         \
       -D CLANG_DEFAULT_PIE_ON_LINUX=ON       \
       -D CLANG_CONFIG_FILE_SYSTEM_DIR=/etc/clang \
-      -W no-dev -G Ninja ..                  &amp;&amp;
+      -W no-author -G Ninja ..               &amp;&amp;
 ninja</userinput></screen>
 
 
@@ -402,27 +442,6 @@ linkend="doxygen"/>. A documentação será construída no final do processo de
 construção.
     </para>
 
-  </sect2>
-
-  <sect2 role="configuration">
-    <title>Configurando LLVM</title>
-
-    <sect3 id="llvm-config-info">
-      <title>Informação de Configuração</title>
-
-      <para>
-        Se você tiver construído o Clang, como o(a) usuário(a) &root;, crie dois
-arquivos de configuração para tornar <xref linkend='gSSP'/> habilitado por
-padrão para <command>clang</command> e <command>clang++</command>, de forma
-que a configuração padrão do recurso SSP deles seja consistente com <xref
-linkend='gcc'/>:
-      </para>
-
-<screen role='root'><userinput>mkdir -pv /etc/clang &amp;&amp;
-for i in clang clang++; do
-  echo -fstack-protector-strong &gt; /etc/clang/$i.cfg
-done</userinput></screen>
-    </sect3>
   </sect2>
 
   <sect2 role="content">

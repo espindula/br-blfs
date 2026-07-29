@@ -10,7 +10,7 @@
 
   <!-- NB with stylo, much of the build uses rust, and therefore cargo files.
     But the extra cached cargo files, if any, seem to be minimal -->
-  <!ENTITY firefox-buildsize     "7,7 GB (233 MB instalado) sem testes">
+  <!ENTITY firefox-buildsize     "8,9 GB (268 MB instalado) sem testes">
   <!-- editors: with ff63 and rust-1.29, ./mach build -j4 is probably the
    most practical way to get a timing on a machine with more cores, if taking
    cores offline is not practical. If in doubt, round up -->
@@ -76,39 +76,33 @@ de código <application>Mozilla</application>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
-
-      <!--
       <listitem>
-
         <para>
           Required patch:
-          <ulink url="&patch-root;/firefox-&firefox-version;esr-ffmpeg-8.0.patch"/>
-        </para>
-      </listitem>
--->
-<listitem>
-        <para>
-          Remendo exigido: <ulink
-url="&patch-root;/firefox-&firefox-version;esr-glibc-2.43.patch"/>
+          <ulink url="&patch-root;/firefox-&firefox-version;esr-glibc-2.43.patch"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/firefox-&firefox-version;esr-python_3.14_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/firefox-&firefox-version;esr-python_3.14_fixes-1.patch"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/firefox-&firefox-version;esr-llvm_22-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/firefox-&firefox-version;esr-llvm_22-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <note>
+-->
+<note>
       <para>
         O nome do diretório é firefox-&firefox-version;
       </para>
@@ -127,7 +121,7 @@ tar: Exiting with failure status due to previous errors
 
       <para>
         Isso finaliza com situação diferente de zero, mas <emphasis>NÃO</emphasis>
-significa que existe um problema real. Não desempacote como o(a) usuário(a)
+significa que exista um problema real. Não desempacote como o(a) usante
 <systemitem class="username">root</systemitem> em um diretório onde o bit
 sticky estiver configurado - isso irá desconfigurá-lo.
       </para>
@@ -212,6 +206,64 @@ seguinte comando:
     </para>
 
 <screen><userinput remap="pre">sed -i '/so.61/i \  "libavcodec.so.62",' dom/media/platforms/ffmpeg/FFmpegRuntimeLinker.cpp</userinput></screen>
+-->
+<!--
+    <para>
+
+      A patch is needed to fix building with glibc-2.43. This
+      patch changes the vendored Rust crate, so the build system must be
+      changed to make <command>cargo</command> skip the checksum
+      verification:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
+
+sed -e '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
+    -i Cargo.toml &amp;&amp;
+ 
+sed -i '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' Cargo.lock</userinput></screen>
+-->
+<!--
+    <para>
+
+      Next, fix building this package with rustc-1.95.0.  Again the build
+      system needs a change to skip the checksum verification:
+    </para>
+
+<screen><userinput remap="pre">sed '/use super::/a use core::simd::Select;' \
+    -i third_party/rust/encoding_rs/src/x_user_defined.rs &amp;&amp;
+sed '/patch.crates-io/a encoding_rs={path="third_party/rust/encoding_rs"}' \
+    -i Cargo.toml &amp;&amp;
+sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
+-->
+<!--
+    <para>
+
+      Next, fix building this package with Python-3.14:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>
+
+    <para>
+      Next, fix building this package with LLVM-22:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-llvm_22-1.patch</userinput></screen>
+-->
+<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
+<!--
+    <para>
+
+      Next, fix building this package with cbindgen-0.29.4:
+    </para>
+
+<screen><userinput remap="pre">sed -i '/const [CVP]/s/pub //' gfx/wr/webrender/src/texture_cache.rs</userinput></screen>
+
+    <para>
+      If you are building with system ICU-78.1 or later, update one file:
+    </para>
+
+<screen><userinput remap="pre">sed -i '/VIRAMA = 47/a CLASS_CHARACTER,' intl/lwbrk/LineBreaker.cpp</userinput></screen>
 -->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
@@ -311,61 +363,10 @@ EOF</userinput></screen>
 
 
 
-    <para>
-      Um remendo é necessário para corrigir construir com glibc-2.43. Este remendo
-muda a caixa fornecida Rust, de modo que o sistema de construção precise ser
-mudado para fazer com que <command>cargo</command> ignore a verificação de
-soma de verificação:
-    </para>
-
-<!--
-    <para>
-
-      Next, fix building this package with rustc-1.95.0.  Again the build
-      system needs a change to skip the checksum verification:
-    </para>
-
-<screen><userinput remap="pre">sed '/use super::/a use core::simd::Select;' \
-    -i third_party/rust/encoding_rs/src/x_user_defined.rs &amp;&amp;
-sed '/patch.crates-io/a encoding_rs={path="third_party/rust/encoding_rs"}' \
-    -i Cargo.toml &amp;&amp;
-sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
--->
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
-
-sed -e '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
-    -i Cargo.toml &amp;&amp;
- 
-sed -i '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' Cargo.lock</userinput></screen>
 
 
 
-    <para>
-      Em seguida, corrija construir esse pacote com Python-3.14:
-    </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>
-
-    <para>
-      Em seguida, corrija construir esse pacote com LLVM-22:
-    </para>
-
-<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-llvm_22-1.patch</userinput></screen>
-
-
-    <para>
-      Em seguida, corrija construir esse pacote com cbindgen-0.29.4:
-    </para>
-
-<screen><userinput remap="pre">sed -i '/const [CVP]/s/pub //' gfx/wr/webrender/src/texture_cache.rs</userinput></screen>
-
-    <para>
-      Se você estiver construindo com o ICU-78.1 do sistema ou posterior, atualize
-um arquivo:
-    </para>
-
-<screen><userinput remap="pre">sed -i '/VIRAMA = 47/a CLASS_CHARACTER,' intl/lwbrk/LineBreaker.cpp</userinput></screen>
 
     <para>
       Se as APIs de geolocalização forem necessárias:

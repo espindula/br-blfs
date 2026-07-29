@@ -107,35 +107,39 @@ comandos:
       Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
     </para>
 
+<!-- With 5.48, file -L /proc/$$/exe returns "Permission denied,"
+         perhaps some hardening? -->
 <screen role="root"><userinput>make NO_ARLIB=1 LIBDIR=/usr/lib BINDIR=/usr/bin SBINDIR=/usr/sbin install</userinput></screen>
 
+    
     <para>
-      A suíte de teste só pode executar depois de instalar-se esse pacote. Para
-testar os resultados, emita, como o(a) usuário(a) <systemitem
-class="username">root</systemitem>:
+      The test suite can only run after installing this package.  A support file
+in the test suite needs to be adapted for <application>File</application>
+5.48 or newer.  To test the results, issue, as the <systemitem
+class="username">root</systemitem> user:
     </para>
 
-<screen role="root" remap="test"><userinput>make -k test</userinput></screen>
+<!-- The kernel needs to invoke /sbin/request-key sometimes, so
+    running the test suite in a chroot environment will actually test
+    the host distro's request-key program.  Just don't do that. -->
+<screen role="root" remap="test"><userinput>sed 's/\$\$/self/' -i tests/toolbox.inc.sh &amp;&amp;
+make -k test</userinput></screen>
 
+    
     <para>
-      <!-- The kernel needs to invoke /sbin/request-key sometimes, so
-      running the test suite in a chroot environment will actually test
-      the host distro's request-key program.  Just don't do that.
-
-      The tests are currently known to fail once it attempts to add user-generated keys
-      to the keyring.
-      I did verify that this occurs on other distros as well, and it seems
-      to be known at Gentoo.
-
-      Is this still a issue if we rule out running the test suite in
-      chroot? -->
-Se <xref linkend='lsb-tools'/> não estiver instalado, a suíte de teste
+      Se <xref linkend='lsb-tools'/> não estiver instalado, a suíte de teste
 produzirá algumas linhas reclamando que o comando
 <command>lsb_release</command> não está disponível, mas não afetará o
 resultado do teste. Os testes não funcionam em um ambiente chroot.
-      
     </para>
 
+    
+    <!-- see upstream commit c076dff259e9 -->
+<para>
+      The tests are currently known to fail once it attempts to add user-generated
+keys to the keyring if <option>CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE</option>
+is enabled in the configuration of the currently running kernel.
+    </para>
   </sect2>
 
   <sect2 role="commands">

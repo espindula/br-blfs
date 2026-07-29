@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "75632c07ce29c765b905f26719c3cb3c">
-  <!ENTITY rust-size          "231 MB">
+  <!ENTITY rust-md5sum        "c6fc3febcd3b1235cf4f00c3e05559b3">
+  <!ENTITY rust-size          "232 MB">
   <!ENTITY rust-buildsize     "10 GB (324 MB instalado); adicionar 11 GB se executar os testes">
   <!ENTITY rust-time          "10 UPC (incluindo tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -138,29 +138,6 @@ discrepantes muito lentos.
       </listitem>
     </itemizedlist>
 
-    
-    
-    <!--  keep this here for reuse in case we need a patch -->
-<!-- deliberately skipped turning version and md5 into entities:
-         it will be uneeded in 1.97.0 per
-         https://github.com/rust-lang/cargo/pull/16931. -->
-<bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
-    <itemizedlist spacing="compact">
-      <listitem>
-        <para>
-          Ligações Rust do OpenSSL atualizadas para suportar OpenSSL 4.: <ulink
-url="https://github.com/lfs-book/rust-openssl/archive/v0.10.78/rust-openssl-0.10.78.tar.gz"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Soma de verificação MD5 da transferência: 8bfcc36cba65c98380f7ac1ec07efdb4
-        </para>
-      </listitem>
-    </itemizedlist>
-
-    &github-lfs-fork;
-
     <bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
@@ -240,6 +217,15 @@ exige somente mudar o link simbólico
 a construção.
     </para>
 
+<!-- retain here in case we need a patch
+    <para>
+
+      If running the test suite, apply a patch to make it compatible with
+      GCC-15 or newer:
+    </para>
+
+<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
+-->
 <screen><userinput>cat &lt;&lt; EOF &gt; bootstrap.toml
 <literal># See bootstrap.toml.example for more possible options,
 # and see src/bootstrap/defaults/bootstrap.dist.toml for a few options
@@ -249,7 +235,7 @@ a construção.
 # Tell x.py that the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn users to review that information.
-change-id = 154508
+change-id = 154587
 
 [llvm]
 # When using the system installed copy of LLVM, prefer the shared libraries
@@ -292,33 +278,6 @@ llvm-config = "/usr/bin/llvm-config"
 [target.i686-unknown-linux-gnu]
 llvm-config = "/usr/bin/llvm-config"</literal>
 EOF</userinput></screen>
-
-    <para>
-      Use uma versão mais recente da ligação Rust do OpenSSL para permitir
-construir esse pacote com OpenSSL 4:
-    </para>
-
-<!-- retain here in case we need a patch
-    <para>
-
-      If running the test suite, apply a patch to make it compatible with
-      GCC-15 or newer:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
--->
-<screen><userinput>tar xf ../rust-openssl-0.10.78.tar.gz &amp;&amp;
-
-cat &gt;&gt; src/tools/cargo/Cargo.toml &lt;&lt; EOF &amp;&amp;
-<literal>[patch.crates-io]
-openssl = { path = "../../../rust-openssl-0.10.78/openssl" }
-openssl-sys = { path = "../../../rust-openssl-0.10.78/openssl-sys" }
-</literal>EOF
-
-sed -ri src/tools/cargo/Cargo.lock \
-    -e '/name = "openssl-sys"/,/^$/{/source|checksum/d;s/0.9.112/0.9.114/}' \
-    -e '/name = "openssl"/,/^$/{/source|checksum/d;s/0.10.76/0.10.78/}'     \
-    -e '/name = "openssl-macros"/,/^$/{/source|checksum/d}'</userinput></screen>
 
 
     <para>

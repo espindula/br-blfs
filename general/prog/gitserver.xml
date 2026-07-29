@@ -46,13 +46,13 @@ url="https://git-scm.com/book/en/v2"/>.
     </para>
 
     <sect3>
-      <title>1. Configurar Usuários(as), Grupos e Permissões</title>
+      <title>1. Configurar Usantes, Grupos e Permissões</title>
 
       <para>
-        Você precisará ser o(a) usuário(a) <systemitem
+        Você precisará ser o(a) usante <systemitem
 class='username'>root</systemitem> para a parte inicial da
-configuração. Crie o(a) usuário(a) e grupo <systemitem
-class="username">git</systemitem> e defina um resumo de senha inutilizável
+configuração. Crie o(a) usante e grupo <systemitem
+class="username">git</systemitem> e configure um resumo de senha desusável
 com os seguintes comandos:
       </para>
 
@@ -61,13 +61,12 @@ useradd -c "Proprietário(a) do git" -d /home/git -m -g git -s /usr/bin/git-shel
 sed -i '/^git:/s/^git:[^:]:/git:NP:/' /etc/shadow</userinput></screen>
 
       <para>
-        Colocar um resumo de senha inutilizável (substituindo <literal>!</literal>
-por <literal>NP</literal>) desbloqueia a conta, mas ela não pode ser usada
-para se conectar via autenticação de senha. Isso é exigido pelo
-<application>sshd</application> para funcionar corretamente. Em seguida,
-crie alguns arquivos e diretórios no diretório &quot;home&quot; do(a)
-usuário(a) git, permitindo acesso ao repositório &quot;git&quot; usando
-chaves &quot;ssh&quot;.
+        Colocar-se um resumo de senha desusável (substituindo-se o
+<literal>!</literal> por <literal>NP</literal>) destrava a conta, mas ela
+não pode ser usada para se conectar via autenticação de senha. Isso é
+exigido pelo <application>sshd</application> para funcionar corretamente. Em
+seguida, crie alguns arquivos e diretórios no diretório lar do(a) usante
+git, permitindo acesso ao repositório git usando chaves ssh.
       </para>
 
 <screen role="root"><userinput>install -o git -g git -dm0700 /home/git/.ssh &amp;&amp;
@@ -75,11 +74,11 @@ install -o git -g git -m0600 /dev/null /home/git/.ssh/authorized_keys</userinput
 
       <para>
         Para qualquer desenvolvedor(a) que devesse ter acesso ao repositório,
-adicione a chave pública &quot;ssh&quot; dele/dela em
-<filename>/home/git/.ssh/authorized_keys</filename>. Primeiro, acrescente
-algumas opções para evitar que os(as) usuários(as) usem a conexão com o
-&quot;git&quot; para encaminhamento de porta para outras máquinas que o
-servidor &quot;git&quot; possa alcançar.
+adicione a chave pública ssh dele/dela em
+<filename>/home/git/.ssh/authorized_keys</filename>. Primeiro, anteponha
+algumas opções para evitar que os(as) usantes usem a conexão com o git para
+encaminhamento de porta para outras máquinas que o servidor git possa
+alcançar.
       </para>
 
 <screen role="nodump"><userinput>echo -n "no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty " \
@@ -87,19 +86,19 @@ servidor &quot;git&quot; possa alcançar.
 cat &lt;user-ssh-key&gt; &gt;&gt; /home/git/.ssh/authorized_keys</userinput></screen>
 
       <para>
-        Também é útil definir o nome padrão da ramificação inicial de novos
-repositórios modificando a configuração do &quot;git&quot;. Como o(a)
-usuário(a) <systemitem class='username'>root</systemitem>, execute:
+        Também é útil configurar o nome padrão da ramificação inicial de novos
+repositórios modificando a configuração do git. Como o(a) usante <systemitem
+class='username'>root</systemitem>, execute:
       </para>
 
 <screen role="nodump"><userinput>git config --system init.defaultBranch trunk</userinput></screen>
 
       <para>
-        Por fim, adicione a entrada <filename>/usr/bin/git-shell</filename> ao
+        Finalmente, adicione a entrada <filename>/usr/bin/git-shell</filename> ao
 arquivo de configuração <filename>/etc/shells</filename>. Esse shell foi
-definido no perfil do(a) usuário(a) <systemitem
+configurado no perfil do(a) usante <systemitem
 class='username'>git</systemitem> e serve para garantir que somente ações
-relacionadas ao &quot;git&quot; possam ser executadas:
+relacionadas ao git possam ser executadas:
       </para>
 
 <screen role="root"><userinput>echo "/usr/bin/git-shell" &gt;&gt; /etc/shells</userinput></screen>

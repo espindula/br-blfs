@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % general-entities SYSTEM "../../general.ent">
+  %general-entities;
+
+  <!ENTITY tiff-download-http
+           "https://download.osgeo.org/libtiff/tiff-&tiff-version;.tar.gz">
+  <!ENTITY tiff-download-ftp  "">
+  <!ENTITY tiff-md5sum        "a2a65ea450b8f469c667128848ffebfc">
+  <!ENTITY tiff-size          "3,9 MB">
+  <!ENTITY tiff-buildsize     "56 MB (com testes)">
+  <!ENTITY tiff-time          "0,3 UPC (com testes)">
+]>
+
+<sect1 id="tiff" xreflabel="tiff-&tiff-version;">
+  <?dbhtml filename="tiff.html"?>
+
+  <title>tiff-&tiff-version;</title>
+
+  <indexterm zone="tiff">
+    <primary sortas="a-tiff">tiff</primary>
+  </indexterm>
+
+  <sect2 role="package">
+    <title>Introdução ao tiff</title>
+
+    <para>
+      O pacote <application>tiff</application> contém as bibliotecas TIFF e
+utilitários associados. As bibliotecas são usadas por muitos programas para
+ler e escrever arquivos TIFF, e os utilitários são usados para tarefas
+gerais com arquivos TIFF.
+    </para>
+
+    &lfs130_checked;
+
+    <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Transferência (HTTP): <ulink url="&tiff-download-http;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Transferência (FTP): <ulink url="&tiff-download-ftp;"/>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Soma de verificação MD5 da transferência: &tiff-md5sum;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tamanho da transferência: &tiff-size;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Espaço em disco estimado exigido: &tiff-buildsize;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Tempo de construção estimado: &tiff-time;
+        </para>
+      </listitem>
+    </itemizedlist>
+
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/tiff-&libtiff-version;-upstream_fixes-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do tiff</bridgehead>
+
+    <bridgehead renderas="sect4">Recomendadas</bridgehead>
+    <para role="recommended">
+      <xref linkend="cmake"/>
+    </para>
+
+    <bridgehead renderas="sect4">Opcionais</bridgehead>
+    <para role="optional">
+      <xref linkend="freeglut"/> (exigido para <command>tiffgt</command>), <xref
+linkend="libjpeg"/>, <xref linkend="sphinx"/>, <xref linkend="libwebp"/>,
+<ulink url="https://www.cl.cam.ac.uk/~mgk25/jbigkit/">JBIG-KIT</ulink> e
+<ulink
+url="https://www.osgeo.org/projects/lerc-limited-error-raster-compression/">LERC</ulink>
+    </para>
+
+  </sect2>
+
+  <sect2 role="installation">
+    <title>Instalação do tiff</title>
+
+
+
+    <!--
+    <para>
+
+      First fix several security issues identified upstream:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../tiff-&libtiff-version;-upstream_fixes-1.patch</userinput></screen>
+-->
+<para>
+      Instale <application>tiff</application> executando os seguintes comandos:
+    </para>
+
+
+<screen><!-- "build" exists in the source tree -->
+<userinput>mkdir -p tiff-build &amp;&amp;
+cd       tiff-build &amp;&amp;
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      -W no-author -G Ninja ..
+ninja</userinput></screen>
+
+    <para>
+      Para testar os resultados, emita: <command>ninja test</command>.
+    </para>
+
+    <para>
+      Agora, como o(a) usuário(a) &root;:
+    </para>
+
+<screen role="root"><userinput>ninja install &amp;&amp;
+mv -v /usr/share/doc/tiff{,-&tiff-version;}</userinput></screen>
+
+  </sect2>
+
+
+
+  <!--
+  <sect2 role="commands">
+
+    <title>Command Explanations</title>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../../xincludes/cmake-policy-version.xml"/>
+  </sect2>
+-->
+<sect2 role="content">
+    <title>Conteúdo</title>
+
+
+
+
+    <!-- libtiff-4.6.0 removed most of the programs that this package
+     previously installed due to lack of maintenance and security concerns. The
+     only ones remaining are tiffcp, tiffdump, tiffinfo, tiffset, and tiffsplit.
+     See Ticket #18550 for more details. -->
+<!-- In libtiff-4.7.0, maintainers have stepped up for those programs! -->
+<segmentedlist>
+      <segtitle>Aplicativos Instalados</segtitle>
+      <segtitle>Bibliotecas Instaladas</segtitle>
+      <segtitle>Diretório Instalado</segtitle>
+
+      <seglistitem>
+        <seg>
+          fax2ps, fax2tiff, pal2rgb, ppm2tiff, raw2tiff, tiff2bw, tiff2pdf, tiff2ps,
+tiff2rgba, tiffcmp, tiffcp, tiffcrop, tiffdither, tiffdump, tiffgt,
+tiffinfo, tiffmedian, tiffset e tiffsplit
+        </seg>
+        <seg>
+          libtiff.so e libtiffxx.so
+        </seg>
+        <seg>
+          /usr/lib/cmake/tiff e /usr/share/doc/tiff-&tiff-version;
+        </seg>
+      </seglistitem>
+    </segmentedlist>
+
+    <variablelist>
+      <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
+      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+
+      <varlistentry id="fax2ps">
+        <term><command>fax2ps</command></term>
+        <listitem>
+          <para>
+            converte um fac-símile TIFF para arquivo PostScript comprimido
+          </para>
+          <indexterm zone="tiff fax2ps">
+            <primary sortas="b-fax2ps">fax2ps</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="fax2tiff">
+        <term><command>fax2tiff</command></term>
+        <listitem>
+          <para>
+            cria um arquivo de fax TIFF Classe F a partir de dados brutos de fax
+          </para>
+          <indexterm zone="tiff fax2tiff">
+            <primary sortas="b-fax2tiff">fax2tiff</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="pal2rgb">
+        <term><command>pal2rgb</command></term>
+        <listitem>
+          <para>
+            converte uma imagem TIFF com paleta de cores para uma imagem completa
+colorida
+          </para>
+          <indexterm zone="tiff pal2rgb">
+            <primary sortas="b-pal2rgb">pal2rgb</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="ppm2tiff">
+        <term><command>ppm2tiff</command></term>
+        <listitem>
+          <para>
+            cria um arquivo TIFF a partir de um arquivo de imagem PPM
+          </para>
+          <indexterm zone="tiff ppm2tiff">
+            <primary sortas="b-ppm2tiff">ppm2tiff</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="raw2tiff">
+        <term><command>raw2tiff</command></term>
+        <listitem>
+          <para>
+            converte uma sequência bruta de baites em TIFF
+          </para>
+          <indexterm zone="tiff raw2tiff">
+            <primary sortas="b-raw2tiff">raw2tiff</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiff2bw">
+        <term><command>tiff2bw</command></term>
+        <listitem>
+          <para>
+            converte uma imagem colorida TIFF em tons de cinza
+          </para>
+          <indexterm zone="tiff tiff2bw">
+            <primary sortas="b-tiff2bw">tiff2bw</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiff2pdf">
+        <term><command>tiff2pdf</command></term>
+        <listitem>
+          <para>
+            converte uma imagem TIFF em um documento PDF
+          </para>
+          <indexterm zone="tiff tiff2pdf">
+            <primary sortas="b-tiff2pdf">tiff2pdf</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiff2ps">
+        <term><command>tiff2ps</command></term>
+        <listitem>
+          <para>
+            converte uma imagem TIFF em um arquivo PostScript
+          </para>
+          <indexterm zone="tiff tiff2ps">
+            <primary sortas="b-tiff2ps">tiff2ps</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiff2rgba">
+        <term><command>tiff2rgba</command></term>
+        <listitem>
+          <para>
+            converte uma ampla variedade de imagens TIFF em uma imagem TIFF RGBA
+          </para>
+          <indexterm zone="tiff tiff2rgba">
+            <primary sortas="b-tiff2rgba">tiff2rgba</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffcmp">
+        <term><command>tiffcmp</command></term>
+        <listitem>
+          <para>
+            compara dois arquivos TIFF
+          </para>
+          <indexterm zone="tiff tiffcmp">
+            <primary sortas="b-tiffcmp">tiffcmp</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffcp">
+        <term><command>tiffcp</command></term>
+        <listitem>
+          <para>
+            copia (e possivelmente converte) um arquivo TIFF
+          </para>
+          <indexterm zone="tiff tiffcp">
+            <primary sortas="b-tiffcp">tiffcp</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffcrop">
+        <term><command>tiffcrop</command></term>
+        <listitem>
+          <para>
+            seleciona, copia, recorta, converte, extrai e(ou) processa um ou mais
+arquivos TIFF
+          </para>
+          <indexterm zone="tiff tiffcrop">
+            <primary sortas="b-tiffcrop">tiffcrop</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffdither">
+        <term><command>tiffdither</command></term>
+        <listitem>
+          <para>
+            converte uma imagem em tons de cinza em dois níveis usando pontilhamento
+          </para>
+          <indexterm zone="tiff tiffdither">
+            <primary sortas="b-tiffdither">tiffdither</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffdump">
+        <term><command>tiffdump</command></term>
+        <listitem>
+          <para>
+            imprime informações literais a respeito de arquivos TIFF
+          </para>
+          <indexterm zone="tiff tiffdump">
+            <primary sortas="b-tiffdump">tiffdump</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffgt">
+        <term><command>tiffgt</command></term>
+        <listitem>
+          <para>
+            exibe uma imagem armazenada em um arquivo TIFF
+          </para>
+          <indexterm zone="tiff tiffgt">
+            <primary sortas="b-tiffgt">tiffgt</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffinfo">
+        <term><command>tiffinfo</command></term>
+        <listitem>
+          <para>
+            imprime informações relativas a arquivos TIFF
+          </para>
+          <indexterm zone="tiff tiffinfo">
+            <primary sortas="b-tiffinfo">tiffinfo</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffmedian">
+        <term><command>tiffmedian</command></term>
+        <listitem>
+          <para>
+            aplica o algoritmo de corte mediano aos dados em um arquivo TIFF
+          </para>
+          <indexterm zone="tiff tiffmedian">
+            <primary sortas="b-tiffmedian">tiffmedian</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffset">
+        <term><command>tiffset</command></term>
+        <listitem>
+          <para>
+            configura o valor de um cabeçalho TIFF para um valor especificado
+          </para>
+          <indexterm zone="tiff tiffset">
+            <primary sortas="b-tiffset">tiffset</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="tiffsplit">
+        <term><command>tiffsplit</command></term>
+        <listitem>
+          <para>
+            divide um TIFF de várias imagens em arquivos TIFF de imagem única
+          </para>
+          <indexterm zone="tiff tiffsplit">
+            <primary sortas="b-tiffsplit">tiffsplit</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libtiff">
+        <term><filename class="libraryfile">libtiff.so</filename></term>
+        <listitem>
+          <para>
+            contém as funções de API usadas pelos programas
+<application>tiff</application>, bem como por outros programas, para ler e
+escrever arquivos TIFF
+          </para>
+          <indexterm zone="tiff libtiff">
+            <primary sortas="c-libtiff">libtiff.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="libtiffxx">
+        <term><filename class="libraryfile">libtiffxx.so</filename></term>
+        <listitem>
+          <para>
+            contém as funções da API C++ usadas pelos programas para ler e escrever
+arquivos TIFF
+          </para>
+          <indexterm zone="tiff libtiffxx">
+            <primary sortas="c-libtiffxx">libtiffxx.so</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </sect2>
+
+</sect1>
