@@ -76,7 +76,7 @@ de código <application>Mozilla</application>.
       </listitem>
     </itemizedlist>
 
-
+    
 
     <!--
     <bridgehead renderas="sect3">
@@ -85,23 +85,11 @@ Additional Downloads</bridgehead>
       <listitem>
         <para>
           Required patch:
-          <ulink url="&patch-root;/firefox-&firefox-version;esr-glibc-2.43.patch"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/firefox-&firefox-version;esr-python_3.14_fixes-1.patch"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/firefox-&firefox-version;esr-llvm_22-1.patch"/>
+          <ulink url="&patch-root;/firefox-&firefox-version;esr-ffmpeg-9.0.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
+    -->
 <note>
       <para>
         O nome do diretório é firefox-&firefox-version;
@@ -201,70 +189,11 @@ seguinte comando:
 <!--
     <para>
 
-      Apply a sed to fix video functionality with
-      <xref linkend="ffmpeg"/>:
+      Fix building this package with ffmpeg-9:
     </para>
 
-<screen><userinput remap="pre">sed -i '/so.61/i \  "libavcodec.so.62",' dom/media/platforms/ffmpeg/FFmpegRuntimeLinker.cpp</userinput></screen>
--->
-<!--
-    <para>
-
-      A patch is needed to fix building with glibc-2.43. This
-      patch changes the vendored Rust crate, so the build system must be
-      changed to make <command>cargo</command> skip the checksum
-      verification:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-glibc-2.43.patch &amp;&amp;
-
-sed -e '/patch.crates-io/a glslopt={path="third_party/rust/glslopt"}' \
-    -i Cargo.toml &amp;&amp;
- 
-sed -i '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' Cargo.lock</userinput></screen>
--->
-<!--
-    <para>
-
-      Next, fix building this package with rustc-1.95.0.  Again the build
-      system needs a change to skip the checksum verification:
-    </para>
-
-<screen><userinput remap="pre">sed '/use super::/a use core::simd::Select;' \
-    -i third_party/rust/encoding_rs/src/x_user_defined.rs &amp;&amp;
-sed '/patch.crates-io/a encoding_rs={path="third_party/rust/encoding_rs"}' \
-    -i Cargo.toml &amp;&amp;
-sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinput></screen>
--->
-<!--
-    <para>
-
-      Next, fix building this package with Python-3.14:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-python_3.14_fixes-1.patch</userinput></screen>
-
-    <para>
-      Next, fix building this package with LLVM-22:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-llvm_22-1.patch</userinput></screen>
--->
-<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
-<!--
-    <para>
-
-      Next, fix building this package with cbindgen-0.29.4:
-    </para>
-
-<screen><userinput remap="pre">sed -i '/const [CVP]/s/pub //' gfx/wr/webrender/src/texture_cache.rs</userinput></screen>
-
-    <para>
-      If you are building with system ICU-78.1 or later, update one file:
-    </para>
-
-<screen><userinput remap="pre">sed -i '/VIRAMA = 47/a CLASS_CHARACTER,' intl/lwbrk/LineBreaker.cpp</userinput></screen>
--->
+<screen><userinput remap="pre">patch -Np1 -i ../firefox-&firefox-version;esr-ffmpeg-9.0.patch</userinput></screen>
+    -->
 <screen><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used by default.
 
@@ -361,12 +290,7 @@ mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 MOZ_APP_REMOTINGNAME=firefox</literal>
 EOF</userinput></screen>
 
-
-
-
-
-
-
+    
 
     <para>
       Se as APIs de geolocalização forem necessárias:
@@ -417,7 +341,7 @@ desse comando, de forma que consiga revisá-la(s).
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &amp;&amp;

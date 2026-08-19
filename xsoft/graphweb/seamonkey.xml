@@ -6,10 +6,10 @@
 
   <!ENTITY seamonkey-download-http "https://archive.seamonkey-project.org/releases/&seamonkey-version;/source/seamonkey-&seamonkey-version;.source.tar.xz">
   <!ENTITY seamonkey-download-ftp  "">
-  <!ENTITY seamonkey-md5sum        "e4aee41da61978e44a83b549a360c3b5">
-  <!ENTITY seamonkey-size          "239 MB">
-  <!ENTITY seamonkey-buildsize     "3 GB (138 MB instalado)">
-  <!ENTITY seamonkey-time          "6,3 UPC (com paralelismo=8)">
+  <!ENTITY seamonkey-md5sum        "1f7bc1087b815cafb85e34ef65505a57">
+  <!ENTITY seamonkey-size          "236 MB">
+  <!ENTITY seamonkey-buildsize     "3,0 GB (140 MB instalado)">
+  <!ENTITY seamonkey-time          "5,1 UPC (com paralelismo=8)">
 ]>
 
 <sect1 id="seamonkey" xreflabel="seamonkey-&seamonkey-version;">
@@ -78,24 +78,26 @@ linkend="firefox"/> e <xref linkend="thunderbird"/>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/seamonkey-&seamonkey-version;-libvpx_security_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/seamonkey-&seamonkey-version;-libvpx_security_fixes-1.patch"/>
         </para>
       </listitem>
       <listitem>
         <para>
-          Remendo recomendado (exigido para construir com ICU-75 do sistema ou mais
-recente): <ulink
-url="&patch-root;/seamonkey-&seamonkey-version;-cxx17-1.patch"/>
+          Recommended patch (required for building with system ICU-75 or
+          newer):
+          <ulink url="&patch-root;/seamonkey-&seamonkey-version;-cxx17-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <note>
+-->
+<note>
       <para>
         O tarball <emphasis>seamonkey-&seamonkey-version;.source.tar.xz</emphasis>
 desempacotará para o diretório
@@ -114,11 +116,10 @@ e <xref linkend="zip"/>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
     <para role="recommended">
-      <!--<xref linkend="libvpx"/>
-, Causes build failures similar to Firefox -->
-<xref linkend="icu"/>, <xref linkend="libevent"/>, <xref
-linkend="libwebp"/>, <xref linkend="llvm"/> (com clang), <xref
-linkend="nspr"/>, <xref linkend="nss"/> e <xref linkend="pulseaudio"/>
+      <xref linkend="dbus-glib"/>, <xref linkend="icu"/>, <xref
+linkend="libevent"/>, <xref linkend="libwebp"/>, <xref linkend="llvm"/> (com
+clang), <xref linkend="nspr"/>, <xref linkend="nss"/> e <xref
+linkend="pulseaudio"/>
     </para>
 
     <note>
@@ -131,9 +132,9 @@ mas podem estar desatualizadas ou conter falhas de segurança.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="alsa-lib"/>, <xref linkend="dbus-glib"/>, <xref
-linkend="libproxy"/>, <xref linkend="nodejs"/>, <xref linkend="valgrind"/>,
-<xref linkend="wget"/>, <xref linkend="wireless_tools"/>, <ulink
+      <xref linkend="alsa-lib"/>, <xref linkend="libproxy"/>, <xref
+linkend="nodejs"/>, <xref linkend="valgrind"/>, <xref linkend="wget"/>,
+<xref linkend="wireless_tools"/>, <ulink
 url="https://hunspell.sourceforge.net/">Hunspell</ulink> e <ulink
 url="https://facebook.github.io/watchman/">Watchman</ulink>
     </para>
@@ -160,14 +161,13 @@ But I've no idea if SeaMonkey will have this change backported.  -->
 <?dbfo keep-together="auto"?><userinput>cat &gt; mozconfig &lt;&lt; "EOF"
 <literal># If you have a multicore machine, all cores will be used
 
-# If you have installed DBus-Glib comment out this line:
-ac_add_options --disable-dbus
+# If you have not installed DBus-Glib uncomment this line:
+#ac_add_options --disable-dbus
 
 # If you have installed dbus-glib, and you have installed (or will install)
 # wireless-tools, and you wish to use geolocation web services, comment out
 # this line
 ac_add_options --disable-necko-wifi
-
 
 # If you wish to use libproxy to determine proxy server information, you will
 # need to install the libproxy package and then uncomment the option below:
@@ -244,15 +244,10 @@ EOF</userinput></screen>
 
     <para>
       Primeiro, se você estiver construindo com o ICU do sistema, adapte o
-mapeamento de quebra de linha para o ICU-74 ou posterior, aplique um remendo
-para construir esse pacote com o C++17 padrão porque os cabeçalhos do ICU-75
-ou posterior exigem alguns recursos do C++17, corrija um problema de
-segurança na versão empacotada da libvpx e adapte o sistema de construção
-para usar a biblioteca correta com ICU-76 ou posterior:
+mapeamento de quebra de linha para ICU-74 ou posterior:
     </para>
 
 
-<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=1894423 -->
 <screen><!-- This used to be 43..47. ICU-78 adjusted line mapping. Firefox 140esr is
      adjusted by adding a CLASS_CHARACTER at the end of what would be 47. So we
      just increase 47 to 48 to adapt for ICU-78 rather quite easily instead of
@@ -262,19 +257,7 @@ para usar a biblioteca correta com ICU-76 ou posterior:
    sed '/ZWJ/s/$/,CLASS_CHARACTER/' -i intl/lwbrk/LineBreaker.cpp || exit $?
 done) &amp;&amp;
 
-patch -Np1 -i ../seamonkey-&seamonkey-version;-cxx17-1.patch                 &amp;&amp;
-patch -Np1 -i ../seamonkey-&seamonkey-version;-libvpx_security_fixes-1.patch &amp;&amp;
-
 sed -i 's/icu-i18n/icu-uc &amp;/' js/moz.configure</userinput></screen>
-
-    
-    <para>
-      Em seguida, remova um pedaço de código não usado que viola o padrão C++. O
-Clang começou a rejeitá-lo, embora não seja usado desde o lançamento 19.1.0:
-    </para>
-
-<screen><userinput>sed -e '/ExclusiveData(ExclusiveData&amp;&amp;/,/^ *}/d' \
-    -i js/src/threading/ExclusiveData.h</userinput></screen>
 
     <para>
       A seguir, corrija um problema com o módulo incluído 'distro' do python:

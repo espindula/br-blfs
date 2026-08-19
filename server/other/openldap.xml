@@ -6,9 +6,9 @@
 
   <!ENTITY openldap-download-http "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-&openldap-version;.tgz">
   <!ENTITY openldap-download-ftp  "">
-  <!ENTITY openldap-md5sum        "761be850c8ff85dbf5031af7c6c6da44">
+  <!ENTITY openldap-md5sum        "fcb40191baba83c1f237d79f85835283">
   <!ENTITY openldap-size          "6,2 MB">
-  <!ENTITY openldap-buildsize     "100 MB (cliente e servidor)">
+  <!ENTITY openldap-buildsize     "108 MB (cliente e servidor)">
   <!ENTITY openldap-time          "0,3 UPC (cliente), 0,8 UPC (servidor)">
 ]>
 
@@ -89,9 +89,8 @@ url="&patch-root;/openldap-&openldap-version;-consolidated-1.patch"/>
       <xref linkend="gnutls"/>, <xref linkend="unixodbc"/>, <xref
 linkend="mariadb"/> ou <xref linkend="postgresql"/> ou <ulink
 url="https://www.mysql.com/">MySQL</ulink>, <ulink
-url="http://www.openslp.org/">OpenSLP</ulink>, <ulink
-url="https://docs.mongodb.com/manual/core/wiredtiger/">WiredTiger</ulink> e
-&berkeley-db; (para slapd, também obsoleto)
+url="http://www.openslp.org/">OpenSLP</ulink> e <ulink
+url="https://docs.mongodb.com/manual/core/wiredtiger/">WiredTiger</ulink>
     </para>
 
   </sect2>
@@ -99,16 +98,18 @@ url="https://docs.mongodb.com/manual/core/wiredtiger/">WiredTiger</ulink> e
   <sect2 role="installation">
     <title>Instalação do OpenLDAP</title>
 
+    <!--
     <para>
-      Se você precisar do cliente ou do servidor, primeiro aplique uma correção
-para construir com OpenSSL-4:
+
+      Whether you need the client or the server, first apply a fix to
+      build with OpenSSL-4:
     </para>
 
 <screen><userinput>sed -e 's/cn->length/ASN1_STRING_length(cn)/g'  \
     -e 's/cn->data/ASN1_STRING_get0_data(cn)/g' \
     -i libraries/libldap/tls_o.c</userinput></screen>
-
-    <note>
+-->
+<note>
       <para>
         Se você precisar instalar somente os binários
 &quot;<command>ldap*</command>&quot; do lado cliente, páginas de manual,
@@ -131,8 +132,7 @@ make depend &amp;&amp;
 make</userinput></screen>
 
     <para>
-      Em seguida, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Em seguida, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="nodump"><userinput>make install</userinput></screen>
@@ -140,10 +140,10 @@ class="username">root</systemitem>&quot;:
     </note>
 
     <para>
-      Deveria existir um(a) usuário(a) e um grupo dedicado(a) para assumir o
-controle do processo de segundo plano &quot;<command>slapd</command>&quot;
-depois de ele ser iniciado. Emita os seguintes comandos como o(a) usuário(a)
-&quot;<systemitem class="username">root</systemitem>&quot;:
+      Deveria existir um(a) usante e um grupo dedicado(a) para assumir o controle
+do processo de segundo plano <command>slapd</command> depois de ele ser
+iniciado. Emita os seguintes comandos como o(a) usante <systemitem
+class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>groupadd -g 83 ldap &amp;&amp;
@@ -156,7 +156,7 @@ useradd  -c "Proprietário(a) do Processo de Segundo Plano OpenLDAP" \
 seguintes comandos:
     </para>
 
-<screen><userinput>patch -Np1 -i ../openldap-&openldap-version;-consolidated-1.patch &amp;&amp;
+<screen role="nodump"><userinput>patch -Np1 -i ../openldap-&openldap-version;-consolidated-1.patch &amp;&amp;
 autoconf &amp;&amp;
 
 ./configure --prefix=/usr         \
@@ -192,8 +192,7 @@ resultados, emita: <command>make test</command>.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install &amp;&amp;
@@ -259,18 +258,7 @@ estruturas de retaguarda disponíveis.
 sobreposições disponíveis.
     </para>
 
-
-
-    <!--
     <para>
-
-      <parameter>- -disable-ndb</parameter>: This switch disables
-      <application>MySQL</application> NDB Cluster backend
-      which causes configure to fail if
-      <application>MySQL</application> is present.
-    </para>
--->
-<para>
       <parameter>--disable-sql</parameter>: Essa chave desabilita explicitamente a
 estrutura &quot;SQL&quot; de retaguarda. Omita essa chave se um servidor
 &quot;SQL&quot; estiver instalado e você for usar uma estrutura
@@ -406,19 +394,7 @@ class="directory">/etc/openldap/slapd.d</filename>&quot; (recomendado pela
 documentação do &quot;OpenLDAP&quot;).
       </para>
 
-      <!--
-      <para>
-
-        The shipped configuration files suppose the loadable modules are
-        installed with their <filename class="extension">.la</filename>
-        files, which may not be true if you remove those files as instructed
-        in <xref linkend="libtool"/>. If this is the case, issue, as the
-        <systemitem class="username">root</systemitem> user:
-      </para>
-
-<screen role="root"><userinput>sed 's/\.la$/.so/' -i /etc/openldap/slapd.{conf,ldif}{,.default}</userinput></screen>
--->
-<warning>
+      <warning>
         <para>
           As instruções acima instalam uma estrutura vazia do &quot;LDAP&quot; e um
 arquivo &quot;<filename>/etc/openldap/slapd.conf</filename>&quot; padrão,
@@ -465,24 +441,7 @@ class="directory">/usr/share/doc/openldap-&openldap-version;/guide/admin</filena
 
     </sect3>
 
-
-
-    <!--
-    <sect3>
-
-      <title>Mozilla Address Directory</title>
-
-      <para>
-        By default, LDAPv2 support is disabled in the
-        <filename>slapd.conf</filename> file. Once the database is properly
-        set up and <application>Mozilla</application> is configured to use the
-        directory, you must add <option>allow bind_v2</option> to the
-        <filename>slapd.conf</filename> file.
-      </para>
-
-    </sect3>
- -->
-<sect3 id="openldap-init">
+    <sect3 id="openldap-init">
       <title><phrase revision="sysv">Conjunto de Comandos Sequenciais de
 Inicialização</phrase> <phrase revision="systemd">Unidade do
 systemd</phrase></title>

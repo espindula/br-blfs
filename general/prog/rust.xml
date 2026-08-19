@@ -102,7 +102,7 @@ discrepantes muito lentos.
       </para>
     </note>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -173,8 +173,8 @@ class="directory">/opt</filename>, é assumido que você tenha configurado
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="gdb"/> (usado pela suíte de teste se estiver presente), <xref
-linkend="git"/> (exigido pela suíte de teste), <ulink
+      <xref linkend="gdb"/> (usado pela suíte de teste se estiver presente),
+<ulink
 url="https://github.com/bytecodealliance/wasmtime/tree/main/cranelift">cranelift</ulink>,
 <ulink url="https://jemalloc.net/">jemalloc</ulink>, libgccjit (leiam-se as
 Explicações do Comando em <xref role="nodep" linkend="gcc"/>) e <ulink
@@ -301,23 +301,35 @@ terminado.
     </note>
 
     <para>
+      Se executar a suíte de teste, simule um executável Git para permitir
+executar a suíte de teste sem o <xref linkend='git'/> instalado (nós estamos
+construindo a partir de um tarball de lançamento em vez de um repositório
+Git aqui, de modo que o Git não será realmente útil mesmo se ele estiver
+instalado):
+    </para>
+
+<screen remap='test'><userinput>mkdir fake-git &amp;&amp; ln -sv /usr/bin/false fake-git</userinput></screen>
+
+    <para>
       Para executar os testes, emita:
     </para>
 
-<screen remap="test"><userinput>./x.py test --verbose --no-fail-fast | tee rustc-testlog</userinput></screen>
+<screen remap="test"><userinput>PATH+=:$PWD/fake-git \
+./x.py test --no-fail-fast | tee rustc-testlog</userinput></screen>
 
     <para>
       <!-- https://github.com/rust-lang/rust/issues/155606 -->
+<!-- https://github.com/rust-lang/rust/issues/158219 -->
 Nos testes do <filename class='directory'>rustdoc-ui</filename>, o teste
-chamado <filename>ice-bug-report-url.rs</filename> é conhecido por falhar
+nominado <filename>ice-bug-report-url.rs</filename> é conhecido por falhar
 por motivo desconhecido. Nos testes do <filename
-class='directory'>run-make</filename>, o teste chamado
+class='directory'>run-make</filename>, o teste nominado
 <filename>remap-path-prefix-std</filename> é conhecido por falhar porque ele
-não funciona com LTO habilitado; o teste chamado
+não funciona com LTO habilitado; o teste nominado
 <filename>rustdoc-target-modifiers</filename> é conhecido por falhar porque
 nós não habilitamos o alvo AArch64 no <xref linkend='llvm'/>; e o teste
-chamado <filename>short-ice</filename> é conhecido por falhar por motivo
-desconhecido.
+nominado <filename>short-ice</filename> não está escrito corretamente e é
+conhecido por falhar.
     </para>
 
     <para>
@@ -484,11 +496,6 @@ linkend='libssh2'/>.
       since one person reported needing this, keep it commented for the moment.
     </para>-->
 <para>
-      <parameter>--verbose</parameter>: essa chave às vezes pode fornecer mais
-informações relativas a um teste que falhe.
-    </para>
-
-    <para>
       <parameter>--no-fail-fast</parameter>: essa chave garante que a suíte de
 teste não parará no primeiro erro.
     </para>

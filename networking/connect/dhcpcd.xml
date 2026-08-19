@@ -6,9 +6,9 @@
 
   <!ENTITY dhcpcd-download-http "https://github.com/NetworkConfiguration/dhcpcd/releases/download/v&dhcpcd-version;/dhcpcd-&dhcpcd-version;.tar.xz">
   <!ENTITY dhcpcd-download-ftp  "">
-  <!ENTITY dhcpcd-md5sum        "e1c3be221969dbc45b806b7b374f3f92">
-  <!ENTITY dhcpcd-size          "276 KB">
-  <!ENTITY dhcpcd-buildsize     "3,7 MB (com testes)">
+  <!ENTITY dhcpcd-md5sum        "59c317602e191a5cd4cf6e70672c62ee">
+  <!ENTITY dhcpcd-size          "284 KB">
+  <!ENTITY dhcpcd-buildsize     "3,9 MB (com testes)">
   <!ENTITY dhcpcd-time          "menos que 0,1 UPC (com testes)">
 ]>
 
@@ -78,9 +78,8 @@ gerenciar com <application>dhcpcd</application>.
     </itemizedlist>
 
 
+
     <!--
-
-
     <bridgehead renderas="sect3">
 Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
@@ -116,7 +115,7 @@ complicada, o livro atualmente usa como padrão desativá-lo.
     <para>
       No entanto, se você gostaria de usar separação de privilégios, etapas
 adicionais de instalação são necessárias para configurar o ambiente
-adequado. Emita os seguintes comandos como o(a) usuário(a) &root;:
+adequado. Emita os seguintes comandos como o(a) usante &root;:
     </para>
 
 <screen role="root"><userinput>install  -v -m700 -d /var/lib/dhcpcd &amp;&amp;
@@ -135,6 +134,7 @@ chown    -v dhcpcd:dhcpcd /var/lib/dhcpcd </userinput></screen>
     <title>Instalação do dhcpcd</title>
 
 
+
     <!--
     <para>
 
@@ -142,9 +142,16 @@ chown    -v dhcpcd:dhcpcd /var/lib/dhcpcd </userinput></screen>
     </para>
 
 <screen><userinput remap="pre">patch -Np1 -i ../dhcpcd-&dhcpcd-version;-upstream_fixes-1.patch</userinput></screen>
-
 -->
 <para>
+      Execute um comando para permitir que o código construa sem separação de
+privilégios:
+    </para>
+
+<screen><userinput>sed '384{N;s/\(.*\)\n\(.*\)/\2\n\1/}' \
+  -i src/control.c</userinput></screen>
+
+    <para>
       Construa o &quot;<application>dhcpcd</application>&quot; sem separação de
 privilégios executando o seguinte comando:
     </para>
@@ -175,7 +182,7 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) &root;:
+      Agora, como o(a) usante &root;:
     </para>
 
 <!--

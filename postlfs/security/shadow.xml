@@ -6,10 +6,10 @@
 
   <!ENTITY shadow-download-http "https://github.com/shadow-maint/shadow/releases/download/&shadow-version;/shadow-&shadow-version;.tar.xz">
   <!ENTITY shadow-download-ftp  "">
-  <!ENTITY shadow-md5sum        "ed0f3ff4940822ba75a3b0687a9ce93b">
+  <!ENTITY shadow-md5sum        "f52e717bd330818c67bd57c897ec5a8e">
   <!ENTITY shadow-size          "2,2 MB">
-  <!ENTITY shadow-buildsize     "104 MB">
-  <!ENTITY shadow-time          "0,2 UPC">
+  <!ENTITY shadow-buildsize     "100 MB">
+  <!ENTITY shadow-time          "0,4 UPC">
 ]>
 
 <sect1 id="shadow" xreflabel="Shadow-&shadow-version;">
@@ -136,6 +136,8 @@ sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
     -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
     -i etc/login.defs                                   &amp;&amp;
 
+sed -i '/stdio.h/i #include &lt;stdint.h&gt;' lib/find_new_sub_*ids.c &amp;&amp;
+
 ./configure --sysconfdir=/etc   \
             --disable-static    \
             --without-libbsd    \
@@ -151,6 +153,8 @@ sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
     -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
     -i etc/login.defs                                   &amp;&amp;
 
+sed -i '/stdio.h/i #include &lt;stdint.h&gt;' lib/find_new_sub_*ids.c &amp;&amp;
+
 ./configure --sysconfdir=/etc   \
             --disable-static    \
             --without-libbsd    \
@@ -162,7 +166,7 @@ make</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make exec_prefix=/usr pamddir= install</userinput></screen>

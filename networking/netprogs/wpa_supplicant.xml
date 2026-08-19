@@ -7,9 +7,9 @@
   <!ENTITY wpa_supplicant-download-http
            "https://w1.fi/releases/wpa_supplicant-&wpa_supplicant-version;.tar.gz">
   <!ENTITY wpa_supplicant-download-ftp  "">
-  <!ENTITY wpa_supplicant-md5sum        "72a4a00eddb7a499a58113c3361ab094">
-  <!ENTITY wpa_supplicant-size          "3,7 MB">
-  <!ENTITY wpa_supplicant-buildsize     "35 MB">
+  <!ENTITY wpa_supplicant-md5sum        "3f1af56655ebca941d2035358331bbc9">
+  <!ENTITY wpa_supplicant-size          "4,1 MB">
+  <!ENTITY wpa_supplicant-buildsize     "46 MB">
   <!ENTITY wpa_supplicant-time          "0,3 UPC">
 ]>
 
@@ -74,17 +74,21 @@ sem fio protegido por senha.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-openssl_4_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/wpa_supplicant-&wpa_supplicant-version;-openssl_4_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
+    -->
+<bridgehead renderas="sect3">Dependências do &quot;WPA Supplicant&quot;</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas (tempo de execução)</bridgehead>
     <para role="nodump">
@@ -172,6 +176,14 @@ seguintes opções ao arquivo de configuração de construção do
 <application>WPA Supplicant</application> executando o seguinte comando:
     </para>
 
+<!--
+    <para>
+
+      Next, fix building with OpenSSL-4:
+    </para>
+
+<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-openssl_4_fixes-1.patch</userinput></screen>
+    -->
 <screen><userinput>cat &gt;&gt; wpa_supplicant/.config &lt;&lt; "EOF"
 <literal>CONFIG_CTRL_IFACE_DBUS=y
 CONFIG_CTRL_IFACE_DBUS_NEW=y
@@ -179,11 +191,7 @@ CONFIG_CTRL_IFACE_DBUS_INTRO=y</literal>
 EOF</userinput></screen>
 
 
-    <para>
-      A seguir, corrija construir com OpenSSL-4:
-    </para>
-
-<screen><userinput>patch -Np1 -i ../wpa_supplicant-&wpa_supplicant-version;-openssl_4_fixes-1.patch</userinput></screen>
+    
 
     <para>
       Instale o <application>WPA Supplicant</application> executando os seguintes
@@ -198,8 +206,7 @@ make BINDIR=/usr/sbin LIBDIR=/usr/lib</userinput></screen>
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>install -v -m755 wpa_{cli,passphrase,supplicant} /usr/sbin/ &amp;&amp;

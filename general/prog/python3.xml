@@ -7,10 +7,10 @@
   <!ENTITY python3-download-http
            "https://www.python.org/ftp/python/&python3-version;/Python-&python3-version;.tar.xz">
   <!ENTITY python3-download-ftp  "">
-  <!ENTITY python3-md5sum        "d28d7fb81a61d3bff5a6bedceb969366">
+  <!ENTITY python3-md5sum        "a4c4c2991b4126e227073c2d9445f432">
   <!ENTITY python3-size          "23 MB">
-  <!ENTITY python3-buildsize     "346 MB (adicionar 65 MB para os testes)">
-  <!ENTITY python3-time          "2,3 UPC (adicionar 0,7 UPC para testes; ambos usando paralelismo=4)">
+  <!ENTITY python3-buildsize     "348 MB (adicionar 65 MB para os testes)">
+  <!ENTITY python3-time          "2,2 UPC (adicionar 0,7 UPC para testes; ambos usando paralelismo=4)">
   <!--
   Note: Size does not reflect docs that were installed in LFS.
   Test time measured with 120 second timeout.
@@ -35,10 +35,18 @@
   Total duration: 1 min 1 sec
   Total tests: run=48,229 skipped=2,143
   Total test files: run=488/492 failed=1 skipped=20 resource_denied=5 rerun=1
+
+  Python-3.14.7
+  Total duration: 1 min 5 sec
+  Total tests: run=48,690 skipped=2,139
+  Total test files: run=487/492 skipped=21 resource_denied=5
+
+  Note: test_zipfile will fail if tests are run after install due to a 
+        permission issue.  I fixed with sudo chown -R bdubbs:bdubbs .
   -->
   <!ENTITY python3htmldoc-download-http
   "https://www.python.org/ftp/python/doc/&python3-version;/python-&python3-version;-docs-html.tar.bz2">
-  <!ENTITY python3-docs-md5sum "95c7483f256f6f0596c9e644756dc556">
+  <!ENTITY python3-docs-md5sum "bdf55dddc02a76961d61730f06d18849">
 ]>
 
 <sect1 id="python3" xreflabel="Python-&python3-version;">
@@ -70,7 +78,7 @@ atualizar esse pacote.
       </para>
     </note>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <important>
       <para>
@@ -144,7 +152,7 @@ url="&lfs-root;/chapter08/jinja2.html">Jinja2</ulink>.
       <listitem>
         <para>
           Remendo exigido: <ulink
-url="&patch-root;/Python-&python3-version;-consolidated_fixes-1.patch"/>
+url="&patch-root;/Python-&python3-version;-openssl_4-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
@@ -197,7 +205,7 @@ e <xref linkend="valgrind"/>
 corrigir três problemas de segurança:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../Python-&python3-version;-consolidated_fixes-1.patch</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../Python-&python3-version;-openssl_4-1.patch</userinput></screen>
 
     <para>
       Instale o &quot;<application>Python 3</application>&quot; executando os
@@ -230,8 +238,7 @@ considerado como passado.
     </para>
 
     <para>
-      Agora, como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot;:
+      Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>make install</userinput></screen>
