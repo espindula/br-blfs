@@ -6,10 +6,10 @@
 
   <!ENTITY qemu-download-http "https://download.qemu.org/qemu-&qemu-version;.tar.xz">
   <!ENTITY qemu-download-ftp  "">
-  <!ENTITY qemu-md5sum        "aa647eccbd37822a6c4cc03411f4dc3f">
-  <!ENTITY qemu-size          "136 MB">
-  <!ENTITY qemu-buildsize     "3,0 GB (474 MB instalado)">
-  <!ENTITY qemu-time          "1,4 UPC (adicionar 0,8 UPC para testes, ambos usando paralelismo=4)">
+  <!ENTITY qemu-md5sum        "184466ea9d0a59e0da2c9a728e91aac1">
+  <!ENTITY qemu-size          "135 MB">
+  <!ENTITY qemu-buildsize     "2.6 GB (499 MB installed)">
+  <!ENTITY qemu-time          "1.5 SBU (add 0.8 SBU for tests, both using parallelism=4)">
 ]>
 
 <sect1 id="qemu" xreflabel="qemu-&qemu-version;">
@@ -30,7 +30,7 @@ Linux em hardware x86 contendo extensões de virtualização (Intel VT ou
 AMD-V).
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -102,8 +102,8 @@ tentará baixar uma cópia do código-fonte do dtc a partir da Internet.
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
       <!-- libcacard has been a standalone project since qemu-2.5.-->
-<xref linkend="pipewire"/> ou <xref linkend="pulseaudio"/> (pode ser usado
-em vez da alsa-lib), <xref linkend="bluez"/>, <xref linkend="curl"/>, <xref
+<xref linkend="pipewire"/> or <xref linkend="pulseaudio"/> (can be used
+instead of alsa-lib), <xref linkend="bluez"/>, <xref linkend="curl"/>, <xref
 linkend="cyrus-sasl"/>, <xref linkend="fuse3"/>, <xref linkend="gnutls"/>,
 <xref linkend="gtk3"/>, <xref linkend="keyutils"/>, <xref
 linkend="libaio"/>, <xref linkend="libusb"/>, <xref linkend="libgcrypt"/>,
@@ -129,13 +129,16 @@ url="https://github.com/Agnoctopus/libu2f-emu">libu2f-emu</ulink>, <ulink
 url="https://github.com/lzfse/lzfse">lzfse</ulink>, <ulink
 url="https://github.com/luigirizzo/netmap">netmap</ulink>, <ulink
 url="https://github.com/numactl/numactl">numactl</ulink>, <ulink
+url="https://pypi.org/project/pygdbmi/">pygdbmi</ulink> (for tests), <ulink
 url="https://github.com/linux-rdma/rdma-core">rdma-core</ulink>, <ulink
 url="https://github.com/SELinuxProject/selinux">SELinux</ulink>, <ulink
 url="https://google.github.io/snappy/">snappy</ulink>, <ulink
 url="https://gitlab.freedesktop.org/spice/spice">spice</ulink>, <ulink
-url="https://gitlab.freedesktop.org/spice/usbredir">usbredir</ulink> e
+url="https://gitlab.freedesktop.org/spice/usbredir">usbredir</ulink>, and
 <ulink url="https://github.com/virtualsquare/vde-2">VDE</ulink>
     </para>
+
+    &test-use-internet;
 
     <bridgehead renderas="sect4">Opcionais (Tempo de execução)</bridgehead>
     <para role="optional">
@@ -261,6 +264,7 @@ cd        build &amp;&amp;
              --localstatedir=/var     \
              --target-list=$QEMU_ARCH \
              --audio-drv-list=alsa    \
+             --disable-download       \
              --disable-pa             \
              --enable-slirp           \
              --docdir=/usr/share/doc/qemu-&qemu-version; &amp;&amp;
@@ -270,12 +274,10 @@ unset QEMU_ARCH &amp;&amp;
 make</userinput></screen>
 
     <para>
-      <!--Three tests are known to fail due
-      to some indent change in the shell output message with bash-5.3
-      or newer.-->
-<application>qemu</application> usa <command>ninja</command> como um
-subprocesso ao construir. Para executar os testes, emita: <command>ninja
-test</command>. 
+      <application>qemu</application> uses <command>ninja</command> as a
+subprocess when building.  To run the tests, issue: <command>ninja
+test</command>.  The test harness will download the external Python module
+pygdbmi to satisfy some tests.
     </para>
 
     <para>
@@ -319,6 +321,12 @@ executar o aplicativo instalado. Por exemplo (como o(a) usuário(a) &root;):
       <parameter>--audio-drv-list=alsa</parameter>: Essa chave configura o
 controlador de áudio para o ALSA. Veja-se abaixo para habilitar outros
 controladores de áudio.
+    </para>
+
+    <para>
+      <parameter>--disable-download</parameter>: This switch prevents the
+<command>configure</command> script from downloading Python modules via
+Internet (the copies shipped within the tarball will be used instead).
     </para>
 
     <para>

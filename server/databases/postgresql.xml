@@ -6,9 +6,9 @@
 
   <!ENTITY postgresql-download-http "https://ftp.postgresql.org/pub/source/v&postgresql-version;/postgresql-&postgresql-version;.tar.bz2">
   <!ENTITY postgresql-download-ftp  "">
-  <!ENTITY postgresql-md5sum        "f985597ebb8e71f338beb2bef974b6ed">
+  <!ENTITY postgresql-md5sum        "6143c18ab91bdfcaa056a61861814cde">
   <!ENTITY postgresql-size          "22 MB">
-  <!ENTITY postgresql-buildsize     "348 MB (com testes)">
+  <!ENTITY postgresql-buildsize     "349 MB (with tests)">
   <!ENTITY postgresql-time          "1,0 UPC (com paralelismo=4, adicionar 0,1 UPC para testes)">
 ]>
 
@@ -32,7 +32,7 @@ derivado do sistema de gerenciamento de bases de dados &quot;Berkeley
 Postgres&quot;.
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -306,18 +306,7 @@ do servidor de &quot;<filename class="directory">/tmp</filename>&quot; para
 &quot;<filename class="directory">/run/postgresql</filename>&quot;.
     </para>
 
- 
-
-    <!-- Removed in 17.0
     <para>
-
-      <parameter>- -enable-thread-safety</parameter>: This switch makes the
-      client libraries thread-safe by allowing concurrent threads in
-      <filename class="libraryfile">libpq</filename> and ECPG programs to
-      safely control their private connection handles.
-    </para>
--->
-<para>
       <option>--with-openssl</option>: constrói o pacote com suporte para conexões
 encriptadas &quot;<application>OpenSSL</application>&quot;.
     </para>
@@ -407,8 +396,9 @@ comando (como o(a) usuário(a) &quot;<systemitem
 class="username">root</systemitem>&quot;):
       </para>
 
-<screen role="root"><userinput>su - postgres -c '/usr/bin/postgres -D /srv/pgsql/data > \
+<screen role="root" revision="sysv"><userinput>su - postgres -c '/usr/bin/postgres -D /srv/pgsql/data > \
                  /srv/pgsql/data/logfile 2&gt;&amp;1 &amp;'</userinput></screen>
+<screen role="root" revision="systemd"><userinput>systemctl start postgresql</userinput></screen>
       <note>
         <para>
           Se você estiver automatizando esta parte, [então] você deveria esperar o
@@ -441,7 +431,8 @@ echo "select * from t1;" | (su - postgres -c '/usr/bin/psql test')</userinput></
 &quot;<systemitem class="username">root</systemitem>&quot;:
       </para>
 
-<screen role="root"><userinput>su - postgres -c "/usr/bin/pg_ctl stop -D /srv/pgsql/data"</userinput></screen>
+<screen role="root" revision='sysv'><userinput>su - postgres -c "/usr/bin/pg_ctl stop -D /srv/pgsql/data"</userinput></screen>
+<screen role="root" revision='systemd'><userinput>systemctl stop postgresql</userinput></screen>
 
     </sect3>
 

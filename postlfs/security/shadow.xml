@@ -33,7 +33,7 @@ concluído. Com <application>Linux-PAM</application> instalado, reinstalar
 <command>login</command> e <command>su</command> utilizem o PAM.
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -131,12 +131,10 @@ comandos:
 <userinput>find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \; &amp;&amp;
 find man -name Makefile.in -exec sed -i 's/passwd\.5 / /'   {} \; &amp;&amp;
 
-sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
-    -e 's@/var/spool/mail@/var/mail@'                   \
-    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
-    -i etc/login.defs                                   &amp;&amp;
-
-sed -i '/stdio.h/i #include &lt;stdint.h&gt;' lib/find_new_sub_*ids.c &amp;&amp;
+sed -e 's@#ENCRYPT_METHOD SHA512@ENCRYPT_METHOD YESCRYPT@' \
+    -e 's@/var/spool/mail@/var/mail@'                      \
+    -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                     \
+    -i etc/login.defs                                      &amp;&amp;
 
 ./configure --sysconfdir=/etc   \
             --disable-static    \
@@ -152,8 +150,6 @@ sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' \
     -e 's@/var/spool/mail@/var/mail@'                   \
     -e '/PATH=/{s@/sbin:@@;s@/bin:@@}'                  \
     -i etc/login.defs                                   &amp;&amp;
-
-sed -i '/stdio.h/i #include &lt;stdint.h&gt;' lib/find_new_sub_*ids.c &amp;&amp;
 
 ./configure --sysconfdir=/etc   \
             --disable-static    \
@@ -185,32 +181,22 @@ class="username">root</systemitem>):
     <title>Explicações do Comando</title>
 
     <para>
-      <command>sed -i 's/groups$(EXEEXT) //' src/Makefile.in</command>: Esse sed é
-usado para suprimir a instalação do aplicativo <command>groups</command>,
-pois a versão originária do pacote <application>Coreutils</application>
-instalado durante o LFS é a preferida.
+      <command>find man -name Makefile.in -exec ... {} \;</command>: These two
+commands prevent installation of manual pages that are already installed by
+<application>Man-pages</application> in LFS.
     </para>
 
     <para>
-      <command>find man -name Makefile.in -exec ... {} \;</command>: O primeiro
-comando é usado para suprimir a instalação das páginas de manual do
-<command>groups</command>, de modo que as existentes instaladas a partir do
-pacote <application>Coreutils</application> não sejam substituídas. Os
-outros dois comandos impedem a instalação de páginas de manual que já estão
-instaladas pelo <application>Man-pages</application> no LFS.
-    </para>
-
-    <para>
-      <command>sed -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD YESCRYPT@' -e
+      <command>sed -e 's@#ENCRYPT_METHOD SHA512@ENCRYPT_METHOD YESCRYPT@' -e
 's@/var/spool/mail@/var/mail@' -e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i
-etc/login.defs</command>: Em vez de usar o método padrão 'DES ', esse
-comando modifica a instalação para usar o método muito mais seguro
-'YESCRYPT' de resumo de senhas, que também permite senhas maiores que oito
-caracteres. O comando também muda o local obsoleto <filename
-class="directory">/var/spool/mail</filename> para caixas de correio de
-usuário(a) que <application>Shadow</application> usa por padrão para o local
-<filename class="directory">/var/mail</filename>. Ele também muda o caminho
-padrão para estar consistente com aquele configurado no LFS.
+etc/login.defs</command>: Instead of using the default 'SHA512' method, this
+command modifies the installation to use the more secure 'YESCRYPT' method
+of hashing passwords, which also allows passwords longer than eight
+characters.  The command also changes the obsolete <filename
+class="directory">/var/spool/mail</filename> location for user mailboxes
+that <application>Shadow</application> uses by default to the <filename
+class="directory">/var/mail</filename> location. It also changes the default
+path to be consistent with that set in LFS.
     </para>
 
     <para>

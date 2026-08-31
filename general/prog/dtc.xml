@@ -116,7 +116,8 @@ meson setup ..                 \
 ninja</userinput></screen>
 
     <para>
-      Para testar os resultados, emita: <command>ninja test</command>.
+      To test the results, issue: <command>meson configure -D werror=false
+&amp;&amp; ninja test</command>.
     </para>
 
     <para>
@@ -140,11 +141,23 @@ popd</userinput></screen>
 comando:
     </para>
 
-    <screen role="root"><userinput>cp -R ../Documentation -T /usr/share/doc/dtc-&dtc-version;</userinput></screen>
+    <!-- https://github.com/dgibson/dtc/pull/192 -->
+<screen role="root"><userinput>cp -R ../Documentation -T /usr/share/doc/dtc-&dtc-version;</userinput></screen>
+
+    
+    <para>
+      If you have installed <xref linkend='swig'/> and you wish to install the
+Python 3 bindings of this package, fix the code for the compatibility with
+SWIG 4.5.0 or newer first:
+    </para>
+
+	<screen role="nodump"><userinput>sed -e 's/PyString_FromString/PyUnicode_FromString/' \
+    -e 's/PyString_AsString/PyBytes_AsString/'       \
+    -e 's/PyInt_AsLong/PyLong_AsLong/'               \
+    -i pylibfdt/libfdt.i</userinput></screen>
 
     <para>
-      Se você tiver instalado <xref linkend='swig'/> e desejar instalar as
-ligações Python 3 desse pacote, construa o módulo Python 3:
+      Build the Python 3 module:
     </para>
 
     <screen role="nodump"><userinput>&build-wheel-cmd; ..</userinput></screen>

@@ -31,7 +31,7 @@
 custo com uma interface SPARQL 1.1.
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -87,9 +87,9 @@ custo com uma interface SPARQL 1.1.
       <xref linkend="gi-docgen"/>
 
 -->
-<xref linkend="asciidoc"/>, <xref linkend="avahi"/>, <xref
-linkend="graphviz"/>, <xref linkend="pygobject3"/>, <ulink
-url="https://github.com/scop/bash-completion/">bash-completion</ulink> e
+<xref linkend="asciidoc"/> (for the man pages), <xref linkend="avahi"/>,
+<xref linkend="graphviz"/>, <xref linkend="pygobject3"/>, <ulink
+url="https://github.com/scop/bash-completion/">bash-completion</ulink>, and
 <ulink url="https://snowballstem.org/">libstemmer</ulink>
     </para>
 
@@ -143,19 +143,26 @@ meson setup --prefix=/usr                  \
 ninja</userinput></screen>
 
     <para>
+      If the optional dependency <xref linkend='asciidoc'/> is installed, you may
+build the man pages with:
+    </para>
+
+<screen remap='doc'><userinput>meson configure -D man=true &amp;&amp; ninja</userinput></screen>
+
+    <para>
       Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
 <screen role="root"><userinput>ninja install</userinput></screen>
 
     <para>
-      Para testar os resultados, garanta que <xref linkend='pygobject3'/> esteja
-instalado e emita: <command>meson configure -D debug=true tests=true
-&amp;&amp; LC_ALL=C.UTF-8 ninja test</command>. A suíte de teste deveria ser
-executada a partir de uma sessão gráfica. Um teste, test_cli, é conhecido
-por falhar devido às páginas de manual não serem geradas, porém passará se
-"-D man=false" for omitida ao se configurar o pacote. Um outro teste,
-resource, também é conhecido por falhar.
+      <!-- https://gitlab.gnome.org/GNOME/tinysparql/-/commit/47d5bf9313d0 -->
+To test the results, ensure <xref linkend='pygobject3'/> is installed and
+issue: <command>meson configure -D debug=true -D tests=true &amp;&amp;
+LC_ALL=C.UTF-8 ninja test</command>.  The test suite should be run from a
+graphical session. One test, test_cli, is known to fail if the man pages
+were not built.  One test named <literal>tinysparql:sparql</literal> is
+known to fail with SQLite 3.53.1 or newer.
     </para>
 
   </sect2>
@@ -165,13 +172,6 @@ resource, também é conhecido por falhar.
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/meson-buildtype-release.xml"/>
-
-    <para>
-      <parameter>-D man=false</parameter>: Essa chave impede o processo de
-construção de gerar páginas de manual. Omita essa chave se você tiver <xref
-linkend="asciidoc" role="nodep"/> instalado e desejar gerar e instalar as
-páginas de manual.
-    </para>
 
     <para revision="sysv">
       <parameter>-D systemd_user_services=false</parameter>: Essa chave impede o

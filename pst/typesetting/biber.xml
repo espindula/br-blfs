@@ -10,9 +10,11 @@
 
   <!ENTITY biber-download-http "https://github.com/plk/biber/archive/v&biber-version;.tar.gz">
 -->
-  <!ENTITY biber-download-http "https://github.com/plk/biber/archive/v&biber-version;/biber-&biber-version;.tar.gz">
+  <!-- for biber-2.22, we need a tag, the release does not exist
+  <!ENTITY biber-download-http "https://github.com/plk/biber/archive/v&biber-version;/biber-&biber-version;.tar.gz"> -->
+  <!ENTITY biber-download-http "https://github.com/plk/biber/archive/refs/tags/v&biber-version;/biber-&biber-version;.tar.gz">
   <!ENTITY biber-download-ftp  "">
-  <!ENTITY biber-md5sum        "abdbdb2aa0479e490d0d75eb8e35ad50">
+  <!ENTITY biber-md5sum        "a14ce888c04ab4047ff46490f8e00faf">
   <!ENTITY biber-size          "1,6 MB">
   <!-- Buildsize includes the installed biblatex, except that what matters is
     the difference from the files shipped by texlive, so usually the addition is
@@ -73,7 +75,7 @@
          The biblatex-biber test only uses latex, trad markup, and
          biber, biblatex.
  -->
-&lfs130_checked;
+&lfs131_checked;
 
     
 
@@ -129,16 +131,7 @@ para instalar os módulos. O BLFS corrige LWP::Protocol::https para usar os
 certificados do sistema; Mozilla::CA usa certificados antigos.
       </para>
 
-
-    <!--  <para>
- ##commented as a reminder that sooner or later it will need a
-        newer version than our current or last but one release ##
-        This version of biber requires <application>perl-5.30</application>
-        or later.  If you are still using the 8.4 version of BLFS you may
-        wish to build the 2.13 version: see the 8.4 book noting that
-        biblatex-3.13 has been replaced by biblatex-3.13a upstream.
-      </para>-->
-</note>
+    </note>
 
     
 
@@ -187,10 +180,13 @@ Required Additional Download</bridgehead>
 <!-- perl-text-csv_xs is a recommended dependency for perl-text-csv -->
 <!-- Unicode-Collate usually needs to be latest when biber is released,
         core perl is usually older. To read the core version, look at
-        /usr/lib/perl5/5.xx.y/x86_64-linux-thread-multi/Unicode/Collate.pm -->
+        /usr/lib/perl5/5.xx/core_perl/Unicode/Collate.pm
+         Up to date in core for perl-5.44
+      <xref linkend="perl-unicode-collate"/>
+-->
 <!-- Unicode::GCstring is part of Unicode::LineBreak -->
 <!-- Unicode::Normalize is part of core perl, found in
-        /usr/lib/perl5/5.xx.y/x86_64-linux-thread-multi/Unicode/Normalize.pm -->
+        /usr/lib/perl5/5.xx/core_perl/Unicode/Normalize.pm -->
 <!-- perl-xml-libxml is a dependency of perl-xml-libxml-simple -->
 <!-- untarring biblatex requires that the texmf directories already exist -->
 <!--
@@ -202,12 +198,13 @@ Required Additional Download</bridgehead>
 <xref linkend="perl-autovivification"/>, <xref
 linkend="perl-business-isbn"/>, <xref linkend="perl-business-ismn"/>, <xref
 linkend="perl-business-issn"/>, <xref linkend="perl-class-accessor"/>, <xref
-linkend="perl-data-compare"/>, <xref linkend="perl-data-dump"/>, <xref
-linkend="perl-data-uniqid"/>, <xref
+linkend="perl-config-autoconf"/>, <xref linkend="perl-data-compare"/>, <xref
+linkend="perl-data-dump"/>, <xref linkend="perl-data-uniqid"/>, <xref
 linkend="perl-datetime-calendar-julian"/>, <xref
 linkend="perl-datetime-format-builder"/>, <xref
 linkend="perl-encode-eucjpascii"/>, <xref linkend="perl-encode-hanextra"/>,
-<xref linkend="perl-encode-jis2k"/>, <xref linkend="perl-file-slurper"/>,
+<xref linkend="perl-encode-jis2k"/>, <xref
+linkend="perl-extutils-libbuilder"/>, <xref linkend="perl-file-slurper"/>,
 <xref linkend="perl-io-string"/>, <xref linkend="perl-ipc-run3"/>, <xref
 linkend="perl-lingua-translit"/>, <xref linkend="perl-list-allutils"/>,
 <xref linkend="perl-list-moreutils"/>, <xref linkend="perl-log-log4perl"/>,
@@ -216,9 +213,8 @@ linkend="perl-module-build"/>, <xref linkend="perl-parse-recdescent"/>,
 <xref linkend="perl-perlio-utf8_strict"/>, <xref
 linkend="perl-regexp-common"/>, <xref linkend="perl-sort-key"/>, <xref
 linkend="perl-text-bibtex"/>, <xref linkend="perl-text-csv"/>, <xref
-linkend="perl-text-roman"/>, <xref linkend="perl-unicode-collate"/>, <xref
-linkend="perl-unicode-linebreak"/>, <xref
-linkend="perl-xml-libxml-simple"/>, <xref linkend="perl-xml-libxslt"/> e
+linkend="perl-text-roman"/>, <xref linkend="perl-unicode-linebreak"/>, <xref
+linkend="perl-xml-libxml-simple"/>, <xref linkend="perl-xml-libxslt"/>, and
 <xref linkend="perl-xml-writer"/>
       
       
@@ -226,7 +222,9 @@ linkend="perl-xml-libxml-simple"/>, <xref linkend="perl-xml-libxslt"/> e
 
     <bridgehead renderas="sect4">Recomendadas (exigidas para a suíte de teste)</bridgehead>
     <para role="recommended">
-      <xref linkend="perl-file-which"/> e <xref linkend="perl-test-differences"/>
+      <!-- Build.PL lists Test::More, which is part of -->
+<xref linkend="perl-file-which"/>, <xref linkend="perl-test-differences"/>,
+and <xref linkend="perl-test-simple"/>
     </para>
 
     <note>
@@ -325,7 +323,7 @@ texhash &amp;&amp;
       <seglistitem>
         <seg>biber</seg>
         <seg>Nenhum(a)</seg>
-        <seg>/usr/lib/perl5/site_perl/5.*{,/&lt;arch&gt;-linux/auto}/Biber</seg>
+        <seg>/usr/lib/perl5/&lfs-perl-version;/site_perl/Biber</seg>
       </seglistitem>
     </segmentedlist>
 

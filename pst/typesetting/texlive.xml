@@ -6,22 +6,22 @@
   <!-- utah -->
   <!ENTITY texlive-download-http "https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/&texlive-year;/texlive-&texlive-version;-source.tar.xz">
   <!ENTITY texlive-download-ftp  "">
-  <!ENTITY texlive-md5sum        "699b3a9871885e54f35c155332d69da4">
-  <!ENTITY texlive-size          "106 MB">
+  <!ENTITY texlive-md5sum        "734e2521173e8ef6a4c04f70d1285124">
+  <!ENTITY texlive-size          "95 MB">
 
-  <!ENTITY texlive-buildsize     "9,8 GB incluindo as transferências adicionais e os testes; 8,7 GB instalado">
+  <!ENTITY texlive-buildsize     "10.3 GB including the additional downloads and the tests, 9.2 GB installed">
   <!ENTITY texlive-time          "4,0 UPC incluindo as transferências adicionais e os testes, construindo com
 paralelismo=4">
 
   <!-- utah -->
   <!ENTITY texlive-texmf-download-http "https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/&texlive-year;/texlive-&texlive-version;-texmf.tar.xz">
   <!ENTITY texlive-texmf-download-ftp  "">
-  <!ENTITY texlive-texmf-md5sum        "9b3093da81e6eacf98fde86589471a22">
-  <!ENTITY texlive-texmf-size          "4,4 GB">
+  <!ENTITY texlive-texmf-md5sum        "0a953c929116392047950b93a8bb96d1">
+  <!ENTITY texlive-texmf-size          "4.6 GB">
 
   <!ENTITY texlive-extra-download-http "https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/&texlive-year;/texlive-&texlive-version;-extra.tar.xz">
   <!ENTITY texlive-extra-download-ftp  "">
-  <!ENTITY texlive-extra-md5sum        "8aabf4273a001d79c3c8de347f028145">
+  <!ENTITY texlive-extra-md5sum        "e4103c7087dd5cd11edb62028a7fafba">
   <!ENTITY texlive-extra-size          "2,0 MB">
 
 <!-- The following commit will change future installs so that the scripts in
@@ -61,15 +61,10 @@ and it might have been removed by next year. -->
 
     <note>
       <para>
-        <!-- the Chinese mirrors do not use a 'historic' subdirectory. -->
-De acordo com <ulink url="https://www.tug.org/historic/"/> o site mestre na
-França suporta somente FTP e rsync. Agora que o FTP está geralmente
-obsoleto, essa página tem links para espelhos, alguns dos quais suportam
-HTTPS, por exemplo, em Utah e Chemnitz, bem como na China. Se você preferir
-usar um espelho diferente a partir dos links de exemplo aqui, você precisará
-navegar até systems/historic/texlive/&texlive-year; ou
-systems/texlive/&texlive-year; conforme o caso.
-        
+        According to <ulink url="https://www.tug.org/historic/"/> the master site in
+Germany only supports rsync, but that page has links to mirrors, which
+support https. If you prefer to use a different mirror from the example
+links here, you will need to navigate to systems/texlive/&texlive-year;.
       </para>
     </note>
 
@@ -87,8 +82,6 @@ falharão se o TeX ainda não tiver sido instalado. Além disso,
 sistema compartilhadas forem usadas.
     </para>
 
-      <para>
-      </para>
     <para>
       Todos esses pacotes são tratados em nas próprias páginas deles e podem ser
 construídos depois de se instalar esse pacote. Se ainda não tiver feito
@@ -96,7 +89,7 @@ isso, você deveria iniciar em <xref linkend="tex-path"/>, de forma que os
 comandos finais para inicializar a nova instalação sejam encontrados.
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -144,10 +137,10 @@ instaladas.
       </para>
 
       <para>
-        Devido ao tamanho desse pacote, é improvável que ele seja espelhado por
-espelhos do BLFS. Se você estiver impossibilitado(a) de baixar os arquivos
-para esse pacote, vá para https://www.ctan.org/mirrors/ para encontrar um
-espelho mais acessível.
+        Because of the size of this package, it is unlikely to be mirrored by BLFS
+mirrors. If you are unable to download the files for this package, go to
+<ulink url="https://www.tug.org/historic/"/> to find a more accessible
+mirror (see the note above).
       </para>
 
     <itemizedlist spacing="compact">
@@ -200,14 +193,17 @@ desse (e criará o cache na primeira execução dele).
           Tamanho da transferência: &texlive-extra-size;
         </para>
       </listitem>
+
+    <!--
       <listitem>
+
         <para>
-          Remendo exigido: <ulink url=
-"&patch-root;/texlive-&texlive-version;-source-upstream_fixes-1.patch"/>
+          Required patch: <ulink url=
+          "&patch-root;/texlive-&texlive-version;-source-upstream_fixes-1.patch"/>
         </para>
       </listitem>
-    </itemizedlist>
-
+-->
+</itemizedlist>
     <bridgehead renderas="sect3">Dependências do TeX Live a partir do fonte</bridgehead>
 
     <bridgehead renderas="sect4">Recomendadas</bridgehead>
@@ -273,37 +269,21 @@ variável TEXARCH para permitir que o(a) &root; a use.
       </para>
     </note>
 
-
-
-    <!-- Applied in TL2025 -renodr
     <para>
-
-      Fix a build failure that occurs on some platforms due to more strict
-      compiler warnings:
-    </para>
-
-<screen><userinput remap="pre">sed -e '182 s/internal_font_number/boolean/' \
-    -e '301 s/internal_font_number/boolean/' \
-    -i texk/web2c/pdftexdir/pdftex.ch</userinput>
-</screen>
--->
-<para>
       Agora, como um(a) usuário(a) normal:
     </para>
 
 
 <screen><!-- if a patch for the source is needed, this should go between the export
-	ande configure. But keeping it there as a commented line adds too much vertical space.
-    patch -Np1 -i ../texlive-&texlive-version;-source-security_fix-1.patch &amp;&amp;-->
-<userinput>export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &amp;&amp;
-
+	and mkdir. But keeping it there as a commented line adds too much vertical space.
 patch -Np1 -i ../texlive-&texlive-version;-source-upstream_fixes-1.patch &amp;&amp;
+    -->
+<userinput>export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &amp;&amp;
 
 mkdir texlive-build &amp;&amp;
 cd    texlive-build &amp;&amp;
 
-../configure CC="gcc -std=gnu17" -C               \
-    CXX="g++ -std=gnu++17"                        \
+../configure CXX="g++ -std=gnu++17" -C            \
     --prefix=$TEXLIVE_PREFIX                      \
     --bindir=$TEXLIVE_PREFIX/bin/$TEXARCH         \
     --datarootdir=$TEXLIVE_PREFIX                 \
@@ -332,17 +312,14 @@ make</userinput></screen>
 
     <para>
       <!-- https://github.com/rrthomas/libpaper/issues/43 -->
-<!-- Still true with TL 2025 -->
-Para testar os resultados, emita: <command>make -k check</command>. Um
-teste, <filename>psutils.test</filename>, é conhecido por falhar se usar a
-libpaper do sistema, pois o TeX Live inclui versões antigas de ambos,
-<application>psutils</application> e de <application>libpaper</application>,
-o que resulta em uma diferença nas casas decimais finais do teste
-psresize. O(A) desenvolvedor(a) da <application>libpaper</application> não
-considera que isso seja significativo. Outro teste,
-<filename>xdvipdfm-pdf.test</filename>, é conhecido por falhar devido a um
-arquivo binário ausente proveniente do remendo de correções do fluxo de
-desenvolvimento. Isso não afeta a funcionalidade do programa.
+<!-- Still true with TL 2026 -->
+To test the results, issue: <command>make -k check</command>.  One test,
+<filename>psutils.test</filename>, is known to fail if using system libpaper
+because TeX Live includes old versions of both
+<application>psutils</application> and <application>libpaper</application>
+which result in a difference in the final decimal places of the psresize
+test. The <application>libpaper</application> developer does not think this
+is significant.
       
     </para>
 
@@ -402,6 +379,14 @@ class="directory">/usr/lib</filename>:
 
 <screen role="root"><userinput>ln -svf $TEXLIVE_PREFIX/lib/libkpathsea.so{,.6} /usr/lib</userinput></screen>
 
+    <para>
+      To allow <command>xdvi</command> to appear in desktop menu, it is necessary
+to create a symlink from <filename
+class="directory">/usr/share/applications</filename>. As the &root; user:
+    </para>
+
+<screen role="root"><userinput>ln -svf $TEXLIVE_PREFIX/applications/* /usr/share/applications</userinput></screen>
+
     <note>
       <para>
         O TeX Live não inclui o fonte para ConTeXt, somente os itens que estão no
@@ -439,8 +424,14 @@ se desejar instalá-los.
     <title>Explicações do Comando</title>
 
     <para>
-      <command>-C</command>: cria config.cache, o que economiza tempo
-significativo em uma construção paralela.
+      <parameter>CXX="g++ -std=gnu++17"</parameter>: the texlive build system
+defaults to the C++11 standard for C++, but some system packages require the
+C++17 standard. This switch allows using this standard.
+    </para>
+
+    <para>
+      <parameter>-C</parameter>: creates config.cache, which saves significant
+time in a parallel build.
     </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -528,8 +519,9 @@ comandos sequenciais</seg>
         <seg>libkpathsea.so, libptexenc.so, libsynctex.so, libtexlua53.so,
 libtexluajit.so
         </seg>
-        <seg>$TEXLIVE_PREFIX/bin, $TEXLIVE_PREFIX/include, $TEXLIVE_PREFIX/lib,
-$TEXLIVE_PREFIX/texmf-dist
+        <seg>$TEXLIVE_PREFIX/applications, $TEXLIVE_PREFIX/bin, $TEXLIVE_PREFIX/include,
+$TEXLIVE_PREFIX/lib, $TEXLIVE_PREFIX/texmf-dist, $TEXLIVE_PREFIX/texmf-var,
+and $TEXLIVE_PREFIX/tlpkg
         </seg>
       </seglistitem>
     </segmentedlist>

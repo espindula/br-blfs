@@ -4,17 +4,16 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY avahi-download-http "https://github.com/lathiat/avahi/releases/download/v&avahi-version;/avahi-&avahi-version;.tar.gz">
+  <!ENTITY avahi-download-http "https://github.com/lathiat/avahi/archive/v&avahi-version;/avahi-&avahi-version;.tar.gz">
   <!ENTITY avahi-download-ftp  "">
-  <!ENTITY avahi-md5sum        "229c6aa30674fc43c202b22c5f8c2be7">
-  <!ENTITY avahi-size          "1,5 MB">
-  <!ENTITY avahi-buildsize     "32 MB">
-  <!ENTITY avahi-time          "0,3 UPC">
+  <!ENTITY avahi-md5sum        "d2b4bd13a4dba40a7b56c3da8bf50fd2">
+  <!ENTITY avahi-size          "1.1 MB">
+  <!ENTITY avahi-buildsize     "30 MB">
+  <!ENTITY avahi-time          "0.2 SBU">
 ]>
 
 <sect1 id="avahi" xreflabel="Avahi-&avahi-version;">
   <?dbhtml filename="avahi.html"?>
-
 
   <title>Avahi-&avahi-version;</title>
 
@@ -30,7 +29,15 @@
 descoberta de serviços em uma rede de intercomunicação local.
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
+
+    <note>
+      <para>
+        Normally the BLFS editors prefer to not use release candidates but the most
+recent "stable" release of this package was in 2020 and there are several
+security updates in this version.
+      </para>
+    </note>
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -127,24 +134,28 @@ class="username">root</systemitem>&quot;:
 intercomunicação estiverem presentes no sistema:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../avahi-&avahi-version;-ipv6_race_condition_fix-1.patch</userinput></screen>
-
+<!-- Present in -rc5
     <para>
-      Corrija uma vulnerabilidade de segurança no
-&quot;<command>avahi-daemon</command>&quot;:
+
+      Fix a security vulnerability in <command>avahi-daemon</command>:
     </para>
 
 <screen><userinput remap="pre">sed -i '426a if (events &amp; AVAHI_WATCH_HUP) { \
 client_free(c); \
 return; \
 }' avahi-daemon/simple-protocol.c</userinput></screen>
+-->
+<screen><userinput remap="pre">patch -Np1 -i ../avahi-&avahi-version;-ipv6_race_condition_fix-1.patch</userinput></screen>
+
 
     <para>
       Instale o &quot;<application>Avahi</application>&quot; executando os
 seguintes comandos:
     </para>
 
-<screen revision="sysv"><userinput>./configure \
+<screen revision="sysv"><userinput>autoreconf -fiv &amp;&amp;
+
+./configure \
     --prefix=/usr                  \
     --sysconfdir=/etc              \
     --localstatedir=/var           \
@@ -162,7 +173,9 @@ seguintes comandos:
     --with-dbus-system-address='unix:path=/run/dbus/system_bus_socket' &amp;&amp;
 make</userinput></screen>
 
-<screen revision="systemd"><userinput>./configure \
+<screen revision="systemd"><userinput>autoreconf -fiv &amp;&amp;
+
+./configure \
     --prefix=/usr        \
     --sysconfdir=/etc    \
     --localstatedir=/var \
@@ -170,6 +183,7 @@ make</userinput></screen>
     --disable-libevent   \
     --disable-mono       \
     --disable-monodoc    \
+    --disable-manpages   \
     --disable-python     \
     --disable-qt3        \
     --disable-qt4        \
@@ -362,40 +376,37 @@ desabilitado o suporte a DNS multicast do
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>avahi-autoipd, avahi-browse, avahi-browse-domains, avahi-daemon,
-avahi-discover-standalone, avahi-dnsconfd, avahi-publish,
-avahi-publish-address, avahi-publish-service, avahi-resolve,
-avahi-resolve-address, avahi-resolve-host-name, avahi-set-host-name, bshell,
-bssh e bvnc</seg>
-        <seg>libavahi-client.so, libavahi-common.so, libavahi-core.so, libavahi-glib.so,
-libavahi-gobject.so, libavahi-libevent.so libavahi-ui-gtk3.so,
-libavahi-ui.so, libdns_sd.so e libhowl.so</seg>
-        <seg>/etc/avahi/services, /usr/include/{avahi-client,avahi-common,
-avahi-compat-howl, avahi-compat-libdns_sd, avahi-core, avahi-glib,
-avahi-gobject, avahi-libevent, avahi-ui}, /usr/lib/avahi, /usr/share/avahi</seg>
+        <seg>
+          avahi-browse, avahi-browse-domains, avahi-discover-standalone,
+avahi-publish, avahi-publish-address, avahi-publish-service, avahi-resolve,
+avahi-resolve-address, avahi-resolve-host-name, avahi-set-host-name, and
+bssh</seg>
+        <seg>
+          libavahi-client.so, libavahi-common.so, libavahi-core.so, libavahi-glib.so,
+libavahi-gobject.so, and libavahi-ui-gtk3.so 
+        </seg>
+        <seg>/etc/avahi/services, /usr/include/{avahi-client, avahi-common, avahi-core,
+avahi-glib, avahi-gobject, avahi-ui}, /usr/lib/avahi, and /usr/share/avahi</seg>
       </seglistitem>
     </segmentedlist>
 
     <variablelist>
       <bridgehead renderas="sect3">Descrições Curtas</bridgehead>
-      <?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
-
+      <!--
       <varlistentry id="avahi-autoipd">
+
         <term><command>avahi-autoipd</command></term>
         <listitem>
           <para>
-            é um processo de segundo plano de configuração de endereço de rede de
-intercomunicação &quot;IPv4LL&quot;
+            is a IPv4LL network address configuration daemon
           </para>
           <indexterm zone="avahi avahi-autoipd">
             <primary sortas="b-avahi-autoipd">avahi-autoipd</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-      
-      <!--
-      <varlistentry id="avahi-bookmarks">
 
+      <varlistentry id="avahi-bookmarks">
         <term><command>avahi-bookmarks</command></term>
         <listitem>
           <para>
@@ -408,7 +419,9 @@ intercomunicação &quot;IPv4LL&quot;
         </listitem>
       </varlistentry>
       -->
-<varlistentry id="avahi-browse">
+<?dbfo list-presentation="list"?> <?dbhtml list-presentation="table"?>
+      
+      <varlistentry id="avahi-browse">
         <term><command>avahi-browse</command></term>
         <listitem>
           <para>
@@ -433,23 +446,22 @@ segundo plano &quot;<application>Avahi</application>&quot;
           </indexterm>
         </listitem>
       </varlistentry>
-
+      
+      <!--
       <varlistentry id="avahi-daemon">
+
         <term><command>avahi-daemon</command></term>
         <listitem>
           <para>
-            é o processo de segundo plano &quot;mDNS&quot;/&quot;DNS-SD&quot;
-&quot;<application>Avahi</application>&quot;
+            is the <application>Avahi</application> mDNS/DNS-SD daemon
           </para>
           <indexterm zone="avahi avahi-daemon">
             <primary sortas="b-avahi-daemon">avahi-daemon</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-      
-      <!--
-      <varlistentry id="avahi-discover">
 
+      <varlistentry id="avahi-discover">
         <term><command>avahi-discover</command></term>
         <listitem>
           <para>
@@ -474,21 +486,22 @@ segundo plano &quot;<application>Avahi</application>&quot;
           </indexterm>
         </listitem>
       </varlistentry>
-
+      
+      <!--
       <varlistentry id="avahi-dnsconfd">
+
         <term><command>avahi-dnsconfd</command></term>
         <listitem>
           <para>
-            é um servidor &quot;DNS&quot; &quot;Unicast&quot; originário do processo de
-segundo plano de configuração &quot;mDNS&quot;/&quot;DNS-SD&quot;
+            is a Unicast DNS server from mDNS/DNS-SD configuration daemon
           </para>
           <indexterm zone="avahi avahi-dnsconfd">
             <primary sortas="b-avahi-dnsconfd">avahi-dnsconfd</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
-      <varlistentry id="avahi-publish">
+      -->
+<varlistentry id="avahi-publish">
         <term><command>avahi-publish</command></term>
         <listitem>
           <para>
@@ -609,19 +622,20 @@ plano &quot;<application>Avahi</application>&quot;
           </indexterm>
         </listitem>
       </varlistentry>
-
+<!--
       <varlistentry id="bvnc">
+
         <term><command>bvnc</command></term>
         <listitem>
           <para>
-            procura servidores &quot;VNC&quot; na rede de intercomunicação local
+            browses for VNC servers on the local network
           </para>
           <indexterm zone="avahi bvnc">
             <primary sortas="b-bvnc">bvnc</primary>
           </indexterm>
         </listitem>
       </varlistentry>
-
+      -->
 <!--<varlistentry id="libavahi-client">
 
         <term><filename class='libraryfile'>libavahi-client.{so,a}</filename></term>
@@ -730,6 +744,7 @@ plano &quot;<application>Avahi</application>&quot;
           </indexterm>
         </listitem>
       </varlistentry>-->
+       
       
 
     </variablelist>

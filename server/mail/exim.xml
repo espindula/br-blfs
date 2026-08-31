@@ -4,15 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY exim-download-http   "https://ftp.exim.org/pub/exim/exim4/exim-&exim-version;.tar.xz">
-
+  <!ENTITY exim-download-http   "https://downloads.exim.org/exim4/exim-&exim-version;.tar.xz">
   <!ENTITY exim-download-ftp    "">
-  <!-- if above don't work, please use one of the official mirrors at
-       http://www.exim.org/mirmon/ftp_mirrors.html -->
-  <!ENTITY exim-md5sum          "3f8e750a827e86ab01aedef01b2de9ec">
+  <!ENTITY exim-md5sum          "0fa646b6f2a40e6b86604926b4a8bcfc">
   <!ENTITY exim-size            "1,9 MB">
-  <!ENTITY exim-buildsize       "18 MB">
-  <!ENTITY exim-time            "0,1 UPC">
+  <!ENTITY exim-buildsize       "23 MB">
+  <!ENTITY exim-time            "0.2 SBU">
 
   <!ENTITY exim-daemon-version  "&exim-version;-2">
 ]>
@@ -36,7 +33,7 @@ Transport Agent&quot; escrito pela Universidade de Cambridge, lançado sob a
 Licença Pública &quot;GNU&quot;.
     </para>
 
-    &lfs130_checked;
+    &lfs131_built;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -81,23 +78,7 @@ enviados com os fontes) podem ser baixados seguindo-se os links mostrados em
 <ulink url="https://exim.org/docs.html"/>.
         </para>
       </listitem>
-
-    <!-- Applied in 4.96
-      <listitem>
-
-        <para>
-          Required patch when building with <application>PAM</application> support:
-          <ulink url="&patch-root;/exim-&exim-version;-call_pam-1.patch"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Required patch to build with openssl-3:
-          <ulink url="&patch-root;/exim-&exim-version;-openssl3_fix-1.patch"/>
-        </para>
-      </listitem>
--->
-</itemizedlist>
+    </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do &quot;Exim&quot;</bridgehead>
 
@@ -108,14 +89,14 @@ enviados com os fontes) podem ser baixados seguindo-se os links mostrados em
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <ulink url="https://sourceforge.net/projects/tdb">TDB</ulink> (alternativa
-ao GDBM, construído no LFS), <xref linkend="cyrus-sasl"/>, <xref
+      <ulink url="https://sourceforge.net/projects/tdb">TDB</ulink> (alternative
+to GDBM, built in LFS), <xref linkend="cyrus-sasl"/>, <xref
 linkend="libidn"/>, <xref linkend="linux-pam"/>, <xref linkend="mariadb"/>
-ou <ulink url="https://www.mysql.com/">MySQL</ulink>, <xref
-linkend="openldap"/>, <xref linkend="gnutls"/>, <xref
+or <xref linkend="openldap"/>, <xref linkend="gnutls"/>, <xref
 linkend="postgresql"/>, <xref linkend="x-window-system"/>, <ulink
+url="https://www.mysql.com/">MySQL</ulink>, <ulink
 url="https://github.com/heimdal/heimdal">Heimdal GSSAPI</ulink>, <ulink
-url="https://github.com/shevek/libspf2/">libspf2</ulink> e <ulink
+url="https://github.com/shevek/libspf2/">libspf2</ulink>, and <ulink
 url="http://www.trusteddomain.org/opendmarc/">OpenDMARC</ulink>
     </para>
 
@@ -139,13 +120,13 @@ useradd -d /dev/null -c "Processo de Segundo Plano Exim" -g exim -s /bin/false -
 comandos:
     </para>
 
-<screen><userinput>sed -e 's,^BIN_DIR.*$,BIN_DIRECTORY=/usr/sbin,'    \
-    -e 's,^CONF.*$,CONFIGURE_FILE=/etc/exim.conf,' \
-    -e 's,^EXIM_USER.*$,EXIM_USER=exim,'           \
-    -e '/# USE_OPENSSL/s,^#,,' src/EDITME > Local/Makefile &amp;&amp;
+<screen><userinput>sed -e 's|^BIN_DIR.*$|BIN_DIRECTORY=/usr/sbin|'    \
+    -e 's|^CONF.*$|CONFIGURE_FILE=/etc/exim.conf|' \
+    -e 's|^EXIM_USER.*$|EXIM_USER=exim|'           \
+    -e '/# USE_OPENSSL/s|^#||'                     \
+    src/EDITME > Local/Makefile &amp;&amp;
 
-printf "USE_GDBM = yes\nDBMLIB = -lgdbm\n" >> Local/Makefile
-</userinput></screen>
+printf "USE_GDBM = yes\nDBMLIB = -lgdbm\n" >> Local/Makefile</userinput></screen>
 
     <para>
       Se você quiser adicionar suporte ao &quot;<application>Linux
@@ -162,7 +143,6 @@ comando:
     </para>
 
 <screen><userinput>make</userinput></screen>
-
 
     <para>
       Esse pacote não vem com uma suíte de teste.
@@ -226,18 +206,8 @@ class="username">root</systemitem>&quot;, o processo precisa transferir o
 processo de segundo plano para o(a) usuário(a) &quot;<systemitem
 class="username">exim</systemitem>&quot;.
     </para>
-    
-    <!-- obsolete: now default 
-    <para>
 
-      <option>SUPPORT_TLS=yes</option>: This allows to support
-      STARTTLS connections. If you use this option, you need to select
-      whether <application>OpenSSL</application> or
-      <application>GnuTLS</application> is used (see
-      <filename>src/EDITME</filename>).
-    </para>
-    -->
-<para>
+    <para>
       <parameter>USE_OPENSSL</parameter>: descomentar
 <option>USE_OPENSSL=yes</option> e <option>USE_OPNSSL_PC=yes</option>
 informa ao sistema de construção para usar
@@ -508,10 +478,12 @@ tua instalação.
       <segtitle>Diretórios Instalados</segtitle>
 
       <seglistitem>
-        <seg>exicyclog, exigrep, exim, exim-&exim-daemon-version;, exim_checkaccess,
+        <seg>
+          exicyclog, exigrep, exim, exim-&exim-daemon-version;, exim_checkaccess,
 exim_dbmbuild, exim_dumpdb, exim_fixdb, exim_id_update, exim_lock,
 exim_msgdate, exim_tidydb, eximstats, exinext, exipick, exiqgrep, exiqsumm,
-exiwhat e, opcionalmente, eximon, eximon.bin e sendmail (link simbólico)</seg>
+exiwhat e, opcionalmente, eximon, eximon.bin e sendmail (link simbólico)
+        </seg>
         <seg>Nenhum(a)</seg>
         <seg>/usr/share/doc/exim-&exim-version; e /var/spool/exim</seg>
       </seglistitem>

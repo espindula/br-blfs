@@ -7,10 +7,10 @@
 <!-- lightdm -->
   <!ENTITY lightdm-download-http "https://github.com/ubuntu/lightdm/archive/&lightdm-version;/lightdm-&lightdm-version;.tar.gz">
   <!ENTITY lightdm-download-ftp  "">
-  <!ENTITY lightdm-md5sum        "e62a5da6c35f612e4d9575eda5c8d467">
-  <!ENTITY lightdm-size          "508 KB">
-  <!ENTITY lightdm-buildsize     "20 MB">
-  <!ENTITY lightdm-time          "0,2 UPC">
+  <!ENTITY lightdm-md5sum        "1e228e940a9e97a59a4e67b07836ad17">
+  <!ENTITY lightdm-size          "324 KB">
+  <!ENTITY lightdm-buildsize     "19 MB">
+  <!ENTITY lightdm-time          "0.1 SBU">
 
 <!-- lightdm-gtk-greeter -->
   <!ENTITY lightdm-gtk-greeter-download-http "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-&lightdm-gtk-greeter-version;/lightdm-gtk-greeter-&lightdm-gtk-greeter-version;.tar.gz">
@@ -39,7 +39,7 @@
 gerenciador de exibição leve baseado em no &quot;GTK&quot;.
     </para>
 
-    &lfs130_checked;
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informações do Pacote &quot;Lightdm&quot;</bridgehead>
     <itemizedlist spacing="compact">
@@ -177,7 +177,11 @@ useradd  -c "Lightdm Daemon" \
 seguintes comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr                  \
+<screen><userinput>sed -i '/YELP_HELP/d' configure.ac help/Makefile.am    &amp;&amp;
+
+autoreconf -fiv                                        &amp;&amp;
+
+./configure --prefix=/usr                 \
             --libexecdir=/usr/lib/lightdm \
             --localstatedir=/var          \
             --sbindir=/usr/bin            \
@@ -185,8 +189,7 @@ seguintes comandos:
             --disable-static              \
             --disable-tests               \
             --with-greeter-user=lightdm   \
-            --with-greeter-session=lightdm-gtk-greeter \
-            --docdir=/usr/share/doc/lightdm-&lightdm-version; &amp;&amp;
+            --with-greeter-session=lightdm-gtk-greeter &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -197,7 +200,8 @@ make</userinput></screen>
       Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install                                                   &amp;&amp;
+<screen role="root"><userinput>make install                                                  &amp;&amp;
+
 cp tests/src/lightdm-session /usr/bin                         &amp;&amp;
 sed -i '1 s/sh/bash --login/' /usr/bin/lightdm-session        &amp;&amp;
 rm -rf /etc/init                                              &amp;&amp;
@@ -211,9 +215,9 @@ install -v -dm770 -o lightdm -g lightdm /var/log/lightdm</userinput></screen>
      </para>
 
 <screen><userinput>tar -xf ../lightdm-gtk-greeter-&lightdm-gtk-greeter-version;.tar.gz &amp;&amp;
-cd lightdm-gtk-greeter-&lightdm-gtk-greeter-version; &amp;&amp;
+cd lightdm-gtk-greeter-&lightdm-gtk-greeter-version;                &amp;&amp;
 
-./configure --prefix=/usr                  \
+./configure --prefix=/usr                 \
             --libexecdir=/usr/lib/lightdm \
             --sbindir=/usr/bin            \
             --sysconfdir=/etc             \
@@ -222,15 +226,15 @@ cd lightdm-gtk-greeter-&lightdm-gtk-greeter-version; &amp;&amp;
             --disable-libido              \
             --disable-libindicator        \
             --disable-static              \
-            --disable-maintainer-mode     \
-            --docdir=/usr/share/doc/lightdm-gtk-greeter-&lightdm-gtk-greeter-version; &amp;&amp;
+            --disable-maintainer-mode     &amp;&amp;
 make</userinput></screen>
 
     <para>
       Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>make install &amp;&amp;
+mv -v /usr/share/doc/lightdm-gtk-greeter{,-&lightdm-gtk-greeter-version;}</userinput></screen>
 
   <note>
     <para>
@@ -400,17 +404,17 @@ incluir um personalizado.
 
       <seglistitem>
         <seg>
-          dm-tool, lightdm e lightdm-gtk-greeter
+          dm-tool, lightdm, lightdm-session, and lightdm-gtk-greeter
         </seg>
         <seg>
           liblightdm-gobject-1.so
         </seg>
         <seg>
-          /etc/lightdm, /etc/apparmor.d, /usr/lib/lightdm,
+          /etc/apparmor.d, /etc/lightdm, /usr/lib/lightdm,
 /usr/include/lightdm-gobject-1, /usr/share/help/C/lightdm
 /usr/share/gtk-doc/html/lightdm-gobject-1,
 /usr/share/doc/lightdm-gtk-greeter-&lightdm-gtk-greeter-version;,
-/var/lib/lightdm, /var/lib/lightdm-data, /var/cache/lightdm e
+/var/cache/lightdm, /var/lib/lightdm, /var/lib/lightdm-data, and
 /var/log/lightdm
         </seg>
       </seglistitem>
