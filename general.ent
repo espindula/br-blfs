@@ -6,7 +6,7 @@
                                       set to IGNORE for development or rc -->
 <!ENTITY % relyear    "2026">
 <!ENTITY % relnum     "13.0">
-<!ENTITY % reldate    "05 de março de 2026">
+<!ENTITY % reldate    "">
 <!ENTITY % relpubdate "2026-03-05">
 <!-- ================================================================== -->
 <!-- Do not change anything below unless the www or book layouts change -->
@@ -135,20 +135,9 @@ url='https://download.gnome.org/sources/gtk+/2.24/'>GTK+-2</ulink>">
      construirá/funcionará -->
 
 
-<!ENTITY lfs130_checked  "<note><para>Versões de desenvolvimento do BLFS
-                          possivelmente não construam ou executem alguns
-                          pacotes adequadamente se o LFS, ou dependências,
-                          tiver sido atualizado desde as versões estáveis
-                          mais recentes dos livros.</para></note>">
+<!ENTITY lfs130_checked "<note><para>Versões de desenvolvimento do BLFS possivelmente não construam ou executem alguns pacotes corretamente se o LFS ou as dependências tiverem sido atualizados desde as versões estáveis mais recentes dos livros.</para></note>">
 
-<!ENTITY lfs131_checked  "<note><para>
-                         <phrase revision='systemd'> Esse pacote é conhecido por construir 
-                         e funcionar adequadamente usando-se uma plataforma LFS 13.1.</phrase>
-                         <phrase revision='sysv'>Esta versão do BLFS possivelmente não construa 
-                         ou execute alguns pacotes adequadamente se o LFS, ou as dependências 
-                         dele, tiver sido atualizado desde a versão estável mais recente dos 
-                         livros System V.</phrase>
-                         </para></note>">
+<!ENTITY lfs131_checked "<note><para>Versões de desenvolvimento do BLFS possivelmente não construam ou executem alguns pacotes corretamente se o LFS ou as dependências tiverem sido atualizados desde as versões estáveis mais recentes dos livros.</para></note>">
 
 <!ENTITY lfs131_built    "<note><para>
                          Esse pacote é conhecido por construir usando uma plataforma LFS 13.1, 
@@ -157,54 +146,14 @@ url='https://download.gnome.org/sources/gtk+/2.24/'>GTK+-2</ulink>">
 
 <!-- Fim das entidades especiais acerca de compatibilidade do LFS -->
 
-<!ENTITY as_root "<note><para>Quando se instalar múltiplos pacotes em
-                 um conjunto de comandos sequênciais, a instalação
-                 precisa ser feita como o(a) usuário(a) root. Existem
-                 três opções gerais que podem ser usadas para se fazer
-                 isso:</para>
 
-  <orderedlist>
 
-  <listitem><para>Executar o conjunto inteiro de comandos sequênciais
-  como o(a) usuário(a) root (não recomendado).</para></listitem>
-
-  <listitem><para>Usar-se o comando <command>sudo</command> originário
-  do pacote <xref linkend='sudo'/>.</para></listitem>
-
-  <listitem><para>Usar-se <command>su -c &quot;argumentos do
-  comando&quot;</command> (aspas exigidas), que solicitará a senha
-  do(a) root para cada interação do ciclo.</para></listitem>
-
-  </orderedlist>
-
-  <para>Uma maneira para se lidar com essa situação é a de se criar
-  uma função curta do <command>bash</command> que automaticamente
-  selecione o método apropriado. Uma vez que o comando esteja
-  configurado no ambiente, não se precisa configurá-lo
-  novamente.</para>
-
-  <screen><userinput>as_root()
-{
-  if   [ $EUID = 0 ];        then $*
-  elif [ -x /usr/bin/sudo ]; then sudo $*
-  else                            su -c \\&quot;$*\\&quot;
-  fi
-}
-
-export -f as_root</userinput></screen> </note>">
-
-<!ENTITY not-katamari         "<para>Esse pacote é fornecido para
-                              testagem da instalação completa do
-                              Xorg.</para>">
+<!ENTITY not-katamari "<para>Este pacote não faz parte do Xorg Katamari e é fornecido apenas como uma dependência de outros pacotes ou para testar a instalação completa do Xorg.</para>">
 
 <!ENTITY % package-entities SYSTEM      "packages.ent">
 %package-entities;
 
-<!ENTITY parallel_issues "<note><para>Esse pacote possível e
-                         ocasionalmente falhe ao construir com
-                         múltiplos processadores. Veja-se
-                         <xref linkend='parallel-builds'/> para
-                         mais informações.</para></note>">
+<!ENTITY parallel_issues "<note><para>Às vezes, esse pacote pode falhar quando construído com vários processadores. Consulte <xref linkend='parallel-builds'/> para obter mais informações.</para></note>">
 
 <!ENTITY shell-env "<note><para>Se instalar no ambiente chroot,
                    assegure-se de exportar a variável de ambiente
@@ -262,3 +211,37 @@ etiqueta de lançamento do fluxo de desenvolvimento estão na mesma submissão,
 de forma que não introduzimos nenhuma mudança no conteúdo do tarball, exceto
 o nome do diretório dele de nível superior (que o Git não
 rastreia).</para></note>">
+<!ENTITY as_root "<note><para>Quando instalar múltiplos pacotes em um
+conjunto de comandos sequenciais, a instalação precisa ser feita como
+o(a) usuário(a) root. Existem três opções gerais que podem ser usadas
+para se fazer isso:</para>
+
+  <orderedlist>
+
+  <listitem><para>Executar o conjunto inteiro de comandos sequenciais
+  como o(a) usuário(a) root (não recomendado).</para></listitem>
+
+  <listitem><para>Usar o comando <command>sudo</command> oriundo do
+  pacote <xref linkend='sudo'/>.</para></listitem>
+
+  <listitem><para>Usar <command>su -c &quot;argumentos do 
+  comando&quot;</command> (aspas exigidas), que solicitará a senha do(a) 
+  root para cada interação do loop.</para></listitem>
+
+  </orderedlist>
+
+  <para>Uma maneira de se lidar com essa situação é a de se criar uma
+  função curta do <command>bash</command> que selecione automaticamente
+  o método apropriado. Uma vez que o comando esteja configurado no
+  ambiente, ele não precisa ser configurado novamente.</para>
+
+  <screen><userinput>as_root()
+{
+  if   [ $EUID = 0 ];        then $*
+  elif [ -x /usr/bin/sudo ]; then sudo $*
+  else                            su -c \\&quot;$*\\&quot;
+  fi
+}
+
+export -f as_root</userinput></screen>
+</note>">
