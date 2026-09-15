@@ -273,18 +273,16 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
 
            Let's let it go.  llvm is complex enough as it is.  Adding
            the additional testsuite is IMO overkill.  - bdubbs -->
-Se <option>-jN</option> (N substituído por um número) for passado para
-<command>ninja</command>, os testes serão construídos com N núcleos lógicos,
-mas executados usando todos os núcleos lógicos disponíveis. Execute o
-comando de teste em um cgroup (<phrase revision='systemd'>passe a opção
-<option>-p AllowedCPUs=...</option> para o comando
-<command>systemd-run</command>, </phrase> leia <xref
-linkend='build-in-cgroup'/> para detalhes) para limitar o número de núcleos
-lógicos para executar os testes. Quatro testes nominados de
-<filename>Linux/pthread_join.cpp</filename> são conhecidos por falharem. Um
-teste nominado de <filename>Linux/clone_setns.cpp</filename> falhará se
-<option>CONFIG_USER_NS</option> não estiver habilitado na configuração do
-núcleo.
+If <option>-jN</option> (N replaced with a number) is passed to
+<command>ninja</command>, the tests will be built with N logical cores, but
+run using all available logical cores.  Run the test command in a cgroup
+(<phrase revision='systemd'>pass the <option>-p AllowedCPUs=...</option>
+option to the <command>systemd-run</command> command, </phrase> read <xref
+linkend='build-in-cgroup'/> for details) to limit the number of logical
+cores for running the tests.  Four tests named
+<filename>Linux/pthread_join.cpp</filename> are known to fail.  One test
+named <filename>Linux/clone_setns.cpp</filename> will fail if
+<option>CONFIG_USER_NS</option> is not enabled in kernel configuration.
       
 
       
@@ -374,14 +372,12 @@ GCC).
     </para>
 
     <para>
-      <parameter>-D LLVM_ENABLE_RUNTIMES=compiler-rt</parameter>: Essa chave
-seleciona as bibliotecas de tempo de execução do LLVM a serem
-construídas. Para BLFS, nós precisamos somente da compiler-rt (para alguns
-recursos do clang e do <xref linkend='rust'/>) e da libclc, e a última tem
-de ser construída separadamente (<xref linkend='libclc'/>) para evitar uma
-dependência circular envolvendo <xref
-linkend='spirv-llvm-translator'/>. Portanto, nós habilitamos somente a
-compiler-rt aqui.
+      <parameter>-D LLVM_ENABLE_RUNTIMES=compiler-rt</parameter>: This switch
+selects the LLVM runtime libraries to be built.  For BLFS we only need
+compiler-rt (for some features of clang and <xref linkend='rust'/>) and
+libclc, and the latter have to be built separately (<xref
+linkend='libclc'/>) to avoid a circular dependency involving <xref
+linkend='spirv-llvm-translator'/>.  So we only enable compiler-rt here.
     </para>
 
     <para>

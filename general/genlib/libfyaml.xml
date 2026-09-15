@@ -71,9 +71,9 @@ YAML 1.3. Ele também suporta YAML 0.1 com a ajuda da biblioteca libyaml.
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="git"/>, <xref linkend="sphinx"/> e <xref
-linkend="sphinx_rtd_theme"/> (para documentação), <ulink
-url="https://www.docker.com/">docker</ulink>, <ulink
+      <xref linkend="git"/>, <xref linkend="llvm"/> (com Clang), <xref
+linkend="sphinx"/> e <xref linkend="sphinx_rtd_theme"/> (para documentação),
+<ulink url="https://www.docker.com/">docker</ulink>, <ulink
 url="https://jqlang.org/">jq</ulink> e <ulink
 url="https://libcheck.github.io/check/">check</ulink> (para testes
 adicionais)
@@ -91,7 +91,7 @@ adicionais)
 comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr --disable-static &amp;&amp;
+<screen><userinput>./configure --prefix=/usr --disable-static --without-libclang &amp;&amp;
 make</userinput></screen>
 
     <para>
@@ -110,6 +110,19 @@ make</userinput></screen>
     <title>Explicações do Comando</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="../../xincludes/static-libraries.xml"/>
+
+    
+    <!-- libfyaml.pc has Clang libraries in Libs instead of Libs.private,
+         so the dependency is "infective."  When libclang really starts to
+         provides a functionality we may remove this option and reassess the
+         issue.  -->
+<para>
+      <parameter>--without-libclang</parameter>: Essa opção desabilita o uso da
+biblioteca Clang. Atualmente, a biblioteca Clang não oferece efetivamente
+nenhuma funcionalidade útil para esse pacote, e ativá-la faria com que todos
+os pacotes que usam a libfyaml fossem lincados desnecessariamente à
+biblioteca Clang.
+    </para>
   </sect2>
 
   <sect2 role="content">

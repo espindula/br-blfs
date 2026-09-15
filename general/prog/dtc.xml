@@ -116,7 +116,7 @@ meson setup ..                 \
 ninja</userinput></screen>
 
     <para>
-      To test the results, issue: <command>meson configure -D werror=false
+      Para testar os resultados, emita: <command>meson configure -D werror=false
 &amp;&amp; ninja test</command>.
     </para>
 
@@ -131,7 +131,7 @@ ninja</userinput></screen>
 formato PDF da documentação emitindo o seguinte comando:
     </para>
 
-    <screen remap="doc"><userinput>pushd ../Documentation
+<screen remap="doc"><userinput>pushd ../Documentation
   latexmk -bibtex --pdf dtc-paper &amp;&amp;
   latexmk -bibtex --pdf dtc-paper -c
 popd</userinput></screen>
@@ -141,23 +141,23 @@ popd</userinput></screen>
 comando:
     </para>
 
-    <!-- https://github.com/dgibson/dtc/pull/192 -->
+<!-- https://github.com/dgibson/dtc/pull/192 -->
 <screen role="root"><userinput>cp -R ../Documentation -T /usr/share/doc/dtc-&dtc-version;</userinput></screen>
 
     
     <para>
-      If you have installed <xref linkend='swig'/> and you wish to install the
-Python 3 bindings of this package, fix the code for the compatibility with
-SWIG 4.5.0 or newer first:
+      Se você tiver instalado <xref linkend='swig'/> e desejar instalar as
+ligações Python 3 desse pacote, corrija o código para a compatibilidade com
+SWIG 4.5.0 ou mais recente primeiro:
     </para>
 
-	<screen role="nodump"><userinput>sed -e 's/PyString_FromString/PyUnicode_FromString/' \
+<screen role="nodump"><userinput>sed -e 's/PyString_FromString/PyUnicode_FromString/' \
     -e 's/PyString_AsString/PyBytes_AsString/'       \
     -e 's/PyInt_AsLong/PyLong_AsLong/'               \
-    -i pylibfdt/libfdt.i</userinput></screen>
+    -i ../pylibfdt/libfdt.i</userinput></screen>
 
     <para>
-      Build the Python 3 module:
+      Construa o módulo Python 3:
     </para>
 
     <screen role="nodump"><userinput>&build-wheel-cmd; ..</userinput></screen>
@@ -189,7 +189,7 @@ desejado.
       <envar>CC='gcc -Wl,-z,noexecstack'</envar>: Essa variável impede marcar as
 bibliotecas compartilhadas na suíte de teste como exigindo pilha
 executável. A Glibc 2.41 ou posterior parou de permitir abrir com
-<function>dlopen</function> tal biblioteca compartilhada, de forma que a
+<function>dlopen</function> tal biblioteca compartilhada, de modo que a
 suíte de teste falharia. Mas essas bibliotecas compartilhadas não precisam
 realmente de uma pilha executável, de modo que nós podemos usar
 <parameter>-Wl,-z,noexecstack</parameter> para consertar a suíte de teste. É

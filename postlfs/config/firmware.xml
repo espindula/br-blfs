@@ -170,14 +170,14 @@ de forma que elas precisam ser aplicadas a cada inicialização.
     <note>
       <para>
         <!-- deliberate hard coded version, not a bug -->
-In some rare cases a microcode update from the kernel can be ineffective.
-For example, despite intel-microcode-20241029 containing the Raptor Lake
-microcode revision 0x12b which is intended to fix a notorious excessive
-voltage issue causing stability issues and even permanent CPU damages, when
-the kernel boots it's already <ulink
-url='https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/issues/78#issuecomment-2286857023'>too
-late</ulink> for the microcode to fix the issue.  The only way to fix this
-issue is updating the BIOS.
+Em alguns casos raros, uma atualização de microcódigo oriunda do núcleo pode
+ser inefetiva. Por exemplo, apesar de intel-microcode-20241029 conter a
+revisão de microcódigo Raptor Lake 0x12b, que visa a corrigir um problema
+notório de voltagem excessiva que causa problemas de estabilidade e até
+mesmo danos permanentes para a CPU, quando o núcleo inicializa, já é <ulink
+url='https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/issues/78#issuecomment-2286857023'>tarde
+demais</ulink> para o microcódigo corrigir o problema. A única maneira de
+corrigir esse problema é a de atualizar o BIOS.
       </para>
     </note>
 
@@ -200,11 +200,11 @@ espaço de usante tenha sido iniciado; o carregamento atrasado ocorre depois
 que o espaço de usante iniciou. No entanto, o carregamento atrasado é
 conhecido por ser problemático e não mais é suportado (veja-se o "commit" do
 núcleo <ulink
-url="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d23d33e">x86/microcode:
-Taint and warn on late loading</ulink>). Na verdade, o carregamento
-antecipado é necessário para contornar uma errata específica nos primeiros
-processadores Haswell da Intel que tinham TSX habilitado. (Veja-se <ulink
-url=
+url="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d23d33e">
+x86/microcode: Taint and warn on late loading</ulink>). Na verdade, o
+carregamento antecipado é necessário para contornar uma errata específica
+nos primeiros processadores Haswell da Intel que tinham TSX
+habilitado. (Veja-se <ulink url=
 "https://www.anandtech.com/show/8376/intel-disables-tsx-instructions-erratum-found-in-haswell-haswelleep-broadwelly/">
 Intel Disables TSX Instructions: Erratum Found in Haswell, Haswell-E/EP,
 Broadwell-Y</ulink>). Sem essa atualização, a glibc pode fazer a coisa
@@ -235,14 +235,14 @@ exige que o núcleo seja recompilado para atualizar o microcódigo.
     <para>
       Para confirmar qual(is) processador(es) você tem (se mais que um, eles serão
 idênticos) olhe em "/proc/cpuinfo". Determine os valores decimais da família
-da "CPU"; do modelo; e da revisão executando o seguinte comando (também
+da cpu; do modelo; e da revisão executando o seguinte comando (também
 informará a versão atual do microcódigo):
     </para>
 
 <screen><userinput>head -n7 /proc/cpuinfo</userinput></screen>
 
     <para>
-      Converta a família da "CPU", o modelo e a revisão em pares de dígitos
+      Converta a família da cpu, o modelo e a revisão em pares de dígitos
 hexadecimais e lembre-se do valor do campo <quote>microcode</quote>. Agora
 você pode verificar se existe algum microcódigo disponível.
     </para>
@@ -267,9 +267,9 @@ Intel. Isso precisa ser feito navegando-se até <ulink url=
 e baixando-se o arquivo mais recente lá. Ao tempo da escrita deste texto, a
 versão mais segura do microcódigo era
 microcode-&intel-microcode-version;. Extraia esse arquivo da maneira normal;
-o microcódigo estará no diretório <filename>intel-ucode</filename>, contendo
-vários blobs com nomes na forma XX-YY-ZZ. Também existem vários outros
-arquivos e uma observação de lançamento.
+o microcódigo estará no diretório <filename>intel-ucode </filename>,
+contendo vários blobs com nomes na forma XX-YY-ZZ. Também existem vários
+outros arquivos e uma observação de lançamento.
       </para>
 
       <para>
@@ -507,10 +507,10 @@ modelo específico.
 
       <para>
         Agora que você sabe qual controlador está usando, consulte a página <ulink
-url="https://wiki.gentoo.org/wiki/Radeon#Firmware">Radeon</ulink> da wiki do
-Gentoo a qual tem uma tabela listando os blobs de firmware exigidos para os
-vários chipsets. Observe que os chips das Ilhas do Sul e os das Ilhas do Mar
-usam firmware diferente para o núcleo 3.17 e posteriores comparados a
+url="https://wiki.gentoo.org/wiki/Radeon#Firmware"> Radeon</ulink> da wiki
+do Gentoo a qual tem uma tabela listando os blobs de firmware exigidos para
+os vários chipsets. Observe que os chips das Ilhas do Sul e os das Ilhas do
+Mar usam firmware diferente para o núcleo 3.17 e posteriores comparados a
 núcleos anteriores. Identifique e baixe os blobs exigidos; então instale-os:
       </para>
 
@@ -620,9 +620,9 @@ vídeo. Esses arquivos de firmware não são lançados pela NVIDIA, mas eles
 podem ser extraídos a partir do controlador binário da NVIDIA. Para
 informações mais exatas acerca de quais chips precisam de firmware extraído,
 veja-se <ulink url=
-"https://nouveau.freedesktop.org/VideoAcceleration.html">o VideoAcceleration
-do wiki Nouveau</ulink>. Para extrair e instalar esses arquivos de firmware,
-emita:
+"https://nouveau.freedesktop.org/VideoAcceleration.html"> o
+VideoAcceleration do wiki Nouveau</ulink>. Para extrair e instalar esses
+arquivos de firmware, emita:
       </para>
 
 <screen><userinput>wget https://anduin.linuxfromscratch.org/BLFS/nvidia-firmware/extract_firmware.py

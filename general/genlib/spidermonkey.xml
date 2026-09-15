@@ -7,8 +7,8 @@
   <!ENTITY spidermonkey-download-http "&mozilla-http;/firefox/releases/&spidermonkey-version;esr/source/firefox-&spidermonkey-version;esr.source.tar.xz">
   <!ENTITY spidermonkey-download-ftp  "">
   <!-- size and md5sum are in packages.ent -->
-  <!ENTITY spidermonkey-buildsize     "4.7 GB (55 MB installed after removing 42 MB static lib; add 29 MB for the
-main and jit tests)">
+  <!ENTITY spidermonkey-buildsize     "4,7 GB (55 MB instalado depois de remover 42 MB de bibliotecas estáticas;
+adicionar 29 MB para os testes principais e de Compilação sob Demanda)">
   <!ENTITY spidermonkey-time          "1,9 UPC (com paralelismo=4; adicionar 0,4 UPC para os testes principais e
 2,6 UPC para os testes de Compilação sob Demanda)">
 ]>
@@ -170,8 +170,8 @@ sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i Cargo.lock</userinpu
 
 
     <para>
-      Instale <application>SpiderMonkey</application> executando os seguintes
-comandos:
+      Install <application>SpiderMonkey</application> by running the following
+commands:
     </para>
 
     <note>
@@ -263,21 +263,19 @@ não atribuídos ao cgroup, de forma que o uso da CPU ainda é controlado.
 
                                                                  - xry111
       -->
-Assim como a suíte de teste do SpiderMonkey, o número de tarefas de teste é
-o mesmo que o número de todos os núcleos de CPU no sistema, mesmo se um
-cgroup for usado. Para piorar as coisas, alguns casos de teste podem usar
-até 4 GB de memória do sistema, de forma que o pico de uso de memória
-possivelmente seja muito grande se tua CPU tiver vários núcleos. Executar a
-suíte de teste JIT sem memória suficiente possivelmente invoque o OOM killer
-do núcleo e cause problemas de estabilidade. Se você não tiver memória de
-sistema suficiente disponível, posponha
-<option>JITTEST_EXTRA_ARGS=-j<replaceable>N</replaceable></option> ao
-comando e substitua <replaceable>N</replaceable> pelo número de tarefas de
-teste que tua memória de sistema disponível consiga conter. Por exemplo, se
-você tiver 15 GB de memória de sistema disponível e 4 núcleos de CPU,
-posponha <option>JITTEST_EXTRA_ARGS=-j3</option> para executar a suíte de
-teste com 3 tarefas paralelas de forma que o uso de memória não exceda 12
-GB.
+Like the SpiderMonkey test suite, the number of test jobs is same as the
+number of all CPU cores in the system even if a cgroup is used. To make
+things worse, some test cases can use up to 4 GB of system memory, so the
+peak memory usage may be very large if your CPU have multiple cores.
+Running the JIT test suite without enough memory may invoke the kernel OOM
+killer and cause stability issues.  If you don't have enough system memory
+available, append
+<option>JITTEST_EXTRA_ARGS=-j<replaceable>N</replaceable></option> to the
+command and replace <replaceable>N</replaceable> with the number of test
+jobs your available system memory can hold.  For example, if you have 15 GB
+system memory available and 4 CPU cores, append
+<option>JITTEST_EXTRA_ARGS=-j3</option> to run the test suite with 3
+parallel jobs so the memory usage won't exceed 12 GB.
       
     </para>
 
@@ -371,31 +369,28 @@ biblioteca estática que não é usada por nenhum pacote do BLFS.
     </para>
 
     <para>
-      <option><envar>CC=gcc CXX=g++</envar></option>: O BLFS costumava preferir
-usar gcc e g++ em vez dos padrões do fluxo de desenvolvimento dos programas
-<application>clang</application>. Com o lançamento do gcc-12 a construção
-demora mais tempo com gcc e g++, principalmente por causa de avisos extras,
-e é maior. Passe essas variáveis de ambiente para o conjunto de comandos
-sequenciais de configuração se você desejar continuar a usar gcc, g++
-(exportando-as e desconfigurando-as depois da instalação ou simplesmente
-acrescentando-as antes do comando
-<command>../js/src/configure</command>). Se você estiver construindo em um
-sistema de 32 bits, veja também abaixo.
+      <option><envar>CC=gcc CXX=g++</envar></option>: BLFS used to prefer to use
+gcc and g++ instead of upstream's defaults of the
+<application>clang</application> programs. With the release of gcc-12 the
+build takes longer with gcc and g++, primarily because of extra warnings,
+and is bigger. Pass these environment variables to the configure script if
+you wish to continue to use gcc, g++ (by exporting them and unset them after
+the installation, or simply prepending them before the
+<command>../js/src/configure</command> command).  If you are building on a
+32-bit system, also see below.
     </para>
 
     <para>
-      <option><envar>CXXFLAGS="-msse2 -mfpmath=sse"</envar></option>: Use SSE2 em
-vez de 387 para operações de ponto flutuante de precisão dupla. É necessário
-ao GCC para satisfazer as expectativas dos(as) desenvolvedores(as) do fluxo
-de desenvolvimento (Mozilla) com aritmética de ponto flutuante. Use-o se
-você estiver construindo esse pacote em um sistema de 32 bits com GCC (se o
-Clang não estiver instalado ou o GCC for especificado
-explicitamente). Observe que isso fará com que o SpiderMonkey trave em um
-processador sem capacidade SSE2. Se você estiver executando o sistema em um
-processador tão antigo, o Clang será estritamente necessário. Essa
-configuração não é necessária em sistemas de 64 bits porque todos os
-processadores x86 de 64 bits suportam SSE2 e os compiladores de 64 bits
-(ambos, Clang e GCC) usam SSE2 por padrão.
+      <option><envar>CXXFLAGS="-msse2 -mfpmath=sse"</envar></option>: Use SSE2
+instead of 387 for double-precision floating-point operations.  It's needed
+by GCC to satisfy the expectations of upstream (Mozilla) developers with
+floating-point arithmetic.  Use it if you are building this package on a
+32-bit system with GCC (if Clang is not installed or GCC is explicitly
+specified).  Note that this will cause SpiderMonkey to crash on a processor
+without SSE2 capability.  If you are running the system on such an old
+processor, Clang is strictly needed.  This setting is not needed on 64-bit
+systems because all 64-bit x86 processors support SSE2 and the 64-bit
+compilers (both Clang and GCC) use SSE2 by default.
     </para>
   </sect2>
 
