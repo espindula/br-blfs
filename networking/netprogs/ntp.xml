@@ -315,11 +315,11 @@ sincronize a hora de maneira gradual. A outra opção é a de executar o
 
       <para>
         Se você escolher a opção um, então instale <phrase revision="sysv">o
-conjunto de comandos sequenciais de iniciação
+conjunto de comandos sequenciados de iniciação
 <filename>/etc/rc.d/init.d/ntp</filename> incluso</phrase> <phrase
 revision="systemd">a unidade <filename>ntpd.service</filename>
-inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
-<xref linkend="systemd-units" revision="systemd"/>.
+inclusa</phrase> no pacote <xref linkend="bootscripts"
+revision="sysv"/><xref linkend="systemd-units" revision="systemd"/>.
       </para>
 
       <indexterm zone="ntp ntp-init" revision="sysv">
@@ -332,12 +332,21 @@ inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
 
 <screen role="root"><userinput>make install-ntpd</userinput></screen>
 
-      <para>
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable ntpd</userinput></screen>
+
+      <para revision='systemd'>
         Além disso, você deveria desabilitar um serviço incompatível. Como o(a)
 usuário(a) &root;:
       </para>
 
-<screen role="root"><userinput>systemctl disable systemd-timesyncd.service</userinput></screen>
+<screen  revision='systemd'
+         role="root"><userinput>systemctl disable systemd-timesyncd.service</userinput></screen>
 
       <para>
         Se você preferir executar <command>ntpd</command> periodicamente, adicione o
@@ -388,7 +397,7 @@ ntptrace, sntp, tickadj e update-leap</seg>
         <term><command>calc_tickadj</command></term>
         <listitem>
           <para>
-            calcula o valor ideal para o tick dado o arquivo de mudança gradual do ntp
+            calcula o valor ideal para tick dado o arquivo de mudança gradual do ntp
           </para>
           <indexterm zone="ntp calc_tickadj">
             <primary sortas="b-calc_tickadj">calc_tickadj</primary>
@@ -428,7 +437,7 @@ até que o &quot;<command>ntpd</command>&quot; tenha configurado a hora
           <para>
             é um processo de segundo plano ntp que executa em segundo plano e mantém a
 data e a hora sincronizadas baseado na resposta originária dos servidores
-ntp configurados. Também funciona como um servidor ntp
+ntp configurados. Ele também funciona como um servidor ntp
           </para>
           <indexterm zone="ntp ntpd">
             <primary sortas="b-ntpd">ntpd</primary>

@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY paps-download-http "https://github.com/dov/paps/releases/download/v&paps-version;/paps-&paps-version;.tar.gz">
+  <!ENTITY paps-download-http "https://github.com/dov/paps/releases/download/v&paps-version;/paps-&paps-version;.tar.xz">
   <!ENTITY paps-download-ftp  "">
-  <!ENTITY paps-md5sum        "6bd661b8fd224adc3343a91e6521a4f2">
-  <!ENTITY paps-size          "220 KB">
-  <!ENTITY paps-buildsize     "4,0 MB">
-  <!ENTITY paps-time          "menos que 0,1 UPC">
+  <!ENTITY paps-md5sum        "dcc3208e8414562607d51107ea2b69a6">
+  <!ENTITY paps-size          "72 KB">
+  <!ENTITY paps-buildsize     "12 MB">
+  <!ENTITY paps-time          "0,1 UPC">
 ]>
 
 <sect1 id="paps" xreflabel="paps-&paps-version;">
@@ -69,20 +69,21 @@ sequenciais complexos suportados pelo <application>Pango</application>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing='compact'>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/paps-&paps-version;-fmt_fix-1.patch"/>
+          Required patch: <ulink url="&patch-root;/paps-&paps-version;-fmt_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do paps</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do paps</bridgehead>
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
-      <xref linkend="fmt"/>, <xref linkend='intltool'/> e <xref linkend="pango"/>
+      <xref linkend="fmt"/>, <xref linkend="libpaper"/> e <xref linkend="pango"/>
     </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
@@ -90,54 +91,55 @@ url="&patch-root;/paps-&paps-version;-fmt_fix-1.patch"/>
       <xref linkend="doxygen"/>
     </para>
 
-
   </sect2>
 
   <sect2 role="installation">
     <title>Instalação do paps</title>
 
-
     <para>
-      First corrija problemas com glib-2.81.0 e fmt-12.1.0 ou posteriores:
+      Primeiro, corrija um problema com um conjunto de comandos sequenciados que
+será instalado:
     </para>
 
-<screen><userinput>sed -i -r 's/g_utf8_(next|offset)/(char*) &amp;/' src/paps.cc &amp;&amp;
-patch -Np1 -i ../paps-0.8.0-fmt_fix-1.patch</userinput></screen>
+<screen><userinput>sed -i 's|/usr/local/share|/usr/share|' scripts/src-to-paps</userinput></screen>
 
     <para>
-      Instale o <application>paps</application> executando os seguintes comandos:
+      Agora, instale o <application>paps</application> executando os seguintes
+comandos:
     </para>
 
-<screen><userinput>./configure --prefix=/usr           \
-            --disable-Werror        \
-            --mandir=/usr/share/man \
-            CXX="g++ -std=gnu++17"  &amp;&amp;
-make</userinput></screen>
+<screen><userinput>mkdir build &amp;&amp;
+cd    build &amp;&amp;
+
+meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
+ninja</userinput></screen>
 
     <para>
       Esse pacote não vem com uma suíte de teste.
     </para>
 
     <para>
-      Agora, como o(a) usante <systemitem class="username">root</systemitem>:
+      Agora, como o(a) usuário(a) &root;:
     </para>
 
-<screen role="root"><userinput>make install</userinput></screen>
+<screen role="root"><userinput>ninja install</userinput></screen>
 
   </sect2>
 
+  <!--
   <sect2 role="commands">
-    <title>Explicações do Comando</title>
+
+    <title>Command Explanations</title>
 
     <para>
-      <parameter>CXX="g++ -std=gnu++17"</parameter>: O padrão é o de usar
-<parameter>-std=gnu++11</parameter>, porém um arquivo usa um recurso
-disponível somente na C++17.
+      <parameter>CXX="g++ -std=gnu++17"</parameter>: The default is to use
+      <parameter>-std=gnu++11</parameter>, but one file uses a feature
+      only available in C++17.
     </para>
 
   </sect2>
-
-  <sect2 role="content">
+-->
+<sect2 role="content">
     <title>Conteúdo</title>
 
     <segmentedlist>
@@ -146,7 +148,7 @@ disponível somente na C++17.
       <segtitle>Diretório Instalado</segtitle>
 
       <seglistitem>
-        <seg>paps</seg>
+        <seg>paps e src-to-paps</seg>
         <seg>Nenhum(a)</seg>
         <seg>Nenhum(a)</seg>
       </seglistitem>
@@ -165,6 +167,18 @@ caracteres UTF-8
           </para>
           <indexterm zone="paps paps-prog">
             <primary sortas="b-paps">paps</primary>
+          </indexterm>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry id="paps-to-src">
+        <term><command>srd-to-paps</command></term>
+        <listitem>
+          <para>
+            é um pequeno envolucrador que imprime código-fonte com realce de sintaxe
+          </para>
+          <indexterm zone="paps paps-to-src">
+            <primary sortas="b-paps-to-src">paps-to-src</primary>
           </indexterm>
         </listitem>
       </varlistentry>

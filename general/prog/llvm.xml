@@ -8,7 +8,8 @@
 
   <!ENTITY llvm-download-http "&llvm-url;/llvm-project-&llvm-version;.src.tar.xz">
   <!ENTITY llvm-download-ftp  "">
-  <!-- md5sum and size in packages.ent to be shared with libclc -->
+  <!ENTITY llvm-md5sum        "3159f9d5d76f74e54e083582d660b08d">
+  <!ENTITY llvm-size          "171 MB">
   <!ENTITY llvm-buildsize     "4,7 GB (1,1 GB instalado; adicionar 23 GB para testes e 2,3 GB para
 documentação)">
   <!ENTITY llvm-time          "13 UPC (Adicionar 19 UPC para testes; ambos usando paralelismo=8)">
@@ -45,6 +46,17 @@ trabalho, como <application>firefox</application>, e para
 <application>rust</application> se for construído usando o sistema
 <application>LLVM</application>.
     </para>
+
+    <note>
+      <para>
+        Em um sistema Linux x86 de 32 bits, <application>Clang</application>
+padroniza para gerar código objeto executável somente em processadores
+Pentium 4 ou mais recentes. Os processadores mais antigos de 32 bits não
+mais são considerados suportados pelo LFS em absoluto. Você pode tentar
+substituir o padrão se realmente necessário, mas os(as) editores(as) do BLFS
+não testaram isso.
+      </para>
+    </note>
 
     <para>
       O pacote <application>Compiler RT</application> fornece higienizador de
@@ -88,17 +100,19 @@ usam <application>Clang</application> e <application>LLVM</application>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing='compact'>
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/llvm-&llvm-version;-upstream_fix-1.patch"/>
+          Required patch: <ulink
+          url="&patch-root;/llvm-&llvm-version;-upstream_fix-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do LLVM</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do LLVM</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -125,13 +139,6 @@ construir documentação), <ulink url="https://ocaml.org/">OCaml</ulink> e
 
   <sect2 role="installation">
     <title>Instalação do LLVM</title>
-
-    <para>
-      Primeiro, corrija um defeito que causante de código incorreto em algumas
-condições:
-    </para>
-
-    <screen><userinput>patch -Np1 -i ../llvm-&llvm-version;-upstream_fix-1.patch</userinput></screen>
 
     <para>
      Existem muitos conjuntos de comandos sequenciais Python nesse pacote que
@@ -262,9 +269,9 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
       <!-- EDITORS - if you have more than 4 cores, use a cgroup to measure
       the elapsed time for the tests.  Also, libstdc++.a and perhaps libstdc++fs.a
       are used by a couple of the link-static tests. -->
-<!-- https://github.com/llvm/llvm-project/issues/184961 -->
-<!-- 22.1.0: 92579 Passed, 34885 Unsupported, 420 Skipped,
-                   136 Expectedly Failed, 4 Failed -->
+<!-- https://github.com/llvm/llvm-project/issues/216004 -->
+<!-- 23.1.0: 99128 Passed, 37444 Unsupported, 436 Skipped,
+                   133 Expectedly Failed, 8 Failed -->
 <!-- To editors: it seems there is a more thorough test suite named
            "test-suite-x.y.z.src.tar.xz" on the GitHub release download
            page.  The usage of it is on
@@ -273,16 +280,18 @@ systemd-run --user --pty -d -G -p LimitCORE=0 ninja check-all</userinput></scree
 
            Let's let it go.  llvm is complex enough as it is.  Adding
            the additional testsuite is IMO overkill.  - bdubbs -->
-If <option>-jN</option> (N replaced with a number) is passed to
-<command>ninja</command>, the tests will be built with N logical cores, but
-run using all available logical cores.  Run the test command in a cgroup
-(<phrase revision='systemd'>pass the <option>-p AllowedCPUs=...</option>
-option to the <command>systemd-run</command> command, </phrase> read <xref
-linkend='build-in-cgroup'/> for details) to limit the number of logical
-cores for running the tests.  Four tests named
-<filename>Linux/pthread_join.cpp</filename> are known to fail.  One test
-named <filename>Linux/clone_setns.cpp</filename> will fail if
-<option>CONFIG_USER_NS</option> is not enabled in kernel configuration.
+Se <option>-jN</option> (N substituído por um número) for passado para
+<command>ninja</command>, os testes serão construídos com N núcleos lógicos,
+mas executados usando todos os núcleos lógicos disponíveis. Execute o
+comando de teste em um cgroup (<phrase revision='systemd'>passe a opção
+<option>-p AllowedCPUs=...</option> para o comando
+<command>systemd-run</command>, </phrase> leia <xref
+linkend='build-in-cgroup'/> para detalhes) para limitar o número de núcleos
+lógicos para executar os testes. Oito testes de ThreadSanitizer são
+conhecidos por falharem com glibc 2.44 ou mais recente. Um teste nominado de
+<filename>Linux/clone_setns.cpp</filename> falhará se
+<option>CONFIG_USER_NS</option> não estiver habilitado na configuração do
+núcleo.
       
 
       
@@ -372,12 +381,10 @@ GCC).
     </para>
 
     <para>
-      <parameter>-D LLVM_ENABLE_RUNTIMES=compiler-rt</parameter>: This switch
-selects the LLVM runtime libraries to be built.  For BLFS we only need
-compiler-rt (for some features of clang and <xref linkend='rust'/>) and
-libclc, and the latter have to be built separately (<xref
-linkend='libclc'/>) to avoid a circular dependency involving <xref
-linkend='spirv-llvm-translator'/>.  So we only enable compiler-rt here.
+      <parameter>-D LLVM_ENABLE_RUNTIMES=compiler-rt</parameter>: Essa chave
+seleciona as bibliotecas de tempo de execução do LLVM a serem
+construídas. Para BLFS, nós precisamos somente da compiler-rt, de modo que
+nós habilitamos somente ela aqui.
     </para>
 
     <para>

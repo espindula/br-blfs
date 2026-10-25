@@ -6,8 +6,8 @@
 
   <!ENTITY thunderbird-download-http "&mozilla-http;/thunderbird/releases/&thunderbird-version;esr/source/thunderbird-&thunderbird-version;esr.source.tar.xz">
   <!ENTITY thunderbird-download-ftp  "">
-  <!ENTITY thunderbird-md5sum        "23978c142934d5be8ee3c699b4991e56">
-  <!ENTITY thunderbird-size          "896 MB">
+  <!ENTITY thunderbird-md5sum        "ef050f29fd16513a7e03f60d2a6eba67">
+  <!ENTITY thunderbird-size          "892 MB">
   <!ENTITY thunderbird-buildsize     "11,0 GB (296 MB instalado)">
   <!ENTITY thunderbird-time          "16 UPC (em uma máquina de oito núcleos)">
   <!-- Removed the -j1 time because python and rust do not obey it, although
@@ -76,33 +76,17 @@ Gecko para o habilitar a exibir e compor mensagens eletrônicas em HTML.
       </listitem>
     </itemizedlist>
 
-
-
-    <!--
-    <bridgehead renderas="sect3">
-Additional Downloads</bridgehead>
+    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Required patch:
-          <ulink url="&patch-root;/thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/thunderbird-&thunderbird-version;esr-glibc-2.43.patch"/>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Required patch:
-          <ulink url="&patch-root;/thunderbird-&thunderbird-version;esr-llvm_22-1.patch"/>
+          Remendo exigido: <ulink
+url="&patch-root;/thunderbird-&thunderbird-version;-clang_23-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
--->
-<bridgehead renderas="sect3">Dependências do Thunderbird</bridgehead>
+
+    <bridgehead renderas="sect3">Dependências do Thunderbird</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -160,73 +144,13 @@ adequados antes de continuar.
       </para>
     </note>
 
-
-    
-
-
-
-
-
-
-    <!--
     <para>
-
-      At first, fix building this package with Python-3.14:
+      Corrija construir esse pacote com clang 23 ou mais recente:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-python_3.14_fixes-1.patch</userinput></screen>
--->
-<!-- https://bugzilla.mozilla.org/show_bug.cgi?id=2006630 -->
-<!--
-    <para>
-
-      Remove checksums from cargo crates for files that don't exist:
-    </para>
-
-<screen><userinput remap="pre">find -name .cargo-checksum.json | \
-     xargs sed -ri 's|"[^"]*.gitmodules":"[^"]*",?||'</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;-clang_23-1.patch</userinput></screen>
 
     <para>
-      Fix building this package with glibc-2.43 and adapt the checksums:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-glibc-2.43.patch &amp;&amp;
-sed '/patch.crates-io/a glslopt={path="../third_party/rust/glslopt"}' \
-    -i comm/rust/Cargo.toml &amp;&amp;
-sed '/name = "glslopt"/,/^$/{/source/d;/checksum/d}' \
-    -i comm/rust/Cargo.lock</userinput></screen>
--->
-<!--
-    <para>
-
-      Next, fix building this package with rustc-1.95.0.  Again the build
-      system needs a change to skip the checksum verification:
-    </para>
-
-<screen><userinput remap="pre">sed '/use super::/a use core::simd::Select;' \
-    -i comm/third_party/rust/encoding_rs/src/x_user_defined.rs &amp;&amp;
-sed '/patch.crates-io/a encoding_rs={path="../third_party/rust/encoding_rs"}' \
-    -i comm/rust/Cargo.toml &amp;&amp;
-sed '/name = "encoding_rs"/,/^$/{/source/d;/checksum/d}' -i comm/rust/Cargo.lock</userinput></screen>
--->
-<!--
-    <para>
-
-      Next, fix building this package with LLVM-22:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../thunderbird-&thunderbird-version;esr-llvm_22-1.patch</userinput></screen>
--->
-<!--https://github.com/mozilla-firefox/firefox/commit/c4aab1ba6aad-->
-<!--
-    <para>
-
-      Next, fix building this package with cbindgen-0.29.4:
-    </para>
-
-<screen><userinput remap="pre">sed -i '/const [CVP]/s/pub //' gfx/wr/webrender/src/texture_cache.rs</userinput></screen>
--->
-<para>
       A configuração do <application>Thunderbird</application> é realizada
 criando-se um arquivo <filename>mozconfig</filename> contendo as opções de
 configuração desejadas. Um <filename>mozconfig</filename> padrão é criado

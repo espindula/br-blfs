@@ -9,7 +9,7 @@
   <!ENTITY openssh-download-ftp  "">
   <!ENTITY openssh-md5sum        "&openssh-md5sum;">
   <!ENTITY openssh-size          "2,3 MB">
-  <!ENTITY openssh-buildsize     "103 MB (com testes)">
+  <!ENTITY openssh-buildsize     "101 MB (com testes)">
   <!ENTITY openssh-time "0,3 UPC (Usando paralelismo=4; executar os testes leva cerca de 20 minutos, independentemente da velocidade do processador)">
                                   
                                   
@@ -426,6 +426,39 @@ systemd</phrase> do sshd do BLFS.
       </indexterm>
 
 <screen role="root"><userinput>make install-sshd</userinput></screen>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable sshd</userinput></screen>
+
+      <note revision="systemd">
+        <para>
+          Esse pacote vem com dois tipos de unidades: um arquivo de serviço e um
+arquivo de soquete. O arquivo de serviço iniciará o processo de segundo
+plano sshd uma vez na inicialização e ele continuará em execução até que o
+sistema desligar. O arquivo de soquete fará com que o systemd escute na
+porta ssh (padrão 22, precisa ser editado para qualquer outra coisa) e
+iniciará o processo de segundo plano sshd quando algo tentar se conectar a
+essa porta e interromperá o processo de segundo plano quando a conexão for
+encerrada. Isso é chamado de ativação de soquete e é análogo a se usar
+<application>{,x}inetd</application> em um sistema baseado em SysVinit.
+        </para>
+
+        <para>
+          Com o comando acima, o primeiro método é usado: o processo de segundo plano
+sshd é iniciado na inicialização e encerrado no desligamento. Se o método de
+soquete for desejado, você, em vez disso, precisa executar (como o(a) usante
+<systemitem class="username">root</systemitem>):
+        </para>
+
+<screen role="nodump"><userinput>systemctl enable sshd.socket</userinput></screen>
+
+      </note>
+
     </sect3>
   </sect2>
 

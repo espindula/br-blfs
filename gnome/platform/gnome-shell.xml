@@ -5,17 +5,16 @@
   %general-entities;
 
   <!ENTITY gnome-shell-download-http
-           "&gnome-download-http;/gnome-shell/&gnome-50;/gnome-shell-&gnome-shell-version;.tar.xz">
+           "&gnome-download-http;/gnome-shell/&gnome-51;/gnome-shell-&gnome-shell-version;.tar.xz">
   <!ENTITY gnome-shell-download-ftp  "">
-  <!ENTITY gnome-shell-md5sum        "4ab5141867b8639e793aa66fb38dc066">
-  <!ENTITY gnome-shell-size          "2,2 MB">
-  <!ENTITY gnome-shell-buildsize     "63 MB (com testes)">
+  <!ENTITY gnome-shell-md5sum        "2c7abd2f021eef95a5e3745cb0d2809f">
+  <!ENTITY gnome-shell-size          "2,3 MB">
+  <!ENTITY gnome-shell-buildsize     "71 MB (com testes)">
   <!ENTITY gnome-shell-time          "0,5 UPC (Usando paralelismo=4; com testes)">
 ]>
 
 <sect1 id="gnome-shell" xreflabel="gnome-shell-&gnome-shell-version;">
   <?dbhtml filename="gnome-shell.html"?>
-
 
   <title>gnome-shell-&gnome-shell-version;</title>
 
@@ -119,15 +118,16 @@ revision='systemd'/>
     <title>Instalação do GNOME Shell</title>
 
     
-    <!-- Still needed for version 50.4 -->
-<para>
-      Primeiro, corrija um problema de construção ao usar gcc-16 ou posterior:
+    <!-- Fixed on version 51.0 
+    <para>
+
+      First, fix a build problem when using gcc-16 or later:
     </para>
 
 <screen><userinput>sed -e '/(ICalProperty/s/ICalProperty/const &amp;/' \
     -i src/calendar-server/gnome-shell-calendar-server.c</userinput></screen>
-
-    <para>
+-->
+<para>
       Instale o <application>GNOME Shell</application> executando os seguintes
 comandos:
     </para>
@@ -172,13 +172,17 @@ ninja test</userinput></screen>
            in a separate namespace, but it's too overkill IMO.
            DO NOT REMOVE unless you've tested with a "complex multi-monitor
            configuration" (with mixed scaling settings and "strange"
-           positions of monitors). -->
+           positions of monitors). 
+
+           51.0 diid not have this problem, but I only had one monitor.
+           Error registering session with GDM.  Was not currently running GDM
+           but gdm-50.3 was installed. bdubbs 2026-09-18.
+           -->
 Você precisa estar executando em uma sessão do Wayland para executar os
 testes. Alguns falharão se <xref linkend="gdm"/> não estiver
 instalado.<phrase revision="sysv"> Vários outros testes possivelmente falhem
-no ambiente Sysv.</phrase> Um teste nominado <filename>Suporte a estilo
-CSS</filename> é conhecido por falhar com algumas configurações de vários
-monitores.
+no ambiente Sysv.</phrase> Um teste, closeWithActiveWindows, é conhecido por
+falhar.
     </para>
 
     <para>

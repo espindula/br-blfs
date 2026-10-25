@@ -83,8 +83,8 @@ Additional Downloads</bridgehead>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend='libyaml'/>, <xref linkend='swig'/> e <xref
-linkend='texlive'/>
+      <xref linkend='libyaml'/>, <xref linkend='meson_python'/> (to build the
+Python module), <xref linkend='swig'/>, and <xref linkend='texlive'/>
     </para>
   </sect2>
 
@@ -147,8 +147,8 @@ comando:
     
     <para>
       Se você tiver instalado <xref linkend='swig'/> e desejar instalar as
-ligações Python 3 desse pacote, corrija o código para a compatibilidade com
-SWIG 4.5.0 ou mais recente primeiro:
+ligações Python 3 desse pacote, primeiro corrija o código para a
+compatibilidade com SWIG 4.5.0 ou mais recente:
     </para>
 
 <screen role="nodump"><userinput>sed -e 's/PyString_FromString/PyUnicode_FromString/' \
@@ -188,16 +188,16 @@ desejado.
 <para>
       <envar>CC='gcc -Wl,-z,noexecstack'</envar>: Essa variável impede marcar as
 bibliotecas compartilhadas na suíte de teste como exigindo pilha
-executável. A Glibc 2.41 ou posterior parou de permitir abrir com
-<function>dlopen</function> tal biblioteca compartilhada, de modo que a
-suíte de teste falharia. Mas essas bibliotecas compartilhadas não precisam
-realmente de uma pilha executável, de modo que nós podemos usar
+executável. A Glibc 2.41 ou posterior parou de permitir o uso de
+<function>dlopen</function> para tais bibliotecas compartilhadas, de modo
+que a suíte de teste falharia. Mas essas bibliotecas compartilhadas não
+precisam realmente de uma pilha executável, de modo que nós conseguimos usar
 <parameter>-Wl,-z,noexecstack</parameter> para consertar a suíte de teste. É
 necessário no ambiente <envar>CC</envar> para o <command>meson
 test</command> porque essas bibliotecas compartilhadas são construídas por
-um conjunto de comandos sequenciais de teste em vez do sistema de construção
-<command>meson</command>/<command>ninja</command>, e o conjunto de comandos
-sequenciais de teste não reconhece outras variáveis de ambiente
+um conjunto de comandos sequenciados de teste em vez do sistema de
+construção <command>meson</command>/<command>ninja</command>, e o conjunto
+de comandos sequenciados de teste não reconhece outras variáveis de ambiente
 <quote>comuns</quote> como <envar>LDFLAGS</envar>.
     </para>
 

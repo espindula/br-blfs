@@ -7,9 +7,9 @@
   <!ENTITY nfs-utils-root "&kernel-dl;/linux/utils/nfs-utils" >
   <!ENTITY nfs-utils-download-http "&nfs-utils-root;/&nfs-utils-version;/nfs-utils-&nfs-utils-version;.tar.xz">
   <!ENTITY nfs-utils-download-ftp  "">
-  <!ENTITY nfs-utils-md5sum        "c398aeaa53ee5bc9ded8bc11752347e9">
-  <!ENTITY nfs-utils-size          "748 KB">
-  <!ENTITY nfs-utils-buildsize     "25 MB (com testes)">
+  <!ENTITY nfs-utils-md5sum        "24b69355dd92c51acc9dda7b178e1390">
+  <!ENTITY nfs-utils-size          "760 KB">
+  <!ENTITY nfs-utils-buildsize     "21 MB (com testes)">
   <!ENTITY nfs-utils-time          "0,2 UPC (com testes)">
 ]>
 
@@ -303,31 +303,29 @@ Inicialização</phrase> <phrase revision="systemd">Unidades do
 Systemd</phrase></title>
 
         <para>
-          Se você tiver habilitado construir recursos do NFSv4, instale <phrase
-revision="sysv">o conjunto de comandos sequenciados de iniciação
-<filename>/etc/rc.d/init.d/nfs-server </filename> incluso </phrase> <phrase
-revision="systemd">as unidades de servidor NFSv4 inclusas</phrase> no pacote
+          Para iniciar o servidor NFS na inicialização, instale <phrase
+revision="sysv"> o conjunto de comandos sequenciados de iniciação
+<filename>/etc/rc.d/init.d/nfs-server</filename> incluso </phrase> <phrase
+revision="systemd">as unidades de servidor NFS inclusas</phrase> no pacote
 <xref linkend="bootscripts" revision="sysv"/> <xref linkend="systemd-units"
 revision="systemd"/> para iniciar o servidor na inicialização.
         </para>
-
-<screen role="nodump" revision="systemd"><userinput>make install-nfsv4-server</userinput></screen>
-
-        <para revision="systemd">
-          Se você desabilitou o suporte ao &quot;NFSv4&quot;, [então] execute o
-seguinte comando como o(a) usuário(a) &quot;<systemitem
-class="username">root</systemitem>&quot; para omitir as unidades do
-&quot;systemd&quot; específicas do &quot;NFSv4&quot;:
-        </para>
-
-
-<screen role="root"><!-- both -->
-<userinput>make install-nfs-server</userinput></screen>
-
-        <indexterm zone="nfs-utils nfs-utils-server-init" revision="sysv">
+        <indexterm zone="nfs-utils nfs-utils-server-init">
           <primary sortas="f-nfs-server">nfs-server</primary>
         </indexterm>
 
+<screen role="root"><userinput>make install-nfs-server</userinput></screen>
+
+        <note revision='systemd'>
+          <para>
+            Se você tiver habilitado o suporte ao NFSv4, execute o seguinte comando. Ele
+instalará as unidades necessárias para o NFSv4, além daquelas necessárias
+para o servidor NFS:
+          </para>
+
+<screen role="nodump" revision="systemd"><userinput>make install-nfsv4-server</userinput></screen>
+
+        </note>
         <para revision="sysv">
           Agora crie o arquivo de configuração
 &quot;<filename>/etc/sysconfig/nfs-server</filename>&quot;:
@@ -361,6 +359,14 @@ padrões deveriam servir para a maioria dos casos de uso.
         <indexterm zone="nfs-utils nfs-utils-server-init" revision="systemd">
           <primary sortas="e-etc-default-nfs-utils">/etc/default/nfs-utils</primary>
         </indexterm>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable nfs-server</userinput></screen>
 
       </sect4>
 
@@ -440,7 +446,7 @@ no pacote &quot;<xref linkend="bootscripts" revision="sysv"/>&quot;
 os serviços do cliente na inicialização.
         </para>
 
-<screen role="root"><userinput>make install-nfs-client</userinput></screen>
+<screen role="nodump"><userinput>make install-nfs-client</userinput></screen>
 
         <indexterm zone="nfs-utils nfs-utils-client-config">
           <primary sortas="f-nfs-client">nfs-client</primary>
@@ -457,6 +463,14 @@ linkend="postlfs-config-netfs"/>&quot;.
         <indexterm zone="nfs-utils nfs-utils-client-config" revision="sysv">
           <primary sortas="f-netfs">netfs</primary>
         </indexterm>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='nodump'><userinput>systemctl enable nfs-client.target</userinput></screen>
 
       </sect4>
 

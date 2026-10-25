@@ -6,13 +6,17 @@
 
   <!ENTITY unbound-download-http "https://nlnetlabs.nl/downloads/unbound/unbound-&unbound-version;.tar.gz">
   <!ENTITY unbound-download-ftp  "">
-  <!ENTITY unbound-md5sum        "dce631cc8c882ebc707dade27e7fe6f3">
+  <!ENTITY unbound-md5sum        "e387641957ace96c83c9e150c124b449">
   <!ENTITY unbound-size          "6,6 MB">
-  <!ENTITY unbound-buildsize     "196 MB (com documentos; adicionar 11 MB para testes)">
-  <!ENTITY unbound-time          "0,3 UPC (Usando paralelismo=4; com documentos; adicionar 0,1 UPC para
-testes)">
+  <!ENTITY unbound-buildsize     "230 MB (com documentos e testes)">
+  <!ENTITY unbound-time          "0,4 UPC (Usando paralelismo=4; com documentos e testes)">
 ]>
 
+  
+
+<!-- Docs will get a separate build size eventually since it shoots up the
+       size by quite a bit. The build time however is negligable and makes
+       little difference. -->
 <sect1 id="unbound" xreflabel="Unbound-&unbound-version;" revision='sysv'>
   <?dbhtml filename="unbound.html"?>
 
@@ -124,11 +128,26 @@ seguintes comandos:
 make</userinput></screen>
 
     <para>
-      Se você tiver o pacote <xref linkend="doxygen"/> instalado e quiser
-construir a documentação html, execute o seguinte comando:
+      If you have <xref linkend="doxygen"/> and <xref linkend="sphinx"/>
+installed, the HTML documentation can be built with the following commands
+<footnote><para>
+        A documentação é construída dessa maneira, uma vez que o sistema de
+construção gerará incorretamente os comandos que constroem a
+documentação. Isso pode conduzir a situações em que
+<command>doxygen</command> se torna em branco, e
+<command>sphinx-build</command> pode se tornar ou
+<command>sphinx-build-</command> ou
+<command>sphinx-build-&python3-major;</command>, dependendo do que estiver
+sendo passado para <command>./configure</command>.
+      </para></footnote>:
     </para>
 
-<screen remap="doc"><userinput>make doc</userinput></screen>
+<screen
+  remap="doc"><userinput>doxygen doc/unbound.doxygen               &amp;&amp;
+sphinx-build -b html pythonmod/doc         \
+                     doc/html/pythonmod   &amp;&amp;
+sphinx-build -b html libunbound/python/doc \
+                     doc/html/pyunbound</userinput></screen>
 
     <para>
       Para testar os resultados, emita <command>make check</command>.
@@ -146,9 +165,13 @@ mv -v /usr/sbin/unbound-host /usr/bin/</userinput></screen>
 como o(a) usante &root;:
     </para>
 
+<!-- install for actually installing the HTML gave a non-zero error since
+         it omits directories within doc/html. So cp -vR is used instead. -->
 <screen role="root"
-        remap="doc"><userinput>install -v -m755 -d /usr/share/doc/unbound-&unbound-version; &amp;&amp;
-install -v -m644 doc/html/* /usr/share/doc/unbound-&unbound-version;</userinput></screen>
+  remap="doc"><userinput>install -v -m755 -d /usr/share/doc/unbound-&unbound-version; &amp;&amp;
+cp -vR doc/html/*   /usr/share/doc/unbound-&unbound-version;</userinput></screen>
+
+    
 
   </sect2>
 
@@ -239,7 +262,7 @@ systemd</phrase></title>
       <para>
         Se você quiser que o servidor <application>Unbound</application> inicie
 automaticamente quando o sistema for inicializado, instale <phrase
-revision="sysv">o conjunto de comandos sequenciais de inicialização
+revision="sysv">o conjunto de comandos sequenciados de inicialização
 <filename>/etc/rc.d/init.d/unbound</filename> incluso</phrase> <phrase
 revision="systemd">a unidade <filename>unbound.service</filename>
 inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
@@ -251,6 +274,14 @@ inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
       </indexterm>
 
 <screen role="root"><userinput>make install-unbound</userinput></screen>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable unbound</userinput></screen>
 
     </sect3>
 

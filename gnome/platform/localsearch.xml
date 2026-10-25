@@ -4,13 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.11/localsearch-&localsearch-version;.tar.xz">
+  <!ENTITY localsearch-download-http "&gnome-download-http;/localsearch/3.12/localsearch-&localsearch-version;.tar.xz">
   <!ENTITY localsearch-download-ftp  "">
-  <!ENTITY localsearch-md5sum        "1406955c072af72776fdcbb9b12dc103">
+  <!ENTITY localsearch-md5sum        "c7fdb559cb18d18775e8318d34cb3ac7">
   <!ENTITY localsearch-size          "4,3 MB">
-  <!ENTITY localsearch-buildsize     "79 MB">
-  <!ENTITY localsearch-time          "0.2 SBU (with parallelism=4; add as much as 1.3 SBU for tests, dependent on
-disk speed)">
+  <!ENTITY localsearch-buildsize     "32 MB (com testes)">
+  <!ENTITY localsearch-time          "0,2 UPC (com paralelismo=4; adicionar 1,8 UPC para testes)">
 ]>
 
 <sect1 id="localsearch" xreflabel="localsearch-&localsearch-version;">
@@ -199,17 +198,10 @@ meson setup --prefix=/usr                  \
 ninja</userinput></screen>
 
     <para>
-      <!--One test,
-      <filename>
-test_cli_inhibit</filename>, is known to fail.
-      Seem to pass if man pages are built (pierre)
-
-      The tests for 3.11.1 need to be revisited.  I had 109 tests pass and
-      12 tests fail.  
-      -->
-To test the results, issue the following commands. Make sure that you adjust
-the individual test timeout to a value suitable for your machine, please
-read the note above for more details.
+      Para testar os resultados, emita os seguintes comandos. Assegure-se de
+ajustar o tempo limite do teste individual para um valor adequado para a tua
+máquina; por favor, leia a observação acima para mais detalhes. Um teste,
+<filename>type-utils</filename>, é conhecido por falhar.
     </para>
 
 <screen remap="test"><userinput>meson configure -D man=true -D functional_tests=true &amp;&amp;
@@ -221,17 +213,8 @@ dbus-run-session env LC_ALL=C.UTF-8 TRACKER_TESTS_AWAIT_TIMEOUT=<replaceable>20<
       Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
-    <!-- Does not seem to be true anymore (pierre Dec 25)
-    <note>
+    <screen role="root"><userinput>ninja install</userinput></screen>
 
-      <para>
-        The tests create files in the user directory (up to 24 MB), so
-        they have to be removed afterwards.
-      </para>
-    </note>
-    -->
-<screen role="root"><userinput>ninja install</userinput></screen>
-    
   </sect2>
 
   <sect2 role="commands">
@@ -293,6 +276,28 @@ instalado a dependência recomendada ffmpeg. Observe que usar isso causará 7
 falhas de teste e também prejudicará significativamente a funcionalidade
 deste pacote.
     </para>
+  </sect2>
+
+  <sect2 role="configuration">
+    <title>Configurando Localsearch</title>
+
+    <sect3>
+      <title>Excluir Diretórios do Índice</title>
+
+      <para>
+        Por padrão, o localsearch enumera recursivamente todo o conteúdo do
+diretório lar do(a) usante para criar um índice; as exceções são pontos de
+montagem definidos em <filename>/etc/fstab</filename>, repositórios Git e
+diretórios ocultos (cujos nomes comecem com um caractere ponto). No entanto,
+possivelmente existam outros diretórios cuja indexação consuma recursos
+excessivos do sistema sem trazer benefícios reais, por exemplo, um diretório
+para armazenar tarballs de fonte de pacotes e construir-se os pacotes a
+partir do fonte. Para excluir um diretório da indexação, crie um arquivo
+<filename>.nomedia</filename> no diretório, por exemplo:
+      </para>
+
+<screen role='nodump'><userinput>touch ~/blfs-sources/.nomedia</userinput></screen>
+    </sect3>
   </sect2>
 
   <sect2 role="content">

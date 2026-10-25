@@ -6,9 +6,9 @@
 
   <!ENTITY rsync-download-http "https://www.samba.org/ftp/rsync/src/rsync-&rsync-version;.tar.gz">
   <!ENTITY rsync-download-ftp  "">
-  <!ENTITY rsync-md5sum        "418db7651d1acf55364b0834234dbbfb">
+  <!ENTITY rsync-md5sum        "9b996a86c297a1e9cef0f92725dc825e">
   <!ENTITY rsync-size          "1,9 MB">
-  <!ENTITY rsync-buildsize     "80 MB (com testes e documentação)">
+  <!ENTITY rsync-buildsize     "81 MB (com testes e documentação)">
   <!ENTITY rsync-time          "0,6 UPC (com testes)">
 ]>
 
@@ -255,7 +255,7 @@ executar o cliente &quot;<application>rsync</application>&quot;.
       </para>
 
       <para>
-        Instale <phrase revision="sysv">o conjunto de comandos sequenciais de
+        Instale <phrase revision="sysv">o conjunto de comandos sequenciados de
 iniciação <filename>/etc/rc.d/init.d/rsyncd</filename> incluso</phrase>
 <phrase revision="systemd">a unidade <filename>rsyncd.service</filename>
 inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
@@ -263,6 +263,14 @@ inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
       </para>
 
 <screen role="root"><userinput>make install-rsyncd</userinput></screen>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable rsyncd</userinput></screen>
 
       <note revision="systemd">
         <para>
@@ -280,16 +288,13 @@ chamado de ativação de soquete e é análogo a usar
         </para>
 
         <para>
-          Por padrão, o primeiro método é usado - o processo de segundo plano
-&quot;rsync&quot; é iniciado na inicialização e parado no desligamento. Se o
-método de soquete for desejado, [então] você precisa executar como o(a)
-usuário(a) &quot;<systemitem class="username">root</systemitem>&quot;:
+          Com o comando acima, o primeiro método é usado - o processo de segundo plano
+rsync é iniciado na inicialização e parado no desligamento. Se o método de
+soquete for desejado, você precisa executar (como o(a) usante <systemitem
+class="username">root</systemitem>):
         </para>
 
-<screen role="nodump"><userinput>systemctl stop rsyncd &amp;&amp;
-systemctl disable rsyncd &amp;&amp;
-systemctl enable rsyncd.socket &amp;&amp;
-systemctl start rsyncd.socket</userinput></screen>
+<screen role="nodump"><userinput>systemctl enable rsyncd.socket</userinput></screen>
 
         <para>
           Observe que o método de soquete só é útil para cópias remotas de

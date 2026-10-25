@@ -5,12 +5,12 @@
   %general-entities;
 
   <!ENTITY gnome-system-monitor-download-http
-           "&gnome-download-http;/gnome-system-monitor/&gnome-50;/gnome-system-monitor-&gnome-system-monitor-version;.tar.xz">
+           "&gnome-download-http;/gnome-system-monitor/&gnome-51;/gnome-system-monitor-&gnome-system-monitor-version;.tar.xz">
   <!ENTITY gnome-system-monitor-download-ftp  "">
-  <!ENTITY gnome-system-monitor-md5sum        "24c73cd65f22e53bc82bef32a79a3ce3">
-  <!ENTITY gnome-system-monitor-size          "1,1 MB">
-  <!ENTITY gnome-system-monitor-buildsize     "24 MB">
-  <!ENTITY gnome-system-monitor-time          "0,1 UPC (com paralelismo=4)">
+  <!ENTITY gnome-system-monitor-md5sum        "8381bbf15a3f5d6c74fcb303958daac3">
+  <!ENTITY gnome-system-monitor-size          "1,2 MB">
+  <!ENTITY gnome-system-monitor-buildsize     "35 MB">
+  <!ENTITY gnome-system-monitor-time          "0,3 UPC (com testes)">
 ]>
 
 <sect1 id="gnome-system-monitor" xreflabel="gnome-system-monitor-&gnome-system-monitor-version;">
@@ -67,7 +67,21 @@ do <application>GNOME</application> para o <command>gtop</command>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do GNOME System Monitor</bridgehead>
+
+
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Required patch:
+          <ulink url="&patch-root;/gnome-system-monitor-&gnome-system-monitor-version;-selinux_fix-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do GNOME System Monitor</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -78,9 +92,8 @@ linkend="libadwaita1"/> e <xref linkend="librsvg"/>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
-      <xref linkend="appstream-glib"/>, <xref linkend="desktop-file-utils"/>,
-<ulink url="https://github.com/catchorg/Catch2">Catch2</ulink> e <ulink
-url="https://github.com/uncrustify/uncrustify">uncrustify</ulink>
+      <xref linkend="appstream-glib"/>, <xref linkend="desktop-file-utils"/> e
+<ulink url="https://github.com/uncrustify/uncrustify">uncrustify</ulink>
     </para>
 
   </sect2>
@@ -88,15 +101,18 @@ url="https://github.com/uncrustify/uncrustify">uncrustify</ulink>
   <sect2 role="installation">
     <title>Instalação do GNOME System Monitor</title>
 
+
+
+    <!--
     <para>
-      Primeiro, remova uma dependência rígida do Catch2, que só é usada se você
-estiver executando os testes de unidade:
+
+      First, fix a problem when <application>selinux</application> is not
+      installed (which is always the case for BLFS).
     </para>
 
-<screen><userinput remap="pre">find . -name meson.build | xargs sed -i -e '/catch2/d' &amp;&amp;
-sed -i '141,151d' src/meson.build</userinput></screen>
-
-    <para>
+<screen><userinput>patch -Np1 -i ../gnome-system-monitor-&gnome-system-monitor-version;-selinux_fix-1.patch</userinput></screen>
+-->
+<para>
       Instale o <application>GNOME System Monitor</application> executando os
 seguintes comandos:
     </para>
@@ -117,10 +133,10 @@ meson setup --prefix=/usr --buildtype=release .. &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      Esse pacote vem com uma suíte de teste, mas ela exige a dependência externa
-Catch2. Se tiver o Catch2 instalado, você pode omitir os seds acima e então
-executar os testes com <command>ninja test</command>.
+      Para testar o pacote, execute: <command>ninja test</command>.
     </para>
+
+
 
     <para>
       Agora, como o(a) usante <systemitem class="username">root</systemitem>:

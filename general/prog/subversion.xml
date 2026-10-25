@@ -6,19 +6,28 @@
 
   <!ENTITY subversion-download-http "https://archive.apache.org/dist/subversion/subversion-&subversion-version;.tar.bz2">
   <!ENTITY subversion-download-ftp  "">
-  <!ENTITY subversion-md5sum        "af6001dc7af2f1242a4f72e8a5c565d2">
-  <!ENTITY subversion-size          "8,3 MB">
+  <!ENTITY subversion-md5sum        "7585618067e2780b7501020fa904bb3a">
+  <!ENTITY subversion-size          "8,2 MB">
   <!-- for 1.12.0                    1.12.2         1.13.0
        make javahl: 0.5 SBU  28 MB; not avail
        swig-pl:     0.8      42 MB; 0.7 SBU  43 MB; 0.6 SBU 44 MB
        swig-py:     0.6      26 MB; 0.5      28 MB; 0.5     28 MB
        swig-rb:     0.4      22 MB; 0.4      21 MB; 0.3     21 MB
        docs:        2 secs   26 MB; 2 sec    27 MB; 2 sec   26 MB
-       tests       46 min  1104 MB  46:52  1103 MB  47 min   -->
-  <!ENTITY subversion-buildsize     "260 MB (adicionar 189 MB para ligações, 54 MB para documentos, 1,3 GB para
-testes)">
-  <!ENTITY subversion-time          "1,5 UPC (Usando paralelismo=4; adicionar 2,0 UPC para ligações, 30 UPC para
-testes)">
+       tests       46 min  1104 MB  46:52  1103 MB  47 min   
+    
+       for 1. 15.0
+       Summary of test results:
+       541 tests PASSED
+        16 tests SKIPPED
+         2 tests XFAILED
+        29 tests FAILED
+    
+        several failures due to undefined symbol: svn_ra_serf__compat_init
+
+       -->
+  <!ENTITY subversion-buildsize     "317 MB (adicionar 30 MB para os testes)">
+  <!ENTITY subversion-time          "1,5 UPC (Usando paralelismo=4; adicionar 13 UPC para testes)">
 ]>
 
 <sect1 id="subversion" xreflabel="Subversion-&subversion-version;">
@@ -82,17 +91,19 @@ repositório é abordada em <xref linkend="svnserver"/>.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/subversion-&subversion-version;-upstream_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/subversion-&subversion-version;-upstream_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Subversion</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Subversion</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -128,12 +139,6 @@ url="https://junit.org/junit4/">JUnit 4</ulink> (para testar as ligações
 
   <sect2 role="installation">
     <title>Instalação do Subversion</title>
-
-    <para>
-      Primeiro, corrija vários problemas com Python 3.14 e SWIG-4.4:
-    </para>
-
-<screen><userinput remap="pre">patch -Np1 -i ../subversion-&subversion-version;-upstream_fixes-1.patch</userinput></screen>
 
     <para>
       Instale <application>Subversion</application> executando os seguintes
@@ -193,11 +198,11 @@ seguintes comandos:
 <command>make swig-rb</command> # para <application>Ruby</application></screen>
 
     <para>
-      Para testar os resultados, emita: <command>make check</command>. Quatro
+      Para testar os resultados, emita: <command>make check</command>. Vários
 testes nas suítes <filename>commit_tests.py</filename>,
 <filename>prop_tests.py</filename> e <filename>update_tests.py</filename>
 são conhecidos por falharem devido a diferenças da saída gerada com versões
-mais recentes do Python.
+mais recentes do Python e serf.
     </para>
 
     <para>
@@ -291,7 +296,7 @@ nível &quot;Java&quot;. Executar &quot;<command>make javahl</command>&quot;
 
     <para>
       <option>--with-junit=&lt;local do arquivo jar do junit&gt;</option>: fornece
-o local do jar do junit, caso contrário, os testes javahl não poderão ser
+o local do jar do junit; caso contrário, os testes javahl não poderão ser
 executados.
     </para>
 

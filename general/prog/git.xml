@@ -8,7 +8,7 @@
 
   <!ENTITY git-download-http "&git-root;/git-&git-version;.tar.xz">
   <!ENTITY git-download-ftp  "">
-  <!ENTITY git-md5sum        "758c02a1b621cc0868ee0a0d99573e6b">
+  <!ENTITY git-md5sum        "d6ab87e82d6c76f9a31bfb5ab4e402dc">
 
   <!ENTITY git-size          "7,8 MB">
   <!-- but people keep forgetting that an install not only needs the net build
@@ -189,14 +189,18 @@ html das páginas de manual e outros documentos:
 <screen remap="doc"><userinput>make man</userinput></screen>
 
     <para>
-      A suíte de teste pode ser executada em modo paralelo. Para executar a suíte
-de teste, emita: <command>GIT_UNZIP=nonexist make test -k</command>. A
-configuração <envar>GIT_UNZIP</envar> impede a suíte de teste de usar
-<command>unzip</command>. Nós precisamos dela porque, no BLFS,
+      <!-- No "or later" here: see
+      https://github.com/coreutils/coreutils/issues/355, remove this
+      workaround when we update coreutils to 9.13.  -->
+A suíte de teste pode ser executada em modo paralelo. Para executar a suíte
+de teste, emita: <command>GIT_UNZIP=nonexist QUOTING_STYLE=literal make test
+-k</command>. A configuração <envar>GIT_UNZIP</envar> impede a suíte de
+teste de usar <command>unzip</command>; nós precisamos dela porque, no BLFS,
 <command>unzip</command> é um linque simbólico para
 <command>bsdunzip</command>, o que não satisfaz a suposição de alguns casos
-de teste. Se algum caso de teste falhar, a lista de testes falhos pode ser
-exibida via <command>make -C t aggregate-results</command>.
+de teste. A configuração <envar>QUOTING_STYLE</envar> impede uma falha de
+teste com Coreutils 9.12. Se algum caso de teste falhar, a lista de testes
+falhos pode ser mostrada via <command>make -C t aggregate-results</command>.
     </para>
 
     <para>
@@ -238,7 +242,7 @@ usuário(a) <systemitem class="username">root</systemitem>:
    -C /usr/share/man --no-same-owner --no-overwrite-dir</userinput></screen>
 
     <para>
-      Se você baixou os documentos html, desempacote-os como o(a) usante
+      Se você baixou os documentos html, descompacte-os como o(a) usante
 <systemitem class="username">root</systemitem>:
     </para>
 

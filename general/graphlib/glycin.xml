@@ -4,8 +4,8 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY glycin-buildsize     "1.4 GB (with documentation, add 1 GB for tests)">
-  <!ENTITY glycin-time          "3.3 SBU (with documentation, add 2.5 SBU for tests)">
+  <!ENTITY glycin-buildsize     "1,5 GB (com documentação)">
+  <!ENTITY glycin-time          "2,9 UPC (com documentação)">
 ]>
 
 
@@ -69,17 +69,7 @@ class='directory'>/opt</filename>): <ulink
 url="&patch-root;/glycin-&glycin-version;-xorg_prefix-1.patch"/>
         </para>
       </listitem>
-      
-    <!--
-      <listitem>
-
-        <para>
-          Recommended patch (required to load XBM and XPM images):
-          <ulink url="&patch-root;/glycin-&glycin-version;-xbm_xpm-1.patch"/>
-        </para>
-      </listitem>
-      -->
-</itemizedlist>
+    </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do glycin</bridgehead>
 
@@ -126,18 +116,8 @@ esteja configurada corretamente para ambos, o(a) usante atual e para &root;,
 seguindo <xref linkend='xorg-env'/> antes de se construir o glycin):
     </para>
 
-<!--https://gitlab.gnome.org/GNOME/glycin/-/merge_requests/396-->
 <screen><userinput>cargo vendor &amp;&amp;
 patch -Np1 -i ../glycin-&glycin-version;-xorg_prefix-1.patch</userinput></screen>
-
-
-    <para>
-      Corrija um erro de construção quando um <application>libglycin</application>
-de sistema não estiver ainda instaldo:
-    </para>
-
-<screen><userinput>sed -e "s/get_option('libglycin-gtk4')/(&amp; or get_option('glycin-thumbnailer'))/" \
-    -i meson.build</userinput></screen>
 
     <para>
       Instale <application>glycin</application> executando os seguintes comandos:
@@ -157,17 +137,23 @@ ninja</userinput></screen>
 documentação emitindo:
     </para>
 
+<!--  All tests failed due to missing test files.
+    <para>
+
+      To test the results, ensure <xref linkend='gtk4'/> is installed, then
+      issue: <command>meson configure -D tests=true &amp;&amp; ninja
+      test</command>. One test is known to fail with  shared-mime-info-2.5.1.
+    </para>
+-->
 <screen remap="doc"><userinput>sed "/install_dir:.*doc/s|,$| / 'glycin-' + meson.project_version()&amp;|" \
     -i ../libglycin/meson.build &amp;&amp;
 
 meson configure -D capi_docs=true &amp;&amp;
 ninja</userinput></screen>
 
+
     <para>
-      Para testar os resultados, certifique-se de que <xref linkend='gtk4'/>
-esteja instalado e, então, emita: <command>meson configure -D tests=true
-&amp;&amp; ninja test</command>. Um teste é conhecido por falhar com
-shared-mime-info-2.5.1.
+      Testes não são recomendados devido à ausência de arquivos de teste.
     </para>
 
     <para>

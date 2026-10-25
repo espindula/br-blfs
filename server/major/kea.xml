@@ -6,10 +6,10 @@
 
   <!ENTITY kea-download-http "https://downloads.isc.org/isc/kea/&kea-dhcp-version;/kea-&kea-dhcp-version;.tar.xz">
   <!ENTITY kea-download-ftp  "">
-  <!ENTITY kea-md5sum        "a673e95637b708b3b1926c696cdf168b">
-  <!ENTITY kea-size          "6,3 MB">
-  <!ENTITY kea-buildsize     "231 MB (47 MB installed; add 425 MB for tests)">
-  <!ENTITY kea-time          "6.4 SBU (with parallelism=4; add 17 SBU for tests)">
+  <!ENTITY kea-md5sum        "72df3b85d9669f37ec98c45cbad7b22e">
+  <!ENTITY kea-size          "6,5 MB">
+  <!ENTITY kea-buildsize     "254 MB (49 MB instalado; adicionar 535 MB para testes)">
+  <!ENTITY kea-time          "3,8 UPCs (com paralelismo=4; adicionar 17 UPCs para testes)">
   <!ENTITY kea-arm-vers      "&kea-dhcp-version;">
 ]>
 
@@ -31,7 +31,18 @@ para DHCP. Isso é o sucessor do antigo servidor DHCP do ISC, o qual ficou
 fora de suporte em dezembro de 2022.
     </para>
 
-    &lfs131_built;
+    <important>
+      <para>
+        Esse pacote constrói sobre um sistema LFS atual, mas ele <emphasis
+role='bold'>não</emphasis> foi testado pelos(as) editores(as) do LFS. Para
+testá-lo adequadamente, o pacote tem de ser instalado em um servidor em uma
+rede de intercomunicação onde ele seja o único servidor dhcp. Em seguida,
+outro sistema nessa rede independente de intercomunicação precisa solicitar
+um endereço IP de DHCP desse servidor.
+      </para>
+    </important>
+
+    &lfs131_checked;
 
     <bridgehead renderas="sect3">Informação do Pacote</bridgehead>
     <itemizedlist spacing="compact">
@@ -127,27 +138,8 @@ necessário:
     <title>Instalação do Servidor DHCP Kea do ISC</title>
 
     <para>
-      Primeiro, aplique algumas correções exigidas para boost-&boost-version;:
-    </para>
-
-<screen><userinput>sed -e "/asio_wrapper/a#include &lt;boost/asio/deadline_timer.hpp&gt;" \
-    -i src/lib/asiolink/interval_timer.cc                        \
-       src/lib/asiodns/io_fetch.cc                               \
-       src/lib/asiodns/tests/io_fetch_unittest.cc                &amp;&amp;
-sed -e "/lexical_cast.hpp/a #include &lt;boost/static_assert.hpp&gt;"  \
-    -i src/lib/log/logger_level_impl.cc                          \
-       src/lib/dns/rdataclass.cc</userinput></screen>
-
-    <para>
-      Also apply a fix for building with OpenSSL-4:
-    </para>
-
-<screen><userinput>sed -e 's/^[ ]*\(::X509_NAME\)/const \1/' \
-    -i src/lib/asiolink/openssl_tls.h</userinput></screen>
-
-    <para>
-      Agora, instale o <application>Servidor DHCP Kea do ISC</application>
-executando os seguintes comandos:
+      Instale o <application>Servidor DHCP Kea do ISC</application> executando os
+seguintes comandos:
     </para>
 
 <screen><userinput>mkdir build &amp;&amp;
@@ -183,8 +175,8 @@ class="username">root</systemitem>:
 sequenciais <command>keactrl</command> e no arquivo de configuração dele:
     </para>
 
-<screen role="root"><userinput>sed -e "s:\${prefix}/::" -i /usr/sbin/keactrl             &amp;&amp;
-sed -e "s:\${prefix}//etc:/etc:" -i /etc/kea/keactrl.conf</userinput></screen>
+<screen role="root"><userinput>sed -i "s:\${prefix}//etc:/etc:" /etc/kea/keactrl.conf &amp;&amp;
+sed -i "s:\${prefix}/::"         /usr/sbin/keactrl</userinput></screen>
 
     <para>
       Crie alguns diretórios e corrija as configurações de permissão deles como
@@ -252,7 +244,7 @@ Referência do(a) Administrador(a) do Kea</ulink> para informações detalhadas
 acerca da configuração do <application>Kea do ISC</application>, pois ele é
 um sistema bastante capaz. A configuração mostrada abaixo é o mínimo para
 colocar um servidor DHCP em execução, mas já inclui configuração para DDNS
-(Dynamic DNS). Essa configuração é melhor para pequenas redes de
+(Dynamic DNS). Essa configuração é melhor para redes pequenas de
 intercomunicação com poucos clientes e baixas quantidades de tráfego da rede
 de intercomunicação. Para instalações maiores com milhares de clientes, o
 <application>Kea do ISC</application> pode ser configurado para usar bases
@@ -264,14 +256,22 @@ painel de gerenciamento para o <application>Kea do ISC</application>.
 
     <para>
       Se você quiser iniciar o Servidor DHCP na inicialização, instale <phrase
-revision="sysv">o conjunto de comandos sequenciais de inicialização
+revision="sysv">o conjunto de comandos sequenciados de inicialização
 <filename>/etc/rc.d/init.d/kea-dhcpd</filename> incluído</phrase> <phrase
-revision="systemd"> a unidade <filename>kea-dhcpd.service</filename>
+revision="systemd">a unidade <filename>kea-dhcpd.service</filename>
 incluída</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
 <xref linkend="systemd-units" revision="systemd"/>:
     </para>
 
 <screen role="root"><userinput>make install-kea-dhcpd</userinput></screen>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable kea-dhcp4-server</userinput></screen>
 
     <sect3 id="kea-dhcp-config">
       <title>Arquivos de Configuração</title>
@@ -689,8 +689,8 @@ essa máquina tenha o IP <literal>192.168.56.2</literal>.
 
       <seglistitem>
         <seg>
-          keactrl, kea-admin, kea-ctrl-agent, kea-dhcp4, kea-dhcp6, kea-dhcp-ddns,
-kea-lfc, kea-msg-compiler, and kea-shell
+          keactrl, kea-admin, kea-dhcp4, kea-dhcp6, kea-dhcp-ddns, kea-lfc,
+kea-msg-compiler, kea-shell e perfdhcp
         </seg>
         <seg>
           libkea-asiodns.so, libkea-asiolink.so, libkea-cc.so, libkea-cfgrpt.so,

@@ -6,8 +6,8 @@
 
   <!ENTITY rust-download-http "https://static.rust-lang.org/dist/rustc-&rust-version;-src.tar.xz">
   <!ENTITY rust-download-ftp  "">
-  <!ENTITY rust-md5sum        "c6fc3febcd3b1235cf4f00c3e05559b3">
-  <!ENTITY rust-size          "232 MB">
+  <!ENTITY rust-md5sum        "8872013f6cf2c07e1f5ffaca47d0a347">
+  <!ENTITY rust-size          "253 MB">
   <!ENTITY rust-buildsize     "10 GB (324 MB instalado); adicionar 11 GB se executar os testes">
   <!ENTITY rust-time          "10 UPC (incluindo tempo de transferência; adicionar 15 UPC para testes,
 ambos usando paralelismo=8)">
@@ -138,7 +138,19 @@ discrepantes muito lentos.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do Rust</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
+    <itemizedlist spacing='compact'>
+      <listitem>
+        <para>
+          Required patch: <ulink
+          url="&patch-root;/rustc-&rust-version;-llvm_23-1.patch"/>
+        </para>
+      </listitem>
+    </itemizedlist>
+-->
+<bridgehead renderas="sect3">Dependências do Rust</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -217,14 +229,13 @@ exige somente mudar o link simbólico
 a construção.
     </para>
 
-<!-- retain here in case we need a patch
+<!--
     <para>
 
-      If running the test suite, apply a patch to make it compatible with
-      GCC-15 or newer:
+      Apply a patch to make this package compatible with LLVM 23 or newer:
     </para>
 
-<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-testsuite_fix-1.patch</userinput></screen>
+<screen><userinput remap="pre">patch -Np1 -i ../rustc-&rust-version;-llvm_23-1.patch</userinput></screen>
 -->
 <screen><userinput>cat &lt;&lt; EOF &gt; bootstrap.toml
 <literal># See bootstrap.toml.example for more possible options,
@@ -235,7 +246,7 @@ a construção.
 # Tell x.py that the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn users to review that information.
-change-id = 154587
+change-id = 160100
 
 [llvm]
 # When using the system installed copy of LLVM, prefer the shared libraries
@@ -279,7 +290,6 @@ llvm-config = "/usr/bin/llvm-config"
 llvm-config = "/usr/bin/llvm-config"</literal>
 EOF</userinput></screen>
 
-
     <para>
       Compile &quot;<application>Rust</application>&quot; executando os seguintes
 comandos:
@@ -301,33 +311,17 @@ terminado.
     </note>
 
     <para>
-      Se executar a suíte de teste, simule um executável Git para permitir
-executar a suíte de teste sem o <xref linkend='git'/> instalado (nós estamos
-construindo a partir de um tarball de lançamento em vez de um repositório
-Git aqui, de modo que o Git não será realmente útil mesmo se ele estiver
-instalado):
-    </para>
-
-<screen remap='test'><userinput>mkdir fake-git &amp;&amp; ln -sv /usr/bin/false fake-git/git</userinput></screen>
-
-    <para>
       Para executar os testes, emita:
     </para>
 
-<screen remap="test"><userinput>PATH+=:$PWD/fake-git \
-./x.py test --no-fail-fast | tee rustc-testlog</userinput></screen>
+<screen remap="test"><userinput>./x.py test --no-fail-fast | tee rustc-testlog</userinput></screen>
 
     <para>
-      <!-- https://github.com/rust-lang/rust/issues/155606 -->
-<!-- https://github.com/rust-lang/rust/issues/158219 -->
-In the <filename class='directory'>rustdoc-ui</filename> tests, the test
-named <filename>ice-bug-report-url.rs</filename> is known to fail for
-unknown reason.  In the <filename class='directory'>run-make</filename>
-tests, the test named <filename>remap-path-prefix-std</filename> is known to
-fail because it does not work with LTO enabled, the test named
-<filename>rustdoc-target-modifiers</filename> is known to fail because we've
-not enabled the AArch64 target in <xref linkend='llvm'/>, and the test named
-<filename>short-ice</filename> is not written correctly and known to fail.
+      <!-- https://github.com/rust-lang/rust/issues/143198 -->
+Nos testes do <filename class='directory'>run-make</filename>, o teste
+nominado <filename>rustdoc-target-modifiers</filename> é conhecido por
+falhar porque nós não habilitamos o alvo AArch64 no <xref linkend='llvm'/>;
+e o teste nominado <filename>short-ice</filename> é conhecido por falhar.
     </para>
 
     <para>
@@ -339,7 +333,7 @@ teste falho é motivo de preocupação.
     </para>
 
     <para>
-      Se você obtiver algum <emphasis>outro</emphasis> teste falho que informe um
+      Se obtiver algum <emphasis>outro</emphasis> teste falho que informe um
 número de problema, então você deveria procurar por esse problema. Por
 exemplo, quando rustc &gt;= 1.41.1 era construído com uma versão do llvm do
 sistema anterior à 10.0, o teste para o problema 69225 falhava <ulink
@@ -400,7 +394,7 @@ install -vm644 README.md                                \
 
 install -vdm755 /usr/share/zsh/site-functions      &amp;&amp;
 ln -sfv /opt/rustc/share/zsh/site-functions/_cargo \
-        /usr/share/zsh/site-functions
+        /usr/share/zsh/site-functions              &amp;&amp;
 
 mv -v /etc/bash_completion.d/cargo /usr/share/bash-completion/completions</userinput></screen>
 
@@ -448,8 +442,8 @@ versão lançada da rust.
 esteja para ser usado. Mude o alvo para
 <literal>[target.i686-unknown-linux-gnu]</literal> se você estiver
 construindo em x86 de 32 bits. Esta seção inteira deveria ser omitida se
-você desejar construir contra o llvm fornecido, porém a construção
-resultante será maior e demorará mais.
+você desejar construir contra o llvm enviado, porém a construção resultante
+será maior e demorará mais.
     </para>
 
 

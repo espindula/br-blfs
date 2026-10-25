@@ -6,10 +6,10 @@
 
   <!ENTITY gtk4-download-http "&gnome-download-http;/gtk/&gtk4-minor;/gtk-&gtk4-version;.tar.xz">
   <!ENTITY gtk4-download-ftp  "">
-  <!ENTITY gtk4-md5sum        "2420b9b289937c1c9f97332470db1889">
+  <!ENTITY gtk4-md5sum        "142724255fea09632a569667851ce916">
   <!ENTITY gtk4-size          "17 MB">
-  <!ENTITY gtk4-buildsize     "1.4 GB (with docs and tests)">
-  <!ENTITY gtk4-time          "1.5 SBU (using parallelism=4; with docs; add 2.1 SBU for tests)">
+  <!ENTITY gtk4-buildsize     "1,4 GB (com documentos)">
+  <!ENTITY gtk4-time          "1,7 UPC (usando paralelismo=4; com documentos)">
 ]>
 
 <sect1 id="gtk4" xreflabel="GTK-&gtk4-version;">
@@ -176,28 +176,35 @@ meson configure -D documentation=true                            &amp;&amp;
 ninja</userinput></screen>
 
     <para>
-      To run the tests, issue:
+      Os(As) editores(as) do BLFS não recomendam executar os testes. Os resultados
+são altamente dependem dos controladores e do hardware instalados,
+comparados com o que os(as) desenvolvedores(as) de fluxo de desenvolvimento
+têm. Em um total de mais que 9.000 testes, o número de falhas pode variar de
+50 a mais que 5.000. Para testar a operação do pacote, o programa
+<command>gtk4-demo</command> é recomendado.
     </para>
 
-    <screen remap='test'><userinput>env -u{GALLIUM_DRIVER,MESA_LOADER_DRIVER_OVERRIDE}          \
+    <para>Para executar os testes mesmo assim, emita:</para>
+
+    <screen role='nodump'><userinput>env -u{GALLIUM_DRIVER,MESA_LOADER_DRIVER_OVERRIDE}          \
     LIBGL_ALWAYS_SOFTWARE=1 VK_LOADER_DRIVERS_SELECT='lvp*' \
     dbus-run-session meson test --setup x11                 \
                                 --no-suite=headless</userinput></screen>
 
     <para>
-      <!--
+      <!--Several other tests may fail for unknown reasons.-->
+<!--
       On some systems as many as 212 tests may fail (out of over 6100) for 
       unknown reasons.
 
       I hope this is gone with LIBGL_ALWAYS_SOFTWARE and -\-no-suite dmabuf.
       If not please restore them.  - xry111
       -->
-If you are in a Wayland session, replace the one occurrence of
-<literal>x11</literal> with <literal>wayland</literal>.  Many tests will
-fail if <filename>~/.config/gtk-4.0/settings.ini</filename> exists and the
-gtk-modules line is not commented out.  Several other tests may fail for
-unknown reasons.  On systems with NVIDIA graphics cards, the tests may take
-significantly longer.
+Se você estiver em uma sessão do Wayland, substitua a ocorrência de
+<literal>x11</literal> por <literal>wayland</literal>. Muitos testes
+falharão se <filename>~/.config/gtk-4.0/settings.ini</filename> existir e a
+linha gtk-modules não estiver comentada. Em sistemas com placas de vídeo
+NVIDIA, os testes possivelmente levem significativamente mais tempo.
       
     </para>
 

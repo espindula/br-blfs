@@ -7,9 +7,9 @@
   <!ENTITY apache-download-http
            "https://archive.apache.org/dist/httpd/httpd-&apache-version;.tar.bz2">
   <!ENTITY apache-download-ftp  "">
-  <!ENTITY apache-md5sum        "f2f3121e9f1fb4838d433dbd494543f9">
-  <!ENTITY apache-size          "7,4 MB">
-  <!ENTITY apache-buildsize     "133 MB">
+  <!ENTITY apache-md5sum        "f2f461efbb47f6f7ba62ae60ef1d8920">
+  <!ENTITY apache-size          "8,1 MB">
+  <!ENTITY apache-buildsize     "97 MB">
   <!ENTITY apache-time          "0,3 UPC (Usando paralelismo=4)">
 ]>
 
@@ -75,12 +75,6 @@ executar grandes operações de serviço web.
           Remendo exigido: <ulink url="&patch-root;/httpd-blfs_layout-1.patch"/>
         </para>
       </listitem>
-      <listitem>
-        <para>
-          Remendo exigido: <ulink
-url="&patch-root;/httpd-&apache-version;-openssl4_fixes-1.patch"/>
-        </para>
-      </listitem>
     </itemizedlist>
 
     <bridgehead renderas="sect3">Dependências do Apache HTTPD</bridgehead>
@@ -116,12 +110,6 @@ class="username">root</systemitem>:
 <screen role="root"><userinput>groupadd -g 25 apache &amp;&amp;
 useradd -c "Servidor Apache" -d /srv/www -g apache \
         -s /bin/false -u 25 apache</userinput></screen>
-
-    <para>
-      Agora adicione um remendo para compatibilidade com openssl4:
-    </para>
-
-<screen><userinput>patch -Np1 -i ../httpd-&apache-version;-openssl4_fixes-1.patch</userinput></screen>
 
     <para>
       Construa e instale o <application>Apache HTTPD</application> executando os
@@ -300,7 +288,7 @@ systemd</phrase></title>
       <para>
         Se você quiser que o servidor <application>Apache</application> inicie
 automaticamente quando o sistema for inicializado, instale <phrase
-revision="sysv">o conjunto de comandos sequenciais de inicialização
+revision="sysv">o conjunto de comandos sequenciados de inicialização
 <filename>/etc/rc.d/init.d/httpd</filename> incluído</phrase> <phrase
 revision="systemd">a unidade <filename>httpd.service</filename>
 incluída</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
@@ -312,6 +300,14 @@ incluída</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
       </indexterm>
 
 <screen role="root"><userinput>make install-httpd</userinput></screen>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable httpd</userinput></screen>
 
     </sect3>
 

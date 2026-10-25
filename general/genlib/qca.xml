@@ -6,10 +6,10 @@
 
   <!ENTITY qca-download-http "https://download.kde.org/stable/qca/&qca-version;/qca-&qca-version;.tar.xz">
   <!ENTITY qca-download-ftp  "">
-  <!ENTITY qca-md5sum        "c3ed3262c83c43bdeb610836769b1534">
-  <!ENTITY qca-size          "748 KB">
-  <!ENTITY qca-buildsize     "56 MB (with tests)">
-  <!ENTITY qca-time          "0.7 SBU (using parallelism=4; with tests)">
+  <!ENTITY qca-md5sum        "fbb2e004918d12e704971cf096820dfe">
+  <!ENTITY qca-size          "752 KB">
+  <!ENTITY qca-buildsize     "55 MB (com testes)">
+  <!ENTITY qca-time          "0,6 UPC (usando paralelismo = 4; com os testes)">
 ]>
 
 <sect1 id="qca" xreflabel="qca-&qca-version;">
@@ -68,17 +68,19 @@ da implementação, usando "plugins" conhecidos como "Providers".
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Transferências Adicionais</bridgehead>
+    <!--
+    <bridgehead renderas="sect3">
+Additional Downloads</bridgehead>
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Remendo exigido: <ulink
-url="&patch-root;/qca-&qca-version;-openssl4_fixes-1.patch"/>
+          Required patch:
+          <ulink url="&patch-root;/qca-&qca-version;-openssl4_fixes-1.patch"/>
         </para>
       </listitem>
     </itemizedlist>
-
-    <bridgehead renderas="sect3">Dependências do Qca</bridgehead>
+-->
+<bridgehead renderas="sect3">Dependências do Qca</bridgehead>
 
     <bridgehead renderas="sect4">Exigidas</bridgehead>
     <para role="required">
@@ -101,16 +103,10 @@ url="https://botan.randombit.net/">Botan</ulink>
     <title>Instalação do Qca</title>
 
     <para>
-      Primeiro, modifique o pacote para ser compatível com OpenSSL4:
+      Primeiro, corrija o local dos certificados de AC:
     </para>
 
-<screen><userinput>patch -Np1 -i ../qca-&qca-version;-openssl4_fixes-1.patch</userinput></screen>
-
-    <para>
-      Now, fix the location of the CA certificates:
-    </para>
-
-<screen><userinput>sed -i 's@cert.pem@certs/ca-bundle.crt@' CMakeLists.txt</userinput></screen>
+<screen><userinput>sed -i '/toTry$/a\      "/etc/pki/tls/certs/ca-bundle.crt"' CMakeLists.txt</userinput></screen>
 
     <para>
       Instale <application>Qca</application> executando os seguintes comandos:
@@ -124,7 +120,7 @@ cmake -D CMAKE_INSTALL_PREFIX=$QT6DIR            \
       -D QT6=ON                                  \
       -D QCA_INSTALL_IN_QT_PREFIX=ON             \
       -D QCA_MAN_INSTALL_DIR:PATH=/usr/share/man \
-      .. &amp;&amp;
+      -W no-author ..                            &amp;&amp;
 make</userinput></screen>
 
     <para>

@@ -5,11 +5,12 @@
   %general-entities;
 
   <!ENTITY ntfs-3g-download-http
-    "https://github.com/tuxera/ntfs-3g/archive/&ntfs-3g-version;/ntfs-3g-&ntfs-3g-version;.tar.gz">
+    "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-&ntfs-3g-version;.tgz">
+
   <!ENTITY ntfs-3g-download-ftp  "">
-  <!ENTITY ntfs-3g-md5sum        "254f0eae638ae2f1f0e24f0b76dd1dfc">
-  <!ENTITY ntfs-3g-size          "884 KB">
-  <!ENTITY ntfs-3g-buildsize     "26 MB">
+  <!ENTITY ntfs-3g-md5sum        "e46c76e3c19e2eb138b62884b1348482">
+  <!ENTITY ntfs-3g-size          "1,3 MB">
+  <!ENTITY ntfs-3g-buildsize     "23 MB">
   <!ENTITY ntfs-3g-time          "0,2 UPC">
 ]>
 
@@ -24,18 +25,36 @@
   </indexterm>
 
   <sect2 role="package">
-    <title>Introdução ao Ntfs-3g</title>
+    <title>Introdução ao ntfs-3g</title>
 
     <note>
       <para id='ntfs3-kernel'>
-        Um novo controlador de leitura e gravação para NTFS, chamado NTFS3, foi
-adicionado ao núcleo Linux desde o lançamento 5.15. O desempenho do NTFS3 é
-muito melhor que o do NTFS-3G. Para habilitar o NTFS3, habilite as seguintes
-opções na configuração do núcleo e recompile o núcleo, se necessário:
+        Desde o Linux 7.1, existem dois controladores NTFS de leitura e escrita
+concorrentes integrados ao núcleo, nominados NTFS e NTFS3. O desempenho
+deles é muito melhor que o do ntfs-3g. Como algumas aplicações invocam
+<command>mount</command> com <option>-t ntfs</option>, enquanto outras podem
+usar <option>-t ntfs3</option> (sendo essa última também o padrão se nenhuma
+opção <option>-t</option> for passada), para fazer ambas opções funcionarem,
+habilite ambos controladores:
       </para>
 
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
       href="ntfs3-kernel.xml"/>
+
+      <para>
+        Se você selecionar NTFS3 como parte da imagem principal do núcleo
+(<literal>*</literal> em vez de <literal>M</literal>), habilitar o NTFS
+(como um módulo ou como parte da imagem principal do núcleo) rebaixará
+imediatamente NTFS3 a um módulo.
+      </para>
+
+      <para>
+        Devido a <ulink url='https://git.kernel.org/torvalds/c/35e4b60792cd'>um
+defeito no sistema de configuração do núcleo</ulink> do Linux 7.1 e
+posterior, o NTFS3 é renderizado no submenu do NTFS (diferentemente do
+exemplo acima). Por favor, observe que isso não significa que NTFS3 seja uma
+extensão do NTFS: eles são controladores distintos.
+      </para>
 
     <indexterm zone="ntfs-3g ntfs3-kernel">
       <primary sortas="d-ntfs3">Suporte de leitura e gravação NTFS no núcleo</primary>
@@ -49,13 +68,13 @@ sistemas de arquivos NTFS).
     </note>
 
     <para>
-      O pacote <application>Ntfs-3g</application> contém um controlador estável,
+      O pacote <application>ntfs-3g</application> contém um controlador estável,
 de leitura e escrita e de fonte aberto para partições NTFS. As partições
 NTFS são usadas pela maioria dos sistemas operacionais da Microsoft. O
-Ntfs-3g permite que você monte partições NTFS no modo de leitura e escrita a
+ntfs-3g permite que você monte partições NTFS no modo de leitura e escrita a
 partir do teu sistema Linux. Ele usa o módulo FUSE do núcleo para estar apto
 para implementar suporte NTFS no espaço do(a) usante. O pacote também contém
-vários utilitários úteis para manipular partições NTFS.
+vários utilitários úteis para se manipular partições NTFS.
     </para>
 
     &lfs131_checked;
@@ -94,7 +113,12 @@ vários utilitários úteis para manipular partições NTFS.
       </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Dependências do Ntfs-3g</bridgehead>
+    <bridgehead renderas="sect3">Dependências do ntfs-3g</bridgehead>
+
+    <bridgehead renderas="sect4">Exigidas</bridgehead>
+    <para role="required">
+      <xref linkend="libgcrypt"/>
+    </para>
 
     <bridgehead renderas="sect4">Opcionais</bridgehead>
     <para role="optional">
@@ -128,16 +152,25 @@ item de configuração.
   </sect2>
 
   <sect2 role="installation">
-    <title>Instalação do Ntfs-3g</title>
+    <title>Instalação do ntfs-3g</title>
+
+    <note>
+      <para>
+        Esse pacote extrai para ntfs-3g-&ntfs-3g-version;.
+      </para>
+    </note>
 
     <para>
-      Instale <application>Ntfs-3g</application> executando os seguintes comandos:
+      Instale <application>ntfs-3g</application> executando os seguintes comandos:
     </para>
 
-<screen><userinput>./autogen.sh &amp;&amp;
 
-./configure --prefix=/usr        \
+
+<screen><!-- <screen>
+<userinput>./autogen.sh &amp;&amp; -->
+<userinput>./configure --prefix=/usr        \
             --disable-static     \
+            --enable-crypto      \
             --with-fuse=internal \
             --docdir=/usr/share/doc/ntfs-3g-&ntfs-3g-version; &amp;&amp;
 make</userinput></screen>
@@ -191,7 +224,7 @@ root permite que usuários(as) não root montem partições NTFS.
   </sect2>
 
   <sect2 role="configuration">
-    <title>Usando o Ntfs-3g</title>
+    <title>Usando o ntfs-3g</title>
 
     <para>
       Para montar uma partição do Windows em tempo de inicialização, coloque uma
@@ -486,7 +519,7 @@ bloco ou arquivo de imagem
         <term><filename class="libraryfile">libntfs-3g.so</filename></term>
         <listitem>
           <para>
-            contém as funções da API do Ntfs-3g
+            contém as funções da API do ntfs-3g
           </para>
           <indexterm zone="ntfs-3g libntfs-3g">
             <primary sortas="c-libntfs-3g">libntfs-3g.so</primary>

@@ -7,9 +7,9 @@
   <!ENTITY bind-download-http "https://ftp.isc.org/isc/bind9/&bind-version;/bind-&bind-version;.tar.xz">
   <!ENTITY bind-download-ftp  "">
   <!ENTITY bind-md5sum        "&bind-md5;">
-  <!ENTITY bind-size          "5,6 MB">
-  <!ENTITY bind-buildsize     "157 MB (23 MB instalado)">
-  <!ENTITY bind-time          "0,4 UPC (com paralelismo=4; cerca de 8 minutos, um tanto independente do
+  <!ENTITY bind-size          "5,7 MB">
+  <!ENTITY bind-buildsize     "124 MB (adicionar 88 MB para testes; 23 MB instalado)">
+  <!ENTITY bind-time          "0,4 UPC (com paralelismo=4; cerca de 58 minutos, um tanto independente do
 processador, para executar a suíte completa de teste)">
 ]>
 
@@ -321,7 +321,7 @@ DNS sobre HTTPS.
 
       <para>
         O <application>BIND</application> será configurado para executar em uma
-jaula <command>chroot</command> como um(a) usante desprivilegiado(a)
+jaula <command>chroot</command> como um(a) usante desprivilegiado
 (<systemitem class="username">named</systemitem>). Essa configuração é mais
 segura naquilo que um comprometimento do DNS consegue afetar somente uns
 poucos arquivos no diretório <envar>HOME</envar> do(a) usante <systemitem
@@ -535,7 +535,7 @@ systemd</phrase></title>
 
       <para>
         Para iniciar o servidor DNS na inicialização, instale <phrase
-revision="sysv">o conjunto de comandos sequenciais de inicialização
+revision="sysv">o conjunto de comandos sequenciados de inicialização
 <filename>/etc/rc.d/init.d/bind</filename> incluso</phrase> <phrase
 revision="systemd">a unidade <filename>named.service</filename>
 inclusa</phrase> no pacote <xref linkend="bootscripts" revision="sysv"/>
@@ -556,6 +556,14 @@ comando:
 
 <screen role="root" revision="sysv"><userinput>/etc/rc.d/init.d/bind start</userinput></screen>
 <screen role="root" revision="systemd"><userinput>systemctl start named</userinput></screen>
+
+      <para revision='systemd'>
+        Você pode, então, habilitar a unidade na inicialização, como o(a) usante
+&root;, com:
+      </para>
+
+<screen revision='systemd'
+        role='root'><userinput>systemctl enable named</userinput></screen>
 
     </sect3>
 

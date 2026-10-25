@@ -5,11 +5,11 @@
   %general-entities;
 
   <!ENTITY gnome-session-download-http
-           "&gnome-download-http;/gnome-session/&gnome-50;/gnome-session-&gnome-session-version;.tar.xz">
+           "&gnome-download-http;/gnome-session/&gnome-51;/gnome-session-&gnome-session-version;.tar.xz">
   <!ENTITY gnome-session-download-ftp  "">
-  <!ENTITY gnome-session-md5sum        "0c02fd88e93b89b8cf09f80637356ca8">
+  <!ENTITY gnome-session-md5sum        "0e6d494c50405bca07f91e54d1785042">
   <!ENTITY gnome-session-size          "396 KB">
-  <!ENTITY gnome-session-buildsize     "7,6 MB">
+  <!ENTITY gnome-session-buildsize     "7,7 MB">
   <!ENTITY gnome-session-time          "menos que 0,1 UPC">
 ]>
 
@@ -191,21 +191,6 @@ desabilitam construir documentação. Omita-os se você tiver construído as
 dependências opcionais.
     </para>
 
-
-
-    <!-- This option was removed in 46
-    <para revision="sysv">
-
-      <parameter>-D systemd_journal=false</parameter>
-      and <parameter>-D systemduserunitdir=/tmp</parameter>: Allow building
-      with elogind support on a SysV based system.
-    </para>
--->
-<para>
-      <option>-D x11=true</option>: Essa opção habilita suporte para sessões do
-X11. O suporte X11 está obsoleto e será removido no GNOME 50.
-    </para>
-
   </sect2>
 
   <sect2 role="starting" revision="systemd">
@@ -232,37 +217,37 @@ linha de comando.
       
       
     </para>
-    
-    <!-- we don't build with x11 support. So there is no point in starting
-         with X11
-    <warning>
-
-      <para>
-        X11 support is deprecated and will be removed in GNOME 50. Please use
-        the Wayland session wherever possible.
-      </para>
-    </warning>
 
     <para>
-      To start <application>GNOME</application> using
-      <xref role="nodep" linkend="xinit"/>, run the following commands:
-    </para>
-
-<screen role="nodump"><userinput>cat &gt; ~/.xinitrc &lt;&lt; "EOF"
-<literal>dbus-run-session gnome-session</literal>
-EOF
-
-startx</userinput></screen>
--->
-<para>
       Para iniciar o <application>GNOME</application> sem um gerenciador de
 exibição você precisa determinar teu ID de sessão, usando
 <command>loginctl</command>. Feito isso, emita (nós supomos que o ID de
 sessão seja 1):
     </para>
 
-    <screen role="nodump"><userinput>systemctl --user set-environment XDG_SESSION_TYPE=wayland XDG_SESSION_ID=<replaceable>1</replaceable> &amp;&amp;
+    <screen role="nodump"><userinput>systemctl --user set-environment    \
+          XDG_CURRENT_DESKTOP=GNOME \
+          XDG_SESSION_DESKTOP=gnome \
+          XDG_SESSION_TYPE=wayland  \
+          XDG_SESSION_ID=<replaceable>1</replaceable> &amp;&amp;
 systemctl --user start gnome-session@gnome.target</userinput></screen>
+
+    <note>
+      <para>
+        Os comandos acima iniciam o <application>GNOME</application> a partir da
+linha de comando, mas não habilitam a funcionalidade completa. Por exemplo,
+o tempo limite automático da tela de escurecimento/inatividade do
+<application>GNOME</application> não funciona por causa de uma interação
+complexa entre a sessão de linha de comando do logind e o componente
+responsável por ambos, travamento de tela e escurecimento da tela deflagrado
+por inatividade.  
+      </para>
+
+      <para>
+        Para a funcionalidade completa do <application>GNOME</application>, você
+precisa iniciá-lo a partir de um gerenciador de exibição.
+      </para>
+    </note>
 
   </sect2>
 

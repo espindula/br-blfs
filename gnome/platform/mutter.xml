@@ -4,12 +4,12 @@
   <!ENTITY % general-entities SYSTEM "../../general.ent">
   %general-entities;
 
-  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-50;/mutter-&mutter-version;.tar.xz">
+  <!ENTITY mutter-download-http "&gnome-download-http;/mutter/&gnome-51;/mutter-&mutter-version;.tar.xz">
   <!ENTITY mutter-download-ftp  "">
-  <!ENTITY mutter-md5sum        "16e91f37bb05f67c684f3582380f86a1">
+  <!ENTITY mutter-md5sum        "7984cded2fefaa4def99b20fd7aa9056">
   <!ENTITY mutter-size          "8,1 MB">
-  <!ENTITY mutter-buildsize     "91 MB (adicionar 84 MB para os testes)">
-  <!ENTITY mutter-time          "0,4 UPC (Usando paralelismo=4; adicionar 6,2 UPC para testes)">
+  <!ENTITY mutter-buildsize     "171 MB (adicionar 86 MB para os testes)">
+  <!ENTITY mutter-time          "0,6 UPC (Usando paralelismo=4; adicionar 7,6 UPC para testes)">
 ]>
 
 <sect1 id="mutter" xreflabel="Mutter-&mutter-version;">
@@ -132,17 +132,8 @@ executariam somente com todos os três últimos)
 pacote fosse construído com informações de depuração:
     </para>
 
-<!-- https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/5102: merged in 50.3
-    <para>
-
-      Fix a private header that conflicts with pango-1.58 and later:
-    </para>
-
-<screen><userinput remap="pre">sed "/AUTOPTR/d" -i clutter/clutter/pango/clutter-pango-private.h</userinput></screen>
--->
 <screen><userinput remap="pre">sed "/tests_c_args =/s/$/ + ['-U', 'G_DISABLE_ASSERT']/" -i src/tests/meson.build &amp;&amp;
 sed "/c_args:/a '-U', 'G_DISABLE_ASSERT'," -i src/tests/cogl/unit/meson.build</userinput></screen>
-
 
     <para>
       Instale o <application>Mutter</application> executando os seguintes
@@ -182,7 +173,21 @@ testes possivelmente falhem. Você também consegue testar funções básicas do
 depois de instalar esse pacote.
     </para>
 
-    <para>
+
+    <!-- For mutter-51.0:
+Ok:                284 
+Expected Fail:     5    
+Fail:              0   
+Timeout:           3    
+
+158/292 core+mutter/backends/native - mutter:native-screen-cast
+        TIMEOUT         60.06s   killed by signal 15 SIGTERM
+166/292 core+mutter/backends/native - mutter:cursor-tests
+        TIMEOUT         60.06s   killed by signal 15 SIGTERM
+168/292 core+mutter/backends/native - mutter:remote-desktop-tests
+        TIMEOUT         60.04s   killed by signal 15 SIGTERM
+-->
+<para>
       Agora, como o(a) usante <systemitem class="username">root</systemitem>:
     </para>
 
@@ -214,11 +219,6 @@ instalado.
 <application>Sysprof</application>. Remova essa opção se você não tiver
 instalado o <application>Sysprof</application> e desejar analisar o
 desempenho de renderização do <application>Mutter</application>.
-    </para>
-
-    <para>
-      <option>-D x11=true</option>: Permite construir esse pacote com suporte a
-X11. O suporte a X11 está obsoleto e será removido no GNOME 50.
     </para>
 
   </sect2>
@@ -257,10 +257,15 @@ aninhado em outra sessão do Wayland. Em um emulador de terminal, emita:
 dbus-run-session mutter --wayland --devkit -- vte-2.91</userinput></screen>
 
     <para>
-      Existirá um atraso de 20 segundos antes do compositor aninhado iniciar
-devido <ulink url='https://gitlab.gnome.org/GNOME/mutter/-/issues/4159'>a
-defeito conhecido</ulink>. Substitua <replaceable>1920x1080</replaceable>
-pelo tamanho que você quiser para a sessão aninhada Wayland.
+      
+      <!-- cannot reproduce with 51.0 but the issue is still open??
+      There will be a 20-second delay before the nested compositor starts
+      up because of
+      <ulink url='https://gitlab.gnome.org/GNOME/mutter/-/issues/4159'>
+a
+      known bug</ulink>. -->
+Substitua <replaceable>1920x1080</replaceable> pelo tamanho que você quiser
+para a sessão aninhada do Wayland.
     </para>
   </sect2>
 
